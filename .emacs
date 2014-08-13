@@ -1960,7 +1960,7 @@ file named after the image's timestamp"
   (setq newsticker-treeview-listwindow-height 30)
   (setq newsticker-obsolete-item-max-age (* 30 (* 24 3600)))
   (setq newsticker-ticker-interval 0.3)
-  (setq newsticker-display-interval 15.3)
+  (setq newsticker-display-interval 10.3)
   (setq newsticker-scroll-smoothly t)
   (setq newsticker-wget-arguments '("-q" "-O" "-"
                                     "--user-agent" "testing"))
@@ -1972,7 +1972,7 @@ file named after the image's timestamp"
           ("The Inquirer" "http://www.theinquirer.net/inquirer.rss" nil nil nil)))
   (setq newsticker-url-list-defaults
         (quote (("Emacs Wiki" "http://www.emacswiki.org/cgi-bin/wiki.pl?action=rss" nil 3600)
-                ("LWN (Linux Weekly News)" "http://lwn.net/headlines/rss")
+                ("Google News" "http://news.google.com/?output=rss")
                 ("Quote of the day" "http://www.quotationspage.com/data/qotd.rss" "07:00" 86400))))
   (newsticker-start)
   (newsticker-start-ticker))
