@@ -1,0 +1,46 @@
+* Introduction
+
+This directory contains files for editing gnuplot (.gp) files and
+running Gnuplot from within emacs.  This package was originally
+assembled by [[mailto:<ravel@phys.washington.edu][Bruce Ravel]]; polishing and uploading to github was done by
+[[mailto:rudi@constantly.at][Rudi Schlatte]].
+
+An earlier version of gnuplot-mode is also included in the gnuplot
+distribution.  The version in this archive aims to modernize the code,
+e.g. by redefining gnuplot-mode keybindings that override standard emacs
+functionality, and generally making gnuplot-mode a better citizen of
+less-than-10-year versions of Emacs.  Various support files, e.g.
+autoconf for installation and support for old versions of Emacs and
+gnuplot on Win9x, have been removed and can be found in the original
+archive at [[http://xafs.org/BruceRavel/GnuplotMode]].
+
+* Contents
+
+|----------------+---------------------------------------------------|
+| README.org     | this file                                         |
+| ChangeLog      | a log of changes by version number                |
+| gnuplot.el     | gnuplot mode for emacs                            |
+| gnuplot-gui.el | a GUI for setting command arguments interactively |
+| gnuplot.info   | info version of gnuplot 3.6 help                  |
+| gpelcard.tex   | quick reference card for gnuplot mode (latex)     |
+|----------------+---------------------------------------------------|
+
+
+* Installation
+
+Add the following lines to your =.emacs= file (adjusting the path to
+where you checked out the gnuplot-mode files, of course).
+
+: (add-to-list 'load-path "/path/to/gnuplot-el")
+: 
+: (autoload 'gnuplot-mode "gnuplot" "gnuplot major mode" t)
+: (autoload 'gnuplot-make-buffer "gnuplot" "open a buffer in gnuplot mode" t)
+: 
+: (unless (assoc "\\.gp\\'" auto-mode-alist)
+:   (add-to-list 'auto-mode-alist '("\\.gp\\'" . gnuplot-mode)))
+
+
+The interactive graphical graphical interface to setting command
+arguments contained in =gnuplot-gui.el= is experimental.  It is incomplete
+and may make mistakes.  Hopefully, you will find it useful.
+

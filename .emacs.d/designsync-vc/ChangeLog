@@ -1,0 +1,119 @@
+2005-01-19    <ken.cox@matrixone.com>
+
+	* vc.el (vc-backend-assign-name): Fixed backend of vc snapshot
+	(tag).  It not efficient, it would be better to use 'tag -rec',
+	but it works.  Ticket 12270.
+
+-------------- DesignSync40_emacs_20031231.tar.gz released -----------------
+
+2003-12-22  Ken Cox  <ken@paganini>
+
+	* vc.el (vc-resolve-conflicts): Now vc-resolve-conflicts works
+	with DesignSync conflict markers.
+
+-------------- DesignSync40_emacs_20031215.tar.gz released -----------------
+
+2003-12-11    <ken.cox@matrixone.com>
+
+	* designsync.el: Set vc-master-templates explicitly, don't use
+	add-to-list, because in my Windows emacs-21.2.1 which I got
+	precompiled, vc-master-templates is bound and it is nil!?@
+
+2003-12-11  Ken Cox  <ken.cox@matrixone.com>
+
+	* vc.el (vc-sync-ensure-syncd): Fixed a hang on some platforms
+	when calling a DesignSync operation with no syncd running.  Now we
+	ensure syncd is running by attempting to spawn it once per emacs
+	session.  No harm done and trivial delay if it's already running. 
+
+-------------- DesignSync40_emacs_20031210.tar.gz released -----------------
+
+2003-12-10  Ken Cox  <ken.cox@matrixone.com>
+
+	* vc.el:
+	* vc-hooks.el: Use (featurep 'xemacs) to detect XEmacs.
+
+2003-12-10  Ken Cox  <ken.cox@matrixone.com>
+
+	* designsync.el: Created this loader file to simplify internal and
+	external distribution.  Now the one file provides support for GNU
+	Emacs 20, 21, and XEmacs 21.
+
+2003-12-09    <ken.cox@matrixone.com>
+
+	* vc.el (vc-backend-merge-news): Updated code to deal with
+	merge messages which changed in rel40.
+
+2003-12-09  Ken Cox  <ken.cox@matrixone.com>
+
+	* vc.el: 
+	* vc-hooks.el: Merged my forked version with XEmacs' forked
+	version.  This merged version will work with both XEmacs-21 and
+	Emacs-20.  Why the heck am I doing all this extra work for XEmacs?
+	Will it make my life miserable trying to reconcile the
+	irreconcilable?  I dunno...I like XEmacs.
+
+-------------- DesignSync40_emacs20_20031205.tar.gz released -----------------
+
+2003-12-09  Ken Cox  <ken.cox@matrixone.com>
+
+	* vc-hooks.el (vc-find-sync-master): Updated code to work with
+	DesignSync 4.0 and released as a separate package.
+
+
+-------------------------- 20011002 released ---------------------------------
+
+2001-10-02    <ken.cox@matrixone.com>
+
+	* vc-hooks.el (vc-toggle-read-only): Changed it so DesignSync
+	merging style does not use vc-next-action.  Instead, let it fall
+	through to (toggle-read-only).  Requested by Dave Finnegan.
+
+-------------------------- 20010228 released ---------------------------------
+
+2001-02-01    <ken.cox@matrixone.com>
+
+	* vc.el: Fixed defect: when using the merging work style,
+	vc-revert-buffer (C-x v u) fails trying to do a "dss cancel".  Now
+	it does "dss co -force".
+
+2000-12-18    <ken.cox@matrixone.com>
+
+	* Added KPS section to README.html.
+
+-------------------------- 20001203 released ---------------------------------
+
+2000-12-03    <ken.cox@matrixone.com>
+
+	* Settled on DS-like naming convention with date in file name.
+
+	* vc.el (vc-backend-diff): Now fakes "status" return by parsing
+	the "N Differences detected" output.  This is necessary because
+	"dss diff" at 3.0 exits 0 even when there are diffs.  This fixed
+	the defect:
+	- turn on "checkin comment required" with 20 chars min
+	- modify file
+	- checkin file with comment "."; this gives an error
+	- but now "C-x v =" says "no changes" even though there are changes
+
+2000-11-17    <ken.cox@matrixone.com>
+
+	* vc.el: Removed three debug msgs.
+	
+-------------------------- i2 ------------------------------------------------
+
+2000-11-11    <ken.cox@matrixone.com>
+
+	* vc-hooks.el: Removed debugging messages and vars.
+
+	* vc.el: Changed snapshot so that it uses "tag -force".  Since
+	snapshot works a file at a time, the other lousy option for
+	reusing a tag was to tag some files and then fail when we hit a
+	file that already had the tag.
+
+2000-11-10    <ken.cox@matrixone.com>
+
+	* vc.el: Implemented vc-annotate (C-x v g).  Check it out!
+	* vc.el: Implemented vc-rename-file for DSS.
+
+-------------------------- first release (i1) --------------------------------

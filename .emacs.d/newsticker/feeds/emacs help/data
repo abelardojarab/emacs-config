@@ -1,0 +1,656 @@
+;; -*- coding: utf-8 -*-
+(("gmane.emacs.help" nil "http://permalink.gmane.org/gmane.emacs.help" (21090 57043 666711 0) feed 0 nil nil ((title nil "gmane.emacs.help") (link nil "http://permalink.gmane.org/gmane.emacs.help") (description nil) (syn:updatePeriod nil "hourly") (syn:updateFrequency nil "1") (syn:updateBase nil "1901-01-01T00:00+00:00") (items nil (rdf:Seq nil (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94096"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94095"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94094"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94093"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94092"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94091"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94090"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94089"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94088"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94087"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94086"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94085"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94084"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94083"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94082"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94081"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94080"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94079"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94078"))) (rdf:li ((rdf:resource . "http://permalink.gmane.org/gmane.emacs.help/94077"))))) (image ((rdf:resource . "http://gmane.org/img/gmane-25t.png"))) (textinput ((rdf:resource . " "))))) ("Re: Quickly Viewing Files in a File List, and then Quickly Closing" "<pre>
+[...]
+You can do this with helm with its follow-mode. It also works with
+images
+https://github.com/emacs-helm/helm/wiki#wiki-turninimageviewer
+\"C-M-v runs the command scroll-other-window\" works as usual.
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94096" (21090 12579) old 5 nil nil ((title nil "Re: Quickly Viewing Files in a File List, and then Quickly Closing") (link nil "http://permalink.gmane.org/gmane.emacs.help/94096") (description nil "<pre>
+
+[...]
+
+
+You can do this with helm with its follow-mode. It also works with
+images
+
+https://github.com/emacs-helm/helm/wiki#wiki-turninimageviewer
+
+\"C-M-v runs the command scroll-other-window\" works as usual.
+
+</pre>") (dc:creator nil "Vagn Johansen") (dc:date nil "2013-10-19T07:13:39"))) ("RE: Best way to get hang of an elisp file?" "<pre>
+Good reminder.  `outline-minor-mode' and `reveal-mode' are oldies but
+goodies.
+Not a complete answer here, though, since `o-m-mode' hides also the
+doc strings.  (And even part of the signature, if it ends on another
+line.)
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94095" (21089 60643) old 6 nil nil ((title nil "RE: Best way to get hang of an elisp file?") (link nil "http://permalink.gmane.org/gmane.emacs.help/94095") (description nil "<pre>
+Good reminder.  `outline-minor-mode' and `reveal-mode' are oldies but
+goodies.
+
+Not a complete answer here, though, since `o-m-mode' hides also the
+doc strings.  (And even part of the signature, if it ends on another
+line.)
+
+
+</pre>") (dc:creator nil "Drew Adams") (dc:date nil "2013-10-19T02:22:27"))) ("Re: Best way to get hang of an elisp file?" "<pre>
+Yes, it's called outline-minor-mode ;-)
+For Elisp, I additionally use:
+(add-hook 'outline-minor-mode-hook
+(lambda ()
+(when (and outline-minor-mode (derived-mode-p 'emacs-lisp-mode))
+(hide-sublevels 1000))))
+which starts outline-minor-mode by hiding all the bodies of functions.
+I also use `reveal-mode' which automatically unhides the bodies when you
+try to move the cursor into them (so you don't need to remember the key
+sequences to use for opening/closing elements).
+Stefan
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94094" (21089 57627) old 7 nil nil ((title nil "Re: Best way to get hang of an elisp file?") (link nil "http://permalink.gmane.org/gmane.emacs.help/94094") (description nil "<pre>
+Yes, it's called outline-minor-mode ;-)
+For Elisp, I additionally use:
+
+(add-hook 'outline-minor-mode-hook
+          (lambda ()
+            (when (and outline-minor-mode (derived-mode-p 'emacs-lisp-mode))
+              (hide-sublevels 1000))))
+
+which starts outline-minor-mode by hiding all the bodies of functions.
+I also use `reveal-mode' which automatically unhides the bodies when you
+try to move the cursor into them (so you don't need to remember the key
+sequences to use for opening/closing elements).
+
+
+        Stefan
+
+
+
+</pre>") (dc:creator nil "Stefan Monnier") (dc:date nil "2013-10-19T01:32:11"))) ("Re: Installed AUCTeX with ELPA, but it's not loading" "<pre>
+Ah, yes, there was a problem with that version which failed to define
+aliases for tex-mode, latex-mode, ....  They were fixed in 11.87.1.
+The current version is 11.87.2 (these are ELPA versions, i.e. just the
+packaging is different, but it's the same 11.87 code).
+Stefan
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94093" (21089 55288) old 8 nil nil ((title nil "Re: Installed AUCTeX with ELPA, but it's not loading") (link nil "http://permalink.gmane.org/gmane.emacs.help/94093") (description nil "<pre>
+Ah, yes, there was a problem with that version which failed to define
+aliases for tex-mode, latex-mode, ....  They were fixed in 11.87.1.
+The current version is 11.87.2 (these are ELPA versions, i.e. just the
+packaging is different, but it's the same 11.87 code).
+
+
+        Stefan
+
+
+</pre>") (dc:creator nil "Stefan Monnier") (dc:date nil "2013-10-19T00:53:12"))) ("Re: A problem with eval-after-load" "<pre>
+No, on the contrary! I love to talk about such
+things. All those shortcuts were setup when I needed
+them - they are from my initialization files.
+If I put them at one place, as I just did, perhaps I can
+detect some new things, or someone else will comment,
+etc. So it is useful for me too.
+I have had *a lot* of troubles with those keys, but now
+everything works (and has for some time), so for this
+reason I was a bit surprised there was zero consistency
+how it was done.
+Did you re-write the key map in the original mode
+source? Share if you like. Did you do that in root or
+user space? I wonder if an update of Emacs will
+overwrite those changes?
+If you use Emacs in a tty, some of the keystrokes are
+undetectable in Emacs unless you have them send
+something else, that *is* detectable. In the above case,
+shift plus the caps lock key is made to send the Unicode
+char (described by the code, whatever that is) and
+*this* in turn is used to setup the shortcut. This hack
+is one of the coolest and most useful I e</pre>" "http://permalink.gmane.org/gmane.emacs.help/94092" (21089 54703) old 9 nil nil ((title nil "Re: A problem with eval-after-load") (link nil "http://permalink.gmane.org/gmane.emacs.help/94092") (description nil "<pre>
+
+No, on the contrary! I love to talk about such
+things. All those shortcuts were setup when I needed
+them - they are from my initialization files.
+
+If I put them at one place, as I just did, perhaps I can
+detect some new things, or someone else will comment,
+etc. So it is useful for me too.
+
+I have had *a lot* of troubles with those keys, but now
+everything works (and has for some time), so for this
+reason I was a bit surprised there was zero consistency
+how it was done.
+
+
+Did you re-write the key map in the original mode
+source? Share if you like. Did you do that in root or
+user space? I wonder if an update of Emacs will
+overwrite those changes?
+
+
+
+If you use Emacs in a tty, some of the keystrokes are
+undetectable in Emacs unless you have them send
+something else, that *is* detectable. In the above case,
+shift plus the caps lock key is made to send the Unicode
+char (described by the code, whatever that is) and
+*this* in turn is used to setup the shortcut. This hack
+is one of the coolest and most useful I e</pre>") (dc:creator nil "Emanuel Berg") (dc:date nil "2013-10-19T00:43:27"))) ("Re: Installed AUCTeX with ELPA, but it's not loading" "<pre>
+I had (package-initialize) in .emacs but then I realized I wasn't
+supposed to.  So I took it out.  [time passes]  Okay, I've tested again
+with (package-initialize), it didn't help.
+Other packages initialize fine.
+The package.el is from my Emacs.  The AUCTeX package has version:
+(define-package \"auctex\" \"11.87\" \"Integrated environment for *TeX*\" nil
+:url \"http://www.gnu.org/software/auctex/\")
+(Not sure which of them you meant with \"package version\" :-) )
+Is Emacs loading auctex first and then the built-in tex?
+Kai
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94091" (21089 46356) old 10 nil nil ((title nil "Re: Installed AUCTeX with ELPA, but it's not loading") (link nil "http://permalink.gmane.org/gmane.emacs.help/94091") (description nil "<pre>
+I had (package-initialize) in .emacs but then I realized I wasn't
+supposed to.  So I took it out.  [time passes]  Okay, I've tested again
+with (package-initialize), it didn't help.
+
+Other packages initialize fine.
+
+The package.el is from my Emacs.  The AUCTeX package has version:
+(define-package \"auctex\" \"11.87\" \"Integrated environment for *TeX*\" nil
+:url \"http://www.gnu.org/software/auctex/\")
+(Not sure which of them you meant with \"package version\" :-) )
+
+Is Emacs loading auctex first and then the built-in tex?
+
+Kai
+
+
+
+</pre>") (dc:creator nil "Kai Großjohann") (dc:date nil "2013-10-18T22:24:20"))) ("Re: About `char' in momentary-string-display" "<pre>
+C-x C-e worked beautifully for me:
+GNU Emacs 24.3.1 (x86_64-apple-darwin12.3.0, NS apple-appkit-1187.37) of
+2013-04-01 on teneight-slave.macports.org
+Kai
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94090" (21089 46059) old 11 nil nil ((title nil "Re: About `char' in momentary-string-display") (link nil "http://permalink.gmane.org/gmane.emacs.help/94090") (description nil "<pre>
+C-x C-e worked beautifully for me:
+
+GNU Emacs 24.3.1 (x86_64-apple-darwin12.3.0, NS apple-appkit-1187.37) of
+2013-04-01 on teneight-slave.macports.org
+
+Kai
+
+
+</pre>") (dc:creator nil "Kai Großjohann") (dc:date nil "2013-10-18T22:19:23"))) ("RE: Best way to get hang of an elisp file?" "<pre>...
+I don't have an answer for use outside Emacs.  But this can help in
+Emacs:
+In Icicle minor mode, `C-=' is by default `icicle-imenu'.  It is a
+multi-command that uses Imenu definition-recognizing regexps.  It
+lets you navigate among definitions (of functions, vars, macros, etc.,
+depending on the language).  You can use pattern matching, sorting,
+and cycling.
+But you can also ask for information about any definitions by
+hitting one of the help keys during completion: `C-M-RET' (help on
+the current definition), `C-M-down' (cycle to the next definition
+and show its help), `C-M-mouse-2' (help on the definition clicked
+in buffer *Completions*), etc.
+The help for a given definition is shown in buffer *Help*.  In the
+case of Emacs things it is just what you would see using `C-h f',
+`C-h v', `decribe-face', etc.: help on the particular Emacs-Lisp
+object.
+So you have three levels of information (3 lists) for such objects:
+(1) their names, (2) their descriptions (help), and (3) their
+definitions.
+[There are a</pre>" "http://permalink.gmane.org/gmane.emacs.help/94089" (21089 43869) old 12 nil nil ((title nil "RE: Best way to get hang of an elisp file?") (link nil "http://permalink.gmane.org/gmane.emacs.help/94089") (description nil "<pre>...
+
+I don't have an answer for use outside Emacs.  But this can help in
+Emacs:
+
+In Icicle minor mode, `C-=' is by default `icicle-imenu'.  It is a
+multi-command that uses Imenu definition-recognizing regexps.  It
+lets you navigate among definitions (of functions, vars, macros, etc.,
+depending on the language).  You can use pattern matching, sorting,
+and cycling.
+
+But you can also ask for information about any definitions by
+hitting one of the help keys during completion: `C-M-RET' (help on
+the current definition), `C-M-down' (cycle to the next definition
+and show its help), `C-M-mouse-2' (help on the definition clicked
+in buffer *Completions*), etc.
+
+The help for a given definition is shown in buffer *Help*.  In the
+case of Emacs things it is just what you would see using `C-h f',
+`C-h v', `decribe-face', etc.: help on the particular Emacs-Lisp
+object.
+
+So you have three levels of information (3 lists) for such objects:
+(1) their names, (2) their descriptions (help), and (3) their
+definitions.
+
+[There are a</pre>") (dc:creator nil "Drew Adams") (dc:date nil "2013-10-18T21:42:53"))) ("Re: Best way to get hang of an elisp file?" "<pre>
+Hi,
+Sounds like a perfect use case for
+[[https://github.com/tj64/navi][navi-mode.el]]. Instead of describing it
+(again) I'll just give some examples of possible views on tex.el:
+* Outline structure (level 1-8)
+type 1 in *Navi* buffer (-&gt; level 1)
+,-----------------------------------------------------------------------
+| 45 matches for \"^;;; \" in buffer: tex.el
+|       1:;;; tex.el --- Support for TeX documents.
+|      27:;;; Commentary:
+|      33:;;; Code:
+|      61:;;; Site Customization
+|     541:;;; Portability.
+|     572:;;; Documentation for Info-goto-emacs-command-node and similar
+|     597:;;; Special support for XEmacs
+|     688:;;; Special support for GNU Emacs
+|     762:;;; Buffer
+|    [...]
+|    5053:;;; Dollars
+|    5144:;;; Simple Commands
+|    5379:;;; Documentation
+|    5508:;;; Ispell Support
+|    5573:;;; Special provisions for other modes and libraries
+|    5598:;;; tex.el ends here
+`-----------------------------------------------------------------------
+type 3 (level 1-3)
+[... sam</pre>" "http://permalink.gmane.org/gmane.emacs.help/94088" (21089 28230) old 13 nil nil ((title nil "Re: Best way to get hang of an elisp file?") (link nil "http://permalink.gmane.org/gmane.emacs.help/94088") (description nil "<pre>
+ Hi,
+
+
+Sounds like a perfect use case for
+[[https://github.com/tj64/navi][navi-mode.el]]. Instead of describing it
+(again) I'll just give some examples of possible views on tex.el:
+
+* Outline structure (level 1-8)
+
+type 1 in *Navi* buffer (-&gt; level 1)
+
+,-----------------------------------------------------------------------
+| 45 matches for \"^;;; \" in buffer: tex.el
+|       1:;;; tex.el --- Support for TeX documents.
+|      27:;;; Commentary:
+|      33:;;; Code:
+|      61:;;; Site Customization
+|     541:;;; Portability.
+|     572:;;; Documentation for Info-goto-emacs-command-node and similar
+|     597:;;; Special support for XEmacs
+|     688:;;; Special support for GNU Emacs
+|     762:;;; Buffer
+|    [...]
+|    5053:;;; Dollars
+|    5144:;;; Simple Commands
+|    5379:;;; Documentation
+|    5508:;;; Ispell Support
+|    5573:;;; Special provisions for other modes and libraries
+|    5598:;;; tex.el ends here
+`-----------------------------------------------------------------------
+
+type 3 (level 1-3)
+
+[... sam</pre>") (dc:creator nil "Thorsten Jolitz") (dc:date nil "2013-10-18T17:22:14"))) ("RE: Quickly Viewing Files in a File List, and then Quickly Closing" "<pre>...
+Here is a quick command definition that does that.  It lets you use
+the Icicles alternate action keys, `C-S-RET', `C-S-down', etc., which
+are analogous to the main action keys, `C-RET', `C-down', etc. (which
+visit the candidate), to visit the candidate in `view-mode' and at
+the same time kill the buffer of the last such visited candidate.
+(defun my-find-file ()
+\"Like `icicle-find-file', but alt action views file temporarily.
+Alternate action keys such as `C-S-down' visit the candidate file in
+`view-mode' and kill the buffer of the last such viewed candidate.\"
+(interactive)
+(let ((icicle-candidate-alt-action-fn
+(lambda (file)
+(when (and my-last-viewed
+(get-file-buffer my-last-viewed))
+(kill-buffer (get-file-buffer my-last-viewed)))
+(setq my-last-viewed  (abbreviate-file-name file))
+(view-file file)
+(select-frame-set-input-focus
+(window-frame (active-minibuffer-window))))))
+(icicle-find-file-of-conten</pre>" "http://permalink.gmane.org/gmane.emacs.help/94087" (21089 26623) old 14 nil nil ((title nil "RE: Quickly Viewing Files in a File List, and then Quickly Closing") (link nil "http://permalink.gmane.org/gmane.emacs.help/94087") (description nil "<pre>...
+
+Here is a quick command definition that does that.  It lets you use
+the Icicles alternate action keys, `C-S-RET', `C-S-down', etc., which
+are analogous to the main action keys, `C-RET', `C-down', etc. (which
+visit the candidate), to visit the candidate in `view-mode' and at
+the same time kill the buffer of the last such visited candidate.
+
+(defun my-find-file ()
+  \"Like `icicle-find-file', but alt action views file temporarily.
+Alternate action keys such as `C-S-down' visit the candidate file in
+`view-mode' and kill the buffer of the last such viewed candidate.\"
+  (interactive)
+  (let ((icicle-candidate-alt-action-fn
+         (lambda (file)
+           (when (and my-last-viewed
+                      (get-file-buffer my-last-viewed))
+             (kill-buffer (get-file-buffer my-last-viewed)))
+           (setq my-last-viewed  (abbreviate-file-name file))
+           (view-file file)
+           (select-frame-set-input-focus
+      (window-frame (active-minibuffer-window))))))
+    (icicle-find-file-of-conten</pre>") (dc:creator nil "Drew Adams") (dc:date nil "2013-10-18T16:55:27"))) ("Best way to get hang of an elisp file?" "<pre>Hi all,
+I'd like to look at AUCTeX sources.  This means that I have a rather
+large elisp file, and I'd like to skim through it.  Since I want to
+know more or less /what/ functions, variables etc. there are and what
+they /do/ instead of how they are implemented, I'm curious whether
+there exists something like \"outline mode\", hiding everything but the
+signature of a function and its docstring etc.  (Or better yet,
+generating a file with everything but signatures and docstrings etc.
+deleted.)  Or is there any other way to accomplish my goal?
+I know that there are tags etc., but this is not what I want: I'd
+prefer to skim through the file /sequentially/, just to learn what's in
+there, I'm not interested in jumping to a function whose name I know -
+since I don't know these names, and I want to learn them.
+I also know that I can navigate through sexps, and probably jumping \"to
+the end of the outermost sexp\" could be easy.  But I don't want to
+limit myself to Emacs when reading the file: my workflow would be to
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94086" (21089 26448) old 15 nil nil ((title nil "Best way to get hang of an elisp file?") (link nil "http://permalink.gmane.org/gmane.emacs.help/94086") (description nil "<pre>Hi all,
+
+I'd like to look at AUCTeX sources.  This means that I have a rather
+large elisp file, and I'd like to skim through it.  Since I want to
+know more or less /what/ functions, variables etc. there are and what
+they /do/ instead of how they are implemented, I'm curious whether
+there exists something like \"outline mode\", hiding everything but the
+signature of a function and its docstring etc.  (Or better yet,
+generating a file with everything but signatures and docstrings etc.
+deleted.)  Or is there any other way to accomplish my goal?
+
+I know that there are tags etc., but this is not what I want: I'd
+prefer to skim through the file /sequentially/, just to learn what's in
+there, I'm not interested in jumping to a function whose name I know -
+since I don't know these names, and I want to learn them.
+
+I also know that I can navigate through sexps, and probably jumping \"to
+the end of the outermost sexp\" could be easy.  But I don't want to
+limit myself to Emacs when reading the file: my workflow would be to
+</pre>") (dc:creator nil "Marcin Borkowski") (dc:date nil "2013-10-18T16:52:32"))) ("RE: Quickly Viewing Files in a File List, and then Quickly Closing" "<pre>
+Others have responded with various ways to accomplish what you want.
+Here is yet another.
+In Icicles, the commands that access files are multi-commands, which
+means that you can use various keys to act on different completion
+candidates.  For example, you can cycle among the candidates that
+match your current minibuffer input, using the `up' and `down' arrows.
+If you hold down `Control' while doing that (i.e., `C-down') then
+you act on each file in turn.  (You can use `C-RET' to act on a file
+that you have cycled to using just `up' or `down'.)
+For `C-x C-f', for instance, the action is to visit the file, so if
+you use `C-x C-f' and then hit `C-down' you will visit the next file.
+Holding down Control and repeating `down' visits successive files, in
+the current sort order.  (You can change the sort order at any time
+during completion, using `C-,'.)
+The behavior is exactly as you described, with this exception: the
+file buffers remain.  That is, the default action for `C-x C-f' only
+visits the file; it doe</pre>" "http://permalink.gmane.org/gmane.emacs.help/94085" (21089 17529) old 16 nil nil ((title nil "RE: Quickly Viewing Files in a File List, and then Quickly Closing") (link nil "http://permalink.gmane.org/gmane.emacs.help/94085") (description nil "<pre>
+Others have responded with various ways to accomplish what you want.
+Here is yet another.
+
+In Icicles, the commands that access files are multi-commands, which
+means that you can use various keys to act on different completion
+candidates.  For example, you can cycle among the candidates that
+match your current minibuffer input, using the `up' and `down' arrows.
+
+If you hold down `Control' while doing that (i.e., `C-down') then
+you act on each file in turn.  (You can use `C-RET' to act on a file
+that you have cycled to using just `up' or `down'.)
+
+For `C-x C-f', for instance, the action is to visit the file, so if
+you use `C-x C-f' and then hit `C-down' you will visit the next file.
+Holding down Control and repeating `down' visits successive files, in
+the current sort order.  (You can change the sort order at any time
+during completion, using `C-,'.)
+
+The behavior is exactly as you described, with this exception: the
+file buffers remain.  That is, the default action for `C-x C-f' only
+visits the file; it doe</pre>") (dc:creator nil "Drew Adams") (dc:date nil "2013-10-18T14:23:53"))) ("Re: contractor resources for emacs extension development" "<pre>
+Did you set the hooks?
+In my .emacs I find e.g.
+,-------------------------------------------------------------
+| (add-hook 'outline-minor-mode-hook 'outshine-hook-function))
+| (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+| (add-hook 'message-mode-hook 'outline-minor-mode))
+`-------------------------------------------------------------
+so whenever outline-minor-mode is activated, the
+`outshine-hook-function' is called for setting up things. For
+emacs-lisp-mode and message-mode (and others not listed) I then activate
+outline-minor-mode by default.
+HTH
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94084" (21089 9312) old 17 nil nil ((title nil "Re: contractor resources for emacs extension development") (link nil "http://permalink.gmane.org/gmane.emacs.help/94084") (description nil "<pre>
+
+Did you set the hooks?
+
+In my .emacs I find e.g.
+
+,-------------------------------------------------------------
+| (add-hook 'outline-minor-mode-hook 'outshine-hook-function))
+| (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+| (add-hook 'message-mode-hook 'outline-minor-mode))
+`-------------------------------------------------------------
+
+so whenever outline-minor-mode is activated, the
+`outshine-hook-function' is called for setting up things. For
+emacs-lisp-mode and message-mode (and others not listed) I then activate
+outline-minor-mode by default. 
+
+HTH
+
+</pre>") (dc:creator nil "Thorsten Jolitz") (dc:date nil "2013-10-18T12:06:56"))) ("Re: Quickly Viewing Files in a File List, and then Quickly Closing" "<pre>
+If you're using OS X, you could call the system's quicklook. This is
+what I'm using here (it works great for images or pdf files, for
+instance, I'm also including the code to open the file in the external
+application).
+#+begin_src emacs-lisp
+(defun do-ql-dwim()
+(interactive)
+(save-window-excursion
+(let* ((proc (get-buffer-process \"*Async Shell Command*\")))
+(if proc
+(kill-process proc)
+(dired-do-async-shell-command
+\"qlmanage -p 2&gt;/dev/null\" \"\"
+(dired-get-marked-files))
+)
+(bury-buffer proc)
+))
+)
+(defun open-in-external-app ()
+\"Open the current file or dired marked files in external app.
+Works in Microsoft Windows, Mac OS X, Linux.\"
+(interactive)
+(let ( doIt
+(myFileList
+(cond
+((string-equal major-mode \"dired-mode\") (dired-get-marked-files))
+(t (list (buffer-file-name))) ) ) )
+(setq doIt (if (&lt;= (length myFileList) 5)
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94083" (21089 7240) old 18 nil nil ((title nil "Re: Quickly Viewing Files in a File List, and then Quickly Closing") (link nil "http://permalink.gmane.org/gmane.emacs.help/94083") (description nil "<pre>
+
+If you're using OS X, you could call the system's quicklook. This is
+what I'm using here (it works great for images or pdf files, for
+instance, I'm also including the code to open the file in the external
+application).
+
+#+begin_src emacs-lisp
+  (defun do-ql-dwim()
+    (interactive)
+    (save-window-excursion
+      (let* ((proc (get-buffer-process \"*Async Shell Command*\")))
+        (if proc
+            (kill-process proc)
+          (dired-do-async-shell-command
+           \"qlmanage -p 2&gt;/dev/null\" \"\"
+           (dired-get-marked-files))
+          )
+        (bury-buffer proc)
+        ))
+    )
+  
+  (defun open-in-external-app ()
+    \"Open the current file or dired marked files in external app.
+  Works in Microsoft Windows, Mac OS X, Linux.\"
+    (interactive)
+    (let ( doIt
+           (myFileList
+            (cond
+             ((string-equal major-mode \"dired-mode\") (dired-get-marked-files))
+             (t (list (buffer-file-name))) ) ) )
+  
+      (setq doIt (if (&lt;= (length myFileList) 5)
+                   </pre>") (dc:creator nil "Alan Schmitt") (dc:date nil "2013-10-18T11:32:24"))) ("Re: contractor resources for emacs extension development" "<pre>
+How do you do this? I just gave it a try, and I got an error message
+when invoking outorg-edit-as-org:
+,----
+| outline-back-to-heading: before first heading
+`----
+Alan
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94082" (21089 6851) old 19 nil nil ((title nil "Re: contractor resources for emacs extension development") (link nil "http://permalink.gmane.org/gmane.emacs.help/94082") (description nil "<pre>
+
+How do you do this? I just gave it a try, and I got an error message
+when invoking outorg-edit-as-org:
+
+,----
+| outline-back-to-heading: before first heading
+`----
+
+Alan
+
+</pre>") (dc:creator nil "Alan Schmitt") (dc:date nil "2013-10-18T11:25:55"))) ("Re: Cursor Invisible on Emacs / Windows Server / Citrix" "<pre>
+Am 18.10.2013 um 07:31 schrieb Eric Brown:
+The variables initial-frame-alist and default-frame-alist can set up fonts, sizes, colours, \"cursor-type\", and \"cursor-color\" – but the themes you mention do override these settings…
+--
+Greetings
+Pete
+&lt;\\
+\\__     O                       __O
+| O\\   _\\\\/\\-%                _`\\&lt;,
+'()-'-(_)--(_)               (_)/(_)
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94081" (21088 63080) old 20 nil nil ((title nil "Re: Cursor Invisible on Emacs / Windows Server / Citrix") (link nil "http://permalink.gmane.org/gmane.emacs.help/94081") (description nil "<pre>
+Am 18.10.2013 um 07:31 schrieb Eric Brown:
+
+
+The variables initial-frame-alist and default-frame-alist can set up fonts, sizes, colours, \"cursor-type\", and \"cursor-color\" – but the themes you mention do override these settings…
+
+
+--
+Greetings
+
+  Pete
+              &lt;\\
+                \\__     O                       __O
+                | O\\   _\\\\/\\-%                _`\\&lt;,
+                '()-'-(_)--(_)               (_)/(_)
+
+
+
+</pre>") (dc:creator nil "Peter Dyballa") (dc:date nil "2013-10-18T08:50:48"))) ("Re: Quickly Viewing Files in a File List, and then Quickly Closing" "<pre>
+Dired has some very nice shortcuts for this sort of thing: If you hit
+\"v\" on a file, you'll visit it in view mode, which means you can hit \"q\"
+to close it. So looking quickly though a bunch of text files just means
+bouncing between \"n\", \"v\" and \"q\". I think view mode is great.
+Also check \"o\" and \"C-o\" -- the latter might be all you need. Other than
+that, it wouldn't be too hard to write something like a \"follow mode\"
+for dired. If it closed the files afterwards that would be nice.
+E
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94080" (21088 62320) old 21 nil nil ((title nil "Re: Quickly Viewing Files in a File List, and then Quickly Closing") (link nil "http://permalink.gmane.org/gmane.emacs.help/94080") (description nil "<pre>
+
+Dired has some very nice shortcuts for this sort of thing: If you hit
+\"v\" on a file, you'll visit it in view mode, which means you can hit \"q\"
+to close it. So looking quickly though a bunch of text files just means
+bouncing between \"n\", \"v\" and \"q\". I think view mode is great.
+
+Also check \"o\" and \"C-o\" -- the latter might be all you need. Other than
+that, it wouldn't be too hard to write something like a \"follow mode\"
+for dired. If it closed the files afterwards that would be nice.
+
+E
+
+
+
+</pre>") (dc:creator nil "Eric Abrahamsen") (dc:date nil "2013-10-18T08:38:08"))) ("Read from stdin in non-batch mode" "<pre>
+Hi List,
+how can I (directly) achieve this behaviour in non-batch mode?
+,-------------------------------------------------------------------------
+| t used as a stream means that the input is read from the minibuffer.
+| [...]. If Emacs is running in batch mode, standard input is used
+| instead of the minibuffer. For example,
+|
+|           (message \"%s\" (read t))
+|
+| will read a Lisp expression from standard input and print the result to
+| standard output.
+`-------------------------------------------------------------------------
+From the manual it seems that I have to either pipe in/output through a
+buffer or write a function - there is no input-stream 'stdin' and no
+output-stream 'stdout' mentioned that would allow for the bahaviour
+described above.
+--
+cheers,
+Thorsten
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94097" (21090 17954) old 4 nil nil ((title nil "Read from stdin in non-batch mode") (link nil "http://permalink.gmane.org/gmane.emacs.help/94097") (description nil "<pre>
+Hi List,
+
+how can I (directly) achieve this behaviour in non-batch mode?
+
+,-------------------------------------------------------------------------
+| t used as a stream means that the input is read from the minibuffer.
+| [...]. If Emacs is running in batch mode, standard input is used
+| instead of the minibuffer. For example,
+|
+|           (message \"%s\" (read t))
+|
+| will read a Lisp expression from standard input and print the result to
+| standard output.
+`-------------------------------------------------------------------------
+
+From the manual it seems that I have to either pipe in/output through a
+buffer or write a function - there is no input-stream 'stdin' and no
+output-stream 'stdout' mentioned that would allow for the bahaviour
+described above.
+
+--
+cheers,
+Thorsten
+
+
+
+</pre>") (dc:creator nil "Thorsten Jolitz") (dc:date nil "2013-10-19T08:43:14"))) ("Re: Read from stdin in non-batch mode" "<pre>
+There's no stdin, because that's where the keys you're typing
+interactively are coming from, normally.
+Now, on linux, the program could use /dev/tty for interactive terminal
+I/O instead of /dev/stdin, so you could both read a stdin file and have
+terminal interaction.  But this is specific to linux (AFAIK).
+Of course, with X, the keys come from the the X server instead of the
+terminal, so again, stdin would be free for an input stream.
+But this would require a special case, compared to running emacs in a
+terminal on a non linux system.  I guess you will have to patch emacs to
+get it.
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94098" (21090 42506) old 3 nil nil ((title nil "Re: Read from stdin in non-batch mode") (link nil "http://permalink.gmane.org/gmane.emacs.help/94098") (description nil "<pre>
+
+There's no stdin, because that's where the keys you're typing
+interactively are coming from, normally.
+
+Now, on linux, the program could use /dev/tty for interactive terminal
+I/O instead of /dev/stdin, so you could both read a stdin file and have
+terminal interaction.  But this is specific to linux (AFAIK).
+
+Of course, with X, the keys come from the the X server instead of the
+terminal, so again, stdin would be free for an input stream.
+
+But this would require a special case, compared to running emacs in a
+terminal on a non linux system.  I guess you will have to patch emacs to
+get it.
+
+</pre>") (dc:creator nil "Pascal J. Bourguignon") (dc:date nil "2013-10-19T15:32:26"))) ("Re: Read from stdin in non-batch mode" "<pre>
+Ok, thanks, I just wanted to make sure I don't miss the obvious (solution)
+here. In this case I rather use a temporary buffer as input stream than
+patching Emacs.
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94099" (21090 45672) old 2 nil nil ((title nil "Re: Read from stdin in non-batch mode") (link nil "http://permalink.gmane.org/gmane.emacs.help/94099") (description nil "<pre>
+
+Ok, thanks, I just wanted to make sure I don't miss the obvious (solution)
+here. In this case I rather use a temporary buffer as input stream than
+patching Emacs. 
+
+</pre>") (dc:creator nil "Thorsten Jolitz") (dc:date nil "2013-10-19T16:25:12"))) ("Re: Installed AUCTeX with ELPA, but it's not loading" "<pre>
+Awesome!  Yes, that fixed it.  So these packages don't auto-update :-)
+Kai
+</pre>" "http://permalink.gmane.org/gmane.emacs.help/94100" (21090 55446) new 1 nil nil ((title nil "Re: Installed AUCTeX with ELPA, but it's not loading") (link nil "http://permalink.gmane.org/gmane.emacs.help/94100") (description nil "<pre>
+Awesome!  Yes, that fixed it.  So these packages don't auto-update :-)
+
+Kai
+
+
+
+
+</pre>") (dc:creator nil "Kai Großjohann") (dc:date nil "2013-10-19T19:08:06"))))

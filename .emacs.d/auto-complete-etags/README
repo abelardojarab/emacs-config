@@ -1,0 +1,40 @@
+A source for auto-complete-mode, using etags as a source.
+
+
+Add the following to your emacs setting file such as .emacs:
+========================================
+(require 'auto-complete-etags)
+(add-to-list 'ac-sources 'ac-source-etags)
+
+;; If you want this to show documentation, also add the following:
+(setq ac-etags-use-document t)
+========================================
+
+However, for now, it only supports c-mode for
+showing-documentation purposes. Completing functionality is available
+possibly in any modes.
+
+Of course, you have to visit TAGS file created by etags program.  To
+visit TAGS file, use M-x visit-tags-table.  Or if you want to choose
+another tag file rather than that currently in use, use M-x
+select-tags-table.
+
+
+Here's part of my settings:
+========================================
+;;; function to be called when entering c-mode.
+(defun my-c-mode-common-hook-func ()
+  (interactive)
+  "Function to be called when entering into c-mode."
+  (when (and (require 'auto-complete nil t) (require 'auto-complete-config nil t))
+    (auto-complete-mode t)
+    (make-local-variable 'ac-sources)
+    (setq ac-auto-start 2)
+    (setq ac-sources '(ac-source-words-in-same-mode-buffers
+                       ac-source-dictionary))
+    (when (require 'auto-complete-etags nil t)
+      (add-to-list 'ac-sources 'ac-source-etags)
+      (setq ac-etags-use-document t))))
+
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook-func)
+========================================

@@ -1,0 +1,84 @@
+
+             DesignSync/VC: the Emacs interface to DesignSync
+
+                         last updated: 2003-12-30
+                                     
+
+WHAT IT IS
+
+DesignSync/VC (Version Control) provides access to basic DesignSync
+commands from within Emacs.  Without leaving the Emacs user interface, you
+can obtain a lock, make local changes, perform a diff, and checkin those
+changes.  DesignSync/VC is built on top of the Emacs VC package, so users
+who have used CVS within Emacs will be familiar with its operation.
+
+
+BASIC OPERATIONS
+
+The most common operation by far is vc-next-action (key sequence: C-x v v),
+"do the right thing". If you have a locally modified file, for example,
+C-x v v checks it in and then reverts the buffer allowing you to continue
+editing; if you have an unmanaged file, C-x v v checks it in using 'ci -new'.
+
+Other common operations are:
+
+    Key Sequence   Command 
+    ------------   -----------------------
+    C-x v v        vc-next-action 
+    C-x v =        vc-diff 
+    C-x v l        vc-print-log (vhistory) 
+
+
+HOW TO GET STARTED 
+
+Before you can use DesignSync/VC, you must follow this procedure: 
+
+1. Decide whether you are using the locking work style or the merging work
+style.  This is important, for example, when you have a file which is
+up-to-date and you type C-x v v. If you are using the locking work style,
+the next thing is to get the lock. If you are using the merging work
+style, there is nothing to do.
+
+2. Add code to your .emacs file to load DesignSync/VC: 
+
+    ;; Set DesignSync/VC options and load it.
+    (setq vc-sync-work-style 'merging) ; 'merging or 'locking
+    (setq vc-initial-comment t)        ; require comment for 'ci -new'
+    (add-to-list 'load-path "/full/path/to/lisp/directory")
+    (load "designsync")
+
+
+LIMITATIONS 
+
+1. This interface has been tested only with DesignSync 4.0, on Windows
+2000 and Linux, using the following versions of Emacs: 
+
+    Gnu Emacs 20.7.1
+    Gnu Emacs 21.1.1
+    XEmacs 21.4.13 
+
+It does not work with emacs 19. 
+
+2. The dss command must be available in your PATH. 
+
+3. You have to manually define 'vc-sync-work-style as shown above. It
+would be conceivable to infer it from the read-only state of the file, or
+from the FetchReadOnly user and machine registry settings, but neither is
+a sufficient indicator of work style. 
+
+4. Tagging with vc-create-snapshot (C-x v s) uses "dss tag -force" and so 
+unconditionally overwrites a previous snapshot. Unfortunately the
+vc-create-snapshot function operates a file at a time; if we didn't use
+"-force" some files might be successfully tagged before others failed. 
+
+5. A couple features of the generic VC package don't work in
+DesignSync/VC, for example, vc-version-other-window.  If you hit one of
+these features, you'll get an error like "Sync todo: can't yet checkout to
+temp file".
+
+
+KNOWN PROBLEMS AND SOLUTIONS 
+
+Problem:  When emacs is loading vc.el, I get the message "Symbol's
+          function definition is void: defcustom".
+Solution: Gnu Emacs 19 is not supported. Get version 21.

@@ -1,0 +1,331 @@
+;; -*- coding: utf-8 -*-
+(("LWN.net" "LWN.net is a comprehensive source of news and opinions from
+and about the Linux community.  This is the main LWN.net feed,
+listing all articles which are posted to the site front page." "http://lwn.net" (21090 35447 516407 0) feed 0 nil nil ((title nil "LWN.net") (link nil "http://lwn.net") (description nil "
+ LWN.net is a comprehensive source of news and opinions from
+        and about the Linux community.  This is the main LWN.net feed,
+        listing all articles which are posted to the site front page.
+
+    ") (syn:updatePeriod nil "hourly") (syn:updateFrequency nil "2") (items nil (rdf:Seq nil (rdf:li ((resource . "http://lwn.net/Articles/570857/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570827/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570806/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570406/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570694/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570665/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570649/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570634/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/569964/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570570/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570471/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570521/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570353/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570469/rss"))) (rdf:li ((resource . "http://lwn.net/Articles/570458/rss"))))))) ("Kernels 3.11.6 and 3.10.17" "<p>Just in time for the weekend, Greg Kroah-Hartman has released stable kernels <a href=\"http://lwn.net/Articles/570853/\">3.11.6</a> and <a href=\"http://lwn.net/Articles/570853/\">3.10.17</a>, each with a host of important updates." "http://lwn.net/Articles/570857/rss" (21089 44188) old 2 nil nil ((title nil "Kernels 3.11.6 and 3.10.17") (link nil "http://lwn.net/Articles/570857/rss") (dc:date nil "2013-10-18T21:48:12+00:00") (dc:creator nil "n8willis") (description nil "
+      <p>Just in time for the weekend, Greg Kroah-Hartman has released stable kernels <a href=\"http://lwn.net/Articles/570853/\">3.11.6</a> and <a href=\"http://lwn.net/Articles/570853/\">3.10.17</a>, each with a host of important updates.
+      
+      "))) ("Shuttleworth: Quantal, raring, saucy…" "Mark Shuttleworth <a
+href=\"http://www.markshuttleworth.com/archives/1295\">goes on the
+offensive</a> against his critics before disclosing that Ubuntu 14.04 will
+be named \"trusty tahr.\"  \"<span>Mir is really important work. When lots of
+competitors attack a project on purely political grounds, you have to
+wonder what THEIR agenda is. At least we know now who belongs to the Open
+Source Tea Party ;)  And to put all the hue and cry into context: Mir is
+relevant for approximately 1% of all developers, just those who think about
+shell development. Every app developer will consume Mir through their
+toolkit. By contrast, those same outraged individuals have NIH’d just about
+every important piece of the stack they can get their hands on… most
+notably SystemD, which is hugely invasive and hardly justified. What
+closely to see how competitors to Canonical torture the English language in
+their efforts to justify how those toolkits should support Windows but not
+Mir. But we’ll get it done, and it will be amazing.</span>\"" "http://lwn.net/Articles/570827/rss" (21089 29455) old 3 nil nil ((title nil "Shuttleworth: Quantal, raring, saucy…") (link nil "http://lwn.net/Articles/570827/rss") (dc:date nil "2013-10-18T17:42:39+00:00") (dc:creator nil "corbet") (description nil "
+      Mark Shuttleworth <a
+href=\"http://www.markshuttleworth.com/archives/1295\">goes on the
+offensive</a> against his critics before disclosing that Ubuntu 14.04 will
+be named \"trusty tahr.\"  \"<span>Mir is really important work. When lots of
+competitors attack a project on purely political grounds, you have to
+wonder what THEIR agenda is. At least we know now who belongs to the Open
+Source Tea Party ;)  And to put all the hue and cry into context: Mir is
+relevant for approximately 1% of all developers, just those who think about
+shell development. Every app developer will consume Mir through their
+toolkit. By contrast, those same outraged individuals have NIH’d just about
+every important piece of the stack they can get their hands on… most
+notably SystemD, which is hugely invasive and hardly justified. What
+closely to see how competitors to Canonical torture the English language in
+their efforts to justify how those toolkits should support Windows but not
+Mir. But we’ll get it done, and it will be amazing.</span>\"
+      
+      "))) ("Friday's security updates" "<p><b>CentOS</b> has updated <a href=\"http://lwn.net/Articles/570788/\">kernel</a>
+(C6: multiple vulnerabilities).
+<p><b>Debian</b> has updated <a href=\"http://lwn.net/Articles/570814/\">mysql-5.1</a>
+(multiple unspecified vulnerabilities).
+<p><b>Mageia</b> has updated <a
+href=\"http://lwn.net/Articles/570789/\">aircrack-ng</a> (code execution), <a
+href=\"http://lwn.net/Articles/570790/\">apache-mod_fcgid</a> (code execution), <a
+href=\"http://lwn.net/Articles/570791/\">chromium-browser-stable</a> (stable update;
+multiple vulnerabilities), <a href=\"http://lwn.net/Articles/570792/\">clutter</a>
+(authentication bypass), <a href=\"http://lwn.net/Articles/570793/\">libtar</a> (code
+execution), <a href=\"http://lwn.net/Articles/570794/\">nmap</a> (MGA3: arbitrary file
+upload), <a href=\"http://lwn.net/Articles/570795/\">quagga</a> (code execution), <a
+href=\"http://lwn.net/Articles/570796/\">quassel</a> (MGA3: SQL injection), and <a
+href=\"http://lwn.net/Articles/570797/\">torque</a> (authentication bypass).
+<p><b>Mandriva</b> has updated <a
+href=\"http://lwn.net/Articles/570798/\">aircrack-ng</a> (MBS1: code execution), <a
+href=\"http://lwn.net/Articles/570799/\">apache-mod_fcgid</a> (MBS1: code execution),
+<a href=\"http://lwn.net/Articles/570800/\">clutter</a> (MBS1: authentication bypass),
+<a href=\"http://lwn.net/Articles/570801/\">libtar</a> (code execution), <a
+href=\"http://lwn.net/Articles/570802/\">quagga</a> (MBS1: code execution), and <a
+href=\"http://lwn.net/Articles/570803/\">torque</a> (MBS1: authentication bypass).
+<p><b>Red Hat</b> has updated <a
+href=\"http://lwn.net/Articles/570786/\">java-1.7.0-oracle</a> (many vulnerabilities)
+and <a href=\"http://lwn.net/Articles/570787/\">rubygems</a> (RHEL6: multiple vulnerabilities).
+<p><b>Scientific Linux</b> has updated <a
+href=\"http://lwn.net/Articles/570804/\">rubygems</a> (SL6: multiple vulnerabilities).
+<p><b>Ubuntu</b> has updated <a href=\"http://lwn.net/Articles/570805/\">xorg-server,
+xorg-server-lts-quantal, xorg-server-lts-raring</a> (multiple
+denial-of-service vulnerabilities)." "http://lwn.net/Articles/570806/rss" (21089 16289) old 4 nil nil ((title nil "Friday's security updates") (link nil "http://lwn.net/Articles/570806/rss") (dc:date nil "2013-10-18T14:03:13+00:00") (dc:creator nil "n8willis") (description nil "
+      <p><b>CentOS</b> has updated <a href=\"http://lwn.net/Articles/570788/\">kernel</a>
+(C6: multiple vulnerabilities).
+
+<p><b>Debian</b> has updated <a href=\"http://lwn.net/Articles/570814/\">mysql-5.1</a>
+(multiple unspecified vulnerabilities).
+
+<p><b>Mageia</b> has updated <a
+href=\"http://lwn.net/Articles/570789/\">aircrack-ng</a> (code execution), <a
+href=\"http://lwn.net/Articles/570790/\">apache-mod_fcgid</a> (code execution), <a
+href=\"http://lwn.net/Articles/570791/\">chromium-browser-stable</a> (stable update;
+multiple vulnerabilities), <a href=\"http://lwn.net/Articles/570792/\">clutter</a>
+(authentication bypass), <a href=\"http://lwn.net/Articles/570793/\">libtar</a> (code
+execution), <a href=\"http://lwn.net/Articles/570794/\">nmap</a> (MGA3: arbitrary file
+upload), <a href=\"http://lwn.net/Articles/570795/\">quagga</a> (code execution), <a
+href=\"http://lwn.net/Articles/570796/\">quassel</a> (MGA3: SQL injection), and <a
+href=\"http://lwn.net/Articles/570797/\">torque</a> (authentication bypass).
+
+<p><b>Mandriva</b> has updated <a
+href=\"http://lwn.net/Articles/570798/\">aircrack-ng</a> (MBS1: code execution), <a
+href=\"http://lwn.net/Articles/570799/\">apache-mod_fcgid</a> (MBS1: code execution),
+<a href=\"http://lwn.net/Articles/570800/\">clutter</a> (MBS1: authentication bypass),
+<a href=\"http://lwn.net/Articles/570801/\">libtar</a> (code execution), <a
+href=\"http://lwn.net/Articles/570802/\">quagga</a> (MBS1: code execution), and <a
+href=\"http://lwn.net/Articles/570803/\">torque</a> (MBS1: authentication bypass).
+
+<p><b>Red Hat</b> has updated <a
+href=\"http://lwn.net/Articles/570786/\">java-1.7.0-oracle</a> (many vulnerabilities)
+and <a href=\"http://lwn.net/Articles/570787/\">rubygems</a> (RHEL6: multiple vulnerabilities).
+
+<p><b>Scientific Linux</b> has updated <a
+href=\"http://lwn.net/Articles/570804/\">rubygems</a> (SL6: multiple vulnerabilities).
+
+<p><b>Ubuntu</b> has updated <a href=\"http://lwn.net/Articles/570805/\">xorg-server,
+xorg-server-lts-quantal, xorg-server-lts-raring</a> (multiple
+denial-of-service vulnerabilities).
+      
+      "))) ("[$] The LPC Android microconference" "A number of upstream community developers and Google Android developers got
+together at the 2013 Linux Plumbers Conference discuss some of the
+non-graphics related out-of-tree or still-in-staging portions of the
+Android patch set.  This discussion followed the <a
+href=\"https://lwn.net/Articles/569704/\">Android graphics
+microconference</a> held earlier in the day.  This article contains a
+summary of the major issues discussed at this gathering.
+<p>
+Click below (subscribers only) for the full article by John Stultz." "http://lwn.net/Articles/570406/rss" (21088 17243) old 5 nil nil ((title nil "[$] The LPC Android microconference") (link nil "http://lwn.net/Articles/570406/rss") (dc:date nil "2013-10-17T20:06:51+00:00") (dc:creator nil "corbet") (description nil "
+      A number of upstream community developers and Google Android developers got
+together at the 2013 Linux Plumbers Conference discuss some of the
+non-graphics related out-of-tree or still-in-staging portions of the
+Android patch set.  This discussion followed the <a
+href=\"https://lwn.net/Articles/569704/\">Android graphics
+microconference</a> held earlier in the day.  This article contains a
+summary of the major issues discussed at this gathering.
+<p>
+Click below (subscribers only) for the full article by John Stultz.
+
+      
+      "))) ("Wireshark switches to Qt" "Beginning with Wireshark 1.11.0 the project has <a
+href=\"https://blog.wireshark.org/2013/10/switching-to-qt/\">switched
+its user interface library</a> from GTK+ to Qt.  \"<span>Both libraries make
+it easy for developers write applications that will run on different
+platforms without having to rewrite a lot of code. GTK+ has had a huge
+impact on the way Wireshark looks and feels and on its popularity but it
+doesn’t cover our supported platforms as effectively as it should and the
+situation is getting worse as time goes on.</span>\"  (Thanks to Matthias
+Berndt)" "http://lwn.net/Articles/570694/rss" (21088 9308) old 6 nil nil ((title nil "Wireshark switches to Qt") (link nil "http://lwn.net/Articles/570694/rss") (dc:date nil "2013-10-17T17:54:36+00:00") (dc:creator nil "ris") (description nil "
+      Beginning with Wireshark 1.11.0 the project has <a
+href=\"https://blog.wireshark.org/2013/10/switching-to-qt/\">switched
+its user interface library</a> from GTK+ to Qt.  \"<span>Both libraries make
+it easy for developers write applications that will run on different
+platforms without having to rewrite a lot of code. GTK+ has had a huge
+impact on the way Wireshark looks and feels and on its popularity but it
+doesn’t cover our supported platforms as effectively as it should and the
+situation is getting worse as time goes on.</span>\"  (Thanks to Matthias
+Berndt)
+      
+      "))) ("Security advisories for Thursday" "<p><b>CentOS</b> has updated <a
+href=\"http://lwn.net/Articles/570658/\">xorg-x11-server</a> (C6: code execution).
+<p><b>Gentoo</b> has updated <a href=\"http://lwn.net/Articles/570659/\">Parallel-ForkManager</a> (symlink attack) and <a href=\"http://lwn.net/Articles/570660/\">polarssl</a> (multiple vulnerabilities).
+<p><b>Mandriva</b> has updated <a href=\"http://lwn.net/Articles/570661/\">mysql</a>
+(multiple unspecified vulnerabilities).
+<p><b>openSUSE</b> has updated <a href=\"http://lwn.net/Articles/570662/\">chromium</a>
+(12.x: multiple vulnerabilities).
+<p><b>Oracle</b> has updated <a href=\"http://lwn.net/Articles/570663/\">kernel</a> (OL6: two vulnerabilities).
+<p><b>Red Hat</b> has updated <a href=\"http://lwn.net/Articles/570657/\">kernel</a>
+(RHEL6: two vulnerabilities).
+<p><b>Scientific Linux</b> has updated <a
+href=\"http://lwn.net/Articles/570664/\">kernel</a> (SL6: two vulnerabilities)." "http://lwn.net/Articles/570665/rss" (21088 5376) old 7 nil nil ((title nil "Security advisories for Thursday") (link nil "http://lwn.net/Articles/570665/rss") (dc:date nil "2013-10-17T16:49:04+00:00") (dc:creator nil "ris") (description nil "
+      <p><b>CentOS</b> has updated <a
+href=\"http://lwn.net/Articles/570658/\">xorg-x11-server</a> (C6: code execution).
+
+<p><b>Gentoo</b> has updated <a href=\"http://lwn.net/Articles/570659/\">Parallel-ForkManager</a> (symlink attack) and <a href=\"http://lwn.net/Articles/570660/\">polarssl</a> (multiple vulnerabilities).
+
+<p><b>Mandriva</b> has updated <a href=\"http://lwn.net/Articles/570661/\">mysql</a>
+(multiple unspecified vulnerabilities).
+
+<p><b>openSUSE</b> has updated <a href=\"http://lwn.net/Articles/570662/\">chromium</a>
+(12.x: multiple vulnerabilities).
+
+<p><b>Oracle</b> has updated <a href=\"http://lwn.net/Articles/570663/\">kernel</a> (OL6: two vulnerabilities).
+
+<p><b>Red Hat</b> has updated <a href=\"http://lwn.net/Articles/570657/\">kernel</a>
+(RHEL6: two vulnerabilities).
+
+<p><b>Scientific Linux</b> has updated <a
+href=\"http://lwn.net/Articles/570664/\">kernel</a> (SL6: two vulnerabilities).
+      
+      "))) ("Ubuntu 13.10 review (ars technica)" "Ars technica has <a
+href=\"http://arstechnica.com/information-technology/2013/10/ubuntu-13-10-review-the-linux-os-of-the-future-remains-a-year-away/\">a
+lengthy review</a> of the Ubuntu 13.10 release.  \"<span>Unity 8 is expected
+to arrive on the desktop in Ubuntu 14.04, at which time Unity 7 will likely
+be retired from further development. Due to the imminent transition to
+Unity 8 and Mir, Ubuntu 13.10 is sort of like the calm before the storm. It
+ships with the familiar old Unity 7 and Xorg—which are reliable but headed
+for deprecation.  As Canonical’s attention is almost entirely dominated by
+the major technical changes coming in the near future, there wasn't a whole
+lot of work that surfaced in 13.10—the assortment of new features is pretty
+thin.</span>\"" "http://lwn.net/Articles/570649/rss" (21087 63878) old 8 nil nil ((title nil "Ubuntu 13.10 review (ars technica)") (link nil "http://lwn.net/Articles/570649/rss") (dc:date nil "2013-10-17T14:51:50+00:00") (dc:creator nil "corbet") (description nil "
+      Ars technica has <a
+href=\"http://arstechnica.com/information-technology/2013/10/ubuntu-13-10-review-the-linux-os-of-the-future-remains-a-year-away/\">a
+lengthy review</a> of the Ubuntu 13.10 release.  \"<span>Unity 8 is expected
+to arrive on the desktop in Ubuntu 14.04, at which time Unity 7 will likely
+be retired from further development. Due to the imminent transition to
+Unity 8 and Mir, Ubuntu 13.10 is sort of like the calm before the storm. It
+ships with the familiar old Unity 7 and Xorg—which are reliable but headed
+for deprecation.  As Canonical’s attention is almost entirely dominated by
+the major technical changes coming in the near future, there wasn't a whole
+lot of work that surfaced in 13.10—the assortment of new features is pretty
+thin.</span>\"
+      
+      "))) ("Ubuntu 13.10 (Saucy Salamander) released" "The Ubuntu 13.10 release is out.  \"<span>Ubuntu 13.10 introduces the first release of Ubuntu for phones and Ubuntu
+Core for the new 64-bit ARM systems (the \"arm64\" architecture, also known
+as AArch64 or ARMv8), and improved AppArmor confinement. In addition to
+these flagship features there are also major updates throughout.</span>\"
+See <a href=\"https://wiki.ubuntu.com/SaucySalamander/ReleaseNotes\">the release
+notes</a> for more information." "http://lwn.net/Articles/570634/rss" (21087 61100) old 9 nil nil ((title nil "Ubuntu 13.10 (Saucy Salamander) released") (link nil "http://lwn.net/Articles/570634/rss") (dc:date nil "2013-10-17T14:05:32+00:00") (dc:creator nil "corbet") (description nil "
+      The Ubuntu 13.10 release is out.  \"<span>Ubuntu 13.10 introduces the first release of Ubuntu for phones and Ubuntu
+Core for the new 64-bit ARM systems (the \"arm64\" architecture, also known
+as AArch64 or ARMv8), and improved AppArmor confinement. In addition to
+these flagship features there are also major updates throughout.</span>\"
+See <a href=\"https://wiki.ubuntu.com/SaucySalamander/ReleaseNotes\">the release
+notes</a> for more information.
+
+      
+      "))) ("[$] LWN.net Weekly Edition for October 17, 2013" "The LWN.net Weekly Edition for October 17, 2013 is available." "http://lwn.net/Articles/569964/rss" (21087 12934) old 10 nil nil ((title nil "[$] LWN.net Weekly Edition for October 17, 2013") (link nil "http://lwn.net/Articles/569964/rss") (dc:date nil "2013-10-17T00:42:46+00:00") (dc:creator nil "corbet") (description nil "
+      The LWN.net Weekly Edition for October 17, 2013 is available.
+
+      
+      "))) ("Slides and videos from the 2013 Linux Plumbers Conference" "The Linux Plumbers Conference organizers have put up <a
+href=\"http://www.linuxplumbersconf.org/2013/resources-slides-and-videos/\">a
+page of slides and videos from the 2013 event</a>.  There is a lot of
+interesting material to be found there for those of us who could not attend
+the conference — or even for those who were there." "http://lwn.net/Articles/570570/rss" (21087 6979) old 11 nil nil ((title nil "Slides and videos from the 2013 Linux Plumbers Conference") (link nil "http://lwn.net/Articles/570570/rss") (dc:date nil "2013-10-16T23:03:31+00:00") (dc:creator nil "corbet") (description nil "
+      The Linux Plumbers Conference organizers have put up <a
+href=\"http://www.linuxplumbersconf.org/2013/resources-slides-and-videos/\">a
+page of slides and videos from the 2013 event</a>.  There is a lot of
+interesting material to be found there for those of us who could not attend
+the conference — or even for those who were there.
+      
+      "))) ("[$] Rationalizing Python packaging" "The Python language comes with a long list of nice features, in keeping
+with the language's \"batteries included\" mantra.  One battery that is
+noticeably absent, though, is a comprehensive mechanism for the
+building, distribution, and installation of Python packages.  That leaves
+packagers and users having to choose between a variety of third-party tools
+or just giving up and solving the whole problem themselves.  The good news
+is that Python&nbsp;3.4 is likely to solve this problem, but Python&nbsp;2
+users may still have to go battery shopping on their own." "http://lwn.net/Articles/570471/rss" (21086 64050) old 12 nil nil ((title nil "[$] Rationalizing Python packaging") (link nil "http://lwn.net/Articles/570471/rss") (dc:date nil "2013-10-16T20:42:26+00:00") (dc:creator nil "corbet") (description nil "
+      The Python language comes with a long list of nice features, in keeping
+with the language's \"batteries included\" mantra.  One battery that is
+noticeably absent, though, is a comprehensive mechanism for the
+building, distribution, and installation of Python packages.  That leaves
+packagers and users having to choose between a variety of third-party tools
+or just giving up and solving the whole problem themselves.  The good news
+is that Python&nbsp;3.4 is likely to solve this problem, but Python&nbsp;2
+users may still have to go battery shopping on their own.
+
+      
+      "))) ("Wednesday's security advisories" "<p><b>openSUSE</b> has updated <a href=\"http://lwn.net/Articles/570515/\">gpg2</a> (11.4: denial of service).
+<p><b>Oracle</b> has updated <b>xorg-x11-server</b> (<a href=\"http://lwn.net/Articles/570516/\">OL6</a>; <a href=\"http://lwn.net/Articles/570517/\">OL5</a>: code execution).
+<p><b>Red Hat</b> has updated <a
+href=\"http://lwn.net/Articles/570514/\">xorg-x11-server</a> (code execution).
+<p><b>Scientific Linux</b> has updated <a
+href=\"http://lwn.net/Articles/570518/\">kernel</a> (SL5: denial of service) and <a href=\"http://lwn.net/Articles/570519/\">xorg-x11-server</a> (code execution).
+<p><b>Ubuntu</b> has updated <a href=\"http://lwn.net/Articles/570520/\">icu</a> (multiple vulnerabilities)." "http://lwn.net/Articles/570521/rss" (21086 46665) old 13 nil nil ((title nil "Wednesday's security advisories") (link nil "http://lwn.net/Articles/570521/rss") (dc:date nil "2013-10-16T15:52:41+00:00") (dc:creator nil "ris") (description nil "
+      <p><b>openSUSE</b> has updated <a href=\"http://lwn.net/Articles/570515/\">gpg2</a> (11.4: denial of service).
+
+<p><b>Oracle</b> has updated <b>xorg-x11-server</b> (<a href=\"http://lwn.net/Articles/570516/\">OL6</a>; <a href=\"http://lwn.net/Articles/570517/\">OL5</a>: code execution).
+
+<p><b>Red Hat</b> has updated <a
+href=\"http://lwn.net/Articles/570514/\">xorg-x11-server</a> (code execution).
+
+<p><b>Scientific Linux</b> has updated <a
+href=\"http://lwn.net/Articles/570518/\">kernel</a> (SL5: denial of service) and <a href=\"http://lwn.net/Articles/570519/\">xorg-x11-server</a> (code execution).
+
+<p><b>Ubuntu</b> has updated <a href=\"http://lwn.net/Articles/570520/\">icu</a> (multiple vulnerabilities).
+      
+      "))) ("[$] A new direction for power-aware scheduling" "Power-aware scheduling attempts to place processes on CPUs in a way that
+minimizes the system's overall consumption of power.  Discussion in this
+area has been muted since we <a href=\"http://lwn.net/Articles/554956/\">last looked at
+it</a> in
+June, but work has been proceeding.  Now a new set of power-aware
+scheduling patches shows a significant change in direction motivated by
+criticisms that were aired in June.  This particular problem is far from
+solved, but the shape of the eventual solution may be becoming a bit more
+clear.
+<p>
+Click below (subscribers only) for the full article from this week's Kernel
+Page." "http://lwn.net/Articles/570353/rss" (21085 40167) old 14 nil nil ((title nil "[$] A new direction for power-aware scheduling") (link nil "http://lwn.net/Articles/570353/rss") (dc:date nil "2013-10-15T19:52:07+00:00") (dc:creator nil "corbet") (description nil "
+      Power-aware scheduling attempts to place processes on CPUs in a way that
+minimizes the system's overall consumption of power.  Discussion in this
+area has been muted since we <a href=\"http://lwn.net/Articles/554956/\">last looked at
+it</a> in 
+June, but work has been proceeding.  Now a new set of power-aware
+scheduling patches shows a significant change in direction motivated by
+criticisms that were aired in June.  This particular problem is far from
+solved, but the shape of the eventual solution may be becoming a bit more
+clear.
+<p>
+Click below (subscribers only) for the full article from this week's Kernel
+Page.
+
+      
+      "))) ("PyPy's new garbage collector" "The PyPy status blog has <a
+href=\"http://morepypy.blogspot.com/2013/10/incremental-garbage-collector-in-pypy.html\">a
+detailed description</a> of the new incremental garbage collector adopted
+by this performance-oriented Python interpreter project.  \"<span>The main
+issue is that splitting the major collections means that the main program
+is actually running between the pieces, and so it can change the pointers
+in the objects to point to other objects. This is not a problem for
+sweeping: dead objects will remain dead whatever the main program
+does. However, it is a problem for marking. Let us see why.</span>\"" "http://lwn.net/Articles/570469/rss" (21085 31963) old 15 nil nil ((title nil "PyPy's new garbage collector") (link nil "http://lwn.net/Articles/570469/rss") (dc:date nil "2013-10-15T17:35:23+00:00") (dc:creator nil "corbet") (description nil "
+      The PyPy status blog has <a
+href=\"http://morepypy.blogspot.com/2013/10/incremental-garbage-collector-in-pypy.html\">a
+detailed description</a> of the new incremental garbage collector adopted
+by this performance-oriented Python interpreter project.  \"<span>The main
+issue is that splitting the major collections means that the main program
+is actually running between the pieces, and so it can change the pointers
+in the objects to point to other objects. This is not a problem for
+sweeping: dead objects will remain dead whatever the main program
+does. However, it is a problem for marking. Let us see why.</span>\"
+      
+      "))) ("Nftables pulled for 3.13" "For those who have been following <a href=\"http://lwn.net/Articles/564095/\">nftables</a>,
+the replacement firewall subsystem for the kernel: this code has just been
+pulled into the net-next tree.  That means that, barring some sort of
+trouble, it will be merged in the 3.13 development cycle.  This code is not
+ready to replace iptables yet, but the pace of the work should increase
+once this subsystem is in the mainline.  Anybody wanting to try out
+nftables can see <a
+href=\"https://home.regit.org/netfilter-en/nftables-quick-howto/\">the quick
+howto page</a> for instructions." "http://lwn.net/Articles/570921/rss" (21090 35350) new 1 nil nil ((title nil "Nftables pulled for 3.13") (link nil "http://lwn.net/Articles/570921/rss") (dc:date nil "2013-10-19T13:33:10+00:00") (dc:creator nil "corbet") (description nil "
+      For those who have been following <a href=\"http://lwn.net/Articles/564095/\">nftables</a>,
+the replacement firewall subsystem for the kernel: this code has just been
+pulled into the net-next tree.  That means that, barring some sort of
+trouble, it will be merged in the 3.13 development cycle.  This code is not
+ready to replace iptables yet, but the pace of the work should increase
+once this subsystem is in the mainline.  Anybody wanting to try out
+nftables can see <a
+href=\"https://home.regit.org/netfilter-en/nftables-quick-howto/\">the quick
+howto page</a> for instructions.
+      
+      "))))
