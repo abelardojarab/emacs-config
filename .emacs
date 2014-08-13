@@ -1959,21 +1959,20 @@ file named after the image's timestamp"
   (setq newsticker-treeview-treewindow-width 40)
   (setq newsticker-treeview-listwindow-height 30)
   (setq newsticker-obsolete-item-max-age (* 30 (* 24 3600)))
-  (setq newsticker-ticker-interval 0.3)
-  (setq newsticker-display-interval 15.3)
-  (setq newsticker-scroll-smoothly t)
+  (setq newsticker-ticker-interval 0.3) ;;
+  (setq newsticker-display-interval 8.3) ;; 0.3 for scroll-smooth, 15.3 otherwise
+  (setq newsticker-scroll-smoothly nil) ;; dont make it t otherwise will start scrolling
   (setq newsticker-wget-arguments '("-q" "-O" "-"
                                     "--user-agent" "testing"))
   (setq newsticker-sort-method (quote sort-by-time))
   (setq newsticker-url-list
-        '(("EmacsWiki Recently Change" "http://www.emacswiki.org/cgi-bin/emacs?action=rss;showedit=1" nil nil nil)
-          ("Planet Emacsen" "http://planet.emacsen.org/atom.xml" nil 86400 nil)
-          ("BBC News" "http://www.bbc.co.uk/syndication/feeds/news/ukfs_news/front_page/rss091.xml" nil nil nil)
-          ("The Inquirer" "http://www.theinquirer.net/inquirer.rss" nil nil nil)))
+        (quote (("BBC News" "http://www.bbc.co.uk/syndication/feeds/news/ukfs_news/front_page/rss091.xml" nil nil nil)
+                ("Phoronix" "http://www.phoronix.com/rss.php")
+                ("Google News" "http://news.google.com/?output=rss"))))
   (setq newsticker-url-list-defaults
-        (quote (("Emacs Wiki" "http://www.emacswiki.org/cgi-bin/wiki.pl?action=rss" nil 3600)
-                ("Google News" "http://news.google.com/?output=rss")
-                ("Quote of the day" "http://www.quotationspage.com/data/qotd.rss" "07:00" 86400))))
+        (quote (("BBC News" "http://www.bbc.co.uk/syndication/feeds/news/ukfs_news/front_page/rss091.xml" nil nil nil)
+                ("Phoronix" "http://www.phoronix.com/rss.php")
+                ("Google News" "http://news.google.com/?output=rss"))))
   (newsticker-start)
   (newsticker-start-ticker))
 
