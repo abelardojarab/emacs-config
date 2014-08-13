@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2005, 2007, 2008, 2009, 2010, 2013 Eric M. Ludlam
 
-;; Author: Abelardo <abelardo@abelardo-Aspire-7720>
-;; Created: 2014-08-12 21:08:11-0700
+;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Created: 2014-08-13 10:02:12-0700
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

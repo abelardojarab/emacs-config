@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2001-2012, 2014 Free Software Foundation, Inc.
 
-;; Author: Abelardo <abelardo@abelardo-Aspire-7720>
-;; Created: 2014-08-12 21:08:52-0700
+;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Created: 2014-08-13 10:02:20-0700
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
