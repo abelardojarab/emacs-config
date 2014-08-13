@@ -1959,8 +1959,8 @@ file named after the image's timestamp"
   (setq newsticker-treeview-treewindow-width 40)
   (setq newsticker-treeview-listwindow-height 30)
   (setq newsticker-obsolete-item-max-age (* 30 (* 24 3600)))
-  (setq newsticker-ticker-interval 0.3) ;;
-  (setq newsticker-display-interval 8.3) ;; 0.3 for scroll-smooth, 15.3 otherwise
+  (setq newsticker-ticker-interval 4.3) ;;
+  (setq newsticker-display-interval 3.3) ;; 0.3 for scroll-smooth, 15.3 otherwise
   (setq newsticker-scroll-smoothly nil) ;; dont make it t otherwise will start scrolling
   (setq newsticker-wget-arguments '("-q" "-O" "-"
                                     "--user-agent" "testing"))
