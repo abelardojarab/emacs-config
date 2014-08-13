@@ -1960,7 +1960,7 @@ file named after the image's timestamp"
   (setq newsticker-treeview-listwindow-height 30)
   (setq newsticker-obsolete-item-max-age (* 30 (* 24 3600)))
   (setq newsticker-ticker-interval 0.3)
-  (setq newsticker-display-interval 10.3)
+  (setq newsticker-display-interval 15.3)
   (setq newsticker-scroll-smoothly t)
   (setq newsticker-wget-arguments '("-q" "-O" "-"
                                     "--user-agent" "testing"))
