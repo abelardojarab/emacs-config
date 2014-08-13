@@ -1064,7 +1064,7 @@
 ;; Line numbers, vim style
 (require 'linum)
 (global-linum-mode 1)
-(set-face-attribute 'linum nil :height 130)
+(set-face-attribute 'linum nil :height 125)
 
 (eval-after-load 'linum
   '(progn
@@ -1115,6 +1115,9 @@
           '(lambda ()
              (turn-on-eldoc-mode)))
 (add-hook 'scheme-mode-hook
+          '(lambda ()
+             (turn-on-eldoc-mode)))
+(add-hook 'python-mode-hook
           '(lambda ()
              (turn-on-eldoc-mode)))
 
