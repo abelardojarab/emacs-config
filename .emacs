@@ -1064,6 +1064,19 @@
 ;; Line numbers, vim style
 (require 'linum)
 (global-linum-mode 1)
+(set-face-attribute 'linum nil :height 130)
+
+(eval-after-load 'linum
+  '(progn
+     (defface linum-leading-zero
+       `((t :inherit 'linum
+            :foreground ,(face-attribute 'linum :background nil t)))
+       "Face for displaying leading zeroes for line numbers in display margin."
+       :group 'linum)
+     (defun linum-format-func (line)
+       (let ((w (length (number-to-string (count-lines (point-min) (point-max))))))
+         (propertize (format (format " %%%dd " w) line) 'face 'linum)))
+     (setq linum-format 'linum-format-func)))
 
 ;; Autopair
 (add-to-list 'load-path "~/.emacs.d/autopair")
