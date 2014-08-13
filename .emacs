@@ -1960,16 +1960,20 @@ file named after the image's timestamp"
   (setq newsticker-treeview-listwindow-height 30)
   (setq newsticker-obsolete-item-max-age (* 30 (* 24 3600)))
   (setq newsticker-ticker-interval 0.3)
+  (setq newsticker-display-interval 15.3)
   (setq newsticker-scroll-smoothly t)
   (setq newsticker-wget-arguments '("-q" "-O" "-"
                                     "--user-agent" "testing"))
+  (setq newsticker-sort-method (quote sort-by-time))
   (setq newsticker-url-list
-        '(("EmacsWiki Recently Change"
-           "http://www.emacswiki.org/cgi-bin/emacs?action=rss;showedit=1"
-           nil nil nil)
-          ("Planet Emacsen"
-           "http://planet.emacsen.org/atom.xml"
-           nil 86400 nil)))
+        '(("EmacsWiki Recently Change" "http://www.emacswiki.org/cgi-bin/emacs?action=rss;showedit=1" nil nil nil)
+          ("Planet Emacsen" "http://planet.emacsen.org/atom.xml" nil 86400 nil)
+          ("BBC News" "http://www.bbc.co.uk/syndication/feeds/news/ukfs_news/front_page/rss091.xml" nil nil nil)
+          ("The Inquirer" "http://www.theinquirer.net/inquirer.rss" nil nil nil)))
+  (setq newsticker-url-list-defaults
+        (quote (("Emacs Wiki" "http://www.emacswiki.org/cgi-bin/wiki.pl?action=rss" nil 3600)
+                ("LWN (Linux Weekly News)" "http://lwn.net/headlines/rss")
+                ("Quote of the day" "http://www.quotationspage.com/data/qotd.rss" "07:00" 86400))))
   (newsticker-start)
   (newsticker-start-ticker))
 
