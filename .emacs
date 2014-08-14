@@ -533,7 +533,7 @@
 ;; Use GNU global if available
 (global-set-key (kbd "M-.") (if (and (fboundp 'my-ido-find-tag) t)
                                 'my-ido-find-tag
-                                'ggtags-find-tag-dwim))
+                              'ggtags-find-tag-dwim))
 
 ;; Flycheck
 (add-to-list 'load-path "~/.emacs.d/flycheck")
@@ -1641,7 +1641,8 @@ a link to this file."
             (concat tilde-buffer-filename
                     "_"
                     (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
-
+    (setq filename (file-relative-name filename (file-name-directory (buffer-file-name))))
+    (setq filename (replace-regexp-in-string "\\\\" "/" filename))
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
