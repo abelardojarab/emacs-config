@@ -1653,27 +1653,6 @@ a link to this file."
     (insert (concat "[[file:" filename "]]"))
     (org-display-inline-images)))
 
-;; Insert images in Org files
-(defun org-insert-clipboard-image ()
-  "using xclip and perl to yank image file in link format for org, and save the
-file named after the image's timestamp"
-  (interactive)
-  (let (clip-targets clip-text)
-    (setq clip-targets (shell-command-to-string "xclip -o -selection clipboard -t TARGETS|perl -e '$ret=0;while(<>){if ($_ eq \"image/png\\n\"){$ret+=4 ;$result = `xclip -o -selection clipboard -t TIMESTAMP`;}$ret=+1 if ($_ eq \"STRING\\n\") or ($_ eq \"UTF8_STRING\\n\");$ret+=2 if $_ eq \"text/html\\n\";}if($ret eq 6){print \"webimg\"};if($ret eq 4){print \"clipboardimg\"};if($ret eq 1){print \"string\"};if($ret eq 0){print \"nothing\"};'"))
-    (message (concat "type :" clip-targets))
-    (when (string= "webimg"  clip-targets)
-      (progn
-        (setq clip-text (shell-command-to-string (concat "perl -e '$buffn=\""
-                                                         (file-name-directory (buffer-file-name)) "\";$result = `xclip -o -selection clipboard -t TIMESTAMP`;chomp($result);$fn = `xclip -o -selection clipboard -t text/html`;$fn=~/src=\"(.*?)\"/i;system(\"xclip -o -selection clipboard -t image/png > $buffn$result.png\");print \"[[file:\".$result.\".png]\".$1.\"]\";'")))
-        (insert clip-text)))
-    (when (string= "clipboardimg"  clip-targets)
-      (progn
-        (setq clip-text (shell-command-to-string (concat "perl -e '$buffn=\""
-                                                         (file-name-directory (buffer-file-name)) "\";$result = `xclip -o -selection clipboard -t TIMESTAMP`;chomp($result);system(\"xclip -o -selection clipboard -t image/png > $buffn$result.png\");print \"[[file:\".$result.\".png]\".$result.\".png]$buffn\";'")))
-        (insert clip-text)))
-    (org-display-inline-images)
-    (or clip-text (x-selection-value))))
-
 ;; for Tikz image in Org
 (setq org-babel-latex-htlatex "htlatex")
 (defmacro by-backend (&rest body)
