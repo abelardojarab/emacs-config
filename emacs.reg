@@ -1,0 +1,22 @@
+REGEDIT4
+[HKEY_CURRENT_USER\SOFTWARE\GNU\Emacs]
+"Emacs.Background"="black"
+"Emacs.Foreground"="white"
+"Emacs.Font"="-*-Lucida Console-normal-r-*-*-11-82-96-96-c-*-iso8859-1"
+"Emacs.Geometry"="90x60"
+"Emacs.HOME"="%EMACSDIR%"
+"HOME"="%EMACSDIR%"
+
+[HKEY_CURRENT_USER\SOFTWARE\Wow6432Node\GNU\Emacs]
+"Emacs.Background"="black"
+"Emacs.Foreground"="white"
+"Emacs.Font"="-*-Lucida Console-normal-r-*-*-11-82-96-96-c-*-iso8859-1"
+"Emacs.Geometry"="90x60"
+"Emacs.HOME"="%EMACSDIR%"
+"HOME"="%EMACSDIR%"
+
+[HKEY_CLASSES_ROOT\*\Shell\Emacs]
+@="Edit with Emacs"
+
+[HKEY_CLASSES_ROOT\*\Shell\Emacs\command]
+@="c:\Program Files (x86)\GNU Emacs-23.2\bin\emacsclientw.exe" --no-wait  --alternate-editor="c:/Program Files (x86)/GNU Emacs 23.2/bin/runemacs.exe" "%1"
