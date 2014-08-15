@@ -165,13 +165,13 @@
               (djcb-set-cursor-according-to-mode))))
 
 ;; Garantee utf8 as input-method
+(set-input-method nil)
+(setq read-quoted-char-radix 10)
+(set-language-environment "UTF-8")
 (setq locale-coding-system 'utf-8-unix)
 (set-terminal-coding-system 'utf-8-unix)
 (set-keyboard-coding-system 'utf-8-unix)
 (set-selection-coding-system 'utf-8-unix)
-(set-language-environment "UTF-8")
-(set-input-method nil)
-(setq read-quoted-char-radix 10)
 (set-default buffer-file-coding-system 'utf-8-unix)
 (set-default-coding-systems 'utf-8-unix)
 (prefer-coding-system 'utf-8-unix)
@@ -2348,15 +2348,15 @@ This command does the reverse of `fill-region'."
 (global-set-key [(button4)] '(lambda () (interactive) (scroll-down 3)))
 (global-set-key [(shift button5)] '(lambda () (interactive) (scroll-up-command)))
 (global-set-key [(shift button4)] '(lambda () (interactive) (scroll-down-command)))
-(global-set-key [(control button5)] '(lambda () (interactive) (scroll-up-command)))
-(global-set-key [(control button4)] '(lambda () (interactive) (scroll-down-command)))
+(global-set-key [(control button5)] '(lambda () (interactive) (text-scale-increase)))
+(global-set-key [(control button4)] '(lambda () (interactive) (text-scale-decrease)))
 
 (global-set-key [(mouse-5)] '(lambda () (interactive) (scroll-up 3)))
 (global-set-key [(mouse-4)] '(lambda () (interactive) (scroll-down 3)))
 (global-set-key [(shift mouse-5)] '(lambda () (interactive) (scroll-up)))
 (global-set-key [(shift mouse-4)] '(lambda () (interactive) (scroll-down)))
-(global-set-key [(control mouse-5)] '(lambda () (interactive) (scroll-up)))
-(global-set-key [(control mouse-4)] '(lambda () (interactive) (scroll-down)))
+(global-set-key [(control mouse-5)] '(lambda () (interactive) (text-scale-increase)))
+(global-set-key [(control mouse-4)] '(lambda () (interactive) (text-scale-decrease)))
 
 ;; higlight changes in documents
 (global-highlight-changes-mode t)
