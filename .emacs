@@ -2343,16 +2343,24 @@ This command does the reverse of `fill-region'."
 (define-key minibuffer-local-isearch-map [(meta f)]
   (lookup-key minibuffer-local-isearch-map "\C-r"))
 
+;; Scroll with the mouse
+(defun smooth-scroll (number-lines increment)
+  (if (= 0 number-lines)
+      t
+    (progn
+      (sit-for 0.02)
+      (scroll-up increment)
+      (smooth-scroll (- number-lines 1) increment))))
+
+(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 6 1)))
+(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 6 -1)))
+
 ;; to get the scroll wheel work
-(global-set-key [(button5)] '(lambda () (interactive) (scroll-up 3)))
-(global-set-key [(button4)] '(lambda () (interactive) (scroll-down 3)))
 (global-set-key [(shift button5)] '(lambda () (interactive) (scroll-up-command)))
 (global-set-key [(shift button4)] '(lambda () (interactive) (scroll-down-command)))
 (global-set-key [(control button5)] 'text-scale-decrease)
 (global-set-key [(control button4)] 'text-scale-increase)
 
-(global-set-key [(mouse-5)] '(lambda () (interactive) (scroll-up 3)))
-(global-set-key [(mouse-4)] '(lambda () (interactive) (scroll-down 3)))
 (global-set-key [(shift mouse-5)] '(lambda () (interactive) (scroll-up)))
 (global-set-key [(shift mouse-4)] '(lambda () (interactive) (scroll-down)))
 (global-set-key [(control mouse-5)] 'text-scale-decrease)
