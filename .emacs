@@ -704,6 +704,9 @@
 ;; Autosave
 (setq auto-save-list-file-prefix "~/.emacs.cache/auto-save-list/.saves-")
 
+;; Autosave every 500 typed characters
+(setq auto-save-interval 500)
+
 ;; Backups
 (setq make-backup-files t
       backup-by-copying t
