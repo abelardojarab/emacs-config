@@ -104,7 +104,7 @@
   "If the current buffer is in emacs-lisp-mode and there already exists an .elc file corresponding to the current buffer file, then recompile the file on save."
   (interactive)
   (when (and (eq major-mode 'emacs-lisp-mode)
-             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+           (file-exists-p (byte-compile-dest-file buffer-file-name)))
     (byte-compile-file buffer-file-name)))
 (add-hook 'after-save-hook 'auto-byte-recompile)
 
@@ -138,6 +138,22 @@
 (if (find-font (font-spec :name "Symbola"))
     (set-fontset-font "fontset-default" nil
                       (font-spec :size 18 :name "Symbola")))
+
+;; Dynamic font adjusting based on monitor resolution
+(when (find-font (font-spec :name "Consolas"))
+  (defun fontify-frame (frame)
+    (interactive)
+    (if window-system
+        (progn
+          (if (> (x-display-pixel-width) 2000)
+              (set-frame-parameter frame 'font "Consolas-14") ;; Cinema Display
+            (set-frame-parameter frame 'font "Consolas-12")))))
+
+  ;; Fontify current frame
+  (fontify-frame nil)
+
+  ;; Fontify any future frames
+  (push 'fontify-frame after-make-frame-functions))
 
 ;; Change form/shape of emacs cursor
 (setq djcb-read-only-color "gray")
@@ -497,7 +513,7 @@
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "M-.") (if (and (fboundp 'ggtags-find-tag-dwim)
-                                     (executable-find "global"))
+                                   (executable-find "global"))
                                 'ggtags-find-tag-dwim
                               'etags-select-find-tag))
 
@@ -870,7 +886,7 @@
 (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
   (setq ad-return-value
         (if (and (buffer-modified-p (tabbar-tab-value tab))
-                 (buffer-file-name (tabbar-tab-value tab)))
+               (buffer-file-name (tabbar-tab-value tab)))
             (concat "+" (concat ad-return-value ""))
           (concat "" (concat ad-return-value "")))))
 
@@ -1138,9 +1154,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-hook 'scheme-mode-hook 'pretty-lambdas)
