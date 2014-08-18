@@ -1079,9 +1079,11 @@
       (message filename))))
 
 ;; ido makes competing buffers and finding files easier
+(add-to-list 'load-path "~/.emacs.d/ido-vertical-mode")
 (add-to-list 'load-path "~/.emacs.d/flx")
 (require 'ido)
 (require 'flx-ido)
+(require 'ido-vertical-mode)
 (ido-mode 'both) ;; for buffers and files
 (ido-everywhere 1)
 (flx-ido-mode 1)
@@ -1092,8 +1094,9 @@
  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace"
    "^\*compilation" "^\*GTAGS" "^session\.*" "^\*")
  ido-work-directory-list '("~/" "~/Desktop" "~/Documents" "~src")
- ido-case-fold  t
+ ido-case-fold t
  ido-enable-last-directory-history t
+ ido-auto-merge-work-directories-length -1
  ido-max-work-directory-list 30
  ido-max-work-file-list 50
  ido-use-filename-at-point nil
@@ -2445,6 +2448,7 @@ This command does the reverse of `fill-region'."
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;; iMenu
+(set-default 'imenu-auto-rescan t)
 (add-hook 'scheme-mode-hook
           (lambda ()
             (setq imenu-create-index-function 'imenu-example--create-lisp-index)
