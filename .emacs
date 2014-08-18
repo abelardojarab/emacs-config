@@ -164,13 +164,18 @@
     (if window-system
         (progn
           (if (> (x-display-pixel-width) 1800)
-              (progn
+              (progn ;; Cinema display
                 (set-face-attribute 'default nil :font "Consolas-14")
-                (set-face-attribute 'variable-pitch nil :font "Calibri-15" :weight 'normal)
+                (set-face-attribute 'variable-pitch nil :font "Calibri-16" :weight 'normal)
                 (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
                 (set-face-attribute 'linum nil :height 140)
-                (set-frame-parameter frame 'font "Consolas-14") ;; Cinema Display
-                )))))
+                (set-frame-parameter frame 'font "Consolas-14"))
+            (progn ;; Cinema display
+              (set-face-attribute 'default nil :font "Consolas-12")
+              (set-face-attribute 'variable-pitch nil :font "Calibri-14" :weight 'normal)
+              (set-face-attribute 'fixed-pitch nil :font "Consolas-12")
+              (set-face-attribute 'linum nil :height 125)
+              (set-frame-parameter frame 'font "Consolas-12"))))))
 
   ;; Fontify current frame
   (fontify-frame nil)
