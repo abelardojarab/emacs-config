@@ -139,15 +139,38 @@
     (set-fontset-font "fontset-default" nil
                       (font-spec :size 18 :name "Symbola")))
 
+;; Line numbers, vim style
+(require 'linum)
+(global-linum-mode 1)
+(set-face-attribute 'linum nil :height 125)
+(setq linum-delay t)
+
+(eval-after-load 'linum
+  '(progn
+     (defface linum-leading-zero
+       `((t :inherit 'linum
+            :foreground ,(face-attribute 'linum :background nil t)))
+       "Face for displaying leading zeroes for line numbers in display margin."
+       :group 'linum)
+     (defun linum-format-func (line)
+       (let ((w (length (number-to-string (count-lines (point-min) (point-max))))))
+         (propertize (format (format " %%%dd " w) line) 'face 'linum)))
+     (setq linum-format 'linum-format-func)))
+
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
   (defun fontify-frame (frame)
     (interactive)
     (if window-system
         (progn
-          (if (> (x-display-pixel-width) 2000)
-              (set-frame-parameter frame 'font "Consolas-14") ;; Cinema Display
-            (set-frame-parameter frame 'font "Consolas-12")))))
+          (if (> (x-display-pixel-width) 1800)
+              (progn
+                (set-face-attribute 'default nil :font "Consolas-14")
+                (set-face-attribute 'variable-pitch nil :font "Calibri-15" :weight 'normal)
+                (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
+                (set-face-attribute 'linum nil :height 140)
+                (set-frame-parameter frame 'font "Consolas-14") ;; Cinema Display
+                )))))
 
   ;; Fontify current frame
   (fontify-frame nil)
@@ -1083,24 +1106,6 @@
 ;; Helm
 (add-to-list 'load-path "~/.emacs.d/helm")
 (require 'helm-config)
-
-;; Line numbers, vim style
-(require 'linum)
-(global-linum-mode 1)
-(set-face-attribute 'linum nil :height 125)
-(setq linum-delay t)
-
-(eval-after-load 'linum
-  '(progn
-     (defface linum-leading-zero
-       `((t :inherit 'linum
-            :foreground ,(face-attribute 'linum :background nil t)))
-       "Face for displaying leading zeroes for line numbers in display margin."
-       :group 'linum)
-     (defun linum-format-func (line)
-       (let ((w (length (number-to-string (count-lines (point-min) (point-max))))))
-         (propertize (format (format " %%%dd " w) line) 'face 'linum)))
-     (setq linum-format 'linum-format-func)))
 
 ;; Autopair
 (add-to-list 'load-path "~/.emacs.d/autopair")
