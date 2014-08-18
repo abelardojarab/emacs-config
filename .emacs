@@ -645,7 +645,7 @@
 
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq scroll-step 1)
-(setq auto-window-vscroll nil)
+(setq auto-window-vscroll t)
 
 ;; Put something different in the scratch buffer
 (setq initial-scratch-message
