@@ -282,22 +282,6 @@
 (add-to-list 'load-path "~/.emacs.d/popup")
 (require 'popup)
 
-;; Emacs server
-(defadvice make-network-process (before force-tcp-server-ipv4 activate)
-  "Monkey patch the server to force it to use ipv4. This is a bug fix that will
-hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
-  (if (eq nil (plist-get (ad-get-args 0) :family))
-      (ad-set-args 0 (plist-put (ad-get-args 0) :family 'ipv4))))
-(require 'remote-emacsclient)
-(update-tramp-emacs-server-port-forward tramp-default-method)
-
-;; Server configuration
-(load "server")
-(unless (server-running-p)
-  (setq server-use-tcp t)
-  (setq server-port 9999)
-  (server-start))
-
 ;; Make Emacs ignore the "-e (make-frame-visible)"
 ;; that it gets passed when started by emacsclientw.
 (add-to-list 'command-switch-alist '("(make-frame-visible)" .
@@ -2558,6 +2542,28 @@ This command does the reverse of `fill-region'."
 
 ;; Enable the menu bar
 (menu-bar-mode t)
+
+;; Server configuration
+(load "server")
+(defadvice make-network-process (before force-tcp-server-ipv4 activate)
+  "Monkey patch the server to force it to use ipv4. This is a bug fix that will
+hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
+  (if (eq nil (plist-get (ad-get-args 0) :family))
+      (ad-set-args 0 (plist-put (ad-get-args 0) :family 'ipv4))))
+(unless (server-running-p)
+  (setq server-use-tcp t)
+  (setq server-port 9999)
+  (setq server-auth-dir "~/.emacs.cache/server")
+  (if (not (file-exists-p server-auth-dir))
+     (make-directory server-auth-dir))
+  (and (>= emacs-major-version 23)
+       (defun server-ensure-safe-dir (dir) "Noop" t))
+  (server-start))
+
+;; Emacsclient support
+(require 'remote-emacsclient)
+(update-tramp-emacs-server-port-forward tramp-default-method)
+
 ;; End of customizations
 
 ;; Utilities
