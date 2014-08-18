@@ -1,12 +1,18 @@
 .. |travis| image:: https://travis-ci.org/flycheck/flycheck.svg?branch=master
             :target: https://travis-ci.org/flycheck/flycheck
+            :alt: Test status
 
 .. |license| image:: https://img.shields.io/badge/license-GPL_3-green.svg?dummy
              :target: https://github.com/flycheck/flycheck/blob/master/COPYING
+             :alt: License GPL 3
 
-=============================
- Flycheck |license| |travis|
-=============================
+.. |docs| image:: https://readthedocs.org/projects/flycheck/badge/?version=latest
+          :target: https://readthedocs.org/projects/flycheck/?badge=latest
+          :alt: Documentation Status
+
+====================================
+ Flycheck |license| |docs| |travis|
+====================================
 
 .. image:: https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/logo.png
    :target: http://flycheck.readthedocs.org
@@ -98,7 +104,7 @@ Support & Contribution
 
 .. _Issue tracker: https://github.com/flycheck/flycheck/issues
 .. _Github: https://github.com/flycheck/flycheck
-.. _Contribution guidelines: http://flycheck.readthedocs.org/en/latest/contributing.html
+.. _Contribution guidelines: http://flycheck.readthedocs.org/en/latest/contrib/guidelines.html
 
 Credits
 =======
@@ -107,7 +113,7 @@ Credits
 - Credits_
 
 .. _Contributors: https://github.com/flycheck/flycheck/graphs/contributors
-.. _Credits: http://flycheck.readthedocs.org/en/latest/manual/credits.html
+.. _Credits: http://flycheck.readthedocs.org/en/latest/credits.html
 
 License
 =======

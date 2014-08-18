@@ -1258,8 +1258,12 @@ check with.  ERRORS is the list of expected errors."
 
 (ert-deftest flycheck-command-argument-p/with-symbols ()
   :tags '(definition)
-  (dolist (symbol '(source source-inplace source-original
-                           temporary-directory temporary-file-name))
+  (dolist (symbol '(source
+                    source-inplace
+                    source-original
+                    temporary-directory
+                    temporary-file-name
+                    null-device))
     (should (flycheck-command-argument-p symbol))))
 
 (ert-deftest flycheck-command-argument-p/config-file-with-variable-symbol ()
@@ -1546,27 +1550,30 @@ check with.  ERRORS is the list of expected errors."
 
 (ert-deftest flycheck-substitute-argument/temporary-directory ()
   :tags '(checker-api)
-  (flycheck-test-with-temp-buffer
-    (unwind-protect
-        (let ((dirname (car (flycheck-substitute-argument 'temporary-directory
-                                                          'emacs-lisp))))
-          (should (file-directory-p dirname))
-          (should (string-prefix-p temporary-file-directory dirname)))
-      (mapc #'flycheck-safe-delete flycheck-temporaries))))
+  (unwind-protect
+      (let ((dirname (car (flycheck-substitute-argument 'temporary-directory
+                                                        'emacs-lisp))))
+        (should (file-directory-p dirname))
+        (should (string-prefix-p temporary-file-directory dirname)))
+    (mapc #'flycheck-safe-delete flycheck-temporaries)))
 
 (ert-deftest flycheck-substitute-argument/temporary-filename ()
   :tags '(checker-api)
-  (flycheck-test-with-temp-buffer
-    (unwind-protect
-        (let ((filename (car (flycheck-substitute-argument 'temporary-file-name
-                                                           'emacs-lisp))))
-          ;; The filename should not exist, but it's parent directory should
-          (should-not (file-exists-p filename))
-          (should (file-directory-p (file-name-directory filename)))
-          (should (string-prefix-p temporary-file-directory filename))
-          (should (member (directory-file-name (file-name-directory filename))
-                          flycheck-temporaries)))
-      (mapc #'flycheck-safe-delete flycheck-temporaries))))
+  (unwind-protect
+      (let ((filename (car (flycheck-substitute-argument 'temporary-file-name
+                                                         'emacs-lisp))))
+        ;; The filename should not exist, but it's parent directory should
+        (should-not (file-exists-p filename))
+        (should (file-directory-p (file-name-directory filename)))
+        (should (string-prefix-p temporary-file-directory filename))
+        (should (member (directory-file-name (file-name-directory filename))
+                        flycheck-temporaries)))
+    (mapc #'flycheck-safe-delete flycheck-temporaries)))
+
+(ert-deftest flycheck-substitute-argument/null-device ()
+  :tags '(checker-api)
+  (should (equal (flycheck-substitute-argument 'null-device 'emacs-lisp)
+                 (list null-device))))
 
 (ert-deftest flycheck-substitute-argument/config-file ()
   :tags '(checker-api)
@@ -3342,6 +3349,17 @@ of the file will be interrupted because there are too many #ifdef configurations
      '(10 16 error "use of undeclared identifier 'nullptr'"
           :checker c/c++-clang))))
 
+(ert-deftest flycheck-define-checker/c/c++-clang-error-template ()
+  :tags '(builtin-checker external-tool language-c++)
+  (skip-unless (flycheck-check-executable 'c/c++-clang))
+  (let ((flycheck-disabled-checkers '(c/c++-gcc)))
+    (flycheck-test-should-syntax-check
+     "checkers/c_c++-error-template.cpp" 'c++-mode
+     '(2 20 error "no member named 'bar' in 'A'"
+         :checker c/c++-clang)
+     '(6 19 info "in instantiation of function template specialization 'foo<A>' requested here"
+         :checker c/c++-clang))))
+
 (ert-deftest flycheck-define-checker/c/c++-clang-error-language-standard ()
   :tags '(builtin-checker external-tool language-c++)
   (skip-unless (flycheck-check-executable 'c/c++-clang))
@@ -3510,6 +3528,15 @@ of the file will be interrupted because there are too many #ifdef configurations
           :checker c/c++-gcc)
      '(10 16 error "‘nullptr’ was not declared in this scope"
           :checker c/c++-gcc))))
+
+(ert-deftest flycheck-define-checker/c/c++-gcc-error-template ()
+  :tags '(builtin-checker external-tool language-c++)
+  (skip-unless (flycheck-check-executable 'c/c++-gcc))
+  (let ((flycheck-disabled-checkers '(c/c++-clang)))
+    (flycheck-test-should-syntax-check
+     "checkers/c_c++-error-template.cpp" 'c++-mode
+     '(2 18 error "‘struct A’ has no member named ‘bar’"
+         :checker c/c++-gcc))))
 
 (ert-deftest flycheck-define-checker/c/c++-gcc-error-language-standard ()
   :tags '(builtin-checker external-tool language-c++)
