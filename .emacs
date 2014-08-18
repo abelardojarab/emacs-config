@@ -636,7 +636,6 @@
 
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq
- scroll-step 1
  scroll-margin 0                ;; start scrolling when marker at top/bottom
  scroll-conservatively 100000   ;; marker distance from center (don't jump to center)
  scroll-preserve-screen-position 1) ;; try to keep screen position when PgDn/PgUp
@@ -716,6 +715,11 @@
 
 ;; Mouse wheel scroll support
 (mouse-wheel-mode t)
+
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
 ;; Autosave
 (setq auto-save-list-file-prefix "~/.emacs.cache/auto-save-list/.saves-")
