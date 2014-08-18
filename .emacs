@@ -588,6 +588,7 @@
           (lambda () (flycheck-mode t)))
 (add-hook 'python-mode-hook
           (lambda () (flycheck-mode t)))
+(add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
 
 ;; Highlight whole line with error
 (setq flycheck-highlighting-mode 'lines)
@@ -2172,10 +2173,13 @@ a link to this file."
 (add-hook 'python-mode-hook 'jedi-eldoc-mode)
 
 ;; Javascript mode
+(add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (add-to-list 'load-path "~/.emacs.d/js2-mode")
+(add-to-list 'load-path "~/.emacs.d/js2-refactor")
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+(require 'setup-js2-mode)
 
 ;; Ergoemacs
 (add-to-list 'load-path "~/.emacs.d/ergoemacs")
@@ -2274,6 +2278,7 @@ This command does the reverse of `fill-region'."
           (add-to-list 'Info-directory-list "~/.emacs.d/magit/")))
 
 (require 'magit)
+(require 'setup-magit)
 (require 'git-emacs)
 (require 'git-gutter-fringe+)
 (require 'git-timemachine)
