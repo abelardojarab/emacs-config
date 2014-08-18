@@ -282,9 +282,21 @@
 (add-to-list 'load-path "~/.emacs.d/popup")
 (require 'popup)
 
+;; Emacs server
+(defadvice make-network-process (before force-tcp-server-ipv4 activate)
+  "Monkey patch the server to force it to use ipv4. This is a bug fix that will
+hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
+  (if (eq nil (plist-get (ad-get-args 0) :family))
+      (ad-set-args 0 (plist-put (ad-get-args 0) :family 'ipv4))))
+(require 'remote-emacsclient)
+(update-tramp-emacs-server-port-forward tramp-default-method)
+
 ;; Server configuration
 (load "server")
-(unless (server-running-p) (server-start))
+(unless (server-running-p)
+  (setq server-use-tcp t)
+  (setq server-port 9999)
+  (server-start))
 
 ;; Make Emacs ignore the "-e (make-frame-visible)"
 ;; that it gets passed when started by emacsclientw.
