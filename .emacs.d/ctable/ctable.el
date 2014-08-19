@@ -1,6 +1,6 @@
 ;;; ctable.el --- Table component for Emacs Lisp
 
-;; Copyright (C) 2011,2012,2013 SAKURAI Masashi
+;; Copyright (C) 2011, 2012, 2013, 2014 SAKURAI Masashi
 
 ;; Author: SAKURAI Masashi <m.sakurai at kiwanami.net>
 ;; URL: https://github.com/kiwanami/emacs-ctable
@@ -41,7 +41,10 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(require 'cl)
+
+(declare-function popup-tip "popup")
+(declare-function pos-tip-show "pos-tip")
 
 
 ;;; Models and Parameters
@@ -110,6 +113,17 @@ top-junction bottom-junction left-junction right-junction cross-junction : +"
   left-top-corner right-top-corner left-bottom-corner right-bottom-corner
   top-junction bottom-junction left-junction right-junction cross-junction)
 
+(defvar ctbl:completing-read 'completing-read
+  "Customize for completing-read function.
+
+To use `ido-completing-read', put the following sexp into your
+Emacs init file:
+
+(eval-after-load 'ido
+  '(progn
+     (setq ctbl:completing-read 'ido-completing-read)))")
+
+
 (defvar ctbl:default-rendering-param
   (make-ctbl:param
    :display-header      t
@@ -135,6 +149,9 @@ top-junction bottom-junction left-junction right-junction cross-junction : +"
 
 (defvar ctbl:tooltip-method '(pos-tip popup minibuffer)
   "Preferred tooltip methods in order.")
+
+(defvar ctbl:component)
+(defvar ctbl:header-text)
 
 ;;; Faces
 
@@ -211,7 +228,7 @@ If the text already has some keymap property, the text is skipped."
 
 (defun ctbl:model-column-length (model)
   "[internal] Return the column number."
-  (length (car (ctbl:model-data model))))
+  (length (ctbl:model-column-model model)))
 
 (defun ctbl:model-row-length (model)
   "[internal] Return the row number."
@@ -815,6 +832,24 @@ bug), this function may return nil."
       (ctbl:cp-set-selected-cell cp cell-id)
       (ctbl:cp-fire-click-hooks cp))))
 
+(defun ctbl:navi-jump-to-column ()
+  "Jump to a specified column of the current row."
+  (interactive)
+  (let* ((cp (ctbl:cp-get-component))
+         (cell-id (ctbl:cursor-to-nearest-cell))
+         (row-id (car cell-id))
+         (model (ctbl:cp-get-model cp))
+         (cols (ctbl:model-column-length model))
+         (col-names (mapcar 'ctbl:cmodel-title
+                            (ctbl:model-column-model model)))
+         (completion-ignore-case t)
+         (col-name (funcall ctbl:completing-read "Column name: " col-names)))
+    (when (and cp cell-id)
+      (ctbl:navi-goto-cell
+       (ctbl:cell-id
+        row-id
+        (position col-name col-names :test 'equal))))))
+
 (defun ctbl:action-update-buffer ()
   "Update action for the latest table model."
   (interactive)
@@ -869,6 +904,8 @@ bug), this function may return nil."
      ("n" . ctbl:navi-move-down)
      ("b" . ctbl:navi-move-left)
      ("f" . ctbl:navi-move-right)
+
+     ("c" . ctbl:navi-jump-to-column)
 
      ("e" . ctbl:navi-move-right-most)
      ("a" . ctbl:navi-move-left-most)
@@ -1209,8 +1246,9 @@ This function assumes that the current buffer is the destination buffer."
                  cmodels model param)))))
     (setq column-formats (ctbl:render-get-formats cmodels column-widths))
     (catch 'ctbl:insert-break
-      (ctbl:render-main-header dest model param
-                               cmodels column-widths)
+      (when (ctbl:param-display-header param)
+        (ctbl:render-main-header dest model param
+                                 cmodels column-widths))
       (ctbl:render-main-content dest model param
                                 cmodels drows column-widths column-formats))
     ;; return the sorted list
@@ -1465,7 +1503,7 @@ This function assumes that the current buffer is the destination buffer."
                     dest model (ctbl:cp-get-param cp) (ctbl:model-column-model model)
                     rows (ctbl:async-state-column-widths astate)
                     (ctbl:async-state-column-formats astate) begin-index)
-                   (delete-backward-char 1)
+                   (backward-delete-char 1)
                    (ctbl:async-state-update-status cp 'normal)
                    ;; append row data (side effect!)
                    (setf (ctbl:component-sorted-data cp)
@@ -1576,9 +1614,9 @@ cell is truncated."
         (when (< limit-width (string-width str))
           (setq str (truncate-string-to-width (substring org 0)
                                               limit-width)))
-        (propertize str 'mouse-face 'highlight)
+        (setq str (propertize str 'mouse-face 'highlight))
         (unless (get-text-property 0 'help-echo str)
-          (propertize str 'help-echo org))
+          (setq str (propertize str 'help-echo org)))
         str)
     org))
 
@@ -1807,6 +1845,7 @@ WIDTH and HEIGHT are reference size of the table view."
   (interactive)
   (let ((param (copy-ctbl:param ctbl:default-rendering-param)))
     ;; rendering parameters
+    ;;(setf (ctbl:param-display-header param) nil)
     (setf (ctbl:param-fixed-header param) t)
     (setf (ctbl:param-hline-colors param)
           '((0 . "#00000") (1 . "#909090") (-1 . "#ff0000") (t . "#00ff00")))
@@ -1817,7 +1856,7 @@ WIDTH and HEIGHT are reference size of the table view."
     (setf (ctbl:param-bg-colors param)
           (lambda (model row-id col-id str)
             (cond ((string-match "CoCo" str) "LightPink")
-                  ((= 0 (% (1- row-index) 2)) "Darkseagreen1")
+                  ((= 0 (% (1- row-id) 2)) "Darkseagreen1")
                   (t nil))))
     (let ((cp
            (ctbl:create-table-component-buffer
@@ -1859,4 +1898,10 @@ WIDTH and HEIGHT are reference size of the table view."
 ;; (progn (eval-current-buffer) (ctbl:demo))
 
 (provide 'ctable)
+
+;; Local Variables:
+;; byte-compile-warnings: (not cl-functions)
+;; indent-tabs-mode: nil
+;; End:
+
 ;;; ctable.el ends here

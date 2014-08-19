@@ -588,7 +588,6 @@
           (lambda () (flycheck-mode t)))
 (add-hook 'python-mode-hook
           (lambda () (flycheck-mode t)))
-(add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
 
 ;; Highlight whole line with error
 (setq flycheck-highlighting-mode 'lines)
@@ -2179,9 +2178,17 @@ a link to this file."
 (add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (add-to-list 'load-path "~/.emacs.d/js2-mode")
 (add-to-list 'load-path "~/.emacs.d/js2-refactor")
+(add-to-list 'load-path "~/.emacs.d/emacs-web-server")
+(add-to-list 'load-path "~/.emacs.d/skewer-mode")
+(add-to-list 'load-path "~/.emacs.d/ac-js2")
+
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+(add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
+(add-hook 'js2-mode-hook 'skewer-mode)
+(setq ac-js2-evaluate-calls t)
 (require 'setup-js2-mode)
 
 ;; Ergoemacs
