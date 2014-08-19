@@ -2386,15 +2386,15 @@ This command does the reverse of `fill-region'."
   (if (= 0 number-lines)
       t
     (progn
-      (sit-for 0.02)
+      (sit-for (* 0.01 number-lines))
       (scroll-up increment)
       (smooth-scroll (- number-lines 1) increment))))
 
-(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 6 1)))
-(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 6 -1)))
+(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 8 1)))
+(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 8 -1)))
 
 ;; to get the scroll wheel work
-(global-set-key [(shift button5)] '(lambda () (interactive) (scroll-up-line)))
+(global-set-key [(shift button5)] '(lambdas () (interactive) (scroll-up-line)))
 (global-set-key [(shift button4)] '(lambda () (interactive) (scroll-down-line)))
 (global-set-key [(control button5)] 'text-scale-decrease)
 (global-set-key [(control button4)] 'text-scale-increase)
