@@ -552,10 +552,6 @@
           (lambda () (ggtags-mode t)))
 (add-hook 'lisp-mode-hook
           (lambda () (ggtags-mode t)))
-(add-hook 'skill-mode-hook
-          (lambda () (ggtags-mode t)))
-(add-hook 'scheme-mode-hook
-          (lambda () (ggtags-mode t)))
 (add-hook 'js2-mode-hook
           (lambda () (ggtags-mode t)))
 
@@ -588,7 +584,7 @@
 (require 'flycheck)
 (require 'flycheck-tip)
 (add-hook 'after-init-hook 'global-flycheck-mode)
-(add-hook 'js-mode-hook
+(add-hook 'js2-mode-hook
           (lambda () (flycheck-mode t)))
 (add-hook 'lisp-mode-hook
           (lambda () (flycheck-mode t)))
@@ -734,13 +730,13 @@
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)
   (if (member major-mode
-              '(emacs-lisp-mode scheme-mode lisp-mode c-mode c++-mode
+              '(emacs-lisp-mode lisp-mode c-mode c++-mode
                                 objc-mode latex-mode plain-tex-mode python-mode js2-mode))
       (indent-region (region-beginning) (region-end) nil)))
 
 (defadvice yank-pop (after indent-region activate)
   (if (member major-mode
-              '(emacs-lisp-mode scheme-mode lisp-mode c-mode c++-mode
+              '(emacs-lisp-mode lisp-mode c-mode c++-mode
                                 objc-mode latex-mode plain-tex-mode python-mode))
       (indent-region (region-beginning) (region-end) nil)))
 
@@ -1015,6 +1011,10 @@
           '(lambda ()
              (define-key java-mode-map "\C-m" 'newline-and-indent)))
 
+(add-hook 'js2-mode-hook
+          '(lambda ()
+             (define-key c-mode-map "\C-m" 'newline-and-indent)))
+
 (add-hook 'c-mode-hook
           '(lambda ()
              (define-key c-mode-map "\C-m" 'newline-and-indent)))
@@ -1031,10 +1031,6 @@
           '(lambda ()
              (define-key lisp-mode-map "\C-m" 'reindent-then-newline-and-indent)))
 
-(add-hook 'skill-mode-hook
-          '(lambda ()
-             (define-key lisp-mode-map "\C-m" 'reindent-then-newline-and-indent)))
-
 ;; Cut the lines at 80 characters; I dont like it but it is a convention
 (add-hook 'c++-mode-hook 'turn-on-auto-fill)
 (add-hook 'c-mode-hook 'turn-on-auto-fill)
@@ -1048,7 +1044,6 @@
 ;; Rainbow delimiters
 (add-to-list 'load-path "~/.emacs.d/rainbow-delimiters")
 (when (require 'rainbow-delimiters nil 'noerror)
-  (add-hook 'scheme-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
@@ -1152,12 +1147,6 @@
 (add-hook 'lisp-mode-hook
           '(lambda ()
              (turn-on-eldoc-mode)))
-(add-hook 'skill-mode-hook
-          '(lambda ()
-             (turn-on-eldoc-mode)))
-(add-hook 'scheme-mode-hook
-          '(lambda ()
-             (turn-on-eldoc-mode)))
 (add-hook 'python-mode-hook
           '(lambda ()
              (turn-on-eldoc-mode)))
@@ -1183,7 +1172,6 @@
                   nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
-(add-hook 'scheme-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
 (require 'pretty-symbols)
 (add-hook 'lisp-mode-hook 'pretty-symbols-mode)
@@ -1372,7 +1360,6 @@
   "Will indicate regions foldable with hideshow in the fringe."
   'interactive)
 (dolist (hook (list 'lisp-mode-hook
-                    'scheme-mode-hook
                     'python-mode-hook
                     'js2-mode-hook
                     'emacs-lisp-mode-hook
@@ -1386,8 +1373,6 @@
 (add-hook 'emacs-lisp-mode-hook
           (lambda () (hs-minor-mode 1)))
 (add-hook 'lisp-mode-hook
-          (lambda () (hs-minor-mode 1)))
-(add-hook 'scheme-lisp-mode-hook
           (lambda () (hs-minor-mode 1)))
 (add-hook 'python-mode-hook
           (lambda () (hs-minor-mode 1)))
@@ -2464,11 +2449,6 @@ This command does the reverse of `fill-region'."
 
 ;; iMenu
 (set-default 'imenu-auto-rescan t)
-(add-hook 'scheme-mode-hook
-          (lambda ()
-            (setq imenu-create-index-function 'imenu-example--create-lisp-index)
-            (setq imenu-generic-expression scheme-imenu-generic-expression)))
-
 (add-hook 'lisp-mode-hook
           (lambda ()
             (setq imenu-create-index-function 'imenu-example--create-lisp-index)
@@ -2476,7 +2456,6 @@ This command does the reverse of `fill-region'."
 
 (add-hook 'emacs-lisp-mode-hook 'imenu-add-menubar-index)
 (add-hook 'lisp-mode-hook 'imenu-add-menubar-index)
-(add-hook 'scheme-mode-hook 'imenu-add-menubar-index)
 (add-hook 'reftex-load-hook 'imenu-add-menubar-index)
 (add-hook 'reftex-mode-hook 'imenu-add-menubar-index)
 (add-hook 'latex-mode-hook 'imenu-add-menubar-index)
@@ -2484,7 +2463,7 @@ This command does the reverse of `fill-region'."
 (add-hook 'python-mode-hook 'imenu-add-menubar-index)
 
 ;; Enable which-function-mode for selected major modes
-(setq which-func-modes '(ecmascript-mode python-mode emacs-lisp-mode lisp-mode scheme-mode skill-mode
+(setq which-func-modes '(ecmascript-mode python-mode emacs-lisp-mode lisp-mode
                                          c-mode c++-mode makefile-mode sh-mode))
 (which-function-mode t)
 (add-hook 'js2-mode-hook
@@ -2494,8 +2473,6 @@ This command does the reverse of `fill-region'."
 (add-hook 'c-mode-common-hook
           (lambda () (which-function-mode t)))
 (add-hook 'lisp-mode-hook
-          (lambda () (which-function-mode t)))
-(add-hook 'scheme-mode-hook
           (lambda () (which-function-mode t)))
 (add-hook 'emacs-lisp-mode-hook
           (lambda () (which-function-mode t)))
