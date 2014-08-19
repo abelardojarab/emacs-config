@@ -383,6 +383,8 @@
                  '(unloaded system))
 (setq-mode-local python-mode semanticdb-find-default-throttle
                  '(unloaded system))
+(setq-mode-local js2-mode semanticdb-find-default-throttle
+                 '(unloaded system))
 
 ;; Include settings
 (require 'semantic/bovine/c)
@@ -420,8 +422,9 @@
             (setq first (cdr (car (cdr alist)))))
         (semantic-mrub-switch-tags first)))))
 (add-hook 'c-mode-common-hook 'semantic-jump-hook)
-(add-hook 'lisp-mode-common-hook 'semantic-jump-hook)
-(add-hook 'python-mode-common-hook 'semantic-jump-hook)
+(add-hook 'lisp-mode-hook 'semantic-jump-hook)
+(add-hook 'python-mode-hook 'semantic-jump-hook)
+(add-hook 'js2-mode-hook 'semantic-jump-hook)
 
 ;; Fast switch between header and implementation for C/C++
 (defun dts-switch-between-header-and-source ()
@@ -517,6 +520,7 @@
 (semanticdb-enable-gnu-global-databases 'c++-mode)
 (semanticdb-enable-gnu-global-databases 'lisp-mode)
 (semanticdb-enable-gnu-global-databases 'python-mode)
+(semanticdb-enable-gnu-global-databases 'js2-mode)
 
 ;; better searching of tags
 (add-to-list 'load-path "~/.emacs.d/ggtags")
@@ -544,13 +548,15 @@
 ;; Use ggtags instead of gtags
 (add-hook 'c-mode-common-hook
           (lambda () (ggtags-mode t)))
-(add-hook 'python-mode-common-hook
+(add-hook 'python-mode-hook
           (lambda () (ggtags-mode t)))
-(add-hook 'lisp-mode-common-hook
+(add-hook 'lisp-mode-hook
           (lambda () (ggtags-mode t)))
-(add-hook 'skill-mode-common-hook
+(add-hook 'skill-mode-hook
           (lambda () (ggtags-mode t)))
-(add-hook 'scheme-mode-common-hook
+(add-hook 'scheme-mode-hook
+          (lambda () (ggtags-mode t)))
+(add-hook 'js2-mode-hook
           (lambda () (ggtags-mode t)))
 
 ;; Function arguments
@@ -641,6 +647,7 @@
 (add-hook 'c-mode-common-hook 'indent-vline)
 (add-hook 'lisp-mode-hook 'indent-vline)
 (add-hook 'python-mode-hook 'indent-vline)
+(add-hook 'js2-mode-hook 'indent-vline)
 (load "~/.emacs.d/elisp/00_func.el")
 (require 'aux-line)
 
@@ -728,7 +735,7 @@
 (defadvice yank (after indent-region activate)
   (if (member major-mode
               '(emacs-lisp-mode scheme-mode lisp-mode c-mode c++-mode
-                                objc-mode latex-mode plain-tex-mode python-mode))
+                                objc-mode latex-mode plain-tex-mode python-mode js2-mode))
       (indent-region (region-beginning) (region-end) nil)))
 
 (defadvice yank-pop (after indent-region activate)
@@ -1033,6 +1040,7 @@
 (add-hook 'c-mode-hook 'turn-on-auto-fill)
 (add-hook 'vhdl-mode-hook 'turn-on-auto-fill)
 (add-hook 'python-mode-hook 'turn-on-auto-fill)
+(add-hook 'js2-mode-hook 'turn-on-auto-fill)
 
 ;; Make a #define be left-aligned
 (setq c-electric-pound-behavior (quote (alignleft)))
@@ -1151,6 +1159,9 @@
           '(lambda ()
              (turn-on-eldoc-mode)))
 (add-hook 'python-mode-hook
+          '(lambda ()
+             (turn-on-eldoc-mode)))
+(add-hook 'js2-mode-hook
           '(lambda ()
              (turn-on-eldoc-mode)))
 
@@ -1363,6 +1374,7 @@
 (dolist (hook (list 'lisp-mode-hook
                     'scheme-mode-hook
                     'python-mode-hook
+                    'js2-mode-hook
                     'emacs-lisp-mode-hook
                     'c++-mode-hook))
   (add-hook hook 'hideshowvis-enable))
@@ -1373,17 +1385,13 @@
 ;; enable `hs-minor-mode' at startup
 (add-hook 'emacs-lisp-mode-hook
           (lambda () (hs-minor-mode 1)))
-
-;; enable `hs-minor-mode' at startup
 (add-hook 'lisp-mode-hook
           (lambda () (hs-minor-mode 1)))
-
-;; enable `hs-minor-mode' at startup
 (add-hook 'scheme-lisp-mode-hook
           (lambda () (hs-minor-mode 1)))
-
-;; enable `hs-minor-mode' at startup
 (add-hook 'python-mode-hook
+          (lambda () (hs-minor-mode 1)))
+(add-hook 'js2-mode-hook
           (lambda () (hs-minor-mode 1)))
 
 ;; Add the following to your .emacs and uncomment it in order to get a + symbol
@@ -2479,15 +2487,17 @@ This command does the reverse of `fill-region'."
 (setq which-func-modes '(ecmascript-mode python-mode emacs-lisp-mode lisp-mode scheme-mode skill-mode
                                          c-mode c++-mode makefile-mode sh-mode))
 (which-function-mode t)
-(add-hook 'python-mode-common-hook
+(add-hook 'js2-mode-hook
+          (lambda () (which-function-mode t)))
+(add-hook 'python-mode-hook
           (lambda () (which-function-mode t)))
 (add-hook 'c-mode-common-hook
           (lambda () (which-function-mode t)))
-(add-hook 'lisp-mode-common-hook
+(add-hook 'lisp-mode-hook
           (lambda () (which-function-mode t)))
-(add-hook 'scheme-mode-common-hook
+(add-hook 'scheme-mode-hook
           (lambda () (which-function-mode t)))
-(add-hook 'emacs-lisp-mode-common-hook
+(add-hook 'emacs-lisp-mode-hook
           (lambda () (which-function-mode t)))
 
 ;; Project management
