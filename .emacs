@@ -2530,6 +2530,7 @@ This command does the reverse of `fill-region'."
 (add-to-list 'sml/hidden-modes " MRev")
 (add-to-list 'sml/hidden-modes " vl")
 (add-to-list 'sml/hidden-modes " ElDoc")
+(add-to-list 'sml/hidden-modes " -Chg")
 
 ;; Better Alt-x
 (add-to-list 'load-path "~/.emacs.d/smex")
