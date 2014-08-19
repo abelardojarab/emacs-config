@@ -539,12 +539,6 @@
       (call-process "global" nil t nil "-u")
       (kill-buffer buffer))))
 
-;; Use GNU global instead of normal find-tag, fall back to etags-select
-(global-set-key (kbd "M-.") (if (and (fboundp 'ggtags-find-tag-dwim)
-                                   (executable-find "global"))
-                                'ggtags-find-tag-dwim
-                              'etags-select-find-tag))
-
 ;; Use ggtags instead of gtags
 (add-hook 'c-mode-common-hook
           (lambda () (ggtags-mode t)))
@@ -554,12 +548,6 @@
           (lambda () (ggtags-mode t)))
 (add-hook 'js2-mode-hook
           (lambda () (ggtags-mode t)))
-
-;; Function arguments
-(add-to-list 'load-path "~/.emacs.d/functions-args")
-(require 'function-args)
-(fa-config-default)
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
 (defun my-ido-find-tag ()
@@ -572,10 +560,18 @@
               tags-completion-table)
     (find-tag (replace-regexp-in-string "\\\\" "" (ido-completing-read "Tag: " tag-names)))))
 
-;; Use GNU global if available
-(global-set-key (kbd "M-.") (if (and (fboundp 'my-ido-find-tag) t)
-                                'my-ido-find-tag
-                              'ggtags-find-tag-dwim))
+;; Use GNU global instead of normal find-tag, fall back to etags-select
+(global-set-key (kbd "M-.") (if (and (fboundp 'ggtags-find-tag-dwim)
+                                     (executable-find "global"))
+                                'ggtags-find-tag-dwim
+                              'etags-select-find-tag))
+(global-set-key (kbd "C-,") 'my-ido-find-tag)
+
+;; Function arguments
+(add-to-list 'load-path "~/.emacs.d/functions-args")
+(require 'function-args)
+(fa-config-default)
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ;; Flycheck
 (add-to-list 'load-path "~/.emacs.d/flycheck")
