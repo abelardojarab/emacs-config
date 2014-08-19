@@ -611,7 +611,7 @@
                                c-mode)
 (add-to-list 'flycheck-checkers 'c-gcc)
 (flycheck-define-clike-checker c++-g++
-                               ("g++" "-fsyntax-only" "-Wall" "-Wextra" "-std=c++10")
+                               ("g++" "-fsyntax-only" "-Wall" "-Wextra" "-std=c++11")
                                c++-mode)
 (add-to-list 'flycheck-checkers 'c++-g++)
 
