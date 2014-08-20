@@ -164,12 +164,19 @@
     (if window-system
         (progn
           (if (> (x-display-pixel-width) 1800)
-              (progn ;; Cinema display
-                (set-face-attribute 'default nil :font "Consolas-14")
-                (set-face-attribute 'variable-pitch nil :font "Cambria-17" :weight 'normal)
-                (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
-                (set-face-attribute 'linum nil :height 140)
-                (set-frame-parameter frame 'font "Consolas-14"))
+              (if (equal system-type 'windows-nt)
+                  (progn ;; Cinema display
+                    (set-face-attribute 'default nil :font "Consolas-12")
+                    (set-face-attribute 'variable-pitch nil :font "Cambria-15" :weight 'normal)
+                    (set-face-attribute 'fixed-pitch nil :font "Consolas-12")
+                    (set-face-attribute 'linum nil :height 130)
+                    (set-frame-parameter frame 'font "Consolas-12"))
+                (progn ;; Cinema display
+                  (set-face-attribute 'default nil :font "Consolas-14")
+                  (set-face-attribute 'variable-pitch nil :font "Cambria-17" :weight 'normal)
+                  (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
+                  (set-face-attribute 'linum nil :height 140)
+                  (set-frame-parameter frame 'font "Consolas-14")))
             (progn ;; Cinema display
               (set-face-attribute 'default nil :font "Consolas-10")
               (set-face-attribute 'variable-pitch nil :font "Cambria-14" :weight 'normal)
@@ -913,7 +920,7 @@
 (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
   (setq ad-return-value
         (if (and (buffer-modified-p (tabbar-tab-value tab))
-               (buffer-file-name (tabbar-tab-value tab)))
+                 (buffer-file-name (tabbar-tab-value tab)))
             (concat "+" (concat ad-return-value ""))
           (concat "" (concat ad-return-value "")))))
 
@@ -1163,9 +1170,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
@@ -2562,7 +2569,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
   (setq server-port 9999)
   (setq server-auth-dir "~/.emacs.cache/server")
   (if (not (file-exists-p server-auth-dir))
-     (make-directory server-auth-dir))
+      (make-directory server-auth-dir))
   (and (>= emacs-major-version 23)
        (defun server-ensure-safe-dir (dir) "Noop" t))
   (server-start))
