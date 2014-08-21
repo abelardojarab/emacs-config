@@ -165,18 +165,25 @@
         (progn
           (if (> (x-display-pixel-width) 1800)
               (if (equal system-type 'windows-nt)
-                  (progn ;; Cinema display
+                  (progn ;; HD monitor in Windows
                     (set-face-attribute 'default nil :font "Consolas-12")
                     (set-face-attribute 'variable-pitch nil :font "Cambria-15" :weight 'normal)
                     (set-face-attribute 'fixed-pitch nil :font "Consolas-12")
                     (set-face-attribute 'linum nil :height 130)
                     (set-frame-parameter frame 'font "Consolas-12"))
-                (progn ;; Cinema display
-                  (set-face-attribute 'default nil :font "Consolas-14")
-                  (set-face-attribute 'variable-pitch nil :font "Cambria-17" :weight 'normal)
-                  (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
-                  (set-face-attribute 'linum nil :height 140)
-                  (set-frame-parameter frame 'font "Consolas-14")))
+                (if (> (x-display-pixel-width) 2000)
+                    (progn ;; Cinema display
+                      (set-face-attribute 'default nil :font "Consolas-16")
+                      (set-face-attribute 'variable-pitch nil :font "Cambria-19" :weight 'normal)
+                      (set-face-attribute 'fixed-pitch nil :font "Consolas-16")
+                      (set-face-attribute 'linum nil :height 160)
+                      (set-frame-parameter frame 'font "Consolas-16"))
+                  (progn ;; HD monitor in Windows and Mac
+                    (set-face-attribute 'default nil :font "Consolas-14")
+                    (set-face-attribute 'variable-pitch nil :font "Cambria-17" :weight 'normal)
+                    (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
+                    (set-face-attribute 'linum nil :height 140)
+                    (set-frame-parameter frame 'font "Consolas-14"))))
             (progn ;; Cinema display
               (set-face-attribute 'default nil :font "Consolas-10")
               (set-face-attribute 'variable-pitch nil :font "Cambria-14" :weight 'normal)
