@@ -24,8 +24,21 @@
 
 ;;; Code:
 
-;; Improve Emacs display engine
-(setq redisplay-dont-pause t)
+;; Set path environment depending on OS.
+(cond
+ ;; Add Homebrew path in Darwin
+ ((equal system-type 'darwin)
+  (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
+  (push "/opt/local/bin" exec-path))
+
+ ;; Add Cygwin path in Windows
+ ((equal system-type 'windows-nt)
+  (when (file-directory-p "c:/cygwin/bin")
+    (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
+    (add-to-list 'exec-path "c:/cygwin/bin"))
+  (if (file-directory-p "c:/cygwin64/bin")
+      (setenv "PATH" (concat "c:/cygwin64/bin:" (getenv "PATH")))
+    (add-to-list 'exec-path "c:/cygwin64/bin"))))
 
 ;; Define preferred shell
 (setq shell-file-name "bash")
@@ -51,6 +64,9 @@
 
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
+
+;; End of line
+(require 'eol-conversion)
 
 ;; Garantee utf8 as input-method
 (set-input-method nil)
@@ -281,6 +297,102 @@
 (abbrev-mode t)
 (setq default-abbrev-mode t
       save-abbrevs t)
+
+;; Edition of EMACS edition modes
+(setq major-mode 'text-mode)
+(add-hook 'text-mode-hook 'text-mode-hook-identify)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'text-mode-hook (function
+                           (lambda ()(ispell-minor-mode))))
+
+;; Enter changes lines and auto-indents the new line
+(add-hook 'java-mode-hook
+          '(lambda ()
+             (define-key java-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'js2-mode-hook
+          '(lambda ()
+             (define-key c-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'c-mode-hook
+          '(lambda ()
+             (define-key c-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'c++-mode-hook
+          '(lambda ()
+             (define-key c++-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'vhdl-mode-hook
+          '(lambda ()
+             (define-key vhdl-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'lisp-mode-hook
+          '(lambda ()
+             (define-key lisp-mode-map "\C-m" 'reindent-then-newline-and-indent)))
+
+;; Cut the lines at 80 characters; I dont like it but it is a convention
+(add-hook 'c++-mode-hook 'turn-on-auto-fill)
+(add-hook 'c-mode-hook 'turn-on-auto-fill)
+(add-hook 'vhdl-mode-hook 'turn-on-auto-fill)
+(add-hook 'python-mode-hook 'turn-on-auto-fill)
+(add-hook 'js2-mode-hook 'turn-on-auto-fill)
+
+;; Make a #define be left-aligned
+(setq c-electric-pound-behavior (quote (alignleft)))
+
+;; Rainbow delimiters
+(add-to-list 'load-path "~/.emacs.d/rainbow-delimiters")
+(when (require 'rainbow-delimiters nil 'noerror)
+  (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+;; Pretty diff mode
+(autoload 'ediff-buffers "ediff" "Intelligent Emacs interface to diff" t)
+(autoload 'ediff-files "ediff" "Intelligent Emacs interface to diff" t)
+(autoload 'ediff-files-remote "ediff"
+  "Intelligent Emacs interface to diff")
+
+;; Change type files
+(setq auto-mode-alist
+      (append '(("\\.cpp$" . c++-mode)
+                ("\\.hpp$" . c++-mode)
+                ("\\.lsp$" . lisp-mode)
+                ("\\.il$" . lisp-mode)
+                ("\\.ils$" . lisp-mode)
+                ("\\.scm$" . scheme-mode)
+                ("\\.pl$" . perl-mode)
+                ) auto-mode-alist))
+
+;; Put file name on clip board
+(defun put-file-name-on-clipboard ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (with-temp-buffer
+        (insert filename)
+        (clipboard-kill-region (point-min) (point-max)))
+      (message filename))))
+
+;; Time stamp
+(setq
+ time-stamp-active t          ;; do enable time-stamps
+ time-stamp-line-limit 20     ;; check first 10 buffer lines for Time-stamp:
+ time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ;; date format
+(add-hook 'write-file-hooks 'time-stamp) ;; update when saving
+
+
+;; Trick emacs when opening a file through menu-find-file-existing
+(defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
+  "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
+  (let ((last-nonmenu-event nil))
+    ad-do-it))
+
+;; Filladapt mode for text files
+(require 'filladapt)
+(add-hook 'text-mode-hook 'turn-on-filladapt-mode)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

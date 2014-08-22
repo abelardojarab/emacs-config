@@ -1,5 +1,20 @@
 ;;; setup-js2-mode.el --- tweak js2 settings -*- lexical-binding: t; -*-
 
+(add-to-list 'load-path "~/.emacs.d/multiple-cursors")
+(add-to-list 'load-path "~/.emacs.d/js2-mode")
+(add-to-list 'load-path "~/.emacs.d/js2-refactor")
+(add-to-list 'load-path "~/.emacs.d/emacs-web-server")
+(add-to-list 'load-path "~/.emacs.d/skewer-mode")
+(add-to-list 'load-path "~/.emacs.d/ac-js2")
+
+(require 'js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+(add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
+(add-hook 'js2-mode-hook 'skewer-mode)
+(setq ac-js2-evaluate-calls t)
+
 (setq-default js2-allow-rhino-new-expr-initializer nil)
 (setq-default js2-auto-indent-p nil)
 (setq-default js2-enter-indents-newline nil)

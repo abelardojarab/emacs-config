@@ -53,6 +53,29 @@
  ;; If there is more than one, they won't work right.
  '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument)))))
 
+;; cl-lib
+(require 'cl-lib)
+(defun cl--set-getf (plist tag val)
+  (let ((p plist))
+    (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
+    (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
+
+;; Set path environment depending on OS.
+(cond
+ ;; Add Homebrew path in Darwin
+ ((equal system-type 'darwin)
+  (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
+  (push "/opt/local/bin" exec-path))
+
+ ;; Add Cygwin path in Windows
+ ((equal system-type 'windows-nt)
+  (when (file-directory-p "c:/cygwin/bin")
+    (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
+    (add-to-list 'exec-path "c:/cygwin/bin"))
+  (if (file-directory-p "c:/cygwin64/bin")
+      (setenv "PATH" (concat "c:/cygwin64/bin:" (getenv "PATH")))
+    (add-to-list 'exec-path "c:/cygwin64/bin"))))
+
 ;; Setup general
 (require 'setup-general)
 
@@ -71,13 +94,6 @@
 ;; Setup Cedet
 (require 'setup-cedet)
 
-;; cl-lib
-(require 'cl-lib)
-(defun cl--set-getf (plist tag val)
-  (let ((p plist))
-    (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
-    (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
-
 ;; Setup Etags
 (require 'setup-tags)
 
@@ -90,11 +106,19 @@
 ;; Setup Ido
 (require 'setup-ido)
 
+;; Helm
+(add-to-list 'load-path "~/.emacs.d/helm")
+(require 'helm-config)
+
 ;; Setup Autopair
 (require 'setup-autopair)
 
 ;; Setup Eldoc
 (require 'setup-eldoc)
+
+;; Filladapt mode for text files
+(require 'filladapt)
+(add-hook 'text-mode-hook 'turn-on-filladapt-mode)
 
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
@@ -105,19 +129,31 @@
 ;; Setup Spelling
 (require 'setup-spell)
 
+;; Markdown
+(add-to-list 'load-path "~/.emacs.d/markdown-mode")
+(require 'markdown-mode)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-hook 'markdown-mode-hook 'flyspell-mode)
+
+;; Yaml mode
+(add-to-list 'load-path "~/.emacs.d/yaml-mode")
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-hook 'yaml-mode-hook
+          '(lambda ()
+             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
 ;; Quack
 (require 'quack)
 
 ;; Setup hideshow
 (require 'setup-hideshow)
 
-;; Setup markdown and Yaml
-(require 'setup-markdown)
-
-;; Setup Org and LaTeX
+;; Setup Org and Latex
 (require 'setup-org)
 
-;; Setup gnus and Newsticker
+;; Setup Gnus and Newsticker
 (require 'setup-gnus)
 
 ;; Better undo
@@ -136,11 +172,18 @@
 ;; Setup versioning control
 (require 'setup-versioning)
 
-;; Setup keys
+;; Setup-keys
 (require 'setup-keys)
 
-;; Setup recent
-(require 'setup-recentf)
+;; Recentf stuff
+(require 'recentf)
+(setq recentf-max-menu-items 25)
+(setq recentf-exclude (append recentf-exclude '("/usr*")))
+(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
+(setq recentf-filename-handlers '(abbreviate-file-name))
+(setq recentf-save-file "~/.emacs.cache/recentf")
+(recentf-mode 1)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;; Setup project support
 (require 'setup-project)
@@ -148,8 +191,32 @@
 ;; Setup modeline
 (require 'setup-modeline)
 
-;; Setup server
-(require 'setup-server)
+;; Better Alt-x
+(add-to-list 'load-path "~/.emacs.d/smex")
+(require 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+
+;; Server configuration
+(load "server")
+(defadvice make-network-process (before force-tcp-server-ipv4 activate)
+  "Monkey patch the server to force it to use ipv4. This is a bug fix that will
+hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
+  (if (eq nil (plist-get (ad-get-args 0) :family))
+      (ad-set-args 0 (plist-put (ad-get-args 0) :family 'ipv4))))
+(unless (server-running-p)
+  (setq server-use-tcp t)
+  (setq server-port 9999)
+  (setq server-auth-dir "~/.emacs.cache/server")
+  (if (not (file-exists-p server-auth-dir))
+      (make-directory server-auth-dir))
+  (and (>= emacs-major-version 23)
+       (defun server-ensure-safe-dir (dir) "Noop" t))
+  (server-start))
+
+;; Emacsclient support
+(require 'remote-emacsclient)
+(update-tramp-emacs-server-port-forward tramp-default-method)
 
 ;; End of customizations
 

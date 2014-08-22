@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Improve Emacs display engine
+(setq redisplay-dont-pause t)
+
 ;; Zenburn theme
 (add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
 (require 'zenburn-theme)
@@ -311,6 +314,31 @@
 (global-set-key  [C-prior] (lambda ()
                              (interactive)
                              (crs-bury-buffer -1)))
+
+;; Pretty lambdas
+(defun pretty-lambdas ()
+  (font-lock-add-keywords
+   nil `(("\\<lambda\\>"
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
+(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
+(add-hook 'lisp-mode-hook 'pretty-lambdas)
+(add-to-list 'load-path "~/.emacs.d/pretty-symbols")
+(require 'pretty-symbols)
+(add-hook 'lisp-mode-hook 'pretty-symbols-mode)
+(add-to-list 'load-path "~/.emacs.d/pretty-mode")
+(require 'pretty-mode)
+(global-pretty-mode t)
+
+;; Line spacing
+(defun toggle-line-spacing ()
+  "Toggle line spacing between no extra space to extra half line height."
+  (interactive)
+  (if (eq line-spacing nil)
+      (setq-default line-spacing 0.5)
+    (setq-default line-spacing nil))
+  (redraw-display))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
