@@ -61,12 +61,6 @@
 (define-key query-replace-map [return] 'act)
 (define-key query-replace-map [?\C-m] 'act)
 
-;; Zoom in/out like feature, with mouse wheel
-(global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
-(global-unset-key (kbd "<C-wheel-down>"))
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase) ;; moved to <mode-line>
-(global-set-key  (kbd "<C-wheel-down>") 'text-scale-decrease)
-
 ;; Zoom in/out like feature, without mouse wheel
 (global-set-key '[C-kp-add] 'text-scale-increase)
 (global-set-key '[C-kp-subtract] 'text-scale-decrease)
@@ -157,7 +151,13 @@
 (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 8 1)))
 (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 8 -1)))
 
-;; to get the scroll wheel work
+;; Zoom in/out like feature, with mouse wheel
+(global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
+(global-unset-key (kbd "<C-wheel-down>"))
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase) ;; moved to <mode-line>
+(global-set-key  (kbd "<C-wheel-down>") 'text-scale-decrease)
+
+;; Get the scroll wheel to work
 (global-set-key [(shift button5)] '(lambdas () (interactive) (scroll-up-line)))
 (global-set-key [(shift button4)] '(lambda () (interactive) (scroll-down-line)))
 (global-set-key [(control button5)] 'text-scale-decrease)
