@@ -363,26 +363,12 @@
                 ("\\.pl$" . perl-mode)
                 ) auto-mode-alist))
 
-;; Put file name on clip board
-(defun put-file-name-on-clipboard ()
-  "Put the current file name on the clipboard"
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (with-temp-buffer
-        (insert filename)
-        (clipboard-kill-region (point-min) (point-max)))
-      (message filename))))
-
 ;; Time stamp
 (setq
  time-stamp-active t          ;; do enable time-stamps
  time-stamp-line-limit 20     ;; check first 10 buffer lines for Time-stamp:
  time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ;; date format
 (add-hook 'write-file-hooks 'time-stamp) ;; update when saving
-
 
 ;; Trick emacs when opening a file through menu-find-file-existing
 (defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
@@ -393,6 +379,14 @@
 ;; Filladapt mode for text files
 (require 'filladapt)
 (add-hook 'text-mode-hook 'turn-on-filladapt-mode)
+
+;; Uniquify-buffers
+(when (require 'uniquify nil 'noerror)  ;; make buffer names more unique
+  (setq
+   uniquify-buffer-name-style 'post-forward
+   uniquify-separator ":"
+   uniquify-after-kill-buffer-p t       ;; rename after killing uniquified
+   uniquify-ignore-buffers-re "^\\*"))  ;; don't muck with special buffers
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

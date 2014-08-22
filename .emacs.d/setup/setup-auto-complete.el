@@ -72,22 +72,5 @@
   (setq ac-sources (append ac-sources '(ac-source-yasnippet ac-source-etags ac-source-gtags ac-source-semantic ac-source-semantic-raw))))
 (add-hook 'auto-complete-mode-hook 'ac-common-setup)
 
-;; Loads Lisp auto-complete
-(add-to-list 'ac-modes 'lisp-mode)
-(defun my-lisp-mode-common-hook-func ()
-  (interactive)
-  "Function to be called when entering into c-mode."
-  (set (make-local-variable 'eldoc-documentation-function)
-       'skill-eldoc-function)
-  (when (and (require 'auto-complete nil t) (require 'auto-complete-config nil t))
-    (auto-complete-mode t)
-    (make-local-variable 'ac-sources)
-    (setq ac-sources '(ac-source-semantic
-                       ac-source-words-in-same-mode-buffers
-                       ac-source-gtags
-                       ac-source-etags
-                       ac-source-dictionary))))
-(add-hook 'lisp-mode-hook 'my-lisp-mode-common-hook-func)
-
 (provide 'setup-auto-complete)
 ;;; setup-auto-complete.el ends here

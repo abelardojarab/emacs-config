@@ -24,6 +24,28 @@
 
 ;;; Code:
 
+;; Line spacing
+(defun toggle-line-spacing ()
+  "Toggle line spacing between no extra space to extra half line height."
+  (interactive)
+  (if (eq line-spacing nil)
+      (setq-default line-spacing 0.5)
+    (setq-default line-spacing nil))
+  (redraw-display))
+
+;; Put file name on clip board
+(defun put-file-name-on-clipboard ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (with-temp-buffer
+        (insert filename)
+        (clipboard-kill-region (point-min) (point-max)))
+      (message filename))))
+
 ;; Remove the trailing spaces
 (defun remove-trailing-spaces ()
   "Remove trailing spaces in the whole buffer."

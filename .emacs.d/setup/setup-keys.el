@@ -173,6 +173,10 @@
 (global-set-key (kbd "C-y") 'redo) ; Microsoft Windows style
 (setq undo-no-redo t)
 
+;; Better undo
+(require 'undo-tree)
+(global-undo-tree-mode)
+
 ;; Right click mouse
 (global-unset-key (kbd "<mouse-3>"))
 (require 'mouse3)

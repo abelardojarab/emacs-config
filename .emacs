@@ -78,16 +78,16 @@
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
-;; Setup Etags
+;; Setup Etags and GTAGS
 (require 'setup-tags)
 
 ;; Setup Flycheck
 (require 'setup-flycheck)
 
-;; Setup Compile
+;; Setup compile
 (require 'setup-compile)
 
-;; Setup Ido
+;; Setup Ido and Flex
 (require 'setup-ido)
 
 ;; Setup Autopair
@@ -99,16 +99,13 @@
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
 
-;; Setup AutoComplete
-(require 'setup-auto-complete)
-
 ;; Setup Spelling
 (require 'setup-spell)
 
-;; Quack
-(require 'quack)
+;; Setup Auto-complete
+(require 'setup-auto-complete)
 
-;; Setup hideshow
+;; Setup Hideshow
 (require 'setup-hideshow)
 
 ;; Setup markdown and Yaml
@@ -117,18 +114,17 @@
 ;; Setup Org and LaTeX
 (require 'setup-org)
 
-;; Setup gnus and Newsticker
-(require 'setup-gnus)
-
-;; Better undo
-(require 'undo-tree)
-(global-undo-tree-mode)
-
 ;; Setup Python
 (require 'setup-python)
 
-;; Javascript mode
+;; Setup Javascript mode
 (require 'setup-js2-mode)
+
+;; Setup Lisp mode
+(require 'setup-lisp)
+
+;; Setup keys
+(require 'setup-keys)
 
 ;; Setup bookmarks
 (require 'setup-bookmarks)
@@ -136,8 +132,8 @@
 ;; Setup versioning control
 (require 'setup-versioning)
 
-;; Setup keys
-(require 'setup-keys)
+;; Setup tabbar
+(require 'setup-tabbar)
 
 ;; Setup recent
 (require 'setup-recentf)
@@ -145,13 +141,14 @@
 ;; Setup project support
 (require 'setup-project)
 
-;; Setup modeline
+;; Setup gnus and Newsticker
+(require 'setup-gnus)
+
+;; Setup modeline and Smex
 (require 'setup-modeline)
 
 ;; Setup server
 (require 'setup-server)
 
-;; End of customizations
-
-;; Utilities
+;; Setup utilities
 (require 'setup-utilities)
