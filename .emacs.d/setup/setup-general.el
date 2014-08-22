@@ -116,10 +116,6 @@
 (add-to-list 'load-path "~/.emacs.d/popwin")
 (require 'popwin)
 
-
-;; More general setup
-
-
 ;; Keep session
 (require 'desktop)
 (desktop-save-mode 1)
@@ -132,7 +128,6 @@
 (setq search-highlight t)
 (setq query-replace-highlight t)
 
-
 ;; show-paren-mode: subtle blinking of matching paren (defaults are ugly)
 (show-paren-mode t)
 
@@ -141,24 +136,6 @@
 
 ;; deleting files goes to OS's trash folder
 (setq delete-by-moving-to-trash t)
-
-;; Treat 'y' or <CR> as yes, 'n' as no.
-(fset 'yes-or-no-p 'y-or-n-p)
-(define-key query-replace-map [return] 'act)
-(define-key query-replace-map [?\C-m] 'act)
-
-;; Moving cursor down at bottom scrolls only a single line, not half page
-(setq
- scroll-margin 0                ;; start scrolling when marker at top/bottom
- scroll-conservatively 100000   ;; marker distance from center (don't jump to center)
- scroll-preserve-screen-position 1) ;; try to keep screen position when PgDn/PgUp
-
-;; These ones are buffer local and thus have to be set up by setq-default
-(setq-default scroll-up-aggressively 0.01 scroll-down-aggressively 0.01)
-
-;; Moving cursor down at bottom scrolls only a single line, not half page
-(setq scroll-step 1)
-(setq auto-window-vscroll t)
 
 ;; Put something different in the scratch buffer
 (setq initial-scratch-message
@@ -184,11 +161,16 @@
 (setq fill-column 160)
 (require 'fill-column-indicator)
 
-;; Marker if the line goes beyond the end of the screen (arrows)
-(global-visual-line-mode 1)
+;; Filladapt mode for text files
+(require 'filladapt)
+(add-hook 'text-mode-hook 'turn-on-filladapt-mode)
 
-;; Save bookmark when you save a file
-(setq bookmark-save-flag 1)
+;; Cut the lines at 80 characters; I dont like it but it is a convention
+(add-hook 'c++-mode-hook 'turn-on-auto-fill)
+(add-hook 'c-mode-hook 'turn-on-auto-fill)
+(add-hook 'vhdl-mode-hook 'turn-on-auto-fill)
+(add-hook 'python-mode-hook 'turn-on-auto-fill)
+(add-hook 'js2-mode-hook 'turn-on-auto-fill)
 
 ;; Set indent to 4 instead of 2
 (setq standard-indent 4)
@@ -217,14 +199,6 @@
               '(emacs-lisp-mode lisp-mode c-mode c++-mode
                                 objc-mode latex-mode plain-tex-mode python-mode))
       (indent-region (region-beginning) (region-end) nil)))
-
-;; Mouse wheel scroll support
-(mouse-wheel-mode t)
-
-;; scroll one line at a time (less "jumpy" than defaults)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-(setq mouse-wheel-progressive-speed t) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
 ;; Autosave
 (setq auto-save-list-file-prefix "~/.emacs.cache/auto-save-list/.saves-")
@@ -271,12 +245,6 @@
 ;; Ignore case when looking for a file
 (setq read-file-name-completion-ignore-case t)
 
-;; Insertion of Dates, bind to C-c i
-(defun insert-date-string ()
-  "Insert a nicely formated date string."
-  (interactive)
-  (insert (format-time-string "%Y-%m-%d")))
-
 ;; Brackets matching script
 (global-set-key "%" 'match-paren)
 (defun match-paren (arg)
@@ -286,56 +254,12 @@
         ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
         (t (self-insert-command (or arg 1)))))
 
-;; Abbrevs
-(setq abbrev-file-name "~/.emacs.cache/abbrev_defs")
-(if (file-exists-p abbrev-file-name)
-    (quietly-read-abbrev-file))
-(add-hook 'kill-emacs-hook
-          'write-abbrev-file)
-
-;; Activate template autocompletion
-(abbrev-mode t)
-(setq default-abbrev-mode t
-      save-abbrevs t)
-
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
 (add-hook 'text-mode-hook 'text-mode-hook-identify)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'text-mode-hook (function
-                           (lambda ()(ispell-minor-mode))))
-
-;; Enter changes lines and auto-indents the new line
-(add-hook 'java-mode-hook
-          '(lambda ()
-             (define-key java-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'js2-mode-hook
-          '(lambda ()
-             (define-key c-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'c-mode-hook
-          '(lambda ()
-             (define-key c-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'c++-mode-hook
-          '(lambda ()
-             (define-key c++-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'vhdl-mode-hook
-          '(lambda ()
-             (define-key vhdl-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'lisp-mode-hook
-          '(lambda ()
-             (define-key lisp-mode-map "\C-m" 'reindent-then-newline-and-indent)))
-
-;; Cut the lines at 80 characters; I dont like it but it is a convention
-(add-hook 'c++-mode-hook 'turn-on-auto-fill)
-(add-hook 'c-mode-hook 'turn-on-auto-fill)
-(add-hook 'vhdl-mode-hook 'turn-on-auto-fill)
-(add-hook 'python-mode-hook 'turn-on-auto-fill)
-(add-hook 'js2-mode-hook 'turn-on-auto-fill)
+                           (lambda () (ispell-minor-mode))))
 
 ;; Make a #define be left-aligned
 (setq c-electric-pound-behavior (quote (alignleft)))
@@ -375,10 +299,6 @@
   "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
   (let ((last-nonmenu-event nil))
     ad-do-it))
-
-;; Filladapt mode for text files
-(require 'filladapt)
-(add-hook 'text-mode-hook 'turn-on-filladapt-mode)
 
 ;; Uniquify-buffers
 (when (require 'uniquify nil 'noerror)  ;; make buffer names more unique

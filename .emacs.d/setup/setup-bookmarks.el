@@ -26,7 +26,9 @@
 
 ;; Bookmarks
 (add-to-list 'load-path "~/.emacs.d/bm")
+(setq bookmark-save-flag 1)
 (setq bm-restore-repository-on-load t)
+
 (require 'bm)
 (setq bm-highlight-style 'bm-highlight-line-and-fringe)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)

@@ -31,6 +31,36 @@
 (require 'ergoemacs-mode)
 (ergoemacs-mode 1)
 
+;; Enter changes lines and auto-indents the new line
+(add-hook 'java-mode-hook
+          '(lambda ()
+             (define-key java-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'js2-mode-hook
+          '(lambda ()
+             (define-key c-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'c-mode-hook
+          '(lambda ()
+             (define-key c-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'c++-mode-hook
+          '(lambda ()
+             (define-key c++-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'vhdl-mode-hook
+          '(lambda ()
+             (define-key vhdl-mode-map "\C-m" 'newline-and-indent)))
+
+(add-hook 'lisp-mode-hook
+          '(lambda ()
+             (define-key lisp-mode-map "\C-m" 'reindent-then-newline-and-indent)))
+
+;; Treat 'y' or <CR> as yes, 'n' as no.
+(fset 'yes-or-no-p 'y-or-n-p)
+(define-key query-replace-map [return] 'act)
+(define-key query-replace-map [?\C-m] 'act)
+
 ;; Zoom in/out like feature, with mouse wheel
 (global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
 (global-unset-key (kbd "<C-wheel-down>"))
@@ -93,6 +123,27 @@
   (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
+
+;; Mouse wheel scroll support
+(mouse-wheel-mode t)
+
+;; Moving cursor down at bottom scrolls only a single line, not half page
+(setq
+ scroll-margin 0                ;; start scrolling when marker at top/bottom
+ scroll-conservatively 100000   ;; marker distance from center (don't jump to center)
+ scroll-preserve-screen-position 1) ;; try to keep screen position when PgDn/PgUp
+
+;; These ones are buffer local and thus have to be set up by setq-default
+(setq-default scroll-up-aggressively 0.01 scroll-down-aggressively 0.01)
+
+;; Moving cursor down at bottom scrolls only a single line, not half page
+(setq scroll-step 1)
+(setq auto-window-vscroll t)
+
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed t) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
 ;; Scroll with the mouse
 (defun smooth-scroll (number-lines increment)

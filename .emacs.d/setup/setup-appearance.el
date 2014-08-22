@@ -27,6 +27,9 @@
 ;; Improve Emacs display engine
 (setq redisplay-dont-pause t)
 
+;; Marker if the line goes beyond the end of the screen (arrows)
+(global-visual-line-mode 1)
+
 ;; Zenburn theme
 (add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
 (require 'zenburn-theme)

@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; Insertion of Dates, bind to C-c i
+(defun insert-date-string ()
+  "Insert a nicely formated date string."
+  (interactive)
+  (insert (format-time-string "%Y-%m-%d")))
+
 ;; Line spacing
 (defun toggle-line-spacing ()
   "Toggle line spacing between no extra space to extra half line height."
