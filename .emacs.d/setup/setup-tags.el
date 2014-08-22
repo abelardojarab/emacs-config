@@ -63,11 +63,11 @@
     (find-tag (replace-regexp-in-string "\\\\" "" (ido-completing-read "Tag: " tag-names)))))
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
-(global-set-key (kbd "C-,") (if (and (fboundp 'ggtags-find-tag-dwim)
+(global-set-key (kbd "M-.") (if (and (fboundp 'ggtags-find-tag-dwim)
                                      (executable-find "global"))
                                 'ggtags-find-tag-dwim
                               'my-ido-find-tag))
-(global-set-key (kbd "M-.") 'etags-select-find-tag)
+(global-set-key (kbd "C-,") 'etags-select-find-tag)
 
 (provide 'setup-tags)
 ;;; setup-tags.el ends here
