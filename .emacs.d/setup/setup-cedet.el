@@ -31,12 +31,14 @@
 (set-default 'semantic-case-fold t)
 (global-set-key [?\C- ] 'semantic-ia-complete-symbol-menu)
 (semantic-load-enable-code-helpers) ;; Enable prototype help and smart completion
-(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
-(add-to-list 'semantic-default-submodes 'global-highlight-func-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode t)
+
+;; Cedet plugins
+(global-semanticdb-minor-mode t)
+(global-semantic-idle-summary-mode t)
+(global-semantic-idle-completions-mode t)
+(global-semantic-highlight-func-mode t)
+(global-semantic-decoration-mode t)
+(global-semantic-idle-local-symbol-highlight-mode t)
 
 ;; Enable code folding
 (global-semantic-tag-folding-mode)
