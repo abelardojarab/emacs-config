@@ -45,5 +45,10 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
 (require 'remote-emacsclient)
 (update-tramp-emacs-server-port-forward tramp-default-method)
 
+;; Make Emacs ignore the "-e (make-frame-visible)"
+;; that it gets passed when started by emacsclientw.
+(add-to-list 'command-switch-alist '("(make-frame-visible)" .
+                                     (lambda (s))))
+
 (provide 'setup-server)
 ;;; setup-server.el ends here

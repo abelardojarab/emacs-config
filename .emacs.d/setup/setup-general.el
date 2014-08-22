@@ -87,11 +87,6 @@
 ;; Emacs is a text editor, make sure your text files end in a newline
 (setq require-final-newline 'query)
 
-;; Make Emacs ignore the "-e (make-frame-visible)"
-;; that it gets passed when started by emacsclientw.
-(add-to-list 'command-switch-alist '("(make-frame-visible)" .
-                                     (lambda (s))))
-
 ;; Automatically kill all spawned processes on exit
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
