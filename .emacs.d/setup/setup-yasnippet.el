@@ -41,29 +41,29 @@
 (setq yas-prompt-functions '(yas-popup-prompt yas-no-prompt))
 
 ;; Tweaking Yasnippet for Org mode
-(defun yas/org-very-safe-expand ()
-  (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
+(defun yas--org-very-safe-expand ()
+  (let ((yas-fallback-behavior 'return-nil)) (yas-expand)))
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (make-variable-buffer-local 'yas/trigger-key)
-            (setq yas/trigger-key [tab])
-            (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
-            (define-key yas/keymap [tab] 'yas/next-field)))
+            (make-variable-buffer-local 'yas-trigger-key)
+            (setq yas-trigger-key [tab])
+            (add-to-list 'org-tab-first-hook 'yas--org-very-safe-expand)
+            (define-key yas-keymap [tab] 'yas-next-field)))
 
 ;; Provide headers or templates for new files using Yasnippet
-(defun yas/expand-by-uuid (mode uuid)
+(defun yas--expand-by-uuid (mode uuid)
   "Exapnd snippet template in MODE by its UUID"
-  (yas/expand-snippet
-   (yas/template-content
-    (yas/get-template-by-uuid mode uuid))))
+  (yas--expand-snippet
+   (yas--template-content
+    (yas--get-template-by-uuid mode uuid))))
 
 ;; Yasnippet templates used in auto-insert mode
 (require 'autoinsert)
 (auto-insert-mode)
 (setq auto-insert-query nil)
 (define-auto-insert "\.R"
-  '(lambda () (yas/expand-by-uuid 'ess-mode "header")))
+  '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
 ;; Get email from Magit if available
 (defun yas--magit-email-or-default ()
   "Get email from GIT or use default"
