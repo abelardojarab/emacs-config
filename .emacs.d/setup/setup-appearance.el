@@ -154,6 +154,7 @@
                     (concat "/home/" user-login-name) "~"
                     (or buffer-file-name "%b"))))))
 
+;; Adjust Emacs size according to resolution
 ;; Next code work with Emacs 21.4, 22.3, 23.1.
 (when window-system
   (add-hook 'window-setup-hook
@@ -170,23 +171,16 @@
               (add-to-list 'initial-frame-alist (cons 'height ty))
               t)))
 
-;; Adjust Emacs size according to resolution
-(defun set-frame-size-according-to-resolution ()
+(defun x11-maximize-frame ()
+  "Maximize the current frame (to full screen)"
   (interactive)
-  (if window-system
-      (progn
-        ;; use 130 char wide window for largeish displays
-        ;; and smaller 80 column windows for smaller displays
-        ;; pick whatever numbers make sense for you
-        (if (> (x-display-pixel-width) 1280)
-            (add-to-list 'default-frame-alist (cons 'width 140))
-          (add-to-list 'default-frame-alist (cons 'width 80)))
-        ;; for the height, subtract a couple hundred pixels
-        ;; from the screen height (for panels, menubars and
-        ;; whatnot), then divide by the height of a char to
-        ;; get the height we want
-        (add-to-list 'default-frame-alist
-                     (cons 'height (/ (- (x-display-pixel-height) 150) (frame-char-height)))))))
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0)))
+
+(defun w32-maximize-frame ()
+  "Maximize the current frame (to full screen)"
+  (interactive)
+  (w32-send-sys-command #xf030))
 
 ;; highlight indentation using vertical lines
 (add-hook 'c-mode-common-hook 'indent-vline)

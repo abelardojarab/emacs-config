@@ -267,8 +267,12 @@ a link to this file."
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
                                                                                       "/clippaste /convert=" filename))
 
-      ;; Linux: ImageMagick: (call-process "import" nil nil nil filename)
-      (call-process "import" nil nil nil filename)
+      (if (equal system-type 'darwin)
+          ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
+          (call-process "pngpaste" nil nil nil filename)
+
+          ;; Linux: ImageMagick: (call-process "import" nil nil nil filename)
+          (call-process "import" nil nil nil filename))
       ) ;; if
     (insert (concat "[[file:" filename "]]"))
     (org-display-inline-images)))
