@@ -64,6 +64,7 @@
 (setq auto-insert-query nil)
 (define-auto-insert "\.R"
   '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
+
 ;; Get email from Magit if available
 (defun yas--magit-email-or-default ()
   "Get email from GIT or use default"
