@@ -191,4 +191,18 @@
     (unless first-line
       (indent-line-to offset))))
 
+;; json files setup
+(add-to-list 'load-path "~/.emacs.d/json-reformat")
+(add-to-list 'load-path "~/.emacs.d/json-snatcher")
+(add-to-list 'load-path "~/.emacs.d/json-mode")
+(require 'json-mode)
+(add-to-list 'auto-mode-alist '("\\.json?$" . json-mode))
+
+(defun js-mode-bindings ()
+  "Sets a hotkey for using the json-snatcher plugin"
+  (when (string-match  "\\.json$" (buffer-name))
+    (local-set-key (kbd "C-c C-g") 'jsons-print-path)))
+(add-hook 'js-mode-hook 'js-mode-bindings)
+(add-hook 'js2-mode-hook 'js-mode-bindings)
+
 (provide 'setup-js2-mode)
