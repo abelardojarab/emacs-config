@@ -232,6 +232,7 @@
 (global-unset-key [(control mouse-3)])
 (require 'mouse3)
 (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
+(global-set-key [(control mouse-3)] 'mouse3-popup-menu)
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
