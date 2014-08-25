@@ -155,7 +155,7 @@
 (global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
 (global-unset-key (kbd "<C-wheel-down>"))
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase) ;; moved to <mode-line>
-(global-set-key  (kbd "<C-wheel-down>") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 ;; Get the scroll wheel to work
 (global-set-key [(shift button5)] '(lambdas () (interactive) (scroll-up-line)))
@@ -229,10 +229,9 @@
 (global-undo-tree-mode)
 
 ;; Right click mouse
-(global-unset-key (kbd "<mouse-3>"))
+(global-unset-key [(control mouse-3)])
 (require 'mouse3)
 (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
-(global-set-key (kbd "<mouse-3>") 'mouse3-region-popup-menu)
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
