@@ -52,7 +52,7 @@
           (lambda () (ggtags-mode t)))
 
 ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
-(defun my-ido-find-tag ()
+(defun ido-find-tag ()
   "Find a tag using ido"
   (interactive)
   (tags-completion-table)
@@ -66,8 +66,10 @@
 (global-set-key (kbd "M-.") (if (and (fboundp 'ggtags-find-tag-dwim)
                                      (executable-find "global"))
                                 'ggtags-find-tag-dwim
-                              'my-ido-find-tag))
-(global-set-key (kbd "C-,") 'etags-select-find-tag)
+                              'etags-select-find-tag))
+
+;; Use Helm instead of 'etags-select-find-tag
+(global-set-key (kbd "C-,") 'helm-etags-select)
 
 (provide 'setup-tags)
 ;;; setup-tags.el ends here
