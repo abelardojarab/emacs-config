@@ -57,9 +57,6 @@
 ;; Disable tool-bar
 (tool-bar-mode -1)
 
-;; Disable scroll bar
-(set-scroll-bar-mode nil)
-
 ;; Make ?, ? and such work
 (set-language-environment 'spanish)
 
