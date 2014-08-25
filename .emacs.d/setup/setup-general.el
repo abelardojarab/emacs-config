@@ -93,6 +93,12 @@
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (flet ((process-list ())) ad-do-it))
 
+;; if indent-tabs-mode is off, untabify before saving
+(add-hook 'write-file-hooks
+          (lambda () (if (not indent-tabs-mode)
+                         (save-excursion
+                           (untabify (point-min) (point-max)))) nil))
+
 ;; Try not to split windows
 (setq same-window-regexps '("."))
 
@@ -241,30 +247,12 @@
 ;; Ignore case when looking for a file
 (setq read-file-name-completion-ignore-case t)
 
-;; Brackets matching script
-(global-set-key "%" 'match-paren)
-(defun match-paren (arg)
-  "Go to the matching paren if on a paren; otherwise insert %."
-  (interactive "p")
-  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
-        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
-        (t (self-insert-command (or arg 1)))))
-
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
 (add-hook 'text-mode-hook 'text-mode-hook-identify)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'text-mode-hook (function
                            (lambda () (ispell-minor-mode))))
-
-;; Make a #define be left-aligned
-(setq c-electric-pound-behavior (quote (alignleft)))
-
-;; Rainbow delimiters
-(add-to-list 'load-path "~/.emacs.d/rainbow-delimiters")
-(when (require 'rainbow-delimiters nil 'noerror)
-  (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 ;; Pretty diff mode
 (autoload 'ediff-buffers "ediff" "Intelligent Emacs interface to diff" t)
@@ -275,6 +263,7 @@
 ;; Change type files
 (setq auto-mode-alist
       (append '(("\\.cpp$" . c++-mode)
+                ("\\.h$" . c++-mode)
                 ("\\.hpp$" . c++-mode)
                 ("\\.lsp$" . lisp-mode)
                 ("\\.il$" . lisp-mode)

@@ -131,11 +131,16 @@ buffer."
 (global-unset-key "\C-b")
 (global-set-key "\C-b" 'beautify-buffer)
 
-;; if indent-tabs-mode is off, untabify before saving
-(add-hook 'write-file-hooks
-          (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+;; Use % to match various kinds of brackets...
+;; See: http://www.lifl.fr/~hodique/uploads/Perso/patches.el
+(defun match-paren (arg)
+  "Go to the matchin paren if on a paren; otherwise insert %."
+  (interactive "p")
+  (let ((prev-char (char-to-string (preceding-char)))
+        (next-char (char-to-string (following-char))))
+    (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
+          ((string-match "[\]})>]" prev-char) (backward-sexp 1))
+          (t (self-insert-command (or arg 1))))))
 
 (provide 'setup-utilities)
 ;;; setup-utilities.el ends here

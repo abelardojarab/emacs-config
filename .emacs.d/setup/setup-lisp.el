@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; Rainbow delimiters
+(add-to-list 'load-path "~/.emacs.d/rainbow-delimiters")
+(when (require 'rainbow-delimiters nil 'noerror)
+  (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
 ;; Quack
 (require 'quack)
 

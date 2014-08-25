@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Make a #define be left-aligned
+(setq c-electric-pound-behavior (quote (alignleft)))
+
 ;; Enable Semantic
 (require 'semantic/ia)
 (semantic-mode 1)
@@ -242,7 +245,6 @@
 (add-to-list 'load-path "~/.emacs.d/functions-args")
 (require 'function-args)
 (fa-config-default)
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 (provide 'setup-cedet)
 ;;; setup-cedet.el ends here
