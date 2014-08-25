@@ -65,6 +65,29 @@
 (define-auto-insert "\.R"
   '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
 
+(defun autoinsert-yas-expand()
+  "Replace text in yasnippet template."
+  (yas-expand-snippet (buffer-string) (point-min) (point-max)))
+
+(define-auto-insert "\\.c$"  ["c-auto-insert" autoinsert-yas-expand])
+(define-auto-insert "\\.cpp$" ["c++-auto-insert" autoinsert-yas-expand])
+(define-auto-insert "\\.cs$" ["csharp-auto-insert" autoinsert-yas-expand])
+(define-auto-insert "\\.org$" ["org-auto-insert" autoinsert-yas-expand])
+
+(defadvice auto-insert (around yasnippet-expand-after-auto-insert activate)
+  "Expand Content Auto-inserted as yasnippet Templete,
+  so That WE could use yasnippet in autoinsert mode "
+  (let ((is-new-File (and (not buffer-read-only)
+                            (or (eq this-command 'auto-insert)
+                               (and auto-insert (bobp) (eobp))))))
+    ad-do-it
+    (let ((old-point-max (point-max)))
+      (when is-new-File
+        (goto-char old-point-max)
+        (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
+        (delete-region (point-min) old-point-max)
+        ))))
+
 ;; Get email from Magit if available
 (defun yas--magit-email-or-default ()
   "Get email from GIT or use default"
@@ -72,14 +95,58 @@
       (magit-get "user.email")
     user-mail-address))
 
-;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
-(defun iy-ac-tab-noconflict ()
-  (let ((command (key-binding [tab]))) ; remember command
-    (local-unset-key [tab]) ; unset from (kbd "<tab>")
-    (local-set-key (kbd "TAB") command))) ; bind to (kbd "TAB")
-(add-hook 'ruby-mode-hook 'iy-ac-tab-noconflict)
-(add-hook 'markdown-mode-hook 'iy-ac-tab-noconflict)
-(add-hook 'org-mode-hook 'iy-ac-tab-noconflict)
+;; Fast creation of snippets
+(defvaralias 'yas/init-snippet-template 'yas-new-snippet-default)
+
+(defun yas-new-snippet-with-content (s e)
+  "Create snippet from region to speed-up snippet development."
+  (interactive "r")
+  (let ((initial-text (buffer-substring s e))
+        (default-directory (file-name-as-directory (car (yas-snippet-dirs)))))
+    (yas-new-snippet t)
+    (save-excursion
+      (when initial-text
+        (insert initial-text)
+        (goto-char (point-min))
+        (while (re-search-forward "[\\$]" nil t)
+          (replace-match "\\\\\\&"))))
+    (yas-expand-snippet yas/init-snippet-template)))
+
+;; Make snippet placeholders
+(defun yas/make-placeholder (s e)
+  "Make yasnippet placeholder from region."
+  (interactive "r")
+  (let ((text (buffer-substring s e)))
+    (yas-expand-snippet "\\${$1:`text`}" s e)))
+(define-key snippet-mode-map "\C-c\C-n" 'yas/make-placeholder)
+
+;; Auto-complete enhancement
+(defun yas/set-ac-modes ()
+  "Add modes in `yas-snippet-dirs' to `ac-modes'. Call (yas/set-ac-modes) BEFORE (global-auto-complete-mode 1) or (ac-config-default)."
+  (eval-after-load "auto-complete"
+    '(setq ac-modes
+           (append
+            (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
+                                   (yas-snippet-dirs)))
+            ac-modes))))
+
+;; Expand snippet synchronously
+(defvar yas/recursive-edit-flag nil)
+(defun yas-expand-sync ()
+  "Execute `yas-expand'. This function exits after expanding snippet."
+  (interactive)
+  (let ((yas/recursive-edit-flag t))
+    (call-interactively 'yas-expand)
+    (recursive-edit)))
+(defun yas-expand-snippet-sync (content &optional start end expand-env)
+  "Execute `yas-expand-snippet'. This function exits after expanding snippet."
+  (let ((yas/recursive-edit-flag t))
+    (yas-expand-snippet content start end expand-env)
+    (recursive-edit)))
+(defun yas/after-exit-snippet-hook--recursive-edit ()
+  (when yas/recursive-edit-flag
+    (throw 'exit nil)))
+(add-hook 'yas-after-exit-snippet-hook 'yas/after-exit-snippet-hook--recursive-edit)
 
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet.el ends here

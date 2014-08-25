@@ -554,5 +554,14 @@ a link to this file."
                                    (wl . wl-other-frame))))
 
 
+;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
+(defun iy-ac-tab-noconflict ()
+  (let ((command (key-binding [tab]))) ; remember command
+    (local-unset-key [tab]) ; unset from (kbd "<tab>")
+    (local-set-key (kbd "TAB") command))) ; bind to (kbd "TAB")
+(add-hook 'ruby-mode-hook 'iy-ac-tab-noconflict)
+(add-hook 'markdown-mode-hook 'iy-ac-tab-noconflict)
+(add-hook 'org-mode-hook 'iy-ac-tab-noconflict)
+
 (provide 'setup-org)
 ;;; setup-org.el ends here

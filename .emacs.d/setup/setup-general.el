@@ -82,6 +82,9 @@
 ;; no extra whitespace after lines
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; update the copyright when present
+(add-hook 'before-save-hook 'copyright-update)
+
 ;; Emacs is a text editor, make sure your text files end in a newline
 (setq require-final-newline 'query)
 
