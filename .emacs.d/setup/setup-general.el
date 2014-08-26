@@ -165,7 +165,10 @@
 
 ;; Filladapt mode for text files
 (require 'filladapt)
+(add-hook 'tex-mode-hook 'turn-on-filladapt-mode)
 (add-hook 'text-mode-hook 'turn-on-filladapt-mode)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'c-mode-hook 'turn-off-filladapt-mode)
 
 ;; Cut the lines at 80 characters; I dont like it but it is a convention
 (add-hook 'c++-mode-hook 'turn-on-auto-fill)
@@ -271,6 +274,16 @@
                 ("\\.scm$" . scheme-mode)
                 ("\\.pl$" . perl-mode)
                 ) auto-mode-alist))
+
+;; Turn on subword-mode for non-lispy languages
+(add-hook 'c-mode-hook 'subword-mode)
+(mapc (lambda (mode)
+        (add-hook mode 'subword-mode))
+      '(c-mode-hook
+        c++-mode-hook
+        python-mode-hook
+        js2-mode-hook
+        java-mode-hook))
 
 ;; Time stamp
 (setq

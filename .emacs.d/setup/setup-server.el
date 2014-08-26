@@ -50,5 +50,13 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
 (add-to-list 'command-switch-alist '("(make-frame-visible)" .
                                      (lambda (s))))
 
+;; Set tramp variables
+(setq tramp-default-method "ssh")
+
+;; have tramp save temps locally...
+(setq auto-save-file-name-transforms
+      '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
+        ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs.cache/backups/" t)))
+
 (provide 'setup-server)
 ;;; setup-server.el ends here

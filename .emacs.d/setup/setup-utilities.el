@@ -73,12 +73,11 @@ This command does the reverse of `fill-paragraph'."
   (let ((fill-column 90002000))
     (fill-paragraph nil)))
 
-(defun unfill-region (start end)
-  "Replace newline chars in region by single spaces.
-This command does the reverse of `fill-region'."
+(defun unfill-region (begin end)
+  "Remove all linebreaks in a region but leave paragraphs,
+ indented text (quotes,code) and lines starting with an asterix (lists) intact."
   (interactive "r")
-  (let ((fill-column 90002000))
-    (fill-region start end)))
+  (replace-regexp "\\([^\n]\\)\n\\([^ *\n]\\)" "\\1 \\2" nil begin end))
 
 ;; dos2unix
 (defun dos2unix (buffer)

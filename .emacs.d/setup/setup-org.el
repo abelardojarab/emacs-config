@@ -24,20 +24,6 @@
 
 ;;; Code:
 
-;; Loads latex auto-complete
-(add-to-list 'load-path "~/.emacs.d/ac-math")
-(require 'ac-math)
-(require 'auto-complete-latex)
-(add-to-list 'ac-modes 'latex-mode)
-(defun ac-latex-mode-setup ()
-  (when (and (require 'auto-complete nil t) (require 'auto-complete-config nil t))
-    (make-local-variable 'ac-sources)
-    (setq ac-sources (append '(ac-source-words-in-same-mode-buffers
-                               ac-source-dictionary
-                               ac-source-math-unicode
-                               ac-source-math-latex) ac-sources))))
-(add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
-
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org/lisp" load-path))
 (defvar org-list-allow-alphabetical t)
@@ -77,6 +63,7 @@
 (setq org-use-speed-commands t)
 (setq org-default-notes-file "~/workspace/Documents/agenda.org")
 (setq org-export-with-sub-superscripts nil)
+(setq org-indent-mode t)
 
 ;; Mouse in Org
 (require 'org-mouse)
@@ -271,8 +258,8 @@ a link to this file."
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
           (call-process "pngpaste" nil nil nil filename)
 
-          ;; Linux: ImageMagick: (call-process "import" nil nil nil filename)
-          (call-process "import" nil nil nil filename))
+        ;; Linux: ImageMagick: (call-process "import" nil nil nil filename)
+        (call-process "import" nil nil nil filename))
       ) ;; if
     (insert (concat "[[file:" filename "]]"))
     (org-display-inline-images)))

@@ -47,6 +47,7 @@
 (global-auto-complete-mode t)
 (auto-complete-mode 1)
 (setq ac-show-menu-immediately-on-auto-complete t)
+(setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
@@ -84,5 +85,26 @@
   (setq ac-sources (append ac-sources '(ac-source-yasnippet ac-source-etags ac-source-gtags ac-source-semantic ac-source-semantic-raw))))
 (add-hook 'auto-complete-mode-hook 'ac-common-setup)
 
+;; Latex auto-complete
+(add-to-list 'load-path "~/.emacs.d/ac-math")
+(require 'ac-math)
+(require 'auto-complete-latex)
+(add-to-list 'ac-modes 'latex-mode)
+(defun ac-latex-mode-setup ()
+  (when (and (require 'auto-complete nil t) (require 'auto-complete-config nil t))
+    (make-local-variable 'ac-sources)
+    (setq ac-sources (append '(ac-source-words-in-same-mode-buffers
+                               ac-source-dictionary
+                               ac-source-math-unicode
+                               ac-source-math-latex) ac-sources))))
+(add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
+
+;; Enable auto-complete on more modes
+(dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
+                                    sass-mode yaml-mode csv-mode espresso-mode haskell-mode
+                                    html-mode nxml-mode sh-mode smarty-mode clojure-mode
+                                    lisp-mode textile-mode markdown-mode tuareg-mode
+                                    js3-mode css-mode less-css-mode))
+  (add-to-list 'ac-modes mode))
+
 (provide 'setup-auto-complete)
-;;; setup-auto-complete.el ends here

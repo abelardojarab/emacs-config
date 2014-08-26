@@ -42,14 +42,14 @@
       (kill-buffer buffer))))
 
 ;; Use ggtags instead of gtags
-(add-hook 'c-mode-common-hook
-          (lambda () (ggtags-mode t)))
-(add-hook 'python-mode-hook
-          (lambda () (ggtags-mode t)))
-(add-hook 'lisp-mode-hook
-          (lambda () (ggtags-mode t)))
-(add-hook 'js2-mode-hook
-          (lambda () (ggtags-mode t)))
+(mapc (lambda (mode)
+        (add-hook mode 'ggtags-mode))
+      '(c-mode-hook
+        c++-mode-hook
+        lisp-mode-hook
+        python-mode-hook
+        js2-mode-hook
+        java-mode-hook))
 
 ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
 (defun ido-find-tag ()
