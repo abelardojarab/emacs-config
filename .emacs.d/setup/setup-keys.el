@@ -27,9 +27,8 @@
 ;; Ergoemacs
 (add-to-list 'load-path "~/.emacs.d/ergoemacs")
 (add-to-list 'load-path "~/.emacs.d/global-set-keybindings")
-(setq ergoemacs-ignore-prev-global nil) ;; Will not ignore any globally defined keybinding
-(setq ergoemacs-keyboard-layout "us")
 (require 'ergoemacs-mode)
+(setq ergoemacs-keyboard-layout "us")
 (ergoemacs-mode 1)
 
 ;; Enter changes lines and auto-indents the new line
