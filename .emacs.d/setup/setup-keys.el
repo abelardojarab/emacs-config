@@ -234,6 +234,12 @@
 (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
 (global-set-key [(control mouse-3)] 'mouse3-popup-menu)
 
+;; Trick emacs when opening a file through menu-find-file-existing
+(defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
+  "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
+  (let ((last-nonmenu-event nil))
+    ad-do-it))
+
 ;; Mac Key mode
 (require 'mac-key-mode)
 

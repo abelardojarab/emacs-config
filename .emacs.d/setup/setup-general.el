@@ -292,12 +292,6 @@
  time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ;; date format
 (add-hook 'write-file-hooks 'time-stamp) ;; update when saving
 
-;; Trick emacs when opening a file through menu-find-file-existing
-(defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
-  "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
-  (let ((last-nonmenu-event nil))
-    ad-do-it))
-
 ;; Uniquify-buffers
 (when (require 'uniquify nil 'noerror)  ;; make buffer names more unique
   (setq
