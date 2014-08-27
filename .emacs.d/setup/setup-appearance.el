@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-;; Improve Emacs display engine
+;; Do not improve Emacs display engine
 (setq redisplay-dont-pause t)
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
