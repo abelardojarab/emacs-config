@@ -24,37 +24,24 @@
 
 ;;; Code:
 
-;; Ergoemacs
+;; Ergoemacs should be loaded at the end
 (add-to-list 'load-path "~/.emacs.d/ergoemacs")
 (add-to-list 'load-path "~/.emacs.d/ergoemacs-keybindings")
+(setq ergoemacs-ignore-prev-global nil) ;; Will not ignore any globally defined keybinding
 (setq ergoemacs-keyboard-layout "us")
 (require 'ergoemacs-mode)
 (ergoemacs-mode 1)
 
 ;; Enter changes lines and auto-indents the new line
-(add-hook 'java-mode-hook
-          '(lambda ()
-             (define-key java-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'js2-mode-hook
-          '(lambda ()
-             (define-key c-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'c-mode-hook
-          '(lambda ()
-             (define-key c-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'c++-mode-hook
-          '(lambda ()
-             (define-key c++-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'vhdl-mode-hook
-          '(lambda ()
-             (define-key vhdl-mode-map "\C-m" 'newline-and-indent)))
-
-(add-hook 'lisp-mode-hook
-          '(lambda ()
-             (define-key lisp-mode-map "\C-m" 'reindent-then-newline-and-indent)))
+(mapc (lambda (mode)
+        (add-hook mode '(lambda () (define-key java-mode-map "\C-m" 'newline-and-indent))))
+      '(c-mode-hook
+        c++-mode-hook
+        lisp-mode-hook
+        python-mode-hook
+        js2-mode-hook
+        vhdl-mode-hook
+        java-mode-hook))
 
 ;; Treat 'y' or <CR> as yes, 'n' as no.
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -178,7 +165,7 @@
 ;; remove the change-highlight in region
 (global-set-key (kbd "S-<f6>") 'highlight-changes-remove-highlight)
 
-;; if you're not already using it for something else...
+;; If you're not already using it for something else...
 (global-set-key (kbd "<M-next>") 'highlight-changes-next-change)
 (global-set-key (kbd "<M-prior>")  'highlight-changes-previous-change)
 (set-face-foreground 'highlight-changes nil)
@@ -188,6 +175,11 @@
 
 ;; toggle truncate lines
 (global-set-key (kbd "<f8>") 'toggle-truncate-lines)
+
+;; Bookmark keys
+(global-set-key (kbd "<C-f2>") 'bm-toggle)
+(global-set-key (kbd "<f2>")   'bm-next)
+(global-set-key (kbd "<S-f2>") 'bm-previous)
 
 ;; Refresh file on F9
 (defun refresh-file ()

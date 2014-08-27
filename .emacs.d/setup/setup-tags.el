@@ -43,6 +43,7 @@
 
 ;; Use ggtags instead of gtags
 (mapc (lambda (mode)
+        (add-hook mode 'gtags-mode)
         (add-hook mode 'ggtags-mode))
       '(c-mode-hook
         c++-mode-hook
