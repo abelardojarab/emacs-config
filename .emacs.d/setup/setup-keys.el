@@ -234,5 +234,8 @@
 (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
 (global-set-key [(control mouse-3)] 'mouse3-popup-menu)
 
+;; Mac Key mode
+(require 'mac-key-mode)
+
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
