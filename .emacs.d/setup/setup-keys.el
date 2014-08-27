@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-;; Ergoemacs should be loaded at the end
+;; Ergoemacs
 (add-to-list 'load-path "~/.emacs.d/ergoemacs")
 (add-to-list 'load-path "~/.emacs.d/ergoemacs-keybindings")
 (setq ergoemacs-ignore-prev-global nil) ;; Will not ignore any globally defined keybinding
