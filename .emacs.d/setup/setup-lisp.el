@@ -93,7 +93,7 @@
                   arg
                 (prog2
                     (if (= i (1- n))
-                        (put-text-property 0 (length arg) 'face '(:bold t :foreground "yellow") arg))
+                        (put-text-property 0 (length arg) 'face '(:foreground "yellow") arg))
                     arg
                   (setq i (1+ i)))))
             (split-string doc) " ")))))
