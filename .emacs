@@ -123,9 +123,6 @@
 ;; Setup Lisp mode
 (require 'setup-lisp)
 
-;; Setup keys
-(require 'setup-keys)
-
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
@@ -135,20 +132,23 @@
 ;; Setup tabbar
 (require 'setup-tabbar)
 
-;; Setup recent
-(require 'setup-recentf)
-
-;; Setup project support
-(require 'setup-project)
-
 ;; Setup gnus and Newsticker
 (require 'setup-gnus)
 
 ;; Setup modeline and Smex
 (require 'setup-modeline)
 
-;; Setup server
-(require 'setup-server)
-
 ;; Setup utilities
 (require 'setup-utilities)
+
+;; Setup keys
+(require 'setup-keys)
+
+;; Setup recent
+(require 'setup-recentf)
+
+;; Setup project support
+(require 'setup-project)
+
+;; Setup server
+(require 'setup-server)
