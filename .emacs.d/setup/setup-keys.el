@@ -243,5 +243,11 @@
 (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
 (guide-key-mode 1) ;; Enable guide-key-mode
 
+;; Guide key tooltips
+(add-to-list 'load-path "~/.emacs.d/pos-tip")
+(add-to-list 'load-path "~/.emacs.d/guide-key-tip")
+(require 'guide-key-tip)
+(setq guide-key-tip/enabled t)
+
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
