@@ -195,12 +195,6 @@
   (revert-buffer t t t))
 (global-set-key [f9] 'refresh-file)
 
-;; Show guide for shortcuts
-(add-to-list 'load-path "~/.emacs.d/guide-key")
-(require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
-(guide-key-mode 1) ;; Enable guide-key-mode
-
 ;; Code folding
 (defun toggle-selective-display ()
   (interactive)
@@ -242,6 +236,12 @@
 
 ;; Mac Key mode
 (require 'mac-key-mode)
+
+;; Show guide for shortcuts
+(add-to-list 'load-path "~/.emacs.d/guide-key")
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+(guide-key-mode 1) ;; Enable guide-key-mode
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
