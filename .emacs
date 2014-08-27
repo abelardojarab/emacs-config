@@ -135,20 +135,20 @@
 ;; Setup gnus and Newsticker
 (require 'setup-gnus)
 
-;; Setup modeline and Smex
-(require 'setup-modeline)
-
-;; Setup utilities
-(require 'setup-utilities)
-
 ;; Setup keys
 (require 'setup-keys)
+
+;; Setup modeline and Smex
+(require 'setup-modeline)
 
 ;; Setup recent
 (require 'setup-recentf)
 
 ;; Setup project support
 (require 'setup-project)
+
+;; Setup utilities
+(require 'setup-utilities)
 
 ;; Setup server
 (require 'setup-server)
