@@ -3,18 +3,33 @@
 master (in development)
 -----------------------
 
+- **Breaking changes**:
+
+  - `html-tidy` is not enabled in Web Mode anymore [GH-464]
+  - `d-dmd` now requires DMD 2.066 or newer [GH-460]
+
+- New syntax checkers:
+
+  - Coq
+
 - New features:
 
   - Add `null-device` symbol for syntax checker commands
+  - Add `flycheck-display-error-messages-unless-error-list` for
+    `flycheck-error-display-function`
 
 - Improvements:
 
   - Improve GCC syntax checking by expanding templates [GH-459]
+  - `d-dmd` reports errors with columns now [GH-460]
+  - Remove Projectile-based config file search [GH-461]
 
 - Bug fixes:
 
   - Expand `default-directory` before using it, to handle abbreviated paths
     gracefully [GH-434]
+  - Restore mouse support in the error list [GH-468]
+  - `less` now correctly resolves relative paths in `data-uri` [GH-471]
 
 0.20 (Aug 12, 2014)
 -------------------

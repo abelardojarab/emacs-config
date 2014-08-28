@@ -710,8 +710,7 @@ If nil, use default `mode-line-format'.")
 (defvar helm-saved-selection nil
   "Value of the currently selected object when the action list is shown.")
 (defvar helm-sources nil
-  "[INTERNAL] Value of current sources in used, a list.")
-(defvar helm-delayed-init-executed nil)
+  "[INTERNAL] Value of current sources in use, a list.")
 (defvar helm-buffer "*helm*"
   "Buffer showing completions.")
 (defvar helm-current-buffer nil
@@ -1407,6 +1406,19 @@ When helm is alive use `make-local-variable' as usual on `helm-buffer'.
                          collect (cons (car i) (cadr i)))
                 helm--local-variables)))
 
+(defun helm-make-actions (&rest args)
+  "Build an alist with (NAME . ACTION) elements with each pairs in ARGS.
+Where NAME is a string or a function returning a string or nil and ACTION
+a function.
+If NAME returns nil the pair is skipped.
+
+\(fn NAME ACTION ...)"
+  (cl-loop for i on args by #'cddr
+           for name  = (car i)
+           when (functionp name)
+           do (setq name (funcall name))
+           when name
+           collect (cons name (cadr i))))
 
 ;; Core: API helper
 (cl-defun helm-empty-buffer-p (&optional (buffer helm-buffer))
@@ -2100,7 +2112,6 @@ It is intended to use this only in `helm-initial-setup'."
   (helm-log-run-hook 'helm-before-initialize-hook)
   (setq helm-current-prefix-arg nil)
   (setq helm-suspend-update-flag nil)
-  (setq helm-delayed-init-executed nil)
   (setq helm-current-buffer (helm--current-buffer))
   (setq helm-buffer-file-name buffer-file-name)
   (setq helm-issued-errors nil)
@@ -2419,19 +2430,9 @@ Helm plug-ins are realized by this function."
 
 
 ;; Core: all candidates
-(defun helm-process-delayed-init (source)
-  "Initialize delayed SOURCE."
-  (let ((name (assoc-default 'name source)))
-    (unless (member name helm-delayed-init-executed)
-      (helm-aif (assoc-default 'delayed-init source)
-          (with-current-buffer helm-current-buffer
-            (helm-funcall-with-source source it)
-            (cl-dolist (_f (if (functionp it) (list it) it))
-              (add-to-list 'helm-delayed-init-executed name)))))))
 
 (defun helm-get-candidates (source)
   "Retrieve and return the list of candidates from SOURCE."
-  (helm-process-delayed-init source)
   (let* (inhibit-quit
          (candidate-fn (assoc-default 'candidates source))
          (candidate-proc (assoc-default 'candidates-process source))
@@ -2523,7 +2524,8 @@ ARGS is (cand1 cand2 ...) or ((disp1 . real1) (disp2 . real2) ...)
 (defmacro helm--maybe-process-filter-one-by-one-candidate (candidate source)
   "Execute `filter-one-by-one' function(s) on CANDIDATE in SOURCE."
   `(helm-aif (assoc-default 'filter-one-by-one ,source)
-       (if (listp it)
+       (if (and (listp it)
+                (not (functionp it))) ;; Don't treat lambda's as list.
            (cl-loop for f in it
                  do (setq ,candidate (funcall f ,candidate)))
          (setq ,candidate (funcall it ,candidate)))))
@@ -3821,7 +3823,7 @@ delete minibuffer contents from point instead of deleting all."
     source))
 
 ;; Built-in plug-in: candidates-in-buffer
-(defun helm-candidates-in-buffer (source)
+(defun helm-candidates-in-buffer (&optional source)
   "Get candidates from the candidates buffer according to `helm-pattern'.
 
 BUFFER is `helm-candidate-buffer' by default.  Each
@@ -3886,21 +3888,20 @@ a specific part of candidate.
 
 To customize `helm-candidates-in-buffer' behavior, use `search',
 `get-line', `match-part' and `search-from-end' attributes."
-
-  (helm-candidates-in-buffer-1
-   (helm-candidate-buffer)
-   helm-pattern
-   (or (assoc-default 'get-line source)
-       #'buffer-substring-no-properties)
-   ;; use external variable `source'.
-   (or (assoc-default 'search source)
-       (if (assoc 'search-from-end source)
-           '(helm-candidates-in-buffer-search-from-end)
-         '(helm-candidates-in-buffer-search-from-start)))
-   (helm-candidate-number-limit source)
-   (assoc 'search-from-end source)
-   (helm-attr 'match-part)
-   source))
+  (let ((src (or source (helm-get-current-source))))
+    (helm-candidates-in-buffer-1
+     (helm-candidate-buffer)
+     helm-pattern
+     (or (assoc-default 'get-line src)
+         #'buffer-substring-no-properties)
+     (or (assoc-default 'search src)
+         (if (assoc 'search-from-end src)
+             '(helm-candidates-in-buffer-search-from-end)
+             '(helm-candidates-in-buffer-search-from-start)))
+     (helm-candidate-number-limit src)
+     (assoc 'search-from-end src)
+     (helm-attr 'match-part)
+     src)))
 
 (defun helm-candidates-in-buffer-search-from-start (pattern)
   "Search PATTERN with `re-search-forward' with bound and noerror args."
@@ -4059,7 +4060,8 @@ Acceptable values of CREATE-OR-BUFFER:
   "Register BUFFER with DATA for a helm candidates-in-buffer session.
 Arg BUFFER can be a string, a buffer object (bufferp), or a symbol,
 either 'local or 'global which is passed to `helm-candidate-buffer'.
-Arg DATA can be either a list or a plain string."
+Arg DATA can be either a list or a plain string.
+Returns the resulting buffer."
   (declare (indent 1))
   (let ((buf (helm-candidate-buffer
               (if (or (stringp buffer)
@@ -4069,9 +4071,11 @@ Arg DATA can be either a list or a plain string."
     (with-current-buffer buf
       (erase-buffer)
       (if (listp data)
-          (cl-loop for i in data do (insert (concat i "\n")))
-        (and (stringp data) (insert data)))))
-  buffer)
+          (cl-loop for i in data
+                   for str = (if (symbolp i) (symbol-name i) i)
+                   do (insert (concat str "\n")))
+        (and (stringp data) (insert data))))
+    buf))
 
 (defun helm-compile-source--candidates-in-buffer (source)
   (helm-aif (assoc 'candidates-in-buffer source)
@@ -4119,7 +4123,7 @@ Arg DATA can be either a list or a plain string."
               helm-buffer)))
          (setq helm--window-side-state (helm--get-window-side-state)))
     (when helm-prevent-escaping-from-minibuffer
-      (helm-prevent-switching-other-window :enabled nil))))
+      (helm-prevent-switching-other-window :enabled t))))
 
 ;; Utility: Resize helm window.
 (defun helm-enlarge-window-1 (n)

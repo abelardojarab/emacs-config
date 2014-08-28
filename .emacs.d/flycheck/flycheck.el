@@ -182,6 +182,7 @@ attention to case differences."
     chef-foodcritic
     coffee
     coffee-coffeelint
+    coq
     css-csslint
     d-dmd
     elixir
@@ -308,7 +309,6 @@ information about file variables.")
 
 (defcustom flycheck-locate-config-file-functions
   '(flycheck-locate-config-file-absolute-path
-    flycheck-locate-config-file-projectile
     flycheck-locate-config-file-ancestor-directories
     flycheck-locate-config-file-home)
   "Functions to locate syntax checker configuration files.
@@ -373,6 +373,8 @@ If set to nil, do not display errors at all."
   :group 'flycheck
   :type '(choice (const :tag "Display error messages"
                         flycheck-display-error-messages)
+                 (const :tag "Display error messages only if no error list"
+                        flycheck-display-error-messages-unless-error-list)
                  (function :tag "Error display function"))
   :package-version '(flycheck . "0.13")
   :risky t)
@@ -2272,24 +2274,6 @@ _CHECKER is ignored."
   (unless (string= (file-name-nondirectory filepath) filepath)
     (expand-file-name filepath)))
 
-(defun flycheck-locate-config-file-projectile (filename _checker)
-  "Locate a configuration FILENAME in a projectile project.
-
-If the Projectile library (see URL
-`https://github.com/bbatsov/projectile') is available and the
-current buffer is within a Projectile project, search FILENAME in
-the root directory of the project.  If the file is found, return
-its absolute path.
-
-Otherwise return nil.
-
-_CHECKER is ignored."
-  (when (fboundp 'projectile-project-root)
-    (-when-let* ((root (ignore-errors (projectile-project-root)))
-                 (filepath (expand-file-name filename root)))
-      (when (file-exists-p filepath)
-        filepath))))
-
 (defun flycheck-locate-config-file-ancestor-directories (filename _checker)
   "Locate a configuration FILENAME in ancestor directories.
 
@@ -2315,7 +2299,6 @@ directory, or nil otherwise."
 (mapc (apply-partially #'custom-add-frequent-value
                        'flycheck-locate-config-file-functions)
       '(flycheck-locate-config-file-absolute-path
-        flycheck-locate-config-file-projectile
         flycheck-locate-config-file-ancestor-directories
         flycheck-locate-config-file-home))
 
@@ -3559,33 +3542,48 @@ the beginning of the buffer."
     ;; list itself.
     (flycheck-error-list-set-source (current-buffer))))
 
+(define-button-type 'flycheck-error-list
+  'action #'flycheck-error-list-button-goto-error
+  'help-echo (purecopy "mouse-2, RET: goto error"))
+
+(defun flycheck-error-list-button-goto-error (button)
+  "Go to the error at BUTTON."
+  (flycheck-error-list-goto-error (button-start button)))
+
+(defun flycheck-error-list-make-cell (text &optional face)
+  "Make an error list cell with TEXT and FACE."
+  (let ((face (or face 'default)))
+    (list text 'type 'flycheck-error-list 'face face)))
+
 (defun flycheck-error-list-make-number-cell (number face)
   "Make a table cell for a NUMBER with FACE.
 
 Convert NUMBER to string, fontify it with FACE and return the
 string with attached text properties."
-  (if (numberp number)
-      (propertize (number-to-string number) 'font-lock-face face)
-    ""))
+  (flycheck-error-list-make-cell
+   (if (numberp number) (number-to-string number) "")
+   face))
 
 (defun flycheck-error-list-make-entry (error)
   "Make a table cell for the given ERROR.
 
 Return a list with the contents of the table cell."
-  (let ((level-face (flycheck-error-level-error-list-face
-                     (flycheck-error-level error)))
-        (line (flycheck-error-line error))
-        (column (flycheck-error-column error))
-        (message (or (flycheck-error-message error) "Unknown error"))
-        (checker (flycheck-error-checker error)))
+  (let* ((level (flycheck-error-level error))
+         (level-face (flycheck-error-level-error-list-face level))
+         (line (flycheck-error-line error))
+         (column (flycheck-error-column error))
+         (message (or (flycheck-error-message error)
+                      (format "Unknown %s" (symbol-name level))))
+         (checker (flycheck-error-checker error)))
     (list error
           (vector (flycheck-error-list-make-number-cell
                    line 'flycheck-error-list-line-number)
                   (flycheck-error-list-make-number-cell
                    column 'flycheck-error-list-column-number)
-                  (propertize (symbol-name (flycheck-error-level error))
-                              'font-lock-face level-face)
-                  (format "%s (%s)" message checker)))))
+                  (flycheck-error-list-make-cell
+                   (symbol-name (flycheck-error-level error)) level-face)
+                  (flycheck-error-list-make-cell
+                   (format "%s (%s)" message checker))))))
 
 (defun flycheck-error-list-entries ()
   "Create the entries for the error list."
@@ -3636,10 +3634,25 @@ mode line indication of `flycheck-error-list-mode'."
     (when (buffer-live-p flycheck-error-list-source-buffer)
       (switch-to-buffer flycheck-error-list-source-buffer))))
 
+(defun flycheck-get-error-list-window-list (&optional all-frames)
+  "Get all windows displaying the error list.
+
+ALL-FRAMES specifies the frames to consider, as in
+`get-buffer-window-list'."
+  (-when-let (buf (get-buffer flycheck-error-list-buffer))
+    (get-buffer-window-list buf nil all-frames)))
+
+(defun flycheck-get-error-list-window (&optional all-frames)
+  "Get a window displaying the error list, or nil if none.
+
+ALL-FRAMES specifies the frames to consider, as in
+`get-buffer-window'."
+  (-when-let (buf (get-buffer flycheck-error-list-buffer))
+    (get-buffer-window buf all-frames)))
+
 (defun flycheck-error-list-recenter-at (pos)
   "Recenter the error list at POS."
-  (dolist (window (get-buffer-window-list flycheck-error-list-buffer
-                                          nil 'all-frames))
+  (dolist (window (flycheck-get-error-list-window-list t))
     (with-selected-window window
       (goto-char pos)
       (recenter))))
@@ -3655,19 +3668,17 @@ list."
   ;; select this window while reverting, because Tabulated List mode attempts to
   ;; recenter the error at the old location, so it must have the proper window
   ;; selected.
-  (-when-let (error-list-window (get-buffer-window flycheck-error-list-buffer
-                                                   'all-frames))
-    (with-selected-window error-list-window
+  (-when-let (window (flycheck-get-error-list-window t))
+    (with-selected-window window
       (revert-buffer))
     (flycheck-error-list-highlight-errors)))
 
-(defun flycheck-error-list-goto-error (&optional error)
-  "Go to the location of an ERROR from the error list.
+(defun flycheck-error-list-goto-error (&optional pos)
+  "Go to the location of the error at POS in the error list.
 
-Interactively or when ERROR is not given, go to the error at
-point."
+POS defaults to `point'."
   (interactive)
-  (-when-let* ((error (or error (tabulated-list-get-id)))
+  (-when-let* ((error (tabulated-list-get-id pos))
                (buffer (flycheck-error-buffer error)))
     (when (buffer-live-p buffer)
       (if (eq (window-buffer) (get-buffer flycheck-error-list-buffer))
@@ -3927,6 +3938,15 @@ In the latter case, show messages in
     (when (and errors (flycheck-may-use-echo-area-p))
       (display-message-or-buffer (string-join messages "\n\n")
                                  flycheck-error-message-buffer))))
+
+(defun flycheck-display-error-messages-unless-error-list (errors)
+  "Show messages of ERRORS unless the error list is visible.
+
+Like `flycheck-display-error-messages', but only if the error
+list (see `flycheck-list-errors') is not visible in any window in
+the current frame."
+  (unless (flycheck-get-error-list-window 'current-frame)
+    (flycheck-display-error-messages errors)))
 
 (defun flycheck-hide-error-buffer ()
   "Hide the Flycheck error buffer if necessary.
@@ -4639,6 +4659,39 @@ See URL `http://www.coffeelint.org/'."
   :error-parser flycheck-parse-checkstyle
   :modes coffee-mode)
 
+(flycheck-define-checker coq
+  "A Coq syntax checker using the Coq compiler.
+
+See URL `http://coq.inria.fr/'."
+  ;; We use coqtop in batch mode, because coqc is picky about file names.
+  :command ("coqtop" "-batch" "-load-vernac-source" source)
+  :error-patterns
+  ((error line-start "File \"" (file-name) "\", line " line
+          ;; TODO: Parse the end column, once Flycheck supports that
+          ", characters " column "-" (one-or-more digit) ":\n"
+          (or "Syntax error: " "Error: ")
+          ;; Most Coq error messages span multiple lines, and end with a dot.
+          ;; There are simple one-line messages, too, though.
+          (message (or (and (one-or-more (or not-newline "\n")) ".")
+                       (one-or-more not-newline)))
+          line-end))
+  :error-filter
+  (lambda (errors)
+    (dolist (err errors)
+      ;; Coq uses zero-based indexing for columns, so we need to fix column
+      ;; indexes.  Also, delete trailing whitespace from all lines in the error
+      ;; message
+      (let ((column (flycheck-error-column err))
+            (message (flycheck-error-message err)))
+        (setf (flycheck-error-column err) (1+ column))
+        (with-temp-buffer
+          (insert message)
+          (delete-trailing-whitespace)
+          (setf (flycheck-error-message err)
+                (buffer-substring-no-properties (point-min) (point-max))))))
+    (flycheck-sanitize-errors errors))
+  :modes coq-mode)
+
 (flycheck-define-checker css-csslint
   "A CSS syntax and style checker using csslint.
 
@@ -4678,15 +4731,20 @@ Relative paths are relative to the file being checked."
 (flycheck-define-checker d-dmd
   "A D syntax checker using the DMD compiler.
 
-See URL `http://dlang.org/'."
-  :command ("dmd" "-debug" "-o-"
+Requires DMD 2.066 or newer.  See URL `http://dlang.org/'."
+  :command ("dmd"
+            "-debug"                    ; Compile in debug mode
+            "-o-"                       ; Don't generate an object file
+            "-vcolumns"                 ; Add columns in output
             "-wi" ; Compilation will continue even if there are warnings
             (eval (concat "-I" (flycheck-d-base-directory)))
             (option-list "-I" flycheck-dmd-include-path concat)
             source)
   :error-patterns
-  ((error line-start (file-name) "(" line "): Error: " (message) line-end)
-   (warning line-start (file-name) "(" line "): "
+  ((error line-start
+          (file-name) "(" line "," column "): Error: " (message)
+          line-end)
+   (warning line-start (file-name) "(" line "," column "): "
             (or "Warning" "Deprecation") ": " (message) line-end))
   :modes d-mode)
 
@@ -4941,12 +4999,7 @@ See URL `http://www.kuwata-lab.com/erubis/'."
   :command ("erubis" "-z" source)
   :error-patterns
   ((error line-start  (file-name) ":" line ": " (message) line-end))
-  :predicate
-  (lambda ()
-    (or (memq major-mode '(html-erb-mode rhtml-mode))
-        (and (buffer-file-name)
-             (member (file-name-extension (buffer-file-name))
-                     '("erb" "rhtml"))))))
+  :modes (html-erb-mode rhtml-mode))
 
 (flycheck-def-option-var flycheck-gfortran-include-path nil fortran-gfortran
   "A list of include directories for GCC Fortran.
@@ -5104,7 +5157,10 @@ See URL `http://golang.org/cmd/go/' and URL
   "A Go syntax and type checker using the `go build' command.
 
 See URL `http://golang.org/cmd/go'."
-  :command ("go" "build" "-o" null-device)
+  ;; We need to use `temporary-file-name' instead of `null-device', because Go
+  ;; can't write to the null device.  It's “too magic”.  See
+  ;; https://code.google.com/p/go/issues/detail?id=4851 for details.
+  :command ("go" "build" "-o" temporary-file-name)
   :error-patterns
   ((error line-start (file-name) ":" line ":"
           (optional column ":") " "
@@ -5301,7 +5357,7 @@ See URL `https://github.com/w3c/tidy-html5'."
             "line " line
             " column " column
             " - Warning: " (message) line-end))
-  :modes (html-mode nxhtml-mode web-mode))
+  :modes (html-mode nxhtml-mode))
 
 (flycheck-def-config-file-var flycheck-jshintrc javascript-jshint ".jshintrc"
   :safe #'stringp)
@@ -5392,7 +5448,10 @@ See URL `https://github.com/zaach/jsonlint'."
 At least version 1.4 of lessc is required.
 
 See URL `http://lesscss.org'."
-  :command ("lessc" "--lint" "--no-color" source)
+  :command ("lessc" "--lint" "--no-color"
+            ;; We need `source-inplace' to resolve relative `data-uri' paths,
+            ;; see https://github.com/flycheck/flycheck/issues/471
+            source-inplace)
   :error-patterns
   ((error line-start (one-or-more word) ":"
           (message)
@@ -5946,7 +6005,7 @@ See URL `http://sass-lang.com'."
    (warning line-start "WARNING on line " line " of " (file-name)
             ":" (optional "\r") "\n" (message) line-end)
    (error line-start
-          "Syntax error: "
+          (or "Syntax error: " "Error: ")
           (message (one-or-more not-newline)
                    (zero-or-more "\n"
                                  (one-or-more " ")
@@ -6025,7 +6084,7 @@ See URL `http://sass-lang.com'."
    (warning line-start "WARNING on line " line " of " (file-name)
             ":" (optional "\r") "\n" (message) line-end)
    (error line-start
-          "Syntax error: "
+          (or "Syntax error: " "Error: ")
           (message (one-or-more not-newline)
                    (zero-or-more "\n"
                                  (one-or-more " ")
