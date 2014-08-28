@@ -179,5 +179,23 @@ buffer."
 (global-set-key (kbd "<left-margin> <mouse-1>") 'mu-select-linum)
 (global-set-key (kbd "<left-margin> <drag-mouse-1>") 'mu-select-linum)
 
+;; Help to determine who modifies buffer
+(defvar my-debug-set-buffer-modified-p-buffers nil)
+
+(defadvice set-buffer-modified-p
+  (before my-debug-set-buffer-modified-p-advice)
+  (when (memq (current-buffer) my-debug-set-buffer-modified-p-buffers)
+    (debug)))
+(ad-activate 'set-buffer-modified-p)
+
+(defun my-debug-set-buffer-modified-p (buffer)
+  (interactive (list (current-buffer)))
+  (if (memq buffer my-debug-set-buffer-modified-p-buffers)
+      (progn (setq my-debug-set-buffer-modified-p-buffers
+                   (delq buffer my-debug-set-buffer-modified-p-buffers))
+             (message "Disabled for %s" buffer))
+    (add-to-list 'my-debug-set-buffer-modified-p-buffers buffer)
+    (message "Enabled for %s" buffer)))
+
 (provide 'setup-utilities)
 ;;; setup-utilities.el ends here
