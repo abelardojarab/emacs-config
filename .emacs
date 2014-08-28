@@ -30,7 +30,7 @@
  '(ecb-highlight-tag-with-point (quote highlight-scroll))
  '(ecb-kill-buffer-clears-history (quote auto))
  '(ecb-layout-name "leftright-sa-m")
- '(ecb-layout-window-sizes (quote (("leftright-sa-m" (ecb-sources-buffer-name 0.1711229946524064 . 0.5084745762711864) (ecb-analyse-buffer-name 0.1711229946524064 . 0.4745762711864407) (ecb-methods-buffer-name 0.15508021390374332 . 0.9830508474576272)))))
+ '(ecb-layout-window-sizes (quote (("left-speedbar" (0.3 . 0.8)) ("leftright-sa-m" (ecb-sources-buffer-name 0.1711229946524064 . 0.6271186440677966) (ecb-analyse-buffer-name 0.1711229946524064 . 0.3559322033898305) (ecb-methods-buffer-name 0.12834224598930483 . 0.9830508474576272)) ("leftright-sa-m" (ecb-sources-buffer-name 0.1711229946524064 . 0.5084745762711864) (ecb-analyse-buffer-name 0.1711229946524064 . 0.4745762711864407) (ecb-methods-buffer-name 0.15508021390374332 . 0.9830508474576272)))))
  '(ecb-methods-menu-sorter (lambda (entries) (let ((sorted (copy-list entries))) (sort sorted (quote string-lessp)))))
  '(ecb-options-version "2.40")
  '(ecb-prescan-directories-for-emptyness t)

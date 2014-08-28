@@ -126,9 +126,9 @@ little more place."
 (when (not (memq 'leftright-sa-m ecb-layout-window-sizes))
   (add-to-list 'ecb-layout-window-sizes
                '("leftright-sa-m"
-                 (0.17 . 0.3)
-                 (0.17 . 0.4)
-                 (0.25 . 0.7))))
+                 (0.10 . 0.3)
+                 (0.10 . 0.4)
+                 (0.10 . 0.7))))
 
 (ecb-layout-define "left-speedbar" left
   "This function creates the following layout:
