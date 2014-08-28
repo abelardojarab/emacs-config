@@ -4,6 +4,8 @@
 
 ### New features
 
+* Add command projectile-find-other-file  Switch between files with
+  the same  name but different extensions.
 * Add Helm interface to switch project. For more details checkout the file
   README.md.
 * Make the mode line format customizable with `projectile-mode-line`
@@ -20,7 +22,8 @@
 ### Bugs fixed
 
 * Prevent `projectile-kill-buffers` from trying to kill indirect
-  buffers.
+buffers.
+* [#412](https://github.com/bbatsov/projectile/issues/412): Handle multiple possible targets in `projectile-toggle-between-implementation-or-test`.
 
 ## 0.11.0 (05/27/2014)
 

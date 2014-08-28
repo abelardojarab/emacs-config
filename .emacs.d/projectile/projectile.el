@@ -166,6 +166,7 @@ and `projectile-buffers-with-file-or-process'."
 (defcustom projectile-project-root-files
   '("rebar.config"       ; Rebar project file
     "project.clj"        ; Leiningen project file
+    "SConstruct"         ; Scons project file
     "pom.xml"            ; Maven project file
     "build.sbt"          ; SBT project file
     "build.gradle"       ; Gradle project file
@@ -1084,6 +1085,76 @@ https://github.com/d11wtq/grizzl")))
 
 
 ;;; Interactive commands
+(defcustom projectile-other-file-alist
+  '(;; handle C/C++ extensions
+    ("cpp" . ("h" "hpp" "ipp"))
+    ("ipp" . ("h" "hpp" "cpp"))
+    ("hpp" . ("h" "ipp" "cpp"))
+    ("cxx" . ("hxx" "ixx"))
+    ("ixx" . ("cxx" "hxx"))
+    ("hxx" . ("ixx" "cxx"))
+    ("c" . ("h"))
+    ("m" . ("h"))
+    ("mm" . ("h"))
+    ("h" . ("c" "m" "mm"))
+    ("cc" . ("hh"))
+    ("hh" . ("cc"))
+
+    ;; vertex shader and fragment shader extensions in glsl
+    ("vert" . ("frag"))
+    ("frag" . ("vert"))
+
+    ;; handle files with no extension
+    (nil . ("lock" "gpg"))
+    ("lock" . (""))
+    ("gpg" . (""))
+    )
+  "Alist of extensions for switching to file with the same name, using other extensions based on the extension of current file.")
+
+(defun projectile-find-other-file (&optional ignore-extensions)
+  "Switch between files with the same name but different extensions.
+With IGNORE-EXTENSIONS, only uses filename for searching other files."
+  (interactive "P")
+  (-if-let (other-file (projectile-get-other-file ignore-extensions))
+      (find-file (expand-file-name other-file (projectile-project-root)))
+    (error "No other file found")))
+
+(defun projectile-find-other-file-other-window (&optional ignore-extensions)
+  "Switch between files with the same name but different extensions in other window.
+With IGNORE-EXTENSIONS, only uses filename for searching other files."
+  (interactive "P")
+  (-if-let (other-file (projectile-get-other-file ignore-extensions))
+      (find-file-other-window (expand-file-name other-file (projectile-project-root)))
+    (error "No other file found")))
+
+(defun projectile-get-other-file (&optional ignore-extensions)
+  "Narrow to files with the same names but different extensions.
+If only one file exists, switch immediately.  If more than one file exist,
+prompt a list of possible files for users to choose.  Return the selection.
+
+With IGNORE-EXTENSIONS, only uses filename for searching other files."
+  (let* ((file-ext-list (cdr (assoc (file-name-extension (buffer-file-name)) projectile-other-file-alist)))
+         (filename (file-name-base (buffer-file-name)))
+         (file-list (mapcar (lambda (ext)
+                              (concat filename "." ext))
+                            file-ext-list))
+         (candidates (-filter (lambda (project-file)
+                                (string-match filename project-file))
+                              (projectile-current-project-files)))
+         (candidates (if ignore-extensions
+                         candidates
+                       (-flatten (mapcar
+                                  (lambda (file)
+                                    (-filter (lambda (project-file)
+                                               (string-match file project-file))
+                                             candidates))
+                                  file-list)))))
+    (if candidates
+        (if (= (length candidates) 1)
+            (car candidates)
+          (projectile-completing-read "Switch to: " candidates))
+      nil)))
+
 (defun projectile-find-file (&optional arg)
   "Jump to a project's file using completion.
 
@@ -1218,6 +1289,7 @@ With a prefix ARG invalidates the cache first."
 (defvar projectile-django '("manage.py"))
 (defvar projectile-python-pip '("requirements.txt"))
 (defvar projectile-python-egg '("setup.py"))
+(defvar projectile-scons '("SConstruct"))
 (defvar projectile-maven '("pom.xml"))
 (defvar projectile-gradle '("build.gradle"))
 (defvar projectile-grails '("application.properties" "grails-app"))
@@ -1249,6 +1321,7 @@ With a prefix ARG invalidates the cache first."
    ((projectile-verify-files projectile-python-egg) 'python)
    ((projectile-verify-files projectile-symfony) 'symfony)
    ((projectile-verify-files projectile-lein) 'lein)
+   ((projectile-verify-files projectile-scons) 'scons)
    ((projectile-verify-files projectile-maven) 'maven)
    ((projectile-verify-files projectile-gradle) 'gradle)
    ((projectile-verify-files projectile-grails) 'grails)
@@ -1339,28 +1412,37 @@ With a prefix ARG invalidates the cache first."
   (cond
    ((member project-type '(rails-rspec ruby-rspec)) "_spec")
    ((member project-type '(rails-test ruby-test lein go)) "_test")
+   ((member project-type '(scons)) "test")
    ((member project-type '(maven symfony)) "Test")
    ((member project-type '(gradle grails)) "Spec")))
 
 (defun projectile-find-matching-test (file)
   "Compute the name of the test matching FILE."
-  (let ((basename (file-name-nondirectory (file-name-sans-extension file)))
-        (test-affix (projectile-test-affix (projectile-project-type))))
-    (-first (lambda (current-file)
-              (let ((current-file-basename (file-name-nondirectory (file-name-sans-extension current-file))))
-                (or (s-equals? current-file-basename (concat test-affix basename))
-                    (s-equals? current-file-basename (concat basename test-affix)))))
-            (projectile-current-project-files))))
+  (let* ((basename (file-name-nondirectory (file-name-sans-extension file)))
+         (test-affix (projectile-test-affix (projectile-project-type)))
+         (candidates (-filter (lambda (current-file)
+                                (let ((current-file-basename (file-name-nondirectory (file-name-sans-extension current-file))))
+                                  (or (s-equals? current-file-basename (concat test-affix basename))
+                                      (s-equals? current-file-basename (concat basename test-affix)))))
+                              (projectile-current-project-files))))
+    (cond
+     ((null candidates) nil)
+     ((= (length candidates) 1) (car candidates))
+     (t (projectile-completing-read "Switch to: " candidates)))))
 
 (defun projectile-find-matching-file (test-file)
   "Compute the name of a file matching TEST-FILE."
-  (let ((basename (file-name-nondirectory (file-name-sans-extension test-file)))
-        (test-affix (projectile-test-affix (projectile-project-type))))
-    (-first (lambda (current-file)
-              (let ((current-file-basename (file-name-nondirectory (file-name-sans-extension current-file))))
-                (or (s-equals? (concat test-affix current-file-basename) basename)
-                    (s-equals? (concat current-file-basename test-affix) basename))))
-            (projectile-current-project-files))))
+  (let* ((basename (file-name-nondirectory (file-name-sans-extension test-file)))
+         (test-affix (projectile-test-affix (projectile-project-type)))
+         (candidates (-filter (lambda (current-file)
+                                (let ((current-file-basename (file-name-nondirectory (file-name-sans-extension current-file))))
+                                  (or (s-equals? (concat test-affix current-file-basename) basename)
+                                      (s-equals? (concat current-file-basename test-affix) basename))))
+                              (projectile-current-project-files))))
+    (cond
+     ((null candidates) nil)
+     ((= (length candidates) 1) (car candidates))
+     (t (projectile-completing-read "Switch to: " candidates)))))
 
 (defun projectile-grep-default-files ()
   "Try to find a default pattern for `projectile-grep'.
@@ -1683,6 +1765,8 @@ For git projects `magit-status' is used if available."
 (defvar projectile-python-test-cmd "python -m unittest discover")
 (defvar projectile-symfony-compile-cmd "app/console server:run")
 (defvar projectile-symfony-test-cmd "phpunit -c app ")
+(defvar projectile-scons-compile-cmd "scons")
+(defvar projectile-scons-test-cmd "scons test")
 (defvar projectile-maven-compile-cmd "mvn clean install")
 (defvar projectile-maven-test-cmd "mvn test")
 (defvar projectile-gradle-compile-cmd "gradle build")
@@ -1714,6 +1798,8 @@ For git projects `magit-status' is used if available."
                   projectile-python-test-cmd
                   projectile-symfony-compile-cmd
                   projectile-symfony-test-cmd
+                  projectile-scons-compile-cmd
+                  projectile-scons-test-cmd
                   projectile-maven-compile-cmd
                   projectile-maven-test-cmd
                   projectile-lein-compile-cmd
@@ -1747,6 +1833,7 @@ For git projects `magit-status' is used if available."
    ((eq project-type 'lein) projectile-lein-compile-cmd)
    ((eq project-type 'make) projectile-make-compile-cmd)
    ((eq project-type 'rebar) projectile-rebar-compile-cmd)
+   ((eq project-type 'scons) projectile-scons-compile-cmd)
    ((eq project-type 'maven) projectile-maven-compile-cmd)
    ((eq project-type 'gradle) projectile-gradle-compile-cmd)
    ((eq project-type 'grails) projectile-grails-compile-cmd)
@@ -1767,6 +1854,7 @@ For git projects `magit-status' is used if available."
    ((eq project-type 'lein) projectile-lein-test-cmd)
    ((eq project-type 'make) projectile-make-test-cmd)
    ((eq project-type 'rebar) projectile-rebar-test-cmd)
+   ((eq project-type 'scons) projectile-scons-test-cmd)
    ((eq project-type 'maven) projectile-maven-test-cmd)
    ((eq project-type 'gradle) projectile-gradle-test-cmd)
    ((eq project-type 'grails) projectile-grails-test-cmd)
@@ -2112,6 +2200,7 @@ is chosen."
 ;;; Minor mode
 (defvar projectile-command-map
   (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "4 a") 'projectile-find-other-file-other-window)
     (define-key map (kbd "4 b") 'projectile-switch-to-buffer-other-window)
     (define-key map (kbd "4 C-o") 'projectile-display-buffer)
     (define-key map (kbd "4 d") 'projectile-find-dir-other-window)
@@ -2119,6 +2208,7 @@ is chosen."
     (define-key map (kbd "4 t") 'projectile-find-implementation-or-test-other-window)
     (define-key map (kbd "!") 'projectile-run-shell-command-in-root)
     (define-key map (kbd "&") 'projectile-run-async-shell-command-in-root)
+    (define-key map (kbd "a") 'projectile-find-other-file)
     (define-key map (kbd "b") 'projectile-switch-to-buffer)
     (define-key map (kbd "c") 'projectile-compile-project)
     (define-key map (kbd "d") 'projectile-find-dir)
@@ -2163,6 +2253,7 @@ is chosen."
    ["Find test file" projectile-find-test-file]
    ["Find directory" projectile-find-dir]
    ["Find file in directory" projectile-find-file-in-directory]
+   ["Find other file" projectile-find-other-file]
    ["Switch to buffer" projectile-switch-to-buffer]
    ["Jump between implementation file and test file" projectile-toggle-between-implementation-and-test]
    ["Kill project buffers" projectile-kill-buffers]
