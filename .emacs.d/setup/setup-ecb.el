@@ -40,7 +40,7 @@
 
 (defconst initial-frame-width (frame-width)
   "The width of frame will be changed ,remember the init value.")
-(setq ecb-compile-window-height 0
+(setq ecb-compile-window-height nil
       ecb-compile-window-width 'edit-window
       ecb-compile-window-temporally-enlarge 'both
       ecb-create-layout-file "~/.emacs.cache/auto-save-list/.ecb-user-layouts.el"
