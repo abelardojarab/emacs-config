@@ -37,9 +37,8 @@
 
 ;; Extra color tweaks
 (set-face-foreground 'variable-pitch "#ffffff")
-(set-face-foreground 'font-lock-comment-face "#90f0ff")
-(set-face-foreground 'font-lock-comment-delimiter-face "#90f0ff")
-(set-face-foreground 'font-lock-string-face "yellow")
+(set-face-foreground 'font-lock-string-face "#95e454")
+(set-face-italic-p 'font-lock-string-face t)
 (set-face-foreground 'font-lock-doc-face "orange")
 
 ;; Syntax coloring
