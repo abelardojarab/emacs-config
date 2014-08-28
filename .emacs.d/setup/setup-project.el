@@ -75,6 +75,10 @@
 (setq stack-trace-on-error t)
 (setq after-find-file-from-revert-buffer t)
 (add-to-list 'load-path "~/.emacs.d/ecb")
+
+
+
+;; Enable ecb
 (require 'ecb)
 (setq ecb-show-sources-in-directories-buffer 'always)
 (set-face-foreground 'ecb-default-general-face "#ffffff")
@@ -83,6 +87,86 @@
 (if (ecb--semantic-active-p)
     (ecb-update-methods-buffer--internal nil nil t)
   (ecb-rebuild-methods-buffer-for-non-semantic))
+
+;; reference path-to-ecb/ecb-layout-defs.el
+(ecb-layout-define "leftright-sa-m" left-right
+  "This function creates the following layout:
+
+   --------------------------------------------------------------
+   |              |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   |  Sources     |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   |--------------|             Edit              |  Methods    |
+   |              |                               |             |
+   |              |                               |             |
+   |  Analyse     |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   --------------------------------------------------------------
+   |                                                            |
+   |                    Compilation                             |
+   |                                                            |
+   --------------------------------------------------------------
+
+If you have not set a compilation-window in `ecb-compile-window-height' then
+the layout contains no persistent compilation window and the other windows get a
+little more place."
+  (ecb-set-sources-buffer)
+  (ecb-split-ver 0.4)
+  (ecb-set-analyse-buffer)
+  (select-window (next-window (next-window)))
+  (ecb-set-methods-buffer)
+  (select-window (previous-window (previous-window (selected-window) 0) 0)))
+
+(when (not (memq 'leftright-sa-m ecb-layout-window-sizes))
+  (add-to-list 'ecb-layout-window-sizes
+               '("leftright-sa-m"
+                 (0.17 . 0.3)
+                 (0.17 . 0.4)
+                 (0.25 . 0.7))))
+
+(ecb-layout-define "left-speedbar" left
+  "This function creates the following layout:
+
+   -------------------------------------------------------
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |   Speedbar   |                 Edit                 |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   -------------------------------------------------------
+   |                                                     |
+   |                    Compilation                      |
+   |                                                     |
+   -------------------------------------------------------
+
+If you have not set a compilation-window in `ecb-compile-window-height' then
+the layout contains no persistent compilation window and the other windows get a
+little more place. "
+  (ecb-set-speedbar-buffer)
+  (select-window (next-window)))
+
+
+(when (not (memq 'left-speedbar ecb-layout-window-sizes))
+  (add-to-list 'ecb-layout-window-sizes
+               '("left-speedbar"
+                 (0.3 . 0.8)
+                 )))
 
 (provide 'setup-project)
 ;;; setup-project.el ends here
