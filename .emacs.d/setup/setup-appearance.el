@@ -52,6 +52,10 @@
     (set-face-attribute 'variable-pitch nil :font "Cambria-14" :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
 
+(if (find-font (font-spec :name "EB Garamond 12"))
+    (set-face-attribute 'variable-pitch nil :font "EB Garamond 12-14" :weight 'normal))
+(add-hook 'text-mode-hook 'variable-pitch-mode)
+
 (if (find-font (font-spec :name "Consolas"))
     (set-face-attribute 'fixed-pitch nil :font "Consolas-10"))
 
@@ -80,51 +84,60 @@
 
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
-  (defun fontify-frame (frame)
-    (interactive)
-    (if window-system
-        (progn
-          (if (> (x-display-pixel-width) 1800)
-              (if (equal system-type 'windows-nt)
-                  (progn ;; HD monitor in Windows
-                    (set-face-attribute 'default nil :font "Consolas-12")
-                    (set-face-attribute 'variable-pitch nil :font "Cambria-15" :weight 'normal)
-                    (set-face-attribute 'fixed-pitch nil :font "Consolas-12")
-                    (set-face-attribute 'linum nil :height 130)
-                    (set-frame-parameter frame 'font "Consolas-12"))
-                (if (> (x-display-pixel-width) 2000)
-                    (progn ;; Cinema display
-                      (set-face-attribute 'default nil :font "Consolas-16")
-                      (set-face-attribute 'variable-pitch nil :font "Cambria-19" :weight 'normal)
-                      (set-face-attribute 'fixed-pitch nil :font "Consolas-16")
-                      (set-face-attribute 'linum nil :height 160)
-                      (set-frame-parameter frame 'font "Consolas-16"))
-                  (progn ;; HD monitor in Windows and Mac
-                    (set-face-attribute 'default nil :font "Consolas-14")
-                    (set-face-attribute 'variable-pitch nil :font "Cambria-17" :weight 'normal)
-                    (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
-                    (set-face-attribute 'linum nil :height 140)
-                    (set-frame-parameter frame 'font "Consolas-14"))))
-            (progn ;; Cinema display
-              (set-face-attribute 'default nil :font "Consolas-10")
-              (set-face-attribute 'variable-pitch nil :font "Cambria-14" :weight 'normal)
-              (set-face-attribute 'fixed-pitch nil :font "Consolas-10")
-              (set-face-attribute 'linum nil :height 125)
-              (set-frame-parameter frame 'font "Consolas-10"))))))
+  (let (main-font)
+    (setq main-font "Consolas")
+    (if (find-font (font-spec :name "Garamond"))
+        (setq main-font "Garamond"))
+    (if (find-font (font-spec :name "Cambria"))
+        (setq main-font "Cambria"))
+    (if (find-font (font-spec :name "EB Garamond 12"))
+        (setq main-font "EB Garamond 12"))
 
-  ;; Fontify current frame
-  (fontify-frame nil)
+    (defun fontify-frame (frame)
+      (interactive)
+      (if window-system
+          (progn
+            (if (> (x-display-pixel-width) 1800)
+                (if (equal system-type 'windows-nt)
+                    (progn ;; HD monitor in Windows
+                      (set-face-attribute 'default nil :font "Consolas-12")
+                      (set-face-attribute 'variable-pitch nil :font (concat main-font "-15") :weight 'normal)
+                      (set-face-attribute 'fixed-pitch nil :font "Consolas-12")
+                      (set-face-attribute 'linum nil :height 130)
+                      (set-frame-parameter frame 'font "Consolas-12"))
+                  (if (> (x-display-pixel-width) 2000)
+                      (progn ;; Cinema display
+                        (set-face-attribute 'default nil :font "Consolas-16")
+                        (set-face-attribute 'variable-pitch nil :font (concat main-font "-19") :weight 'normal)
+                        (set-face-attribute 'fixed-pitch nil :font "Consolas-16")
+                        (set-face-attribute 'linum nil :height 160)
+                        (set-frame-parameter frame 'font "Consolas-16"))
+                    (progn ;; HD monitor in Windows and Mac
+                      (set-face-attribute 'default nil :font "Consolas-14")
+                      (set-face-attribute 'variable-pitch nil :font (concat main-font "-17") :weight 'normal)
+                      (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
+                      (set-face-attribute 'linum nil :height 140)
+                      (set-frame-parameter frame 'font "Consolas-14"))))
+              (progn ;; Cinema display
+                (set-face-attribute 'default nil :font "Consolas-10")
+                (set-face-attribute 'variable-pitch nil :font (concat main-font "-14") :weight 'normal)
+                (set-face-attribute 'fixed-pitch nil :font "Consolas-10")
+                (set-face-attribute 'linum nil :height 125)
+                (set-frame-parameter frame 'font "Consolas-10"))))))
 
-  ;; Fontify any future frames
-  (push 'fontify-frame after-make-frame-functions))
+    ;; Fontify current frame
+    (fontify-frame nil)
+
+    ;; Fontify any future frames
+    (push 'fontify-frame after-make-frame-functions)))
 
 ;; Pretty lambdas
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
