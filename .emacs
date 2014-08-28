@@ -27,10 +27,10 @@
  '(ecb-auto-activate t)
  '(ecb-display-image-icons-for-semantic-tags t)
  '(ecb-grep-find-function (quote if))
+ '(ecb-grep-recursive-function (quote rgrep))
  '(ecb-highlight-tag-with-point (quote highlight-scroll))
  '(ecb-kill-buffer-clears-history (quote auto))
  '(ecb-layout-name "leftright-sa-m")
- '(ecb-layout-window-sizes (quote (("left-speedbar" (0.3 . 0.8)) ("leftright-sa-m" (ecb-sources-buffer-name 0.16042780748663102 . 0.5932203389830508) (ecb-analyse-buffer-name 0.16042780748663102 . 0.3898305084745763) (ecb-methods-buffer-name 0.13903743315508021 . 0.9830508474576272)))))
  '(ecb-methods-menu-sorter (lambda (entries) (let ((sorted (copy-list entries))) (sort sorted (quote string-lessp)))))
  '(ecb-options-version "2.40")
  '(ecb-prescan-directories-for-emptyness t)
@@ -146,6 +146,9 @@
 
 ;; Setup project support
 (require 'setup-project)
+
+;; Setup ECB
+(require 'setup-ecb)
 
 ;; Setup utilities
 (require 'setup-utilities)
