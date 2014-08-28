@@ -57,7 +57,6 @@
 (global-set-key "\C-l" 'goto-line)
 (global-set-key (kbd "") 'other-window)
 (global-set-key [f5] 'compile)
-(global-set-key [f6] 'next-error)
 (global-set-key [f11] 'djcb-full-screen-toggle)
 (global-set-key [C-tab] 'comment-or-uncomment-region)
 (global-set-key [kp-prior] 'scroll-down)
@@ -157,6 +156,19 @@
 ;; higlight changes in documents
 (global-highlight-changes-mode t)
 (setq highlight-changes-visibility-initial-state nil)
+
+;; higlight changes in documents
+(global-highlight-changes-mode t)
+(setq highlight-changes-visibility-initial-state nil)
+
+;; Fix hilight bug of marking a file as modified
+(defadvice highlight-changes-rotate-faces (around around-rotate-faces)
+  (let ((was-modified (buffer-modified-p))
+        (buffer-undo-list t))
+    ad-do-it
+    (unless was-modified
+      (set-buffer-modified-p nil))))
+(ad-activate 'highlight-changes-rotate-faces)
 
 ;; toggle visibility
 (global-set-key (kbd "<f6>") 'highlight-changes-visible-mode) ;; changes

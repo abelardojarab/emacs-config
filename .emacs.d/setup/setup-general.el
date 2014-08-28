@@ -79,9 +79,6 @@
 (prefer-coding-system 'utf-8-unix)
 (set-default default-buffer-file-coding-system 'utf-8-unix)
 
-;; no extra whitespace after lines
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 ;; update the copyright when present
 (add-hook 'before-save-hook 'copyright-update)
 
@@ -299,6 +296,10 @@
    uniquify-separator ":"
    uniquify-after-kill-buffer-p t       ;; rename after killing uniquified
    uniquify-ignore-buffers-re "^\\*"))  ;; don't muck with special buffers
+
+;; Ethan whitepsace, the remove trailing whitespace causes problem with buffer-modified-p
+(add-to-list 'load-path "~/.emacs.d/ethan-wspace/lisp")
+(require 'ethan-wspace)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
