@@ -36,7 +36,7 @@
 ;; (load-theme 'zenburn t)
 
 ;; Monokai theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs-theme")
 (load-theme 'monokai t)
 
 ;; Extra color tweaks
