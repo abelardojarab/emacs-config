@@ -1,1 +1,0 @@
-Has a trailing newline.

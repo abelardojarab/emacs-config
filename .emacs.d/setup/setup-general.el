@@ -298,8 +298,9 @@
    uniquify-ignore-buffers-re "^\\*"))  ;; don't muck with special buffers
 
 ;; Ethan whitepsace, the remove trailing whitespace causes problem with buffer-modified-p
-(add-to-list 'load-path "~/.emacs.d/ethan-wspace/lisp")
-(require 'ethan-wspace)
+(add-to-list 'load-path "~/.emacs.d/whitespace-cleanup-mode")
+(require 'whitespace-cleanup-mode)
+(global-whitespace-cleanup-mode)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
