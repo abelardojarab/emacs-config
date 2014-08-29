@@ -1,6 +1,6 @@
-;;; ergoemacs-unbind.el --- unbind keys
+;;; ergoemacs-unbind.el --- unbind keys -*- lexical-binding: t -*-
 
-;; Copyright (C) 2013 Matthew L. Fidler
+;; Copyright (C) 2013, 2014 Free Software Foundation, Inc.
 
 ;; Maintainer: Matthew L. Fidler
 ;; Keywords: convenience
@@ -28,6 +28,9 @@
 ;; 
 
 ;;; Code:
+(eval-when-compile 
+  (require 'cl)
+  (require 'ergoemacs-macros))
 
 (require 'edmacro)
 
@@ -74,6 +77,7 @@
     ("<end>" (end-of-buffer move-end-of-line))
     ("<execute>" (execute-extended-command))
     ("<f10>" (menu-bar-open))
+    ("<f11>" (toggle-frame-fullscreen))
     ("<f1> ." (display-local-help))
     ("<f1> 4 i" (info-other-window))
     ("<f1> 4" (prefix))
@@ -100,7 +104,7 @@
     ("<f1> P" (nil describe-package))
     ("<f1> RET" (view-order-manuals))
     ("<f1> S" (info-lookup-symbol))
-    ("<f1> a" (apropos-command))
+    ("<f1> a" (apropos apropos-command))
     ("<f1> b" (describe-bindings))
     ("<f1> c" (describe-key-briefly))
     ("<f1> d" (apropos-documentation))
@@ -156,7 +160,7 @@
     ("<help> P" (nil describe-package))
     ("<help> RET" (view-order-manuals))
     ("<help> S" (info-lookup-symbol))
-    ("<help> a" (apropos-command))
+    ("<help> a" (apropos apropos-command))
     ("<help> b" (describe-bindings))
     ("<help> c" (describe-key-briefly))
     ("<help> d" (apropos-documentation))
@@ -283,7 +287,7 @@
     ("C-h P" (describe-package nil))
     ("C-h RET" (view-order-manuals))
     ("C-h S" (info-lookup-symbol))
-    ("C-h a" (apropos-command))
+    ("C-h a" (apropos apropos-command))
     ("C-h b" (describe-bindings))
     ("C-h c" (describe-key-briefly))
     ("C-h d" (apropos-documentation))
@@ -628,23 +632,26 @@
     ("M-|" (shell-command-on-region))
     ("M-}" (forward-paragraph))
     ("M-~" (not-modified))
-    ("RET" (newline)))
-  "Default Emacs Key Bindings")
+    ("DEL" (delete-backward-char))
+    ("RET" (newline))
+    ("TAB" (indent-for-tab-command)))
+  "Default Emacs Key Bindings.")
 
-(defvar ergoemacs-unbind-keymap (make-sparse-keymap)
-  "Keymap for `ergoemacs-unbind-keys'")
-
-(defun ergoemacs-undefined (&optional arg)
-  "Ergoemacs Undefined key, tells where to perform the old action."
-  (interactive "P")
-  (let* ((key-kbd (or ergoemacs-single-command-keys (this-single-command-keys)))
-         (key (key-description key-kbd))
-         (fn (assoc key ergoemacs-emacs-default-bindings))
+(defvar ergoemacs-single-command-keys)
+(defvar ergoemacs-shortcut-keymap)
+(defvar ergoemacs-no-shortcut-keymap)
+(defvar ergoemacs-keymap)
+(defvar keyfreq-mode)
+(defvar keyfreq-table)
+(defvar ergoemacs-describe-key)
+(declare-function ergoemacs-debug "ergoemacs-mode.el")
+(declare-function ergoemacs-real-key-binding "ergoemacs-advices.el" (key &optional accept-default no-remap position) t)
+(defun ergoemacs-undefined ()
+  "Ergoemacs Undefined key, echo new key for old action."
+  (interactive)
+  (let* ((key-kbd (this-single-command-keys))
          tmp
-         (local-fn nil)
-         (last (substring key -1))
-         (ergoemacs-where-is-skip t)
-         (curr-fn nil))
+         (local-fn nil))
     ;; Lookup local key, if present and then issue that
     ;; command instead...
     ;;
@@ -659,8 +666,7 @@
           (setq local-fn (lookup-key ergoemacs-keymap key-kbd)))
         (functionp local-fn))
       (ergoemacs-debug "WARNING: The command %s is undefined when if shouldn't be..." local-fn)
-      (ergoemacs-vars-sync) ;; Try to fix issue.
-      (setq tmp (key-binding key-kbd))
+      (setq tmp (ergoemacs-real-key-binding key-kbd))
       (when (and tmp (not (equal tmp 'ergoemacs-undefined)))
         (setq local-fn tmp))
       (when (featurep 'keyfreq)
@@ -688,9 +694,7 @@
         ;; defined there.
         (setq local-fn (get-char-property (point) 'local-map))
         (if (and local-fn
-                 (condition-case err
-                     (keymapp local-fn)
-                   (error nil)))
+                 (ignore-errors (keymapp local-fn)))
             (setq local-fn (lookup-key local-fn key-kbd))
           (if (current-local-map)
               (setq local-fn (lookup-key (current-local-map) key-kbd))
@@ -722,16 +726,6 @@
       (ergoemacs-where-is-old-binding key-kbd))))
   (setq ergoemacs-describe-key nil))
 
-(defun ergoemacs-unbind-setup-keymap ()
-  "Setup `ergoemacs-unbind-keymap' based on current layout."
-  (setq ergoemacs-unbind-keymap (make-sparse-keymap))
-  (mapc
-   (lambda(x)
-     (unless (ergoemacs-global-changed-p x)
-       (define-key ergoemacs-unbind-keymap (read-kbd-macro x) 'ergoemacs-undefined
-         )))
-   (symbol-value (ergoemacs-get-redundant-keys))))
-
 
 (defvar ergoemacs-where-is-global-hash (make-hash-table :test 'equal)
   "Hash for ergoemacs lookup of global functions.")
@@ -739,21 +733,17 @@
 (defun ergoemacs-reset-global-where-is ()
   "Reset `ergoemacs-where-is-global-hash'."
   (setq ergoemacs-where-is-global-hash (make-hash-table :test 'equal))
-  (mapc
-   (lambda(x)
-     (let ((key (read-kbd-macro (nth 0 x))))
-       (mapc
-        (lambda(fn)
-          (let ((keys (gethash fn ergoemacs-where-is-global-hash)))
-            (add-to-list 'keys key)
-            (puthash fn keys ergoemacs-where-is-global-hash)))
-        (nth 1 x))))
-   ergoemacs-emacs-default-bindings))
+  (dolist (x ergoemacs-emacs-default-bindings)
+    (let ((key (read-kbd-macro (nth 0 x))))
+      (dolist (fn (nth 1 x))
+        (let ((keys (gethash fn ergoemacs-where-is-global-hash)))
+          (pushnew key keys :test 'equal)
+          (puthash fn keys ergoemacs-where-is-global-hash))))))
 
 
 ;;;###autoload
 (defun ergoemacs-ignore-prev-global ()
-  "Ignores previously defined global keys."
+  "Ignore previously defined global keys."
   (setq ergoemacs-emacs-default-bindings
         (mapcar
          (lambda(elt)
@@ -763,46 +753,20 @@
              (setq fn (lookup-key global-map (read-kbd-macro first)))
              (if (not (functionp fn))
                  elt
-	       ;; FIXME: Use `push' or `cl-pushnew' instead of
-               ;; `add-to-list'.
-               (add-to-list 'last fn)
+               (pushnew fn last :test 'equal)
                `(,first ,last))))
          ergoemacs-emacs-default-bindings))
   (ergoemacs-reset-global-where-is))
 
-  
-(defun ergoemacs-format-where-is-buffer (&optional include-menu-bar include-alias)
-  "Format a buffer created from a `where-is' command."
-  (when (and (boundp 'fn)
-             (eq (nth 0 (nth 1 fn)) 'digit-argument))
-    (goto-char (point-min))
-    (while (re-search-forward "\\<\\([CMS]-\\)+" nil t)
-      (when (and (boundp 'last)
-                 (not (save-match-data (looking-at last))))
-        (replace-match "")
-        (delete-char 1)
-        (when (looking-at " *, *")
-          (replace-match "")))))
-  ;; Delete menu entires
-  (unless include-menu-bar
-    (goto-char (point-min))
-    (when (re-search-forward "\\(?:, *\\)?<menu-bar>.*\\([(,]\\)" nil t)
-      (replace-match "\\1")))
-  ;; Reformat aliases
-  (unless include-alias
-    (goto-char (point-min))
-    (when (re-search-forward " *([^)]*);\n.*alias *" nil t)
-      (replace-match ""))))
-
 (defun ergoemacs-translate-current-key (key)
-  "Translate the current key."
+  "Translate the current KEY."
   (cond
    ((string= (key-description key) "<backspace>")
     (read-kbd-macro "DEL" t))
    (t key)))
 
 (defun ergoemacs-translate-current-function (curr-fn)
-  "Translate the current function"
+  "Translate the current function CURR-FN."
   (cond
    ((eq 'delete-horizontal-space curr-fn)
     'ergoemacs-shrink-whitespaces)
@@ -816,6 +780,7 @@
 (defvar ergoemacs-global-changed-cache '()
   "Cache of global variables that have changed.")
 
+(defvar ergoemacs-dir)
 (defun ergoemacs-global-fix-defualt-bindings (kbd-code function)
   "Helper function to fix `ergoemacs-emacs-default-bindings' based on currently running emacs."
   (interactive)
@@ -827,6 +792,7 @@
       (insert (format "%s " function)))
     (write-file (expand-file-name "ergoemacs-unbind.el" ergoemacs-dir))))
 
+(declare-function ergoemacs-kbd "ergoemacs-translate.el")
 (defun ergoemacs-global-changed-p (key &optional is-variable complain fix)
   "Returns if a global key has been changed.  If IS-VARIABLE is
 true and KEY is a string, then lookup the keyboard equivalent
@@ -842,11 +808,10 @@ This should only be run when no global keys have been set.
            ((eq (type-of key) 'string)
             (if is-variable
                 (ergoemacs-kbd key)
-              (condition-case err
-                  (read-kbd-macro key)
-                (error (read-kbd-macro
-                        (encode-coding-string
-                         key locale-coding-system))))))
+              (or (ignore-errors (read-kbd-macro key))
+                  (read-kbd-macro
+                   (encode-coding-string
+                    key locale-coding-system)))))
            (t key)))
          (key-kbd (key-description key-code)))
     (if (string-match "\\(mouse\\|wheel\\)" key-kbd)
@@ -856,9 +821,7 @@ This should only be run when no global keys have been set.
             (when (or fix complain)
               (let* ((key-function (lookup-key (current-global-map) key-code t))
                      (old-bindings (assoc key-kbd ergoemacs-emacs-default-bindings))
-                     (trans-function (if (condition-case err
-                                             (keymapp key-function)
-                                           (error nil))
+                     (trans-function (if (ignore-errors (keymapp key-function))
                                          'prefix
                                        key-function)))
                 (message "Warning %s has been set globally. It is bound to %s not in %s." key-kbd
@@ -868,9 +831,7 @@ This should only be run when no global keys have been set.
             nil
           (let* ((key-function (lookup-key (current-global-map) key-code t))
                  (old-bindings (assoc key-kbd ergoemacs-emacs-default-bindings))
-                 (trans-function (if (condition-case err
-                                         (keymapp key-function)
-                                       (error nil))
+                 (trans-function (if (ignore-errors (keymapp key-function))
                                      'prefix
                                    key-function))
                  (has-changed nil))
@@ -884,11 +845,9 @@ This should only be run when no global keys have been set.
                 (while (< i trans-function)
                   (aset prefix-vector i (elt key-as-vector i))
                   (setq i (+ 1 i)))
-                (unless (condition-case err ; If it is a prefix vector,
-                                        ; assume not globally
-                                        ; changed
-                            (keymapp (lookup-key (current-global-map) prefix-vector))
-                          (error nil))
+                ;; If it is a prefix vector, assume not globally
+                ;; changed
+                (unless (ignore-errors (keymapp (lookup-key (current-global-map) prefix-vector)))
                   ;; Not a prefix, see if the key had actually changed
                   ;; by recursively calling `ergoemacs-global-changed-p'
                   (setq has-changed
@@ -908,208 +867,31 @@ This should only be run when no global keys have been set.
                     (when fix
                       (unless (integerp trans-function)
                         (ergoemacs-global-fix-defualt-bindings key-kbd trans-function))))
-                  (add-to-list 'ergoemacs-global-changed-cache key-kbd))
-              (add-to-list 'ergoemacs-global-not-changed-cache key-kbd))
-            (symbol-value 'has-changed)))))))
+                  (pushnew key-kbd ergoemacs-global-changed-cache :test 'equal))
+              (pushnew key-kbd ergoemacs-global-not-changed-cache :test 'equal))
+            has-changed))))))
 
+(declare-function ergoemacs-get-fixed-layout "ergoemacs-translate.el")
+(declare-function ergoemacs-get-variable-layout "ergoemacs-translate.el")
 (defun ergoemacs-warn-globally-changed-keys (&optional fix)
   "Warns about globally changed keys. If FIX is true, fix the ergoemacs-unbind file."
   (interactive)
-  (mapc
-   (lambda(x)
-     (ergoemacs-global-changed-p (nth 0 x) nil t t))
-   ergoemacs-emacs-default-bindings)
+  (dolist (x ergoemacs-emacs-default-bindings)
+    (ergoemacs-global-changed-p (nth 0 x) nil t fix))
   (message "Ergoemacs Keys warnings for this layout:")
-  (mapc
-   (lambda(x)
-     (and (eq 'string (type-of (nth 0 x)))
-          (ergoemacs-global-changed-p (nth 0 x) nil t t)))
-      (symbol-value (ergoemacs-get-fixed-layout)))
-  (mapc
-   (lambda(x)
-     (and (eq 'string (type-of (nth 0 x)))
-          (ergoemacs-global-changed-p (nth 0 x) t t)))
-   (symbol-value (ergoemacs-get-variable-layout))))
+  (dolist (x (ergoemacs-sv (ergoemacs-get-fixed-layout)))
+    (and (eq 'string (type-of (nth 0 x)))
+         (ergoemacs-global-changed-p (nth 0 x) nil t fix)))
+  (dolist (x (ergoemacs-sv (ergoemacs-get-variable-layout)))
+    (and (eq 'string (type-of (nth 0 x)))
+         (ergoemacs-global-changed-p (nth 0 x) t t fix))))
 
-(defvar ergoemacs-display-char-list nil
-  "List of characters and fonts and if they display or not.")
 
-(require 'descr-text)
-(require 'faces)
-(defun ergoemacs-display-char-p (char)
-  "Determines if CHAR can be displayed."
-  (condition-case err
-      (let* (ret
-             (buf (current-buffer))
-             (face (font-xlfd-name (face-attribute 'default :font)))
-             (found (assoc (list face char window-system) ergoemacs-display-char-list)))
-        (if found
-            (nth 0 (cdr found))
-          (switch-to-buffer (get-buffer-create " *ergoemacs-display-char-p*") t)
-          (delete-region (point-min) (point-max))
-          (insert char)
-          (let ((display (describe-char-display (point-min) (char-after (point-min)))))
-            (if (display-graphic-p (selected-frame))
-                (if display
-                    (setq ret t))
-              (if display
-                  (setq ret t))))
-          (switch-to-buffer buf)
-          ;; Save it so the user doesn't see the buffer popup very much
-          ;; (if at all).
-          (add-to-list 'ergoemacs-display-char-list (list (list face char window-system) ret))
-          (symbol-value 'ret)))
-    (error nil)))
-
-(defvar ergoemacs-use-unicode-char t
-  "Use unicode characters when available.")
-(defun ergoemacs-unicode-char (char alt-char)
-  "Uses CHAR if it can be displayed, otherwise use ALT-CHAR.
-This assumes `ergoemacs-use-unicode-char' is non-nil.  When
-`ergoemacs-use-unicode-char' is nil display ALT-CHAR"
-  (if (and ergoemacs-use-unicode-char (ergoemacs-display-char-p char))
-      char
-    alt-char))
-
-(defcustom ergoemacs-use-ergoemacs-key-descriptions t
-  "Use ergoemacs key descriptions (Alt+) instead of emacs key descriptors (M-)"
-  :type 'boolean
-  :group 'ergoemacs-mode)
-
-(defun ergoemacs-pretty-key (code)
-  "Creates Pretty keyboard binding from kbd CODE from M- to Alt+"
-  (if (not code) ""
-    (let (deactivate-mark
-        (ret (replace-regexp-in-string
-              " +$" "" (replace-regexp-in-string "^ +" "" code)))
-        (case-fold-search nil)) 
-    (when ergoemacs-use-ergoemacs-key-descriptions
-      (save-match-data
-        (with-temp-buffer
-          (insert (ergoemacs-unicode-char "【" "["))
-          (insert ret)
-          (insert (ergoemacs-unicode-char "】" "]"))
-          (goto-char (point-min))
-          (while (re-search-forward "<f\\([0-9]+\\)>" nil t)
-            (replace-match "<F\\1>"))
-          (goto-char (point-min))
-          (while (re-search-forward "\\(-[A-Z]\\)\\([^-]\\|$\\)" nil t)
-            (unless (save-excursion
-                      (save-match-data
-                        (goto-char (match-beginning 0))
-                        (looking-at "-\\(RET\\|SPC\\|ESC\\)")))
-              (replace-match (format "-S%s%s" (downcase (match-string 1)) (match-string 2)))))
-          (goto-char (point-min))
-          (while (re-search-forward "\\(S-\\)\\{2,\\}" nil t)
-            (replace-match "S-" t t))
-          (goto-char (point-min))
-          (while (re-search-forward " +" nil t)
-            (replace-match (format "%s%s"
-                                   (ergoemacs-unicode-char "】" "]") (ergoemacs-unicode-char "【" "["))))
-          (goto-char (point-min))
-          (while (search-forward "M-" nil t)
-            (replace-match (if (eq system-type 'darwin)
-                               (cond
-                                ((or (and (boundp 'mac-command-modifier)
-                                          (eq mac-command-modifier 'meta))
-                                     (and (boundp 'ns-command-modifier)
-                                          (eq ns-command-modifier 'meta)))
-                                 (format "%sCmd+"
-                                         (ergoemacs-unicode-char "⌘" "")))
-                                ((or (and (boundp 'mac-alternate-modifier)
-                                          (eq mac-alternate-modifier 'meta))
-                                     (and (boundp 'ns-alternate-modifier)
-                                          (eq ns-alternate-modifier 'meta)))
-                                 (format "%sOpt+"
-                                         (ergoemacs-unicode-char "⌥" "")))
-                                (t "Alt+"))
-                             "Alt+") t))
-          (goto-char (point-min))
-          (while (search-forward "C-" nil t)
-            (replace-match "Ctl+" t))
-          (goto-char (point-min))
-          (while (search-forward "S-" nil t)
-            (replace-match (format "%sShift+"
-                                   (ergoemacs-unicode-char "⇧" "")) t))
-          (goto-char (point-min))
-          (while (re-search-forward "[<>]" nil t)
-            (replace-match ""))
-          (goto-char (point-min))
-          (while (re-search-forward "\\(RET\\|[Rr]eturn\\)" nil t)
-            (replace-match (format "Enter%s"
-                                   (ergoemacs-unicode-char "⏎" "")) t))
-          (goto-char (point-min))
-          (while (re-search-forward "TAB" nil t)
-            (replace-match (format "%sTab"
-                                   (ergoemacs-unicode-char "↹" "")) t))
-          (goto-char (point-min))
-          (while (re-search-forward "\\(menu\\|apps\\)" nil t)
-            (unless (or (save-match-data (looking-at "-bar"))
-                        ;; (save-match-data (not (looking-back "-")))
-                        )
-              (replace-match (format "%s"
-                                     (ergoemacs-unicode-char "▤" "Menu")) t)))
-          (goto-char (point-min))
-          (while (re-search-forward "prior>" nil t)
-            (replace-match "PgUp>" t))
-          (goto-char (point-min))
-          (while (re-search-forward "next>" nil t)
-            (replace-match "PgDn>" t))
-          (goto-char (point-min))
-          (while (re-search-forward "[+]\\([[:lower:]]\\)\\(】\\|\\]\\)" nil t)
-            (replace-match (upcase (match-string 0)) t t))
-          (when (and (eq system-type 'darwin)
-                     (string= "⇧" (ergoemacs-unicode-char "⇧" ""))
-                     (string= "⌘" (ergoemacs-unicode-char "⌘" ""))
-                     (string= "⌥" (ergoemacs-unicode-char "⌥" "")))
-            (goto-char (point-min))
-            (while (re-search-forward ".Opt[+]" nil t)
-              (replace-match "⌥"))
-            (goto-char (point-min))
-            (while (re-search-forward ".Cmd[+]" nil t)
-              (replace-match "⌘"))
-            (goto-char (point-min))
-            (while (re-search-forward ".Shift[+]" nil t)
-              (replace-match "⇧"))
-            (goto-char (point-min))
-            (while (re-search-forward "Ctl[+]" nil t)
-              (replace-match "^")))
-          (setq ret (buffer-string)))))
-    (symbol-value 'ret))))
-
-(defun ergoemacs-pretty-key-rep-internal ()
-  (let (case-fold-search)
-    (goto-char (point-min))
-    (while (re-search-forward "\\(\\(?:[CAMHS]-\\)+\\(?:RET\\|Return\\|TAB\\|prior>\\|next>\\|SPC\\|ESC\\|.\\)\\|<[^>]*?>\\|\\<RET\\>\\|\\<TAB\\>\\|\\<prior>\\>\\|\\<next>\\>\\|\\<SPC\\>\\|\\<ESC\\>\\)\\( +\\|[':,.]\\|$\\)" nil t)
-      (unless (or (save-match-data (string-match "remap" (match-string 1)))
-                  (save-match-data (string-match "\\(\\[\\]\\|【】\\)" (ergoemacs-pretty-key (match-string 1))))
-                  (save-match-data (save-excursion (goto-char (match-beginning 0)) (looking-back "-\\="))))
-        (replace-match (concat (ergoemacs-pretty-key (match-string 1))
-                               (match-string 2)) t t)
-        (while (re-search-forward "\\=\\(\\<RET\\>\\|\\<Return\\>\\|\\<TAB\\>\\|\\<prior>\\>\\|\\<next>\\>\\|\\<SPC\\>\\|\\<ESC\\>\\|[^\n ]\\)\\( +\\|[':,.]\\|$\\)" nil t)
-          (unless (save-match-data (save-excursion (goto-char (match-beginning 0)) (looking-back "-\\=")))
-            (replace-match (concat (ergoemacs-pretty-key (match-string 1))
-                                   (match-string 2)) t t)))))
-    (goto-char (point-min))
-    (while (re-search-forward "】 【" nil t)
-      (replace-match"】【"))))
-
-(defun ergoemacs-pretty-key-rep (&optional code)
-  "Finds keyboard binding codes such as C-x and replaces them with `ergoemacs-pretty-key' encoding."
-  (if code
-      (let ((ret code)
-            (case-fold-search nil))
-        (when ergoemacs-use-ergoemacs-key-descriptions
-          (save-match-data
-            (with-temp-buffer
-              (insert code)
-              (ergoemacs-pretty-key-rep-internal)
-              (setq ret (buffer-string)))))
-        (symbol-value 'ret))
-    (when ergoemacs-use-ergoemacs-key-descriptions
-      (ergoemacs-pretty-key-rep-internal))))
 
 ;; Based on describe-key-briefly
+(declare-function ergoemacs-key-fn-lookup "ergoemacs-translate.el")
+(declare-function ergoemacs-pretty-key "ergoemacs-translate.el")
+(defvar yank-menu)
 (defun ergoemacs-where-is-old-binding (&optional key only-new-key)
   "Print the name of the function KEY invoked before to start ErgoEmacs minor mode."
   (interactive

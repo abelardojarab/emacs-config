@@ -1,6 +1,6 @@
-;;; ergoemacs-track.el --- minor mode to track layout-based distances typed
+;;; ergoemacs-track.el --- minor mode to track layout-based typed -*- lexical-binding: t -*-
 
-;; Copyright (C) 2013 Matthew L. Fidler
+;; Copyright (C) 2013, 2014 Free Software Foundation, Inc.
 
 ;; Maintainer: Matthew L. Fidler
 ;; Keywords: convenience
@@ -115,7 +115,7 @@
               (last 0)
               curr)
           (mapcar
-           (lambda(x)
+           (lambda(_x)
              (setq i (+ i 1))
              (setq curr (+ last (/ ergoemacs-tab-key-width 2)))
              (cond
@@ -135,7 +135,7 @@
               (last 0)
               curr)
           (mapcar
-           (lambda(x)
+           (lambda(_x)
              (setq i (+ i 1))
              (setq curr (+ last (/ ergoemacs-tab-key-width 2)))
              (cond
@@ -158,12 +158,10 @@
     (when lay
       (if curr-i
           (setq wi curr-i)
-        (mapc
-         (lambda(x)
-           (when (string= key x)
-             (setq wi i))
-           (setq i (+ i 1)))
-         (symbol-value lay)))
+        (dolist (x (ergoemacs-sv lay))
+          (when (string= key x)
+            (setq wi i))
+          (setq i (+ i 1))))
       (setq i wi)
       (setq xh (nth (if (<= (nth i ergoemacs-track-finger) 3)
                         (+ 32 (nth i ergoemacs-track-finger))
@@ -215,7 +213,7 @@
                         'home)
                        ((= 4 (nth i ergoemacs-track-row))
                         'bottom))))
-     (symbol-value 'ret))))
+     ret)))
 
 (defvar ergoemacs-key-hash nil
   "Key hash")
@@ -227,18 +225,15 @@
 
 (setq ergoemacs-key-hash (make-hash-table :test 'equal))
 
-(mapc
- (lambda(layout)
-   (let ((lay (intern-soft (format "ergoemacs-layout-%s" layout))))
-     (when lay
-       (mapc
-        (lambda(key)
-          (unless (string= key "")
-            (puthash (cons layout key)
-                     (ergoemacs-key-properties key layout)
-                     ergoemacs-key-hash)))
-        (symbol-value lay)))))
- (ergoemacs-get-layouts t))
+(declare-function ergoemacs-get-layouts "ergoemacs-layouts.el")
+(dolist (layout (ergoemacs-get-layouts t))
+  (let ((lay (intern-soft (format "ergoemacs-layout-%s" layout))))
+    (when lay
+      (dolist (key (ergoemacs-sv lay))
+        (unless (string= key "")
+          (puthash (cons layout key)
+                   (ergoemacs-key-properties key layout)
+                   ergoemacs-key-hash))))))
 
 (defun ergoemacs-key-distance (key1 key2 &optional last-plist layout)
   "Gets the key distance based on the layout.
@@ -249,12 +244,12 @@ LAST-PLIST is the last property list returned by this function or nil if nothing
   (if layout
       (let ((ret (gethash (cons (cons key1 key2) (cons last-plist layout)) ergoemacs-key-hash)))
         (if ret
-            (symbol-value 'ret)
+            ret
           (let ((kp1 (gethash (cons layout key1) ergoemacs-key-hash))
                 (kp2 (gethash (cons layout key2) ergoemacs-key-hash))
                 kpl kpl1
                 (kp12 (gethash (cons layout (cons key1 key2)) ergoemacs-key-hash))
-                dx dy d dh)
+                dx dy)
             
             (when (and (not kp12) kp1 kp2
                        (eq (plist-get kp1 :finger-n) (plist-get kp2 :finger-n)))
@@ -411,7 +406,7 @@ LAST-PLIST is the last property list returned by this function or nil if nothing
                              :finger-n ,(plist-get kp2 :finger-n)
                              :key ,key2)))))
           (puthash (cons (cons key1 key2) (cons last-plist layout)) ret ergoemacs-key-hash)
-          (symbol-value 'ret)))
+          ret))
     (let (ret)
       (setq ret
             (mapcar
@@ -427,24 +422,24 @@ LAST-PLIST is the last property list returned by this function or nil if nothing
                  (puthash lay (+ dist (plist-get ret :d)) ergoemacs-distance-hash)
                  `(,lay ,ret)))
              (ergoemacs-get-layouts)))
-      (symbol-value 'ret))))
+      ret)))
 
 (defvar ergoemacs-last-distance-plist nil
   "Last distance plist")
 
 (defvar ergoemacs-last-key-press nil)
 
-(defun ergoemacs-track-post-command-hook ()
-  "Tracks the key presses."
-  (let ((keys (key-description (this-command-keys)))
-        dist-p)
-    ;; Note that sending something like QWERTY <apps> j
-    ;; Adds a key binding of C-c or C-c * key binding.
-    (when ergoemacs-last-key-press
-      (setq dist-p (ergoemacs-key-distance ergoemacs-last-key-press keys)))
-    (setq ergoemacs-last-key-press keys)))
+;; (defun ergoemacs-track-post-command-hook ()
+;;   "Tracks the key presses."
+;;   (let ((keys (key-description (this-command-keys)))
+;;         dist-p)
+;;     ;; Note that sending something like QWERTY <apps> j
+;;     ;; Adds a key binding of C-c or C-c * key binding.
+;;     (when ergoemacs-last-key-press
+;;       (setq dist-p (ergoemacs-key-distance ergoemacs-last-key-press keys)))
+;;     (setq ergoemacs-last-key-press keys)))
 
-(add-hook 'post-command-hook 'ergoemacs-track-post-command-hook)
+;; (add-hook 'post-command-hook 'ergoemacs-track-post-command-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ergoemacs-track.el ends here
