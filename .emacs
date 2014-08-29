@@ -129,9 +129,6 @@
 ;; Setup versioning control
 (require 'setup-versioning)
 
-;; Setup tabbar
-(require 'setup-tabbar)
-
 ;; Setup gnus and Newsticker
 (require 'setup-gnus)
 
@@ -147,11 +144,14 @@
 ;; Setup project support
 (require 'setup-project)
 
-;; Setup ECB
-(require 'setup-ecb)
-
 ;; Setup utilities
 (require 'setup-utilities)
+
+;; Setup tabbar
+(require 'setup-tabbar)
+
+;; Setup ECB
+(require 'setup-ecb)
 
 ;; Setup server
 (require 'setup-server)
