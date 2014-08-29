@@ -49,11 +49,7 @@
     (set-face-attribute 'default nil :font "Consolas-10"))
 
 (if (find-font (font-spec :name "Calibri"))
-    (set-face-attribute 'variable-pitch nil :font "Cambria-14" :weight 'normal))
-(add-hook 'text-mode-hook 'variable-pitch-mode)
-
-(if (find-font (font-spec :name "EB Garamond 12"))
-    (set-face-attribute 'variable-pitch nil :font "EB Garamond 12-14" :weight 'normal))
+    (set-face-attribute 'variable-pitch nil :font "Calibri-14" :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
 
 (if (find-font (font-spec :name "Consolas"))
@@ -84,14 +80,15 @@
 
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
-  (let (main-font)
-    (setq main-font "Consolas")
-    (if (find-font (font-spec :name "Garamond"))
-        (setq main-font "Garamond"))
+  (let (main-writing-font main-programming-font)
+    (setq main-writing-font "Consolas")
+    (setq main-programming-font "Consolas-10")
     (if (find-font (font-spec :name "Cambria"))
-        (setq main-font "Cambria"))
+        (setq main-writing-font "Cambria"))
+    (if (find-font (font-spec :name "Garamond"))
+        (setq main-writing-font "Garamond"))
     (if (find-font (font-spec :name "EB Garamond 12"))
-        (setq main-font "EB Garamond 12"))
+        (setq main-writing-font "EB Garamond 12"))
 
     (defun fontify-frame (frame)
       (interactive)
@@ -100,30 +97,27 @@
             (if (> (x-display-pixel-width) 1800)
                 (if (equal system-type 'windows-nt)
                     (progn ;; HD monitor in Windows
-                      (set-face-attribute 'default nil :font "Consolas-12")
-                      (set-face-attribute 'variable-pitch nil :font (concat main-font "-15") :weight 'normal)
-                      (set-face-attribute 'fixed-pitch nil :font "Consolas-12")
-                      (set-face-attribute 'linum nil :height 130)
-                      (set-frame-parameter frame 'font "Consolas-12"))
+                      (setq main-programming-font "Consolas-12")
+                      (set-face-attribute 'variable-pitch nil :font (concat main-writing-font "-15") :weight 'normal)
+                      (set-face-attribute 'linum nil :height 130))
                   (if (> (x-display-pixel-width) 2000)
                       (progn ;; Cinema display
-                        (set-face-attribute 'default nil :font "Consolas-16")
-                        (set-face-attribute 'variable-pitch nil :font (concat main-font "-19") :weight 'normal)
-                        (set-face-attribute 'fixed-pitch nil :font "Consolas-16")
-                        (set-face-attribute 'linum nil :height 160)
-                        (set-frame-parameter frame 'font "Consolas-16"))
+                        (setq main-programming-font "Consolas-16")
+                        (set-face-attribute 'variable-pitch nil :font (concat main-writing-font "-19") :weight 'normal)
+                        (set-face-attribute 'linum nil :height 160))
                     (progn ;; HD monitor in Windows and Mac
-                      (set-face-attribute 'default nil :font "Consolas-14")
-                      (set-face-attribute 'variable-pitch nil :font (concat main-font "-17") :weight 'normal)
-                      (set-face-attribute 'fixed-pitch nil :font "Consolas-14")
-                      (set-face-attribute 'linum nil :height 140)
-                      (set-frame-parameter frame 'font "Consolas-14"))))
-              (progn ;; Cinema display
-                (set-face-attribute 'default nil :font "Consolas-10")
-                (set-face-attribute 'variable-pitch nil :font (concat main-font "-14") :weight 'normal)
-                (set-face-attribute 'fixed-pitch nil :font "Consolas-10")
-                (set-face-attribute 'linum nil :height 125)
-                (set-frame-parameter frame 'font "Consolas-10"))))))
+                      (setq main-programming-font "Consolas-14")
+                      (set-face-attribute 'variable-pitch nil :font (concat main-writing-font "-17") :weight 'normal)
+                      (set-face-attribute 'linum nil :height 140))))
+              (progn ;; Small display
+                (setq main-programming-font "Consolas-10")
+                (set-face-attribute 'variable-pitch nil :font (concat main-writing-font "-14") :weight 'normal)
+                (set-face-attribute 'linum nil :height 125)))
+
+            ;; Finally, set the fonts as desired
+            (set-face-attribute 'default nil :font main-programming-font)
+            (set-face-attribute 'fixed-pitch nil :font main-programming-font)
+            (set-frame-parameter frame 'font main-programming-font))))
 
     ;; Fontify current frame
     (fontify-frame nil)
