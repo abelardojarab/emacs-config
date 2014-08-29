@@ -109,23 +109,27 @@
                     (progn ;; HD monitor in Windows
                       (setq main-programming-font "Consolas-12")
                       (set-default-font main-programming-font)
-                      (set-face-attribute 'variable-pitch nil :font (concat main-writing-font "-15") :weight 'normal)
+                      (setq main-writing-font (concat main-writing-font "-15"))
+                      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                       (set-face-attribute 'linum nil :height 130))
                   (if (> (x-display-pixel-width) 2000)
                       (progn ;; Cinema display
                         (setq main-programming-font "Consolas-16")
                         (set-default-font main-programming-font)
-                        (set-face-attribute 'variable-pitch nil :font (concat main-writing-font "-19") :weight 'normal)
+                        (setq main-writing-font (concat main-writing-font "-19"))
+                        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                         (set-face-attribute 'linum nil :height 160))
                     (progn ;; HD monitor in Windows and Mac
                       (setq main-programming-font "Consolas-14")
                       (set-default-font main-programming-font)
-                      (set-face-attribute 'variable-pitch nil :font (concat main-writing-font "-17") :weight 'normal)
+                      (setq main-writing-font (concat main-writing-font "-17"))
+                      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                       (set-face-attribute 'linum nil :height 140))))
               (progn ;; Small display
                 (setq main-programming-font "Consolas-10")
                 (set-default-font main-programming-font)
-                (set-face-attribute 'variable-pitch nil :font (concat main-writing-font "-14") :weight 'normal)
+                (setq main-writing-font (concat main-writing-font "-14"))
+                (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                 (set-face-attribute 'linum nil :height 125))))))
 
     ;; Fontify current frame

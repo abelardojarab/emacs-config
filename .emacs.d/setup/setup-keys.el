@@ -105,8 +105,12 @@
     (abort-recursive-edit)))
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
-;; Mouse wheel scroll support
-(mouse-wheel-mode t)
+;; Escape key in minibuffer
+(define-key minibuffer-local-map [escape] 'abort-recursive-edit)
+(define-key minibuffer-local-ns-map [escape] 'abort-recursive-edit)
+(define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
+(define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
+(define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
 
 ;; Smooth scrolling
 (add-to-list 'load-path "~/.emacs.d/smooth-scrolling")
@@ -124,6 +128,9 @@
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq scroll-step 1)
 (setq auto-window-vscroll t)
+
+;; Mouse wheel scroll support
+(mouse-wheel-mode t)
 
 ;; scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
