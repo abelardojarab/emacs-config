@@ -107,6 +107,10 @@
 ;; Mouse wheel scroll support
 (mouse-wheel-mode t)
 
+;; Smooth scrolling
+(add-to-list 'load-path "~/.emacs.d/smooth-scrolling")
+(require 'smooth-scrolling)
+
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq
  scroll-margin 0                ;; start scrolling when marker at top/bottom
