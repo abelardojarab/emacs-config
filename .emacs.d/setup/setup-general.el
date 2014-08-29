@@ -247,6 +247,17 @@
 ;; Ignore case when looking for a file
 (setq read-file-name-completion-ignore-case t)
 
+;; https://github.com/kentaro/auto-save-buffers-enhanced
+;; `regexp-match-p` function modified by @sds on stackoverflow
+;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
+(defun regexp-match-p (regexps string)
+  (and string
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
+
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
 (add-hook 'text-mode-hook 'text-mode-hook-identify)
