@@ -29,6 +29,7 @@
 (add-to-list 'load-path "~/.emacs.d/global-set-keybindings")
 (setq ergoemacs-ignore-prev-global nil) ;; Will not ignore any globally defined keybinding
 (require 'ergoemacs-mode)
+(setq ergoemacs-theme nil) ;; Uses Standard Ergoemacs keyboard theme
 (setq ergoemacs-keyboard-layout "us")
 (ergoemacs-mode 1)
 
