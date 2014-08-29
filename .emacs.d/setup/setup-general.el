@@ -185,7 +185,9 @@
 
 ;; Auto-indent mode
 (add-to-list 'load-path "~/.emacs.d/auto-indent-mode")
-(setq auto-indent-on-visit-file t)
+(setq auto-indent-on-visit-file nil) ;; do not indent when a file is visit
+(setq auto-indent-blank-lines-on-move nil)
+(setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
 (require 'auto-indent-mode)
 (auto-indent-global-mode)
 
