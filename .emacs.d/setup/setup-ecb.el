@@ -100,10 +100,6 @@
                    (display-pixel-width)))
       (set-frame-width (selected-frame) (+ (frame-width) (+ ecb-windows-width 2))))))
 
-(defadvice ecb-activate (after ecb-activate-after activate)
-  "Redraw layout after activation of ecb."
-  (ecb-redraw-layout))
-
 ;; reference path-to-ecb/ecb-layout-defs.el
 (ecb-layout-define "leftright-sa-m" left-right
   "This function creates the following layout:

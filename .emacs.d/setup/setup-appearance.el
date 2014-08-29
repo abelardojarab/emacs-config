@@ -84,17 +84,9 @@
 
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
-  (let (main-writing-font main-programming-font)
-    (setq main-writing-font "Consolas")
-    (setq main-programming-font "Consolas-10")
-    (if (find-font (font-spec :name "Cambria"))
-        (setq main-writing-font "Cambria"))
-    (if (find-font (font-spec :name "Garamond"))
-        (setq main-writing-font "Garamond"))
-    (if (find-font (font-spec :name "EB Garamond 12"))
-        (setq main-writing-font "EB Garamond 12"))
+  (let ()
 
-    (defun set-default-font (main-programming-font)
+    (defun set-default-font (main-programming-font frame)
       ;; Finally, set the fonts as desired
       (set-face-attribute 'default nil :font main-programming-font)
       (set-face-attribute 'fixed-pitch nil :font main-programming-font)
@@ -102,49 +94,62 @@
 
     (defun fontify-frame (frame)
       (interactive)
-      (if window-system
-          (progn
-            (if (> (x-display-pixel-width) 1800)
-                (if (equal system-type 'windows-nt)
-                    (progn ;; HD monitor in Windows
-                      (setq main-programming-font "Consolas-12")
-                      (set-default-font main-programming-font)
-                      (setq main-writing-font (concat main-writing-font "-15"))
-                      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
-                      (set-face-attribute 'linum nil :height 130))
-                  (if (> (x-display-pixel-width) 2000)
-                      (progn ;; Cinema display
-                        (setq main-programming-font "Consolas-16")
-                        (set-default-font main-programming-font)
-                        (setq main-writing-font (concat main-writing-font "-19"))
+      (let (main-writing-font main-programming-font)
+
+        (setq main-writing-font "Consolas")
+        (setq main-programming-font "Consolas-10")
+        (if (find-font (font-spec :name "Cambria"))
+            (setq main-writing-font "Cambria"))
+        (if (find-font (font-spec :name "Garamond"))
+            (setq main-writing-font "Garamond"))
+        (if (find-font (font-spec :name "EB Garamond 12"))
+            (setq main-writing-font "EB Garamond 12"))
+
+        (if window-system
+            (progn
+              (if (> (x-display-pixel-width) 1800)
+                  (if (equal system-type 'windows-nt)
+                      (progn ;; HD monitor in Windows
+                        (setq main-programming-font "Consolas-12")
+                        (set-default-font main-programming-font frame)
+                        (setq main-writing-font (concat main-writing-font "-15"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
-                        (set-face-attribute 'linum nil :height 160))
-                    (progn ;; HD monitor in Windows and Mac
-                      (setq main-programming-font "Consolas-14")
-                      (set-default-font main-programming-font)
-                      (setq main-writing-font (concat main-writing-font "-17"))
-                      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
-                      (set-face-attribute 'linum nil :height 140))))
-              (progn ;; Small display
-                (setq main-programming-font "Consolas-10")
-                (set-default-font main-programming-font)
-                (setq main-writing-font (concat main-writing-font "-14"))
-                (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
-                (set-face-attribute 'linum nil :height 125))))))
+                        (set-face-attribute 'linum nil :height 130))
+                    (if (> (x-display-pixel-width) 2000)
+                        (progn ;; Cinema display
+                          (setq main-programming-font "Consolas-16")
+                          (set-default-font main-programming-font frame)
+                          (setq main-writing-font (concat main-writing-font "-19"))
+                          (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
+                          (set-face-attribute 'linum nil :height 160))
+                      (progn ;; HD monitor in Windows and Mac
+                        (setq main-programming-font "Consolas-14")
+                        (set-default-font main-programming-font frame)
+                        (setq main-writing-font (concat main-writing-font "-17"))
+                        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
+                        (set-face-attribute 'linum nil :height 140))))
+                (progn ;; Small display
+                  (setq main-programming-font "Consolas-10")
+                  (set-default-font main-programming-font frame)
+                  (setq main-writing-font (concat main-writing-font "-14"))
+                  (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
+                  (set-face-attribute 'linum nil :height 125)))))))
 
     ;; Fontify current frame
     (fontify-frame nil)
 
     ;; Fontify any future frames
-    (push 'fontify-frame after-make-frame-functions)))
+    (push 'fontify-frame after-make-frame-functions)
+
+    ))
 
 ;; Pretty lambdas
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
