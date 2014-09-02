@@ -1,18 +1,32 @@
 exec-path-from-shell
 =====================
 
-A GNU Emacs library to setup environment variables from the user's shell.
+A GNU Emacs library to ensure environment variables inside Emacs look
+the same as in the user's shell.
 
 Motivation
 ----------
 
-On OS X, an Emacs instance started from the graphical user interface will have a
-different environment than a shell in a terminal window, because OS X does not
-run a shell during the login.  Obviously this will lead to unexpected results
-when calling external utilities like `make` from Emacs.
+Ever find that a command works in your shell, but not in Emacs?
 
-This library works around this problem by copying important environment
-variables from the user's shell.
+This happens a lot on OS X, where an Emacs instance started from the GUI inherits a
+default set of environment variables.
+
+This library works solves this problem by copying important environment
+variables from the user's shell: it works by asking your shell to print out the
+variables of interest, then copying them into the Emacs environment.
+
+Compatibility
+-------------
+
+If you use a non-POSIX-standard shell such as `tcsh` or `fish`, your
+shell will be asked to execute `sh` as a subshell in order to print
+out the variables in a format which can be reliably parsed. `sh` must
+be a POSIX-compliant shell in this case.
+
+Note that shell variables which have not been exported as environment
+variables (e.g. using the "export" keyword) may not be visible to
+`exec-path-from-shell'.
 
 Installation
 ------------

@@ -25,6 +25,9 @@
 ;;; Code:
 
 ;; Set path environment depending on OS.
+(add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
+(require 'exec-path-from-shell)
+
 (cond
  ;; Add Homebrew path in Darwin
  ((equal system-type 'darwin)
