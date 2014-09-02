@@ -138,7 +138,7 @@
     (push 'fontify-frame after-make-frame-functions)
 
     ;; hook for setting up UI when not running in daemon mode
-    (add-hook 'emacs-startup-hook 'fontify-frame)))
+    (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil)))))
 
 ;; Pretty lambdas
 (defun pretty-lambdas ()
