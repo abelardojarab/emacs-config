@@ -225,16 +225,20 @@
   (interactive)
   (w32-send-sys-command #xf030))
 
+;; Higlight indentation
+(add-to-list 'load-path "~/.emacs.d/Highlight-Indentation-for-Emacs/")
+(require 'highlight-indentation)
+
 ;; highlight indentation using vertical lines, old version
 (load "~/.emacs.d/elisp/00_func.el")
 (require 'aux-line)
 (add-hook 'c-mode-common-hook 'indent-vline)
+(add-hook 'lisp-mode-hook 'indent-vline)
+(add-hook 'python-mode-hook 'indent-vline)
 
 ;; Alternative indent hint, new version
 (require 'indent-hint)
-(add-hook 'lisp-mode-hook 'indent-hint-lisp)
 (add-hook 'js2-mode-hook 'indent-hint-js)
-(add-hook 'python-mode-hook 'indent-hint-fixed)
 
 ;; In every buffer, the line which contains the cursor will be fully highlighted
 (global-hl-line-mode 1)
@@ -243,10 +247,6 @@
   (make-local-variable 'global-hl-line-mode)
   (setq global-hl-line-mode nil))
 (add-hook 'org-mode-hook 'local-hl-line-mode-off)
-
-;; Higlight indentation
-(add-to-list 'load-path "~/.emacs.d/Highlight-Indentation-for-Emacs/")
-(require 'highlight-indentation)
 
 ;; Smart scrollbars
 (set-scroll-bar-mode 'right)
