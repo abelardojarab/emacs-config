@@ -24,10 +24,22 @@
 
 ;;; Code:
 
+;; Implementing my own copy of this function since it is required by
+;; semantic-ia-fast-jump but this function is not defined in etags.el
+;; of GNU emacs
+(add-to-list 'load-path "~/.emacs.d/etags-select")
+(require 'etags)
+(require 'etags-select)
+(unless (fboundp 'push-tag-mark)
+  (defun push-tag-mark ()
+    "Push the current position to the ring of markers so that
+    \\[pop-tag-mark] can be used to come back to current position."
+    (interactive)
+    (ring-insert find-tag-marker-ring (point-marker))
+    ))
+
 ;; better searching of tags
 (add-to-list 'load-path "~/.emacs.d/ggtags")
-(add-to-list 'load-path "~/.emacs.d/etags-select")
-(require 'etags-select)
 (require 'gtags)
 (require 'ggtags)
 
