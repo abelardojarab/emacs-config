@@ -197,6 +197,90 @@ Here is one at the end of a line. =2=
       (org-narrow-to-subtree)
       (org-test-with-expanded-babel-code (buffer-string))))))
 
+(ert-deftest ob-exp/exports-inline-code ()
+  (should
+   (string-match "\\`src_emacs-lisp\\(?:\\[]\\)?{(\\+ 1 1)}$"
+		 (org-test-with-temp-text
+		  "src_emacs-lisp[:exports code]{(+ 1 1)}"
+		  (org-export-execute-babel-code)
+		  (buffer-string))))
+  (should
+   (string-match "\\`src_emacs-lisp\\(?:\\[]\\)?{(\\+ 1 1)}$"
+		 (org-test-with-temp-text
+		  "src_emacs-lisp[ :exports code ]{(+ 1 1)}"
+		  (org-export-execute-babel-code)
+		  (buffer-string))))
+  (should
+   (string-match "\\`src_emacs-lisp\\(?:\\[]\\)?{(\\+ 1 1)} =2=$"
+		 (org-test-with-temp-text
+		  "src_emacs-lisp[:exports both]{(+ 1 1)}"
+		  (org-export-execute-babel-code)
+		  (buffer-string))))
+  (should
+   (string-match "\\`=2=$"
+		 (org-test-with-temp-text
+		  "src_emacs-lisp[:exports results :results scalar]{(+ 1 1)}"
+		  (org-export-execute-babel-code)
+		  (buffer-string))))
+  (should
+   (let ((text "foosrc_emacs-lisp[:exports code]{(+ 1 1)}"))
+     (string-match (regexp-quote text)
+		   (org-test-with-temp-text
+		    text
+		    (org-export-execute-babel-code)
+		    (buffer-string)))))
+  (should
+   (let ((text "src_emacs lisp{(+ 1 1)}"))
+     (string-match (regexp-quote text)
+		   (org-test-with-temp-text
+		    text
+		    (org-export-execute-babel-code)
+		    (buffer-string)))))
+  (should
+   (string-match
+    (replace-regexp-in-string
+     "\\\\\\[]{" "\\(?:\\[]\\)?{" ;accept both src_sh[]{...} or src_sh{...}
+     (regexp-quote "Here is one in the middle src_sh[]{echo 1} of a line.
+Here is one at the end of a line. src_sh[]{echo 2}
+src_sh[]{echo 3} Here is one at the beginning of a line.
+Here is one that is also evaluated: src_sh[]{echo 4} =4=")
+     nil t)
+    (org-test-at-id "cd54fc88-1b6b-45b6-8511-4d8fa7fc8076"
+      (org-narrow-to-subtree)
+      (org-test-with-expanded-babel-code (buffer-string))))))
+
+(ert-deftest ob-exp/exports-inline-code-double-eval ()
+  "Based on default header arguments for inline code blocks (:exports
+results), the resulting code block `src_emacs-lisp{2}' should also be
+evaluated."
+  (should
+   (string-match "\\`=2=$"
+  		 (org-test-with-temp-text
+  		  "src_emacs-lisp[:exports results :results code]{(+ 1 1)}"
+  		  (org-export-execute-babel-code)
+  		  (buffer-string)))))
+
+(ert-deftest ob-exp/exports-inline-code-eval-code-once ()
+  "Ibid above, except that the resulting inline code block should not
+be evaluated."
+  (should
+   (string-match "\\`src_emacs-lisp\\(?:\\[]\\)?{2}$"
+  		 (org-test-with-temp-text
+  		  (concat "src_emacs-lisp[:exports results :results code "
+			  ":results_switches \":exports code\"]{(+ 1 1)}")
+  		  (org-export-execute-babel-code)
+  		  (buffer-string)))))
+
+(ert-deftest ob-exp/exports-inline-code-double-eval-exports-both ()
+  (should
+   (string-match (concat "\\`src_emacs-lisp\\(?:\\[]\\)?{(\\+ 1 1)} "
+  			 "src_emacs-lisp\\(?:\\[]\\)?{2}$")
+  		 (org-test-with-temp-text
+  		  (concat "src_emacs-lisp[:exports both :results code "
+			  ":results_switches \":exports code\"]{(+ 1 1)}")
+  		  (org-export-execute-babel-code)
+  		  (buffer-string)))))
+
 (ert-deftest ob-exp/export-call-line-information ()
   (org-test-at-id "bec63a04-491e-4caa-97f5-108f3020365c"
     (org-narrow-to-subtree)

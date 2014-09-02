@@ -12977,7 +12977,7 @@ an Info file.
 Export as a Texinfo file.  For an Org file, @file{myfile.org}, the resulting
 file will be @file{myfile.texi}.  The file will be overwritten without
 warning.
-@orgcmd{C-c C-e m M,org-texinfo-export-to-info}
+@orgcmd{C-c C-e i i,org-texinfo-export-to-info}
 Export to Texinfo and then process to an Info file@footnote{By setting
 @code{org-texinfo-info-process}, it is possible to generate other formats,
 including DocBook.}.
@@ -13102,7 +13102,15 @@ an appendix, independently on its level and the class used.
 Each regular sectioning structure creates a menu entry, named after the
 heading.  You can provide a different, e.g., shorter, title in
 @code{:ALT_TITLE:} property (@pxref{Table of contents}).  Optionally, you can
-specify a description for the item in @code{:DESCRIPTION:} property.
+specify a description for the item in @code{:DESCRIPTION:} property.  E.g.,
+
+@example
+* Controlling Screen Display
+  :PROPERTIES:
+  :ALT_TITLE: Display
+  :DESCRIPTION: Controlling Screen Display
+  :END:
+@end example
 
 @node Indices
 @subsection Indices
@@ -13168,9 +13176,8 @@ written just above the list or table.
 
 In Texinfo output, description lists appear as two-column tables, using the
 default command @code{@@table}.  You can use @code{@@ftable} or
-@code{@@vtable}@footnote{For more information, please refer to
-@inforef{Two-column Tables,,texinfo}.} instead with @code{:table-type}
-attribute.
+@code{@@vtable}@footnote{For more information, @inforef{Two-column
+Tables,,texinfo}.} instead with @code{:table-type} attribute.
 
 @vindex org-texinfo-def-table-markup
 In any case, these constructs require a highlighting command for entries in
@@ -13822,6 +13829,7 @@ however, override everything.
 
 @multitable {@code{:html-table-use-header-tags-for-first-column}} {@code{org-html-table-use-header-tags-for-first-column}}
 @item @code{:html-allow-name-attribute-in-anchors} @tab @code{org-html-allow-name-attribute-in-anchors}
+@item @code{:html-checkbox-type}              @tab @code{org-html-checkbox-type}
 @item @code{:html-container}                  @tab @code{org-html-container-element}
 @item @code{:html-divs}                       @tab @code{org-html-divs}
 @item @code{:html-doctype}                    @tab @code{org-html-doctype}
@@ -13877,6 +13885,7 @@ however, override everything.
 @item @code{:latex-active-timestamp-format}    @tab @code{org-latex-active-timestamp-format}
 @item @code{:latex-classes}                    @tab @code{org-latex-classes}
 @item @code{:latex-class}                      @tab @code{org-latex-default-class}
+@item @code{:latex-custom-id-labels}           @tab @code{org-latex-custom-id-as-label}
 @item @code{:latex-default-figure-position}    @tab @code{org-latex-default-figure-position}
 @item @code{:latex-default-table-environment}  @tab @code{org-latex-default-table-environment}
 @item @code{:latex-default-table-mode}         @tab @code{org-latex-default-table-mode}

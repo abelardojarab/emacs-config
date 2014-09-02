@@ -482,15 +482,15 @@ Paragraph"
   ;; Plannings.
   (should
    (string-match
-    "CLOSED: \\[2012-04-29 .* 10:45\\]"
+    "* H\nCLOSED: \\[2012-04-29 .* 10:45\\]"
     (let ((org-closed-string "CLOSED:"))
-      (org-test-with-temp-text "CLOSED: [2012-04-29 sun. 10:45]"
+      (org-test-with-temp-text "* H\nCLOSED: [2012-04-29 sun. 10:45]"
 	(org-export-as (org-test-default-backend)
 		       nil nil nil '(:with-planning t))))))
   (should
-   (equal ""
+   (equal "* H\n"
 	  (let ((org-closed-string "CLOSED:"))
-	    (org-test-with-temp-text "CLOSED: [2012-04-29 sun. 10:45]"
+	    (org-test-with-temp-text "* H\nCLOSED: [2012-04-29 sun. 10:45]"
 	      (org-export-as (org-test-default-backend)
 			     nil nil nil '(:with-planning nil))))))
   ;; Property Drawers.
@@ -1719,10 +1719,23 @@ Paragraph[fn:1]"
   (should
    (equal
     '(yes yes no)
-    (org-test-with-parsed-data "* Headline\n** Headline 2\n** Headline 3"
+    (org-test-with-parsed-data "* H\n** H 2\n** H 3"
       (org-element-map tree 'headline
 	(lambda (h) (if (org-export-first-sibling-p h info) 'yes 'no))
 	info))))
+  (should
+   (equal '(yes no)
+	  (org-test-with-parsed-data "- item\n\n  para"
+	    (org-element-map tree 'paragraph
+	      (lambda (h) (if (org-export-first-sibling-p h info) 'yes 'no))
+	      info))))
+  ;; Ignore sections for headlines.
+  (should
+   (equal '(yes yes)
+	  (org-test-with-parsed-data "* H\nSection\n** H 2"
+	    (org-element-map tree 'headline
+	      (lambda (h) (if (org-export-first-sibling-p h info) 'yes 'no))
+	      info))))
   ;; Ignore headlines not exported.
   (should
    (equal
@@ -1743,6 +1756,12 @@ Paragraph[fn:1]"
       (org-element-map tree 'headline
 	(lambda (h) (if (org-export-last-sibling-p h info) 'yes 'no))
 	info))))
+  (should
+   (equal '(no yes)
+	  (org-test-with-parsed-data "- item\n\n  para"
+	    (org-element-map tree 'paragraph
+	      (lambda (h) (if (org-export-last-sibling-p h info) 'yes 'no))
+	      info))))
   ;; Ignore headlines not exported.
   (should
    (equal
@@ -2892,6 +2911,25 @@ Another text. (ref:text)
 	(lambda (row)
 	  (if (org-export-table-row-ends-rowgroup-p row info) 'yes 'no))
 	info)))))
+
+(ert-deftest test-org-export/table-row-in-header-p ()
+  "Test `org-export-table-row-in-header-p' specifications."
+  ;; Standard test.  Separators are always nil.
+  (should
+   (equal
+    '(yes no no)
+    (org-test-with-parsed-data "| a |\n|---|\n| b |"
+      (org-element-map tree 'table-row
+	(lambda (row)
+	  (if (org-export-table-row-in-header-p row info) 'yes 'no)) info))))
+  ;; Nil when there is no header.
+  (should
+   (equal
+    '(no no)
+    (org-test-with-parsed-data "| a |\n| b |"
+      (org-element-map tree 'table-row
+	(lambda (row)
+	  (if (org-export-table-row-in-header-p row info) 'yes 'no)) info)))))
 
 (ert-deftest test-org-export/table-row-starts-header-p ()
   "Test `org-export-table-row-starts-header-p' specifications."

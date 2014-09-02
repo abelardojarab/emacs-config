@@ -387,14 +387,17 @@ A schedule is this string, followed by a time stamp.  Should be a word,
 terminated by a colon.  You can insert a schedule keyword and
 a timestamp with \\[org-schedule].")
 
-(defconst org-planning-or-clock-line-re
+(defconst org-planning-line-re
   (concat "^[ \t]*"
 	  (regexp-opt
-	   (list org-clock-string org-closed-string org-deadline-string
-		 org-scheduled-string)
+	   (list org-closed-string org-deadline-string org-scheduled-string)
 	   t))
-  "Matches a line with planning or clock info.
+  "Matches a line with planning info.
 Matched keyword is in group 1.")
+
+(defconst org-clock-line-re
+  (concat "^[ \t]*" org-clock-string)
+  "Matches a line with clock info.")
 
 ;;;; Drawer
 
@@ -6254,12 +6257,20 @@ Use `org-reduced-level' to remove the effect of `org-odd-levels'."
 
 (defsubst org-re-property (property &optional literal allow-null)
   "Return a regexp matching a PROPERTY line.
- Match group 3 will be set to the value if it exists."
-  (concat "^\\(?4:[ \t]*\\)\\(?1::\\(?2:"
- 	  (if literal property (regexp-quote property))
-	  "\\):\\)[ \t]+\\(?3:[^ \t\r\n]"
-	  (if allow-null "*")
-	  ".*?\\)\\(?5:[ \t]*\\)$"))
+
+When optional argument LITERAL is non-nil, do not quote PROPERTY.
+This is useful when PROPERTY is a regexp.  When ALLOW-NULL is
+non-nil, match properties even without a value.
+
+Match group 3 is set to the value when it exists.  If there is no
+value and ALLOW-NULL is non-nil, it is set to the empty string."
+  (concat
+   "^\\(?4:[ \t]*\\)"
+   (format "\\(?1::\\(?2:%s\\):\\)"
+	   (if literal property (regexp-quote property)))
+   (if allow-null
+       "\\(?:\\(?3:$\\)\\|[ \t]+\\(?3:.*?\\)\\)\\(?5:[ \t]*\\)$"
+     "[ \t]+\\(?3:[^ \r\t\n]+.*?\\)\\(?5:[ \t]*\\)$")))
 
 (defconst org-property-re
   (org-re-property ".*?" 'literal t)
@@ -6820,7 +6831,8 @@ in special contexts.
       (setq org-cycle-global-status 'overview)
       (run-hook-with-args 'org-cycle-hook 'overview)))))
 
-(defvar org-called-with-limited-levels);Dyn-bound in ̀org-with-limited-levels'.
+(defvar org-called-with-limited-levels nil
+  "Non-nil when `org-with-limited-levels' is currently active.")
 
 (defun org-cycle-internal-local ()
   "Do the local cycling action."
@@ -8658,6 +8670,7 @@ and still retain the repeater to cover future instances of the task."
 	       ""))) ;; No time shift
 	(n-no-remove -1)
 	(drawer-re org-drawer-regexp)
+	(org-clock-re (format "^[ \t]*%s.*$" org-clock-string))
 	beg end template task idprop
 	shift-n shift-what doshift nmin nmax)
     (if (not (and (integerp n) (> n 0)))
@@ -8697,7 +8710,7 @@ and still retain the repeater to cover future instances of the task."
 			    (org-entry-delete nil "ID")
 			  (org-id-get-create t)))
 	    (unless (= n 0)
-	      (while (re-search-forward "^[ \t]*CLOCK:.*$" nil t)
+	      (while (re-search-forward org-clock-re nil t)
 		(kill-whole-line))
 	      (goto-char (point-min))
 	      (while (re-search-forward drawer-re nil t)
@@ -15882,6 +15895,9 @@ formats in the current buffer."
 		  0))
 	(beg (point))
 	(re (concat "^[ \t]*" org-keyword-time-regexp))
+	(org-clock-re (format "^[ \t]*\\(:CLOCK:\\|:LOGBOOK:\\|%s\\|:END:\\)"
+			      org-clock-string))
+	(org-skip-line-list (list org-clock-string ":END:"))
 	end hiddenp)
     (outline-next-heading)
     (setq end (point))
@@ -15890,8 +15906,8 @@ formats in the current buffer."
     (setq hiddenp (outline-invisible-p))
     (end-of-line 1)
     (and (equal (char-after) ?\n) (forward-char 1))
-    (while (looking-at "^[ \t]*\\(:CLOCK:\\|:LOGBOOK:\\|CLOCK:\\|:END:\\)")
-      (if (member (match-string 1) '("CLOCK:" ":END:"))
+    (while (looking-at org-clock-re)
+      (if (member (match-string 1) org-skip-line-list)
 	  ;; just skip this line
 	  (beginning-of-line 2)
 	;; Drawer start, find the end
@@ -17588,7 +17604,7 @@ With prefix ARG, change that many days."
   "Is the cursor on the clock log line?"
   (save-excursion
     (move-beginning-of-line 1)
-    (looking-at "^[ \t]*CLOCK:")))
+    (looking-at org-clock-line-re)))
 
 (defvar org-clock-history)                     ; defined in org-clock.el
 (defvar org-clock-adjust-closest nil)          ; defined in org-clock.el
@@ -19461,6 +19477,7 @@ boundaries."
 (org-defkey org-mode-map "\C-c="    'org-table-eval-formula)
 (org-defkey org-mode-map "\C-c'"    'org-edit-special)
 (org-defkey org-mode-map "\C-c`"    'org-table-edit-field)
+(org-defkey org-mode-map "\C-cp"    'orgtbl-ascii-plot)
 (org-defkey org-mode-map "\C-c|"    'org-table-create-or-convert-from-region)
 (org-defkey org-mode-map [(control ?#)] 'org-table-rotate-recalc-marks)
 (org-defkey org-mode-map "\C-c~"    'org-table-create-with-table.el)
@@ -21133,7 +21150,8 @@ on context.  See the individual commands for more information."
      ["Move Column Left" org-metaleft (org-at-table-p)]
      ["Move Column Right" org-metaright (org-at-table-p)]
      ["Delete Column" org-shiftmetaleft (org-at-table-p)]
-     ["Insert Column" org-shiftmetaright (org-at-table-p)])
+     ["Insert Column" org-shiftmetaright (org-at-table-p)]
+     ["Ascii plot" orgtbl-ascii-plot (org-at-table-p)])
     ("Row"
      ["Move Row Up" org-metaup (org-at-table-p)]
      ["Move Row Down" org-metadown (org-at-table-p)]
@@ -22379,7 +22397,7 @@ ELEMENT."
 	      (if level (1+ level) 0))))
 	 ((item plain list)
 	  (org-list-item-body-column
-	   (or (org-element-property :post-affiliated element) start)))
+	   (org-element-property :post-affiliated element)))
 	 (otherwise
 	  (goto-char start)
 	  (org-get-indentation))))
@@ -22458,7 +22476,8 @@ Alignment is done according to `org-property-format', which see."
 	  (looking-at org-property-re))
     (replace-match
      (concat (match-string 4)
-	     (format org-property-format (match-string 1) (match-string 3)))
+	     (org-trim
+	      (format org-property-format (match-string 1) (match-string 3))))
      t t)))
 
 (defun org-indent-line ()
@@ -22511,8 +22530,7 @@ Also align node properties according to `org-property-format'."
 	   (type (org-element-type element)))
       (cond ((and (memq type '(plain-list item))
 		  (= (line-beginning-position)
-		     (or (org-element-property :post-affiliated element)
-			 (org-element-property :begin element))))
+		     (org-element-property :post-affiliated element)))
 	     'noindent)
 	    ((and (eq type 'src-block)
 		  org-src-tab-acts-natively
@@ -22581,8 +22599,7 @@ assumed to be significant there."
 	      ;; according to the element type, or not indented at
 	      ;; all.  Other parts are indented as a single block.
 	      (let* ((post (copy-marker
-			    (or (org-element-property :post-affiliated element)
-				(org-element-property :begin element))))
+			    (org-element-property :post-affiliated element)))
 		     (cbeg
 		      (copy-marker
 		       (cond
@@ -22743,7 +22760,7 @@ matches in paragraphs or comments, use it."
 			 (org-element-at-point)))
 	      (type (org-element-type element))
 	      (post-affiliated (org-element-property :post-affiliated element)))
-	 (unless (and post-affiliated (< p post-affiliated))
+	 (unless (< p post-affiliated)
 	   (case type
 	     (comment
 	      (save-excursion
@@ -22752,10 +22769,7 @@ matches in paragraphs or comments, use it."
 		(concat (match-string 0) "# ")))
 	     (footnote-definition "")
 	     ((item plain-list)
-	      (make-string (org-list-item-body-column
-			    (or post-affiliated
-				(org-element-property :begin element)))
-			   ?\s))
+	      (make-string (org-list-item-body-column post-affiliated) ?\s))
 	     (paragraph
 	      ;; Fill prefix is usually the same as the current line,
 	      ;; unless the paragraph is at the beginning of an item.
@@ -22988,9 +23002,7 @@ region only contains such lines."
            ((and (memq type '(babel-call clock comment diary-sexp headline
 					 horizontal-rule keyword paragraph
 					 planning))
-		 (or (not (org-element-property :post-affiliated element))
-		     (<= (org-element-property :post-affiliated element)
-			 (point))))
+		 (<= (org-element-property :post-affiliated element) (point)))
             (skip-chars-forward " \t")
             (insert ": "))
            ((and (org-looking-at-p "[ \t]*$")
@@ -23945,7 +23957,7 @@ item, etc.  It also provides some special moves for convenience:
            (skip-chars-forward " \r\t\n")
            (or (eobp) (beginning-of-line)))
           ;; On affiliated keywords, move to element's beginning.
-          ((and post-affiliated (< (point) post-affiliated))
+          ((< (point) post-affiliated)
            (goto-char post-affiliated))
           ;; At a table row, move to the end of the table.  Similarly,
           ;; at a node property, move to the end of the property
@@ -24024,7 +24036,7 @@ convenience:
      ((= (point) begin)
       (backward-char)
       (org-backward-paragraph))
-     ((and post-affiliated (<= (point) post-affiliated)) (goto-char begin))
+     ((<= (point) post-affiliated) (goto-char begin))
      ((memq type '(node-property table-row))
       (goto-char (org-element-property
                   :post-affiliated (org-element-property :parent element))))
@@ -24520,7 +24532,7 @@ To get rid of the restriction, use \\[org-agenda-remove-restriction-lock]."
 		   (otherwise t)))))))
       (cond
        ;; Ignore checks in all affiliated keywords but captions.
-       ((and post-affiliated (< (point) post-affiliated))
+       ((< (point) post-affiliated)
 	(and (save-excursion
 	       (beginning-of-line)
 	       (let ((case-fold-search t)) (looking-at "[ \t]*#\\+CAPTION:")))
@@ -24543,8 +24555,7 @@ To get rid of the restriction, use \\[org-agenda-remove-restriction-lock]."
 	  ((comment quote-section) t)
 	  (comment-block
 	   ;; Allow checks between block markers, not on them.
-	   (and (> (line-beginning-position)
-		   (org-element-property :post-affiliated element))
+	   (and (> (line-beginning-position) post-affiliated)
 		(save-excursion
 		  (end-of-line)
 		  (skip-chars-forward " \r\t\n")
