@@ -65,6 +65,190 @@
 (setq org-export-with-sub-superscripts nil)
 (setq org-indent-mode t)
 
+;; Org Agenda
+(eval-after-load 'org-agenda
+  '(setq org-agenda-custom-commands
+         '(("a" "Agenda"
+            ((agenda "")
+             (tags-todo "/!STARTED"
+                        ((org-agenda-overriding-header "In Progress")
+                         (org-tags-match-list-sublevels nil)
+                         (org-agenda-sorting-strategy '(priority-down
+                                                        category-keep
+                                                        effort-up))))
+             (tags "REFILE"
+                   ((org-agenda-overriding-header "Entries to Refile")
+                    (org-tags-match-list-sublevels nil)))
+             (tags "-REFILE/"
+                   ((org-agenda-overriding-header "Entries to Archive")
+                    (org-agenda-skip-function 'nox/skip-non-archivable-tasks)
+                    (org-tags-match-list-sublevels nil)))))
+           ("d" "Timeline for today"
+            ((agenda ""))
+            ((org-agenda-ndays 1)
+             (org-agenda-show-log t)
+             (org-agenda-log-mode-items '(clock closed))
+             (org-agenda-clockreport-mode t)
+             (org-agenda-entry-types '())))
+           ("w" "Waiting for"
+            todo "WAITING"
+            ((org-agenda-sorting-strategy '(priority-down))))
+           ("U" "Important stuff I don't want to do"
+            ((tags-todo "focus")))
+           ("P" "By priority"
+            ((tags-todo "+PRIORITY=\"A\"")
+             (tags-todo "+PRIORITY=\"B\"")
+             (tags-todo "+PRIORITY=\"\"")
+             (tags-todo "+PRIORITY=\"C\""))
+            ((org-agenda-prefix-format "%-10c %-10T %e ")
+             (org-agenda-sorting-strategy '(priority-down
+                                            tag-up
+                                            category-keep
+                                            effort-down)))))))
+
+;; Thanks to http://doc.norang.ca/org-mode.html
+(defun nox/skip-non-archivable-tasks ()
+  "Skip trees that are not available for archiving"
+  (save-restriction
+    (widen)
+    ;; Consider only tasks with done todo headings as archivable candidates
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max))))
+          (subtree-end (save-excursion (org-end-of-subtree t))))
+      (if (member (org-get-todo-state) org-todo-keywords-1)
+          (if (member (org-get-todo-state) org-done-keywords)
+              (let* ((daynr (string-to-int (format-time-string "%d" (current-time))))
+                     (a-month-ago (* 60 60 24 (+ daynr 1)))
+                     (last-month (format-time-string "%Y-%m-" (time-subtract (current-time) (seconds-to-time a-month-ago))))
+                     (this-month (format-time-string "%Y-%m-" (current-time)))
+                     (subtree-is-current (save-excursion
+                                           (forward-line 1)
+                                           (and (< (point) subtree-end)
+                                                (re-search-forward (concat last-month "\\|" this-month) subtree-end t)))))
+                (if subtree-is-current
+                    subtree-end ; Has a date in this month or last month, skip it
+                  nil))  ; available to archive
+            (or subtree-end (point-max)))
+        next-headline))))
+
+;; I tend not to consult the agenda often enough, so let’s show it after Emacs is idle for a while.
+(defun nox/jump-to-org-agenda ()
+  (interactive)
+  (let ((buf (get-buffer "*Org Agenda*"))
+        wind)
+    (if buf
+        (if (setq wind (get-buffer-window buf))
+            (select-window wind)
+          (if (called-interactively-p)
+              (progn
+                (select-window (display-buffer buf t t))
+                (org-fit-window-to-buffer))
+            (with-selected-window (display-buffer buf)
+              (org-fit-window-to-buffer))))
+      (call-interactively 'org-agenda-list))))
+(run-with-idle-timer 2400 t 'nox/jump-to-org-agenda)
+
+;; Org Capture
+(defun nox/org-capture-todo (note)
+  (let* ((org-file org-default-notes-file)
+         (type 'entry)
+         (headline nil)
+         (template (concat "** " note
+                           "\n   SCHEDULED: %t\n")))
+    (nox/org-capture-entry org-file headline template)))
+
+(defun nox/org-capture-note (note)
+  (let* ((org-file org-default-notes-file)
+         (type 'entry)
+         (headline nil)
+         (template (concat "** %U " note "\n")))
+    (nox/org-capture-entry org-file headline template)))
+
+(defun nox/org-capture-entry (org-file headline template)
+  (let* ((type 'entry)
+         (org-capture-entry
+          (if (headline)
+              `(entry
+                (file+headline ,org-file ,headline)
+                ,template :clock-keep t :immediate-finish t)
+            `(entry
+              (file ,org-file)
+              ,template :clock-keep t :immediate-finish t))))
+    (require 'org-capture)
+    (nox/org-capture-noninteractively)))
+
+;; See http://stackoverflow.com/questions/22411626/generate-org-mode-objects-programmatically
+(defun nox/org-capture-noninteractively ()
+  (let* ((orig-buf (current-buffer))
+         (annotation (if (and (boundp 'org-capture-link-is-already-stored)
+                              org-capture-link-is-already-stored)
+                         (plist-get org-store-link-plist :annotation)
+                       (ignore-errors (org-store-link nil))))
+         (entry org-capture-entry)
+         initial)
+    (setq initial (or org-capture-initial
+                      (and (org-region-active-p)
+                           (buffer-substring (point) (mark)))))
+    (when (stringp initial)
+      (remove-text-properties 0 (length initial) '(read-only t) initial))
+    (when (stringp annotation)
+      (remove-text-properties 0 (length annotation)
+                              '(read-only t) annotation))
+    (setq org-capture-plist (copy-sequence (nthcdr 3 entry)))
+    (org-capture-put :target (nth 1 entry))
+    (let ((txt (nth 2 entry)) (type (or (nth 0 entry) 'entry)))
+      (when (or (not txt) (and (stringp txt) (not (string-match "\\S-" txt))))
+        (cond
+         ((eq type 'item) (setq txt "- %?"))
+         ((eq type 'checkitem) (setq txt "- [ ] %?"))
+         ((eq type 'table-line) (setq txt "| %? |"))
+         ((member type '(nil entry)) (setq txt "* %?\n  %a"))))
+      (org-capture-put :template txt :type type))
+    (org-capture-get-template)
+    (org-capture-put :original-buffer orig-buf
+                     :original-file (or (buffer-file-name orig-buf)
+                                        (and (featurep 'dired)
+                                             (car (rassq orig-buf
+                                                         dired-buffers))))
+                     :original-file-nondirectory
+                     (and (buffer-file-name orig-buf)
+                          (file-name-nondirectory
+                           (buffer-file-name orig-buf)))
+                     :annotation annotation
+                     :initial initial
+                     :return-to-wconf (current-window-configuration)
+                     :default-time
+                     (or org-overriding-default-time
+                         (org-current-time)))
+    (org-capture-set-target-location)
+    (condition-case error
+        (org-capture-put :template (org-capture-fill-template))
+      ((error quit)
+       (if (get-buffer "*Capture*") (kill-buffer "*Capture*"))
+       (error "Capture abort: %s" error)))
+    (setq org-capture-clock-keep (org-capture-get :clock-keep))
+    (condition-case error
+        (org-capture-place-template
+         (equal (car (org-capture-get :target)) 'function))
+      ((error quit)
+       (if (and (buffer-base-buffer (current-buffer))
+                (string-match "\\`CAPTURE-" (buffer-name)))
+           (kill-buffer (current-buffer)))
+       (set-window-configuration (org-capture-get :return-to-wconf))
+       (error "Error.")))
+    (if (and (derived-mode-p 'org-mode)
+             (org-capture-get :clock-in))
+        (condition-case nil
+            (progn
+              (if (org-clock-is-active)
+                  (org-capture-put :interrupted-clock
+                                   (copy-marker org-clock-marker)))
+              (org-clock-in)
+              (org-set-local 'org-capture-clock-was-started t))
+          (error
+           "Could not start the clock in this capture buffer")))
+    (if (org-capture-get :immediate-finish)
+        (org-capture-finalize))))
+
 ;; Mouse in Org
 (require 'org-mouse)
 
@@ -539,6 +723,8 @@ a link to this file."
                                    (gnus . org-gnus-no-new-news)
                                    (file . find-file)
                                    (wl . wl-other-frame))))
+
+
 
 
 ;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
