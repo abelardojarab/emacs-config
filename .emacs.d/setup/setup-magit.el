@@ -42,6 +42,7 @@
   (when (looking-at "\n")
     (open-line 1)))
 (add-hook 'git-commit-mode-hook 'magit-commit-mode-init)
+(add-hook 'git-commit-mode-hook 'goto-address-mode)
 
 (defun magit-save-and-exit-commit-mode ()
   (interactive)
@@ -156,7 +157,5 @@
 ;; Hint: customize `magit-repo-dirs' so that you can use C-u M-F12 to
 ;; quickly open magit on any one of your projects.
 (global-set-key (kbd "<C-f12>") 'magit-status)
-(after-load 'magit
-            (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-goto-parent-section))
 
 (provide 'setup-magit)
