@@ -28,9 +28,24 @@
 (cond
  ;; Add Homebrew path in Darwin
  ((equal system-type 'darwin)
+  (setq delete-by-moving-to-trash t
+        trash-directory "~/.Trash/")
+  ;; BSD ls does not support --dired. Use GNU core-utils: brew install coreutils
+  (when (executable-find "gls")
+    (setq insert-directory-program "gls"))
+  ;; Derive PATH by running a shell so that GUI Emacs sessions have access to it
+  (exec-path-from-shell-initialize)
+  ;; Correctly parse exec-path when PATH delimiter is a space
+  (when (equal (file-name-nondirectory (getenv "SHELL")) "fish")
+    (setq exec-path (split-string (car exec-path) " "))
+    (setenv "PATH" (mapconcat 'identity exec-path ":"))
+    (setq eshell-path-env (getenv "PATH")))
   (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
   (push "/usr/local/bin" exec-path)
-  (push "/opt/local/bin" exec-path))
+  (push "/opt/local/bin" exec-path)
+  ;; Point Org to LibreOffice executable
+  (when (file-exists-p "/Applications/LibreOffice.app/Contents/MacOS/soffice")
+    (setq org-export-odt-convert-processes '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")))))
 
  ;; Add Cygwin path in Windows
  ((equal system-type 'windows-nt)
@@ -314,6 +329,19 @@
 (add-to-list 'load-path "~/.emacs.d/whitespace-cleanup-mode")
 (require 'whitespace-cleanup-mode)
 (global-whitespace-cleanup-mode)
+
+;; Measure Emacs startup time
+(defun nox/show-startup-time ()
+  "Show Emacs's startup time in the minibuffer"
+  (message "Startup time: %s seconds."
+           (emacs-uptime "%s")))
+
+(add-hook 'emacs-startup-hook 'nox/show-startup-time 'append)
+
+;; Benchmark-init can give us a breakdown of time spent on require and load calls:
+(add-to-list 'load-path "~/.emacs.d/benchmark-init")
+(require 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

@@ -208,6 +208,10 @@
               (add-to-list 'initial-frame-alist (cons 'height ty))
               t)))
 
+;; Maximize window if function is found
+(if (fboundp 'toggle-frame-maximized)
+    (add-hook 'emacs-startup-hook 'toggle-frame-maximized))
+
 (defun x11-maximize-frame ()
   "Maximize the current frame (to full screen)"
   (interactive)
