@@ -241,6 +241,10 @@
   (setq global-hl-line-mode nil))
 (add-hook 'org-mode-hook 'local-hl-line-mode-off)
 
+;; Higlight indentation
+(add-to-list 'load-path "~/.emacs.d/Highlight-Indentation-for-Emacs/")
+(require 'highlight-indentation)
+
 ;; Smart scrollbars
 (set-scroll-bar-mode 'right)
 
