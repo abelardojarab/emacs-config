@@ -1,6 +1,6 @@
 ;;; project-am.el --- A project management scheme based on automake files.
 
-;; Copyright (C) 1998-2000, 2003, 2005, 2007-2013 Free Software
+;; Copyright (C) 1998-2000, 2003, 2005, 2007-2014 Free Software
 ;; Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
@@ -428,12 +428,8 @@ Argument COMMAND is the command to use for compiling the target."
 If a given set of projects has already been loaded, then do nothing
 but return the project for the directory given.
 Optional ROOTPROJ is the root EDE project."
-  (let* ((ede-constructiong t)
-	 (amo (object-assoc (expand-file-name "Makefile.am" directory)
-			    'file ede-projects)))
-    (when (not amo)
-      (setq amo (project-am-load-makefile directory)))
-    amo))
+  ;; Just jump into creating the project from the Makefiles.
+  (project-am-load-makefile directory))
 
 (defun project-am-find-topmost-level (dir)
   "Find the topmost automakefile starting with DIR."

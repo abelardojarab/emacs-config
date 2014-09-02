@@ -503,7 +503,13 @@ code to parse."
 	      (hif-canonicalize)
 	    (error nil))))
 
-    (let ((eval-form (eval parsedtokelist)))
+    (let ((eval-form (condition-case err
+			 (eval parsedtokelist)
+		       (error 
+			(semantic-push-parser-warning
+			 (format "Hideif forms produced an error.  Assuming false.\n%S" err)
+			 (point) (1+ (point)))
+			nil))))
       (if (or (not eval-form)
               (and (numberp eval-form)
                    (equal eval-form 0)));; ifdefline resulted in false

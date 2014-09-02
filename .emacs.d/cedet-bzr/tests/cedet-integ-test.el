@@ -266,6 +266,7 @@ This test is about optimizing for minimal file loads."
   "Display a MESSAGE that some test is now finished.
 Argument STYLE is the type of build done."
   ;; Do a message in case we're in batch mode
+  (ede-global-list-sanity-check)
   (message "PASSED! -- Make Style: %S" style)
   (unless noninteractive
     (let ((b (set-buffer (get-buffer-create "*PASSED*"))))

@@ -1,4 +1,4 @@
-;; Copyright (C) 2012, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2012, 2013, 2014 Free Software Foundation, Inc.
 
 ;; Author: Alex Ott <alexott@gmail.com>
 
@@ -45,33 +45,21 @@
   "name of project file for Lein2 projects")
 
 ;;;###autoload
-(defun ede-lein2-project-root (&optional dir)
-  "Get the Lein2 root directory for DIR."
-  (ede-find-project-root ede-lein2-project-file-name dir))
-
-(defvar ede-lein2-project-list nil
-  "List of projects created by option `ede-lein2-project'.")
-
-;;;###autoload
 (defun ede-lein2-load (dir &optional rootproj)
   "Return a Leiningen Project object if there is a match.
 Return nil if there isn't one.
 Argument DIR is the directory it is created for.
 ROOTPROJ is nil, since there is only one project."
-  (or (ede-files-find-existing dir ede-lein2-project-list)
-      ;; Doesn't already exist, so lets make one.
-      (let ((this
-             (ede-lein2-project "Leiningen2"
-                                 :name "Leiningen dir" ; make fancy name from dir here.
-                                 :directory dir
-                                 :file (expand-file-name ede-lein2-project-file-name dir)
-				 :current-target "jar")))
-	(ede-add-project-to-global-list this)
-	this)))
+  ;; Doesn't already exist, so lets make one.
+  (ede-lein2-project "Leiningen2"
+		     :name "Leiningen dir" ; make fancy name from dir here.
+		     :directory dir
+		     :file (expand-file-name ede-lein2-project-file-name dir)
+		     :current-target "jar"))
 
 ;;;###autoload
-(defclass ede-lein2-project (ede-jvm-base-project eieio-instance-tracker)
-  ((tracking-symbol :initform 'ede-lein2-project-list)
+(defclass ede-lein2-project (ede-jvm-base-project)
+  (
    )
   "EDE Leiningen2 project class."
   :method-invocation-order :depth-first)
@@ -124,8 +112,9 @@ Argument COMMAND is the command to use when compiling."
  (ede-project-autoload "lein2"
 		       :name "Lein2"
 		       :file 'ede/lein2
-		       :proj-file ede-lein2-project-file-name
-		       :proj-root 'ede-lein2-project-root
+		       :proj-file (if (featurep 'ede/lein2)
+				      ede-lein2-project-file-name
+				    "project.clj")
 		       :load-type 'ede-lein2-load
 		       :class-sym 'ede-lein2-project
 		       :new-p nil

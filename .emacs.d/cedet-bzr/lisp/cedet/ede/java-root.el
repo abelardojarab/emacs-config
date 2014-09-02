@@ -1,6 +1,6 @@
 ;;; ede/java-root.el --- A simple way to wrap a java project with a single root
 
-;; Copyright (C) 2012 Free Software Foundation, Inc.
+;; Copyright (C) 2012, 2014 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -95,11 +95,6 @@
 ;;   <write your code here, or return nil>
 ;;   )
 ;;
-;; (defun MY-ROOT-FCN ()
-;;   "Return the root directory for `default-directory'"
-;;   ;; You might be able to use `ede-java-root-project-root'.
-;;   )
-;;
 ;; (defun MY-LOAD (dir)
 ;;   "Load a project of type `java-root' for the directory DIR.
 ;; Return nil if there isn't one."
@@ -107,16 +102,14 @@
 ;;                                :locate-fcn 'MYFCN)
 ;;   )
 ;;
-;; (add-to-list 'ede-project-class-files
-;; 	     (ede-project-autoload "java-root"
+;; (ede-add-project-autoload
+;;   (ede-project-autoload "java-root"
 ;; 	      :name "JAVA ROOT"
 ;; 	      :file 'ede/java-root
 ;; 	      :proj-file 'MY-FILE-FOR-DIR
-;;            :proj-root 'MY-ROOT-FCN
 ;; 	      :load-type 'MY-LOAD
 ;; 	      :class-sym 'ede-java-root-project
-;;	      :safe-p t)
-;; 	     t)
+;;	      :safe-p t))
 ;;
 
 (require 'ede/jvm-base)
@@ -136,80 +129,6 @@
 ;;
 (defvar ede-java-root-project-list nil
   "List of projects created by option `ede-java-root-project'.")
-
-(defun ede-java-root-file-existing (dir)
-  "Find a java-root project in the list of java-root projects.
-DIR is the directory to search from."
-  (let ((projs ede-java-root-project-list)
-	(ans nil))
-    (while (and projs (not ans))
-      (let ((root (ede-project-root-directory (car projs))))
-	(when (string-match (concat "^" (regexp-quote root)) dir)
-	  (setq ans (car projs))))
-      (setq projs (cdr projs)))
-    ans))
-
-;;; PROJECT AUTOLOAD CONFIG
-;;
-;; Each project type registers itself into the project-class list.
-;; This way, each time a file is loaded, EDE can map that file to a
-;; project.  This project type checks files against the internal cache
-;; of projects created by the user.
-;;
-;; EDE asks two kinds of questions.  One is, does this DIR belong to a
-;; project.  If it does, it then asks, what is the ROOT directory to
-;; the project in DIR.  This is easy for java-root projects, but more
-;; complex for multiply nested projects.
-;;
-;; If EDE finds out that a project exists for DIR, it then loads that
-;; project.  The LOAD routine can either create a new project object
-;; (if it needs to load it off disk) or more likely can return an
-;; existing object for the discovered directory.  java-root always uses
-;; the second case.
-
-(defun ede-java-root-project-file-for-dir (&optional dir)
-  "Return a full file name to the project file stored in DIR."
-  (let ((proj (ede-java-root-file-existing dir)))
-    (when proj (oref proj :file))))
-
-(defvar ede-java-root-count 0
-  "Count number of hits to the java root thing.
-This is a debugging variable to test various optimizations in file
-lookup in the main EDE logic.")
-
-;;;###autoload
-(defun ede-java-root-project-root (&optional dir)
-  "Get the root directory for DIR."
-  (let ((projfile (ede-java-root-project-file-for-dir
-		   (or dir default-directory))))
-    (setq ede-java-root-count (1+ ede-java-root-count))
-    ;(debug)
-    (when projfile
-      (file-name-directory projfile))))
-
-(defun ede-java-root-load (dir &optional rootproj)
-  "Return a JAVA root object if you created one.
-Return nil if there isn't one.
-Argument DIR is the directory it is created for.
-ROOTPROJ is nil, since there is only one project."
-  ;; Snoop through our master list.
-  (ede-java-root-file-existing dir))
-
-;;;###autoload
-(ede-add-project-autoload
- (ede-project-autoload "java-root"
-		       :name "JAVA ROOT"
-		       :file 'ede-java-root
-		       :proj-file 'ede-java-root-project-file-for-dir
-		       :proj-root 'ede-java-root-project-root
-		       :load-type 'ede-java-root-load
-		       :class-sym 'ede-java-root
-		       :new-p nil
-		       :safe-p t)
- ;; When a user creates one of these, it should override any other project
- ;; type that might happen to be in this directory, so force this to the
- ;; very front.
- 'unique)
 
 ;;; CLASSES
 ;;
@@ -291,6 +210,7 @@ Each directory needs a project file to control it.")
 					    :directory 'ede-java-root-project-list)))
       ;; This is safe, because :directory isn't filled in till later.
       (when (and old (not (eq old this)))
+	(ede-delete-project-from-global-list old)
 	(delete-instance old)))
     ;; Basic initialization.
     (when (or (not (file-exists-p f))
@@ -300,11 +220,13 @@ Each directory needs a project file to control it.")
     (oset this :file f)
     (oset this :directory (file-name-directory f))
     (ede-project-directory-remove-hash (file-name-directory f))
+    ;; NOTE: We must add to global list here because these classes are not
+    ;;       created via the typial loader, but instead via calls from a .emacs
+    ;;       file.
     (ede-add-project-to-global-list this)
+
     (unless (slot-boundp this 'targets)
       (oset this :targets nil))
-    ;; We need to add ourselves to the master list.
-    ;;(setq ede-projects (cons this ede-projects))
     ))
 
 ;;; SUBPROJ Management.
@@ -384,6 +306,12 @@ This knows details about or source tree."
 (defmethod ede-project-root-directory ((this ede-java-root-project))
   "Return my root."
   (file-name-directory (oref this :file)))
+
+;;; Rescan command.
+;;
+(defmethod project-rescan ((this ede-java-root-project))
+  "Don't rescan this project from the sources."
+  (message "java-root has nothing to rescan."))
 
 ;;; JAVA SPECIFIC CODE
 ;;

@@ -1,6 +1,6 @@
 ;;; cogre/srecode.el --- SRecode macros for COGRE.
 ;;
-;; Copyright (C) 2009, 2010 Eric M. Ludlam
+;; Copyright (C) 2009, 2010, 2014 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;;
@@ -87,6 +87,8 @@
 (defun cogre-srecode-add-attr (label value dict)
   "Add LABEL with VALUE to DICT."
   (let ((subdict (srecode-dictionary-add-section-dictionary dict "ATTRIBUTES")))
+    (while (string-match "\\(^\\|[^\\]\\)\\(\"\\)" value)
+      (setq value (replace-match "\\\"" t t value 2)))
     (srecode-dictionary-set-value subdict "LABEL" label)
     (srecode-dictionary-set-value subdict "VALUE" value)))
 

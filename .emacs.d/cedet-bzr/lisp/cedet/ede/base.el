@@ -1,6 +1,6 @@
 ;;; ede/base.el --- Baseclasses for EDE.
 
-;; Copyright (C) 2010-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2014 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -608,7 +608,7 @@ Display the results as a debug list."
   "Return the ede project which is the root of the current project.
 Optional argument SUBPROJ indicates a subproject to start from
 instead of the current project."
-  (or ede-object-root-project
+  (or (when (not subproj) ede-object-root-project)
       (let* ((cp (or subproj (ede-current-project))))
 	(or (and cp (ede-project-root cp))
 	    (progn

@@ -1,6 +1,6 @@
 ;;; ede/arduino.el --- EDE support for arduino projects / sketches
 ;;
-;; Copyright (C) 2012, 2013 Eric M. Ludlam
+;; Copyright (C) 2012, 2013, 2014 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;;
@@ -72,6 +72,11 @@ Note: If this changes, we need to also update the autoload feature."
    )
   "EDE Arduino project.")
 
+(defmethod ede-find-subproject-for-directory ((proj ede-arduino-project)
+					      dir)
+  "Return PROJ, for handling all subdirs below DIR."
+  proj)
+
 ;;; TARGET MANAGEMENT
 ;;
 (defmethod ede-find-target ((proj ede-arduino-project) buffer)
@@ -97,9 +102,7 @@ If one doesn't exist, create a new one for this directory."
 The only arduino sketches allowed are those configured by the arduino IDE
 in their sketch directory.
 
-If BASEFILE is non-nil, then convert root to the project basename also.
-
-Consider expanding this at some later date."
+If BASEFILE is non-nil, then convert root to the project basename also."
   (when (ede-arduino-find-install) ;; Do nothing if tools aren't installed.
     (let* ((prefs (ede-arduino-sync))
 	   (sketchroot (and prefs (oref prefs sketchbook)))
@@ -137,44 +140,42 @@ to check."
 Return nil if there isn't one.
 Argument DIR is the directory it is created for.
 ROOTPROJ is nil, sinc there is only one project for a directory tree."
-  (let* ((root (ede-arduino-root dir))
-	 (proj (and root (ede-directory-get-open-project root))))
-    (if proj
-	proj
-
-      (when root
-	;; Create a new project here.
-	(let* ((name (file-name-nondirectory (directory-file-name root)))
-	       (pde (expand-file-name (concat name ".pde") root)))
-	  (when (not (file-exists-p pde))
-	    (setq pde (expand-file-name (concat name ".ino") root)))
-	  (setq proj (ede-arduino-project
-		      name
-		      :name name
-		      :directory (file-name-as-directory dir)
-		      :file pde
-		      :targets nil)))
-	(ede-add-project-to-global-list proj)
-	))))
+  ;; Create a new project here.
+  (let* ((name (file-name-nondirectory (directory-file-name dir)))
+	 (pde (expand-file-name (concat name ".pde") dir)))
+    (when (not (file-exists-p pde))
+      (setq pde (expand-file-name (concat name ".ino") dir)))
+    (ede-arduino-project
+     name
+     :name name
+     :directory (file-name-as-directory dir)
+     :file pde
+     :targets nil)))
 
 ;;;###autoload
-(add-to-list 'ede-project-class-files
-	     (ede-project-autoload "arduino"
-	      :name "ARDUINO SKETCH"
-	      :file 'ede/arduino
-	      :proj-root-dirmatch
-	      (ede-project-autoload-dirmatch 
-	       "arduino"
-	       :fromconfig "~/.arduino/preferences.txt"
-	       :configregex "^sketchbook.path=\\([^\n]+\\)$"
-	       :configregexidx 1)
-	      :proj-file 'ede-arduino-file
-	      :proj-root 'ede-arduino-root
-	      :load-type 'ede-arduino-load
-	      :class-sym 'ede-arduino-project
-	      :safe-p t
-	      :new-p t)
-	     t)
+(ede-add-project-autoload
+ (ede-project-autoload
+  "arduino"
+  :name "ARDUINO SKETCH"
+  :file 'ede/arduino
+  :root-only nil
+  :proj-root-dirmatch
+  (ede-project-autoload-dirmatch 
+   "arduino"
+   ;; NOTE: In loaddefs, the pref file isn't there, so we need a fallback.
+   ;;       when this files loads, we need to use the actual pref in case
+   ;;       the user set it.
+   :fromconfig (if (boundp 'ede-arduino-preferences-file)
+		   ede-arduino-preferences-file 
+		 "~/.arduino/preferences.txt")
+   :configregex "^sketchbook.path=\\([^\n]+\\)$"
+   :configregexidx 1)
+  :proj-file 'ede-arduino-file
+  :load-type 'ede-arduino-load
+  :class-sym 'ede-arduino-project
+  :safe-p t
+  :new-p t)
+ 'unique)
 
 ;;; COMMAND SUPPORT
 ;;
@@ -216,6 +217,10 @@ Argument COMMAND is the command to use for compiling the target."
 (defmethod project-debug-target ((target ede-arduino-target))
   "Run the current project derived from TARGET in a debugger."
   (error "No Debugger support for Arduino."))
+
+(defmethod project-rescan ((this ede-arduino-project))
+  "Rescan all project files associated with THIS project."
+  (ede-arduino-sync))
 
 ;;; C/C++ support
 (require 'semantic/db)

@@ -1,4 +1,4 @@
-;; Copyright (C) 2012, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2012, 2013, 2014 Free Software Foundation, Inc.
 
 ;; Author: Alex Ott <alexott@gmail.com>
 
@@ -51,34 +51,21 @@
   "name of project file for Ant projects")
 
 ;;;###autoload
-(defun ede-ant-project-root (&optional dir)
-  "Get the Ant root directory for DIR."
-  (ede-find-project-root ede-ant-project-file-name dir))
-
-(defvar ede-ant-project-list nil
-  "List of projects created by option `ede-ant-project'.")
-
-;;;###autoload
 (defun ede-ant-load (dir &optional rootproj)
   "Return a Leiningen Project object if there is a match.
 Return nil if there isn't one.
 Argument DIR is the directory it is created for.
 ROOTPROJ is nil, since there is only one project."
-  (or (ede-files-find-existing (file-truename dir) ede-ant-project-list)
-      ;; Doesn't already exist, so lets make one.
-      (let ((this
-             (ede-ant-project "Ant"
-			      :name "Ant dir" ; make fancy name from dir here.
-			      :directory (file-truename dir)
-			      :file (file-truename (expand-file-name ede-ant-project-file-name dir))
-			      )))
-	(ede-add-project-to-global-list this)
-	this)))
+  ;; Doesn't already exist, so lets make one.
+  (ede-ant-project "Ant"
+		   :name "Ant dir"    ; make fancy name from dir here.
+		   :directory (file-truename dir)
+		   :file (file-truename (expand-file-name ede-ant-project-file-name dir))
+		   ))
 
 ;;;###autoload
-(defclass ede-ant-project (ede-jvm-base-project eieio-instance-tracker)
-  ((tracking-symbol :initform 'ede-ant-project-list)
-   (srcroot :initarg :srcroot
+(defclass ede-ant-project (ede-jvm-base-project)
+  ((srcroot :initarg :srcroot
 	    :initform nil
 	    :type list
 	    :documentation
@@ -198,8 +185,9 @@ This knows details about or source tree."
  (ede-project-autoload "ant"
 		       :name "Ant"
 		       :file 'ede/ant
-		       :proj-file ede-ant-project-file-name
-		       :proj-root 'ede-ant-project-root
+		       :proj-file (if (featurep 'ede/ant)
+				      ede-ant-project-file-name
+				    "build.xml")
 		       :load-type 'ede-ant-load
 		       :class-sym 'ede-ant-project
 		       :new-p nil

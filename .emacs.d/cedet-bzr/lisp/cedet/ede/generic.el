@@ -1,6 +1,6 @@
 ;;; ede/generic.el --- Base Support for generic build systems
 
-;; Copyright (C) 2010-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2014 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -95,6 +95,7 @@
    (build-command :initarg :build-command
 		  :initform "make -k"
 		  :type string
+		  :group commands
 		  :custom string
 		  :group (default build)
 		  :documentation
@@ -102,25 +103,28 @@
    (debug-command :initarg :debug-command
 		  :initform "gdb "
 		  :type string
+		  :group commands
 		  :custom string
 		  :group (default build)
 		  :documentation
 		  "Command used for debugging this project.")
    (run-command :initarg :run-command
-		:initform nil
-		:type (or null string)
+		:initform ""
+		:type string
+		:group commands
 		:custom string
 		:group (default build)
 		:documentation
 		"Command used to run something related to this project.")
-   ;; C target customizations
+   ;; C / C++ target customizations
    (c-include-path :initarg :c-include-path
 		   :initform nil
 		   :type list
 		   :custom (repeat (string :tag "Path"))
 		   :group c
 		   :documentation
-		   "The include path used by C/C++ projects.")
+		   "The include path used by C/C++ projects.
+The include path is used when searching for symbols.")
    (c-preprocessor-table :initarg :c-preprocessor-table
 			 :initform nil
 			 :type list
@@ -128,11 +132,31 @@
 					       (string :tag "Value")))
 			 :group c
 			 :documentation
-			 "Preprocessor Symbols for this project.")
+			 "Preprocessor Symbols for this project.
+When files within this project are parsed by CEDET, these symbols will be
+used to resolve macro occurrences in source fies.
+If you modify this slot, you will need to force your source files to be
+parsed again.")
    (c-preprocessor-files :initarg :c-preprocessor-files
 			 :initform nil
 			 :type list
-			 :custom (repeat (string :tag "Include File")))
+			 :group c
+			 :custom (repeat (string :tag "Include File"))
+			 :documentation
+			 "Files parsed and used to populate preprocessor tables.
+When files within this project are parsed by CEDET, these symbols will be used to
+resolve macro occurences in source files.
+If you modify this slot, you will need to force your source files to be
+parsed again.")
+   ;; Java target customizations
+   (classpath :initarg :classpath
+	      :initform nil
+	      :type list
+	      :group java
+	      :custom (repeat (string :tag "Classpath"))
+	      :documentation
+	      "The default classpath used within a project.
+All files listed in the local path are full paths to files.")
    )
   "User Configuration object for a generic project.")
 
@@ -142,19 +166,18 @@ Return nil if there isn't one.
 Argument DIR is the directory it is created for.
 ROOTPROJ is nil, since there is only one project."
   ;; Doesn't already exist, so let's make one.
-  (let* ((alobj ede-constructing)
-	 (this nil))
+  (let* ((alobj ede-constructing))
     (when (not alobj) (error "Cannot load generic project without the autoload instance"))
-
-    (setq this
-	  (funcall (oref alobj class-sym)
-		   (symbol-name (oref alobj class-sym))
-		   :name (file-name-nondirectory
-			  (directory-file-name dir))
-		   :version "1.0"
-		   :directory (file-name-as-directory dir)
-		   :file (expand-file-name (oref alobj :proj-file)) ))
-    (ede-add-project-to-global-list this)
+    ;;;
+    ;; TODO - find the root dir. 
+    (let ((rootdir dir))
+      (funcall (oref alobj class-sym)
+	       (symbol-name (oref alobj class-sym))
+	       :name (file-name-nondirectory (directory-file-name dir))
+	       :version "1.0"
+	       :directory (file-name-as-directory rootdir)
+	       :file (expand-file-name (oref alobj :proj-file)
+				       rootdir)))
     ))
 
 ;;; Base Classes for the system
@@ -195,6 +218,15 @@ The class allocated value is replace by different sub classes.")
   (unless (slot-boundp this 'targets)
     (oset this :targets nil))
   )
+
+(defmethod ede-project-root ((this ede-generic-project))
+  "Return my root."
+  this)
+
+(defmethod ede-find-subproject-for-directory ((proj ede-generic-project)
+					      dir)
+  "Return PROJ, for handling all subdirs below DIR."
+  proj)
 
 (defmethod ede-generic-get-configuration ((proj ede-generic-project))
   "Return the configuration for the project PROJ."
@@ -247,6 +279,12 @@ All directories need at least one target.")
 (defclass ede-generic-target-texi (ede-generic-target)
   ((shortname :initform "Texinfo")
    (extension :initform "texi"))
+  "EDE Generic Project target for texinfo code.
+All directories need at least one target.")
+
+(defclass ede-generic-target-java (ede-generic-target)
+  ((shortname :initform "Java")
+   (extension :initform "java"))
   "EDE Generic Project target for texinfo code.
 All directories need at least one target.")
 
@@ -329,6 +367,11 @@ If one doesn't exist, create a new one for this directory."
 	(config (ede-generic-get-configuration proj)))
     (oref config c-include-path)))
 
+;;; Java support
+(defmethod ede-java-classpath ((proj ede-generic-project))
+  "Return the classpath for this project."
+  (oref (ede-generic-get-configuration proj) :classpath))
+
 ;;; Commands
 ;;
 (defmethod project-compile-project ((proj ede-generic-project) &optional command)
@@ -365,6 +408,12 @@ Argument COMMAND is the command to use for compiling the target."
 	 (run (concat "./" (oref config :run-command)))
 	 (cmd (read-from-minibuffer "Run (like this): " run)))
     (ede-shell-run-something target cmd)))
+
+(defmethod project-rescan ((this ede-generic-project))
+  "Rescan this generic project from the sources."
+  ;; Force the config to be rescanned.
+  (oset this config nil)
+  (ede-generic-get-configuration this))
 
 ;;; Customization
 ;;
@@ -415,6 +464,7 @@ the class `ede-generic-project' project."
 			 :name external-name
 			 :file 'ede/generic
 			 :proj-file projectfile
+			 :root-only nil
 			 :load-type 'ede-generic-load
 			 :class-sym class
 			 :new-p nil
@@ -436,6 +486,25 @@ the class `ede-generic-project' project."
 			      "SConstruct" 'ede-generic-scons-project)
   (ede-generic-new-autoloader "generic-cmake" "CMake"
 			      "CMakeLists" 'ede-generic-cmake-project)
+
+  ;; Super Generic found via revision control tags.
+  (ede-generic-new-autoloader "generic-git" "Git"
+			      ".git" 'ede-generic-vc-project)
+  (ede-generic-new-autoloader "generic-bzr" "Bazaar"
+			      ".bzr" 'ede-generic-vc-project)
+  (ede-generic-new-autoloader "generic-hg" "Mercurial"
+			      ".hg" 'ede-generic-vc-project)
+  (ede-generic-new-autoloader "generic-svn" "Subversions"
+			      ".svn" 'ede-generic-vc-project)
+  (ede-generic-new-autoloader "generic-cvs" "CVS"
+			      "CVS" 'ede-generic-vc-project)
+
+  ;; Take advantage of existing 'projectile' based projects.
+  ;; @TODO - if projectile supports compile commands etc, can we
+  ;; read that out?  Howto if projectile is not part of core emacs.
+  (ede-generic-new-autoloader "generic-projectile" ".projectile"
+			      ".projectile" 'ede-generic-vc-project)
+
   )
 
 
@@ -479,6 +548,15 @@ the class `ede-generic-project' project."
   "Setup a configuration for CMake."
   (oset config build-command "cmake")
   (oset config debug-command "gdb ")
+  )
+
+;;; Generic Version Control System
+(defclass ede-generic-vc-project (ede-generic-project)
+  ()
+  "Generic project found via Version Control files.")
+
+(defmethod ede-generic-setup-configuration ((proj ede-generic-vc-project) config)
+  "Setup a configuration for projects identified by revision control."
   )
 
 (provide 'ede/generic)

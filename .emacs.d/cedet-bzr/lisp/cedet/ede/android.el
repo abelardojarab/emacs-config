@@ -1,6 +1,6 @@
 ;;; ede/android.el --- Support Android code projects
 ;;
-;; Copyright (C) 2011, 2012, 2013 Eric M. Ludlam
+;; Copyright (C) 2011, 2012, 2013, 2014 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;;
@@ -30,21 +30,6 @@
 (require 'nxml-mode nil t)
 
 ;;; Code:
-(defvar ede-android-project-list nil
-  "List of projects created by option `ede-android-project'.")
-
-(defun ede-android-file-existing (dir)
-  "Find an Android project in the list of Android projects.
-DIR is the directory to search from."
-  (let ((projs ede-android-project-list)
-	(ans nil))
-    (while (and projs (not ans))
-      (let ((root (ede-project-root-directory (car projs))))
-	(when (string-match (concat "^" (regexp-quote root)) dir)
-	  (setq ans (car projs))))
-      (setq projs (cdr projs)))
-    ans))
-
 (defun ede-android-project-data (dir)
   "Find the Android data for the Android project in DIR.
 Return (NAME VERSION PACKAGE)."
@@ -75,19 +60,16 @@ Return (NAME VERSION PACKAGE)."
 Return nil if there isn't one.
 Argument DIR is the directory it is created for.
 ROOTPROJ is nil, since there is only one project."
-  (or (ede-android-file-existing dir)
-      ;; Doesn't already exist, so lets make one.
-      (let* ((ad (ede-android-project-data dir))
-	     (proj (ede-android-project
-		    (car ad)
-		    :name (car ad)
-		    :version (car (cdr ad))
-		    :directory (file-name-as-directory dir)
-		    :file (expand-file-name "AndroidManifest.xml"
-					    dir)
-		    :package (car (cdr (cdr ad))))))
-	(ede-add-project-to-global-list proj)
-	)))
+  ;; Doesn't already exist, so lets make one.
+  (let* ((ad (ede-android-project-data dir)))
+    (ede-android-project
+     (car ad)
+     :name (car ad)
+     :version (car (cdr ad))
+     :directory (file-name-as-directory dir)
+     :file (expand-file-name "AndroidManifest.xml"
+			     dir)
+     :package (car (cdr (cdr ad))))))
 
 ;;;###autoload
 (ede-add-project-autoload
@@ -138,9 +120,8 @@ All directories with filesshould have at least one target.")
 
 
 ;;;###autoload
-(defclass ede-android-project (ede-project eieio-instance-tracker)
-  ((tracking-symbol :initform 'ede-android-project-list)
-   (keybindings :initform (("S" . ede-android-visit-strings)
+(defclass ede-android-project (ede-project)
+  ((keybindings :initform (("S" . ede-android-visit-strings)
 			   ("U" . ede-android-install)))
    (menu :initform
 	 (

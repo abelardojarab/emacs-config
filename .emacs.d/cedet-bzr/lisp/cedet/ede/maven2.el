@@ -1,4 +1,4 @@
-;; Copyright (C) 2008, 2009, 2012, 2013 Eric M. Ludlam
+;; Copyright (C) 2008, 2009, 2012, 2013, 2014 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;; Joakim Verona <joakim@verona.se>
@@ -129,22 +129,14 @@
   :require  'ede/maven2
   :type 'list)
 
+(defconst ede-maven2-project-file-name "pom.xml"
+  "Name of project file for Maven2 projects")
+
 (defcustom ede-maven2-deps-plugin-options '("-DincludeTypes=jar")
   "Options for Maven's dependency plugin that is used to extract the classpath for project"
   :group 'ede-maven2
   :require  'ede/maven2
   :type 'list)
-
-;; Because there is one root project file, and no sub project files,
-;; we need a special root-finding function.
-
-;;;###autoload
-(defun ede-maven2-project-root (&optional dir)
-  "Get the root directory for DIR."
-  (ede-find-project-root "pom.xml" dir))
-
-(defvar ede-maven2-project-list nil
-  "List of projects created by option `ede-maven2'.")
 
 ;;;###autoload
 (defun ede-maven2-load (dir &optional rootproj)
@@ -152,25 +144,20 @@
 Return nil if there isn't one.
 Argument DIR is the directory it is created for.
 ROOTPROJ is nil, since there is only one project."
-  (or (ede-files-find-existing dir ede-maven2-project-list)
-      ;; Doesn't already exist, so lets make one.
-       (let ((this
-             (ede-maven2-project "Maven"
-                                 :name "maven dir" ; TODO: make fancy name from dir here.
-                                 :directory dir
-                                 :file (expand-file-name "pom.xml" dir)
-				 :current-target "package"
-                                 )))
-         (ede-add-project-to-global-list this)
-         ;; TODO: the above seems to be done somewhere else, maybe ede-load-project-file
-         ;; this seems to lead to multiple copies of project objects in ede-projects
-	 ;; TODO: call rescan project to setup all data
-	 this)))
+  ;; Doesn't already exist, so lets make one.
+  (let ((this
+	 (ede-maven2-project "Maven"
+			     :name "maven dir" ; TODO: make fancy name from dir here.
+			     :directory dir
+			     :file (expand-file-name ede-maven2-project-file-name dir)
+			     :current-target "package"
+			     )))
+    ;; TODO: call rescan project to setup all data
+    this))
 
 ;;;###autoload
-(defclass ede-maven2-project (ede-jvm-base-project eieio-instance-tracker)
-  ((tracking-symbol :initform 'ede-maven2-project-list)
-   (file-header-line :initform ";; EDE Maven2 project wrapper")
+(defclass ede-maven2-project (ede-jvm-base-project)
+  ((file-header-line :initform ";; EDE Maven2 project wrapper")
    (pom :initform nil
 	:initarg :pom
 	:documentation "Parsed pom.xml file")
@@ -182,7 +169,7 @@ ROOTPROJ is nil, since there is only one project."
                                 &rest fields)
   "Make sure the all targets as setup."
   (call-next-method)
-  (ede-normalize-file/directory this "pom.xml")
+  (ede-normalize-file/directory this ede-maven2-project-file-name)
   ;; TODO: add analysis of pom.xml
   )
 
@@ -240,8 +227,9 @@ Argument COMMAND is the command to use when compiling."
  (ede-project-autoload "maven2"
 		       :name "MAVEN2"
 		       :file 'ede/maven2
-		       :proj-file "pom.xml"
-		       :proj-root 'ede-maven2-project-root
+		       :proj-file (if (featurep 'ede/lein2)
+				      ede-maven2-project-file-name
+				    "pom.xml")
 		       :load-type 'ede-maven2-load
 		       :class-sym 'ede-maven2-project
 		       :new-p nil
