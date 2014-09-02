@@ -237,6 +237,8 @@
 ;; Better undo
 (require 'undo-tree)
 (global-undo-tree-mode)
+(setq undo-tree-visualizer-diff t)
+(setq undo-tree-visualizer-timestamps t)
 
 ;; Right click mouse
 (global-unset-key [(control mouse-3)])

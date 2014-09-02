@@ -38,6 +38,9 @@
 (add-hook 'python-mode-hook
           (lambda () (flycheck-mode t)))
 
+;; Configuration
+(setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
+
 ;; Highlight whole line with error
 (setq flycheck-highlighting-mode 'lines)
 
