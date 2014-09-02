@@ -129,10 +129,12 @@ If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
   (ecb-set-sources-buffer)
-  (ecb-split-ver 0.4)
+  (ecb-split-ver 0.5)
   (ecb-set-analyse-buffer)
   (select-window (next-window (next-window)))
   (ecb-set-methods-buffer)
+  (ecb-split-ver 0.5)
+  (ecb-set-symboldef-buffer)
   (select-window (previous-window (previous-window (selected-window) 0) 0)))
 
 (ecb-layout-define "left-speedbar" left
