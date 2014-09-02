@@ -20,22 +20,28 @@
      (set-face-foreground 'ediff-even-diff-A "#ffffff")
      (set-face-background 'ediff-even-diff-A "#292527")))
 
-;; todo:
-;; diff-added-face      diff-changed-face
-;; diff-context-face    diff-file-header-face
-;; diff-function-face   diff-header-face
-;; diff-hunk-header-face        diff-index-face
-;; diff-indicator-added-face    diff-indicator-changed-face
-;; diff-indicator-removed-face  diff-nonexistent-face
-;; diff-removed-face
-
-
 ;; Load git configurations
-;; For instance, to run magit-svn-mode in a project, do:
-;;
-;;     git config --add magit.extension svn
-;;
 (add-hook 'magit-mode-hook 'magit-load-config-extensions)
+
+;; we no longer need vc-git
+(delete 'Git vc-handled-backends)
+
+;; Close popup when commiting - this stops the commit window
+;; hanging around
+;; From: http://git.io/rPBE0Q
+(defadvice git-commit-commit (after delete-window activate)
+  (delete-window))
+
+(defadvice git-commit-abort (after delete-window activate)
+  (delete-window))
+
+;; these two force a new line to be inserted into a commit window,
+;; which stops the invalid style showing up.
+;; From: http://git.io/rPBE0Q
+(defun magit-commit-mode-init ()
+  (when (looking-at "\n")
+    (open-line 1)))
+(add-hook 'git-commit-mode-hook 'magit-commit-mode-init)
 
 (defun magit-save-and-exit-commit-mode ()
   (interactive)
@@ -52,7 +58,6 @@
   '(define-key git-commit-mode-map (kbd "C-c C-k") 'magit-exit-commit-mode))
 
 ;; C-c C-a to amend without any prompt
-
 (defun magit-just-amend ()
   (interactive)
   (save-window-excursion
@@ -63,18 +68,15 @@
   '(define-key magit-status-mode-map (kbd "C-c C-a") 'magit-just-amend))
 
 ;; C-x C-k to kill file on line
-
 (defun magit-kill-file-on-line ()
   "Show file on current magit line and prompt for deletion."
   (interactive)
   (magit-visit-item)
   (delete-current-buffer-file)
   (magit-refresh))
-
 (define-key magit-status-mode-map (kbd "C-x C-k") 'magit-kill-file-on-line)
 
 ;; full screen magit-status
-
 (defadvice magit-status (around magit-fullscreen activate)
   (window-configuration-to-register :magit-fullscreen)
   ad-do-it
@@ -89,7 +91,6 @@
 (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
 
 ;; full screen vc-annotate
-
 (defun vc-annotate-quit ()
   "Restores the previous window configuration and kills the vc-annotate buffer"
   (interactive)
@@ -106,7 +107,6 @@
      (define-key vc-annotate-mode-map (kbd "q") 'vc-annotate-quit)))
 
 ;; ignore whitespace
-
 (defun magit-toggle-whitespace ()
   (interactive)
   (if (member "-w" magit-diff-options)
@@ -125,13 +125,31 @@
 
 (define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
 
+;; magit settings
+(setq
+ ;; use ido to look for branches
+ magit-completing-read-function 'magit-ido-completing-read
+ ;; don't put "origin-" in front of new branch names by default
+ magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
+ ;; open magit status in same window as current buffer
+ magit-status-buffer-switch-function 'switch-to-buffer
+ ;; highlight word/letter changes in hunk diffs
+ magit-diff-refine-hunk t
+ ;; ask me if I want to include a revision when rewriting
+ magit-rewrite-inclusive 'ask
+ ;; ask me to save buffers
+ magit-save-some-buffers t
+ ;; pop the process buffer if we're taking a while to complete
+ magit-process-popup-time 10
+ ;; ask me if I want a tracking upstream
+ magit-set-upstream-on-push 'askifnotset)
+
 ;; Show blame for current line
 (add-to-list 'load-path "~/.emacs.d/git-messenger")
 (require 'git-messenger)
 (global-set-key (kbd "C-x v p") #'git-messenger:popup-message)
 
 ;; Don't bother me with flyspell keybindings
-
 (eval-after-load "flyspell"
   '(define-key flyspell-mode-map (kbd "C-.") nil))
 
