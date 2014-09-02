@@ -8,7 +8,6 @@
 ;;	Sebastian Wiesner <lunaryorn@gmail.com>
 ;;	Florian Ragwitz <rafl@debian.org>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
-;; Version: 0.14.0
 ;; Homepage: https://github.com/magit/git-modes
 ;; Keywords: convenience vc git
 
@@ -343,7 +342,10 @@ The commit message is saved to the kill ring."
   "Cycle backward through message history, after saving current message.
 With a numeric prefix ARG, go back ARG comments."
   (interactive "*p")
-  (git-commit-save-message)
+  (when (and (git-commit-save-message) (> arg 0))
+    (setq log-edit-comment-ring-index
+          (log-edit-new-comment-index
+           arg (ring-length log-edit-comment-ring))))
   (save-restriction
     (narrow-to-region (point-min) (git-commit-find-pseudo-header-position))
     (log-edit-previous-comment arg)))
@@ -536,7 +538,7 @@ Known comment headings are provided by `git-commit-comment-headings'."
   (append
    `(("^\\s<.*$" . 'font-lock-comment-face)
      ("^\\s<\\s-On branch \\(.*\\)$" (1 'git-commit-branch-face t))
-     ("^\\s<\t\\(?:\\([^:]+\\):\\s-+\\)?\\(.*\\)$"
+     ("^\\s<\t\\(?:\\([^:\n]+\\):\\s-+\\)?\\(.*\\)$"
       (1 'git-commit-comment-action-face t t)
       (2 'git-commit-comment-file-face t))
      (,(concat "^\\("
@@ -617,6 +619,8 @@ basic structure of and errors in git commit messages."
                      (line-beginning-position)
                      (line-end-position)))
     (open-line 1))
+  ;; That's what happens when every little detail is commented
+  (make-local-variable 'log-edit-comment-ring-index)
   ;; Make sure `git-commit-abort' cannot be by-passed
   (add-hook 'kill-buffer-query-functions
             'git-commit-kill-buffer-noop nil t)
