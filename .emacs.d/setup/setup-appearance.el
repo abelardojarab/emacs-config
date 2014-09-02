@@ -52,8 +52,8 @@
 (if (find-font (font-spec :name "Consolas"))
     (set-face-attribute 'default nil :font "Consolas-10"))
 
-(if (find-font (font-spec :name "Garamond"))
-    (set-face-attribute 'variable-pitch nil :font "Garamond-14" :weight 'normal))
+(if (find-font (font-spec :name "Cambria"))
+    (set-face-attribute 'variable-pitch nil :font "Cambria-14" :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
 
 (if (find-font (font-spec :name "Consolas"))
@@ -98,8 +98,10 @@
       (let (main-writing-font main-programming-font)
         (setq main-writing-font "Consolas")
         (setq main-programming-font "Consolas-10")
-        (if (find-font (font-spec :name "Garamond"))
-            (setq main-writing-font "Garamond"))
+        (if (find-font (font-spec :name "Cambria"))
+            (setq main-writing-font "Cambria"))
+        (if (find-font (font-spec :name "EB Garamond 12"))
+            (setq main-writing-font "EB Garamond 12"))
 
         (if window-system
             (progn

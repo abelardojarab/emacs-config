@@ -148,22 +148,22 @@
 (run-with-idle-timer 2400 t 'nox/jump-to-org-agenda)
 
 ;; Org Capture
-(defun nox/org-capture-todo (note)
+(defun org-capture-todo (note)
   (let* ((org-file org-default-notes-file)
          (type 'entry)
          (headline nil)
          (template (concat "** " note
                            "\n   SCHEDULED: %t\n")))
-    (nox/org-capture-entry org-file headline template)))
+    (org-capture-entry org-file headline template)))
 
-(defun nox/org-capture-note (note)
+(defun org-capture-note (note)
   (let* ((org-file org-default-notes-file)
          (type 'entry)
          (headline nil)
          (template (concat "** %U " note "\n")))
-    (nox/org-capture-entry org-file headline template)))
+    (org-capture-entry org-file headline template)))
 
-(defun nox/org-capture-entry (org-file headline template)
+(defun org-capture-entry (org-file headline template)
   (let* ((type 'entry)
          (org-capture-entry
           (if (headline)
@@ -174,10 +174,10 @@
               (file ,org-file)
               ,template :clock-keep t :immediate-finish t))))
     (require 'org-capture)
-    (nox/org-capture-noninteractively)))
+    (org-capture-noninteractively)))
 
 ;; See http://stackoverflow.com/questions/22411626/generate-org-mode-objects-programmatically
-(defun nox/org-capture-noninteractively ()
+(defun org-capture-noninteractively ()
   (let* ((orig-buf (current-buffer))
          (annotation (if (and (boundp 'org-capture-link-is-already-stored)
                               org-capture-link-is-already-stored)
