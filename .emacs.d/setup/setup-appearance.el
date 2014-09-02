@@ -225,13 +225,16 @@
   (interactive)
   (w32-send-sys-command #xf030))
 
-;; highlight indentation using vertical lines
-(add-hook 'c-mode-common-hook 'indent-vline)
-(add-hook 'lisp-mode-hook 'indent-vline)
-(add-hook 'python-mode-hook 'indent-vline)
-(add-hook 'js2-mode-hook 'indent-vline)
+;; highlight indentation using vertical lines, old version
 (load "~/.emacs.d/elisp/00_func.el")
 (require 'aux-line)
+(add-hook 'c-mode-common-hook 'indent-vline)
+
+;; Alternative indent hint, new version
+(require 'indent-hint)
+(add-hook 'lisp-mode-hook 'indent-hint-lisp)
+(add-hook 'js2-mode-hook 'indent-hint-js)
+(add-hook 'python-mode-hook 'indent-hint-fixed)
 
 ;; In every buffer, the line which contains the cursor will be fully highlighted
 (global-hl-line-mode 1)

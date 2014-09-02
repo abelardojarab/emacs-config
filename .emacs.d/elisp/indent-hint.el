@@ -5,7 +5,7 @@
 ;; -*- encoding: utf-8-unix; -*-
 ;; File-name:    <indent-hint.el>
 ;; Create:       <2012-09-10 12:04:07 ran9er>
-;; Time-stamp:   <2014-09-02 13:35:35 (ajaraber)>
+;; Time-stamp:   <2014-09-02 13:47:18 (ajaraber)>
 ;; Mail:         <2999am@gmail.com>
 
 ;; *init
@@ -50,7 +50,7 @@ s1 ",\n" s2 "};"
 ))))
 
 (defvar ih-line-height (or (car (window-line-height)) 20))
-(defvar ih-img (ih-make-xpm 9 ih-line-height "#4D4D4D"))
+(defvar ih-img (ih-make-xpm 9 ih-line-height "#CDCDCD"))
 (defvar ih-img-lgc (ih-make-xpm 9 ih-line-height "#5d478b"))
 (defvar ih-img-mtd (ih-make-xpm 9 ih-line-height "khaki"))
 (defvar ih-img-dat (ih-make-xpm 9 ih-line-height "#008b45"))
