@@ -146,9 +146,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
@@ -247,6 +247,19 @@
   (make-local-variable 'global-hl-line-mode)
   (setq global-hl-line-mode nil))
 (add-hook 'org-mode-hook 'local-hl-line-mode-off)
+
+;; Highlight symbol
+(add-to-list 'load-path "~/.emacs.d/highlight-symbol")
+(require 'highlight-symbol)
+(global-set-key [f3] 'highlight-symbol-at-point)
+(global-set-key [(control f3)] 'highlight-symbol-next)
+(global-set-key [(shift f3)] 'highlight-symbol-prev)
+(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
+(global-set-key [(control shift mouse-1)]
+                (lambda (event)
+                  (interactive "e")
+                  (goto-char (posn-point (event-start event)))
+                  (highlight-symbol-at-point)))
 
 ;; Smart scrollbars
 (set-scroll-bar-mode 'right)
