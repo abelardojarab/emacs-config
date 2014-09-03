@@ -286,4 +286,4 @@
     setenv LM_LICENSE_FILE 5280@plxs0419.pdx.intel.com:5280@ilic2003.iil.intel.com:5280@fmylic37c.fm.intel.com:5280@scylic14.sc.intel.com
     setenv CDS_INST_DIR /p/adx/x74a/cad_root/cadence/6.15.513
     setenv GDK_NATIVE_WINDOWS=1
-setenv emacsclient --alternate-editor="" --server-file ~/.emacs.cache/server/server -c "$@"
+
