@@ -38,7 +38,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
   (if (not (file-exists-p server-auth-dir))
       (make-directory server-auth-dir))
   (and (>= emacs-major-version 23)
-       (defun server-ensure-safe-dir (dir) "Noop" t))
+     (defun server-ensure-safe-dir (dir) "Noop" t))
   (server-start))
 
 ;; Ensure there is always at least one visible frame open at all times
@@ -46,13 +46,34 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
   (when (< 2 (length (frame-list)))
     ad-do-it))
 
-;; Hide Emacs when using emacsclient
+;; Keeping emacs running even when "exiting"
+;; http://bnbeckwith.com/blog/not-killing-emacs-on-windows.html
+(defun bnb/exit ()
+  (interactive)
+  ;;  Check for a server-buffer before closing the server-buffer
+  (if server-buffer-clients
+      (server-edit)
+
+    ;; If there are connected clients quit them
+    (if (> (length server-clients) 1)
+        (cond ((y-or-n-p "There are connected clients, really quit Emacs? ")
+               (progn (setq bnb/really-kill-emacs t)
+                      (save-buffers-kill-terminal))))
+      (progn (setq bnb/really-kill-emacs t)
+             (save-buffers-kill-terminal)))))
+(global-set-key (kbd "C-x C-c") 'bnb/exit)
+
 (defvar bnb/really-kill-emacs nil)
 (defadvice kill-emacs (around bnb/really-exit activate)
-  "Only kill emacs if the variable is true"
+  "Only kill emacs if a prefix is set"
   (if bnb/really-kill-emacs
       ad-do-it)
   (bnb/exit))
+
+(defun bnb/really-kill-emacs ()
+  (interactive)
+  (setq bnb/really-kill-emacs t)
+  (kill-emacs))
 
 ;; Emacsclient support
 (require 'remote-emacsclient)
