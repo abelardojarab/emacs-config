@@ -35,6 +35,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
   (setq server-use-tcp t)
   (setq server-port 9999)
   (setq server-auth-dir "~/.emacs.cache/server")
+  (setq server-socket-dir "~/.emacs.cache/server")
   (if (not (file-exists-p server-auth-dir))
       (make-directory server-auth-dir))
   (and (>= emacs-major-version 23)
