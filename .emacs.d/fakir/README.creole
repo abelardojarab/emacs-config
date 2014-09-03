@@ -1,0 +1,129 @@
+= Fakir =
+
+This is a bunch of functions to mock core Emacs Lisp objects for
+testing purposes.
+
+These are the two things most difficult to mock in Emacs currently.
+
+We use the variations on the {{{noflet}}} macro to override a lot of
+Emacs API functions to understand mocked data types.
+
+== API ==
+
+Here's the API currently.
+
+=== fakir-fake-file faked-file &rest body ===
+
+Fake //faked-file// and evaluate //body//.
+
+//faked-file// must be a [[fakir-file]] object or a list of
+[[fakir-file]] objects.
+
+
+=== fakir-file &rest args ===
+
+Make a fakir-file, a struct.
+
+:FILENAME is the basename of the file
+
+:DIRECTORY is the dirname of the file
+
+:CONTENT is a string of content for the file
+
+:MTIME is the modified time, with a default around the time fakir
+was written.
+
+
+=== fakir-file-path fakir-file ===
+
+Make the path for //fakir-file//.
+
+
+=== fakir-mock-proc-properties process-obj &rest body ===
+
+Mock process property list functions.
+
+Within //body// the functions [[process-get]], [[process-put]] and
+[[process-plist]] are all mocked to use a hashtable if the process
+passed to them is [[eq]] to //process-obj//.
+
+Also provides an additional function [[process-setplist]] to set
+the plist of the specified //process-obj//.  If this function is
+called on anything but //process-obj// it will error.
+
+//This is the beginning of a noflet alternative to
+`fakir-mock-process'//
+
+
+=== fakir-mock-process process-symbol process-bindings &rest body ===
+
+Allow easier testing by mocking the process functions.
+
+For example:
+
+{{{
+ (fakir-mock-process :fake
+      (:elnode-http-params
+       (:elnode-http-method "GET")
+       (:elnode-http-query "a=10"))
+   (should (equal 10 (elnode-http-param :fake "a"))))
+}}}
+
+Causes:
+
+{{{
+ (process-get :fake :elnode-http-method)
+}}}
+
+to always return "GET".
+
+[[process-put]] is also remapped, to set any setting.
+
+[[process-buffer]] is also remapped, to deliver the value of the
+key [[:buffer]] if present and a dummy buffer otherwise.
+
+[[delete-process]] is also remapped, to throw
+[[:mock-process-finished]] to the catch called
+[[:mock-process-finished]].  You can implement your own catch to do
+something with the [[delete-process]] event.
+
+[[process-send-string]] is also remapped to send to a fake output
+buffer.  The fake buffer can be returned with
+[[fakir-get-output-buffer]].
+
+In normal circumstances, we return what the //body// returned.
+
+
+=== fakir-test-mock-process  ===
+
+A very quick function to test mocking process macro.
+
+
+=== fakir-time-encode time-str ===
+
+Encode the //time-str// as an EmacsLisp time.
+
+
+
+
+
+== TODO ==
+
+* currenly the process functions do not use {{{noflet}}}, they need to be re-written 
+** {{{flet-overrides}}} could be thrown away then
+* share the implementation of the faked file functions better
+** this would also have the benefit that they are more instrumentable
+** something like:
+
+{{{
+(override 
+  (expand-file-name fakir/expand-file-name)
+  (find-file-noselect fakir/find-file-no-select)
+  ...)         
+}}}
+
+** where the 2nd symbol is the implementation function
+*** it should be expected to take the original function as 1st argument
+*** and all other arguments as the original
+* we need multiple file support
+** just added this - //Sun May 12 23:59:50 BST 2013//

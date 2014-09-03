@@ -153,5 +153,8 @@
 ;; Setup tabbar
 (require 'setup-tabbar)
 
+;; Setup elnode
+(require 'setup-elnode)
+
 ;; Setup server
 (require 'setup-server)
