@@ -150,10 +150,6 @@
 (require 'git-messenger)
 (global-set-key (kbd "C-x v p") #'git-messenger:popup-message)
 
-;; Don't bother me with flyspell keybindings
-(eval-after-load "flyspell"
-  '(define-key flyspell-mode-map (kbd "C-.") nil))
-
 ;; Hint: customize `magit-repo-dirs' so that you can use C-u M-F12 to
 ;; quickly open magit on any one of your projects.
 (global-set-key (kbd "<C-f12>") 'magit-status)

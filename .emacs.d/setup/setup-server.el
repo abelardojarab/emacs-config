@@ -41,9 +41,21 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
        (defun server-ensure-safe-dir (dir) "Noop" t))
   (server-start))
 
+;; Ensure there is always at least one visible frame open at all times
+(defadvice server-save-buffers-kill-terminal (around dont-kill-last-client-frame activate)
+  (when (< 2 (length (frame-list)))
+    ad-do-it))
+
+;; Hide Emacs when using emacsclient
+(defvar bnb/really-kill-emacs nil)
+(defadvice kill-emacs (around bnb/really-exit activate)
+  "Only kill emacs if the variable is true"
+  (if bnb/really-kill-emacs
+      ad-do-it)
+  (bnb/exit))
+
 ;; Emacsclient support
 (require 'remote-emacsclient)
-(update-tramp-emacs-server-port-forward tramp-default-method)
 
 ;; Make Emacs ignore the "-e (make-frame-visible)"
 ;; that it gets passed when started by emacsclientw.
@@ -52,6 +64,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
 
 ;; Set tramp variables
 (setq tramp-default-method "ssh")
+(update-tramp-emacs-server-port-forward tramp-default-method)
 
 ;; have tramp save temps locally...
 (setq auto-save-file-name-transforms

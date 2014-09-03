@@ -63,5 +63,9 @@
      (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
      (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
+;; Disable flyspell keybindings
+(eval-after-load "flyspell"
+  '(define-key flyspell-mode-map (kbd "C-.") nil))
+
 (provide 'setup-spell)
 ;;; setup-spell.el ends here
