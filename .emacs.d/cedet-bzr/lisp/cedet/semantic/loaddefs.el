@@ -2103,13 +2103,17 @@ Setup buffer for parse.
 ;;;***
 
 ;;;### (autoloads nil nil ("analyze/debug.el" "analyze/fcn.el" "ast.el"
-;;;;;;  "bovine/debug.el" "bovine/erlang.el" "bovine/grammar-macros.el"
-;;;;;;  "canned-configs.el" "chart.el" "db-debug.el" "db-ebrowse.el"
-;;;;;;  "db-el.el" "db-javascript.el" "db-mk.el" "db-ref.el" "decorate.el"
-;;;;;;  "ede-grammar.el" "fw.el" "gram-wy-fallback.el" "grammar.el"
-;;;;;;  "java.el" "sb.el" "symref/filter.el" "util.el" "wisent.el"
+;;;;;;  "bovine/c-by.el" "bovine/debug.el" "bovine/erlang-by.el"
+;;;;;;  "bovine/erlang.el" "bovine/f90-by.el" "bovine/grammar-macros.el"
+;;;;;;  "bovine/make-by.el" "bovine/scm-by.el" "canned-configs.el"
+;;;;;;  "chart.el" "db-debug.el" "db-ebrowse.el" "db-el.el" "db-javascript.el"
+;;;;;;  "db-mk.el" "db-ref.el" "decorate.el" "ede-grammar.el" "fw.el"
+;;;;;;  "gram-wy-fallback.el" "grammar-wy.el" "grammar.el" "java.el"
+;;;;;;  "sb.el" "symref/filter.el" "util.el" "wisent.el" "wisent/calc-wy.el"
 ;;;;;;  "wisent/comp.el" "wisent/expr.el" "wisent/grammar-macros.el"
-;;;;;;  "wisent/java.el" "wisent/wisent.el") (21510 8079 508960 0))
+;;;;;;  "wisent/java-tags-wy.el" "wisent/java-wy.el" "wisent/java.el"
+;;;;;;  "wisent/javascript-wy.el" "wisent/python-wy.el" "wisent/wisent.el")
+;;;;;;  (21511 19275 26477 0))
 
 ;;;***
 
