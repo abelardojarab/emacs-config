@@ -58,7 +58,12 @@
 (add-to-list 'sml/hidden-modes " WSC")
 
 ;; Better Alt-x
-(add-to-list 'load-path "~/.emacs.d/smex")
+(if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
+    ;; Use smex3
+    (add-to-list 'load-path "~/.emacs.d/smex")
+  ;; Use smex2
+  (add-to-list 'load-path "~/.emacs.d/smex2")
+  ) ;; if
 (require 'smex)
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
