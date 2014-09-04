@@ -336,7 +336,9 @@
 ;; Ethan whitepsace, the remove trailing whitespace causes problem with buffer-modified-p
 (add-to-list 'load-path "~/.emacs.d/whitespace-cleanup-mode")
 (require 'whitespace-cleanup-mode)
-(global-whitespace-cleanup-mode)
+
+;; More exhaustive cleaning of white space
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Measure Emacs startup time
 (defun nox/show-startup-time ()
