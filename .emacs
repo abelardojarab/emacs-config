@@ -78,9 +78,6 @@
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
-;; Setup ECB
-(require 'setup-ecb)
-
 ;; Setup Etags and GTAGS
 (require 'setup-tags)
 
@@ -155,6 +152,9 @@
 
 ;; Setup elnode
 (require 'setup-elnode)
+
+;; Setup ECB
+(require 'setup-ecb)
 
 ;; Setup server
 (require 'setup-server)
