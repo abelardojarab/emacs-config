@@ -34,6 +34,7 @@
 (setq sml/name-width 25)
 (setq sml/mode-width 'full)
 
+(add-to-list 'sml/hidden-modes " Ind")
 (add-to-list 'sml/hidden-modes " AC")
 (add-to-list 'sml/hidden-modes " AI")
 (add-to-list 'sml/hidden-modes " SP")
