@@ -25,11 +25,11 @@
 ;;; Code:
 
 ;; ido makes competing buffers and finding files easier
-(add-to-list 'load-path "~/.emacs.d/ido-vertical-mode")
+
 (add-to-list 'load-path "~/.emacs.d/flx")
 (require 'ido)
 (require 'flx-ido)
-(require 'ido-vertical-mode)
+
 (ido-mode 'both) ;; for buffers and files
 (ido-everywhere 1)
 (flx-ido-mode 1)
