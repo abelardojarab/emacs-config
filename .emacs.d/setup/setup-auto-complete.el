@@ -97,12 +97,9 @@
       (mapcar (lambda (item)(concat "-I" item))
               (split-string
                "
- /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include
  /usr/local/include
  /usr/include
- /usr/include/gio-unix-2.0/
- /usr/lib64/glib-2.0/include
-/usr/include/glib-2.0
+ /usr/include/c++
 ")))
 
 ;; Latex auto-complete
