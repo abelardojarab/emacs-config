@@ -59,6 +59,7 @@
 (add-to-list 'sml/hidden-modes " sc")
 (add-to-list 'sml/hidden-modes " WSC")
 (add-to-list 'sml/hidden-modes " Spell")
+(add-to-list 'sml/hidden-modes " Wrap")
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
