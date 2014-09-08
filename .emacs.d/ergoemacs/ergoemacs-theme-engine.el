@@ -1510,16 +1510,20 @@ If FORCE is true, set it even if it changed.
 (defvar ergoemacs-theme-refresh nil)
 (defvar ergoemacs-applied-inits '())
 (defmethod ergoemacs-apply-inits-obj ((obj ergoemacs-theme-component-map-list))
+  ;; (message "Apply Inits %s" ergoemacs-theme-refresh)
+  (when (eq ergoemacs-theme-refresh t)
+    (setq ergoemacs-theme-refresh ergoemacs-applied-inits))
   (dolist (init (ergoemacs-get-inits obj))
     (cond
+     ((and ergoemacs-theme-refresh (boundp (nth 0 init)))
+      ;; FIXME: Change when the theme changed the value...
+      (let ((x (assq (nth 0 init) ergoemacs-theme-refresh)))
+        (when x
+          (setq ergoemacs-theme-refresh (delq x ergoemacs-theme-refresh)))))
      ((not (boundp (nth 0 init))) ;; Do nothing, not bound yet.
       )
      ((assq (nth 0 init) ergoemacs-applied-inits)
       ;; Already applied, Do nothing for now.
-      (when ergoemacs-theme-refresh ;; When refreshing don't reset.
-        (let ((x (assq (nth 0 init) ergoemacs-theme-refresh)))
-          (when x
-            (setq ergoemacs-theme-refresh (delq x ergoemacs-theme-refresh)))))
       )
      ((nth 2 init)
       ;; Hook
@@ -1549,6 +1553,7 @@ If FORCE is true, set it even if it changed.
 (defun ergoemacs-remove-inits ()
   "Remove the applied initializations of modes and variables.
 This assumes the variables are stored in `ergoemacs-applied-inits'"
+  (message "Remove Inits %s" ergoemacs-theme-refresh)
   (if ergoemacs-theme-refresh
       (setq ergoemacs-theme-refresh ergoemacs-applied-inits)
     (dolist (init ergoemacs-applied-inits)
@@ -1676,6 +1681,7 @@ FULL-SHORTCUT-MAP-P "
                   "ergoemacs-translate.el")
 (declare-function ergoemacs-update-translation-text
                   "ergoemacs-translate.el")
+(defvar ergoemacs-substitute-command-hash)
 (defmethod ergoemacs-theme-obj-install ((obj ergoemacs-theme-component-map-list) &optional remove-p)
   (with-slots (read-map
                map
@@ -1860,13 +1866,14 @@ The actual keymap changes are included in `ergoemacs-emulation-mode-map-alist'."
       
       ;; Reset shortcut hash
       (setq ergoemacs-command-shortcuts-hash (make-hash-table :test 'equal)
+            ergoemacs-substitute-command-hash (make-hash-table :test 'equal)
+            ergoemacs-original-keys-to-shortcut-keys (make-hash-table :test 'equal)
+            ergoemacs-modified-map-hash (make-hash-table :test 'equal)
             ergoemacs-alt-text (replace-regexp-in-string "[Qq]" "" (ergoemacs-pretty-key "M-q"))
             ergoemacs-ctl-text (replace-regexp-in-string "[Qq]" "" (ergoemacs-pretty-key "C-q"))
             ergoemacs-alt-ctl-text (replace-regexp-in-string "[Qq]" "" (ergoemacs-pretty-key "M-C-q"))
-            ergoemacs-modified-map-hash (make-hash-table :test 'equal)
             ergoemacs-shortcut-prefix-keys '()
-            ergoemacs-original-keys-to-shortcut-keys-regexp ""
-            ergoemacs-original-keys-to-shortcut-keys (make-hash-table :test 'equal))
+            ergoemacs-original-keys-to-shortcut-keys-regexp "")
       (ergoemacs-update-translation-text)
       (unless remove-p
         ;; Remove keys that should not be in the keymap.

@@ -330,7 +330,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.")
 (declare-function ergoemacs-pretty-key "ergoemacs-translate.el")
 (ert-deftest ergoemacs-test-ctl-c-ctl-c ()
   "Issue #64.  Should translate C-c C-c correctly."
-  (let (ergoemacs-use-unicode-char)
+  (let (ergoemacs-use-unicode-char
+        ergoemacs-pretty-key-use-face
+        ergoemacs-use-small-symbols)
     (should (string= (ergoemacs-pretty-key "C-c C-c") "[Ctrl+C][Ctrl+C]"))))
 
 (declare-function ergoemacs-cut-line-or-region "ergoemacs-functions.el")
@@ -354,7 +356,9 @@ not using cua or cutting line. I think kill-region is what is meant."
 (ert-deftest ergoemacs-test-issue-77 ()
   "Issue #77.
 Test \"C-x \" translating to \"[Ctrl+X][]\", should be \"[Ctrl+X]\""
-  (let ((ergoemacs-use-unicode-char nil))
+  (let (ergoemacs-use-unicode-char
+        ergoemacs-pretty-key-use-face
+        ergoemacs-use-small-symbols)
     (should (string= (ergoemacs-pretty-key "C-x ") "[Ctrl+X]"))))
 
 (ert-deftest ergoemacs-test-issue-86 ()
@@ -1150,7 +1154,8 @@ Grep finished (matches found) at Fri Aug 22 08:30:37
        (with-timeout (0.2 nil) (ergoemacs-read-key "<M-down>"))
        (should (eq ergoemacs-test-fn 'ergoemacs-org-metadown))
        (should (eq (ergoemacs-real-key-binding (kbd "<M-down>"))
-                   'ergoemacs-org-metadown))))))
+                   'ergoemacs-org-metadown))
+       (kill-buffer (current-buffer))))))
 
 (ert-deftest ergoemacs-test-M-e-only-one-char-issue-306 ()
   "Tests Issue #306.
@@ -1178,7 +1183,15 @@ enim ad minim veniam, quis nostrud exercitation ullamco laboris
 nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
 reprehenderit in voluptate velit esse cillum dolore eu fugiat
 nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-sunt in culpa qui officia deserunt mollit anim id est " (buffer-string)))))))
+sunt in culpa qui officia deserunt mollit anim id est " (buffer-string)))
+       (kill-buffer (current-buffer))))))
+
+
+(ert-deftest ergoemacs-test-issue-305-variables-set-to-nil ()
+  "Test Issue #305.
+When calling `ergoemacs-refresh' variable values should be preserved."
+  (ergoemacs-theme-reset)
+  (should (eq t shift-select-mode)))
 
 (provide 'ergoemacs-test)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

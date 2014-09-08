@@ -20,15 +20,15 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;; Todo:
 
-;; 
+;;
 
 ;;; Code:
 
-(eval-when-compile 
+(eval-when-compile
   (require 'cl)
   (require 'ergoemacs-macros))
 (declare-function ergoemacs-without-emulation--internal "ergoemacs-shortcuts.el")
@@ -326,7 +326,7 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
            (push (list key item) shortcut-list))
          ergoemacs-command-shortcuts-hash)
         (ergoemacs-theme--install-shortcuts-list
-         shortcut-list n-map 
+         shortcut-list n-map
          keymap full-map)
         (cond
          ((ignore-errors
@@ -357,7 +357,7 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
 
     ;; To keep from inifinite loops, don't do this when defining
     ;; `ergoemacs-mode' style keys
-    
+
     (when (and (not ergoemacs-ignore-advice)
                (not (equal original-keymap '(keymap))))
       ;; Update `minor-mode-map-alist'. Should address Issue #298
@@ -365,7 +365,7 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
         (if (and (not (ignore-errors (string-match "^ergoemacs" (symbol-name (car elt)))))
                  (equal (cdr elt) original-keymap))
             (ergoemacs-setcdr elt keymap)))
-      ;; Update `minor-mode-overriding-map-alist'. 
+      ;; Update `minor-mode-overriding-map-alist'.
       (dolist (elt minor-mode-overriding-map-alist)
         (if (and (not (ignore-errors (string-match "^ergoemacs" (symbol-name (car elt)))))
                  (equal (cdr elt) original-keymap))
@@ -384,7 +384,7 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
                 (when (equal (cdr map-key) original-keymap)
                   (ergoemacs-setcdr map-key keymap))))))
         (ergoemacs-emulations)))
-    
+
     (when (and is-global-p (not ergoemacs-global-changes-are-ignored-p))
       (let ((vk key))
         (ergoemacs-global-set-key-after key)
@@ -401,8 +401,7 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
 (defun ergoemacs-global-set-key-after (key)
   (if ergoemacs-ignore-advice nil
     (let ((kd (key-description key)))
-      (ignore-errors
-        (unless (or (and (vectorp key)
+      (ignore-errors (unless (or (and (vectorp key)
                        (memq (elt key 0) '(menu-bar 27 remap)))
                   ;; FIXME: don't unbind for packages that use
                   ;; global-set-key.  Like undo-tree
@@ -412,8 +411,7 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
         (pushnew kd ergoemacs-global-changed-cache :test 'equal)
         (setq ergoemacs-global-not-changed-cache (delete kd ergoemacs-global-not-changed-cache))
         ;; Remove the key from `ergoemacs-mode' bindings
-        (ergoemacs-theme-component--ignore-globally-defined-key key t)))
-      )))
+        (ergoemacs-theme-component--ignore-globally-defined-key key t))))))
 
 (defvar ergoemacs-use-M-x-p)
 (eval-after-load "helm"
@@ -693,27 +691,34 @@ Uses `ergoemacs-real-key-description'."
 (defvar ergoemacs-use-unicode-brackets)
 (declare-function ergoemacs-emulations "ergoemacs-mode.el")
 (declare-function ergoemacs-remove-shortcuts "ergoemacs-shortcuts.el")
+(defvar ergoemacs-substitute-command-hash (make-hash-table :test 'equal))
 (defun ergoemacs-substitute-command (string &optional map)
   "Substitutes command STRING within MAP or currently bound keys."
-  (save-match-data
-    (let* ((test (ergoemacs-with-global
-                  (ergoemacs-real-substitute-command-keys
-                   (or (and map (concat map string)) string))))
-           (test-vect (read-kbd-macro test t))
-           (test-hash (gethash test-vect ergoemacs-original-keys-to-shortcut-keys)))
-      (if test-hash
-          (progn
-            (setq test (ergoemacs-real-key-description (nth 0 test-hash)))
-            (ergoemacs-pretty-key test))
-        (let (ergoemacs-modal
-              ;; (ergoemacs-shortcut-keys (not map))
-              ergoemacs-shortcut-keys
-              (ergoemacs-no-shortcut-keys (not map))
-              ergoemacs-repeat-keys
-              ergoemacs-read-input-keys)
-          (ergoemacs-pretty-key
-           (ergoemacs-real-substitute-command-keys
-            (or (and map (concat map string)) string))))))))
+  (or (gethash (list string map) ergoemacs-substitute-command-hash)
+      (save-match-data
+        (let* ((test (ergoemacs-with-global
+                      (ergoemacs-real-substitute-command-keys
+                       (or (and map (concat map string)) string))))
+               (test-vect (read-kbd-macro test t))
+               (test-hash (gethash test-vect ergoemacs-original-keys-to-shortcut-keys))
+               ret)
+          (if test-hash
+              (progn
+                (setq test (ergoemacs-real-key-description (nth 0 test-hash))
+                      ret (ergoemacs-pretty-key test))
+                (puthash (list string map) ret ergoemacs-substitute-command-hash)
+                ret)
+            (let (ergoemacs-modal
+                  ;; (ergoemacs-shortcut-keys (not map))
+                  ergoemacs-shortcut-keys
+                  (ergoemacs-no-shortcut-keys (not map))
+                  ergoemacs-repeat-keys
+                  ergoemacs-read-input-keys)
+              (setq ret (ergoemacs-pretty-key
+                         (ergoemacs-real-substitute-command-keys
+                          (or (and map (concat map string)) string))))
+              (puthash (list string map) ret ergoemacs-substitute-command-hash)
+              ret))))))
 
 (defun ergoemacs-substitute-map--1 (string)
   (substring
@@ -965,7 +970,7 @@ When `ergoemacs-mode' is enabled and
       (ergoemacs-real-this-single-command-keys)))
 
 ;; When
-(declare-function ergoemacs-real-eval-after-load 
+(declare-function ergoemacs-real-eval-after-load
                   "ergoemacs-advices.el" (file form) t)
 (fset 'ergoemacs-real-eval-after-load
       (symbol-function 'eval-after-load))
@@ -1001,12 +1006,12 @@ like 'font-lock.
 
 This function makes or adds to an entry on `after-load-alist'.
 
-`ergoemacs-mode' will respect user keys defined in the user 
+`ergoemacs-mode' will respect user keys defined in the user
 initialization after ergoemacs-mode loaded itself.  has `eval-after-load'
 "
   (ergoemacs-real-eval-after-load
    file (or (and ergoemacs-run-mode-hooks
-                 (ergoemacs-is-user-defined-map-change-p) 
+                 (ergoemacs-is-user-defined-map-change-p)
                  `(let ((ergoemacs-run-mode-hooks t)
                         (ergoemacs-is-user-defined-map-change-p t))
                     ,form)) form)))
