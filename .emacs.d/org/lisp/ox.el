@@ -176,7 +176,8 @@ way they are handled must be hard-coded into
 `org-export--get-inbuffer-options' function.")
 
 (defconst org-export-filters-alist
-  '((:filter-bold . org-export-filter-bold-functions)
+  '((:filter-body . org-export-filter-body-functions)
+    (:filter-bold . org-export-filter-bold-functions)
     (:filter-babel-call . org-export-filter-babel-call-functions)
     (:filter-center-block . org-export-filter-center-block-functions)
     (:filter-clock . org-export-filter-clock-functions)
@@ -188,6 +189,7 @@ way they are handled must be hard-coded into
     (:filter-dynamic-block . org-export-filter-dynamic-block-functions)
     (:filter-entity . org-export-filter-entity-functions)
     (:filter-example-block . org-export-filter-example-block-functions)
+    (:filter-export-block . org-export-filter-export-block-functions)
     (:filter-export-snippet . org-export-filter-export-snippet-functions)
     (:filter-final-output . org-export-filter-final-output-functions)
     (:filter-fixed-width . org-export-filter-fixed-width-functions)
@@ -934,6 +936,10 @@ BACKEND is a structure with `org-export-backend' type."
   (let ((parent (org-export-backend-parent backend)))
     (when (and parent (not (org-export-get-backend parent)))
       (error "Cannot use unknown \"%s\" back-end as a parent" parent)))
+  ;; Register dedicated export blocks in the parser.
+  (dolist (name (org-export-backend-blocks backend))
+    (add-to-list 'org-element-block-name-alist
+		 (cons name 'org-element-export-block-parser)))
   ;; If a back-end with the same name as BACKEND is already
   ;; registered, replace it with BACKEND.  Otherwise, simply add
   ;; BACKEND to the list of registered back-ends.
@@ -1065,7 +1071,7 @@ keywords are understood:
     String, or list of strings, representing block names that
     will not be parsed.  This is used to specify blocks that will
     contain raw code specific to the back-end.  These blocks
-    still have to be handled by the `special-block' type
+    still have to be handled by the relative `export-block' type
     translator.
 
   :filters-alist
@@ -1170,7 +1176,7 @@ keywords are understood:
     String, or list of strings, representing block names that
     will not be parsed.  This is used to specify blocks that will
     contain raw code specific to the back-end.  These blocks
-    still have to be handled by the `special-block' type
+    still have to be handled by the relative `export-block' type
     translator.
 
   :filters-alist
@@ -2447,9 +2453,13 @@ Any element in `:ignore-list' will be skipped when using
 ;;   tree.  Users can set it through
 ;;   `org-export-filter-parse-tree-functions' variable.
 ;;
+;; - `:filter-body' applies to the body of the output, before template
+;;   translator chimes in.  Users can set it through
+;;   `org-export-filter-body-functions' variable.
+;;
 ;; - `:filter-final-output' applies to the final transcoded string.
 ;;   Users can set it with `org-export-filter-final-output-functions'
-;;   variable
+;;   variable.
 ;;
 ;; - `:filter-plain-text' applies to any string not recognized as Org
 ;;   syntax.  `org-export-filter-plain-text-functions' allows users to
@@ -2457,7 +2467,7 @@ Any element in `:ignore-list' will be skipped when using
 ;;
 ;; - `:filter-TYPE' applies on the string returned after an element or
 ;;   object of type TYPE has been transcoded.  A user can modify
-;;   `org-export-filter-TYPE-functions'
+;;   `org-export-filter-TYPE-functions' to install these filters.
 ;;
 ;; All filters sets are applied with
 ;; `org-export-filter-apply-functions' function.  Filters in a set are
@@ -2515,6 +2525,13 @@ return the modified parse tree to transcode.")
 
 (defvar org-export-filter-plain-text-functions nil
   "List of functions applied to plain text.
+Each filter is called with three arguments: a string which
+contains no Org syntax, the back-end, as a symbol, and the
+communication channel, as a plist.  It must return a string or
+nil.")
+
+(defvar org-export-filter-body-functions nil
+  "List of functions applied to transcoded body.
 Each filter is called with three arguments: a string which
 contains no Org syntax, the back-end, as a symbol, and the
 communication channel, as a plist.  It must return a string or
@@ -2580,6 +2597,12 @@ channel, as a plist.  It must return a string or nil.")
 
 (defvar org-export-filter-example-block-functions nil
   "List of functions applied to a transcoded example-block.
+Each filter is called with three arguments: the transcoded data,
+as a string, the back-end, as a symbol, and the communication
+channel, as a plist.  It must return a string or nil.")
+
+(defvar org-export-filter-export-block-functions nil
+  "List of functions applied to a transcoded export-block.
 Each filter is called with three arguments: the transcoded data,
 as a string, the back-end, as a symbol, and the communication
 channel, as a plist.  It must return a string or nil.")
@@ -3142,8 +3165,11 @@ Return code as a string."
 		       (or (org-export-data tree info) "")))
 		(inner-template (cdr (assq 'inner-template
 					   (plist-get info :translate-alist))))
-		(full-body (if (not (functionp inner-template)) body
-			     (funcall inner-template body info)))
+		(full-body (org-export-filter-apply-functions
+			    (plist-get info :filter-body)
+			    (if (not (functionp inner-template)) body
+			      (funcall inner-template body info))
+			    info))
 		(template (cdr (assq 'template
 				     (plist-get info :translate-alist)))))
 	   ;; Remove all text properties since they cannot be
@@ -4216,29 +4242,8 @@ objects of the same type."
 	    ((funcall predicate el info) (incf counter) nil)))
 	 info 'first-match)))))
 
-;;;; For Special Blocks
-;;
-;; `org-export-raw-special-block-p' check if current special block is
-;; an "export block", i.e., a block whose contents should be inserted
-;; as-is in the output.  This should generally be the first check to
-;; do when handling special blocks in the export back-end.
 
-(defun org-export-raw-special-block-p (element info &optional no-inheritance)
-  "Non-nil if ELEMENT is an export block relatively to current back-end.
-An export block is a special block whose contents should be
-included as-is in the final output.  Such blocks are defined
-through :export-block property in `org-export-define-backend',
-which see."
-  (and (eq (org-element-type element) 'special-block)
-       (let ((type (org-element-property :type element))
-	     (b (plist-get info :back-end)))
-	 (if no-inheritance (member type (org-export-backend-blocks b))
-	   (while (and b (not (member type (org-export-backend-blocks b))))
-	     (setq b (org-export-get-backend (org-export-backend-parent b))))
-	   b))))
-
-
-;;;; For Src Blocks
+;;;; For Src-Blocks
 ;;
 ;; `org-export-get-loc' counts number of code lines accumulated in
 ;; src-block or example-block elements with a "+n" switch until
