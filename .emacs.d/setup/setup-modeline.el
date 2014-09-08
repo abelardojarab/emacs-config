@@ -34,6 +34,8 @@
 (setq sml/name-width 25)
 (setq sml/mode-width 'full)
 
+(add-to-list 'sml/hidden-modes " iImg")
+(add-to-list 'sml/hidden-modes " BufFace")
 (add-to-list 'sml/hidden-modes " Ind")
 (add-to-list 'sml/hidden-modes " AC")
 (add-to-list 'sml/hidden-modes " AI")
@@ -56,6 +58,7 @@
 (add-to-list 'sml/hidden-modes " -Chg")
 (add-to-list 'sml/hidden-modes " sc")
 (add-to-list 'sml/hidden-modes " WSC")
+(add-to-list 'sml/hidden-modes " Spell")
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
