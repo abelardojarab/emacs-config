@@ -1,3 +1,17 @@
+New in v2.6
+===========
+- Filtering of minor modes is now delegated to the
+  [rich-minority](https://github.com/Bruce-Connor/rich-minority)
+  package. This has 3 effects:
+  - The original (black list) method of filtering is given by the
+    variable `rm-blacklist`. `sml/hidden-modes` still works, but
+    is obsolete.
+  - Alternatively, modes can be filtered by a whitelist, using `rm-whitelist`.
+  - Modes can also be propertized, using `rm-text-properties`.
+
+- The file-path display can have different minimum and maximum widths.
+  Just set `sml/name-width` to a cons cell `(MIN . MAX)`.
+
 New in v2.5
 ===========
 - Emacs 24.4 compatible.

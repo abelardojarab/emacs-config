@@ -46,14 +46,27 @@ To change the color theme, do one of the following:
     (sml/apply-theme 'respectful)
     (sml/apply-theme 'automatic)
 
-#### Instalation Issues (FAQ) ####
+#### Installation Issues (FAQ) ####
 
 - **Problem:** If emacs keeps warning you that *"Loading themes can run
 lisp code"* and asking *"Would you like to mark this theme as safe for
 future sessions?"*. That is probably an issue with your `init.el` or
-`.emacs` file.
-- **Solution:** Make sure the `(custom-set-variables ...)` sexp is at
+`.emacs` file, but we offer a workaround.
+- **Solution A:** Make sure the `(custom-set-variables ...)` sexp is at
   the very top of your `.emacs` file. That is the right place for it.
+  If that doesn't work, you can work around it with the code `(setq sml/no-confirm-load-theme t)`,
+  but we recommend you try to figure out what's wrong with your configs.
+- **Solution B:** `smart-mode-line` ships with multiple themes, and
+  each must be separately marked as safe. And when `sml/apply-theme`
+  is set to `automatic`, it may attempt to load a theme which you
+  haven't previously loaded, causing the *"Would you like to mark this
+  theme as safe..."* question to be asked again.  
+  If you don't want to use the `sml/no-confirm-load-theme` variable, a
+  second option is to manually cycle through all the themes and say
+  "yes" to mark each of them safe. Your goal is for the
+  `(custom-set-variables ...)` sexp at the top of your `.emacs` to
+  contain at least three different entries under `(custom-safe-themes
+  ...)`.
 
 Features
 ===
@@ -80,13 +93,14 @@ Its main features include:
     over the abbreviated path will show you the full
     path. See below for examples.  	
 
- 4. **Hide minor-modes**:  
-    Hidden-modes feature saves even more space. Select
-    which minor modes you don't want to see listed by
-    customizing the `sml/hidden-modes` variable. This will
-    filter out the modes you don't care about and unclutter
-    the modes list (mousing over the modes list still shows
-    the full list).
+ 4. **Hide or Highlight minor-modes**:  
+    The [rich-minority](https://github.com/Bruce-Connor/rich-minority)
+    package saves even more space. Select which minor modes you don't
+    want to see listed by adding them to the variable
+    `rm-excluded-modes`, or even highlight the modes that are more
+    important with the variable `rm-text-properties`. This will filter
+    out the modes you don't care about and unclutter the modes list
+    (mousing over the modes list still shows the full list).
 
  5. **Very easy to configure**:  
     All colors and variables are customizable. You can change the
