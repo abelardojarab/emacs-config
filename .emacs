@@ -24,6 +24,7 @@
  '(auto-indent-delete-trailing-whitespace-on-visit-file t)
  '(cua-enable-cua-keys nil)
  '(custom-safe-themes (quote ("96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
+ '(delete-selection-mode t nil (delsel))
  '(ecb-auto-activate t)
  '(ecb-display-image-icons-for-semantic-tags t)
  '(ecb-grep-find-function (quote if))
@@ -37,14 +38,21 @@
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
  '(ecb-process-non-semantic-files t)
  '(ecb-redraw-layout-quickly t)
+ '(ecb-source-path (quote (("/" "/"))))
  '(ecb-sources-perform-read-only-check t)
  '(ecb-sources-sort-method (quote extension))
  '(ecb-tree-buffer-style (quote image))
  '(ecb-use-speedbar-instead-native-tree-buffer nil)
  '(ecb-vc-enable-support t)
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
+ '(initial-scratch-message ";; scratch buffer created -- start typing...
+")
+ '(magit-use-overlays nil)
+ '(org-CUA-compatible nil)
+ '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
- '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point)))))
+ '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
+ '(shift-select-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
