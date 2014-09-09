@@ -28,20 +28,26 @@
 (add-to-list 'load-path "~/.emacs.d/tabbar")
 (require 'tabbar)
 (tabbar-mode)
-(global-set-key [s-left] 'tabbar-backward)
-(global-set-key [s-right] 'tabbar-forward)
-(global-set-key [s-up] 'tabbar-forward-group)
-(global-set-key [s-down] 'tabbar-backward-group)
-(global-set-key "\C-c+" 'tabbar-forward)
-(global-set-key "\C-c-" 'tabbar-backward)
-(global-set-key "\C-c-" 'tabbar-backward)
-(global-set-key "\C-c*" 'other-window)
-(global-set-key [C-prior] 'tabbar-backward)
-(global-set-key [C-next] 'tabbar-forward)
+(global-set-key [C-prior] 'tabbar-backward-tab)
+(global-set-key [C-next] 'tabbar-forward-tab)
 (global-set-key [M-prior] 'tabbar-backward-group)
 (global-set-key [M-next] 'tabbar-forward-group)
-(global-set-key [(control meta prior)] 'tabbar-forward-group)
-(global-set-key [(control meta next)] 'tabbar-backward-group)
+(global-set-key [M-left] 'tabbar-backward-tab)
+(global-set-key [M-right] 'tabbar-forward-tab)
+
+;; Sort buffer names alphabetically
+(defun tabbar-add-tab (tabset object &optional append_ignored)
+  "Add to TABSET a tab with value OBJECT if there isn't one there yet.
+ If the tab is added, it is added at the beginning of the tab list,
+ unless the optional argument APPEND is non-nil, in which case it is
+ added at the end."
+  (let ((tabs (tabbar-tabs tabset)))
+    (if (tabbar-get-tab object tabset)
+        tabs
+      (let ((tab (tabbar-make-tab object tabset)))
+        (tabbar-set-template tabset nil)
+        (set tabset (sort (cons tab tabs)
+                          (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
 
 ;; Tweaking the tabbar
 (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
@@ -124,8 +130,8 @@
               my-buffer-list)
        (bury-buffer)
        (nth n my-buffer-list)))))
-(global-set-key  [C-next] 'crs-bury-buffer)
-(global-set-key  [C-prior] (lambda ()
+(global-set-key  [(control meta prior)] 'crs-bury-buffer)
+(global-set-key  [(control metal next)] (lambda ()
                              (interactive)
                              (crs-bury-buffer -1)))
 
