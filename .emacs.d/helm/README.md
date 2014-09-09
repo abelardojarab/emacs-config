@@ -39,6 +39,7 @@ You need a recent Emacs to use latest helm, at least Emacs-24.3.
     (add-to-list 'load-path "/path/to/helm/directory")
     (require 'helm-config)
     ```
+_NOTE:_ Installing helm like this (i.e from git+make) is the safest way.
 
 Alternatively, you can have a quick try to helm by launching from the helm directory:
 
@@ -51,10 +52,11 @@ Note that this will not work on Windows systems.
 Helm is now available on Melpa at `http://melpa.milkbox.net/`
 You will find there instructions to install.
 
-_WARNING:_ For any upgrade after Version 1.5.6 using package.el, you will have to remove all your helm*.elc files
-and recompile from a clean Emacs, expect failures if you don't do that.
-Users that are installing from git will not have this problem
-by recompiling their helm copy with "make".
+_WARNING:_ Due to a bad concept of package.el which is in charge of fetching helm files
+and compiling them, expect errors most of the time when upgrading from melpa and `list-package`.
+To avoid this you will have to compile your new files outside of your current emacs running helm.
+People installing from git and using make file will not suffer from this problem.
+See [FAQ](https://github.com/emacs-helm/helm/wiki#faq) for more infos.
 
 **Note to Linux Distributions Maintainers**
 
@@ -102,7 +104,7 @@ The demo starts when you see `Eval: START` in the minibuffer.
 
 - All the C buffers are selected using the regexp `*C`. In the demo, I also select Tcl buffers with `*Tcl` and then switched back to C buffers with `*C`.
 - I only want to have buffers that contains only the string "crash". To do that, I add a space, then add the pattern `@crash`.
-- After the initial search pattern, I hand over the current matching buffers to `helm-moccur` - `moccur` with Helm interface. 
+- After the initial search pattern, I hand over the current matching buffers to `helm-moccur` - `moccur` with Helm interface. In the above demo, I only switch to one file, that is `kexec.c`. However, you can select multiple buffers with `C-SPC` or select all buffers with `M-a`.
 - Candidates can be filtered gradually by adding more pattern, i.e. I added `memory` to filtered down to buffers that contain the string "memory" among the buffers that are containing "crash".
 
 As you can see, as you filtered out, the number of candidates decreases, as displayed in the modeline. At the end, there were 12 buffers remained as the result of filtering, down from the total 253 buffers.
