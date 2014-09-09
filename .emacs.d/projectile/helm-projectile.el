@@ -46,6 +46,8 @@
 (require 'helm-files)
 (require 'cl-lib)
 
+(declare-function eshell "eshell")
+
 (defgroup helm-projectile nil
   "Helm support for projectile."
   :prefix "helm-projectile-"
@@ -92,6 +94,8 @@
                    (kbd "M-g") 'helm-projectile-vc)
                  (helm-projectile-define-key map
                    (kbd "M-e") 'helm-projectile-switch-to-eshell)
+                 (helm-projectile-define-key map
+                   (kbd "C-s") 'helm-find-files-grep)
                  map))
     (action . (("Switch to project" .
                 (lambda (project)
@@ -100,7 +104,8 @@
                ("Open Dired in project's directory `C-d'" . dired)
                ("Open project root in vc-dir or magit `M-g'" .
                 helm-projectile-vc)
-               ("Switch to Eshell `M-e'" . helm-projectile-switch-to-eshell))))
+               ("Switch to Eshell `M-e'" . helm-projectile-switch-to-eshell)
+               ("Grep in projects `C-s C-u Recurse'" . helm-find-files-grep))))
   "Helm source for known projectile projects.")
 
 (defvar helm-source-projectile-files-list
@@ -115,6 +120,7 @@
     (mode-line . helm-ff-mode-line-string)
     (type . file)
     (action . (("Find file" . (lambda (file) (find-file file)))
+               ("Find file other window" . (lambda (file) (find-file-other-window file)))
                ("Open dired in file's directory" . helm-open-dired))))
   "Helm source definition.")
 
