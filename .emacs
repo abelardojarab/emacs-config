@@ -68,12 +68,12 @@
 (require 'setup-appearance)
 
 ;; CEDET
-(add-to-list 'load-path "~/.emacs.d/cedet-bzr")
-(add-to-list 'load-path "~/projects/cedet-bzr/contrib")
+(add-to-list 'load-path "~/.emacs.d/cedet")
+(add-to-list 'load-path "~/projects/cedet/contrib")
 (require 'cedet-remove-builtin)
 (setq byte-compile-warnings nil)
-(load-file "~/.emacs.d/cedet-bzr/cedet-devel-load.el")
-(load-file "~/.emacs.d/cedet-bzr/contrib/cedet-contrib-load.el")
+(load-file "~/.emacs.d/cedet/cedet-devel-load.el")
+(load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
 (global-ede-mode 1)
 
 ;; Setup Cedet

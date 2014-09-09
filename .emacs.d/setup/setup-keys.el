@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; Ergoemacs
-(add-to-list 'load-path "~/.emacs.d/ergoemacs")
+(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
 (add-to-list 'load-path "~/.emacs.d/global-set-keybindings")
 (setq ergoemacs-ignore-prev-global nil) ;; Will not ignore any globally defined keybinding
 (require 'ergoemacs-mode)

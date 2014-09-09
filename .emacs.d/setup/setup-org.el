@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; Org mode
-(setq load-path (cons "~/.emacs.d/org/lisp" load-path))
+(setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
 (defvar org-list-allow-alphabetical t)
 (defun org-element-bold-successor           (arg))
 (defun org-element-code-successor           (arg))
