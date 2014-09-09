@@ -45,6 +45,7 @@
  '(ecb-use-speedbar-instead-native-tree-buffer nil)
  '(ecb-vc-enable-support t)
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
+ '(helm-mode t)
  '(initial-scratch-message ";; scratch buffer created -- start typing...
 ")
  '(magit-use-overlays nil)
