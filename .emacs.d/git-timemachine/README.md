@@ -1,5 +1,7 @@
 # Git time machine
 
+![Timemachine](timemachine.gif)
+
 ## Installation
 
 Installation alternatives:
@@ -16,5 +18,12 @@ bind it to a keybinding of your choice).
 Use the following keys to navigate historic version of the file
  - `p` Visit previous historic version
  - `n` Visit next historic version
- - `w` Copy the hash of the current historic version
+ - `w` Copy the abbreviated hash of the current historic version
+ - `W` Copy the full hash of the current historic version
  - `q` Exit the time machine.
+
+## Customize
+
+Set `git-timemachine-abbreviation-length` (default 12) to your
+preferred length for abbreviated commit hashes. Also `M-x customize
+[git-timemachine]`.
