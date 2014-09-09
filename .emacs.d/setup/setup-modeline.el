@@ -25,6 +25,7 @@
 ;;; Code:
 
 ;; Fix the modeline
+(add-to-list 'load-path "~/.emacs.d/rich-minority")
 (add-to-list 'load-path "~/.emacs.d/smart-mode-line")
 (require 'smart-mode-line)
 (sml/setup)
