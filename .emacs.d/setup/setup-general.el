@@ -87,15 +87,16 @@
   (setq dlgopen-executable-path "~/.emacs.d/elisp/getfile.exe")))
 
 ;; Define preferred shell
-(defun getshell ()
-  (or
-   (executable-find "bash")
-   (executable-find "csh")
-   (executable-find "zsh")
-   (executable-find "cmdproxy")
-   (error "can't find 'shell' command in PATH!!")))
+(cond
+ ((executable-find "bash")
+  (setq shell-file-name "bash"))
+ ((executable-find "csh")
+  (setq shell-file-name "csh"))
+ ((executable-find "cmdproxy")
+  (setq shell-file-name "cmdproxy"))
+ (t
+  (setq shell-file-name "bash")))
 
-(setq shell-file-name (getshell))
 (setq explicit-shell-file-name shell-file-name)
 
 ;; avoid garbage collection up to 20M (default is only 400k)
