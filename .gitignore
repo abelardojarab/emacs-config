@@ -32,3 +32,4 @@ srecode-map.el*
 .org-id-locations
 .travis.yml
 wget-log
+ergoemacs-themes.elc
