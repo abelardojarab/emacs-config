@@ -99,5 +99,9 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
       '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
         ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs.cache/backups/" t)))
 
+;; End of line
+(require 'eol-conversion)
+(setq inhibit-eol-conversion 't) ;; do this so tramp doesnt complain about ls
+
 (provide 'setup-server)
 ;;; setup-server.el ends here

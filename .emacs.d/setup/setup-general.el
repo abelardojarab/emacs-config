@@ -121,9 +121,6 @@
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 
-;; End of line
-(require 'eol-conversion)
-
 ;; Garantee utf8 as input-method
 (set-input-method nil)
 (setq read-quoted-char-radix 10)
