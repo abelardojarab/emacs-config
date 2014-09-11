@@ -31,3 +31,4 @@ tramp-autosave/*
 srecode-map.el*
 .org-id-locations
 .travis.yml
+wget-log
