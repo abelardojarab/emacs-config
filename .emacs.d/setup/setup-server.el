@@ -37,7 +37,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
   (setq server-auth-dir "~/.emacs.cache/server")
   (setq server-socket-dir "~/.emacs.cache/server")
   (if (not (file-exists-p server-auth-dir))
-      (make-directory server-auth-dir))
+      (make-directory server-auth-dir t))
   (and (>= emacs-major-version 23)
      (defun server-ensure-safe-dir (dir) "Noop" t))
   (server-start))
@@ -85,8 +85,14 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
                                      (lambda (s))))
 
 ;; Set tramp variables
-(setq tramp-default-method "ssh")
+(if (eq system-type 'windows-nt)
+    (setq tramp-default-method "plink")
+  (setq tramp-default-method "ssh"))
 (update-tramp-emacs-server-port-forward tramp-default-method)
+
+;; Fix the auto save problem.
+(setq tramp-auto-save-directory "~/.emacs.cache/backups")
+(make-directory tramp-auto-save-directory t)
 
 ;; have tramp save temps locally...
 (setq auto-save-file-name-transforms
