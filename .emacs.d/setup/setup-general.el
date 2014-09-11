@@ -57,7 +57,10 @@
     (add-to-list 'exec-path "c:/cygwin/bin"))
   (if (file-directory-p "c:/cygwin64/bin")
       (setenv "PATH" (concat "c:/cygwin64/bin:" (getenv "PATH")))
-    (add-to-list 'exec-path "c:/cygwin64/bin"))))
+    (add-to-list 'exec-path "c:/cygwin64/bin"))
+
+  (require 'w32browser-dlgopen)
+  (setq dlgopen-executable-path "~/.emacs.d/elisp/getfile.exe")))
 
 ;; Define preferred shell
 (setq shell-file-name "bash")
