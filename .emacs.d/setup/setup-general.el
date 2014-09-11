@@ -29,7 +29,31 @@
 (require 'exec-path-from-shell)
 
 (cond
- ;; Add Homebrew path in Darwin
+
+ ;; Linux
+ ((equal system-type 'gnu/linux)
+  ;; Inspired by the windows version. Also used call-process here because
+  ;; shell-command-to-string gave me 100% CPU usage by lisp.run until
+  ;; kdialog returned.
+  (defun kde-open-file ()
+    (interactive)
+    (let
+        ((buffer (generate-new-buffer "*opening-files*"))
+         (file-to-open ""))
+      (if (call-process "kdialog" nil buffer nil "--title"
+                        "Open File -Emacs" "--getopenfilename" ".")
+          (save-excursion
+            (set-buffer buffer)
+            (goto-line 1)
+            (setq file-to-open
+                  (buffer-substring
+                   (save-excursion (beginning-of-line) (point))
+                   (save-excursion (end-of-line) (point))))
+            (if (> (length file-to-open) 0)
+                (find-file file-to-open))))
+      (kill-buffer buffer))))
+
+ ;; Mac OSX
  ((equal system-type 'darwin)
   (setq delete-by-moving-to-trash t
         trash-directory "~/.Trash/")
@@ -50,7 +74,7 @@
   (when (file-exists-p "/Applications/LibreOffice.app/Contents/MacOS/soffice")
     (setq org-export-odt-convert-processes '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")))))
 
- ;; Add Cygwin path in Windows
+ ;; Windows
  ((equal system-type 'windows-nt)
   (when (file-directory-p "c:/cygwin/bin")
     (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
@@ -63,7 +87,15 @@
   (setq dlgopen-executable-path "~/.emacs.d/elisp/getfile.exe")))
 
 ;; Define preferred shell
-(setq shell-file-name "bash")
+(defun getshell ()
+  (or
+   (executable-find "bash")
+   (executable-find "csh")
+   (executable-find "zsh")
+   (executable-find "cmdproxy")
+   (error "can't find 'shell' command in PATH!!")))
+
+(setq shell-file-name (getshell))
 (setq explicit-shell-file-name shell-file-name)
 
 ;; avoid garbage collection up to 20M (default is only 400k)
