@@ -37,21 +37,25 @@
   ;; kdialog returned.
   (defun kde-open-file ()
     (interactive)
-    (let
-        ((buffer (generate-new-buffer "*opening-files*"))
-         (file-to-open ""))
-      (if (call-process "kdialog" nil buffer nil "--title"
-                        "Open File -Emacs" "--getopenfilename" ".")
-          (save-excursion
-            (set-buffer buffer)
-            (goto-line 1)
-            (setq file-to-open
-                  (buffer-substring
-                   (save-excursion (beginning-of-line) (point))
-                   (save-excursion (end-of-line) (point))))
-            (if (> (length file-to-open) 0)
-                (find-file file-to-open))))
-      (kill-buffer buffer))))
+    (let ((file-name
+           (replace-regexp-in-string "kbuildsycoca running..." ""
+                                     (replace-regexp-in-string
+                                      "[\n]+" ""
+                                      (shell-command-to-string "kdialog --getopenurl ~ 2> /dev/null")))))
+      (cond
+       ((string-match "^file://" file-name)
+        ;; Work arround a bug in kioexec, which causes it to delete local
+        ;; files. (See bugs.kde.org, Bug 127894.) Because of this we open the
+        ;; file with `find-file' instead of emacsclient.
+        (let ((local-file-name (substring file-name 7)))
+          (message "Opening local file '%s'" local-file-name)
+          (find-file local-file-name)))
+       ((string-match "^[:space:]*$" file-name)
+        (message "Empty file name given, doing nothing..."))
+       (t
+        (message "Opening remote file '%s'" file-name)
+        (save-window-excursion
+          (shell-command (concat "kioexec emacsclient " file-name "&"))))))))
 
  ;; Mac OSX
  ((equal system-type 'darwin)
