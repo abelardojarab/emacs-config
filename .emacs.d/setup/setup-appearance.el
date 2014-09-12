@@ -340,5 +340,15 @@
 
 (global-lawlist-scroll-bar-mode)
 
+;; horizontal scrolling
+(if (boundp 'truncate-lines)
+    (setq-default truncate-lines t) ; always truncate
+  (progn
+    (hscroll-global-mode t)
+    (setq hscroll-margin 1)
+    (setq auto-hscroll-mode 1)
+    (setq automatic-hscrolling t)
+    ))
+
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
