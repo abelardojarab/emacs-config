@@ -1,6 +1,9 @@
-======================================
- Feb 1, 2014 — Flycheck 0.17 released
-======================================
+===============
+ Flycheck 0.17
+===============
+
+:date: Feb 1, 2014
+:version: 0.17
 
 .. only:: not format_texinfo
 
@@ -79,7 +82,7 @@ shortcomings over the time.
 Syntax checkers
 ===============
 
-Flycheck can now check GNU Makefiles (:issue:`321`) with the new `make-gmake`
+Flycheck can now check GNU Makefiles (see [GH-321]) with the new `make-gmake`
 syntax checker.
 
 The :flyc-checker:`rust` syntax checker now uses `--no-trans` to check for more
@@ -97,9 +100,9 @@ Other bug fixes and improvements
 ================================
 
 - Flycheck does not longer attach syntax checker processes to the buffer
-  anymore, improving compatibility with Tabbar Mode (:issue:`298`).
+  anymore, improving compatibility with Tabbar Mode ([GH-298]).
 - The :flyc-checker:`emacs-lisp` and :flyc-checker:`emacs-lisp-checkdoc` syntax
   checkers do not visit the file being checked anymore, to avoid unintended side
-  effects from unsafe local variables, etc. (:issue:`319`)
+  effects from unsafe local variables, etc. ([GH-319])
 - When a buffer changes while being checked, Flycheck immediately re-checks the
-  buffer after the check finished, to avoid outdated errors (:issue:`301`).
+  buffer after the check finished, to avoid outdated errors ([GH-301]).

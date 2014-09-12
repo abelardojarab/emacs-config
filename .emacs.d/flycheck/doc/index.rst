@@ -51,6 +51,7 @@ languages and syntax checking tools.
    guide/usage
    guide/languages
    guide/glossary
+   guide/releases/index
 
 Developer guide
 ===============
@@ -63,18 +64,6 @@ reference.
 
    dev/extending
    dev/api
-
-News
-====
-
-This part of the documentation has the latest news on Flycheck, the release
-notes, and the complete changelog.
-
-.. toctree::
-   :maxdepth: 1
-
-   news/index
-   changes
 
 Contributor guide
 =================
@@ -91,7 +80,20 @@ perform and problems they face.
    contrib/testing
    contrib/docs
    contrib/maintenance
-   credits
+
+Index
+=====
+
+The index provides a sorted list of all symbols and concepts explained
+throughout Flycheck's documentation:
+
+- :ref:`genindex`
+
+Credits
+=======
+
+.. include:: ../CREDITS.rst
+   :start-line: 4
 
 Licensing
 =========
@@ -129,11 +131,3 @@ https://creativecommons.org/licenses/by-sa/4.0/legalcode.
 
    gpl
    fdl
-
-Index
-=====
-
-The index provides a sorted list of all symbols and concepts explained
-throughout Flycheck's documentation:
-
-- :ref:`genindex`
