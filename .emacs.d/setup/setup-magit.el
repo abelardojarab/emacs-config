@@ -23,9 +23,6 @@
 ;; Load git configurations
 (add-hook 'magit-mode-hook 'magit-load-config-extensions)
 
-;; we no longer need vc-git
-(delete 'Git vc-handled-backends)
-
 ;; Close popup when commiting - this stops the commit window
 ;; hanging around
 ;; From: http://git.io/rPBE0Q
