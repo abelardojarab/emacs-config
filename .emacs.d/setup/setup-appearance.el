@@ -70,17 +70,41 @@
 (set-face-attribute 'linum nil :height 125)
 (setq linum-delay t)
 
-(eval-after-load 'linum
-  '(progn
-     (defface linum-leading-zero
-       `((t :inherit 'linum
-            :foreground ,(face-attribute 'linum :background nil t)))
-       "Face for displaying leading zeroes for line numbers in display margin."
-       :group 'linum)
-     (defun linum-format-func (line)
-       (let ((w (length (number-to-string (count-lines (point-min) (point-max))))))
-         (propertize (format (format " %%%dd " w) line) 'face 'linum)))
-     (setq linum-format 'linum-format-func)))
+;; Format the line number
+(require 'hl-line)
+(defface my-linum-hl
+  `((t :inherit linum :background ,(face-background 'hl-line nil t)))
+  "Face for the current line number."
+  :group 'linum)
+
+(defvar my-linum-format-string "%3d")
+(add-hook 'linum-before-numbering-hook 'my-linum-get-format-string)
+
+(defun my-linum-get-format-string ()
+  (let* ((width (1+ (length (number-to-string
+                             (count-lines (point-min) (point-max))))))
+         (format (concat "%" (number-to-string width) "d")))
+    (setq my-linum-format-string format)))
+
+(defvar my-linum-current-line-number 0)
+
+(setq linum-format 'my-linum-format)
+
+(defun my-linum-format (line-number)
+  (propertize (format my-linum-format-string line-number) 'face
+              (if (eq line-number my-linum-current-line-number)
+                  'my-linum-hl
+                'linum)))
+
+(defadvice linum-update (around my-linum-update)
+  (let ((my-linum-current-line-number (line-number-at-pos)))
+    ad-do-it))
+(ad-activate 'linum-update)
+
+;; hlinum
+(add-to-list 'load-path "~/.emacs.d/hlinum")
+(require 'hlinum)
+(hlinum-activate)
 
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
