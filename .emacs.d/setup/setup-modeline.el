@@ -41,6 +41,7 @@
 (add-to-list 'sml/hidden-modes " iImg")
 (add-to-list 'sml/hidden-modes " BufFace")
 (add-to-list 'sml/hidden-modes " Ind")
+(add-to-list 'sml/hidden-modes " ing")
 (add-to-list 'sml/hidden-modes " AC")
 (add-to-list 'sml/hidden-modes " AI")
 (add-to-list 'sml/hidden-modes " SP")
