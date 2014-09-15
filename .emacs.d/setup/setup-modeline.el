@@ -35,6 +35,7 @@
 (setq sml/name-width 25)
 (setq sml/mode-width 'full)
 
+(add-to-list 'sml/hidden-modes " my-keys")
 (add-to-list 'sml/hidden-modes " iImg")
 (add-to-list 'sml/hidden-modes " BufFace")
 (add-to-list 'sml/hidden-modes " Ind")
@@ -72,6 +73,10 @@
 (require 'smex)
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
+
+;; Nyan cat
+(add-to-list 'load-path "~/.emacs.d/nyan-mode")
+(require 'nyan-mode)
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here
