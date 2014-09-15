@@ -101,11 +101,6 @@
     ad-do-it))
 (ad-activate 'linum-update)
 
-;; hlinum
-(add-to-list 'load-path "~/.emacs.d/hlinum")
-(require 'hlinum)
-;; (hlinum-activate)
-
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
   (let ()
