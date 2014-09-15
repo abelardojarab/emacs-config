@@ -1,6 +1,6 @@
 ;;; cogre.el --- COnnected GRaph Editor for Emacs
 
-;;; Copyright (C) 2001, 2002, 2003, 2005, 2007, 2008, 2009, 2010, 2012, 2013 Eric M. Ludlam
+;;; Copyright (C) 2001, 2002, 2003, 2005, 2007, 2008, 2009, 2010, 2012, 2013, 2014 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: graph, oop, extensions, outlines
@@ -200,11 +200,22 @@ rendered in a buffer, or serialized to disk.")
   (oset G buffer (current-buffer))
   )
 
+;; These needs to be evaluated during compile so it can be used by the
+;; below defclass.
+(eval-and-compile
+(defun cogre-position-p (posvector)
+  "Test that POSVECTOR is a two element vector, and positive."
+  (and (vectorp posvector)
+       (= (length posvector) 2)
+       (wholenump (aref posvector 0))
+       (wholenump (aref posvector 1))))
+)
+
 ;;;###autoload
 (defclass cogre-node (cogre-graph-element)
   ((position :initarg :position
 	     :initform [ 0 0 ]
-	     :type vector
+	     :type cogre-position
 	     :custom (vector integer integer)
 	     :documentation
 	     "The X,Y [COL ROW] position as a vector for this node.
@@ -975,11 +986,11 @@ Reverses `cogre-graph-pre-serialize'."
 		(when startrect
 		  (cogre-erase-rectangle x1 y1
 					 (length (car startrect))
-					 (1- (length startrect))))
+					 (max (1- (length startrect)) 0)))
 		(when endrect
 		  (cogre-erase-rectangle x2 y2
 					 (length (car endrect))
-					 (1- (length endrect))))
+					 (max (1- (length endrect)) 0)))
 		)
 	    (picture-goto-coordinate x1 y1)
 	    (cogre-picture-insert-rectangle startrect)

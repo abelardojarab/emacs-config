@@ -935,7 +935,7 @@ macro `defcustom-mode-local-semantic-dependency-system-include-path'.
 ;;;***
 
 ;;;### (autoloads (semantic-documentation-for-tag) "semantic/doc"
-;;;;;;  "doc.el" (21510 8044 2193 0))
+;;;;;;  "doc.el" (21527 6376 1741 0))
 ;;; Generated autoloads from doc.el
 
 (autoload 'semantic-documentation-for-tag "semantic/doc" "\
@@ -1379,8 +1379,8 @@ The VALUE is a spp lexical table.
 ;;;***
 
 ;;;### (autoloads (semantic-m3-ref-items semantic-m3-context-items
-;;;;;;  semantic-m3-add-whatisit semantic-m3-install) "semantic/m3"
-;;;;;;  "m3.el" (21510 8044 2702 0))
+;;;;;;  semantic-m3-add-doc semantic-m3-add-whatisit semantic-m3-install)
+;;;;;;  "semantic/m3" "m3.el" (21527 6376 2158 0))
 ;;; Generated autoloads from m3.el
 
 (autoload 'semantic-m3-install "semantic/m3" "\
@@ -1390,6 +1390,12 @@ Install ourselves into the `cedet-m3' system.
 
 (autoload 'semantic-m3-add-whatisit "semantic/m3" "\
 Return a menu item for the 'whatisit' function.
+
+\(fn)" nil nil)
+
+(autoload 'semantic-m3-add-doc "semantic/m3" "\
+Return a menu item to query the doc for the symbol under point.
+Only return that menu item if there is some doc to display.
 
 \(fn)" nil nil)
 
@@ -2113,7 +2119,7 @@ Setup buffer for parse.
 ;;;;;;  "wisent/comp.el" "wisent/expr.el" "wisent/grammar-macros.el"
 ;;;;;;  "wisent/java-tags-wy.el" "wisent/java-wy.el" "wisent/java.el"
 ;;;;;;  "wisent/javascript-wy.el" "wisent/python-wy.el" "wisent/wisent.el")
-;;;;;;  (21511 19275 26477 0))
+;;;;;;  (21527 6443 3823 0))
 
 ;;;***
 

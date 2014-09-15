@@ -1,6 +1,6 @@
 ;;; semantic/m3.el --- Utilities for CEDET/M3
 ;;
-;; Copyright (C) 2011 Eric M. Ludlam
+;; Copyright (C) 2011, 2014 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;;
@@ -42,6 +42,7 @@
   "Install ourselves into the `cedet-m3' system."
   (interactive)
   (add-hook 'cedet-m3-menu-query-hooks 'semantic-m3-add-whatisit nil nil)
+  (add-hook 'cedet-m3-menu-query-hooks 'semantic-m3-add-doc nil nil)
   (add-hook 'cedet-m3-menu-visit-hooks 'semantic-m3-ref-items nil nil)
   (add-hook 'cedet-m3-menu-completions-hooks 'semantic-m3-context-items nil nil)
   )
@@ -88,7 +89,10 @@ The what is under the cursor."
 	     (ctxt (semantic-analyze-current-context))
 	     (pf (when ctxt (oref ctxt prefix)))
 	     (rpf (reverse pf))
+	     (kwsum nil)
 	     )
+	(when (and rpf (stringp (car rpf)) (semantic-lex-keyword-p (car rpf)))
+	  (setq kwsum (semantic-lex-keyword-get (car rpf) 'summary)))
 	(with-output-to-temp-buffer (help-buffer)
 	  (with-current-buffer standard-output
 	    (if (not ctxt)
@@ -103,6 +107,13 @@ The what is under the cursor."
 	      (princ "You have found ")
 	      (cond
 
+	       ;; A lexical keyword
+	       (kwsum
+		(princ "a language keyword.  It's summary is:\n  ")
+		(princ kwsum)
+		(princ "\n\n")
+		)
+	       
 	       ;; RAW String - unknown symbol
 	       ((stringp (car rpf))
 		(let ((comp (save-current-buffer
@@ -128,6 +139,7 @@ The what is under the cursor."
 		      (princ (semantic-format-tag-summarize C))
 		      (princ "\n"))
 		    )))
+
 
 	       ;; A Semantic Tag
 	       ((semantic-tag-p (car rpf))
@@ -167,6 +179,26 @@ The what is under the cursor."
 		(princ "absolutely nothing...")
 
 		))))))))
+
+;;;###autoload
+(defun semantic-m3-add-doc ()
+  "Return a menu item to query the doc for the symbol under point.
+Only return that menu item if there is some doc to display."
+  (let* ((ctxt (semantic-analyze-current-context))
+	 (prefix (when ctxt (oref ctxt :prefix)))
+	 (sym (car (reverse prefix)))
+	 (doc nil)
+	 )
+    (when (semantic-tag-p sym)
+      (setq doc (semantic-documentation-for-tag sym))
+      (if (not (or (null doc) (string= doc "")))
+	  (list (cedet-m3-menu-item (concat "Doc: " (semantic-format-tag-prototype sym))
+				    'semantic-ia-show-doc
+				    :active t))
+	;; Else, just show a summary
+	(list (cedet-m3-menu-item (semantic-format-tag-prototype sym)
+				  nil :active nil))
+	))))
 
 ;;;###autoload
 (defun semantic-m3-context-items ()

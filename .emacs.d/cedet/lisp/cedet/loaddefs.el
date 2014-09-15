@@ -167,7 +167,7 @@ If ARG is nil, then toggle.
 ;;;***
 
 ;;;### (autoloads (cogre cogre-arrow cogre-link cogre-node cogre-base-graph
-;;;;;;  cogre-graph-element) "cogre" "cogre.el" (21510 8044 125 0))
+;;;;;;  cogre-graph-element) "cogre" "cogre.el" (21527 6376 5 0))
 ;;; Generated autoloads from cogre.el
 
 (eieio-defclass-autoload 'cogre-graph-element '(eieio-named) "cogre" "A Graph Element.\nGraph elements are anything that is drawn into a `cogre-base-graph'.\nGraph elements have a method for marking themselves dirty.")
@@ -357,7 +357,7 @@ Semantic mode.
 
 ;;;### (autoloads nil nil ("cedet-compat.el" "cedet-cscope.el" "cedet-files.el"
 ;;;;;;  "cedet-idutils.el" "cedet.el" "pulse.el" "srecode.el" "working.el")
-;;;;;;  (21511 19274 602582 0))
+;;;;;;  (21527 6442 230519 0))
 
 ;;;***
 

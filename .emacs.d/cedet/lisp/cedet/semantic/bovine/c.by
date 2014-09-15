@@ -830,7 +830,7 @@ opt-initializers
 
 opt-post-fcn-modifiers
   : post-fcn-modifiers opt-post-fcn-modifiers
-    ( ,(cons ,$1 $2) )
+    ( ,(cons ,(car $1) $2) )
   | ;;EMPTY
     ( nil )
   ;
