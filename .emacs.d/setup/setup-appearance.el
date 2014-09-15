@@ -73,7 +73,7 @@
 ;; Format the line number
 (require 'hl-line)
 (defface my-linum-hl
-  `((t :inherit linum :background ,(face-background 'hl-line nil t)))
+  `((t :inherit linum :foreground "yellow3" :background ,(face-background 'hl-line nil t)))
   "Face for the current line number."
   :group 'linum)
 
@@ -104,7 +104,7 @@
 ;; hlinum
 (add-to-list 'load-path "~/.emacs.d/hlinum")
 (require 'hlinum)
-(hlinum-activate)
+;; (hlinum-activate)
 
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
