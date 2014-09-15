@@ -763,13 +763,17 @@ However instead of using M-a `eval-buffer', you could use M-a `eb'"
   "Shuffle ergoemacs keymaps in `minor-mode-map-alist'."
   (when (or force-update (not (eq (car (nth 0 minor-mode-map-alist)) 'ergoemacs-mode)))
     (let ((x (assq 'ergoemacs-mode minor-mode-map-alist)))
-      (when x
-        (setq minor-mode-map-alist (delq x minor-mode-map-alist)))
+      (while x
+        (setq minor-mode-map-alist (delq x minor-mode-map-alist))
+        ;; Multiple menus sometimes happen because of multiple 
+        ;; ergoemacs-mode variables in minor-mode-map-alist
+        (setq x (assq 'ergoemacs-mode minor-mode-map-alist)))
       (push (cons 'ergoemacs-mode ergoemacs-keymap) minor-mode-map-alist)))
   (when (or force-update (not (eq (car (nth (- 1 (length minor-mode-map-alist)) minor-mode-map-alist)) 'ergoemacs-unbind-keys)))
     (let ((x (assq 'ergoemacs-unbind-keys minor-mode-map-alist)))
-      (when x
-        (setq minor-mode-map-alist (delq x minor-mode-map-alist)))
+      (while x
+        (setq minor-mode-map-alist (delq x minor-mode-map-alist))
+        (setq x (assq 'ergoemacs-unbind-keys minor-mode-map-alist)))
       (setq minor-mode-map-alist (append minor-mode-map-alist
                                          (list (cons 'ergoemacs-unbind-keys ergoemacs-unbind-keymap)))))))
 
@@ -846,6 +850,7 @@ This is done by checking if this is a command that supports shift selection or c
 (declare-function ergoemacs-restore-post-command-hook "ergoemacs-shortcuts.el")
 (declare-function ergoemacs-install-shortcuts-up "ergoemacs-shortcuts.el")
 (defvar ergoemacs-force-shift-select-mark-active nil)
+(defvar ergoemacs-cache-movement-commands-command-keys)
 (defun ergoemacs-pre-command-hook ()
   "Ergoemacs pre-command-hook."
   (setq ergoemacs-force-shift-select-mark-active mark-active)
@@ -859,10 +864,20 @@ This is done by checking if this is a command that supports shift selection or c
     (ignore-errors
       (progn
         (ergoemacs-restore-post-command-hook)
+        (when (and (not ergoemacs-repeat-keys) ergoemacs-repeat-keymap)
+          (setq ergoemacs-repeat-keymap t))
         (when (and ergoemacs-repeat-keys
                    (keymapp ergoemacs-repeat-keymap)
-                   (not (lookup-key ergoemacs-repeat-keymap (this-single-command-keys))))
-          (setq ergoemacs-repeat-keys nil)
+                   (or
+                    (and ergoemacs-cache-movement-commands-command-keys
+                         (not ergoemacs-repeat-movement-commands)
+                         (equal ergoemacs-repeat-movement-commands
+                                (this-single-command-keys)))
+                    (and (not ergoemacs-cache-movement-commands-command-keys)
+                         ergoemacs-repeat-movement-commands
+                         (not (lookup-key ergoemacs-repeat-keymap (this-single-command-keys))))))
+          (setq ergoemacs-repeat-keys nil
+                ergoemacs-repeat-movement-commands nil)
           (ergoemacs-mode-line))
         (when (and (not ergoemacs-read-input-keys)
                    (not unread-command-events))
