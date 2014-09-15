@@ -73,7 +73,7 @@
 ;; Format the line number
 (require 'hl-line)
 (defface my-linum-hl
-  `((t :inherit linum :foreground "yellow3" :background ,(face-background 'hl-line nil t)))
+  `((t :inherit linum :foreground "yellow" :background ,(face-background 'hl-line nil t)))
   "Face for the current line number."
   :group 'linum)
 
