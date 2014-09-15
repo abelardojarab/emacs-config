@@ -35,6 +35,8 @@
 (setq sml/name-width 25)
 (setq sml/mode-width 'full)
 
+(add-to-list 'sml/hidden-modes " ErgoEmacs")
+(add-to-list 'sml/hidden-modes " ErgoEmacs[us]")
 (add-to-list 'sml/hidden-modes " my-keys")
 (add-to-list 'sml/hidden-modes " iImg")
 (add-to-list 'sml/hidden-modes " BufFace")
@@ -77,6 +79,7 @@
 ;; Nyan cat
 (add-to-list 'load-path "~/.emacs.d/nyan-mode")
 (require 'nyan-mode)
+(nyan-mode t)
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here

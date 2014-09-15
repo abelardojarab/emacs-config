@@ -49,6 +49,7 @@
  '(initial-scratch-message ";; scratch buffer created -- start typing...
 ")
  '(magit-use-overlays nil)
+ '(nyan-mode t)
  '(org-CUA-compatible nil)
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
