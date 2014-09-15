@@ -71,5 +71,8 @@
 (setq projectile-enable-caching t)
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
 
+;; Automatically invoke magit-status
+(setq projectile-switch-project-action 'projectile-vc)
+
 (provide 'setup-project)
 ;;; setup-project.el ends here
