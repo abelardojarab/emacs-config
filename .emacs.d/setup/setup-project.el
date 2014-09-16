@@ -65,14 +65,16 @@
 (require 'ack-and-a-half)
 ;; (require 'perspective)
 (require 'projectile)
-(projectile-global-mode t)
 (setq projectile-cache-file "~/.emacs.cache/projectile.cache")
 (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld")
+(setq projectile-indexing-method 'git)
 (setq projectile-enable-caching t)
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
+(setq projectile-remember-window-configs t)
+(projectile-global-mode t)
 
 ;; Automatically invoke magit-status
-(setq projectile-switch-project-action 'projectile-vc)
+(setq projectile-switch-project-action 'projectile-dired)
 
 (provide 'setup-project)
 ;;; setup-project.el ends here
