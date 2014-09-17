@@ -24,6 +24,13 @@
 
 ;;; Code:
 
+;; rsync support
+(require 'auto-rsync)
+(auto-rsync-mode t)
+;; (setq auto-rsync-dir-alist
+;;       (("/path/to/src1/" . "/path/to/dest1/")
+;;        ("/path/to/src2/" . "username@hostname:/path/to/dest2/")))
+
 ;; Server configuration
 (load "server")
 (defadvice make-network-process (before force-tcp-server-ipv4 activate)
