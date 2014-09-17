@@ -7322,20 +7322,17 @@ Optional arguments START and END can be used to limit the range."
   (setq org-hide-block-overlays nil))
 
 (defun org-hide-block-toggle-maybe ()
-  "Toggle visibility of block at point."
+  "Toggle visibility of block at point.
+Unlike to `org-hide-block-toggle', this function does not throw
+an error.  Return a non-nil value when toggling is successful."
   (interactive)
-  (let ((case-fold-search t))
-    (if (save-excursion
-          (beginning-of-line 1)
-          (looking-at org-block-regexp))
-        (progn (org-hide-block-toggle)
-               t) ;; to signal that we took action
-      nil))) ;; to signal that we did not
+  (ignore-errors (org-hide-block-toggle)))
 
 (defun org-hide-block-toggle (&optional force)
   "Toggle the visibility of the current block.
 When optional argument FORCE is `off', make block visible.  If it
-is non-nil, hide it unconditionally."
+is non-nil, hide it unconditionally.  Throw an error when not at
+a block.  Return a non-nil value when toggling is successful."
   (interactive)
   (let ((element (org-element-at-point)))
     (unless (memq (org-element-type element)
@@ -7354,8 +7351,7 @@ is non-nil, hide it unconditionally."
       (cond
        ;; Do nothing when not before or at the block opening line or
        ;; at the block closing line.
-       ((let ((eol (line-end-position)))
-	  (and (> eol start) (/= eol end))))
+       ((let ((eol (line-end-position))) (and (> eol start) (/= eol end))) nil)
        ((and (not (eq force 'off))
 	     (not (memq t (mapcar
 			   (lambda (o)
@@ -7376,9 +7372,11 @@ is non-nil, hide it unconditionally."
 	  ;; a visible part of the buffer.
 	  (when (> (line-beginning-position) start)
 	    (goto-char start)
-	    (beginning-of-line))))
+	    (beginning-of-line))
+	  ;; Signal successful toggling.
+	  t))
        ((or (not force) (eq force 'off))
-	(dolist (ov overlays)
+	(dolist (ov overlays t)
 	  (when (memq ov org-hide-block-overlays)
 	    (setq org-hide-block-overlays (delq ov org-hide-block-overlays)))
 	  (when (eq (overlay-get ov 'invisible) 'org-hide-block)
@@ -23702,14 +23700,11 @@ headline found, or nil if no higher level is found.
 Also, this function will be a lot faster than `outline-up-heading',
 because it relies on stars being the outline starters.  This can really
 make a significant difference in outlines with very many siblings."
-  (let (start-level re)
-    (org-back-to-heading t)
-    (setq start-level (funcall outline-level))
-    (if (equal start-level 1)
-	nil
-      (setq re (concat "^\\*\\{1," (number-to-string (1- start-level)) "\\} "))
-      (if (re-search-backward re nil t)
-	  (funcall outline-level)))))
+  (when (ignore-errors (org-back-to-heading t))
+    (let ((level-up (1- (funcall outline-level))))
+      (and (> level-up 0)
+	   (re-search-backward (format "^\\*\\{1,%d\\} " level-up) nil t)
+	   (funcall outline-level)))))
 
 (defun org-first-sibling-p ()
   "Is this heading the first child of its parents?"
