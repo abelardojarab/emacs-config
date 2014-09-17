@@ -80,6 +80,9 @@
 
  ;; Windows
  ((equal system-type 'windows-nt)
+  (defadvice shell (after my-shell-advice)
+    (set-buffer-process-coding-system 'cp1251 'cp1251))
+  (ad-activate 'shell)
   (when (file-directory-p "c:/cygwin/bin")
     (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
     (add-to-list 'exec-path "c:/cygwin/bin"))

@@ -24,8 +24,25 @@
 
 ;;; Code:
 
+;; Non-nil means do not display continuation lines.
+;; Instead, give each line of text just one screen line.
+(setq truncate-lines nil)
+
+;; A value of nil means to respect the value of `truncate-lines'.
+(setq truncate-partial-width-windows nil)
+
+;; Non-nil means no need to redraw entire frame after suspending.
+(setq no-redraw-on-reenter nil)
+
 ;; Do not improve Emacs display engine
 (setq redisplay-dont-pause t)
+
+;; Enables narrow possibility (`narrow-to-page' function).
+(put 'narrow-to-page 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+
+;; Disable bidirectional text support
+(setq-default bidi-display-reordering nil)
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
 (global-visual-line-mode 1)
@@ -57,7 +74,7 @@
 (add-hook 'text-mode-hook 'variable-pitch-mode)
 
 (if (find-font (font-spec :name "Consolas"))
-    (set-face-attribute 'fixed-pitch nil :font "Consolas-10"))
+    (set-face-attribute 'fixed-pitch nil :font "Consolas-10:antialias=subpixel"))
 
 ;; Fallback for Unicode symbols
 (if (find-font (font-spec :name "Symbola"))
@@ -127,26 +144,26 @@
               (if (> (x-display-pixel-width) 1800)
                   (if (equal system-type 'windows-nt)
                       (progn ;; HD monitor in Windows
-                        (setq main-programming-font "Consolas-12")
+                        (setq main-programming-font "Consolas-12:antialias=subpixel")
                         (set-default-font main-programming-font frame)
                         (setq main-writing-font (concat main-writing-font "-15"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                         (set-face-attribute 'linum nil :height 130))
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
-                          (setq main-programming-font "Consolas-16")
+                          (setq main-programming-font "Consolas-16:antialias=subpixel")
                           (set-default-font main-programming-font frame)
                           (setq main-writing-font (concat main-writing-font "-19"))
                           (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                           (set-face-attribute 'linum nil :height 160))
                       (progn ;; HD monitor in Windows and Mac
-                        (setq main-programming-font "Consolas-14")
+                        (setq main-programming-font "Consolas-14:antialias=subpixel")
                         (set-default-font main-programming-font frame)
                         (setq main-writing-font (concat main-writing-font "-17"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                         (set-face-attribute 'linum nil :height 140))))
                 (progn ;; Small display
-                  (setq main-programming-font "Consolas-10")
+                  (setq main-programming-font "Consolas-10:antialias=subpixel")
                   (set-default-font main-programming-font frame)
                   (setq main-writing-font (concat main-writing-font "-14"))
                   (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
