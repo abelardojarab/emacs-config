@@ -250,5 +250,9 @@
 (require 'function-args)
 (fa-config-default)
 
+;; Formatting
+(require 'zjl-hl)
+(zjl-hl-enable-global-all-modes)
+
 (provide 'setup-cedet)
 ;;; setup-cedet.el ends here
