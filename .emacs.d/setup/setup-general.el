@@ -156,8 +156,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; Try not to split windows
 (setq same-window-regexps '("."))
@@ -317,11 +317,36 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-       (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
-           (dolist (regexp regexps)
-             (when (string-match regexp string)
-               (throw 'matched t)))))))
+     (catch 'matched
+       (let ((inhibit-changing-match-data t)) ; small optimization
+         (dolist (regexp regexps)
+           (when (string-match regexp string)
+             (throw 'matched t)))))))
+
+;; Better search, similar to vim
+(defun my-isearch-word-at-point ()
+  (interactive)
+  (call-interactively 'isearch-forward-regexp))
+
+(defun my-isearch-yank-word-hook ()
+  (when (equal this-command 'my-isearch-word-at-point)
+    (let ((string (concat "\\<"
+                          (buffer-substring-no-properties
+                           (progn (skip-syntax-backward "w_") (point))
+                           (progn (skip-syntax-forward "w_") (point)))
+                          "\\>")))
+      (if (and isearch-case-fold-search
+             (eq 'not-yanks search-upper-case))
+          (setq string (downcase string)))
+      (setq isearch-string string
+            isearch-message
+            (concat isearch-message
+                    (mapconcat 'isearch-text-char-description
+                               string ""))
+            isearch-yank-flag t)
+      (isearch-search-and-update))))
+
+(add-hook 'isearch-mode-hook 'my-isearch-yank-word-hook)
 
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)

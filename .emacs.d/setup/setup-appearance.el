@@ -182,9 +182,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
@@ -292,6 +292,8 @@
 ;; Highlight symbol
 (add-to-list 'load-path "~/.emacs.d/highlight-symbol")
 (require 'highlight-symbol)
+(add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
+(setq highlight-symbol-on-navigation-p t)
 (global-set-key [f3] 'highlight-symbol-at-point)
 (global-set-key [(control f3)] 'highlight-symbol-next)
 (global-set-key [(shift f3)] 'highlight-symbol-prev)
