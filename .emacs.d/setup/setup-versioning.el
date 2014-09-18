@@ -63,12 +63,14 @@
 (require 'git-gutter-fringe+)
 (require 'git-timemachine)
 (global-git-gutter+-mode t)
-(set-face-foreground 'git-gutter-fr+-modified "white")
+(set-face-foreground 'git-gutter-fr+-modified "orange")
 (set-face-foreground 'git-gutter-fr+-added    "green")
-(set-face-foreground 'git-gutter-fr+-deleted  "orange")
+(set-face-foreground 'git-gutter-fr+-deleted  "red")
 
 ;; Please adjust fringe width if your own sign is too big.
 (setq-default left-fringe-width 20)
+;; (setq-default right-fringe-width 20)
+;; (setq git-gutter-fr+-side 'right-fringe)
 
 (fringe-helper-define 'git-gutter-fr+-added nil
   ".XXXXXX."
