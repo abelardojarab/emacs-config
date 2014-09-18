@@ -1,9 +1,9 @@
-;;; setup-ecb.el --- 
+;;; setup-ecb.el ---
 
 ;; Copyright (C) 2014  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -45,13 +45,13 @@
       ecb-compile-window-temporally-enlarge 'both
       ecb-create-layout-file "~/.emacs.cache/auto-save-list/.ecb-user-layouts.el"
       ecb-windows-width 30
-      ecb-fix-window-size 'width 
+      ecb-fix-window-size 'width
       ecb-layout-name "leftright-sa-m"
       ecb-history-make-buckets 'mode
       ecb-kill-buffer-clears-history 'auto
       ecb-tip-of-the-day nil
       ecb-tip-of-the-day-file "~/.emacs.cache/auto-save-list/.ecb-tip-of-day.el"
-      ecb-primary-secondary-mouse-buttons 'mouse-1--mouse-2 
+      ecb-primary-secondary-mouse-buttons 'mouse-1--mouse-2
       semantic-decoration-styles (list '("semantic-decoration-on-includes" . t)
                                        '("semantic-tag-boundary" . t)))
 
@@ -79,7 +79,7 @@
 (defun ecb-shrink-frame-width-before-hide ()
   "Shrink frame width before ecb hide layout."
   (if (and (not (ecb-windows-all-hidden))
-           
+
            (not (eq (frame-pixel-width)
                     (display-pixel-width))))
       (if (< (- (frame-width) (+ ecb-windows-width 2)) initial-frame-width)
@@ -129,6 +129,7 @@ If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
   (ecb-set-sources-buffer)
+  ;; (ecb-set-speedbar-buffer)
   (ecb-split-ver 0.5)
   (ecb-set-analyse-buffer)
   (select-window (next-window (next-window)))
@@ -167,6 +168,31 @@ the layout contains no persistent compilation window and the other windows get a
 little more place. "
   (ecb-set-speedbar-buffer)
   (select-window (next-window)))
+
+;; Speedbar
+(speedbar-add-supported-extension ".js")
+(add-to-list 'speedbar-fetch-etags-parse-list
+             '("\\.js" . speedbar-parse-c-or-c++tag))
+
+;; don't refresh on buffer changes
+(setq sr-speedbar-auto-refresh t)
+
+;; turn off the ugly icons
+(setq speedbar-use-images nil)
+
+;; nicer fonts for speedbar when in GUI
+(when (and (window-system)
+           (find-font (font-spec :name "Consolas")))
+  ;; keep monospace buttons, but smaller height
+  (set-face-attribute 'speedbar-button-face nil :height 100)
+
+  ;; change to system default UI font for entries
+  (dolist (face (list 'speedbar-file-face 'speedbar-directory-face
+                      'speedbar-tag-face  'speedbar-selected-face
+                      'speedbar-highlight-face))
+    (if (eq system-type 'windows-nt)
+        (set-face-attribute face nil :family "Consolas" :height 110))
+    (set-face-attribute face nil :family "Consolas" :height 110)))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
