@@ -254,12 +254,12 @@
 (require 'zjl-hl)
 (zjl-hl-enable-global-all-modes)
 
-;; Inhibit Semantic for some modes
-(eval-after-load "semantic"
-  '(add-to-list 'semantic-inhibit-functions
-                (lambda () (member major-mode '(python-mode)))))
-(add-hook 'python-mode-hook '(lambda () (set
-                                    (make-local-variable 'semantic-mode) nil)))
+;; Disable setup by semantic for python, javascript and scheme buffers
+(setq semantic-new-buffer-setup-functions (remove-if (lambda (buffer-setup-function)
+                                                       (member (car buffer-setup-function)
+                                                               '(python-mode js-mode scheme-mode html-mode)))
+                                                     semantic-new-buffer-setup-functions))
+(remove-hook 'python-mode-hook 'wisent-python-default-setup)
 
 (provide 'setup-cedet)
 ;;; setup-cedet.el ends here
