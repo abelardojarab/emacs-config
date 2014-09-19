@@ -46,7 +46,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
   (if (not (file-exists-p server-auth-dir))
       (make-directory server-auth-dir t))
   (and (>= emacs-major-version 23)
-     (defun server-ensure-safe-dir (dir) "Noop" t))
+       (defun server-ensure-safe-dir (dir) "Noop" t))
   (server-start))
 
 ;; Ensure there is always at least one visible frame open at all times
@@ -96,6 +96,14 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
     (setq tramp-default-method "plink")
   (setq tramp-default-method "ssh"))
 (update-tramp-emacs-server-port-forward tramp-default-method)
+
+;; Tramp configurations
+(setq my-tramp-ssh-completions
+      '((tramp-parse-sconfig "~/.ssh/config")
+        (tramp-parse-shosts "~/.ssh/known_hosts")))
+(mapc (lambda (method)
+        (tramp-set-completion-function method my-tramp-ssh-completions))
+      '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))
 
 ;; Fix the auto save problem.
 (setq tramp-auto-save-directory "~/.emacs.cache/backups")

@@ -26,10 +26,10 @@
 
 ;; Non-nil means do not display continuation lines.
 ;; Instead, give each line of text just one screen line.
-(setq truncate-lines nil)
+(setq-default truncate-lines nil)
 
-;; A value of nil means to respect the value of `truncate-lines'.
-(setq truncate-partial-width-windows nil)
+;; make side by side buffers function the same as the main window
+(setq-default truncate-partial-width-windows nil)
 
 ;; Non-nil means no need to redraw entire frame after suspending.
 (setq no-redraw-on-reenter nil)
@@ -64,6 +64,17 @@
 
 ;; Syntax coloring
 (global-font-lock-mode 1)
+
+;; Reduce line spacing
+(defun toggle-line-spacing ()
+  "Toggle line spacing between no extra space to extra half line height."
+  (interactive)
+  (if (eq line-spacing nil)
+      (setq-default line-spacing 0.5) ;; add 0.5 height between lines
+    (setq-default line-spacing nil)   ;; no extra heigh between lines
+    ) ;; if
+  (redraw-display))
+(global-set-key (kbd "<C-f7>") 'toggle-line-spacing)
 
 ;; Use 10-pt Consolas as default font
 (if (find-font (font-spec :name "Consolas"))

@@ -80,13 +80,19 @@ This command does the reverse of `fill-paragraph'."
   (replace-regexp "\\([^\n]\\)\n\\([^ *\n]\\)" "\\1 \\2" nil begin end))
 
 ;; dos2unix
-(defun dos2unix (buffer)
-  "Automate M-% C-q C-m RET C-q C-j RET"
-  (interactive "*b")
-  (save-excursion
-    (goto-char (point-min))
-    (while (search-forward (string ?\C-m) nil t)
-      (replace-match (string ?\C-j) nil t))))
+;;  no... wait... I like them!
+(defun unix2dos ()
+  "Opposite of dos2unix"
+  (interactive)
+  (goto-char (point-min))
+  (while (search-forward "\n" nil t) (replace-match "\r\n")))
+
+;;  no... wait... I like them!
+(defun unix2dos ()
+  "Opposite of dos2unix"
+  (interactive)
+  (goto-char (point-min))
+  (while (search-forward "\n" nil t) (replace-match "\r\n")))
 
 ;; Remove or add ending chars
 (defun compact-uncompact-block ()
