@@ -26,13 +26,13 @@
 
 ;; Non-nil means do not display continuation lines.
 ;; Instead, give each line of text just one screen line.
-(setq-default truncate-lines t)
+(set-default 'truncate-lines t)
 
 ;; disable line wrap
-(setq default-truncate-lines t)
+(setq-default default-truncate-lines t)
 
 ;; make side by side buffers function the same as the main window
-(setq truncate-partial-width-windows nil)
+(setq-default truncate-partial-width-windows nil)
 
 ;; Non-nil means no need to redraw entire frame after suspending.
 (setq no-redraw-on-reenter nil)
