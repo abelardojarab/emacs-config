@@ -203,5 +203,12 @@ buffer."
     (add-to-list 'my-debug-set-buffer-modified-p-buffers buffer)
     (message "Enabled for %s" buffer)))
 
+;; Move text
+(require 'move-text)
+(global-set-key [M-up] 'move-text-up)
+(global-set-key [M-down] 'move-text-down)
+(global-set-key [M-S-up] 'move-text-up)
+(global-set-key [M-S-down] 'move-text-down)
+
 (provide 'setup-utilities)
 ;;; setup-utilities.el ends here

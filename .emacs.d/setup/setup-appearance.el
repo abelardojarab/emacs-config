@@ -49,6 +49,7 @@
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
 (global-visual-line-mode 1)
+(setq line-move-visual nil)
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
 
