@@ -254,5 +254,12 @@
 (require 'zjl-hl)
 (zjl-hl-enable-global-all-modes)
 
+;; Inhibit Semantic for some modes
+(eval-after-load "semantic"
+  '(add-to-list 'semantic-inhibit-functions
+                (lambda () (member major-mode '(python-mode)))))
+(add-hook 'python-mode-hook '(lambda () (set
+                                    (make-local-variable 'semantic-mode) nil)))
+
 (provide 'setup-cedet)
 ;;; setup-cedet.el ends here

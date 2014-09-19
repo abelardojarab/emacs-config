@@ -797,12 +797,11 @@ enough performance."
     (error (message "zjl-hl-semantic-update-screen-update error")))
   )
 
-                                        ;idea from how ecb update method buffer
+;;idea from how ecb update method buffer
 ;;(add-hook (ecb--semantic-after-partial-cache-change-hook) 'ecb-update-after-partial-reparse t)
 ;;(add-hook (ecb--semantic-after-toplevel-cache-change-hook) 'ecb-rebuild-methods-buffer-with-tagcache t)
 ;; can refer to site-lisp\ecb\ecb-method-browser.el later for ecb-update-after-partial-reparse and ecb--semantic-after-partial-cache-change-hook
 (defun zjl-hl-semantic-after-partial-cache-change-hook (updated-tags)
-  (condition-case nil
       (when zjl-hl-regions-already-hl  ;;maybe zjl-hl-init has not hl any where
         (let (start end overlay todo)
           (dolist (tags updated-tags)
@@ -819,11 +818,7 @@ enough performance."
           (when zjl-hl-timer-semantic-update-obj
             (cancel-timer zjl-hl-timer-semantic-update-obj))
           (when (< (- (overlay-end overlay) (overlay-start overlay)) zjl-hl-toobig-not-update-size)
-            (setq zjl-hl-timer-semantic-update-obj (run-with-idle-timer 3 nil 'zjl-hl-semantic-update-screen-update (current-buffer))))
-          )
-        )
-    (error (message "zjl-hl-semantic-after-partial-cache-change-hook error"))))
-
+            (setq zjl-hl-timer-semantic-update-obj (run-with-idle-timer 3 nil 'zjl-hl-semantic-update-screen-update (current-buffer)))))))
 
 (setq zjl-hl-fun-call-notable-degree-old-value nil)
 
