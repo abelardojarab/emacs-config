@@ -80,9 +80,17 @@
 
  ;; Windows
  ((equal system-type 'windows-nt)
+  ;; Custom grep
+  (grep-apply-setting 'grep-find-template
+                      "findstr /S /N /D:. /C:<R> <F>")
+  (setq find-name-arg nil)
+
+  ;; Better shell
   (defadvice shell (after my-shell-advice)
     (set-buffer-process-coding-system 'cp1251 'cp1251))
   (ad-activate 'shell)
+
+  ;; Custom $PATH
   (when (file-directory-p "c:/cygwin/bin")
     (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
     (add-to-list 'exec-path "c:/cygwin/bin"))
@@ -349,6 +357,16 @@
 (add-hook 'isearch-mode-hook 'my-isearch-yank-word-hook)
 (global-set-key (kbd "C-*") 'my-isearch-word-at-point)
 (global-set-key [(control kp-multiply)] 'my-isearch-word-at-point)
+
+;; Keep the search results in the center in incremental search
+(defadvice isearch-repeat-forward (after isearch-repeat-forward-recenter activate)
+  (recenter))
+
+(defadvice isearch-repeat-backward (after isearch-repeat-backward-recenter activate)
+  (recenter))
+
+(ad-activate 'isearch-repeat-forward)
+(ad-activate 'isearch-repeat-backward)
 
 ;; Search at point
 (require 'thingatpt)
