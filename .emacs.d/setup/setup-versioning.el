@@ -102,5 +102,8 @@
   "Xx.XX.xX"
   "Xx.XX.xX")
 
+(defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
+  (ad-set-arg 0 (file-truename (ad-get-arg 0))))
+
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here
