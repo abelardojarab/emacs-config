@@ -80,10 +80,6 @@
 
  ;; Windows
  ((equal system-type 'windows-nt)
-  ;; Custom grep
-  (grep-apply-setting 'grep-find-template
-                      "findstr /S /N /D:. /C:<R> <F>")
-  (setq find-name-arg nil)
 
   ;; Better shell
   (defadvice shell (after my-shell-advice)
