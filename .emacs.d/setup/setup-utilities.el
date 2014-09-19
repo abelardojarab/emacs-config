@@ -80,12 +80,12 @@ This command does the reverse of `fill-paragraph'."
   (replace-regexp "\\([^\n]\\)\n\\([^ *\n]\\)" "\\1 \\2" nil begin end))
 
 ;; dos2unix
-;;  no... wait... I like them!
-(defun unix2dos ()
-  "Opposite of dos2unix"
+(defun dos2unix ()
+  "Replace DOS eolns CR LF with Unix eolns CR"
   (interactive)
   (goto-char (point-min))
-  (while (search-forward "\n" nil t) (replace-match "\r\n")))
+  (while (search-forward "\r" nil t) (replace-match ""))
+  (set-buffer-file-coding-system 'unix 't))
 
 ;;  no... wait... I like them!
 (defun unix2dos ()
