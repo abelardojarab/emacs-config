@@ -110,7 +110,8 @@
                  '(unloaded system))
 
 ;; Include settings
-(require 'semantic/bovine/c)
+(ignore-errors
+  (require 'semantic/bovine/c))
 (require 'semantic/bovine/gcc)
 (require 'semantic/bovine/clang)
 (require 'semantic/bovine/scm-by)
