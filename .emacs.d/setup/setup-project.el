@@ -28,6 +28,11 @@
 (add-to-list 'load-path "~/.emacs.d/helm")
 (require 'helm-config)
 
+;; Async
+(add-to-list 'load-path "~/.emacs.d/async")
+(when (require 'dired-aux)
+  (require 'dired-async))
+
 ;; iMenu
 (set-default 'imenu-auto-rescan t)
 (add-hook 'lisp-mode-hook
