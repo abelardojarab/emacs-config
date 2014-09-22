@@ -35,6 +35,8 @@
 (declare-function inferior-ess-send-input "ext:ess-inf" ())
 (declare-function ess-make-buffer-current "ext:ess-inf" ())
 (declare-function ess-eval-buffer "ext:ess-inf" (vis))
+(declare-function ess-wait-for-process "ext:ess-inf"
+		  (proc &optional sec-prompt wait force-redisplay))
 (declare-function org-number-sequence "org-compat" (from &optional to inc))
 (declare-function org-remove-if-not "org" (predicate seq))
 (declare-function org-every "org" (pred seq))
@@ -87,7 +89,8 @@ this variable.")
   :version "24.1"
   :type 'string)
 
-(defvar ess-local-process-name) ; dynamically scoped
+(defvar ess-current-process-name) ; dynamically scoped
+(defvar ess-local-process-name)   ; dynamically scoped
 (defun org-babel-edit-prep:R (info)
   (let ((session (cdr (assoc :session (nth 2 info)))))
     (when (and session (string-match "^\\*\\(.+?\\)\\*$" session))
@@ -262,6 +265,9 @@ This function is called by `org-babel-execute-src-block'."
 	    ;; Session buffer exists, but with dead process
 	    (set-buffer session))
 	  (require 'ess) (R)
+	  (ess-wait-for-process
+	   (get-process (or ess-local-process-name
+			    ess-current-process-name)))
 	  (rename-buffer
 	   (if (bufferp session)
 	       (buffer-name session)

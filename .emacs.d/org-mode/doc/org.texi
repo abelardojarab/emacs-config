@@ -10355,16 +10355,16 @@ Org syntax includes pre-defined blocks (@pxref{Paragraphs} and @ref{Literal
 examples}).  It is also possible to create blocks containing raw code
 targeted at a specific back-end (e.g., @samp{#+BEGIN_LATEX}).
 
-Any other block is a @emph{special block}.
+Any other block is a @emph{special block}.  Its name is case-sensitive.
 
-For example, @samp{#+BEGIN_ABSTRACT} and @samp{#+BEGIN_VIDEO} are special
+For example, @samp{#+BEGIN_abstract} and @samp{#+BEGIN_video} are special
 blocks.  The first one is useful when exporting to @LaTeX{}, the second one
 when exporting to HTML5.
 
 Each export back-end decides if they should be exported, and how.  When the
 block is ignored, its contents are still exported, as if the opening and
 closing block lines were not there.  For example, when exporting a
-@samp{#+BEGIN_TEST} block, HTML back-end wraps its contents within a
+@samp{#+BEGIN_test} block, HTML back-end wraps its contents within a
 @samp{<div name="test">} tag.
 
 Refer to back-end specific documentation for more information.
@@ -10738,16 +10738,12 @@ Toggle inclusion of TODO keywords into exported text
 Toggle inclusion of tables (@code{org-export-with-tables}).
 @end table
 
-@cindex property, EXPORT_FILE_NAME
 When exporting only a subtree, each of the previous keywords@footnote{With
 the exception of @samp{SETUPFILE}.} can be overridden locally by special node
 properties.  These begin with @samp{EXPORT_}, followed by the name of the
 keyword they supplant.  For example, @samp{DATE} and @samp{OPTIONS} keywords
 become, respectively, @samp{EXPORT_DATE} and @samp{EXPORT_OPTIONS}
-properties.  Subtree export also supports the self-explicit
-@samp{EXPORT_FILE_NAME} property@footnote{There is no buffer-wide equivalent
-for this property.  The file name in this case is derived from the file
-associated to the buffer, if possible, or asked to the user otherwise.}.
+properties.
 
 @cindex #+BIND
 @vindex org-export-allow-bind-keywords
@@ -10755,6 +10751,13 @@ If @code{org-export-allow-bind-keywords} is non-@code{nil}, Emacs variables
 can become buffer-local during export by using the BIND keyword.  Its syntax
 is @samp{#+BIND: variable value}.  This is particularly useful for in-buffer
 settings that cannot be changed using specific keywords.
+
+@cindex property, EXPORT_FILE_NAME
+The name of the output file to be generated is taken from the file associated
+to the buffer, when possible, or asked to you otherwise.  For subtree export,
+you can also set @samp{EXPORT_FILE_NAME} property.  In all cases, only the
+base name of the file is retained, and a back-end specific extension is
+added.
 
 @node ASCII/Latin-1/UTF-8 export
 @section ASCII/Latin-1/UTF-8 export
@@ -11189,7 +11192,7 @@ Becomes:
 
 Special blocks that do not correspond to HTML5 elements (see
 @code{org-html-html5-elements}) will revert to the usual behavior, i.e.,
-@code{#+BEGIN_LEDERHOSEN} will still export to @samp{<div class="lederhosen">}.
+@code{#+BEGIN_lederhosen} will still export to @samp{<div class="lederhosen">}.
 
 Headlines cannot appear within special blocks.  To wrap a headline and its
 contents in e.g., @samp{<section>} or @samp{<article>} tags, set the
@@ -11933,15 +11936,15 @@ Value of @code{:options} attribute will be appended as-is to that
 environment's opening string.  For example:
 
 @example
-#+BEGIN_ABSTRACT
+#+BEGIN_abstract
 We demonstrate how to solve the Syracuse problem.
-#+END_ABSTRACT
+#+END_abstract
 
 #+ATTR_LATEX: :options [Proof of important theorem]
-#+BEGIN_PROOF
+#+BEGIN_proof
 ...
 Therefore, any even number greater than 2 is the sum of two primes.
-#+END_PROOF
+#+END_proof
 @end example
 
 @noindent
@@ -11964,9 +11967,9 @@ example:
 
 @example
 #+ATTR_LATEX: :caption \MyCaption@{HeadingA@}
-#+BEGIN_PROOF
+#+BEGIN_proof
 ...
-#+END_PROOF
+#+END_proof
 @end example
 
 @subsubheading Horizontal rules
@@ -13804,6 +13807,7 @@ however, override everything.
 @item @code{:ascii-inlinetask-width}              @tab @code{org-ascii-inlinetask-width}
 @item @code{:ascii-inner-margin}                  @tab @code{org-ascii-inner-margin}
 @item @code{:ascii-links-to-notes}                @tab @code{org-ascii-links-to-notes}
+@item @code{:ascii-list-margin}                   @tab @code{org-ascii-list-margin}
 @item @code{:ascii-paragraph-spacing}             @tab @code{org-ascii-paragraph-spacing}
 @item @code{:ascii-quote-margin}                  @tab @code{org-ascii-quote-margin}
 @item @code{:ascii-table-keep-all-vertical-lines} @tab @code{org-ascii-table-keep-all-vertical-lines}

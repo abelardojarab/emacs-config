@@ -28,6 +28,7 @@ master (in development)
   - Improve GCC syntax checking by expanding templates [GH-459]
   - `d-dmd` reports errors with columns now [GH-460]
   - Remove Projectile-based config file search [GH-461]
+  - Do not change point when navigating in the error list [GH-487]
 
 - Bug fixes:
 
@@ -35,6 +36,7 @@ master (in development)
     gracefully [GH-434]
   - Restore mouse support in the error list [GH-468]
   - `less` now correctly resolves relative paths in `data-uri` [GH-471]
+  - `go-errcheck` now properly uses package names as syntax checker arguments
 
 0.20 (Aug 12, 2014)
 -------------------
