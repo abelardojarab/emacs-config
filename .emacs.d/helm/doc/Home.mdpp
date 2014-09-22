@@ -12,6 +12,10 @@ welcomed by submitting a Pull Request for [Home.mdpp][1].
 
 ## I have updated from melpa and I have errors
 
+Normally since helm, when installed from (m)elpa force dependency to
+[Async](https://github.com/jwiegley/emacs-async) you should not have this problem
+anymore, however if it happen, do like this:
+
 1. Uninstall `helm` from `list-packages`
 
 2. Close emacs
@@ -22,38 +26,12 @@ welcomed by submitting a Pull Request for [Home.mdpp][1].
 
 5. Restart emacs
 
-If you still have errors report bug on [emacs helm issues](https://github.com/emacs-helm/helm/issues)
+And report bug on [emacs helm issues](https://github.com/emacs-helm/helm/issues)
 
 
-You can workaround the problem using this piece of code (Need [emacs-async](https://github.com/jwiegley/emacs-async)) in your init file:
+_Note:_ After upgrading as usual you will have anyway to restart emacs for the changes take effect.
 
-```lisp
-
-(defun async-byte-recompile-directory (directory &optional arg force)
-  (cl-loop with dir = (directory-files directory t "\\.elc\\'")
-           unless dir return nil
-           for f in dir
-           when (file-exists-p f) do (delete-file f))
-  (let ((proc
-         (async-start
-          `(lambda ()
-             (require 'bytecomp)
-             ,(async-inject-variables "\\`load-path\\'")
-             (let ((default-directory (file-name-as-directory ,directory)))
-               (add-to-list 'load-path default-directory)
-               (byte-recompile-directory ,directory ,arg ,force))))))
-    (unless (condition-case err
-                (async-get proc)
-              (error
-               (ignore (message "Error: %s" (car err)))))
-      (ignore (message "Recompiling %s...FAILED" directory)))))
-
-(defadvice package--compile (around byte-compile-async activate)
-  (package-activate-1 pkg-desc)
-  (async-byte-recompile-directory (package-desc-dir pkg-desc) 0 t))
-```
-
-_Note:_ After upgrading as usual you will have anyway to restart emacs.
+_Note:_ [emacs-async](https://github.com/jwiegley/emacs-async) is available as "async" in melpa.
 
 ## I have warnings when compiling from emacs-24.3.1
 
