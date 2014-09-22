@@ -33,4 +33,5 @@ srecode-map.el*
 .travis.yml
 wget-log
 ergoemacs-themes.elc
+ergoemacs-theme-engine.elc
 .emacs.elc
