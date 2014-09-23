@@ -28,6 +28,12 @@
 (add-to-list 'load-path "~/.emacs.d/helm")
 (require 'helm-config)
 
+;; Helm ls git
+(add-to-list 'load-path "~/.emacs.d/helm-ls-git")
+(require 'helm-ls-git)
+(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
+(global-set-key (kbd "C-x C-d") 'helm-browse-project)
+
 ;; Async
 (add-to-list 'load-path "~/.emacs.d/async")
 (when (require 'dired-aux)
