@@ -123,7 +123,7 @@
                      (subtree-is-current (save-excursion
                                            (forward-line 1)
                                            (and (< (point) subtree-end)
-                                                (re-search-forward (concat last-month "\\|" this-month) subtree-end t)))))
+                                              (re-search-forward (concat last-month "\\|" this-month) subtree-end t)))))
                 (if subtree-is-current
                     subtree-end ; Has a date in this month or last month, skip it
                   nil))  ; available to archive
@@ -218,7 +218,7 @@
                      :return-to-wconf (current-window-configuration)
                      :default-time
                      (or org-overriding-default-time
-                         (org-current-time)))
+                        (org-current-time)))
     (org-capture-set-target-location)
     (condition-case error
         (org-capture-put :template (org-capture-fill-template))
@@ -231,12 +231,12 @@
          (equal (car (org-capture-get :target)) 'function))
       ((error quit)
        (if (and (buffer-base-buffer (current-buffer))
-                (string-match "\\`CAPTURE-" (buffer-name)))
+              (string-match "\\`CAPTURE-" (buffer-name)))
            (kill-buffer (current-buffer)))
        (set-window-configuration (org-capture-get :return-to-wconf))
        (error "Error.")))
     (if (and (derived-mode-p 'org-mode)
-             (org-capture-get :clock-in))
+           (org-capture-get :clock-in))
         (condition-case nil
             (progn
               (if (org-clock-is-active)
@@ -290,8 +290,8 @@
        '(progn
           (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
             (if (and cua-mode
-                     org-support-shift-select
-                     (not (use-region-p)))
+                   org-support-shift-select
+                   (not (use-region-p)))
                 (cua-set-mark)))))))
 
 ;; Fix on the keys
@@ -436,7 +436,7 @@ a link to this file."
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                      "/clippaste /convert=" filename))
+                                                                                "/clippaste /convert=" filename))
 
       (if (equal system-type 'darwin)
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
@@ -494,21 +494,21 @@ a link to this file."
 (defun org-mode-reftex-setup ()
   (interactive)
   (and (buffer-file-name) (file-exists-p (buffer-file-name))
-       (progn
-         ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
-         (setq TeX-master t)
-         (turn-on-reftex)
-         ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-         (global-auto-revert-mode t) ; careful: this can kill the undo
-         ;; history when you change the file
-         ;; on-disk.
-         (reftex-parse-all)
-         ;; add a custom reftex cite format to insert links
-         ;; This also changes any call to org-citation!
-         (reftex-set-cite-format
-          '((?c . "\\citet{%l}") ; natbib inline text
-            (?i . "\\citep{%l}") ; natbib with parens
-            ))))
+     (progn
+       ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
+       (setq TeX-master t)
+       (turn-on-reftex)
+       ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
+       (global-auto-revert-mode t) ; careful: this can kill the undo
+       ;; history when you change the file
+       ;; on-disk.
+       (reftex-parse-all)
+       ;; add a custom reftex cite format to insert links
+       ;; This also changes any call to org-citation!
+       (reftex-set-cite-format
+        '((?c . "\\citet{%l}") ; natbib inline text
+          (?i . "\\citep{%l}") ; natbib with parens
+          ))))
   (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
   (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
 (add-hook 'org-mode-hook 'org-mode-reftex-setup)
@@ -548,6 +548,44 @@ a link to this file."
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(add-to-list 'org-latex-classes
+             ;; beamer class, for presentations
+             '("beamer"
+               "\\documentclass[11pt]{beamer}\n
+\\mode<{{{beamermode}}}>\n
+\\usetheme{{{{beamertheme}}}}\n
+\\usecolortheme{{{{beamercolortheme}}}}\n
+\\beamertemplateballitem\n
+\\setbeameroption{show notes}
+\\usepackage[utf8]{inputenc}\n
+\\usepackage[T1]{fontenc}\n
+\\usepackage{hyperref}\n
+\\usepackage{color}
+\\usepackage{listings}
+\\usepackage{geometry}
+\\usepackage{graphicx}
+\\usepackage{mathptmx}
+\\usepackage[section]{placeins}
+\\lstset{numbers=none,language=[ISO]C++,tabsize=4,
+frame=single,
+basicstyle=\\small,
+showspaces=false,showstringspaces=false,
+showtabs=false,
+keywordstyle=\\color{blue}\\bfseries,
+commentstyle=\\color{red},
+}\n
+
+\\usepackage{verbatim}\n
+\\institute{{{{beamerinstitute}}}}\n
+\\subject{{{{beamersubject}}}}\n"
+
+               ("\\section{%s}" . "\\section*{%s}")
+
+               ("\\begin{frame}[fragile]\\frametitle{%s}"
+                "\\end{frame}"
+                "\\begin{frame}[fragile]\\frametitle{%s}"
+                "\\end{frame}")))
+
 (add-to-list 'org-latex-classes
              '("xelatex"
                "\\documentclass[11pt,a4paper]{article}
@@ -723,9 +761,6 @@ a link to this file."
                                    (gnus . org-gnus-no-new-news)
                                    (file . find-file)
                                    (wl . wl-other-frame))))
-
-
-
 
 ;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
 (defun iy-ac-tab-noconflict ()
