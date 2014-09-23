@@ -1,0 +1,70 @@
+% Created 2014-09-23 Tue 14:21
+\documentclass[presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\tolerance=1000
+\usepackage{mathptmx}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usetheme{default}
+\author{Eric S Fraga}
+\date{2010-10-02 Sat}
+\title{Writing Beamer presentations in org-mode}
+\begin{document}
+
+\maketitle
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+
+\section{Introduction}
+\label{sec-1}
+\subsection{A simple slide}
+\label{sec-1-1}
+This slide consists of some text with a number of bullet points:
+
+\begin{itemize}
+\item the first, very @important@, point!
+\item the previous point shows the use of the special markup which
+translates to the Beamer specific \emph{alert} command for highlighting
+text.
+\end{itemize}
+
+
+The above list could be numbered or any other type of list and may
+include sub-lists.
+
+\subsection{A more complex slide}
+\label{sec-1-2}
+This slide illustrates the use of Beamer blocks.  The following text,
+with its own headline, is displayed in a block:
+\begin{frame}[label=sec-1-2-1]{Org mode increases productivity}
+\begin{itemize}
+\item org mode means not having to remember \LaTeX{} commands.
+\item it is based on ascii text which is inherently portable.
+\item Emacs!
+\end{itemize}
+
+\hfill \(\qed\)
+\end{frame}
+% Emacs 24.3.1 (Org mode 8.3beta)
+\end{document}
