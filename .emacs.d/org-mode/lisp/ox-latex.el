@@ -1982,7 +1982,8 @@ INFO is a plist holding contextual information.  See
 			     #'number-to-string
 			     (org-export-get-headline-number destination info)
 			     "-")))))
-	     (if (and (plist-get info :section-numbers) (not desc))
+	     (if (and (not desc)
+		      (org-export-numbered-headline-p destination info))
 		 (format "\\ref{%s}" label)
 	       (format "\\hyperref[%s]{%s}" label
 		       (or desc
@@ -2300,7 +2301,11 @@ contextual information."
        ((eq listings 'minted)
 	(let* ((caption-str (org-latex--caption/label-string src-block info))
 	       (float-env
-		(cond ((and (not float) (plist-member attributes :float)) "%s")
+		(cond ((and (not float) (plist-member attributes :float) caption)
+		       (format "%%s\n%s" (replace-regexp-in-string
+					  "\\\\caption" "\\captionof{listing}"
+					  caption-str t t)))
+		      ((and (not float) (plist-member attributes :float)) "%s")
 		      ((string= "multicolumn" float)
 		       (format "\\begin{listing*}\n%%s\n%s\\end{listing*}"
 			       caption-str))
