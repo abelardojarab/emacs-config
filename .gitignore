@@ -31,7 +31,7 @@ tramp-autosave/*
 srecode-map.el*
 .org-id-locations
 .travis.yml
-wget-log
+wget*-log*
 ergoemacs-themes.elc
 ergoemacs-theme-engine.elc
 .emacs.elc
