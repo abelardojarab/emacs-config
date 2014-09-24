@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/function-args
-;; Version: 0.5.0
+;; Version: 0.4
 
 ;; This file is not part of GNU Emacs
 
@@ -93,7 +93,7 @@
   :group 'function-args-faces)
 
 (defface fa-face-semi
-    '((t (:foreground "#2a00ff" :background "#fff3bc" :bold t)))
+    '((t (:foreground "#2a00ff" :background "#fff3bc")))
   "Face for displaying separators."
   :group 'function-args-faces)
 
@@ -120,27 +120,20 @@
   (if function-args-mode
       (semantic-mode 1)))
 
-(defun fa-idx-cycle-down ()
-  "Cycle `fa-idx' down and redisplay function arguments."
-  (interactive)
-  (setq fa-idx
-        (mod (+ fa-idx 1)
-             (length fa-lst)))
-  (fa-update-arg))
-
-(defun fa-idx-cycle-up ()
-  "Cycle `fa-idx' up and redisplay function arguments."
-  (interactive)
-  (setq fa-idx
-        (mod (+ fa-idx -1)
-             (length fa-lst)))
-  (fa-update-arg))
+(defmacro fa-idx-cycle (arg)
+  "Cycle `fa-idx' by ARG and redisplay function arguments."
+  `(lambda ()
+     (interactive)
+     (setq fa-idx
+           (mod (+ fa-idx ,arg)
+                (length fa-lst)))
+     (fa-update-arg)))
 
 (let ((map function-args-mode-map))
   (define-key map (kbd "M-o") 'moo-complete)
   (define-key map (kbd "M-i") 'fa-show)
-  (define-key map (kbd "M-n") 'fa-idx-cycle-down)
-  (define-key map (kbd "M-h") 'fa-idx-cycle-up)
+  (define-key map (kbd "M-n") (fa-idx-cycle 1))
+  (define-key map (kbd "M-h") (fa-idx-cycle -1))
   (define-key map (kbd "M-u") 'fa-abort)
   (define-key map (kbd "M-j") 'fa-jump-maybe))
 
@@ -183,31 +176,6 @@ Otherwise, call `c-indent-new-comment-line' that's usually bound to \"M-j\"."
 
 (defvar fa-superclasses (make-hash-table :test 'equal)
   "Stores superclasses tags.")
-
-(defcustom fa-delay 2
-  "Number of seconds to delay before calling `fa-show'.")
-
-(defvar fa-timer nil
-  "Timer for calling `fa-show' after idling for `fa-delay' seconds.")
-
-(defvar fa-last-pos 1
-  "Last position of call to `fa-show'.")
-
-(defun fa-show-wrapper ()
-  "Wrap around `fa-show'."
-  (when (memq major-mode '(c-mode c++-mode))
-    (unless (= (point) fa-last-pos)
-      (ignore-errors (fa-show)
-                     (setq fa-last-pos (point))))))
-
-(defun fa-auto ()
-  "Toggle automatic calls to `fa-show'."
-  (interactive)
-  (if fa-timer
-      (progn
-        (cancel-timer fa-timer)
-        (setq fa-timer))
-    (setq fa-timer (run-with-idle-timer fa-delay t #'fa-show-wrapper))))
 
 ;; ——— Interactive functions ———————————————————————————————————————————————————
 (defun fa-show ()
@@ -524,7 +492,7 @@ WSPACE is the padding."
          (glue (if (> (+ wspace str-width)
                       (min fa-max-one-line-width (frame-width)))
                    ;; each arg on its own line
-                   (concat fa-comma "\n" (make-string (1+ wspace) ?\ ))
+                   (concat fa-comma "\n" (make-string wspace ?\ ))
                  fa-comma))
          (args (mapcar #'fa-fancy-argument
                        (cdr lst)))
@@ -567,7 +535,6 @@ Select bold faces when BOLD is t."
               type-p
               arguments-p
               constant-flag-p
-              methodconst-flag-p
               typemodifiers-p
               constructor-flag-p
               pointer-p
@@ -580,7 +547,6 @@ Select bold faces when BOLD is t."
               (:type (setq type-p (pop r)))
               (:arguments (setq arguments-p (pop r)))
               (:constant-flag (setq constant-flag-p (pop r)))
-              (:methodconst-flag (setq methodconst-flag-p (pop r)))
               (:typemodifiers (setq typemodifiers-p (pop r)))
               (:constructor-flag (setq constructor-flag-p (pop r)))
               (:pointer (setq pointer-p (pop r)))
@@ -619,16 +585,14 @@ Select bold faces when BOLD is t."
                (if constructor-flag-p
                    ""
                  (if type-p
-                     (propertize (fa-type->str type-p) 'face 'font-lock-type-face)
+                     (fa-type->str type-p)
                    "?"))
                " " (propertize name 'face 'font-lock-function-name-face)
                "("
                (mapconcat (lambda (x) (concat (car x) " " (cdr x)))
                           argument-conses
                           ", ")
-               ")"
-               (if methodconst-flag-p (propertize " const" 'face 'font-lock-keyword-face) "")
-               ";"))))
+               ");"))))
       (error "Not a function"))))
 
 (defun fa-throw-unless-eq (x v)
@@ -658,8 +622,8 @@ TYPE and NAME are strings."
           :arguments)
          (pop r))
         (t (error "Unknown token %s" item))))
-    (cons (concat (and constant-flag-p (propertize "const " 'face 'font-lock-keyword-face))
-                  (propertize (fa-type->str type-p) 'face 'font-lock-type-face))
+    (cons (concat (and constant-flag-p "const ")
+                  (fa-type->str type-p))
           (concat (and reference-p "&")
                   (and pointer-p "*")
                   ;; pretty up std:: identifiers
@@ -672,16 +636,21 @@ TYPE and NAME are strings."
   "Return string representation of type TAG."
   (if (stringp tag)
       tag
-    (let ((name (semantic-tag-name tag))
-          (template (semantic-tag-get-attribute tag :template-specifier)))
-      (if template
-          (let ((inside (mapconcat #'fa-type->str template ",")))
-            (format
-             (if (string-match ">" inside)
-                 "%s<%s >"
-               "%s<%s>")
-             name inside))
-        name))))
+    (let ((name (pop tag))
+          (tag-class (pop tag)))
+      (if (not (eq tag-class 'type))
+          (error "Not a type")
+        (let ((rst (pop tag))
+              item
+              template-specifier-p)
+          (while rst
+            (setq item (pop rst))
+            (case item
+              (:template-specifier
+               (setq template-specifier-p (pop rst)))
+              (t (pop rst))))
+          (concat name (fa-ttemplate-specifier->str
+                        template-specifier-p)))))))
 
 (defun fa-ttemplate-specifier->str (tag)
   (and tag
@@ -742,7 +711,6 @@ NAME is the TAG name."
   (point))
 
 (defun fa-start-tracking ()
-  "Call `fa-after-change' after each change to buffer."
   (setq fa-beg-pos (save-excursion (re-search-backward "(" nil t) (point)))
   (setq fa-end-pos (save-excursion (re-search-forward ")" nil t) (- (point) 1)))
   (add-hook 'after-change-functions 'fa-after-change))
@@ -798,8 +766,7 @@ NAME is the TAG name."
       ;; work around for when auto-complete-mode is active
       (unless (and ;; (bound-and-true-p auto-complete-mode)
                ac-prefix-overlay
-               ;; (>= (- end beg) 1)
-               )
+               (>= (- end beg) 1))
         (fa-abort))
     (cond ((eq len 0)                   ; insertion
            (cl-incf fa-end-pos (- end beg)))
@@ -854,8 +821,11 @@ The default FORMATTER is `moo-tag->cons'."
     (t
      (let* ((completion-ignore-case (string= prefix (downcase prefix)))
             (tc (try-completion (or prefix "") candidates)))
-       (if (eq tc t)
-           (moo-action-insert tc prefix)
+       (if (and (stringp tc) (not (string= tc (or prefix ""))))
+           (progn
+             (moo-action-insert tc prefix)
+             (unless (moo-filter-tag-by-name tc candidates)
+               (moo-handle-completion tc candidates formatter)))
          (moo-select-candidate
           (mapcar (or formatter 'moo-tag->cons)
                   candidates)
@@ -973,7 +943,6 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                         (backward-char 2)
                         (fa-backward-char-skip<>)
                         (moo-ctxt-type))
-                    ;; TODO: maybe just call `moo-ctxt-type' here
                     (moo-tag-at-point var-name
                                       (when var-used-as-classvar-p
                                         'moo-variablep))))
@@ -983,9 +952,6 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                       (var-used-as-classvar-p
                        ;; semantic may think it's a function
                        (let ((tag-type (moo-complete-type-member var-tag)))
-                         (when (eq tag-type t)
-                           (setq var-tag (moo-ctxt-type))
-                           (setq tag-type (semantic-tag-get-attribute var-tag :type)))
                          (if (moo-ttype->tmembers tag-type)
                              tag-type
                            ;; this works sometimes
@@ -1087,15 +1053,7 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                            ;; variable init inside constructor
                            ((and (moo-variablep ctxt-type)
                                  (looking-back ":[^;]*"))
-                            (or (filter #'moo-constructorp
-                                        (apply #'append
-                                               (delq nil
-                                                     (mapcar
-                                                      #'moo-ttype->tmembers
-                                                      (moo-desperately-find-sname
-                                                       (car (semantic-tag-type ctxt-type)))))))
-                                (moo-tget-constructors
-                                 (moo-sname->tag (car function)))))
+                            (moo-tget-constructors (moo-sname->tag (car function))))
                            ;; parent class init inside constructor
                            ;; or constructor as part of expression
                            ((moo-typep ctxt-type)
@@ -1224,9 +1182,7 @@ This includes the constructors of types with name STR."
                       (moo-prototype-flag-p ctxt)
                       (let ((arg1 (caar (semantic-tag-get-attribute ctxt :arguments))))
                         (and arg1 (stringp arg1) (string= arg1 ""))))
-                 (or (ignore-errors
-                       (moo-tag-at-point (car (semantic-tag-get-attribute ctxt :type))))
-                     (semantic-tag-get-attribute ctxt :type)))
+                 (moo-tag-at-point (car (semantic-tag-get-attribute ctxt :type))))
                 (t
                  ctxt)))))))
 
@@ -1393,49 +1349,40 @@ Returns TAG if it's not a typedef."
     (modify-syntax-entry ?} "){" table)
     table))
 
-(defun moo-c++-match-constructor-impl ()
-  (save-excursion
-    (let ((pt (point)))
-      (when (re-search-backward "template\\s-+<\\([^>]*\\)>[\n\t ]*\\([A-Za-z_0-9]+\\)\\(<[^>]*>\\)?::\\2" nil t)
-        (unless (string-match "{" (buffer-substring-no-properties (point) pt))
-          (cons (match-string-no-properties 2)
-                (match-string-no-properties 1)))))))
-
 (defun moo-c++-class-name-and-template ()
   "Return currrent class name and template as a cons."
-  (or (moo-c++-match-constructor-impl)
-      (ignore-errors
-        (save-excursion
-          (let (name template defun-start)
-            ;; step out of the current block
-            (with-syntax-table moo-c++-braces-table
-              (up-list)
-              (backward-list))
-            ;; TODO take care of nested classes
-            (if (looking-back
-                 "\\(?:class\\|struct\\) \\([A-Za-z][A-Z_a-z0-9]*\\)[: \t\n]+[^{;]*?")
-                (progn
-                  (goto-char (match-beginning 0))
-                  (setq name (match-string-no-properties 1))
-                  ;; try to match the template as well
-                  (when (looking-back ">[\n \t]*")
-                    (let ((end (progn (goto-char (match-beginning 0)) (point)))
-                          (beg (ignore-errors (forward-char) (backward-list) (point))))
-                      (when end
-                        (setq template (buffer-substring-no-properties (1+ beg) end))))))
-              ;; we're not in class, but in a function
-              (beginning-of-defun)
-              (setq defun-start (point))
-              (when (looking-at "template +<")
-                (goto-char (1- (match-end 0)))
-                (setq template (substring (moo-list-at-point) 1 -1))
-                (forward-list))
-              (re-search-forward " \\([A-Za-z][A-Z_a-z0-9]*\\)\\(\\(?:<[^>]*>\\)?\\)::")
+  (ignore-errors
+    (save-excursion
+      (let (name template defun-start)
+        ;; step out of the current block
+        (with-syntax-table moo-c++-braces-table
+          (up-list)
+          (backward-list))
+        ;; TODO take care of nested classes
+        (if (looking-back
+             "\\(?:class\\|struct\\) \\([A-Za-z][A-Z_a-z0-9]*\\)[: \t\n]+[^{;]*?")
+            (progn
+              (goto-char (match-beginning 0))
               (setq name (match-string-no-properties 1))
-              ;; check if there's a mess up
-              (when (re-search-backward "{" defun-start t)
-                (setq name)))
-            (cons name template))))))
+              ;; try to match the template as well
+              (when (looking-back ">[\n \t]*")
+                (let ((end (progn (goto-char (match-beginning 0)) (point)))
+                      (beg (ignore-errors (forward-char) (backward-list) (point))))
+                  (when end
+                    (setq template (buffer-substring-no-properties (1+ beg) end))))))
+          ;; we're not in class, but in a function
+          (beginning-of-defun)
+          (setq defun-start (point))
+          (when (looking-at "template +<")
+            (goto-char (1- (match-end 0)))
+            (setq template (substring (moo-list-at-point) 1 -1))
+            (forward-list))
+          (re-search-forward " \\([A-Za-z][A-Z_a-z0-9]*\\)\\(\\(?:<[^>]*>\\)?\\)::")
+          (setq name (match-string-no-properties 1))
+          ;; check if there's a mess up
+          (when (re-search-backward "{" defun-start t)
+            (setq name)))
+        (cons name template)))))
 
 (defun moo-list-at-point ()
   "Return any list at point.
