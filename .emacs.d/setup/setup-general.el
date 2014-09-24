@@ -81,11 +81,6 @@
  ;; Windows
  ((equal system-type 'windows-nt)
 
-  ;; Better shell
-  (defadvice shell (after my-shell-advice)
-    (set-buffer-process-coding-system 'cp1251 'cp1251))
-  (ad-activate 'shell)
-
   ;; Custom $PATH
   (when (file-directory-p "c:/cygwin/bin")
     (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
