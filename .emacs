@@ -167,4 +167,5 @@
 (require 'setup-ecb)
 
 ;; Setup server
-(require 'setup-server)
+(unless (string-equal system-type "windows-nt")
+  (require 'setup-server))
