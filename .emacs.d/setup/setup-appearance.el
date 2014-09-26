@@ -325,5 +325,88 @@
 ;; Scrollbar
 (set-scroll-bar-mode 'right)
 
+;; Smart scrollbar
+(defvar regexp-always-scroll-bar '("\\.yes" "\\*Scroll-Bar\\*")
+  "Regexp matching buffer names that will always have scroll bars.")
+
+(defvar regexp-never-scroll-bar '("\\.off" "\\.not")
+  "Regexp matching buffer names that will never have scroll bars.")
+
+(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+
+(modify-all-frames-parameters (list (cons 'vertical-scroll-bars nil)))
+
+(defun lawlist-scroll-bar ()
+  (when (window-live-p (get-buffer-window (current-buffer)))
+    (redisplay t)
+    (cond
+     ;; not regexp matches | not narrow-to-region
+     ((and
+       (not (regexp-match-p regexp-always-scroll-bar (buffer-name)))
+       (not (regexp-match-p regexp-never-scroll-bar (buffer-name)))
+       (equal (- (point-max) (point-min)) (buffer-size)))
+      (cond
+       ;; Lines of text are less-than or equal-to window height,
+       ;; and scroll bars are present (which need to be removed).
+       ((and
+         (<= (- (point-max) (point-min)) (- (window-end) (window-start)))
+         (equal (window-scroll-bars) `(15 2 right nil)))
+        (set-window-scroll-bars (selected-window) 0 'right nil))
+       ;; Lines of text are greater-than window height, and
+       ;; scroll bars are not present and need to be added.
+       ((and
+         (> (- (point-max) (point-min)) (- (window-end) (window-start)))
+         (not (equal (window-scroll-bars) `(15 2 right nil))))
+        (set-window-scroll-bars (selected-window) 15 'right nil))))
+     ;; Narrow-to-region is active, and scroll bars are present
+     ;; (which need to be removed).
+     ((and
+       (not (equal (- (point-max) (point-min)) (buffer-size)))
+       (equal (window-scroll-bars) `(15 2 right nil)))
+      (set-window-scroll-bars (selected-window) 0 'right nil))
+     ;; not narrow-to-region | regexp always scroll-bars
+     ((and
+       (equal (- (point-max) (point-min)) (buffer-size))
+       (regexp-match-p regexp-always-scroll-bar (buffer-name)))
+      (set-window-scroll-bars (selected-window) 15 'right nil))
+     ;; not narrow-to-region | regexp never scroll-bars
+     ((and
+       (equal (- (point-max) (point-min)) (buffer-size))
+       (regexp-match-p regexp-never-scroll-bar (buffer-name)))
+      (set-window-scroll-bars (selected-window) 0 'right nil)))))
+
+(define-minor-mode lawlist-scroll-bar-mode
+  "This is a custom scroll bar mode."
+  :lighter " sc"
+  (if lawlist-scroll-bar-mode
+      (progn
+        (add-hook 'post-command-hook 'lawlist-scroll-bar nil t)
+        ;; (add-hook 'change-major-mode-hook 'lawlist-scroll-bar nil t)
+        ;; (add-hook 'window-configuration-change-hook 'lawlist-scroll-bar nil t)
+        )
+    (remove-hook 'post-command-hook 'lawlist-scroll-bar t)
+    (remove-hook 'change-major-mode-hook 'lawlist-scroll-bar t)
+    (remove-hook 'window-configuration-change-hook 'lawlist-scroll-bar t)))
+
+(define-globalized-minor-mode global-lawlist-scroll-bar-mode
+  lawlist-scroll-bar-mode lawlist-scroll-bar-on)
+
+(defun lawlist-scroll-bar-on ()
+  (unless (minibufferp)
+    (lawlist-scroll-bar-mode 1)))
+
+(global-lawlist-scroll-bar-mode)
+
+;; https://github.com/kentaro/auto-save-buffers-enhanced
+;; `regexp-match-p` function modified by @sds on stackoverflow
+;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
+(defun regexp-match-p (regexps string)
+  (and string
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
+
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
