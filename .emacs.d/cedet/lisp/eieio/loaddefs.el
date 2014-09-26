@@ -67,7 +67,7 @@ Also extracts information about all methods specific to this generic.
 ;;;***
 
 ;;;### (autoloads nil nil ("chart.el" "eieio-base.el" "eieio-datadebug.el"
-;;;;;;  "eieio-speedbar.el" "eieio.el") (21536 15618 637295 0))
+;;;;;;  "eieio-speedbar.el" "eieio.el") (21541 34201 128941 0))
 
 ;;;***
 
