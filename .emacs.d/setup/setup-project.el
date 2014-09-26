@@ -78,14 +78,13 @@
 (require 'projectile)
 (setq projectile-cache-file "~/.emacs.cache/projectile.cache")
 (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld")
-(setq projectile-indexing-method 'git)
 (setq projectile-enable-caching t)
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
 (setq projectile-remember-window-configs t)
+(unless (string-equal system-type "windows-nt")
+    (setq projectile-indexing-method 'git)
+  ) ;; unless
 (projectile-global-mode t)
-
-;; Automatically invoke magit-status
-(setq projectile-switch-project-action 'projectile-dired)
 
 (provide 'setup-project)
 ;;; setup-project.el ends here
