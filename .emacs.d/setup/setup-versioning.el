@@ -24,7 +24,6 @@
 
 ;;; Code:
 
-
 ;; Designsync versioning control
 (require 'vc-sync)
 (defun dired-sync-symlink-filter ()
@@ -110,8 +109,9 @@
   "Xx.XX.xX"
   "Xx.XX.xX")
 
-(defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
-  (ad-set-arg 0 (file-truename (ad-get-arg 0))))
+(unless (string-equal system-type "windows-nt")
+  (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
+    (ad-set-arg 0 (file-truename (ad-get-arg 0)))))
 
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here
