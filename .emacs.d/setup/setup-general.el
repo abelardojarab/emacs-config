@@ -441,5 +441,8 @@
 (require 'benchmark-init)
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
 
+;; Better help
+(require 'help-fns+)
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
