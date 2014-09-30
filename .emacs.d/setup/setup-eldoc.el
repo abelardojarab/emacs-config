@@ -50,5 +50,10 @@
  'paredit-close-round)
 (set-face-attribute 'eldoc-highlight-function-argument nil :underline "red")
 
+;; Eldoc support in minibuffer
+(add-to-list 'load-path "~/.emacs.d/eldoc-eval")
+(require 'eldoc-eval)
+(eldoc-in-minibuffer-mode 1)
+
 (provide 'setup-eldoc)
 ;;; setup-eldoc.el ends here

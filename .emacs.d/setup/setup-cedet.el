@@ -247,9 +247,9 @@
 (semanticdb-enable-gnu-global-databases 'js2-mode)
 
 ;; Function arguments
-(add-to-list 'load-path "~/.emacs.d/functions-args")
-(require 'function-args)
-(fa-config-default)
+;; (add-to-list 'load-path "~/.emacs.d/functions-args")
+;; (require 'function-args)
+;; (fa-config-default)
 
 ;; Formatting
 (require 'zjl-hl)

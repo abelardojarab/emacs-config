@@ -313,5 +313,15 @@
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
 
+;; Faster buffer switching
+(add-to-list 'load-path "~/.emacs.d/popup-switcher")
+(require 'popup-switcher)
+(global-set-key [f4] 'psw-switch-buffer)
+
+;; Enable function switching too
+(require 'eassist)
+(eval-after-load "eassist"
+  '(global-set-key (kbd "<C-f4>") 'psw-switch-function))
+
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
