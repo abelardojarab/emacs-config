@@ -345,7 +345,6 @@ I.e use the -path/ipath arguments of find instead of -name/iname."
     (when helm-ff-lynx-style-map
       (define-key map (kbd "<left>")      'helm-find-files-up-one-level)
       (define-key map (kbd "<right>")     'helm-execute-persistent-action)
-      (define-key map (kbd "C-o")         nil)
       (define-key map (kbd "<M-left>")    'helm-previous-source)
       (define-key map (kbd "<M-right>")   'helm-next-source))
     (delq nil map))
@@ -2084,6 +2083,7 @@ Use it for non--interactive calls of `helm-find-files'."
                       "Complete at point `C-c i'" 'helm-insert-file-name-completion-at-point
                       "Insert as org link `C-c @'" 'helm-files-insert-as-org-link
                       "Find shell command `C-c /'" 'helm-ff-find-sh-command
+                      "Add marked files to file-cache" 'helm-ff-cache-add-file
                       "Open file externally `C-c C-x, C-u to choose'" 'helm-open-file-externally
                       "Grep File(s) `C-s, C-u Recurse'" 'helm-find-files-grep
                       "Zgrep File(s) `M-g z, C-u Recurse'" 'helm-ff-zgrep
@@ -2203,7 +2203,8 @@ Find inside `require' and `declare-function' sexp."
   "Execute ACTION on FILES to CANDIDATE.
 Where ACTION is a symbol that can be one of:
 'copy, 'rename, 'symlink,'relsymlink, 'hardlink.
-Argument FOLLOW when non--nil specify to follow FILES to destination."
+Argument FOLLOW when non--nil specify to follow FILES to destination for the actions
+copy and rename."
   (when (get-buffer dired-log-buffer) (kill-buffer dired-log-buffer))
   (let ((fn     (cl-case action
                   (copy       'dired-copy-file)
@@ -2240,7 +2241,9 @@ Argument FOLLOW when non--nil specify to follow FILES to destination."
              (file-name-directory candidate)))
           helm-ff-history)
     ;; If follow is non--nil we should not be in async mode.
-    (when (and follow (not (get-buffer dired-log-buffer)))
+    (when (and follow
+               (not (memq action '(symlink relsymlink hardlink)))
+               (not (get-buffer dired-log-buffer)))
       (let ((target (directory-file-name candidate)))
         (unwind-protect
              (progn
@@ -2462,28 +2465,36 @@ Else return ACTIONS unmodified."
 ;;; File Cache
 ;;
 ;;
-(defvar helm-file-cache-initialized-p nil)
-(defvar helm-file-cache-files nil)
+(defvar file-cache-alist)
+
+(defclass helm-file-cache (helm-source-in-buffer helm-type-file)
+  ((init :initform (lambda () (require 'filecache)))
+   (keymap :initform helm-generic-files-map)
+   (help-message :initform helm-generic-file-help-message)
+   (mode-line :initform helm-generic-file-mode-line-string)))
 
 (defvar helm-source-file-cache
-  `((name . "File Cache")
-    (init
-     . (lambda ()
-         (require 'filecache nil t)
-         (unless helm-file-cache-initialized-p
-           (setq helm-file-cache-files
-                 (cl-loop for item in file-cache-alist append
-                       (cl-destructuring-bind (base &rest dirs) item
-                         (cl-loop for dir in dirs collect
-                               (concat dir base)))))
-           (defadvice file-cache-add-file (after file-cache-list activate)
-             (add-to-list 'helm-file-cache-files (expand-file-name file)))
-           (setq helm-file-cache-initialized-p t))))
-    (keymap . ,helm-generic-files-map)
-    (help-message . helm-generic-file-help-message)
-    (mode-line . helm-generic-file-mode-line-string)
-    (candidates . helm-file-cache-files)
-    (type . file)))
+  (helm-make-source
+   "File Cache" 'helm-file-cache
+   :data (lambda ()
+           (cl-loop for (bn dir) in file-cache-alist
+                    collect (expand-file-name bn dir)))))
+
+(cl-defun helm-file-cache-add-directory-recursively
+    (dir &optional match (ignore-dirs t))
+  (require 'filecache)
+  (cl-loop for f in (helm-walk-directory
+                     dir
+                     :path 'full
+                     :directories nil
+                     :match match
+                     :skip-subdirs ignore-dirs) 
+           do (file-cache-add-file f)))
+
+(defun helm-ff-cache-add-file (_candidate)
+  (require 'filecache)
+  (let ((mkd (helm-marked-candidates)))
+    (mapc 'file-cache-add-file mkd)))
 
 
 ;;; File name history

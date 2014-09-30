@@ -250,14 +250,14 @@
     :documentation
       "  A transformer function that treat candidates one by one.
   It is called with one arg the candidate.
-  It is faster than `filtered-candidate-transformer' or `candidates-transformer',
-  but should be used only in sources that recompute constantly their candidates,
-  e.g `helm-source-find-files'.
+  It is faster than `filtered-candidate-transformer' or
+  `candidates-transformer', but should be used only in sources
+  that recompute constantly their candidates, e.g `helm-source-find-files'.
   Filtering happen early and candidates are treated
   one by one instead of re-looping on the whole list.
   If used with `filtered-candidate-transformer' or `candidates-transformer'
-  these functions should treat the candidates transformed by the `filter-one-by-one'
-  function in consequence.")
+  these functions should treat the candidates transformed by the
+  `filter-one-by-one' function in consequence.")
 
    (display-to-real
     :initarg :display-to-real
@@ -405,7 +405,6 @@
     :custom function
     :documentation
       "  It's a function called with one argument: the selected candidate.
-
   This function is intended for type convertion. In normal case,
   the selected candidate (string) is passed to action
   function. If coerce function is specified, it is called just
@@ -458,8 +457,8 @@
     :custom integer
     :documentation
     "  `helm-follow-mode' will execute persistent-action after this delay.
-Otherwise value of `helm-follow-input-idle-delay' is used if non--nil,
-If none of these are found fallback to `helm-input-idle-delay'.")
+  Otherwise value of `helm-follow-input-idle-delay' is used if non--nil,
+  If none of these are found fallback to `helm-input-idle-delay'.")
 
    (dont-plug
     :initarg :dont-plug
@@ -473,7 +472,8 @@ If none of these are found fallback to `helm-input-idle-delay'.")
     :initform nil
     :custom boolean
     :documentation
-    "If you are not Japonese, ignore this.")
+    "  Needed for Japanese input with helm-migemo.el.
+  If you are not Japanese, ignore this.")
 
    (matchplugin
     :initarg :matchplugin
@@ -486,7 +486,7 @@ If none of these are found fallback to `helm-input-idle-delay'.")
     :custom symbol
     :documentation
     "  A local hook that run at beginning of initilization of this source.
-i.e Before the creation of `helm-buffer'.")
+  i.e Before the creation of `helm-buffer'.")
 
    (after-init-hook
     :initarg :after-init-hook
@@ -494,7 +494,7 @@ i.e Before the creation of `helm-buffer'.")
     :custom symbol
     :documentation
     "  A local hook that run at end of initilization of this source.
-i.e After the creation of `helm-buffer'."))
+  i.e After the creation of `helm-buffer'."))
   
   "Main interface to define helm sources."
   :abstract t)
@@ -674,6 +674,7 @@ i.e After the creation of `helm-buffer'."))
            'helm-ff-etags-select
            "View file"                            'view-file
            "Insert file"                          'insert-file
+           "Add marked files to file-cache"       'helm-ff-cache-add-file
            "Delete file(s)"                       'helm-delete-marked-files
            "Open file externally (C-u to choose)" 'helm-open-file-externally
            "Open file with default tool"          'helm-open-file-with-default-tool
@@ -826,7 +827,8 @@ Arguments ARGS are keyword value pairs as defined in CLASS."
                         (lambda ()
                           (helm-init-candidates-in-buffer
                               'global
-                            ',it)))))))
+                            (if (functionp ,it) (funcall ,it)
+                                (if (stringp ,it) ,it ',it)))))))))
   (when (slot-value source :matchplugin)
     (oset source :search (helm-source-mp-get-search-or-match-fns source 'search)))
   (let ((mtc (slot-value source :match)))

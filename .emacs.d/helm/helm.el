@@ -1090,7 +1090,7 @@ associated to name."
 (cl-defun helm-add-action-to-source-if (name fn source predicate
                                         &optional (index 4) test-only)
   "Add new action NAME linked to function FN to SOURCE.
-Action is added only if current candidate match PREDICATE.
+Action NAME will be available when the current candidate matches PREDICATE.
 This function add an entry in the `action-transformer' attribute
 of SOURCE (or create one if not found).
 Function PREDICATE should take one arg candidate.
@@ -1125,7 +1125,9 @@ only when predicate helm-ff-candidates-lisp-p return non--nil:
     (if test-only                       ; debug
         (delq nil (append (list transformer) action-transformers))
       (helm-attrset 'action-transformer
-                    (delq nil (append (list transformer) action-transformers))
+                    (helm-fast-remove-dups
+                     (delq nil (append (list transformer) action-transformers))
+                     :test 'equal)
                     source))))
 
 (defun helm-set-source-filter (sources)
