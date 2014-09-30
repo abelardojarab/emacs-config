@@ -4,7 +4,7 @@
 ;; Author: Jeremy Rayman <opensource@jeremyrayman.com>
 ;; Maintainer: Jeremy Rayman <opensource@jeremyrayman.com>
 ;; Created: 2010-09-02
-;; Version: 1.3.11
+;; Version: 1.3.12
 ;; Keywords: faces, convenience, lisp, matching, tools, rainbow, rainbow parentheses, rainbow parens
 ;; EmacsWiki: http://www.emacswiki.org/emacs/RainbowDelimiters
 ;; Github: http://github.com/jlr/rainbow-delimiters
@@ -452,36 +452,40 @@ Returns t if char at loc meets one of the following conditions:
 (defun rainbow-delimiters-apply-color (delim depth loc match)
   "Apply color for DEPTH to DELIM at LOC following user settings.
 
-DELIM is a string specifying delimiter type.
+DELIM is a symbol of the variable specifying whether to highlight this delimiter
+type.
 DEPTH is the delimiter depth, or corresponding face # if colors are repeating.
 LOC is location of character (delimiter) to be colorized.
 MATCH is nil iff it's a mismatched closing delimiter."
   ;; Ensure user has enabled highlighting of this delimiter type.
-  (when (symbol-value (intern-soft
-                       (concat "rainbow-delimiters-highlight-" delim "s-p")))
+  (when (symbol-value delim)
     (rainbow-delimiters-propertize-delimiter loc
                                              depth
                                              match)))
 
 ;;; Font-Lock functionality
 
-(defconst rainbow-delimiters-delim-regex "\\(\(\\|\)\\|\\[\\|\\]\\|\{\\|\}\\)"
+(defconst rainbow-delimiters-delim-regex "[]()[{}]"
   "Regex matching all opening and closing delimiters the mode highlights.")
 
 (defconst rainbow-delimiters-opening-delim-info
-  '((?\( . "paren") (?\{ . "brace") (?\[ . "bracket"))
+  '((?\( . rainbow-delimiters-highlight-parens-p)
+    (?\{ . rainbow-delimiters-highlight-braces-p)
+    (?\[ . rainbow-delimiters-highlight-brackets-p))
   "Open delimiter information: list of (DELIMITER . TYPE).
 
 DELIMITER is the opening delimiter.
-TYPE is the delimiter type string for `rainbow-delimiters-apply-color'.")
+TYPE is the delimiter type for `rainbow-delimiters-apply-color'.")
 
 (defconst rainbow-delimiters-closing-delim-info
-  '((?\) ?\( . "paren") (?\} ?\{ . "brace") (?\] ?\[ . "bracket"))
+  '((?\) ?\( . rainbow-delimiters-highlight-parens-p)
+    (?\} ?\{ . rainbow-delimiters-highlight-braces-p)
+    (?\] ?\[ . rainbow-delimiters-highlight-brackets-p))
   "Closing delimiter information: list of (DELIMITER OPENING . TYPE).
 
 DELIMITER is the closing delimiter.
 OPENING is the corresponding opening delimiter.
-TYPE is the delimiter type string for `rainbow-delimiters-apply-color'.")
+TYPE is the delimiter type for `rainbow-delimiters-apply-color'.")
 
 ;; Main function called by font-lock.
 (defun rainbow-delimiters-propertize (end)
@@ -490,41 +494,42 @@ TYPE is the delimiter type string for `rainbow-delimiters-apply-color'.")
 Used by font-lock for dynamic highlighting."
   (setq rainbow-delimiters-escaped-char-predicate
         (cdr (assoc major-mode rainbow-delimiters-escaped-char-predicate-list)))
-  (with-syntax-table rainbow-delimiters-syntax-table
-    (let ((inhibit-point-motion-hooks t))
-      ;; Point can be anywhere in buffer; determine the nesting depth at point.
-      (let* ((last-ppss-pos (point))
-             (ppss (rainbow-delimiters-syntax-ppss last-ppss-pos))
-             (depth (rainbow-delimiters-depth ppss)))
-        (while (and (< (point) end)
-                    (re-search-forward rainbow-delimiters-delim-regex end t))
-          (let ((delim-pos (match-beginning 0)))
-            (setq ppss (save-excursion
-                         (parse-partial-sexp last-ppss-pos delim-pos nil nil ppss)))
-            (setq last-ppss-pos delim-pos)
-            (unless (rainbow-delimiters-char-ineligible-p delim-pos ppss)
-              (let* ((delim (char-after delim-pos))
-                     (opening-delim-info
-                      (assq delim rainbow-delimiters-opening-delim-info)))
-                (if opening-delim-info
-                    (progn
-                      (setq depth (1+ depth))
-                      (rainbow-delimiters-apply-color (cdr opening-delim-info)
+  (when rainbow-delimiters-syntax-table
+    (with-syntax-table rainbow-delimiters-syntax-table
+      (let ((inhibit-point-motion-hooks t))
+        ;; Point can be anywhere in buffer; determine the nesting depth at point.
+        (let* ((last-ppss-pos (point))
+               (ppss (rainbow-delimiters-syntax-ppss last-ppss-pos))
+               (depth (rainbow-delimiters-depth ppss)))
+          (while (and (< (point) end)
+                      (re-search-forward rainbow-delimiters-delim-regex end t))
+            (let ((delim-pos (match-beginning 0)))
+              (setq ppss (save-excursion
+                           (parse-partial-sexp last-ppss-pos delim-pos nil nil ppss)))
+              (setq last-ppss-pos delim-pos)
+              (unless (rainbow-delimiters-char-ineligible-p delim-pos ppss)
+                (let* ((delim (char-after delim-pos))
+                       (opening-delim-info
+                        (assq delim rainbow-delimiters-opening-delim-info)))
+                  (if opening-delim-info
+                      (progn
+                        (setq depth (1+ depth))
+                        (rainbow-delimiters-apply-color (cdr opening-delim-info)
+                                                        depth
+                                                        delim-pos
+                                                        t))
+                    ;; Not an opening delimiter, so it's a closing delimiter.
+                    (let ((closing-delim-info
+                           (assq delim rainbow-delimiters-closing-delim-info))
+                          (matching-opening-delim (char-after (nth 1 ppss))))
+                      (rainbow-delimiters-apply-color (nthcdr 2 closing-delim-info)
                                                       depth
                                                       delim-pos
-                                                      t))
-                  ;; Not an opening delimiter, so it's a closing delimiter.
-                  (let ((closing-delim-info
-                         (assq delim rainbow-delimiters-closing-delim-info))
-                        (matching-opening-delim (char-after (nth 1 ppss))))
-                    (rainbow-delimiters-apply-color (nthcdr 2 closing-delim-info)
-                                                    depth
-                                                    delim-pos
-                                                    (= (nth 1 closing-delim-info)
-                                                       matching-opening-delim))
-                    (setq depth (if (<= depth 0)
-                                    0   ; unmatched delim
-                                  (1- depth))))))))))))
+                                                      (= (nth 1 closing-delim-info)
+                                                         matching-opening-delim))
+                      (setq depth (if (<= depth 0)
+                                      0 ; unmatched delim
+                                    (1- depth)))))))))))))
   ;; We already fontified the delimiters, tell font-lock there's nothing more
   ;; to do.
   nil)

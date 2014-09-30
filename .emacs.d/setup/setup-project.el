@@ -35,6 +35,7 @@
 (global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
 ;; Async
+(require 'dired+)
 (add-to-list 'load-path "~/.emacs.d/async")
 (when (require 'dired-aux)
   (require 'dired-async))
