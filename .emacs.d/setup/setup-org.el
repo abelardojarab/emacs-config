@@ -739,5 +739,10 @@ a link to this file."
 (add-hook 'markdown-mode-hook 'iy-ac-tab-noconflict)
 (add-hook 'org-mode-hook 'iy-ac-tab-noconflict)
 
+;; Org Table of Contents
+(add-to-list 'load-path "~/.emacs.d/org-toc")
+(when (require 'org-toc nil t)
+  (add-hook 'org-mode-hook 'org-toc-enable))
+
 (provide 'setup-org)
 ;;; setup-org.el ends here
