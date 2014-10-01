@@ -317,7 +317,7 @@
 (add-to-list 'load-path "~/.emacs.d/popup-switcher")
 (require 'popup-switcher)
 (global-set-key [f4] 'psw-switch-buffer)
-(global-set-key (global-set-key [(control shift mouse-3)]) 'psw-switch-buffer)
+(global-set-key [(control shift mouse-3)] 'psw-switch-buffer)
 
 ;; Enable function switching too
 (require 'eassist)
