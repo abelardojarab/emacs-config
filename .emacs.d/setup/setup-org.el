@@ -609,19 +609,23 @@ a link to this file."
 (setq org-latex-default-class "pdflatex")
 
 ;; Let the exporter use the -shell-escape option to let latex execute external programs.
-;; (setq org-latex-pdf-process
-;;       '("xelatex -interaction nonstopmode %f"
-;;         "bibtex $(basename %b)"
-;;         "xelatex -interaction nonstopmode %f"
-;;         "xelatex -interaction nonstopmode %f"
-;;         )) ;; multipass
+(if (executable-find "xelatex") 
+
+(setq org-latex-pdf-process
+      '("xelatex -interaction nonstopmode %f"
+        "bibtex $(basename %b)"
+        "xelatex -interaction nonstopmode %f"
+        "xelatex -interaction nonstopmode %f"
+        )) ;; multipass
 
 (setq org-latex-pdf-process
       '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
         "bibtex $(basename %b)"
         "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
         "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-        )) ;; multipass
+        ))
+
+) ;; multipass
 
 ;; Tweak the PDF viewer
 (eval-after-load "org"
