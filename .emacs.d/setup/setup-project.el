@@ -34,6 +34,10 @@
 (global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
 (global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
+;; Helm themes
+(add-to-list 'load-path "~/.emacs.d/helm-themes")
+(require 'helm-themes)
+
 ;; Async
 (require 'dired+)
 (add-to-list 'load-path "~/.emacs.d/async")
@@ -86,6 +90,10 @@
     (setq projectile-indexing-method 'git)
   ) ;; unless
 (projectile-global-mode t)
+
+;; CMake autocomplete/flycheck
+(add-to-list 'load-path "~/.emacs.d/cpputils-cmake")
+(require 'cpputils-cmake)
 
 (provide 'setup-project)
 ;;; setup-project.el ends here

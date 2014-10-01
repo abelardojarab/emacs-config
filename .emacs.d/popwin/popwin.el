@@ -465,9 +465,9 @@ popup buffer.")
 (defun popwin:start-close-popup-window-timer ()
   (or popwin:close-popup-window-timer
       (setq popwin:close-popup-window-timer
-            (run-with-timer popwin:close-popup-window-timer-interval
-                            popwin:close-popup-window-timer-interval
-                            'popwin:close-popup-window-timer))))
+            (run-with-idle-timer popwin:close-popup-window-timer-interval
+                                 popwin:close-popup-window-timer-interval
+                                 'popwin:close-popup-window-timer))))
 
 (defun popwin:stop-close-popup-window-timer ()
   (when popwin:close-popup-window-timer
@@ -550,6 +550,30 @@ the popup window will be closed are followings:
                 (and other-window-selected
                      (not minibuf-window-p)
                      (not popwin:popup-window-stuck-p)))
+        (when popwin:debug
+          (message (concat "popwin: CLOSE:\n"
+                           "  quit-requested = %s\n"
+                           "  popup-buffer-alive = %s\n"
+                           "  popup-buffer-buried = %s\n"
+                           "  popup-buffer-changed-despite-of-dedicated = %s\n"
+                           "  popup-window-alive = %s\n"
+                           "  (selected-window) = %s\n"
+                           "  popwin:focus-window = %s\n"
+                           "  popwin:popup-window = %s\n"
+                           "  other-window-selected = %s\n"
+                           "  minibuf-window-p = %s\n"
+                           "  popwin:popup-window-stuck-p = %s")
+                   quit-requested
+                   popup-buffer-alive
+                   popup-buffer-buried
+                   popup-buffer-changed-despite-of-dedicated
+                   popup-window-alive
+                   window
+                   popwin:focus-window
+                   popwin:popup-window
+                   other-window-selected
+                   minibuf-window-p
+                   popwin:popup-window-stuck-p))
         (when (and quit-requested
                    (null orig-this-command))
           (setq this-command 'popwin:close-popup-window)
