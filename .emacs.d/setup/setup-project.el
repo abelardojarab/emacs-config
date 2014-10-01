@@ -91,9 +91,14 @@
   ) ;; unless
 (projectile-global-mode t)
 
-;; CMake autocomplete/flycheck
+;; cmake autocomplete/flycheck
 (add-to-list 'load-path "~/.emacs.d/cpputils-cmake")
 (require 'cpputils-cmake)
+
+;; cmake IDE
+(add-to-list 'load-path "~/.emacs.d/cmake-ide")
+(require 'cmake-ide)
+(cmake-ide-setup)
 
 (provide 'setup-project)
 ;;; setup-project.el ends here
