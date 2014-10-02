@@ -541,7 +541,7 @@ a link to this file."
  (add-to-list 'org-latex-packages-alist
 	     "\\setsansfont{Calibri}" t)
  (add-to-list 'org-latex-packages-alist
-	     "\\setmonofont{Consolas}" t)
+	     "\\setmonofont[Scale=0.8]{Consolas}" t)
  (add-to-list 'org-latex-packages-alist
 	     "\\usepackage[section]{placeins}" t)
  (add-to-list 'org-latex-packages-alist
