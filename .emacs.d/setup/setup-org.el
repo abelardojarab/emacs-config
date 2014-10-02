@@ -531,6 +531,22 @@ a link to this file."
 (add-to-list 'org-latex-packages-alist '("" "listings"))
 (add-to-list 'org-latex-packages-alist '("" "color"))
 (add-to-list 'org-latex-packages-alist '("" "mathptmx"))
+
+(when (executable-find "xelatex")
+ (add-to-list 'org-latex-packages-alist '("" "fontspec"))
+ (add-to-list 'org-latex-packages-alist
+	     "\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}" t)
+ (add-to-list 'org-latex-packages-alist
+	     "\\setromanfont{Cambria}" t)
+ (add-to-list 'org-latex-packages-alist
+	     "\\setsansfont{Calibri}" t)
+ (add-to-list 'org-latex-packages-alist
+	     "\\setmonofont{Consolas}" t)
+ (add-to-list 'org-latex-packages-alist
+	     "\\usepackage[section]{placeins}" t)
+ (add-to-list 'org-latex-packages-alist
+	     "\\defaultfontfeatures{Ligatures=TeX}" t))
+
 (add-to-list 'org-latex-classes
              '("article"
                "\\documentclass[10pt,article,oneside]{memoir}"
@@ -557,11 +573,9 @@ a link to this file."
 \\usepackage{fontspec,lipsum}
 \\usepackage{graphicx}
 \\defaultfontfeatures{Mapping=tex-text}
-\\setromanfont{Gentium}
-\\setromanfont [BoldFont={Gentium Basic Bold},
-                ItalicFont={Gentium Basic Italic}]{Gentium Basic}
-\\setsansfont{Charis SIL}
-\\setmonofont[Scale=0.8]{DejaVu Sans Mono}
+\\setromanfont{Calibri}
+\\setsansfont{Cambria}
+\\setmonofont[Scale=0.8]{Consolas}
 \\defaultfontfeatures{Ligatures=TeX}
 \\usepackage{geometry}
 \\usepackage{listings}
