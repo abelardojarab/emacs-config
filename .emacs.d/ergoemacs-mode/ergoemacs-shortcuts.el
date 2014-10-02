@@ -320,6 +320,10 @@ Used to help with translation keymaps like `input-decode-map'"
 (declare-function ergoemacs-translate "ergoemacs-translate.el")
 (declare-function ergoemacs-local-map "ergoemacs-translate.el")
 (declare-function ergoemacs-real-key-binding "ergoemacs-advices.el" (key &optional accept-default no-remap position) t)
+
+(defvar ergoemacs-read-key nil
+  "Current key for `ergoemacs-read-key'")
+
 (defun ergoemacs-read-event (type &optional pretty-key extra-txt universal)
   "Reads a single event of TYPE.
 
@@ -417,6 +421,9 @@ universal argument can be entered.
           (setq ret (ergoemacs-read-event-change ret key-translation-map))))
       (cond
        ((and ret (not universal)
+             (not (ergoemacs-real-key-binding
+                   (or (and ergoemacs-read-key (vconcat ergoemacs-read-key (vector ret)))
+                       (vector ret))))
              (and local-keymap
                   (memq (lookup-key local-keymap (vector ret))
                         ergoemacs-universal-fns)))
@@ -457,6 +464,9 @@ universal argument can be entered.
                         (ergoemacs-translate (vector ret))
                         key-tag))
                       ergoemacs-universal-fns)
+                (not (ergoemacs-real-key-binding
+                      (or (and ergoemacs-read-key (vconcat ergoemacs-read-key (vector ret)))
+                          (vector ret))))
                 (and local-keymap
                      (memq (lookup-key local-keymap (vector ret))
                            ergoemacs-universal-fns))))
@@ -628,8 +638,6 @@ It will replace anything defined by `ergoemacs-translation'"
 (declare-function guide-key/close-guide-buffer "guide-key.el")
 (declare-function guide-key/popup-guide-buffer-p "guide-key.el")
 (defvar ergoemacs-read-key-last-help nil)
-(defvar ergoemacs-read-key nil
-  "Current key for `ergoemacs-read-key'")
 (defun ergoemacs-read-key-help ()
   "Show help for the current sequence KEY."
   (interactive)
@@ -1669,10 +1677,10 @@ Basically, this gets the keys called and passes the arguments to`ergoemacs-read-
 (declare-function ergoemacs-mode-line "ergoemacs-mode.el")
 (defun ergoemacs-install-repeat-keymap (keymap &optional mode-line)
   "Installs repeat KEYMAP."
-  (set (make-local-variable 'ergoemacs-repeat-keymap) keymap)
-  (set (make-local-variable 'ergoemacs-repeat-emulation-mode-map-alist)
+  (setq ergoemacs-repeat-keymap keymap)
+  (setq ergoemacs-repeat-emulation-mode-map-alist
         (list (cons 'ergoemacs-repeat-keys ergoemacs-repeat-keymap)))
-  (set (make-local-variable 'ergoemacs-repeat-keys) t)
+  (setq ergoemacs-repeat-keys t)
   (when mode-line
     (ergoemacs-mode-line mode-line)))
 (defvar ergoemacs-ignore-advice)
@@ -1754,12 +1762,44 @@ shift-translated key.
                    ':shift-translated-key))
   (ergoemacs-read-key-call (let (ergoemacs-read-input-keys) (ergoemacs-real-key-binding (this-single-command-keys)))))
 
-(defcustom ergoemacs-cache-movement-commands t
-  "Cache movement command lookups on the repeatable keymap."
+(defcustom ergoemacs-cache-movement-commands nil
+  "Cache movement command lookups on the repeatable keymap.
+This is currently unstable."
   :group 'ergoemacs-mode
   :type 'boolean)
 
 (defvar ergoemacs-cache-movement-commands-command-keys nil)
+
+(defun ergoemacs-delete-repeat-cache (&rest _ignore)
+  "Removes repeatable keys and cached movement keys"
+  (setq ergoemacs-repeat-keys nil
+        ergoemacs-repeat-movement-commands nil)
+  (ergoemacs-mode-line))
+
+(defun ergoemacs-delete-cached-movement (&rest _ignore)
+  "Deletes cached movement commands."
+  (when ergoemacs-cache-movement-commands-command-keys
+    (setq ergoemacs-cache-movement-commands-command-keys nil)
+    (ergoemacs-delete-repeat-cache)))
+
+(dolist (hook '(after-change-major-mode-hook
+                after-change-functions
+                after-insert-file-functions
+                after-make-frame-functions
+                after-save-hook
+                buffer-list-update-hook
+                buffer-quit-hook
+                minibuffer-exit-hook
+                minibuffer-setup-hook
+                mouse-leave-buffer-hook
+                delete-frame-functions
+                find-file-hook
+                kill-buffer-hook
+                post-self-insert-hook
+                suspend-hook
+                window-setup-hook))
+  (when (boundp hook)
+    (add-hook hook 'ergoemacs-delete-cached-movement)))
 
 (defun ergoemacs-shortcut-movement-no-shift-select ()
   "Shortcut for other key/function in movement keys without shift-selection support.
