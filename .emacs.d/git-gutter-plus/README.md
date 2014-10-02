@@ -7,7 +7,7 @@ View, stage and revert Git changes straight from the buffer.
 plugin for Sublime Text. It contains patches that haven't yet been added
 to [Git-Gutter](https://github.com/syohex/emacs-git-gutter).)
 
-![git-gutter](images/git-gutter-main.png)
+![git-gutter](images/stage-and-commit-animation.gif)
 
 [Changelog](#changelog-1)
 -----------
@@ -52,7 +52,9 @@ Get Started
              ;; If region is active, stage all hunk lines within the region.
              (define-key git-gutter+-mode-map (kbd "C-x t") 'git-gutter+-stage-hunks)
              (define-key git-gutter+-mode-map (kbd "C-x c") 'git-gutter+-commit)
-             (define-key git-gutter+-mode-map (kbd "C-x C") 'git-gutter+-stage-and-commit)))
+             (define-key git-gutter+-mode-map (kbd "C-x C") 'git-gutter+-stage-and-commit)
+             (define-key git-gutter+-mode-map (kbd "C-x C-y") 'git-gutter+-stage-and-commit-whole-buffer)
+             (define-key git-gutter+-mode-map (kbd "C-x U") 'git-gutter+-unstage-whole-buffer)))
 
 
 [git-gutter-fringe+.el](https://github.com/nonsequitur/git-gutter-fringe-plus)
@@ -127,6 +129,15 @@ If nothing is staged, ask to stage the current buffer.
 
 Calls `git-gutter+-stage-hunks` followed by `git-gutter+-commit`.
 
+#### `git-gutter+-stage-and-commit-whole-buffer`
+
+Stages and commits the whole buffer.
+
+#### `git-gutter+-unstage-whole-buffer`
+
+Unstages all changes in the current buffer.
+Use this to undo any effects caused by git-gutter+-stage-hunks.
+
 Committing
 ----------
 
@@ -150,6 +161,17 @@ are provided:
 
 Changelog
 ---------
+### 0.2
+  * 2 enhancements:
+    * New interactive functions `git-gutter+-stage-and-commit-whole-buffer` and
+      `git-gutter+-unstage-whole-buffer`
+    * Refresh gutter when a buffer is staged or unstaged in Magit
+  * 4 bug fixes:
+    * `M-n` is now guaranteed to insert the message of the previous commit
+    * Fixed compatibility with current versions of `git-commit-mode`
+    * `git-gutter+-diff-args` is now properly handled as a list of strings
+    * Fixed extraneous window splits that occured when displaying staged changes
+      before committing
 
 ### 0.1
   * New commit interface based on git-commit-mode.

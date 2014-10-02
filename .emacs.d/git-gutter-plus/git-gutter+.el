@@ -4,7 +4,7 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com> and contributors
 ;; URL: https://github.com/nonsequitur/git-gutter-plus
-;; Version: 0.1
+;; Version: 0.2
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,9 +27,7 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'cl))
-
+(require 'cl)
 (require 'tramp)
 (require 'log-edit)
 (require 'git-commit-mode)
@@ -602,14 +600,16 @@ calculated width looks wrong. (This can happen with some special characters.)"
 (defun git-gutter+-stage-hunks ()
   "Stage hunk at point. If region is active, stage all hunk lines within the region."
   (interactive)
-  (let* ((line-range (if (use-region-p)
-                         (cons (line-number-at-pos (region-beginning))
-                               (line-number-at-pos (region-end)))))
-         (diffinfos (git-gutter+-selected-diffinfos line-range)))
+  (git-gutter+-stage-hunks-between-lines (when (use-region-p)
+                                          (cons (line-number-at-pos (region-beginning))
+                                                (line-number-at-pos (region-end))))))
+
+(defun git-gutter+-stage-hunks-between-lines (line-range)
+  (let ((diffinfos (git-gutter+-selected-diffinfos line-range)))
     (when diffinfos
       (let ((error-msg (git-gutter+-stage-diffinfos diffinfos line-range)))
-        (if error-msg
-            (message "Error staging hunks:\n%s" error-msg))
+        (when error-msg
+          (message "Error staging hunks:\n%s" error-msg))
         (git-gutter+-refresh)))))
 
 (defun git-gutter+-selected-diffinfos (&optional line-range)
@@ -777,6 +777,11 @@ If TYPE is not `modified', also remove all deletion (-) lines."
   (git-gutter+-stage-hunks)
   (git-gutter+-commit))
 
+(defun git-gutter+-stage-and-commit-whole-buffer ()
+  (interactive)
+  (git-gutter+-stage-whole-buffer)
+  (git-gutter+-commit))
+
 (defun git-gutter+-save-window-config-if-needed ()
   ;; Only save the window config if the temporary buffers that get popped-up by
   ;; git-gutter+ are not already visible.
@@ -794,15 +799,12 @@ If TYPE is not `modified', also remove all deletion (-) lines."
   (git-gutter+-commit-mode)
   (message "Type C-c C-c to commit (C-c C-k to cancel)."))
 
-(defsubst git-gutter+-pop-to-staged-changes-buffer ()
-  (let* ((buf    (get-buffer-create git-gutter+-staged-changes-buffer-name))
-         (window (get-buffer-window buf)))
-    (if window
-        ;; Buffer is already visible
-        (select-window window)
-      (if (<= (length (window-list)) 2)
-          (split-window))
-      (pop-to-buffer buf))))
+(defun git-gutter+-pop-to-staged-changes-buffer ()
+  ;; Shift the bias towards vertical splitting.
+  ;; If possible, the staged changes should be shown below the
+  ;; commit message buffer.
+  (let ((split-height-threshold 50))
+    (pop-to-buffer git-gutter+-staged-changes-buffer-name)))
 
 (defun git-gutter+-show-staged-changes (file dir)
   (save-selected-window
@@ -880,9 +882,13 @@ If TYPE is not `modified', also remove all deletion (-) lines."
         (ignore-errors (vc-find-file-hook))))))
 
 (defun git-gutter+-stage-whole-buffer ()
-  (save-excursion
-    (mark-whole-buffer)
-    (git-gutter+-stage-hunks)))
+  (git-gutter+-stage-hunks-between-lines (cons (line-number-at-pos (point-min))
+                                              (line-number-at-pos (point-max)))))
+
+(defun git-gutter+-unstage-whole-buffer ()
+  (interactive)
+  (git-gutter+-call-git '("reset" "--quiet" "HEAD"))
+  (git-gutter+-refresh))
 
 (defun git-gutter+-anything-staged-p ()
   "Return t if the current repo has staged changes"
@@ -1024,8 +1030,35 @@ set remove it."
 ;; Like git-commit-mode, but adds keybindings to git-gutter+ commands and
 ;; highlighting support for the commit message header.
 
-(define-derived-mode git-gutter+-commit-mode git-commit-mode "Git-Gutter-Commit"
-  (setq font-lock-defaults (list (git-gutter+-commit-font-lock-keywords) t)))
+(define-derived-mode git-gutter+-commit-mode text-mode "Git-Gutter-Commit"
+  ;; The following is copied from `git-commit-mode'.
+  ;; Directly deriving from `git-commit-mode' would pull in unwanted setup code
+  ;; that's incompatible with `git-gutter+-commit-mode'.
+  (setq font-lock-defaults (list (git-commit-mode-font-lock-keywords) t))
+  (set (make-local-variable 'font-lock-multiline) t)
+  (git-commit-font-lock-diff)
+  (setq fill-column git-commit-fill-column)
+  ;; Recognize changelog-style paragraphs
+  (set (make-local-variable 'paragraph-start)
+       (concat paragraph-start "\\|*\\|("))
+  ;; Setup comments
+  (set (make-local-variable 'comment-start) "#")
+  (set (make-local-variable 'comment-start-skip)
+       (concat "^" (regexp-quote comment-start) "+"
+               "\\s-*"))
+  (set (make-local-variable 'comment-use-syntax) nil)
+  ;; Do not remember point location in commit messages
+  (when (fboundp 'toggle-save-place)
+    (setq save-place nil))
+  ;; If the commit summary is empty, insert a newline after point
+  (when (string= "" (buffer-substring-no-properties
+                     (line-beginning-position)
+                     (line-end-position)))
+    (open-line 1))
+  (set (make-local-variable 'log-edit-comment-ring-index) -1)
+  (run-mode-hooks 'git-commit-mode-hook))
+
+(put 'git-gutter+-commit-mode 'derived-mode-parent 'git-commit-mode)
 
 (setq git-gutter+-commit-mode-map
   (let ((map (copy-keymap git-commit-mode-map)))
@@ -1067,8 +1100,9 @@ set remove it."
 
 
 ;;; Magit synchronization
-;; Force Magit to refresh git-gutter+ when updating the VC mode line.
 
+;; 1. Force Magit to refresh git-gutter+ when updating the VC mode line.
+;;    This is not needed in newer Magit versions that use `auto-revert-mode'.
 (defvar git-gutter+-orig-vc-find-file-hook)
 
 (defvar git-gutter+-vc-find-file-hook-with-refresh
@@ -1087,6 +1121,49 @@ set remove it."
   (unwind-protect
       ad-do-it
     (fset 'vc-find-file-hook git-gutter+-orig-vc-find-file-hook)))
+
+;; 2. Refresh git-gutter+ when a buffer is staged or unstaged
+(defvar git-gutter+-last-magit-head nil)
+(defvar git-gutter+-previously-staged-files nil)
+(defvar git-gutter+-staged-files nil)
+
+(eval-after-load 'magit
+  '(add-hook 'magit-refresh-status-hook 'git-gutter+-on-magit-refresh-status))
+
+(defun git-gutter+-on-magit-refresh-status ()
+  (let ((head (git-gutter+-get-magit-head)))
+    (when head
+      (setq git-gutter+-previously-staged-files git-gutter+-staged-files)
+      (setq git-gutter+-staged-files (git-gutter+-get-magit-staged-files))
+
+      (if (string= head git-gutter+-last-magit-head)
+          (git-gutter+-magit-refresh)
+        (setq git-gutter+-previously-staged-files git-gutter+-staged-files)
+        (setq git-gutter+-last-magit-head head)))))
+
+(defun git-gutter+-get-magit-head ()
+  (save-excursion
+    (goto-char (point-min))
+    (when (re-search-forward "Head:\\s-+\\([0-9a-z]+\\)" nil t)
+      (match-string-no-properties 1))))
+
+(defun git-gutter+-get-magit-staged-files ()
+  (save-excursion
+    (goto-char (point-min))
+    (when (re-search-forward "^Staged changes:$" nil t)
+      (let (staged-files)
+        (while (re-search-forward "^\\s-*Modified\\s-+\\(.+\\)$" nil t)
+          (push (match-string-no-properties 1) staged-files))
+        staged-files))))
+
+(defun git-gutter+-magit-refresh ()
+  (dolist (file-to-refresh (cl-set-exclusive-or git-gutter+-previously-staged-files
+                                                git-gutter+-staged-files
+                                                :test 'equal))
+    (let ((buffer (get-file-buffer file-to-refresh)))
+      (when buffer
+        (with-current-buffer buffer
+          (git-gutter+-refresh))))))
 
 (provide 'git-gutter+)
 
