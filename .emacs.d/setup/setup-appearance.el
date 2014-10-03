@@ -70,7 +70,16 @@
 
 ;; Syntax coloring
 (require 'font-lock+)
-(global-font-lock-mode 1)
+(global-font-lock-mode t)
+(setq font-lock-maximum-decoration t
+      font-lock-maximum-size nil)
+(setq font-lock-support-mode 'jit-lock-mode ;; lazy-lock-mode
+      fast-lock-cache-directories '("~/.emacs-flc"))
+(setq font-lock-support-mode 'jit-lock-mode)
+       (setq jit-lock-stealth-time 16
+	     jit-lock-defer-contextually t
+	     jit-lock-stealth-nice 0.5)
+       (setq-default font-lock-multiline t)
 
 ;; Reduce line spacing
 (defun toggle-line-spacing ()

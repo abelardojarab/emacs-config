@@ -206,13 +206,13 @@
     (org-capture-get-template)
     (org-capture-put :original-buffer orig-buf
                      :original-file (or (buffer-file-name orig-buf)
-                                        (and (featurep 'dired)
-                                             (car (rassq orig-buf
-                                                         dired-buffers))))
+                                       (and (featurep 'dired)
+                                          (car (rassq orig-buf
+                                                      dired-buffers))))
                      :original-file-nondirectory
                      (and (buffer-file-name orig-buf)
-                          (file-name-nondirectory
-                           (buffer-file-name orig-buf)))
+                        (file-name-nondirectory
+                         (buffer-file-name orig-buf)))
                      :annotation annotation
                      :initial initial
                      :return-to-wconf (current-window-configuration)
@@ -436,7 +436,7 @@ a link to this file."
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                "/clippaste /convert=" filename))
+                                                                                      "/clippaste /convert=" filename))
 
       (if (equal system-type 'darwin)
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
@@ -532,20 +532,38 @@ a link to this file."
 (add-to-list 'org-latex-packages-alist '("" "color"))
 (add-to-list 'org-latex-packages-alist '("" "mathptmx"))
 
+;; Extra packages when better support available
 (when (executable-find "xelatex")
- (add-to-list 'org-latex-packages-alist '("" "fontspec"))
- (add-to-list 'org-latex-packages-alist
-	     "\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}" t)
- (add-to-list 'org-latex-packages-alist
-	     "\\setromanfont{Cambria}" t)
- (add-to-list 'org-latex-packages-alist
-	     "\\setsansfont{Calibri}" t)
- (add-to-list 'org-latex-packages-alist
-	     "\\setmonofont[Scale=0.8]{Consolas}" t)
- (add-to-list 'org-latex-packages-alist
-	     "\\usepackage[section]{placeins}" t)
- (add-to-list 'org-latex-packages-alist
-	     "\\defaultfontfeatures{Ligatures=TeX}" t))
+  (setq org-latex-listings 'minted)
+  (setq org-latex-minted-options
+        '(("frame" "lines") ("linenos=true") ("framesep" "6pt")
+          ("mathescape" "true") ("fontsize" "\\footnotesize")))
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage{minted}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage{parskip}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage{tikz}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage{fontspec}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\setromanfont{Cambria}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\setsansfont{Calibri}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\setmonofont[Scale=0.8]{Consolas}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage{csquotes}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage[section]{placeins}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage[mla]{ellipsis}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\defaultfontfeatures{Ligatures=TeX}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage[backend=bibtex,sorting=none]{biblatex}" t))
 
 (add-to-list 'org-latex-classes
              '("article"
@@ -560,35 +578,6 @@ a link to this file."
              '("book"
                "\\documentclass[10pt]{memoir}"
                ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-(add-to-list 'org-latex-classes
-             '("xelatex"
-               "\\documentclass[11pt,a4paper]{article}
-\\usepackage[T1]{fontenc}
-\\usepackage{fontspec,lipsum}
-\\usepackage{graphicx}
-\\defaultfontfeatures{Mapping=tex-text}
-\\setromanfont{Calibri}
-\\setsansfont{Cambria}
-\\setmonofont[Scale=0.8]{Consolas}
-\\defaultfontfeatures{Ligatures=TeX}
-\\usepackage{geometry}
-\\usepackage{listings}
-\\usepackage{hyperref}
-\\usepackage{caption}
-\\usepackage{color}
-\\usepackage{tikz}
-\\geometry{a4paper, textwidth=6.5in, textheight=10in,
-            marginparsep=7pt, marginparwidth=.6in}
-\\pagestyle{empty}
-\\title{}
-      [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]"
                ("\\section{%s}" . "\\section*{%s}")
                ("\\subsection{%s}" . "\\subsection*{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
@@ -623,23 +612,18 @@ a link to this file."
 (setq org-latex-default-class "pdflatex")
 
 ;; Let the exporter use the -shell-escape option to let latex execute external programs.
-(if (executable-find "xelatex") 
-
-(setq org-latex-pdf-process
-      '("xelatex -interaction nonstopmode %f"
-        "bibtex $(basename %b)"
-        "xelatex -interaction nonstopmode %f"
-        "xelatex -interaction nonstopmode %f"
-        )) ;; multipass
-
-(setq org-latex-pdf-process
-      '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-        "bibtex $(basename %b)"
-        "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-        "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-        ))
-
-) ;; multipass
+(if (executable-find "xelatex")
+    (setq org-latex-pdf-process
+          '("xelatex -interaction nonstopmode %f"
+            "bibtex $(basename %b)"
+            "xelatex -interaction nonstopmode %f"
+            "xelatex -interaction nonstopmode %f")) ;; multipass
+  (setq org-latex-pdf-process
+        '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+          "bibtex $(basename %b)"
+          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"))
+  ) ;; multipass
 
 ;; Tweak the PDF viewer
 (eval-after-load "org"
@@ -670,6 +654,10 @@ a link to this file."
    (js . t)
    (C . t)
    (haskell . t)))
+
+;; add emacs lisp support for minted
+(setq org-latex-custom-lang-environments
+      '((emacs-lisp "common-lispcode")))
 
 ;; Make org do not open other frames
 (setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
