@@ -71,15 +71,15 @@
 ;; Syntax coloring
 (require 'font-lock+)
 (global-font-lock-mode t)
-(setq font-lock-maximum-decoration t
-      font-lock-maximum-size nil)
+(setq font-lock-maximum-decoration t)
+(setq font-lock-maximum-size (* 1024 1024))
 (setq font-lock-support-mode 'jit-lock-mode ;; lazy-lock-mode
       fast-lock-cache-directories '("~/.emacs-flc"))
 (setq font-lock-support-mode 'jit-lock-mode)
-       (setq jit-lock-stealth-time 16
-	     jit-lock-defer-contextually t
-	     jit-lock-stealth-nice 0.5)
-       (setq-default font-lock-multiline t)
+(setq jit-lock-stealth-time 16
+      jit-lock-defer-contextually t
+      jit-lock-stealth-nice 0.5)
+(setq-default font-lock-multiline t)
 
 ;; Reduce line spacing
 (defun toggle-line-spacing ()
@@ -209,9 +209,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
@@ -411,11 +411,11 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-       (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
-           (dolist (regexp regexps)
-             (when (string-match regexp string)
-               (throw 'matched t)))))))
+     (catch 'matched
+       (let ((inhibit-changing-match-data t)) ; small optimization
+         (dolist (regexp regexps)
+           (when (string-match regexp string)
+             (throw 'matched t)))))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
