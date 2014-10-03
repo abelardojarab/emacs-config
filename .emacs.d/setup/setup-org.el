@@ -542,6 +542,10 @@ a link to this file."
     (add-to-list 'org-latex-packages-alist
                  "\\usepackage{minted}" t)) ;; when
   (add-to-list 'org-latex-packages-alist
+               "\\usepackage[]{xkeyval,polyglossia}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage[]{titlesec}" t)
+  (add-to-list 'org-latex-packages-alist
                "\\usepackage{xltxtra}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage{paralist}" t)
@@ -604,6 +608,8 @@ a link to this file."
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
 
+\\usepackage[]{xkeyval,polyglossia}
+\\usepackage[]{titlesec}
 \\usepackage{xltxtra}
 \\usepackage{parskip}
 \\usepackage{tikz}
