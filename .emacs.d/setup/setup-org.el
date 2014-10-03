@@ -608,12 +608,6 @@ a link to this file."
 \\usepackage{tikz}
 \\usepackage{paralist}
 \\usepackage[]{blindtext}
-\\usepackage{fontspec}
-\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
-\\setsansfont[ItalicFont={Cambria Italic},BoldFont={Cambria Bold},BoldItalicFont={Cambria Bold Italic}]{Cambria}
-\\setromanfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
-\\setmainfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
-\\setmonofont[Scale=0.8,ItalicFont={Consolas Italic},BoldFont={Consolas Bold},BoldItalicFont={Consolas Bold Italic}]{Consolas}
 \\usepackage{csquotes}
 \\usepackage[mla]{ellipsis}
 \\defaultfontfeatures{Ligatures=TeX}
