@@ -551,9 +551,7 @@ a link to this file."
                "\\usepackage{paralist}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage[]{blindtext}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage{parskip}" t)
-  (add-to-list 'org-latex-packages-alist
+ (add-to-list 'org-latex-packages-alist
                "\\usepackage{tikz}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage{fontspec}" t)
@@ -611,7 +609,6 @@ a link to this file."
 \\usepackage[]{xkeyval,polyglossia}
 \\usepackage[]{titlesec}
 \\usepackage{xltxtra}
-\\usepackage{parskip}
 \\usepackage{tikz}
 \\usepackage{paralist}
 \\usepackage[]{blindtext}
@@ -625,11 +622,8 @@ a link to this file."
 \\defaultfontfeatures{Ligatures=TeX}
 \\usepackage[backend=bibtex,sorting=none]{biblatex}
 
-\\setlength{\parindent}{0pt}
-\\setlength{\parskip}{1em}
 \\usepackage{unicode-math}
 \\setmathfont{Cambria Math}
-\\begin{document}
 
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
