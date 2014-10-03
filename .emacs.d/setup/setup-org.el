@@ -562,8 +562,6 @@ a link to this file."
   (add-to-list 'org-latex-packages-alist
                "\\setmonofont[Scale=0.8,ItalicFont={Consolas Italic},BoldFont={Consolas Bold},BoldItalicFont={Consolas Bold Italic}]{Consolas}" t)
   (add-to-list 'org-latex-packages-alist
-               "\\setmathfont{Cambria Math}" t)
-  (add-to-list 'org-latex-packages-alist
                "\\usepackage{csquotes}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage[section]{placeins}" t)
