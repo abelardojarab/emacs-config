@@ -544,8 +544,6 @@ a link to this file."
   (add-to-list 'org-latex-packages-alist
                "\\usepackage[]{xkeyval}" t)
   (add-to-list 'org-latex-packages-alist
-               "\\usepackage[]{titlesec}" t)
-  (add-to-list 'org-latex-packages-alist
                "\\usepackage{xltxtra}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage{paralist}" t)
@@ -609,7 +607,6 @@ a link to this file."
 \\usepackage[section]{placeins}
 
 \\usepackage[]{xkeyval}
-\\usepackage[]{titlesec}
 \\usepackage{xltxtra}
 \\usepackage{tikz}
 \\usepackage{paralist}
