@@ -542,7 +542,7 @@ a link to this file."
     (add-to-list 'org-latex-packages-alist
                  "\\usepackage{minted}" t)) ;; when
   (add-to-list 'org-latex-packages-alist
-               "\\usepackage[]{xkeyval,polyglossia}" t)
+               "\\usepackage[]{xkeyval}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage[]{titlesec}" t)
   (add-to-list 'org-latex-packages-alist
@@ -557,6 +557,8 @@ a link to this file."
                "\\usepackage{fontspec}" t)
   (add-to-list 'org-latex-packages-alist
                "\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\setmainfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}" t)
   (add-to-list 'org-latex-packages-alist
                "\\setromanfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}" t)
   (add-to-list 'org-latex-packages-alist
@@ -606,7 +608,7 @@ a link to this file."
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
 
-\\usepackage[]{xkeyval,polyglossia}
+\\usepackage[]{xkeyval}
 \\usepackage[]{titlesec}
 \\usepackage{xltxtra}
 \\usepackage{tikz}
@@ -615,6 +617,7 @@ a link to this file."
 \\usepackage{fontspec}
 \\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
 \\setsansfont[ItalicFont={Cambria Italic},BoldFont={Cambria Bold},BoldItalicFont={Cambria Bold Italic}]{Cambria}
+\\setromanfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
 \\setmainfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
 \\setmonofont[Scale=0.8,ItalicFont={Consolas Italic},BoldFont={Consolas Bold},BoldItalicFont={Consolas Bold Italic}]{Consolas}
 \\usepackage{csquotes}
