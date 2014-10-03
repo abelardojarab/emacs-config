@@ -542,6 +542,12 @@ a link to this file."
     (add-to-list 'org-latex-packages-alist
                  "\\usepackage{minted}" t)) ;; when
   (add-to-list 'org-latex-packages-alist
+               "\\usepackage{xltxtra}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage{paralist}" t)
+  (add-to-list 'org-latex-packages-alist
+               "\\usepackage[]{blindtext}" t)
+  (add-to-list 'org-latex-packages-alist
                "\\usepackage{parskip}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage{tikz}" t)
@@ -550,11 +556,11 @@ a link to this file."
   (add-to-list 'org-latex-packages-alist
                "\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}" t)
   (add-to-list 'org-latex-packages-alist
-               "\\setromanfont{Cambria}" t)
+               "\\setromanfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}" t)
   (add-to-list 'org-latex-packages-alist
-               "\\setsansfont{Calibri}" t)
+               "\\setsansfont[ItalicFont={Cambria Italic},BoldFont={Cambria Bold},BoldItalicFont={Cambria Bold Italic}]{Cambria}" t)
   (add-to-list 'org-latex-packages-alist
-               "\\setmonofont[Scale=0.8]{Consolas}" t)
+               "\\setmonofont[Scale=0.8,ItalicFont={Consolas Italic},BoldFont={Consolas Bold},BoldItalicFont={Consolas Bold Italic}]{Consolas}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage{csquotes}" t)
   (add-to-list 'org-latex-packages-alist
@@ -598,17 +604,26 @@ a link to this file."
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
 
+\\usepackage{xltxtra}
 \\usepackage{parskip}
 \\usepackage{tikz}
+\\usepackage{paralist}
+\\usepackage[]{blindtext}
 \\usepackage{fontspec}
 \\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
-\\setromanfont{Cambria}
-\\setsansfont{Calibri}
-\\setmonofont[Scale=0.8]{Consolas}
+\\setsansfont[ItalicFont={Cambria Italic},BoldFont={Cambria Bold},BoldItalicFont={Cambria Bold Italic}]{Cambria}
+\\setmainfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
+\\setmonofont[Scale=0.8,ItalicFont={Consolas Italic},BoldFont={Consolas Bold},BoldItalicFont={Consolas Bold Italic}]{Consolas}
 \\usepackage{csquotes}
 \\usepackage[mla]{ellipsis}
 \\defaultfontfeatures{Ligatures=TeX}
 \\usepackage[backend=bibtex,sorting=none]{biblatex}
+
+\\setlength{\parindent}{0pt}
+\\setlength{\parskip}{1em}
+\\usepackage{unicode-math}
+\\setmathfont{Cambria Math}
+\\begin{document}
 
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
