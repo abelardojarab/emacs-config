@@ -180,14 +180,14 @@
 (defun org-capture-noninteractively ()
   (let* ((orig-buf (current-buffer))
          (annotation (if (and (boundp 'org-capture-link-is-already-stored)
-                              org-capture-link-is-already-stored)
+                            org-capture-link-is-already-stored)
                          (plist-get org-store-link-plist :annotation)
                        (ignore-errors (org-store-link nil))))
          (entry org-capture-entry)
          initial)
     (setq initial (or org-capture-initial
-                      (and (org-region-active-p)
-                           (buffer-substring (point) (mark)))))
+                     (and (org-region-active-p)
+                        (buffer-substring (point) (mark)))))
     (when (stringp initial)
       (remove-text-properties 0 (length initial) '(read-only t) initial))
     (when (stringp annotation)
@@ -436,7 +436,7 @@ a link to this file."
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                      "/clippaste /convert=" filename))
+                                                                                "/clippaste /convert=" filename))
 
       (if (equal system-type 'darwin)
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
@@ -534,12 +534,13 @@ a link to this file."
 
 ;; Extra packages when better support available
 (when (executable-find "xelatex")
-  (setq org-latex-listings 'minted)
-  (setq org-latex-minted-options
-        '(("frame" "lines") ("linenos=true") ("framesep" "6pt")
-          ("mathescape" "true") ("fontsize" "\\footnotesize")))
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage{minted}" t)
+  (when (executable-find "pygmentize")
+    (setq org-latex-listings 'minted)
+    (setq org-latex-minted-options
+          '(("frame" "lines") ("linenos=true") ("framesep" "6pt")
+            ("mathescape" "true") ("fontsize" "\\footnotesize")))
+    (add-to-list 'org-latex-packages-alist
+                 "\\usepackage{minted}" t)) ;; when
   (add-to-list 'org-latex-packages-alist
                "\\usepackage{parskip}" t)
   (add-to-list 'org-latex-packages-alist
@@ -597,7 +598,6 @@ a link to this file."
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
 
-\\usepackage{minted}
 \\usepackage{parskip}
 \\usepackage{tikz}
 \\usepackage{fontspec}
@@ -651,7 +651,7 @@ a link to this file."
 ;; Set default document stylesheet
 (if (executable-find "xelatex")
     (setq org-latex-default-class "xelatex")
-    (setq org-latex-default-class "pdflatex"))
+  (setq org-latex-default-class "pdflatex"))
 
 ;; Let the exporter use the -shell-escape option to let latex execute external programs.
 (if (executable-find "xelatex")
