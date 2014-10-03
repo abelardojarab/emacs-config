@@ -606,13 +606,8 @@ a link to this file."
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
 
-\\usepackage[]{xkeyval}
 \\usepackage{tikz}
-\\usepackage{paralist}
-\\usepackage[]{blindtext}
 \\usepackage{csquotes}
-\\usepackage[mla]{ellipsis}
-\\usepackage{unicode-math}
 \\usepackage[backend=bibtex,sorting=none]{biblatex}
 
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
