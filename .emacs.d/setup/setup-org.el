@@ -656,10 +656,10 @@ a link to this file."
 ;; Let the exporter use the -shell-escape option to let latex execute external programs.
 (if (executable-find "xelatex")
     (setq org-latex-pdf-process
-          '("xelatex -interaction nonstopmode %f"
+          '("xelatex -interaction nonstopmode -shell-escape -output-directory %o %f"
             "bibtex $(basename %b)"
-            "xelatex -interaction nonstopmode %f"
-            "xelatex -interaction nonstopmode %f")) ;; multipass
+            "xelatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+            "xelatex -interaction nonstopmode -shell-escape -output-directory %o %f")) ;; multipass
   (setq org-latex-pdf-process
         '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
           "bibtex $(basename %b)"
