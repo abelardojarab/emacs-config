@@ -546,6 +546,8 @@ a link to this file."
   (add-to-list 'org-latex-packages-alist
                "\\usepackage{paralist}" t)
   (add-to-list 'org-latex-packages-alist
+               "\\usepackage{unicode-math}" t)
+  (add-to-list 'org-latex-packages-alist
                "\\usepackage[]{blindtext}" t)
  (add-to-list 'org-latex-packages-alist
                "\\usepackage{tikz}" t)
@@ -610,11 +612,8 @@ a link to this file."
 \\usepackage[]{blindtext}
 \\usepackage{csquotes}
 \\usepackage[mla]{ellipsis}
-\\defaultfontfeatures{Ligatures=TeX}
-\\usepackage[backend=bibtex,sorting=none]{biblatex}
-
 \\usepackage{unicode-math}
-\\setmathfont{Cambria Math}
+\\usepackage[backend=bibtex,sorting=none]{biblatex}
 
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
