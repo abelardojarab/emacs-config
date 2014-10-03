@@ -585,6 +585,45 @@ a link to this file."
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
 (add-to-list 'org-latex-classes
+             '("xelatex"
+               "\\documentclass[11pt,a4paper]{article}
+\\usepackage[T1]{fontenc}
+\\usepackage{graphicx}
+\\usepackage{geometry}
+\\usepackage{listings}
+\\usepackage{hyperref}
+\\usepackage{caption}
+\\usepackage{color}
+\\usepackage{mathptmx}
+\\usepackage[section]{placeins}
+
+\\usepackage{minted}
+\\usepackage{parskip}
+\\usepackage{tikz}
+\\usepackage{fontspec}
+\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
+\\setromanfont{Cambria}
+\\setsansfont{Calibri}
+\\setmonofont[Scale=0.8]{Consolas}
+\\usepackage{csquotes}
+\\usepackage[mla]{ellipsis}
+\\defaultfontfeatures{Ligatures=TeX}
+\\usepackage[backend=bibtex,sorting=none]{biblatex}
+
+\\geometry{a4paper, textwidth=6.5in, textheight=10in,
+            marginparsep=7pt, marginparwidth=.6in}
+\\renewcommand{\\rmdefault}{ptm}
+\\pagestyle{empty}
+\\title{}
+      [NO-DEFAULT-PACKAGES]
+      [NO-PACKAGES]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+(add-to-list 'org-latex-classes
              '("pdflatex"
                "\\documentclass[11pt,a4paper]{article}
 \\usepackage[T1]{fontenc}
@@ -609,7 +648,10 @@ a link to this file."
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-(setq org-latex-default-class "pdflatex")
+;; Set default document stylesheet
+(if (executable-find "xelatex")
+    (setq org-latex-default-class "xelatex")
+    (setq org-latex-default-class "pdflatex"))
 
 ;; Let the exporter use the -shell-escape option to let latex execute external programs.
 (if (executable-find "xelatex")
