@@ -74,7 +74,7 @@
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size (* 1024 1024))
 (setq font-lock-support-mode 'jit-lock-mode ;; lazy-lock-mode
-      fast-lock-cache-directories '("~/.emacs-flc"))
+      fast-lock-cache-directories '("~/.emacs.cache"))
 (setq font-lock-support-mode 'jit-lock-mode)
 (setq jit-lock-stealth-time 16
       jit-lock-defer-contextually t
