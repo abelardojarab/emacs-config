@@ -133,6 +133,9 @@
 ;; Setup Lisp mode
 (require 'setup-lisp)
 
+;; Setup VHDL/Verilog mode
+(require 'setup-vhdl)
+
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
