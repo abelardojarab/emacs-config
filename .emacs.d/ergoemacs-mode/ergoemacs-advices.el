@@ -400,7 +400,8 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
 (defvar ergoemacs-global-not-changed-cache)
 (defun ergoemacs-global-set-key-after (key)
   (if ergoemacs-ignore-advice nil
-    (ignore-errors (let ((kd (key-description key)))
+    (let ((kd (key-description key)))
+(ignore-errors 	
       (unless (or (and (vectorp key)
                        (memq (elt key 0) '(menu-bar 27 remap)))
                   ;; FIXME: don't unbind for packages that use

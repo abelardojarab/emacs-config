@@ -1174,11 +1174,6 @@ otherwise do ELSE."
   `(let ((it ,val))
      (if it ,then ,@else)))
 
-(defun dash--match-cons (match-form source)
-  "Setup a cons matching environment and call the real matcher."
-  (let ((s (make-symbol "--dash-source--")))
-    (cons (list s source) (dash--match-cons-1 match-form s))))
-
 (defun dash--match-cons-skip-cdr (skip-cdr source)
   "Helper function generating idiomatic shifting code."
   (cond
@@ -1209,6 +1204,29 @@ otherwise do ELSE."
    (t
     `(nthcdr ,skip-cdr ,source))))
 
+(defun dash--match-cons (match-form source)
+  "Setup a cons matching environment and call the real matcher."
+  (let ((s (make-symbol "--dash-source--"))
+        (n 0)
+        (m match-form))
+    (while (and (consp m)
+                (symbolp (car m))
+                (eq (aref (symbol-name (car m)) 0) ?_))
+      (setq n (1+ n)) (!cdr m))
+    (cond
+     ;; handle improper lists
+     ((and (consp m)
+           (not (cdr m)))
+      (dash--match (car m) (dash--match-cons-get-car n source)))
+     ;; handle other special types
+     ((> n 0)
+      (dash--match m (dash--match-cons-get-cdr n source)))
+     ;; this is the only entry-point for dash--match-cons-1, that's
+     ;; why we can't simply use the above branch, it would produce
+     ;; infinite recursion
+     (t
+      (cons (list s source) (dash--match-cons-1 match-form s))))))
+
 (defun dash--match-cons-1 (match-form source &optional props)
   "Match MATCH-FORM against SOURCE.
 
@@ -1231,27 +1249,27 @@ SOURCE is a proper or improper list."
          ((cdr match-form)
           (cond
            ((eq (aref (symbol-name (car match-form)) 0) ?_)
-            (dash--match-cons-1 (cdr match-form) s
+            (dash--match-cons-1 (cdr match-form) source
                                 (plist-put props :skip-cdr (1+ skip-cdr))))
            (t
-            (cons (list (car match-form) (dash--match-cons-skip-cdr skip-cdr s))
-                  (dash--match-cons-1 (cdr match-form) s)))))
+            (cons (list (car match-form) (dash--match-cons-skip-cdr skip-cdr source))
+                  (dash--match-cons-1 (cdr match-form) source)))))
          ;; Last matching place, no need for shift
          (t
-          (list (list (car match-form) (dash--match-cons-get-car skip-cdr s))))))
+          (list (list (car match-form) (dash--match-cons-get-car skip-cdr source))))))
        (t
         (cond
          ((cdr match-form)
-          (-concat (dash--match (car match-form) (dash--match-cons-skip-cdr skip-cdr s))
-                   (dash--match-cons-1 (cdr match-form) s)))
+          (-concat (dash--match (car match-form) (dash--match-cons-skip-cdr skip-cdr source))
+                   (dash--match-cons-1 (cdr match-form) source)))
          ;; Last matching place, no need for shift
          (t
-          (dash--match (car match-form) (dash--match-cons-get-car skip-cdr s)))))))
+          (dash--match (car match-form) (dash--match-cons-get-car skip-cdr source)))))))
      ((eq match-form nil)
       nil)
      ;; Handle improper lists.  Last matching place, no need for shift
      (t
-      (list (list match-form (dash--match-cons-get-cdr skip-cdr s)))))))
+      (dash--match match-form (dash--match-cons-get-cdr skip-cdr source))))))
 
 (defun dash--vector-tail (seq start)
   "Return the tail of SEQ starting at START."
@@ -1306,7 +1324,8 @@ is discarded."
                      ;; do not match symbols starting with _
                      (not (eq (aref (symbol-name m) 0) ?_)))
                 (list (list m `(aref ,source ,i))))
-               (t (dash--match m `(aref ,source ,i))))
+               ((not (symbolp m))
+                (dash--match m `(aref ,source ,i))))
               re)
         (setq i (1+ i))))
     (-flatten-n 1 (nreverse re))))

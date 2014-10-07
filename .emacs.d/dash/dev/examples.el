@@ -720,6 +720,8 @@ new list."
       (list bar face inv)) => '(2 foo-face t)
     (-let [(a (b c) d) (list 1 (list 2 3) 4 5 6)] (list a b c d)) => '(1 2 3 4)
     (-let [[a _ c] [1 2 3 4]] (list a c)) => '(1 3)
+    (-let [[_ _ _ a] (vector 1 2 3 4)] a) => 4
+    (-let [[a _ _ _ b] (vector 1 2 3 4 5)] (list a b)) => '(1 5)
     (-let [[a (b c) d] [1 (2 3) 4]] (list a b c d)) => '(1 2 3 4)
     (-let [[a b c] (string ?f ?o ?b ?a ?r)] (list a b c)) => '(?f ?o ?b)
     (-let [[a b c] "abcdef"] (list a b c)) => '(?a ?b ?c)
@@ -741,6 +743,8 @@ new list."
             (error "previous call should fail.")))
       (args-out-of-range t)) => t
     (-let [(a . (b . c)) (cons 1 (cons 2 3))] (list a b c)) => '(1 2 3)
+    (-let [(_ _ . [a b]) (cons 1 (cons 2 (vector 3 4)))] (list a b)) => '(3 4)
+    (-let [(_ _ . (a b)) (cons 1 (cons 2 (list 3 4)))] (list a b)) => '(3 4)
     ;; final cdr optimization
     (-let [(((a))) (list (list (list 1 2) 3) 4)] a) => 1
     (-let [(((a b) c) d) (list (list (list 1 2) 3) 4)] (list a b c d)) => '(1 2 3 4)
@@ -764,7 +768,27 @@ new list."
     (-let [(_ a _ _) (list 1 2 3 4 5)] a) => 2
     (-let [(_ . b) (cons 1 2)] b) => 2
     (-let [([a b c d] . e) (cons (vector 1 2 3 4) 5)] (list a b c d e)) => '(1 2 3 4 5)
-    (-let [([a b c d] _ . e) (cons (vector 1 2 3 4) (cons 5 6))] (list a b c d e)) => '(1 2 3 4 6))
+    (-let [([a b c d] _ . e) (cons (vector 1 2 3 4) (cons 5 6))] (list a b c d e)) => '(1 2 3 4 6)
+    ;; late-binding optimization
+    (-let [(((a))) (list (list (list 1 2) 3) 4)] a) => 1
+    (-let [(((&plist :foo a :bar b))) (list (list (list :bar 1 :foo 2) 3) 4)] (list a b)) => '(2 1)
+    (-let [(((a b) c) d) (list (list (list 1 2) 3) 4)] (list a b c d)) => '(1 2 3 4)
+    (-let [(((a b) c) . d) (list (list (list 1 2) 3) 4)] (list a b c d)) => '(1 2 3 (4))
+    (-let [(((a b) c)) (list (list (list 1 2) 3) 4)] (list a b c)) => '(1 2 3)
+    (-let [(a b c d) (list 1 2 3 4)] (list a b c d)) => '(1 2 3 4)
+    (-let [(a) (list 1 2 3 4)] (list a)) => '(1)
+    (-let [(_ a) (list 1 2 3 4)] (list a)) => '(2)
+    (-let [(_ _ a) (list 1 2 3 4)] (list a)) => '(3)
+    (-let [(_ _ . a) (list 1 2 3 4)] a) => '(3 4)
+    (-let [(_ _ [a b]) (list 1 2 (vector 3 4))] (list a b)) => '(3 4)
+    (-let [(a _ _ b) (list 1 2 3 4 5 6 7 8)] (list a b)) => '(1 4)
+    (-let [(_ _ a _ _ b) (list 1 2 3 4 5 6 7 8)] (list a b)) => '(3 6)
+    (-let [(_ _ a _ _ . b) (list 1 2 3 4 5 6 7 8)] (cons a b)) => '(3 6 7 8)
+    (-let [(_ a _ b) (list 1 2 3 4)] (list a b)) => '(2 4)
+    (-let [(a b c (d e)) (list 1 2 3 (list 4 5))] (list a b c d e)) => '(1 2 3 4 5)
+    (-let [(_ _ (_ _ (_ _ a))) (list 1 2 (list 3 4 (list 5 6 7)))] a) => 7
+    (-let [(_ (_ (_ a))) (list 1 (list 2 (list 3 4)))] a) => 4
+    (-let [(_ _ . (&plist :foo a :bar b)) (list 1 2 :bar 2 :foo 1)] (list a b)) => '(1 2))
 
   (defexamples -let*
     (-let* (((a . b) (cons 1 2))
