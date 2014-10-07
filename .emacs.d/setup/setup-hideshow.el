@@ -75,15 +75,23 @@
 
 (defun display-code-line-counts (ov)
   (when (eq 'code (overlay-get ov 'hs))
-    (let* ((marker-string "*fringe-dummy*")
-           (marker-length (length marker-string))
-           (display-string (format "(%d)..." (count-lines (overlay-start ov) (overlay-end ov)))))
-      (overlay-put ov 'help-echo "Hiddent text. C-c,= to show")
-      (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'hs-fringe-face) marker-string)
-      (overlay-put ov 'before-string marker-string)
-      (put-text-property 0 (length display-string) 'face 'hs-face display-string)
-      (overlay-put ov 'display display-string))))
+    (overlay-put ov 'display
+                 (propertize
+                  (format " ...<%d>)"
+                          (count-lines (overlay-start ov)
+                                       (overlay-end ov)))
+                  'face 'hs-face))))
 (setq hs-set-up-overlay 'display-code-line-counts)
+
+;; Yafolding
+(add-to-list 'load-path "~/.emacs.d/yafolding")
+(require 'yafolding)
+(add-hook 'prog-mode-hook
+          (lambda () (yafolding-mode)))
+(define-key yafolding-mode-map (kbd "<C-S-return>") nil)
+(define-key yafolding-mode-map (kbd "<C-return>") nil)
+(define-key yafolding-mode-map (kbd "C-c <C-S-return>") 'yafolding-toggle-all)
+(define-key yafolding-mode-map (kbd "C-c <C-return>") 'yafolding-toggle-element)
 
 (provide 'setup-hideshow)
 ;;; setup-hideshow.el ends here
