@@ -118,7 +118,7 @@
 
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq
- scroll-margin 0                ;; start scrolling when marker at top/bottom
+ scroll-margin 1                ;; start scrolling when marker at top/bottom
  scroll-conservatively 100000   ;; marker distance from center (don't jump to center)
  scroll-preserve-screen-position 1) ;; try to keep screen position when PgDn/PgUp
 
@@ -133,41 +133,21 @@
 (mouse-wheel-mode t)
 
 ;; scroll one line at a time (less "jumpy" than defaults)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-(setq mouse-wheel-progressive-speed t) ;; don't accelerate scrolling
+(setq mouse-wheel-scroll-amount '(0.07)) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
 ;; Scroll with the mouse
-(defun smooth-scroll (number-lines increment)
-  (if (= 0 number-lines)
-      t
-    (progn
-      (sit-for (* 0.01 number-lines))
-      (scroll-up increment)
-      (smooth-scroll (- number-lines 1) increment))))
+(defun smooth-scroll (increment)
+  (scroll-up increment) (sit-for 0.05)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.05)
+  (scroll-up increment) (sit-for 0.06)
+  (scroll-up increment))
 
-;; turn on mouse wheel scrolling
-(defun sd-mousewheel-scroll-up (event)
-  "Scroll window under mouse up by five lines."
-  (interactive "e")
-  (let ((current-window (selected-window)))
-    (unwind-protect
-        (progn
-          (select-window (posn-window (event-start event)))
-          (scroll-up 2))
-      (select-window current-window))))
-(defun sd-mousewheel-scroll-down (event)
-  "Scroll window under mouse down by five lines."
-  (interactive "e")
-  (let ((current-window (selected-window)))
-    (unwind-protect
-        (progn
-          (select-window (posn-window (event-start event)))
-          (scroll-down 2))
-      (select-window current-window))))
-
-(global-set-key (kbd "<mouse-5>") 'sd-mousewheel-scroll-up)
-(global-set-key (kbd "<mouse-4>") 'sd-mousewheel-scroll-down)
+(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 1)))
+(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll -1)))
 
 ;; Zoom in/out like feature, with mouse wheel
 (global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
