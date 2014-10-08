@@ -178,15 +178,15 @@
                         (set-face-attribute 'linum nil :height 130))
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
-                          (setq main-programming-font "Consolas-16:antialias=subpixel")
+                          (setq main-programming-font "Consolas-15:antialias=subpixel")
                           (set-default-font main-programming-font frame)
-                          (setq main-writing-font (concat main-writing-font "-19"))
+                          (setq main-writing-font (concat main-writing-font "-18"))
                           (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                           (set-face-attribute 'linum nil :height 160))
                       (progn ;; HD monitor in Windows and Mac
-                        (setq main-programming-font "Consolas-14:antialias=subpixel")
+                        (setq main-programming-font "Consolas-13:antialias=subpixel")
                         (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-17"))
+                        (setq main-writing-font (concat main-writing-font "-16"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
                         (set-face-attribute 'linum nil :height 140))))
                 (progn ;; Small display
