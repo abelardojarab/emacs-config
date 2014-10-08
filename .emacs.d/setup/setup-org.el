@@ -534,13 +534,6 @@ a link to this file."
 
 ;; Extra packages when better support available
 (when (executable-find "xelatex")
-  (when (executable-find "pygmentize")
-    (setq org-latex-listings 'minted)
-    (setq org-latex-minted-options
-          '(("frame" "lines") ("linenos=true") ("framesep" "6pt")
-            ("mathescape" "true") ("fontsize" "\\footnotesize")))
-    (add-to-list 'org-latex-packages-alist
-                 "\\usepackage{minted}" t)) ;; when
   (add-to-list 'org-latex-packages-alist
                "\\usepackage[]{xkeyval}" t)
   (add-to-list 'org-latex-packages-alist
@@ -565,7 +558,6 @@ a link to this file."
                "\\usepackage{csquotes}" t)
   (add-to-list 'org-latex-packages-alist
                "\\usepackage[section]{placeins}" t)
-
   (add-to-list 'org-latex-packages-alist
                "\\usepackage[backend=bibtex,sorting=none]{biblatex}" t))
 
