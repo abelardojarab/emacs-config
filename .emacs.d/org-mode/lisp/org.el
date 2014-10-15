@@ -163,6 +163,8 @@ Stars are put in group 1 and the trimmed body in group 2.")
 (declare-function org-table-paste-rectangle "org-table" ())
 (declare-function org-table-maybe-eval-formula "org-table" ())
 (declare-function org-table-maybe-recalculate-line "org-table" ())
+(declare-function orgtbl-ascii-plot "org-table" (&optional ask))
+(declare-function org-plot/gnuplot "org-plot" (&optional params))
 
 (declare-function org-element-at-point "org-element" ())
 (declare-function org-element-cache-reset "org-element" (&optional all))
@@ -9261,14 +9263,16 @@ if `orgstruct-heading-prefix-regexp' is not empty."
 	    (if fallback
 		(let* ((orgstruct-mode)
 		       (binding
-			(loop with key = ,key
-			      for rep in
-			      '(nil
-				("<\\([^>]*\\)tab>" . "\\1TAB")
-				("<\\([^>]*\\)return>" . "\\1RET")
-				("<\\([^>]*\\)escape>" . "\\1ESC")
-				("<\\([^>]*\\)delete>" . "\\1DEL"))
-			      do
+			(let ((key ,key))
+			  (catch 'exit
+			    (dolist
+				(rep
+				 '(nil
+				   ("<\\([^>]*\\)tab>" . "\\1TAB")
+				   ("<\\([^>]*\\)return>" . "\\1RET")
+				   ("<\\([^>]*\\)escape>" . "\\1ESC")
+				   ("<\\([^>]*\\)delete>" . "\\1DEL"))
+				 nil)
 			      (when rep
 				(setq key (read-kbd-macro
 					   (let ((case-fold-search))
@@ -9276,7 +9280,8 @@ if `orgstruct-heading-prefix-regexp' is not empty."
 					      (car rep)
 					      (cdr rep)
 					      (key-description key))))))
-			      thereis (key-binding key))))
+			      (when (key-binding key)
+				(throw 'exit (key-binding key))))))))
 		  (if (keymapp binding)
 		      (org-set-transient-map binding)
 		    (let ((func (or binding
@@ -19478,7 +19483,8 @@ boundaries."
 (org-defkey org-mode-map "\C-c="    'org-table-eval-formula)
 (org-defkey org-mode-map "\C-c'"    'org-edit-special)
 (org-defkey org-mode-map "\C-c`"    'org-table-edit-field)
-(org-defkey org-mode-map "\C-cp"    'orgtbl-ascii-plot)
+(org-defkey org-mode-map "\C-c\"a"  'orgtbl-ascii-plot)
+(org-defkey org-mode-map "\C-c\"g"  'org-plot/gnuplot)
 (org-defkey org-mode-map "\C-c|"    'org-table-create-or-convert-from-region)
 (org-defkey org-mode-map [(control ?#)] 'org-table-rotate-recalc-marks)
 (org-defkey org-mode-map "\C-c~"    'org-table-create-with-table.el)
@@ -21161,8 +21167,7 @@ on context.  See the individual commands for more information."
      ["Move Column Left" org-metaleft (org-at-table-p)]
      ["Move Column Right" org-metaright (org-at-table-p)]
      ["Delete Column" org-shiftmetaleft (org-at-table-p)]
-     ["Insert Column" org-shiftmetaright (org-at-table-p)]
-     ["Ascii plot" orgtbl-ascii-plot (org-at-table-p)])
+     ["Insert Column" org-shiftmetaright (org-at-table-p)])
     ("Row"
      ["Move Row Up" org-metaup (org-at-table-p)]
      ["Move Row Down" org-metadown (org-at-table-p)]
@@ -21205,7 +21210,11 @@ on context.  See the individual commands for more information."
     ["Import from File" org-table-import (not (org-at-table-p))]
     ["Export to File" org-table-export (org-at-table-p)]
     "--"
-    ["Create/Convert from/to table.el" org-table-create-with-table.el t]))
+    ["Create/Convert from/to table.el" org-table-create-with-table.el t]
+    "--"
+    ("Plot"
+     ["Ascii plot" orgtbl-ascii-plot :active (org-at-table-p) :keys "C-c \" a"]
+     ["Gnuplot" org-plot/gnuplot :active (org-at-table-p) :keys "C-c \" g"])))
 
 (easy-menu-define org-org-menu org-mode-map "Org menu"
   '("Org"
@@ -22406,9 +22415,13 @@ ELEMENT."
 	  (if (not org-adapt-indentation) 0
 	    (let ((level (org-current-level)))
 	      (if level (1+ level) 0))))
-	 ((item plain list)
+	 (item
 	  (org-list-item-body-column
 	   (org-element-property :post-affiliated element)))
+	 (plain-list
+	  (save-excursion
+	    (goto-char (org-element-property :post-affiliated element))
+	    (org-get-indentation)))
 	 (otherwise
 	  (goto-char start)
 	  (org-get-indentation))))
@@ -22430,19 +22443,25 @@ ELEMENT."
 	 (while t
 	   (if (= (point-min) start) (throw 'exit 0)
 	     (goto-char (1- start))
-	     (let ((previous (org-element-at-point)))
-	       (while (let ((parent (org-element-property :parent previous)))
-			(and parent
-			     (setq previous parent)
-			     (<= (org-element-property :end parent) start))))
-	       (cond ((or (not previous)
-			  (> (org-element-property :end previous) start))
-		      (throw 'exit (org--get-expected-indentation previous t)))
-		     ((memq (org-element-type previous)
-			    '(footnote-definition inlinetask))
-		      (setq start (org-element-property :begin previous)))
-		     (t (goto-char (org-element-property :begin previous))
-			(throw 'exit (org-get-indentation)))))))))
+	     (let* ((previous (org-element-at-point))
+		    (parent previous))
+	       (while (and parent (<= (org-element-property :end parent) start))
+		 (setq previous parent
+		       parent (org-element-property :parent parent)))
+	       (cond
+		((not previous) (throw 'exit 0))
+		((> (org-element-property :end previous) start)
+		 (throw 'exit (org--get-expected-indentation previous t)))
+		((memq (org-element-type previous)
+		       '(footnote-definition inlinetask))
+		 (setq start (org-element-property :begin previous)))
+		(t (goto-char (org-element-property :begin previous))
+		   (throw 'exit
+			  (if (bolp) (org-get-indentation)
+			    ;; At first paragraph in an item or
+			    ;; a footnote definition.
+			    (org--get-expected-indentation
+			     (org-element-property :parent previous) t))))))))))
       ;; Otherwise, move to the first non-blank line above.
       (t
        (beginning-of-line)
@@ -22575,13 +22594,14 @@ assumed to be significant there."
   (interactive "r")
   (save-excursion
     (goto-char start)
-    (beginning-of-line)
+    (skip-chars-forward " \r\t\n")
+    (unless (eobp) (beginning-of-line))
     (let ((indent-to
 	   (lambda (ind pos)
 	     ;; Set IND as indentation for all lines between point and
 	     ;; POS or END, whichever comes first.  Blank lines are
 	     ;; ignored.  Leave point after POS once done.
-	     (let ((limit (copy-marker  (min end pos))))
+	     (let ((limit (copy-marker (min end pos))))
 	       (while (< (point) limit)
 		 (unless (org-looking-at-p "[ \t]*$") (org-indent-line-to ind))
 		 (forward-line))
@@ -22593,17 +22613,18 @@ assumed to be significant there."
 		 (type (org-element-type element))
 		 (element-end (copy-marker (org-element-property :end element)))
 		 (ind (org--get-expected-indentation element nil)))
-	    (if (or (memq type '(paragraph table table-row))
-		    (not (or (org-element-property :contents-begin element)
-			     (memq type
-				   '(example-block export-block src-block)))))
-		;; Elements here are indented as a single block.  Also
-		;; align node properties.
-		(progn
-		  (when (eq type 'node-property)
-		    (org--align-node-property)
-		    (beginning-of-line))
-		  (funcall indent-to ind element-end))
+	    (cond
+	     ((or (memq type '(paragraph table table-row))
+		  (not (or (org-element-property :contents-begin element)
+			   (memq type
+				 '(example-block export-block src-block)))))
+	      ;; Elements here are indented as a single block.  Also
+	      ;; align node properties.
+	      (when (eq type 'node-property)
+		(org--align-node-property)
+		(beginning-of-line))
+	      (funcall indent-to ind element-end))
+	     (t
 	      ;; Elements in this category consist of three parts:
 	      ;; before the contents, the contents, and after the
 	      ;; contents.  The contents are treated specially,
@@ -22627,8 +22648,9 @@ assumed to be significant there."
 			 ;; from the second line.
 			 (org-with-wide-buffer
 			  (goto-char post)
-			  (forward-line)
-			  (point)))
+			  (end-of-line)
+			  (skip-chars-forward " \r\t\n")
+			  (if (eobp) (point) (line-beginning-position))))
 			(t (org-element-property :contents-begin element)))))
 		     (cend (copy-marker
 			    (or (org-element-property :contents-end element)
@@ -22637,13 +22659,24 @@ assumed to be significant there."
 				 (goto-char element-end)
 				 (skip-chars-backward " \r\t\n")
 				 (line-beginning-position))))))
-		(funcall indent-to ind cbeg)
+		;; Do not change items indentation individually as it
+		;; might break the list as a whole.  On the other
+		;; hand, when at a plain list, indent it as a whole.
+		(cond ((eq type 'plain-list)
+		       (let ((offset (- ind (org-get-indentation))))
+			 (unless (zerop offset)
+			   (indent-rigidly (org-element-property :begin element)
+					   (org-element-property :end element)
+					   offset))
+			 (goto-char cbeg)))
+		      ((eq type 'item) (goto-char cbeg))
+		      (t (funcall indent-to ind cbeg)))
 		(when (< (point) end)
 		  (case type
 		    ((example-block export-block verse-block))
 		    (src-block
-		     ;; In a source block, indent source code according
-		     ;; to language major mode, but only if
+		     ;; In a source block, indent source code
+		     ;; according to language major mode, but only if
 		     ;; `org-src-tab-acts-natively' is non-nil.
 		     (when (and (< (point) end) org-src-tab-acts-natively)
 		       (ignore-errors
@@ -22658,7 +22691,7 @@ assumed to be significant there."
 		  (when (< (point) end) (funcall indent-to ind element-end)))
 		(set-marker post nil)
 		(set-marker cbeg nil)
-		(set-marker cend nil)))
+		(set-marker cend nil))))
 	    (set-marker element-end nil))))
       (set-marker end nil))))
 

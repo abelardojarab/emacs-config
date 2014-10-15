@@ -3153,7 +3153,8 @@ Return code as a string."
 		;; EMAIL is not a parsed keyword: store it as-is.
 		(cons "email" (or (plist-get info :email) ""))
 		(cons "title"
-		      (org-element-interpret-data (plist-get info :title)))))
+		      (org-element-interpret-data (plist-get info :title))))
+	  'finalize)
 	 ;; Parse buffer.
 	 (setq tree (org-element-parse-buffer nil visible-only))
 	 ;; Handle left-over uninterpreted elements or objects in
@@ -3824,12 +3825,12 @@ INFO is the plist used as a communication channel."
 (defun org-export-get-footnote-definition (footnote-reference info)
   "Return definition of FOOTNOTE-REFERENCE as parsed data.
 INFO is the plist used as a communication channel.  If no such
-definition can be found, return \"DEFINITION NOT FOUND\"."
+definition can be found, raise an error."
   (let ((label (org-element-property :label footnote-reference)))
     (or (if label
 	    (cdr (assoc label (plist-get info :footnote-definition-alist)))
 	  (org-element-contents footnote-reference))
-	"DEFINITION NOT FOUND.")))
+	(error "Definition not found for footnote %s" label))))
 
 (defun org-export-get-footnote-number (footnote info)
   "Return number associated to a footnote.
@@ -5785,8 +5786,9 @@ to `:default' encoding. If it fails, return S."
 (defmacro org-export-async-start  (fun &rest body)
   "Call function FUN on the results returned by BODY evaluation.
 
-BODY evaluation happens in an asynchronous process, from a buffer
-which is an exact copy of the current one.
+FUN is an anonymous function of one argument.  BODY evaluation
+happens in an asynchronous process, from a buffer which is an
+exact copy of the current one.
 
 Use `org-export-add-to-stack' in FUN in order to register results
 in the stack.

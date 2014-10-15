@@ -354,6 +354,18 @@ portability of tables."
 	  (const :tag "Stick to hline" nil)
 	  (const :tag "Error on attempt to cross" error)))
 
+(defcustom org-table-formula-create-columns nil
+  "Non-nil means that evaluation of a field formula can add new
+columns if an out-of-bounds field is being set."
+  :group 'org-table-calculation
+  :version "24.5"
+  :package-version '(Org . "8.3")
+  :type '(choice
+	  (const :tag "Setting an out-of-bounds field generates an error (default)" nil)
+	  (const :tag "Setting an out-of-bounds field silently adds columns as needed" t)
+	  (const :tag "Setting an out-of-bounds field adds columns as needed, but issues a warning message" warn)
+	  (const :tag "When setting an out-of-bounds field, the user is prompted" prompt)))
+
 (defgroup org-table-import-export nil
   "Options concerning table import and export in Org-mode."
   :tag "Org Table Import Export"
@@ -3125,9 +3137,26 @@ known that the table will be realigned a little later anyway."
       (while (setq eq (pop eqlname1))
 	(message "Re-applying formula to field: %s" (car eq))
 	(org-goto-line (nth 1 eq))
-	(org-table-goto-column (nth 2 eq))
-	(org-table-eval-formula nil (nth 3 eq) 'noalign 'nocst
-				'nostore 'noanalysis))
+	(let ((column-target (nth 2 eq)))
+	  (when (> column-target 1000)
+	    (user-error "Formula column target too large"))
+	  (let* ((column-count (progn (end-of-line)
+				      (1- (org-table-current-column))))
+		 (create-new-column
+		  (and (> column-target column-count)
+		       (or (eq org-table-formula-create-columns t)
+			   (and
+			    (eq org-table-formula-create-columns 'warn)
+			    (progn
+			      (org-display-warning "Out-of-bounds formula added columns")
+			      t))
+			   (and
+			    (eq org-table-formula-create-columns 'prompt)
+			    (yes-or-no-p "Out-of-bounds formula. Add columns?"))))))
+	    (org-table-goto-column column-target nil create-new-column))
+
+	  (org-table-eval-formula nil (nth 3 eq) 'noalign 'nocst
+				  'nostore 'noanalysis)))
 
       (org-goto-line thisline)
       (org-table-goto-column thiscol)
@@ -4276,8 +4305,7 @@ to execute outside of tables."
 	 ["Move Column Left" org-metaleft :active (org-at-table-p) :keys "M-<left>"]
 	 ["Move Column Right" org-metaright :active (org-at-table-p) :keys "M-<right>"]
 	 ["Delete Column" org-shiftmetaleft :active (org-at-table-p) :keys "M-S-<left>"]
-	 ["Insert Column" org-shiftmetaright :active (org-at-table-p) :keys "M-S-<right>"]
-	 ["Ascii plot" orgtbl-ascii-plot :active (org-at-table-p) :keys "C-c p"])
+	 ["Insert Column" org-shiftmetaright :active (org-at-table-p) :keys "M-S-<right>"])
 	("Row"
 	 ["Move Row Up" org-metaup :active (org-at-table-p) :keys "M-<up>"]
 	 ["Move Row Down" org-metadown :active (org-at-table-p) :keys "M-<down>"]
@@ -4315,7 +4343,10 @@ to execute outside of tables."
 	 org-table-toggle-coordinate-overlays :active (org-at-table-p)
 	 :keys "C-c }"
 	 :style toggle :selected org-table-overlay-coordinates]
-	))
+	"--"
+	("Plot"
+	 ["Ascii plot" orgtbl-ascii-plot :active (org-at-table-p) :keys "C-c \" a"]
+	 ["Gnuplot" org-plot/gnuplot :active (org-at-table-p) :keys "C-c \" g"])))
     t))
 
 (defun orgtbl-ctrl-c-ctrl-c (arg)
@@ -4850,8 +4881,19 @@ information."
 	 ;; Make sure that contents are exported as Org data when :raw
 	 ;; parameter is non-nil.
 	 ,(when (and backend (plist-get params :raw))
-	    `(setq contents (org-export-data-with-backend
-			     (org-element-contents cell) 'org info)))
+	    `(setq contents
+		   ;; Since we don't know what are the pseudo object
+		   ;; types defined in backend, we cannot pass them to
+		   ;; `org-element-interpret-data'.  As a consequence,
+		   ;; they will be treated as pseudo elements, and
+		   ;; will have newlines appended instead of spaces.
+		   ;; Therefore, we must make sure :post-blank value
+		   ;; is really turned into spaces.
+		   (replace-regexp-in-string
+		    "\n" " "
+		    (org-trim
+		     (org-element-interpret-data
+		      (org-element-contents cell))))))
 	 (when contents
 	   ;; Check if we can apply `:efmt' on CONTENTS.
 	   ,(when efmt
@@ -5052,7 +5094,7 @@ supported.  It is also possible to use the following ones:
 
 ;; Put the cursor in a column containing numerical values
 ;; of an Org-Mode table,
-;; type C-c p
+;; type C-c " a
 ;; A new column is added with a bar plot.
 ;; When the table is refreshed (C-u C-c *),
 ;; the plot is updated to reflect the new values.
