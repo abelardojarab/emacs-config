@@ -71,7 +71,7 @@
 (add-to-list 'load-path "~/.emacs.d/ac-ispell")
 (require 'ac-ispell)
 (custom-set-variables
- '(ac-ispell-requires 3)
+ '(ac-ispell-requires 4)
  '(ac-ispell-fuzzy-limit 2))
 
 (eval-after-load "auto-complete"
