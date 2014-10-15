@@ -69,6 +69,7 @@
 
 ;; Autocomplete using Aspell
 (add-to-list 'load-path "~/.emacs.d/ac-ispell")
+(require 'ac-ispell)
 (custom-set-variables
   '(ac-ispell-requires 4)
   '(ac-ispell-fuzzy-limit 2))
