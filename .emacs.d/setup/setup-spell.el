@@ -71,12 +71,12 @@
 (add-to-list 'load-path "~/.emacs.d/ac-ispell")
 (require 'ac-ispell)
 (custom-set-variables
-  '(ac-ispell-requires 4)
-  '(ac-ispell-fuzzy-limit 2))
+ '(ac-ispell-requires 3)
+ '(ac-ispell-fuzzy-limit 2))
 
 (eval-after-load "auto-complete"
   '(progn
-      (ac-ispell-setup)))
+     (ac-ispell-setup)))
 
 (add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
 (add-hook 'mail-mode-hook 'ac-ispell-ac-setup)
