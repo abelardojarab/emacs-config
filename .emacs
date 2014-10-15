@@ -109,11 +109,11 @@
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
 
+;; Setup Auto-Complete
+(require 'setup-auto-complete)
+
 ;; Setup Spelling
 (require 'setup-spell)
-
-;; Setup Auto-complete
-(require 'setup-auto-complete)
 
 ;; Setup Hideshow
 (require 'setup-hideshow)
