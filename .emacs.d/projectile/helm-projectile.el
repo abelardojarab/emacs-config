@@ -60,19 +60,30 @@
   (with-current-buffer (helm-candidate-buffer)
     (expand-file-name candidate helm-projectile-current-project-root)))
 
-(defmacro helm-projectile-define-key (map key fun)
-  (declare (indent 1))
-  `(define-key ,map ,key
-     (lambda ()
-       (interactive)
-       (helm-quit-and-execute-action ,fun))))
+(defmacro helm-projectile-define-key (keymap key def &rest bindings)
+  "In KEYMAP, define key sequence KEY1 as DEF1, KEY2 as DEF2 ..."
+  (declare (indent defun))
+  (let ((ret '(progn)))
+    (while key
+      (add-to-list
+       'ret
+       `(define-key ,keymap ,key
+          (lambda ()
+            (interactive)
+            (helm-quit-and-execute-action ,def)))
+       'append)
+      (setq key (pop bindings)
+            def (pop bindings)))
+    ret))
 
 (defun helm-projectile-vc (dir)
   "A Helm action for jumping to project root using `vc-dir' or Magit.
 DIR is a directory to be switched"
   (let ((projectile-require-project-root nil))
-    (with-helm-default-directory (expand-file-name dir (projectile-project-root))
-        (projectile-vc))))
+    (cond
+     ((and (eq (projectile-project-vcs dir) 'git) (fboundp 'magit-status))
+      (magit-status dir))
+     (t (vc-dir dir)))))
 
 (defun helm-projectile-compile-project (dir)
   "A Helm action for compile a project.
@@ -90,14 +101,11 @@ DIR is the project root."
                       projectile-known-projects)))
     (keymap . ,(let ((map (make-sparse-keymap)))
                  (set-keymap-parent map helm-map)
-                 (helm-projectile-define-key map (kbd "C-d") 'dired)
                  (helm-projectile-define-key map
-                   (kbd "M-g") 'helm-projectile-vc)
-                 (helm-projectile-define-key map
-                   (kbd "M-e") 'helm-projectile-switch-to-eshell)
-                 (helm-projectile-define-key map
-                   (kbd "C-s") 'helm-find-files-grep)
-                 (helm-projectile-define-key map
+                   (kbd "C-d") 'dired
+                   (kbd "M-g") 'helm-projectile-vc
+                   (kbd "M-e") 'helm-projectile-switch-to-eshell
+                   (kbd "C-s") 'helm-find-files-grep
                    (kbd "C-c") 'helm-projectile-compile-project)
                  map))
     (action . (("Switch to project" .
@@ -124,9 +132,10 @@ DIR is the project root."
   (let ((map (copy-keymap helm-find-files-map)))
     (define-key map (kbd "<left>") 'helm-previous-source)
     (define-key map (kbd "<right>") 'helm-next-source)
-    (helm-projectile-define-key map (kbd "M-e") 'helm-projectile-switch-to-eshell)
-    (helm-projectile-define-key map (kbd "M-.") 'helm-projectile-ff-etags-select-action)
-    (helm-projectile-define-key map (kbd "M-!") 'helm-projectile-find-files-eshell-command-on-file-action)
+    (helm-projectile-define-key map
+      (kbd "M-e") 'helm-projectile-switch-to-eshell
+      (kbd "M-.") 'helm-projectile-ff-etags-select-action
+      (kbd "M-!") 'helm-projectile-find-files-eshell-command-on-file-action)
     map))
 
 (define-key helm-etags-map (kbd "C-c p f") (lambda ()
@@ -162,7 +171,6 @@ DIR is the project root."
    "Serial rename by copying files" 'helm-ff-serial-rename-by-copying
    "Open file with default tool" 'helm-open-file-with-default-tool
    "Find file in hex dump" 'hexl-find-file
-   "Complete at point `C-c i'" 'helm-insert-file-name-completion-at-point
    "Insert as org link `C-c @'" 'helm-files-insert-as-org-link
    "Open file externally `C-c C-x, C-u to choose'" 'helm-open-file-externally
    "Grep File(s) `C-s, C-u Recurse'" 'helm-find-files-grep
@@ -170,7 +178,7 @@ DIR is the project root."
    "Switch to Eshell `M-e'" 'helm-projectile-switch-to-eshell
    "Etags `M-., C-u reload tag file'" 'helm-projectile-ff-etags-select-action
    "Eshell command on file(s) `M-!, C-u take all marked as arguments.'" 'helm-projectile-find-files-eshell-command-on-file-action
-   "Find file as root `C-x @'" 'helm-find-file-as-root
+   "Find file as root `C-c r'" 'helm-find-file-as-root
    "Ediff File `C-='" 'helm-find-files-ediff-files
    "Ediff Merge File `C-c ='" 'helm-find-files-ediff-merge-files
    "Delete File(s) `M-D'" 'helm-delete-marked-files
@@ -232,6 +240,11 @@ DIR is the project root."
   (dired (expand-file-name dir (projectile-project-root)))
   (run-hooks 'projectile-find-dir-hook))
 
+(defun helm-projectile-dired-find-dir-other-window (dir)
+  "Jump to a selected directory DIR from helm-projectile."
+  (dired-other-window (expand-file-name dir (projectile-project-root)))
+  (run-hooks 'projectile-find-dir-hook))
+
 (defvar helm-source-projectile-directories-list
   `((name . "Projectile Directories")
     (candidates . (lambda ()
@@ -240,13 +253,13 @@ DIR is the project root."
                 (projectile-current-project-dirs))))
     (keymap . ,(let ((map (make-sparse-keymap)))
                  (set-keymap-parent map helm-map)
-                 (helm-projectile-define-key map (kbd "C-d") 'helm-projectile-dired-find-dir)
                  (helm-projectile-define-key map
-                   (kbd "M-e") 'helm-projectile-switch-to-eshell)
-                 (helm-projectile-define-key map
-                   (kbd "C-s") 'helm-find-files-grep)
+                   (kbd "C-c o") 'helm-projectile-dired-find-dir-other-window
+                   (kbd "M-e")   'helm-projectile-switch-to-eshell
+                   (kbd "C-s")   'helm-find-files-grep)
                  map))
-    (action . (("Open Dired in project's directory `C-d'" . helm-projectile-dired-find-dir)
+    (action . (("Open Dired" . helm-projectile-dired-find-dir)
+               ("Open Dired in other window`C-c o'" . helm-projectile-dired-find-dir)
                ("Switch to Eshell `M-e'" . helm-projectile-switch-to-eshell)
                ("Grep in projects `C-s C-u Recurse'" . helm-find-files-grep))))
   "Helm source for listing project directories")

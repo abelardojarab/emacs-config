@@ -349,10 +349,11 @@ The saved data can be restored with `projectile-unserialize'."
       (insert-file-contents filename)
       (read (buffer-string)))))
 
-(defvar projectile-projects-cache
-  (or (projectile-unserialize projectile-cache-file)
-      (make-hash-table :test 'equal))
+(defvar projectile-projects-cache nil
   "A hashmap used to cache project file names to speed up related operations.")
+
+(defvar projectile-project-root-cache (make-hash-table :test 'equal)
+  "Cached value of function `projectile-project-root`.")
 
 (defvar projectile-known-projects nil
   "List of locations where we have previously seen projects.
@@ -457,6 +458,7 @@ to invalidate."
              (completing-read "Remove cache for: "
                               (projectile-hash-keys projectile-projects-cache))
            (projectile-project-root))))
+    (setq projectile-project-root-cache (make-hash-table :test 'equal))
     (remhash project-root projectile-projects-cache)
     (projectile-serialize-cache)
     (message "Invalidated Projectile cache for %s."
@@ -522,7 +524,7 @@ The cache is created both in memory and on the hard drive."
 ;; cache opened files automatically to reduce the need for cache invalidation
 (defun projectile-cache-files-find-file-hook ()
   "Function for caching files with `find-file-hook'."
-  (when (and (projectile-project-p) projectile-enable-caching)
+  (when (and projectile-enable-caching (projectile-project-p))
     (projectile-cache-current-file)))
 
 (defun projectile-cache-projects-find-file-hook ()
@@ -576,6 +578,14 @@ Returns nil if no window configuration was found"
              (projectile-project-p))
     (projectile-restore-window-config (projectile-project-name))))
 
+(defadvice delete-file (before purge-from-projectile-cache (filename &optional trash))
+  (if (and projectile-enable-caching (projectile-project-p))
+      (let* ((project-root (projectile-project-root))
+             (true-filename (file-truename filename))
+             (relative-filename (file-relative-name true-filename project-root)))
+        (if (projectile-file-cached-p relative-filename project-root)
+            (projectile-purge-file-from-cache relative-filename)))))
+
 
 ;;; Project root related utilities
 (defun projectile-parent (path)
@@ -613,7 +623,7 @@ Returns a project root directory path or nil if not found."
    (or acc
        (projectile-locate-dominating-file dir it))
    nil
-   (or list projectile-project-root-files-bottom-up (list))))
+   (or list projectile-project-root-files-bottom-up)))
 
 (defun projectile-root-top-down (dir &optional list)
   "Identify a project root in DIR by looking at `projectile-project-root-files'.
@@ -622,7 +632,7 @@ Returns a project root directory path or nil if not found."
    dir
    (lambda (dir)
      (--first (projectile-file-exists-p (expand-file-name it dir))
-              (or list projectile-project-root-files (list))))))
+              (or list projectile-project-root-files)))))
 
 (defun projectile-root-top-down-recurring (dir &optional list)
   "Identify a project root in DIR by looking at `projectile-project-root-files-top-down-recurring'.
@@ -636,7 +646,7 @@ Returns a project root directory path or nil if not found."
                (or (string-match locate-dominating-stop-dir-regexp (projectile-parent dir))
                    (not (projectile-file-exists-p (expand-file-name it (projectile-parent dir)))))))))
    nil
-   (or list projectile-project-root-files-top-down-recurring (list))))
+   (or list projectile-project-root-files-top-down-recurring)))
 
 (defun projectile-project-root ()
   "Retrieves the root directory of a project if available.
@@ -644,7 +654,17 @@ The current directory is assumed to be the project's root otherwise."
   (file-truename
    (let ((dir (file-truename default-directory)))
      (or (--reduce-from
-          (or acc (funcall it dir)) nil
+          (or acc
+              (let* ((cache-key (format "%s-%s" it dir))
+                     (cache-value (gethash cache-key projectile-project-root-cache)))
+                (if cache-value
+                    (if (eq cache-value 'no-project-root)
+                        nil
+                      cache-value)
+                  (let ((value (funcall it dir)))
+                    (puthash cache-key (or value 'no-project-root) projectile-project-root-cache)
+                    value))))
+          nil
           projectile-project-root-files-functions)
          (if projectile-require-project-root
              (error "You're not in a project")
@@ -713,6 +733,11 @@ Files are returned as relative paths to the project root."
   :group 'projectile
   :type 'string)
 
+(defcustom projectile-git-submodule-command "git submodule --quiet foreach 'echo $name' | tr '\\n' '\\0'"
+  "Command used by projectile to get the files in git submodules."
+  :group 'projectile
+  :type 'string)
+
 (defcustom projectile-hg-command "hg locate -0 -I ."
   "Command used by projectile to get the files in a hg project."
   :group 'projectile
@@ -755,9 +780,111 @@ Files are returned as relative paths to the project root."
      ((eq vcs 'svn) projectile-svn-command)
      (t projectile-generic-command))))
 
+(defun projectile-get-sub-projects-command ()
+  (let ((vcs (projectile-project-vcs)))
+    (cond
+     ((eq vcs 'git) projectile-git-submodule-command)
+     (t ""))))
+
+(defun projectile-get-all-sub-projects (project &optional known-projects)
+  "Get all sub-projects for a given projects.
+PROJECT is base directory to start search recursively.
+KNOWN-PROJECTS is all the currently known sub-projects.  It is used for testing
+already traversed sub-projects.
+
+The function handles also the case that a project has sub-projects that
+includes themselves as modules and could create a infinite loop when traverse
+the sub-project tree.  A sub-project is a another project inside current project
+that could also be consider a project when standing on its own.  Git submodule
+is an example of a sub-project.  This function is designed to extend with
+more VCS in general, since it uses the function `projectile-get-sub-projects-command'
+to return appropriate command for a VCS to list sup-project.
+
+Now, consider a project tree like this:
+
+root/
+    sub-project1/
+    sub-project2/
+    sub-project3/
+    .... main project's files and directories....
+
+Each such sub-project can also have sub-projects.  In the normal
+case, we can walk the directory tree all they way down.  The problem is,
+sub-projects can include itself as a sub-project! To solve this problem,
+the function checks that if it encounters existing sub-projects already
+processed before (this means the function walks up the directory tree again),
+it simply ignores to avoid infinite loop.
+
+An example is `yasnippet' Git project at the time of writing this:
+
+yasnippet/
+    snippets/  -> submodule
+    yasmate/   -> submodule
+
+
+Running \"git submodule\" inside `yasnippet/' returns this result:
+
+ 16154e1462a8bbb2c5cf48e1101bd3f2c090e0fc snippets (remotes/origin/cleanup_html_tags-7-g16154e1)
+ 0543618bd34a6715918992f01161c118f136bb37 yasmate (0543618)
+
+Running \"git submodule\" inside `yasnippet/yasmate' returns this result:
+
+-993588a35d665427209936618a9e524679480e95 bundles/html-tmbundle
+-d0c1ae22d326d310edaf126acf93588b7958f682 bundles/objc-tmbundle
+-8091f39a6efd288c8793321e8822a639db3cc940 bundles/rails-tmbundle
+-da63813a86d46f17abf0a9303de1149ca7cee60a bundles/ruby-tmbundle
+
+We change into the directory of either of those directory, for example:
+
+cd bundles/ruby-tmbundle
+
+Running \"git submodule\" any of those submodule returns this result:
+
+-993588a35d665427209936618a9e524679480e95 ../html-tmbundle
+-d0c1ae22d326d310edaf126acf93588b7958f682 ../objc-tmbundle
+-8091f39a6efd288c8793321e8822a639db3cc940 ../rails-tmbundle
+-da63813a86d46f17abf0a9303de1149ca7cee60a ../ruby-tmbundle
+
+So, each of those modules is point to itself! We must only check to avoid
+looping at a single point."
+  (let* ((default-directory project)
+         ;; search for sub-projects under current project `project'
+         (submodules (mapcar
+                      (lambda (s)
+                        (file-name-as-directory (expand-file-name s default-directory)))
+                      (projectile-files-via-ext-command (projectile-get-sub-projects-command)))))
+
+    ;; check if there are more submodules to be processed
+    ;; if not, returns found submodules since we reach the base case of recursion.
+    ;; or, if the current project already in the sub-project list;
+    ;; we are simply getting into a loop, so better terminate it here and returns nil
+    ;; because we already processed it..
+    (cond
+     ((null submodules) known-projects)
+     ((member project known-projects) submodules)
+     (t
+      (-flatten
+       ;; recursively get sub-projects of each sub-project
+       (mapcar (lambda (s)
+                 (projectile-get-all-sub-projects s (nconc known-projects submodules))) submodules))))))
+
+(defun projectile-get-sub-projects-files ()
+  "Get files from sub-projects recursively."
+  (-flatten
+   (mapcar (lambda (s)
+             (let ((default-directory s))
+               (mapcar (lambda (f)
+                         (concat s f))
+                       (projectile-files-via-ext-command projectile-git-command))))
+           (projectile-get-all-sub-projects (projectile-project-root)))))
+
 (defun projectile-get-repo-files ()
-  "Get a list of the files in the project."
-  (projectile-files-via-ext-command (projectile-get-ext-command)))
+  "Get a list of the files in the project, including sub-projects."
+  (cond
+   ((eq (projectile-project-vcs) 'git)
+    (nconc (projectile-files-via-ext-command (projectile-get-ext-command))
+           (projectile-get-sub-projects-files)))
+   (t (projectile-files-via-ext-command (projectile-get-ext-command)))))
 
 (defun projectile-files-via-ext-command (command)
   "Get a list of relative file names in the project root by executing COMMAND."
@@ -1441,9 +1568,12 @@ With a prefix ARG invalidates the cache first."
 Expands wildcards using `file-expand-wildcards' before checking."
   (file-expand-wildcards (projectile-expand-root file)))
 
-(defun projectile-project-vcs ()
-  "Determine the VCS used by the project if any."
-  (let ((project-root (projectile-project-root)))
+(defun projectile-project-vcs (&optional dir)
+  "Determine the VCS used by the project if any.
+DIR is the targeted directory.  If nil, use `projectile-project-root'."
+  (let ((project-root (if dir
+                          dir
+                        (projectile-project-root))))
     (cond
      ((projectile-file-exists-p (expand-file-name ".git" project-root)) 'git)
      ((projectile-file-exists-p (expand-file-name ".hg" project-root)) 'hg)
@@ -2428,16 +2558,23 @@ Otherwise behave as if called interactively.
   :require 'projectile
   (cond
    (projectile-mode
+    ;; initialize the projects cache if needed
+    (unless projectile-projects-cache
+      (setq projectile-projects-cache
+            (or (projectile-unserialize projectile-cache-file)
+                (make-hash-table :test 'equal))))
     (add-hook 'find-file-hook 'projectile-cache-files-find-file-hook t t)
     (add-hook 'find-file-hook 'projectile-cache-projects-find-file-hook t t)
     (add-hook 'projectile-find-dir-hook 'projectile-cache-projects-find-file-hook)
     (add-hook 'find-file-hook 'projectile-visit-project-tags-table t t)
-    (ad-activate 'compilation-find-file))
+    (ad-activate 'compilation-find-file)
+    (ad-activate 'delete-file))
    (t
     (remove-hook 'find-file-hook 'projectile-cache-files-find-file-hook t)
     (remove-hook 'find-file-hook 'projectile-cache-projects-find-file-hook t)
     (remove-hook 'find-file-hook 'projectile-visit-project-tags-table t)
-    (ad-deactivate 'compilation-find-file))))
+    (ad-deactivate 'compilation-find-file)
+    (ad-deactivate 'delete-file))))
 
 ;;;###autoload
 (define-globalized-minor-mode projectile-global-mode

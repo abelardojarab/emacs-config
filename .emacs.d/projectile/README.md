@@ -105,11 +105,21 @@ project.
 
 Since the native indexing mode is much slower, by default the second
 method is used on all operating systems except Windows. To force the
-use of native indexing:
+use of native indexing in operating systems other than Windows:
 
 ```el
 (setq projectile-indexing-method 'native)
 ```
+
+To force the use of external indexing in Windows:
+
+```el
+(setq projectile-indexing-method 'alien)
+```
+
+This can speed up Projectile in Windows significantly. The disadvantage of this 
+method is that it's not well supported on Windows systems. If there's problem,
+you can always use native indexing mode.
 
 #### Caching
 
@@ -198,7 +208,10 @@ may prefer to alter the value of `projectile-switch-project-action`:
 
 This is the default.  With this setting, once you have selected your
 project via Projectile's completion system (see below), you will
-remain in the completion system to select a file to visit.
+remain in the completion system to select a file to visit. `projectile-find-file`
+is capable of retrieving files in all sub-projects under the project root,
+such as Git submodules. Currently, only Git is supported. Support for other VCS
+will be added in the future.
 
 ###### `projectile-find-file-dwim`
 
@@ -603,6 +616,9 @@ commands:
 
 If you already activate helm-projectile key bindings and you don't like it, you can turn it off
 and use the normal Projectile bindings with command `helm-projectile-off`.
+
+To fully learn Helm Projectile and see what it is capable of, you should refer to this guide:
+[Exploring large projects with Projectile and Helm Projectile](http://tuhdo.github.io/helm-projectile.html).
 
 Obviously you need to have Helm installed for this to work :-)
 
