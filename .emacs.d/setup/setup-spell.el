@@ -80,7 +80,6 @@
 
 (add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
 (add-hook 'mail-mode-hook 'ac-ispell-ac-setup)
-(add-hook 'org-mode-hook 'ac-ispell-ac-setup)
 
 (provide 'setup-spell)
 ;;; setup-spell.el ends here

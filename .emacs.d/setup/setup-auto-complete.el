@@ -82,7 +82,7 @@
 
 ;; Let's have snippets and TAGS in the auto-complete dropdown
 (defun ac-common-setup ()
-  (setq ac-sources (append ac-sources '(ac-source-yasnippet ac-source-etags ac-source-gtags ac-source-semantic ac-source-semantic-raw ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers))))
+  (setq ac-sources (append ac-sources '(ac-source-yasnippet ac-source-etags ac-source-gtags ac-source-semantic ac-source-semantic-raw ac-source-abbrev ac-source-ispell-fuzzy ac-source-dictionary ac-source-words-in-same-mode-buffers))))
 (add-hook 'auto-complete-mode-hook 'ac-common-setup)
 
 ;; Clang auto-complete
@@ -123,5 +123,10 @@
                                     lisp-mode textile-mode markdown-mode tuareg-mode
                                     js3-mode css-mode less-css-mode))
   (add-to-list 'ac-modes mode))
+
+;; font face setting
+(when (find-font (font-spec :name "Consolas"))
+  (set-face-font 'ac-candidate-face "Consolas-11")
+  (set-face-font 'ac-selection-face "Consolas-11"))
 
 (provide 'setup-auto-complete)
