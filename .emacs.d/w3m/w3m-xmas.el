@@ -1,6 +1,6 @@
 ;;; w3m-xmas.el --- XEmacs stuff for emacs-w3m
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2007, 2008, 2009
+;; Copyright (C) 2001-2010, 2012, 2013
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: Yuuichi Teranishi  <teranisi@gohome.org>,
@@ -165,52 +165,6 @@ PRIORITY-LIST is a list of coding systems ordered by priority."
 			      start end (nreverse categories))))
 	(car codesys)
       codesys)))
-
-(defun w3m-decode-coding-string-with-priority (str coding)
-  "Decode the string STR which is encoded in CODING.
-If CODING is a list, look for the coding system using it as a priority
-list."
-  (w3m-static-if (and (fboundp 'find-coding-system)
-		      (subrp (symbol-function 'find-coding-system)))
-      (if (listp coding)
-	  (with-temp-buffer
-	    (insert str)
-	    (let* ((orig-category-list (coding-priority-list))
-		   (orig-category-systems (mapcar #'coding-category-system
-						  orig-category-list))
-		   codesys category priority-list)
-	      (unwind-protect
-		  (progn
-		    (while coding
-		      (setq codesys (car coding)
-			    coding (cdr coding)
-			    category (or (coding-system-category codesys)
-					 (coding-system-name codesys)))
-		      (unless (or (eq (coding-system-type codesys) 'undecided)
-				  (assq category priority-list))
-			(set-coding-category-system category codesys)
-			(push category priority-list)))
-		    (set-coding-priority-list (nreverse priority-list))
-		    ;; `detect-coding-region' always returns `undecided'
-		    ;; ignoring `priority-list' in XEmacs 21.5-b19, but
-		    ;; that's okay.
-		    (when (consp (setq codesys (detect-coding-region
-						(point-min) (point-max))))
-		      (setq codesys (car codesys)))
-		    (decode-coding-region (point-min) (point-max)
-					  (or codesys
-					      w3m-default-coding-system
-					      w3m-coding-system
-					      'iso-2022-7bit))
-		    (buffer-string))
-		(set-coding-priority-list orig-category-list)
-		(while orig-category-list
-		  (set-coding-category-system (car orig-category-list)
-					      (car orig-category-systems))
-		  (setq orig-category-list (cdr orig-category-list)
-			orig-category-systems (cdr orig-category-systems))))))
-	(decode-coding-string str coding))
-    str))
 
 (eval-when-compile (autoload 'ucs-to-char "unicode"))
 
@@ -530,6 +484,8 @@ A buffer string between BEG and END are replaced with IMAGE."
   "Return non-nil if an image with IMAGE-TYPE can be displayed inline."
   (and (device-on-window-system-p)
        (featurep image-type)))
+
+(defalias 'w3m-image-animate 'identity)
 
 ;;; Toolbar:
 (defcustom w3m-use-toolbar (and (featurep 'toolbar) t)
@@ -964,8 +920,8 @@ necessarily solve the problem completely."
 	  (epos (point-at-eol))
 	  (buf (window-buffer window)))
       (save-selected-window
-	(save-excursion
-	  (set-buffer buf)
+	(save-excursion ;; Don't replace it with:
+	  (set-buffer buf) ;; (with-current-buffer buf
 	  (beginning-of-line)
 	  (condition-case nil
 	      (forward-char hs)
@@ -997,7 +953,7 @@ necessarily solve the problem completely."
 
 (defun w3m-form-coding-system-accept-region-p (&optional from to coding-system)
   "Check whether `coding-system' can encode specified region."
-  (let ((string (buffer-substring (or from (point-min)) 
+  (let ((string (buffer-substring (or from (point-min))
 				  (or to   (point-max)))))
     (unless (string= (decode-coding-string
 		      (encode-coding-string string coding-system)
