@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012-2014 Magnar Sveen
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
-;; Version: 2.8.0
+;; Version: 2.9.0
 ;; Keywords: lists
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -1174,6 +1174,11 @@ otherwise do ELSE."
   `(let ((it ,val))
      (if it ,then ,@else)))
 
+(defun dash--match-ignore-place-p (symbol)
+  "Return non-nil if SYMBOL is a symbol and starts with _."
+  (and (symbolp symbol)
+       (eq (aref (symbol-name symbol) 0) ?_)))
+
 (defun dash--match-cons-skip-cdr (skip-cdr source)
   "Helper function generating idiomatic shifting code."
   (cond
@@ -1241,34 +1246,24 @@ there.
 SOURCE is a proper or improper list."
   (let ((skip-cdr (or (plist-get props :skip-cdr) 0)))
     (cond
-     ((and (consp match-form)
-           (not (null match-form)))
+     ((consp match-form)
       (cond
-       ((symbolp (car match-form))
+       ((cdr match-form)
         (cond
-         ((cdr match-form)
-          (cond
-           ((eq (aref (symbol-name (car match-form)) 0) ?_)
-            (dash--match-cons-1 (cdr match-form) source
-                                (plist-put props :skip-cdr (1+ skip-cdr))))
-           (t
-            (cons (list (car match-form) (dash--match-cons-skip-cdr skip-cdr source))
-                  (dash--match-cons-1 (cdr match-form) source)))))
-         ;; Last matching place, no need for shift
+         ((and (symbolp (car match-form))
+               (eq (car match-form) '&keys))
+          (dash--match-kv (cons '&plist (cdr match-form)) (dash--match-cons-get-cdr skip-cdr source)))
+         ((dash--match-ignore-place-p (car match-form))
+          (dash--match-cons-1 (cdr match-form) source
+                              (plist-put props :skip-cdr (1+ skip-cdr))))
          (t
-          (list (list (car match-form) (dash--match-cons-get-car skip-cdr source))))))
-       (t
-        (cond
-         ((cdr match-form)
           (-concat (dash--match (car match-form) (dash--match-cons-skip-cdr skip-cdr source))
-                   (dash--match-cons-1 (cdr match-form) source)))
-         ;; Last matching place, no need for shift
-         (t
-          (dash--match (car match-form) (dash--match-cons-get-car skip-cdr source)))))))
+                   (dash--match-cons-1 (cdr match-form) source)))))
+       (t ;; Last matching place, no need for shift
+        (dash--match (car match-form) (dash--match-cons-get-car skip-cdr source)))))
      ((eq match-form nil)
       nil)
-     ;; Handle improper lists.  Last matching place, no need for shift
-     (t
+     (t ;; Handle improper lists.  Last matching place, no need for shift
       (dash--match match-form (dash--match-cons-get-cdr skip-cdr source))))))
 
 (defun dash--vector-tail (seq start)
@@ -1285,7 +1280,18 @@ SOURCE is a proper or improper list."
 (defun dash--match-vector (match-form source)
   "Setup a vector matching environment and call the real matcher."
   (let ((s (make-symbol "--dash-source--")))
-    (cons (list s source) (dash--match-vector-1 match-form s))))
+    (cond
+     ;; don't bind `s' if we only have one sub-pattern
+     ((= (length match-form) 1)
+      (dash--match (aref match-form 0) `(aref ,source 0)))
+     ;; don't bind `s' if we only have one sub-pattern which is not ignored
+     ((let* ((ignored-places (mapcar 'dash--match-ignore-place-p match-form))
+             (ignored-places-n (length (-remove 'null ignored-places))))
+        (when (= ignored-places-n (1- (length match-form)))
+          (let ((n (-find-index 'null ignored-places)))
+            (dash--match (aref match-form n) `(aref ,source ,n))))))
+     (t
+      (cons (list s source) (dash--match-vector-1 match-form s))))))
 
 (defun dash--match-vector-1 (match-form source)
   "Match MATCH-FORM against SOURCE.
@@ -1313,9 +1319,6 @@ is discarded."
         (push (cond
                ((and (symbolp m)
                      (eq m '&rest))
-                ;; the reversing here is necessary, because we reverse
-                ;; `re' in the end.  That would then incorrectly
-                ;; reorder sub-expression matches
                 (prog1 (dash--match
                         (aref match-form (1+ i))
                         `(dash--vector-tail ,source ,i))
@@ -1335,7 +1338,12 @@ is discarded."
 
 kv can be any key-value store, such as plist, alist or hash-table."
   (let ((s (make-symbol "--dash-source--")))
-    (cons (list s source) (dash--match-kv-1 (cdr match-form) s (car match-form)))))
+    (cond
+     ;; don't bind `s' if we only have one sub-pattern (&type key val)
+     ((= (length match-form) 3)
+      (dash--match-kv-1 (cdr match-form) source (car match-form)))
+     (t
+      (cons (list s source) (dash--match-kv-1 (cdr match-form) s (car match-form)))))))
 
 (defun dash--match-kv-1 (match-form source type)
   "Match MATCH-FORM against SOURCE of type TYPE.
@@ -1388,6 +1396,8 @@ Key-value stores are disambiguated by placing a token &plist,
     (cond
      ((memq (car match-form) '(&plist &alist &hash))
       (dash--match-kv match-form source))
+     ((eq (car match-form) '&keys)
+      (dash--match-kv (cons '&plist (cdr match-form)) source))
      (t (dash--match-cons match-form source))))
    ((vectorp match-form)
     (dash--match-vector match-form source))))
@@ -1488,7 +1498,16 @@ Key/value stores:
 
   (&hash key0 a0 ... keyN aN) - bind value mapped by keyK in the
                                 SOURCE hash table to aK.  If the
-                                value is not found, aK is nil."
+                                value is not found, aK is nil.
+
+Further, special keyword &keys supports \"inline\" matching of
+plist-like key-value pairs, similarly to &keys keyword of
+`cl-defun'.
+
+  (a1 a2 ... aN &keys key1 b1 ... keyN bK)
+
+This binds N values from the list to a1 ... aN, then interprets
+the cdr as a plist (see key/value matching above)."
   (declare (debug ((&rest (sexp form)) body))
            (indent 1))
   (if (vectorp varlist)

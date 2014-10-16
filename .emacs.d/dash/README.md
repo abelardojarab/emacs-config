@@ -19,11 +19,11 @@ If you want the function combinators, then also:
 
 Add this to the big comment block at the top:
 
-    ;; Package-Requires: ((dash "2.8.0"))
+    ;; Package-Requires: ((dash "2.9.0"))
 
 To get function combinators:
 
-    ;; Package-Requires: ((dash "2.8.0") (dash-functional "1.1.0") (emacs "24"))
+    ;; Package-Requires: ((dash "2.9.0") (dash-functional "1.2.0") (emacs "24"))
 
 ## Syntax highlighting of dash functions
 
@@ -1782,6 +1782,15 @@ Key/value stores:
                                   `source` hash table to aK.  If the
                                   value is not found, aK is nil.
 
+Further, special keyword &keys supports "inline" matching of
+plist-like key-value pairs, similarly to &keys keyword of
+`cl-defun`.
+
+    (a1 a2 ... aN &keys key1 b1 ... keyN bK)
+
+This binds `n` values from the list to a1 ... aN, then interprets
+the cdr as a plist (see key/value matching above).
+
 ```cl
 (-let (([a (b c) d] [1 (2 3) 4])) (list a b c d)) ;; => '(1 2 3 4)
 (-let [(a b c . d) (list 1 2 3 4 5 6)] (list a b c d)) ;; => '(1 2 3 (4 5 6))
@@ -2125,6 +2134,15 @@ Oh, and don't edit `README.md` directly, it is auto-generated.
 Change `readme-template.md` or `examples-to-docs.el` instead.
 
 ## Changelist
+
+### From 2.8 to 2.9
+
+- Add `-let`, `-let*` and `-lambda` with destructuring
+- Add `-tree-seq` and `-tree-map-nodes`
+- Add `-non-nil`
+- Add `-fix`
+- Add `-fixfn` (dash-functional 1.2)
+- Add `-copy` (Wilfred Hughes)
 
 ### From 2.7 to 2.8
 

@@ -323,6 +323,7 @@
                (throw 'matched t)))))))
 
 ;; Better search, similar to vim
+(require 'isearch+)
 (defun my-isearch-word-at-point ()
   (interactive)
   (call-interactively 'isearch-forward-regexp))
