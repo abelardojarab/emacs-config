@@ -63,6 +63,8 @@
 (add-to-list 'sml/hidden-modes " ElDoc")
 (add-to-list 'sml/hidden-modes " Eldoc-eval")
 (add-to-list 'sml/hidden-modes " -Chg")
+(add-to-list 'sml/hidden-modes " Projectile")
+
 (add-to-list 'sml/hidden-modes " sc")
 (add-to-list 'sml/hidden-modes " WSC")
 (add-to-list 'sml/hidden-modes " Spell")
