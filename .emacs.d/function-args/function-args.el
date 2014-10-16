@@ -72,6 +72,14 @@
           (const :tag "Plain" display-completion-list))
   :group 'function-args)
 
+(defcustom fa-insert-method 'name
+  "How to insert a function completed with `moo-complete'."
+  :type '(choice
+          (const :tag "name only" name)
+          (const :tag "name and parens" name-and-parens)
+          (const :tag "name and parens and hint" name-and-parens-and-hint))
+  :group 'function-args)
+
 (defface fa-face-hint
     '((t (:background "#fff3bc" :foreground "black")))
   "Basic hint face."
@@ -558,81 +566,78 @@ Select bold faces when BOLD is t."
 
 (defun fa-tfunction->fal (tag &optional output-string)
   "Return function argument list structure for TAG.
-It has the structure:
-(template type (file . position) arguments)."
+It has the structure: (template type (file . position) arguments)."
+  (unless (eq (semantic-tag-class tag) 'function)
+    (error "Not a function"))
   (let ((filename (moo-tget-filename tag))
         (position (moo-tget-beginning-position tag))
-        (name (pop tag))
-        (name-e (pop tag)))
-    (if (eq name-e 'function)
-        (let ((r (pop tag))
-              template-p
-              type-p
-              arguments-p
-              constant-flag-p
-              methodconst-flag-p
-              typemodifiers-p
-              constructor-flag-p
-              pointer-p
-              template-specifier-p
-              item)
-          (while r
-            (setq item (pop r))
-            (case item
-              (:template (setq template-p (pop r)))
-              (:type (setq type-p (pop r)))
-              (:arguments (setq arguments-p (pop r)))
-              (:constant-flag (setq constant-flag-p (pop r)))
-              (:methodconst-flag (setq methodconst-flag-p (pop r)))
-              (:typemodifiers (setq typemodifiers-p (pop r)))
-              (:constructor-flag (setq constructor-flag-p (pop r)))
-              (:pointer (setq pointer-p (pop r)))
-              (:template-specifier (setq template-specifier-p (pop r)))
-              ((:prototype-flag
-                :parent
-                :operator-flag
-                :destructor-flag
-                :pure-virtual-flag
-                :throws
-                :filename)
-               (pop r))
-              (t (error "Unknown token %s" item))))
-          (let ((argument-conses (mapcar
-                                  #'fa-variable->cons
-                                  (mapcar
-                                   (lambda (x) (if (string= (car x) "") (setcar x "")) x)
-                                   arguments-p))))
-            (if (null output-string)
-                (cons
-                 ;; name and type part
-                 (list (and template-p
-                            (concat "template " (fa-ttemplate-specifier->str template-p) " "))
-                       (if constructor-flag-p
-                           name
-                         (if type-p
-                             (fa-type->str type-p)
-                           "?"))
-                       (cons filename position))
-                 ;; arguments part
-                 argument-conses)
-              ;; ——— output a string instead —————————————————————————————————————————————
-              (concat
-               (and template-p (concat "template " (fa-ttemplate-specifier->str template-p) " "))
-               (and typemodifiers-p (concat (mapconcat #'identity typemodifiers-p " ") " "))
-               (if constructor-flag-p
-                   ""
-                 (if type-p
-                     (propertize (fa-type->str type-p) 'face 'font-lock-type-face)
-                   "?"))
-               " " (propertize name 'face 'font-lock-function-name-face)
-               "("
-               (mapconcat (lambda (x) (concat (car x) " " (cdr x)))
-                          argument-conses
-                          ", ")
-               ")"
-               (if methodconst-flag-p (propertize " const" 'face 'font-lock-keyword-face) "")
-               ";"))))
-      (error "Not a function"))))
+        (name (semantic-tag-name tag))
+        (r (semantic-tag-attributes tag))
+        template-p type-p arguments-p constant-flag-p
+        methodconst-flag-p typemodifiers-p constructor-flag-p
+        pointer-p template-specifier-p item)
+    (while r
+      (setq item (pop r))
+      (case item
+        (:template (setq template-p (pop r)))
+        (:type (setq type-p (pop r)))
+        (:arguments (setq arguments-p (pop r)))
+        (:constant-flag (setq constant-flag-p (pop r)))
+        (:methodconst-flag (setq methodconst-flag-p (pop r)))
+        (:typemodifiers (setq typemodifiers-p (pop r)))
+        (:constructor-flag (setq constructor-flag-p (pop r)))
+        (:pointer (setq pointer-p (pop r)))
+        (:template-specifier (setq template-specifier-p (pop r)))
+        ((:prototype-flag
+          :parent
+          :operator-flag
+          :destructor-flag
+          :pure-virtual-flag
+          :throws
+          :filename)
+         (pop r))
+        (t (error "Unknown token %s" item))))
+    (let ((argument-conses (mapcar
+                            #'fa-variable->cons
+                            (mapcar
+                             (lambda (x) (unless (stringp (car x)) (setcar x "")) x)
+                             arguments-p)))
+          (template-part
+           (and template-p
+                (concat "template " (fa-ttemplate-specifier->str template-p) " ")))
+          (return-type
+           (concat (if constant-flag-p
+                       "const "
+                     "")
+                   (if type-p
+                       (propertize (fa-type->str type-p) 'face 'font-lock-type-face)
+                     "?")
+                   (if pointer-p " *" ""))))
+      (if (null output-string)
+          (cons
+           ;; name and type part
+           (list template-part
+                 (if constructor-flag-p
+                     name
+                   return-type)
+                 (cons filename position))
+           ;; arguments part
+           argument-conses)
+        ;; ——— output a string instead —————————————————————————————————————————————
+        (concat
+         template-part
+         (and typemodifiers-p (concat (mapconcat #'identity typemodifiers-p " ") " "))
+         (if constructor-flag-p
+             ""
+           return-type)
+         " " (propertize name 'face 'font-lock-function-name-face)
+         "("
+         (mapconcat (lambda (x) (concat (car x) " " (cdr x)))
+                    argument-conses
+                    ", ")
+         ")"
+         (if methodconst-flag-p (propertize " const" 'face 'font-lock-keyword-face) "")
+         ";")))))
 
 (defun fa-throw-unless-eq (x v)
   "Return t if X equals V.
@@ -863,6 +868,18 @@ When PREFIX is not nil, erase it before inserting."
     (moo-erase-string prefix))
   (cond ((eq formatter 'full-tag)
          (insert (moo-tag->str candidate)))
+        ((moo-functionp candidate)
+         (insert (semantic-tag-name candidate))
+         (unless (eq fa-insert-method 'name)
+           (insert "()")
+           (backward-char 1)
+           (when (eq fa-insert-method 'name-and-parens-and-hint)
+             (setq fa-hint-pos (point))
+             (setq fa-idx 0)
+             (setq fa-lst (list (fa-tfunction->fal candidate)))
+             (fa-update-arg)
+             (fa-start-tracking)
+             (fa-show))))
         ((stringp candidate)
          (insert candidate))
         ((and (consp candidate)
