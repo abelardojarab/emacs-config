@@ -117,13 +117,13 @@
 ;; Tern.JS
 (add-to-list 'load-path "~/.emacs.d/tern/emacs")
 (autoload 'tern-mode "tern.el" nil t)
-;;(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(when (executable-find "npm")
+  (add-hook 'js2-mode-hook (lambda () (tern-mode t))))
 (eval-after-load 'auto-complete
   '(eval-after-load 'tern
      '(progn
         (require 'tern-auto-complete)
         (tern-ac-setup))))
-
 
 (defun my-aget (key map)
   (cdr (assoc key map)))
