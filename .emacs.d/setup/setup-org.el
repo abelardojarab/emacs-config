@@ -63,6 +63,7 @@
 (setq org-use-speed-commands t)
 (setq org-default-notes-file "~/workspace/Documents/agenda.org")
 (setq org-export-with-sub-superscripts nil)
+(setq org-use-sub-superscripts (quote {}))
 (setq org-indent-mode t)
 
 ;; Org Agenda
@@ -123,7 +124,7 @@
                      (subtree-is-current (save-excursion
                                            (forward-line 1)
                                            (and (< (point) subtree-end)
-                                              (re-search-forward (concat last-month "\\|" this-month) subtree-end t)))))
+                                                (re-search-forward (concat last-month "\\|" this-month) subtree-end t)))))
                 (if subtree-is-current
                     subtree-end ; Has a date in this month or last month, skip it
                   nil))  ; available to archive
@@ -180,14 +181,14 @@
 (defun org-capture-noninteractively ()
   (let* ((orig-buf (current-buffer))
          (annotation (if (and (boundp 'org-capture-link-is-already-stored)
-                            org-capture-link-is-already-stored)
+                              org-capture-link-is-already-stored)
                          (plist-get org-store-link-plist :annotation)
                        (ignore-errors (org-store-link nil))))
          (entry org-capture-entry)
          initial)
     (setq initial (or org-capture-initial
-                     (and (org-region-active-p)
-                        (buffer-substring (point) (mark)))))
+                      (and (org-region-active-p)
+                           (buffer-substring (point) (mark)))))
     (when (stringp initial)
       (remove-text-properties 0 (length initial) '(read-only t) initial))
     (when (stringp annotation)
@@ -206,19 +207,19 @@
     (org-capture-get-template)
     (org-capture-put :original-buffer orig-buf
                      :original-file (or (buffer-file-name orig-buf)
-                                       (and (featurep 'dired)
-                                          (car (rassq orig-buf
-                                                      dired-buffers))))
+                                        (and (featurep 'dired)
+                                             (car (rassq orig-buf
+                                                         dired-buffers))))
                      :original-file-nondirectory
                      (and (buffer-file-name orig-buf)
-                        (file-name-nondirectory
-                         (buffer-file-name orig-buf)))
+                          (file-name-nondirectory
+                           (buffer-file-name orig-buf)))
                      :annotation annotation
                      :initial initial
                      :return-to-wconf (current-window-configuration)
                      :default-time
                      (or org-overriding-default-time
-                        (org-current-time)))
+                         (org-current-time)))
     (org-capture-set-target-location)
     (condition-case error
         (org-capture-put :template (org-capture-fill-template))
@@ -231,12 +232,12 @@
          (equal (car (org-capture-get :target)) 'function))
       ((error quit)
        (if (and (buffer-base-buffer (current-buffer))
-              (string-match "\\`CAPTURE-" (buffer-name)))
+                (string-match "\\`CAPTURE-" (buffer-name)))
            (kill-buffer (current-buffer)))
        (set-window-configuration (org-capture-get :return-to-wconf))
        (error "Error.")))
     (if (and (derived-mode-p 'org-mode)
-           (org-capture-get :clock-in))
+             (org-capture-get :clock-in))
         (condition-case nil
             (progn
               (if (org-clock-is-active)
@@ -283,15 +284,16 @@
 (add-to-list 'org-structure-template-alist '("S" "#+BEGIN_SRC shell-script\n?\n#+END_SRC\n"))
 
 ;; Fix shift problem in Org mode
-(setq org-support-shift-select t)
+(setq org-CUA-compatible t)
+(setq org-support-shift-select 'always)
 (eval-after-load "org"
   '(progn
      (eval-after-load "cua-base"
        '(progn
           (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
             (if (and cua-mode
-                   org-support-shift-select
-                   (not (use-region-p)))
+                     org-support-shift-select
+                     (not (use-region-p)))
                 (cua-set-mark)))))))
 
 ;; Fix on the keys
@@ -436,7 +438,7 @@ a link to this file."
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                "/clippaste /convert=" filename))
+                                                                                      "/clippaste /convert=" filename))
 
       (if (equal system-type 'darwin)
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
@@ -494,21 +496,21 @@ a link to this file."
 (defun org-mode-reftex-setup ()
   (interactive)
   (and (buffer-file-name) (file-exists-p (buffer-file-name))
-     (progn
-       ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
-       (setq TeX-master t)
-       (turn-on-reftex)
-       ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-       (global-auto-revert-mode t) ; careful: this can kill the undo
-       ;; history when you change the file
-       ;; on-disk.
-       (reftex-parse-all)
-       ;; add a custom reftex cite format to insert links
-       ;; This also changes any call to org-citation!
-       (reftex-set-cite-format
-        '((?c . "\\citet{%l}") ; natbib inline text
-          (?i . "\\citep{%l}") ; natbib with parens
-          ))))
+       (progn
+         ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
+         (setq TeX-master t)
+         (turn-on-reftex)
+         ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
+         (global-auto-revert-mode t) ; careful: this can kill the undo
+         ;; history when you change the file
+         ;; on-disk.
+         (reftex-parse-all)
+         ;; add a custom reftex cite format to insert links
+         ;; This also changes any call to org-citation!
+         (reftex-set-cite-format
+          '((?c . "\\citet{%l}") ; natbib inline text
+            (?i . "\\citep{%l}") ; natbib with parens
+            ))))
   (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
   (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
 (add-hook 'org-mode-hook 'org-mode-reftex-setup)
@@ -774,6 +776,18 @@ a link to this file."
 (add-to-list 'load-path "~/.emacs.d/org-toc")
 (when (require 'org-toc nil t)
   (add-hook 'org-mode-hook 'org-toc-enable))
+
+;;** misc
+;;*** strike thru headlines for DONE task
+;;stolen from http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
+(setq org-fontify-done-headline t)
+(custom-set-faces
+ '(org-done ((t (:foreground "PaleGreen"
+                             :weight normal
+                             :strike-through t))))
+ '(org-headline-done
+   ((((class color) (min-colors 16) (background dark))
+     (:foreground "LightSalmon" :strike-through t)))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
