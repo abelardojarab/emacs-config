@@ -26,6 +26,8 @@
 
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
+(add-to-list 'load-path "~/.emacs.d/org-mode/contrib/lisp")
+
 (defvar org-list-allow-alphabetical t)
 (defun org-element-bold-successor           (arg))
 (defun org-element-code-successor           (arg))
@@ -62,9 +64,13 @@
 (setq org-confirm-babel-evaluate nil)
 (setq org-use-speed-commands t)
 (setq org-default-notes-file "~/workspace/Documents/agenda.org")
-(setq org-export-with-sub-superscripts nil)
-(setq org-use-sub-superscripts (quote {}))
 (setq org-indent-mode t)
+
+;; (setq org-export-with-sub-superscripts nil)
+;; (setq org-use-sub-superscripts "{}")
+
+;; deadline warning day
+(setq org-deadline-warning-days 3)
 
 ;; Org Agenda
 (eval-after-load 'org-agenda
