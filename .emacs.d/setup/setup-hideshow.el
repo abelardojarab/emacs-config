@@ -75,12 +75,17 @@
 
 (defun display-code-line-counts (ov)
   (when (eq 'code (overlay-get ov 'hs))
-    (overlay-put ov 'display
-                 (propertize
-                  (format " ...<%d>)"
-                          (count-lines (overlay-start ov)
-                                       (overlay-end ov)))
-                  'face 'hs-face))))
+    (let* ((marker-string "*fringe-dummy*")
+           (marker-length (length marker-string))
+           (display-string (format "(%d)..." (count-lines
+                                              (overlay-start ov) (overlay-end ov)))))
+      (overlay-put ov 'help-echo "Hiddent text. C-c,= to show")
+      (put-text-property 0 marker-length 'display (list 'left-fringe
+                                                        'hs-marker 'hs-fringe-face) marker-string)
+      (overlay-put ov 'before-string marker-string)
+      (put-text-property 0 (length display-string) 'face 'hs-face
+                         display-string)
+      (overlay-put ov 'display display-string))))
 (setq hs-set-up-overlay 'display-code-line-counts)
 
 ;; Yafolding
