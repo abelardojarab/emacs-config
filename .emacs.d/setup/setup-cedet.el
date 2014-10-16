@@ -97,17 +97,17 @@
 ;; smart completions
 (require 'semantic/ia)
 (setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
-                 '(unloaded system))
+                 '(project unloaded))
 (setq-mode-local c-mode semanticdb-find-default-throttle
-                 '(unloaded system))
+                 '(project unloaded))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
-                 '(unloaded system))
+                 '(project unloaded))
 (setq-mode-local lisp-mode semanticdb-find-default-throttle
-                 '(unloaded system))
+                 '(project unloaded))
 (setq-mode-local python-mode semanticdb-find-default-throttle
-                 '(unloaded system))
+                 '(project unloaded))
 (setq-mode-local js2-mode semanticdb-find-default-throttle
-                 '(unloaded system))
+                 '(project unloaded))
 
 ;; Include settings
 (ignore-errors
