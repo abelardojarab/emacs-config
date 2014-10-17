@@ -6,8 +6,13 @@
 (add-to-list 'load-path "~/.emacs.d/emacs-web-server")
 (add-to-list 'load-path "~/.emacs.d/skewer-mode")
 (add-to-list 'load-path "~/.emacs.d/ac-js2")
+(add-to-list 'load-path "~/.emacs.d/node-ac")
+(add-to-list 'load-path "~/.emacs.d/web-beautify")
 
 (require 'js2-mode)
+(require 'ac-js2)
+(require 'node-ac-mode)
+
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 (add-hook 'js2-mode-hook 'ac-js2-mode)
@@ -33,12 +38,10 @@
 (setq-default js2-show-parse-errors nil)
 (setq-default js2-strict-missing-semi-warning nil)
 (setq-default js2-strict-trailing-comma-warning t) ;; jshint does not warn about this now for some reason
-
 (add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
 
 (require 'js2-refactor)
 (js2r-add-keybindings-with-prefix "C-c C-m")
-
 (require 'js2-imenu-extras)
 (js2-imenu-extras-setup)
 
@@ -48,9 +51,7 @@
 (define-key js2-mode-map (kbd "C-c RET os") 'jump-to-source-file-other-window)
 (define-key js2-mode-map (kbd "C-c RET jo") 'jump-between-source-and-test-files)
 (define-key js2-mode-map (kbd "C-c RET oo") 'jump-between-source-and-test-files-other-window)
-
 (define-key js2-mode-map (kbd "C-c RET dp") 'js2r-duplicate-object-property-node)
-
 (define-key js2-mode-map (kbd "C-c RET ta") 'toggle-assert-refute)
 
 (defadvice js2r-inline-var (after reindent-buffer activate)
@@ -111,8 +112,6 @@
                        (if (string-match "/\\* *global *\\(.*?\\) *\\*/" btext) (match-string-no-properties 1 btext) "")
                        " *, *" t))
                 ))))
-
-(require 'json)
 
 ;; Tern.JS
 (add-to-list 'load-path "~/.emacs.d/tern/emacs")
@@ -195,6 +194,7 @@
 (add-to-list 'load-path "~/.emacs.d/json-reformat")
 (add-to-list 'load-path "~/.emacs.d/json-snatcher")
 (add-to-list 'load-path "~/.emacs.d/json-mode")
+(require 'json)
 (require 'json-mode)
 (add-to-list 'auto-mode-alist '("\\.json?$" . json-mode))
 
@@ -204,5 +204,48 @@
     (local-set-key (kbd "C-c C-g") 'jsons-print-path)))
 (add-hook 'js-mode-hook 'js-mode-bindings)
 (add-hook 'js2-mode-hook 'js-mode-bindings)
+
+;; Web beautify
+(require 'web-beautify) ;; Not necessary if using ELPA package
+(eval-after-load 'js2-mode
+  '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+;; Or if you're using 'js-mode' (a.k.a 'javascript-mode')
+(eval-after-load 'js
+  '(define-key js-mode-map (kbd "C-c b") 'web-beautify-js))
+
+(eval-after-load 'json-mode
+  '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
+
+(eval-after-load 'sgml-mode
+  '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
+
+(eval-after-load 'css-mode
+  '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
+
+(eval-after-load 'js2-mode
+  '(add-hook 'js2-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+
+;; Or if you're using 'js-mode' (a.k.a 'javascript-mode')
+(eval-after-load 'js
+  '(add-hook 'js-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+
+(eval-after-load 'json-mode
+  '(add-hook 'json-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+
+(eval-after-load 'sgml-mode
+  '(add-hook 'html-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-html-buffer t t))))
+
+(eval-after-load 'css-mode
+  '(add-hook 'css-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-css-buffer t t))))
 
 (provide 'setup-js2-mode)
