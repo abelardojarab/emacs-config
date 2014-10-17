@@ -1,6 +1,6 @@
 ;;; ac-js2.el --- Auto-complete source for Js2-mode, with navigation
 
-;; Copyright (C) 2013  Scott Barnett
+;; Copyright (C) 2013, 2014  Scott Barnett
 
 ;; Author: Scott Barnett <scott.n.barnett@gmail.com>
 ;; URL: https://github.com/ScottyB/ac-js2
@@ -282,11 +282,11 @@ string contain a function prototype."
   "Setup ac-js2 to be used with auto-complete-mode."
   (add-to-list 'ac-sources 'ac-source-js2)
   (auto-complete-mode)
-  (ac-define-source "js2"
+  (eval '(ac-define-source "js2"
     '((candidates . ac-js2-ac-candidates)
       (document . ac-js2-ac-document)
       (prefix .  ac-js2-ac-prefix)
-      (requires . -1))))
+      (requires . -1)))))
 
 ;;; Completion at point function
 
@@ -523,8 +523,8 @@ Supports navigation to 'foo.bar = 3' and 'foo = {bar: 3}'."
        (let ((parent (js2-node-parent node)))
          (unless endp
            (if (or (and (js2-prop-get-node-p node)
-                    (not (or (js2-elem-get-node-p parent) (js2-call-node-p parent)))
-                    (equal list-names (ac-js2-build-prop-name-list node)))
+                        (not (or (js2-elem-get-node-p parent) (js2-call-node-p parent)))
+                        (equal list-names (ac-js2-build-prop-name-list node)))
                    (and (js2-name-node-p node)
                         (js2-object-prop-node-p parent)
                         (string= (js2-name-node-name node)
