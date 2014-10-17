@@ -297,7 +297,7 @@ Intermediate `parse-partial-sexp' results are added to the cache."
         (let ((state (parse-partial-sexp from newpos nil nil oldstate)))
           (if (/= newpos to)
               (if cache-nearest-after
-                  (push (cons newpos state) (cdr cache-nearest-after))
+                  (setcdr cache-nearest-after (cons (cons newpos state) (cdr cache-nearest-after)))
                 (push (cons newpos state) rainbow-delimiters-parse-partial-sexp-cache)))
           (setq oldstate state
                 from newpos))))
@@ -513,8 +513,8 @@ Used by font-lock for dynamic highlighting."
                       (rainbow-delimiters-apply-color (nthcdr 2 closing-delim-info)
                                                       depth
                                                       delim-pos
-                                                      (= (nth 1 closing-delim-info)
-                                                         matching-opening-delim))
+                                                      (eq (nth 1 closing-delim-info)
+                                                          matching-opening-delim))
                       (setq depth (if (<= depth 0)
                                       0 ; unmatched delim
                                     (1- depth)))))))))))))
