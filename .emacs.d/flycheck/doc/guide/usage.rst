@@ -437,14 +437,22 @@ Every time the error list refreshes,
    :auto:
 
 When you move the point in the current buffer while the error list is visible,
-all errors at point and at the current line are highlighted in the error list
-with :face:`flycheck-error-list-highlight-at-point` and
-:face:`flycheck-error-list-highlight` respectively.
-
-.. face:: flycheck-error-list-highlight-at-point
-   :auto:
+all errors on the current line are highlighted in the error list with
+:face:`flycheck-error-list-highlight`:
 
 .. face:: flycheck-error-list-highlight
+   :auto:
+
+You can customize the appearance of the line and column numbers and of the
+syntax checker name:
+
+.. face:: flycheck-error-list-line-number
+   :auto:
+
+.. face:: flycheck-error-list-column-number
+   :auto:
+
+.. face:: flycheck-error-list-checker-name
    :auto:
 
 .. _error-navigation:
@@ -498,6 +506,12 @@ which are not affected by :option:`flycheck-standard-error-navigation`:
    With prefix argument, jump forwards to by as many errors as specified by
    the prefix argument, e.g. :kbd:`M-3 M-x flycheck-first-error` moves to
    the 3rd error from the beginning of the buffer.
+
+These commands consider all errors by default, but you can ignore errors below a
+given level with :option:`flycheck-navigation-minimum-level`:
+
+.. option:: flycheck-navigation-minimum-level
+   :auto:
 
 .. _mode-line:
 

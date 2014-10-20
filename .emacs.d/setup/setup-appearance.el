@@ -331,6 +331,10 @@
                   (goto-char (posn-point (event-start event)))
                   (highlight-symbol-at-point)))
 
+;; Highlight block
+(add-to-list 'load-path "~/.emacs.d/highlight-blocks")
+(require 'highlight-blocks)
+
 ;; Scrollbar
 (set-scroll-bar-mode 'right)
 

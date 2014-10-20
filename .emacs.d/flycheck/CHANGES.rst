@@ -9,6 +9,8 @@ master (in development)
   - `d-dmd` now requires DMD 2.066 or newer [GH-460]
   - `:next-checkers` now requires the maximum permissible level instead of a
     custom predicate [GH-472]
+  - Remove `flycheck-error-list-highlight-at-point` face and related
+    functionality [GH-490]
 
 - New syntax checkers:
 
@@ -22,6 +24,13 @@ master (in development)
     `flycheck-error-display-function`
   - Add `flycheck-error-list-after-refresh-hook` to run after the error list
     refreshes
+  - Add `flycheck-navigation-minimum-level` to restrict error levels available
+    for navigation [GH-398] [GH-485]
+  - The error list can be sorted by message and syntax checker name now [GH-500]
+  - Add `flycheck-error-list-checker-name` face to customize the appearance of
+    the syntax checker name in the error list [GH-500]
+  - Add `flycheck-shellcheck-excluded-warnings` to exclude warnings from
+    ShellCheck reports [GH-499]
 
 - Improvements:
 
@@ -29,6 +38,7 @@ master (in development)
   - `d-dmd` reports errors with columns now [GH-460]
   - Remove Projectile-based config file search [GH-461]
   - Do not change point when navigating in the error list [GH-487]
+  - ShellCheck warnings now include the corresponding warning code
 
 - Bug fixes:
 

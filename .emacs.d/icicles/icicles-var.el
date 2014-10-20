@@ -3,13 +3,12 @@
 ;; Filename: icicles-var.el
 ;; Description: Internal variables for Icicles
 ;; Author: Drew Adams
-;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2013, Drew Adams, all rights reserved.
+;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
+;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
 ;; Created: Mon Feb 27 09:23:26 2006
-;; Version: 22.0
-;; Last-Updated: Thu Apr  4 09:11:50 2013 (-0700)
+;; Last-Updated: Sun Aug 10 11:09:26 2014 (-0700)
 ;;           By: dradams
-;;     Update #: 1710
+;;     Update #: 1820
 ;; URL: http://www.emacswiki.org/icicles-var.el
 ;; Doc URL: http://www.emacswiki.org/Icicles
 ;; Keywords: internal, extensions, help, abbrev, local, minibuffer,
@@ -18,10 +17,16 @@
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   `apropos', `apropos-fn+var', `cl', `el-swank-fuzzy', `ffap',
-;;   `ffap-', `fuzzy', `fuzzy-match', `hexrgb', `icicles-opt',
-;;   `kmacro', `levenshtein', `naked', `regexp-opt', `thingatpt',
-;;   `thingatpt+', `wid-edit', `wid-edit+', `widget'.
+;;   `apropos', `apropos+', `apropos-fn+var', `avoid', `bookmark',
+;;   `bookmark+', `bookmark+-1', `bookmark+-bmu', `bookmark+-key',
+;;   `bookmark+-lit', `cl', `cmds-menu', `cus-theme',
+;;   `el-swank-fuzzy', `ffap', `ffap-', `fit-frame', `frame-fns',
+;;   `fuzzy', `fuzzy-match', `help+20', `hexrgb', `icicles-opt',
+;;   `info', `info+20', `kmacro', `levenshtein', `menu-bar',
+;;   `menu-bar+', `misc-cmds', `misc-fns', `naked', `package', `pp',
+;;   `pp+', `regexp-opt', `second-sel', `strings', `thingatpt',
+;;   `thingatpt+', `unaccent', `w32browser-dlgopen', `wid-edit',
+;;   `wid-edit+', `widget'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -40,6 +45,7 @@
 ;;    `icicle-allowed-sort-predicate', `icicle-apply-nomsg',
 ;;    `icicle-apropos-complete-match-fn',
 ;;    `icicle-apropos-value-last-initial-cand-set',
+;;    `icicle-auto-no-icomplete-mode-p', `icicle-auto-no-sort-p',
 ;;    `icicle-bookmark-history', `icicle-bookmark-list-names-only-p',
 ;;    `icicle-bookmark-types', `icicle-buffer-complete-fn',
 ;;    `icicle-buffer-config-history', `icicle-buffer-name-input-p',
@@ -57,17 +63,17 @@
 ;;    `icicle-complete-input-overlay', `icicle-complete-keys-alist',
 ;;    `icicle-completing-keys-p', `icicle-completing-p',
 ;;    `icicle-completing-read+insert-candidates',
-;;    `icicle-completion-candidates',
+;;    `icicle-completion-candidates', `icicle-completion-map-vars',
 ;;    `icicle-completion-prompt-overlay',
 ;;    `icicle-completion-set-history',
 ;;    `icicle-compute-narrowing-regexp-p',
 ;;    `icicle-confirm-exit-commands',
 ;;    `icicle-current-completion-candidate-overlay',
-;;    `icicle-current-completion-mode', `icicle-current-input',
-;;    `icicle-current-raw-input', `icicle-current-TAB-method',
-;;    `icicle-cycling-p', `icicle-default-thing-insertion-flipped-p',
-;;    `icicle-delete-candidate-object', `icicle-dictionary-history',
-;;    `icicle-dir-candidate-can-exit-p',
+;;    `icicle-current-completion-mode',
+;;    `icicle-current-font-lock-part', `icicle-current-input',
+;;    `icicle-current-raw-input', `icicle-cycling-p',
+;;    `icicle-default-thing-insertion-flipped-p',
+;;    `icicle-dictionary-history', `icicle-dir-candidate-can-exit-p',
 ;;    `icicle-doc-last-initial-cand-set',
 ;;    `icicle-dot-string-internal', `icicle-edit-update-p',
 ;;    `icicle-ess-use-ido', `icicle-exclude-default-proxies',
@@ -97,7 +103,8 @@
 ;;    `icicle-kmacro-history',
 ;;    `icicle-last-apropos-complete-match-fn',
 ;;    `icicle-last-completion-candidate',
-;;    `icicle-last-completion-command', `icicle-last-input',
+;;    `icicle-last-completion-command',
+;;    `icicle-last-icomplete-mode-value', `icicle-last-input',
 ;;    `icicle-last-sort-comparer', `icicle-last-top-level-command',
 ;;    `icicle-last-transform-function', `icicle-lighter-truncation',
 ;;    `icicle-list-use-nth-parts', `icicle-menu-map',
@@ -110,12 +117,18 @@
 ;;    `icicle-nb-candidates-before-truncation',
 ;;    `icicle-nb-of-other-cycle-candidates', `icicle-new-last-cmd',
 ;;    `icicle-next-apropos-complete-cycles-p',
-;;    `icicle-next-prefix-complete-cycles-p', `icicle-orig-buff',
+;;    `icicle-next-prefix-complete-cycles-p',
+;;    `icicle-next-window-for-display-buffer', `icicle-orig-buff',
+;;    `icicle-orig-font-lock-keywords',
+;;    `icicle-orig-minibuffer-completion-pred',
+;;    `icicle-orig-minibuffer-completion-table',
+;;    `icicle-orig-must-match-regexp',
+;;    `icicle-orig-must-not-match-regexp',
 ;;    `icicle-orig-must-pass-after-match-pred',
-;;    `icicle-orig-pt-explore', `icicle-orig-read-file-name-fn',
-;;    `icicle-orig-window', `icicle-orig-win-explore',
-;;    `icicle-other-window', `icicle-path-variables',
-;;    `icicle-plist-last-initial-cand-set',
+;;    `icicle-orig-must-pass-predicate', `icicle-orig-pt-explore',
+;;    `icicle-orig-read-file-name-fn', `icicle-orig-window',
+;;    `icicle-orig-win-explore', `icicle-other-window',
+;;    `icicle-path-variables', `icicle-plist-last-initial-cand-set',
 ;;    `icicle-predicate-types-alist', `icicle-pref-arg',
 ;;    `icicle-pre-minibuffer-buffer', `icicle-post-command-hook',
 ;;    `icicle-pre-command-hook',
@@ -124,7 +137,6 @@
 ;;    `icicle-progressive-completing-p', `icicle-prompt',
 ;;    `icicle-proxy-candidate-regexp', `icicle-proxy-candidates',
 ;;    `icicle-read-char-history', `icicle-read-expression-map',
-;;    `icicle-read-file-name-internal-fn' (Emacs 24+),
 ;;    `icicle-remove-icicles-props-p', `icicle-re-no-dot',
 ;;    `icicle-require-match-p', `icicle-reverse-multi-sort-p',
 ;;    `icicle-reverse-sort-p', `icicle-saved-candidate-overlays',
@@ -201,6 +213,9 @@
 ;;; Defvars to quiet byte-compiler:
 (defvar kmacro-ring-max)                ; Defined in `kmacro.el' in Emacs 22+.
 (defvar minibuffer-confirm-exit-commands) ; Defined in `minibuffer.el' in Emacs 23+.
+(defvar minibuffer-local-filename-completion-map)
+(defvar minibuffer-local-filename-must-match-map)
+(defvar minibuffer-local-must-match-filename-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -239,10 +254,12 @@ That is, `icicle-all-candidates-action-1' is in progress.
 If neither nil nor t, then the value is the action function to use.")
 
 (defvar icicle-all-candidates-list-action-fn nil
-  "Action function to apply to a list of all matching completions.")
+  "Action function to apply to a list of all matching completions.
+It is applied using `M-!' during completion.")
 
 (defvar icicle-all-candidates-list-alt-action-fn nil
-  "Alternative action function to apply to a list of matching completions.")
+  "Alternative action function to apply to a list of matching completions.
+It is applied using `M-|' during completion.")
 
 (defvar icicle-allowed-sort-predicate nil
   "Predicate that `icicle-current-sort-functions' allows in a sort order.
@@ -264,6 +281,16 @@ not filtered by the input, except possibly by a function-valued
 
 (defvar icicle-apropos-value-last-initial-cand-set ()
   "Cache for initial set of completion cands for `icicle-apropos-value'.")
+
+(defvar icicle-auto-no-icomplete-mode-p nil
+  "Non-nil means Icomplete mode has been turned off for this minibuffer activation.
+This automatic turning off happens when there are at least
+`icicle-icomplete-mode-max-candidates' completion candidates.")
+
+(defvar icicle-auto-no-sort-p nil
+  "Non-nil means sorting has been turned off for this minibuffer activation.
+This automatic turning off happens when there are at least
+`icicle-sorting-max-candidates' completion candidates.")
 
 (defvar icicle-bookmark-history nil "History for bookmark names.")
 
@@ -298,11 +325,15 @@ Otherwise, all buffer names are used as candidates.")
 
 (defvar icicle-candidate-action-fn nil
   "Action function to apply to current completion candidate.
+It is applied by `C-RET', `C-mouse-2', and similar keys during
+completion.
 For `icicle-all-candidates-action' to be able to report successes,
 this should return nil for \"success\" and non-nil for \"failure\".")
 
 (defvar icicle-candidate-alt-action-fn nil
   "Alternative action function to apply to current completion candidate.
+It is applied by `C-S-RET', `C-S-mouse-2', and similar keys during
+completion.
 For `icicle-all-candidates-alt-action' to be able to report successes,
 this should return nil for \"success\" and non-nil for \"failure\".")
 
@@ -311,6 +342,8 @@ this should return nil for \"success\" and non-nil for \"failure\".")
 
 (defvar icicle-candidate-help-fn nil
   "Help function to be applied to current completion candidate.
+It is applied by `C-M-RET', `C-M-mouse-2', and similar keys during
+completion.
 If nil then default help function `icicle-help-on-candidate' is used.
 If non-nil, it must be a function that accepts a completion candidate
 in its display form.  If the candidate is a multi-completion then the
@@ -355,7 +388,7 @@ same car.  Icicles search is one such example.")
 (defvar icicle-cands-to-narrow ()
   "Saved `icicle-completion-candidates' for reference during narrowing.")
 
-(defvar icicle-char-property-value-history nil "History for character property values.")
+(defvar icicle-char-property-value-history nil "History for text and overlay property values.")
 
 (defvar icicle-cmd-calling-for-completion 'ignore
   "Last command causing display of list of possible completions.")
@@ -400,6 +433,31 @@ Used only for Emacs 22 and later.")
 
 (defvar icicle-completion-candidates nil "Current list of completion candidates.")
 
+(defvar icicle-completion-map-vars
+  (delq nil (list 'minibuffer-local-completion-map
+                  'minibuffer-local-must-match-map
+                  (and (< emacs-major-version 24)
+                       (boundp 'minibuffer-local-filename-completion-map)
+                       (not (eq minibuffer-local-completion-map
+                                (keymap-parent minibuffer-local-filename-completion-map)))
+                       'minibuffer-local-filename-completion-map)
+                  (and (< emacs-major-version 24)
+                       (boundp 'minibuffer-local-filename-must-match-map)
+                       (not (eq minibuffer-local-must-match-map
+                                (keymap-parent minibuffer-local-filename-must-match-map)))
+                       'minibuffer-local-filename-must-match-map)
+                  (and (< emacs-major-version 24)
+                       (boundp 'minibuffer-local-must-match-filename-map)
+                       (not (eq minibuffer-local-must-match-map
+                                (keymap-parent minibuffer-local-must-match-filename-map)))
+                       'minibuffer-local-must-match-filename-map)))
+  "Minibuffer completion keymap variables.")
+
+;; Might as well do this here.
+(dolist (map  icicle-completion-map-vars)
+  ;; Non-nil value, to indicate completion.
+  (define-key (symbol-value map) [icicle-is-completion-map] 'ignore))
+
 (defvar icicle-completion-prompt-overlay nil
   "Overlay used to highlight saved completion candidates.")
 
@@ -429,11 +487,11 @@ Effective starting with Emacs 23.")
 (defvar icicle-current-completion-mode nil
   "Symbol `prefix' or `apropos', specifying the current completion mode.")
 
-(defvar icicle-current-input "" "Current minibuffer input.")
+(defvar icicle-current-font-lock-part nil
+  "The part of `font-lock-keywords' currently being used, during cycling.
+Updated by `icicle-next-font-lock-keywords(-repeat)'.")
 
-(defvar icicle-current-TAB-method nil
-  "*Current completion method for \
-`\\<minibuffer-local-completion-map>\\[icicle-prefix-complete]'.")
+(defvar icicle-current-input "" "Current minibuffer input.")
 
 (defvar icicle-current-raw-input "" "Current minibuffer raw (unexpanded) input.
 This can be different from `icicle-current-input' only when
@@ -446,24 +504,6 @@ This can be different from `icicle-current-input' only when
   "Non-nil means a previous `M-.' in this succession was used with `C-u'.
 This means that the meaning of `icicle-default-thing-insertion' has
 been reversed.")
-
-(defvar icicle-delete-candidate-object nil
-  "Defines deletion action for command `icicle-delete-candidate-object'.
-The value can be a function or a symbol bound to an alist.
-
-If the value is a function, then the function is called on the current
-completion candidate (a string) to delete some corresponding object.
-
-If the value is a symbol (variable) bound to an alist, then
-`icicle-delete-current-candidate-object' is called to delete the
-corresponding object from that alist.  If the variable is also a user
-option, then the option is saved after the candidate is deleted.
-
-Note that if the value is a variable and you use multi-completion
-candidates during completion, then the alist value of the variable
-must itself contain multi-completions.  Otherwise, no candidate will
-be deleted, because `icicle-delete-current-candidate-object' deletes
-the full candidate object.")
 
 (defvar icicle-dictionary-history nil "History for dictionary entries.")
 
@@ -584,7 +624,7 @@ noted in parentheses.
 * `icicle-buffer-*'                      - `icicle-buffer' options
 * `icicle-candidate-width-factor'        - Width %%, candidate columns
 * `icicle-change-region-background-flag' - Change region color?
-* `icicle-change-sort-order-completion-flag' - Control `C-,' behavior
+* `icicle-change-sort-order-completion'  - Control `C-,' behavior
 * `icicle-C-l-uses-completion-flag'      - `C-l' uses completion?
 * `icicle-color-themes'                  - For `icicle-color-theme'
 * `icicle-comint-dynamic-complete-replacements' - Comint complete fns
@@ -611,7 +651,8 @@ noted in parentheses.
 * `icicle-deletion-action-flag'          - `S-delete' deletes?
 * `icicle-dot-show-regexp-flag'          - Show regexp for `.'?
 * `icicle-dot-string'                    - String that `.' inserts
-* `icicle-expand-input-to-common-match'  - Expand your input? (`C-\"')
+* `icicle-expand-input-to-common-match'  - Expand your input? (`C-M-\"')
+* `icicle-expand-input-to-common-match-alt' - Expand your input? (`C-\"')
 * `icicle-file-*'                        - `icicle-file' options
 * `icicle-filesets-as-saved-completion-sets-flag'- Use filesets?
 * `icicle-guess-commands-in-path'        - Shell commands to complete
@@ -842,6 +883,9 @@ RING-ITEM is an item in `kmacro-ring' or `(kmacro-ring-head)'.")
 
 (defvar icicle-last-completion-command nil "Last completion command used.")
 
+(defvar icicle-last-icomplete-mode-value (and (featurep 'icomplete)  icomplete-mode)
+  "Value of `icomplete-mode' when completion started.")
+
 (defvar icicle-last-input "" "Last minibuffer input typed (not from cycling).")
 
 (defvar icicle-last-sort-comparer (or icicle-sort-comparer 'icicle-case-string-less-p)
@@ -962,11 +1006,36 @@ Used by, e.g., `icicle-execute-extended-command'.")
 (defvar icicle-next-prefix-complete-cycles-p nil
   "Whether the next prefix-completion command should cycle.")
 
+(defvar icicle-next-window-for-display-buffer nil
+  "The window to use for the next buffer-displaying call.
+Affects `display-buffer', `switch-to-buffer',
+`switch-to-buffer-other-window', and functions that call these.
+\(Not used for Emacs versions prior to Emacs 24.)")
+
 (defvar icicle-orig-buff nil
   "Current buffer when you invoked an Icicles multi-command.")
 
+(defvar icicle-orig-font-lock-keywords nil
+  "Saved value of `font-lock-keywords'.")
+(make-variable-buffer-local 'icicle-orig-font-lock-keywords)
+
+(defvar icicle-orig-minibuffer-completion-pred nil
+  "Saved value of `minibufer-completion-predicate'.")
+
+(defvar icicle-orig-minibuffer-completion-table nil
+  "Saved value of `minibufer-completion-table'.")
+
+(defvar icicle-orig-must-match-regexp nil
+  "Saved value of `icicle-must-match-regexp'.")
+
+(defvar icicle-orig-must-not-match-regexp nil
+  "Saved value of `icicle-must-not-match-regexp'.")
+
 (defvar icicle-orig-must-pass-after-match-pred nil
   "Saved value of `icicle-must-pass-after-match-predicate'.")
+
+(defvar icicle-orig-must-pass-predicate nil
+  "Saved value of `icicle-must-pass-predicate'.")
 
 (defvar icicle-orig-pt-explore nil
   "Point when you invoked `icicle-explore'.")
@@ -1073,25 +1142,21 @@ Augmented by `icicle-read-char-maybe-completing' and
 
 (defvar icicle-read-expression-map nil
   "Icicle mode version of `read-expression-map'.
-Several Emacs-Lisp mode key bindings are used.")
+Several standard Emacs-Lisp mode key bindings are available.
+In addition, `TAB' completes a symbol and `C-M-i' (or `ESC TAB')
+indents the current line.")
 (unless icicle-read-expression-map
   (let ((map  (make-sparse-keymap)))
-    (define-key map (icicle-kbd "C-M-i")   'lisp-complete-symbol) ; `ESC TAB', `C-M-i'
-    (define-key map (icicle-kbd "C-i")     'lisp-indent-line) ; `C-i', `TAB'
-    (define-key map (icicle-kbd "ESC tab") 'lisp-complete-symbol) ; `ESC tab'
+    (define-key map (icicle-kbd "C-M-i")   'lisp-indent-line) ; `ESC TAB', `C-M-i'
+    (define-key map (icicle-kbd "C-i")     'lisp-complete-symbol) ; `C-i', `TAB'
+    (define-key map (icicle-kbd "ESC tab") 'lisp-indent-line) ; `ESC tab'
     (define-key map (icicle-kbd "C-M-x")   'eval-defun) ; `ESC C-x', `C-M-x'
-    (define-key map (icicle-kbd "C-M-q")   'indent-pp-sexp) ; `ESC C-q', `C-M-q'
+    (define-key map (icicle-kbd "C-M-q")   (if (fboundp 'indent-pp-sexp) ; `ESC C-q', `C-M-q'
+                                               'indent-pp-sexp ; Emacs 22+
+                                             'indent-sexp))
     ;;(define-key map (icicle-kbd "DEL") 'backward-delete-char-untabify)
     (set-keymap-parent map minibuffer-local-map)
     (setq icicle-read-expression-map  map)))
-
-(when (fboundp 'read-file-name-default) ; Emacs 24+
-  (defvar icicle-read-file-name-internal-fn 'read-file-name-internal
-    "Function replacing `read-file-name-internal' in `read-file-name-default'.
-Function `icicle-read-file-name-default' is the same as
-`read-file-name-default', except that instead of hard-coding the use
-of `read-file-name-internal' it uses the value of this variable.
-Lisp code can thus bind this var to replace `read-file-name-internal'."))
 
 (defvar icicle-remove-icicles-props-p t
   "Non-nil means to remove Icicles text properties from completion result.
@@ -1395,12 +1460,24 @@ by binding it to `icicle-remove-duplicates' or
   "Local copy of `icicle-transform-function', so we can restore it.")
 
 (defvar icicle-universal-argument-map
-  (let ((map  (make-sparse-keymap)))
-    (define-key map [t]                         'icicle-universal-argument-other-key)
-    (define-key map (vector meta-prefix-char t) 'icicle-universal-argument-other-key)
-    (define-key map [switch-frame]              nil)
+  (let ((map                       (make-sparse-keymap))
+        (universal-argument-minus
+         (and (fboundp 'universal-argument--mode) ; Emacs 24.4+
+              `(menu-item "" icicle-negative-argument
+                :filter ,(lambda (cmd) (if (integerp prefix-arg) nil cmd))))))
+    (cond ((fboundp 'universal-argument-other-key) ; Emacs < 24.4
+           (define-key map [t]                         'icicle-universal-argument-other-key)
+           (define-key map (vector meta-prefix-char t) 'icicle-universal-argument-other-key)
+           (define-key map [switch-frame]              nil))
+          (t                            ; Emacs 24.4+
+           (define-key map [switch-frame]       (lambda (evt)
+                                                  (interactive "e")
+                                                  (handle-switch-frame evt)
+                                                  (universal-argument--mode)))))
     (define-key map (icicle-kbd "C-u")          'icicle-universal-argument-more)
-    (define-key map (icicle-kbd "-")            'icicle-universal-argument-minus)
+    (define-key map (icicle-kbd "-")            (if (fboundp 'universal-argument--mode)
+                                                    universal-argument-minus ; Emacs 24.4+
+                                                  'icicle-universal-argument-minus))
     (define-key map (icicle-kbd "0")            'icicle-digit-argument)
     (define-key map (icicle-kbd "1")            'icicle-digit-argument)
     (define-key map (icicle-kbd "2")            'icicle-digit-argument)
@@ -1421,7 +1498,9 @@ by binding it to `icicle-remove-duplicates' or
     (define-key map (icicle-kbd "kp-7")         'icicle-digit-argument)
     (define-key map (icicle-kbd "kp-8")         'icicle-digit-argument)
     (define-key map (icicle-kbd "kp-9")         'icicle-digit-argument)
-    (define-key map (icicle-kbd "kp-subtract")  'icicle-universal-argument-minus)
+    (define-key map (icicle-kbd "kp-subtract")  (if (fboundp 'universal-argument--mode)
+                                                    universal-argument-minus ; Emacs 24.4+
+                                                  'icicle-universal-argument-minus))
     map)
   "Keymap used while processing `C-u' during Icicles completion.")
 

@@ -36,7 +36,7 @@ to Flycheck:
 - `Mitch Tishmack <https://github.com/mitchty>`_ (Microsoft extensions in C/C++)
 - `Omair Majid <https://github.com/omajid>`_ (syntax checker for RPM spec)
 - `Per Nordlöw <https://github.com/nordlow>`_ (syntax checkers for Ada and
-  Fortran)
+  Fortran, syntax checker name in error list)
 - `Peter Vasil <https://github.com/ptrv>`_ (Lua and Go build/test syntax
   checkers)
 - `Robert Zaremba <https://github.com/robert-zaremba>`_ (gofmt syntax checker)
@@ -52,7 +52,8 @@ to Flycheck:
 - `Sylvain Benner <https://github.com/syl20bnr>`_ (Elixir and Erlang syntax
   checkers)
 - `Sylvain Rousseau <https://github.com/thisirs>`_ (Bash syntax checkers)
-- `Ted Zlatanov <https://github.com/tzz>`_ (CFEngine syntax checker)
+- `Ted Zlatanov <https://github.com/tzz>`_ (CFEngine syntax checker, minimum
+  level for error navigation)
 - `Tom Jakubowski <https://github.com/tomjakubowski>`_ (test support in Rust)
 - `Tomoya Tanjo <https://github.com/tom-tan>`_ (DMD syntax checker)
 - `Victor Deryagin <https://github.com/vderyagin>`_ (Rust syntax checker)

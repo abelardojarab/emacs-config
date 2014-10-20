@@ -3,13 +3,12 @@
 ;; Filename: icicles-face.el
 ;; Description: Faces for Icicles
 ;; Author: Drew Adams
-;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2013, Drew Adams, all rights reserved.
+;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
+;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
 ;; Created: Mon Feb 27 09:19:43 2006
-;; Version: 22.0
-;; Last-Updated: Mon Feb  4 14:02:51 2013 (-0800)
+;; Last-Updated: Sun Oct 19 10:17:33 2014 (-0700)
 ;;           By: dradams
-;;     Update #: 686
+;;     Update #: 715
 ;; URL: http://www.emacswiki.org/icicles-face.el
 ;; Doc URL: http://www.emacswiki.org/Icicles
 ;; Keywords: internal, extensions, help, abbrev, local, minibuffer,
@@ -47,7 +46,8 @@
 ;;    `icicle-historical-candidate',
 ;;    `icicle-historical-candidate-other',
 ;;    `icicle-input-completion-fail',
-;;    `icicle-input-completion-fail-lax',
+;;    `icicle-input-completion-fail-lax', `icicle-key-complete-menu',
+;;    `icicle-key-complete-menu-local',
 ;;    `icicle-match-highlight-Completions',
 ;;    `icicle-match-highlight-minibuffer', `icicle-mode-line-help',
 ;;    `icicle-msg-emphasis', `icicle-multi-command-completion',
@@ -361,13 +361,15 @@ This means that they belong to list `icicle-extra-candidates'."
                                                    :underline t)))
     "*Face to highlight `*Completions*' candidates that were used indirectly.
 That is, you might or might not have entered these candidates but in
-some sense you have used or visited them.  Example: index topics that
-point to Info nodes that you have visited.
+some sense you have used or visited them.  Whether or not such
+highlighting is done is governed by option
+`icicle-highlight-historical-candidates-flag'.
 
-Whether or not such highlighting is done at all is governed by option
-`icicle-highlight-historical-candidates-flag'.  Whether it is done for
-a given set of candidates is governed by option
-`icicle-Info-visited-max-candidates'."
+Example:
+Index topics that point to Info nodes that you have visited.  Whether
+such highlighting occurs automatically for Info-node candidates is
+governed by option `icicle-Info-highlight-visited-nodes'.  But you can
+highlight the nodes on demand, using `C-x C-M-l'."
     :group 'Icicles-Completions-Display :group 'faces))
 
 (defface icicle-input-completion-fail
@@ -381,6 +383,34 @@ a given set of candidates is governed by option
       (t (:foreground "Black" :background "#FFFFB8C4BB87")))
   "*Face for highlighting failed part of input during lax completion."
   :group 'Icicles-Minibuffer-Display :group 'faces)
+
+;; By default, these two faces have the same backgrounds as faces
+;; `icicle-candidate-part' and `icicle-special-candidate', respectively.  They differ
+;; only in being boxed as well.
+(when (fboundp 'map-keymap)             ; Emacs 22+.
+  (defface icicle-key-complete-menu
+      '((((background dark))
+         (:background "#451700143197"   ; a very dark magenta
+          :box (:line-width 1 :color "#FA6CC847FFFF"))) ; a light magenta box
+        (t (:background "#EF84FFEAF427" ; a light green.
+            :box (:line-width 1 :color "#34F393F434F3")))) ; a green box
+    "*Face used to highlight non-local menu items when completing keys.
+Non-local keys that are not menu items are highlighted with face
+`icicle-candidate-part'.  Menu items for the current mode (i.e., local
+keymap) are highlighted with face `icicle-key-complete-menu-local'."
+    :group 'Icicles-Searching :group 'faces)
+
+  (defface icicle-key-complete-menu-local
+      '((((background dark))
+         (:background "#176900004E0A"   ; a dark blue
+          :box (:line-width 1 :color "#E1E1EAEAFFFF"))) ; a light blue box
+        (t (:background "#EF47FFFFC847" ; a light yellow.
+            :box (:line-width 1 :color "#AC4AAC4A0000")))) ; a dark yellow box
+    "*Face used to highlight local menu items when completing keys.
+Local keys that are not menu items are highlighted with face
+`icicle-special-candidate'.  Non-local menu items (i.e., not for the
+current mode) are highlighted with face `icicle-key-complete-menu'."
+    :group 'Icicles-Searching :group 'faces))
 
 (defface icicle-match-highlight-Completions
     '((((background dark)) (:foreground "#1F1FA21CA21C")) ; a very dark cyan

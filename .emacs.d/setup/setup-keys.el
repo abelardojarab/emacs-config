@@ -174,7 +174,7 @@
 (global-highlight-changes-mode t)
 (setq highlight-changes-visibility-initial-state nil)
 
-;; Fix hilight bug of marking a file as modified
+;; Fix highlight bug of marking a file as modified
 (defadvice highlight-changes-rotate-faces (around around-rotate-faces)
   (let ((was-modified (buffer-modified-p))
         (buffer-undo-list t))
