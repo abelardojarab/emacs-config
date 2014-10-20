@@ -64,11 +64,12 @@
 (add-to-list 'sml/hidden-modes " Eldoc-eval")
 (add-to-list 'sml/hidden-modes " -Chg")
 (add-to-list 'sml/hidden-modes " Projectile")
-
 (add-to-list 'sml/hidden-modes " sc")
 (add-to-list 'sml/hidden-modes " WSC")
 (add-to-list 'sml/hidden-modes " Spell")
 (add-to-list 'sml/hidden-modes " Wrap")
+(add-to-list 'sml/hidden-modes " FlyC")
+(add-to-list 'sml/hidden-modes " FlyC-")
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
