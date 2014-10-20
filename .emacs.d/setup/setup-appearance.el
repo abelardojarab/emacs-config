@@ -332,8 +332,8 @@
                   (highlight-symbol-at-point)))
 
 ;; Highlight block
-(add-to-list 'load-path "~/.emacs.d/highlight-blocks")
-(require 'highlight-blocks)
+;; (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
+;; (require 'highlight-blocks)
 
 ;; Scrollbar
 (set-scroll-bar-mode 'right)
