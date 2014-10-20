@@ -298,6 +298,7 @@
 ;; Highlight blocks
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
 (require 'highlight-blocks)
+(add-hook 'prog-mode-hook (highlight-blocks-mode t))
 
 ;; Higlight indentation
 (add-to-list 'load-path "~/.emacs.d/Highlight-Indentation-for-Emacs")
