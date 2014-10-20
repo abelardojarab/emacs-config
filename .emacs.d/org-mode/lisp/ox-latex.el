@@ -89,8 +89,9 @@
     (underline . org-latex-underline)
     (verbatim . org-latex-verbatim)
     (verse-block . org-latex-verse-block)
-    ;; Pseudo objects.
-    (latex-math-block . org-latex-math-block))
+    ;; Pseudo objects and elements.
+    (latex-math-block . org-latex-math-block)
+    (latex-matrices . org-latex-matrices))
   :export-block '("LATEX" "TEX")
   :menu-entry
   '(?l "Export to LaTeX"
@@ -102,7 +103,8 @@
 	      (if a (org-latex-export-to-pdf t s v b)
 		(org-open-file (org-latex-export-to-pdf nil s v b)))))))
   :filters-alist '((:filter-options . org-latex-math-block-options-filter)
-		   (:filter-parse-tree . org-latex-math-block-tree-filter))
+		   (:filter-parse-tree org-latex-math-block-tree-filter
+				       org-latex-matrices-tree-filter))
   :options-alist
   '((:latex-class "LATEX_CLASS" nil org-latex-default-class t)
     (:latex-class-options "LATEX_CLASS_OPTIONS" nil nil t)
@@ -110,6 +112,7 @@
     (:latex-header-extra "LATEX_HEADER_EXTRA" nil nil newline)
     ;; Other variables.
     (:latex-active-timestamp-format nil nil org-latex-active-timestamp-format)
+    (:latex-caption-above nil nil org-latex-caption-above)
     (:latex-classes nil nil org-latex-classes)
     (:latex-custom-id-labels nil nil org-latex-custom-id-as-label)
     (:latex-default-figure-position nil nil org-latex-default-figure-position)
@@ -132,7 +135,6 @@
     (:latex-listings-options nil nil org-latex-listings-options)
     (:latex-minted-langs nil nil org-latex-minted-langs)
     (:latex-minted-options nil nil org-latex-minted-options)
-    (:latex-table-caption-above nil nil org-latex-table-caption-above)
     (:latex-table-scientific-notation nil nil org-latex-table-scientific-notation)
     (:latex-tables-booktabs nil nil org-latex-tables-booktabs)
     (:latex-tables-centered nil nil org-latex-tables-centered)
@@ -200,8 +202,8 @@
   "Alist between language code and corresponding Babel option.")
 
 (defconst org-latex-table-matrix-macros '(("bordermatrix" . "\\cr")
-					    ("qbordermatrix" . "\\cr")
-					    ("kbordermatrix" . "\\\\"))
+					  ("qbordermatrix" . "\\cr")
+					  ("kbordermatrix" . "\\\\"))
   "Alist between matrix macros and their row ending.")
 
 (defconst org-latex-pseudo-objects '(latex-math-block)
@@ -216,6 +218,24 @@
   :tag "Org Export LaTeX"
   :group 'org-export)
 
+;;;; Generic
+
+(defcustom org-latex-caption-above t
+  "When non-nil, place caption string at the beginning of elements.
+Otherwise, place it near the end.  When value is a list of
+symbols, put caption above selected elements only.  Allowed
+symbols are: `image', `table', `src-block' and `special-block'."
+  :group 'org-export-latex
+  :type '(choice
+	  (const :tag "For all elements" t)
+	  (const :tag "For no element" nil)
+	  (set :tag "For the following elements only" :greedy t
+	       (const :tag "Images" image)
+	       (const :tag "Tables" table)
+	       (const :tag "Source code" src-block)
+	       (const :tag "Special blocks" special-block))))
+(define-obsolete-variable-alias
+  'org-latex-table-caption-above 'org-latex-caption-above "25.1") ; Since 8.3.
 
 ;;;; Preamble
 
@@ -610,13 +630,6 @@ attributes."
   :type 'boolean
   :safe #'booleanp)
 
-(defcustom org-latex-table-caption-above t
-  "When non-nil, place caption string at the beginning of the table.
-Otherwise, place it near the end."
-  :group 'org-export-latex
-  :type 'boolean
-  :safe #'booleanp)
-
 (defcustom org-latex-table-scientific-notation "%s\\,(%s)"
   "Format string to display numbers in scientific notation.
 The format should have \"%s\" twice, for mantissa and exponent
@@ -977,6 +990,14 @@ calling `org-latex-compile'."
 
 
 ;;; Internal Functions
+
+(defun org-latex--caption-above-p (element info)
+  "Non nil when caption is expected to be located above ELEMENT.
+INFO is a plist holding contextual information."
+  (let ((above (plist-get info :latex-caption-above)))
+    (if (symbolp above) above
+      (let ((type (org-element-type element)))
+	(memq (if (eq type 'link) 'image type) above)))))
 
 (defun org-latex--caption/label-string (element info)
   "Return caption and label LaTeX string for ELEMENT.
@@ -1811,6 +1832,7 @@ used as a communication channel."
 		   (expand-file-name raw-path))))
 	 (filetype (file-name-extension path))
 	 (caption (org-latex--caption/label-string parent info))
+	 (caption-above-p (org-latex--caption-above-p link info))
 	 ;; Retrieve latex attributes from the element around.
 	 (attr (org-export-read-attribute :attr_latex parent))
 	 (float (let ((float (plist-get attr :float)))
@@ -1896,21 +1918,36 @@ used as a communication channel."
     ;; Return proper string, depending on FLOAT.
     (case float
       (wrap (format "\\begin{wrapfigure}%s
-\\centering
+%s\\centering
 %s%s
-%s\\end{wrapfigure}" placement comment-include image-code caption))
+%s\\end{wrapfigure}"
+		    placement
+		    (if caption-above-p caption "")
+		    comment-include image-code
+		    (if caption-above-p "" caption)))
       (sideways (format "\\begin{sidewaysfigure}
-\\centering
+%s\\centering
 %s%s
-%s\\end{sidewaysfigure}" comment-include image-code caption))
+%s\\end{sidewaysfigure}"
+			(if caption-above-p caption "")
+			comment-include image-code
+			(if caption-above-p "" caption)))
       (multicolumn (format "\\begin{figure*}%s
-\\centering
+%s\\centering
 %s%s
-%s\\end{figure*}" placement comment-include image-code caption))
+%s\\end{figure*}"
+			   placement
+			   (if caption-above-p caption "")
+			   comment-include image-code
+			   (if caption-above-p "" caption)))
       (figure (format "\\begin{figure}%s
-\\centering
+%s\\centering
 %s%s
-%s\\end{figure}" placement comment-include image-code caption))
+%s\\end{figure}"
+		      placement
+		      (if caption-above-p caption "")
+		      comment-include image-code
+		      (if caption-above-p "" caption)))
       (otherwise image-code))))
 
 (defun org-latex-link (link desc info)
@@ -2129,7 +2166,76 @@ holding contextual information."
        (format "\\begin{verbatim}\n%s\\end{verbatim}" contents)))
 
 
+;;;; Pseudo Element: LaTeX Matrices
+
+;; `latex-matrices' elements have the following properties:
+;; `:caption', `:post-blank' and `:markup' (`inline', `equation' or
+;; `math').
+
+(defun org-latex--wrap-latex-matrices (data info)
+  "Merge contiguous tables with the same mode within a pseudo-element.
+DATA is a parse tree or a secondary string.  INFO is a plist
+containing export options.  Modify DATA by side-effect and return
+it."
+  (org-element-map data 'table
+    (lambda (table)
+      (when (eq (org-element-property :type table) 'org)
+	(let ((mode (or (org-export-read-attribute :attr_latex table :mode)
+			(plist-get info :latex-default-table-mode))))
+	  (when (and (member mode '("inline-math" "math"))
+		     ;; Do not wrap twice the same table.
+		     (not (eq (org-element-type
+			       (org-element-property :parent table))
+			      'latex-matrices)))
+	    (let* ((caption (and (not (string= mode "inline-math"))
+				 (org-element-property :caption table)))
+		   (matrices
+		    (list 'latex-matrices
+			  (list :caption caption
+				:markup
+				(cond ((string= mode "inline-math") 'inline)
+				      (caption 'equation)
+				      (t 'math)))))
+		   (previous table)
+		   (next (org-export-get-next-element table info)))
+	      (org-element-insert-before matrices table)
+	      ;; Swallow all contiguous tables sharing the same mode.
+	      (while (and
+		      (zerop (or (org-element-property :post-blank previous) 0))
+		      (setq next (org-export-get-next-element previous info))
+		      (eq (org-element-type next) 'table)
+		      (eq (org-element-property :type next) 'org)
+		      (string= (or (org-export-read-attribute
+				    :attr_latex next :mode)
+				   (plist-get info :latex-default-table-mode))
+			       mode))
+		(org-element-extract-element previous)
+		(org-element-adopt-elements matrices previous)
+		(setq previous next))
+	      (org-element-put-property
+	       matrices :post-blank (org-element-property :post-blank previous))
+	      (org-element-extract-element previous)
+	      (org-element-adopt-elements matrices previous))))))
+    info)
+  data)
+
+(defun org-latex-matrices (matrices contents info)
+  "Transcode a MATRICES element from Org to LaTeX.
+CONTENTS is a string.  INFO is a plist used as a communication
+channel."
+  (format (case (org-element-property :markup matrices)
+	    (inline "\\(%s\\)")
+	    (equation "\\begin{equation}\n%s\\end{equation}")
+	    (t "\\[\n%s\\]"))
+	  contents))
+
+(defun org-latex-matrices-tree-filter (tree backend info)
+  (org-latex--wrap-latex-matrices tree info))
+
 ;;;; Pseudo Object: LaTeX Math Block
+
+;; `latex-math-block' objects have the following property:
+;; `:post-blank'.
 
 (defun org-latex--wrap-latex-math-block (data info)
   "Merge contiguous math objects in a pseudo-object container.
@@ -2234,13 +2340,13 @@ holding contextual information."
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
   (let ((type (org-element-property :type special-block))
-	(opt (org-export-read-attribute :attr_latex special-block :options)))
+	(opt (org-export-read-attribute :attr_latex special-block :options))
+	(caption (org-latex--caption/label-string special-block info))
+	(caption-above-p (org-latex--caption-above-p special-block info)))
     (concat (format "\\begin{%s}%s\n" type (or opt ""))
-	    ;; Insert any label or caption within the block
-	    ;; (otherwise, a reference pointing to that element will
-	    ;; count the section instead).
-	    (org-latex--caption/label-string special-block info)
+	    (and caption-above-p caption)
 	    contents
+	    (and (not caption-above-p) caption)
 	    (format "\\end{%s}" type))))
 
 
@@ -2253,6 +2359,7 @@ contextual information."
   (when (org-string-nw-p (org-element-property :value src-block))
     (let* ((lang (org-element-property :language src-block))
 	   (caption (org-element-property :caption src-block))
+	   (caption-above-p (org-latex--caption-above-p src-block info))
 	   (label (org-element-property :name src-block))
 	   (custom-env (and lang
 			    (cadr (assq (intern lang)
@@ -2271,11 +2378,12 @@ contextual information."
 	       (float-env
 		(cond ((and (not float) (plist-member attributes :float)) "%s")
 		      ((string= "multicolumn" float)
-		       (format "\\begin{figure*}[%s]\n%%s%s\n\\end{figure*}"
+		       (format "\\begin{figure*}[%s]\n%s%%s\n%s\\end{figure*}"
 			       (plist-get info :latex-default-figure-position)
-			       caption-str))
+			       (if caption-above-p caption-str "")
+			       (if caption-above-p "" caption-str)))
 		      ((or caption float)
-		       (format "\\begin{figure}[H]\n%%s%s\n\\end{figure}"
+		       (format "\\begin{figure}[H]\n%%s\n%s\\end{figure}"
 			       caption-str))
 		      (t "%s"))))
 	  (format
@@ -2283,26 +2391,37 @@ contextual information."
 	   (concat (format "\\begin{verbatim}\n%s\\end{verbatim}"
 			   (org-export-format-code-default src-block info))))))
        ;; Case 2.  Custom environment.
-       (custom-env (format "\\begin{%s}\n%s\\end{%s}\n"
-			   custom-env
-			   (org-export-format-code-default src-block info)
-			   custom-env))
+       (custom-env
+	(let ((caption-str (org-latex--caption/label-string src-block info)))
+	  (format "\\begin{%s}\n%s\\end{%s}\n"
+		  custom-env
+		  (concat (and caption-above-p caption-str)
+			  (org-export-format-code-default src-block info)
+			  (and (not caption-above-p) caption-str))
+		  custom-env)))
        ;; Case 3.  Use minted package.
        ((eq listings 'minted)
 	(let* ((caption-str (org-latex--caption/label-string src-block info))
 	       (float-env
-		(cond ((and (not float) (plist-member attributes :float) caption)
-		       (format "%%s\n%s" (replace-regexp-in-string
-					  "\\\\caption" "\\captionof{listing}"
-					  caption-str t t)))
-		      ((and (not float) (plist-member attributes :float)) "%s")
-		      ((string= "multicolumn" float)
-		       (format "\\begin{listing*}\n%%s\n%s\\end{listing*}"
-			       caption-str))
-		      ((or caption float)
-		       (format "\\begin{listing}[H]\n%%s\n%s\\end{listing}"
-			       caption-str))
-		      (t "%s")))
+		(cond
+		 ((and (not float) (plist-member attributes :float) caption)
+		  (let ((caption
+			 (replace-regexp-in-string
+			  "\\\\caption" "\\captionof{listing}" caption-str
+			  t t)))
+		    (concat (and caption-above-p caption)
+			    "%%s"
+			    (and (not caption-above-p) (concat "\n" caption)))))
+		 ((and (not float) (plist-member attributes :float)) "%s")
+		 ((string= "multicolumn" float)
+		  (format "\\begin{listing*}\n%s%%s\n%s\\end{listing*}"
+			  (if caption-above-p caption-str "")
+			  (if caption-above-p "" caption-str)))
+		 ((or caption float)
+		  (format "\\begin{listing}[H]\n%s%%s\n%s\\end{listing}"
+			  (if caption-above-p caption-str "")
+			  (if caption-above-p "" caption-str)))
+		 (t "%s")))
 	       (options (plist-get info :latex-minted-options))
 	       (body
 		(format
@@ -2376,12 +2495,12 @@ contextual information."
 	       `(("language" ,lst-lang))
 	       (if label `(("label" ,label)) '(("label" " ")))
 	       (if caption-str `(("caption" ,caption-str)) '(("caption" " ")))
+	       `(("captionpos" ,(if caption-above-p "t" "b")))
 	       (cond ((assoc "numbers" lst-opt) nil)
 		     ((not num-start) '(("numbers" "none")))
 		     ((zerop num-start) '(("numbers" "left")))
-		     (t `(("numbers" "left")
-			  ("firstnumber"
-			   ,(number-to-string (1+ num-start))))))))
+		     (t `(("firstnumber" ,(number-to-string (1+ num-start)))
+			  ("numbers" "left"))))))
 	     (let ((local-options (plist-get attributes :options)))
 	       (and local-options (concat "," local-options)))))
 	   ;; Source code.
@@ -2583,7 +2702,7 @@ This function assumes TABLE has `org' as its `:type' property and
 	      (format "[%s]" (plist-get info :latex-default-figure-position))))
 	 (centerp (if (plist-member attr :center) (plist-get attr :center)
 		    (plist-get info :latex-tables-centered)))
-	 (caption-above-p (plist-get info :latex-table-caption-above)))
+	 (caption-above-p (org-latex--caption-above-p table info)))
     ;; Prepare the final format string for the table.
     (cond
      ;; Longtable.
@@ -2689,10 +2808,8 @@ TABLE is the table type element to transcode.  INFO is a plist
 used as a communication channel.
 
 This function assumes TABLE has `org' as its `:type' property and
-`inline-math' or `math' as its `:mode' attribute.."
-  (let* ((caption (org-latex--caption/label-string table info))
-	 (attr (org-export-read-attribute :attr_latex table))
-	 (inlinep (equal (plist-get attr :mode) "inline-math"))
+`inline-math' or `math' as its `:mode' attribute."
+  (let* ((attr (org-export-read-attribute :attr_latex table))
 	 (env (or (plist-get attr :environment)
 		  (plist-get info :latex-default-table-environment)))
 	 (contents
@@ -2707,38 +2824,18 @@ This function assumes TABLE has `org' as its `:type' property and
 		   (substring
 		    (org-element-interpret-data cell org-latex-pseudo-objects)
 		    0 -1))
-		 (org-element-map row 'table-cell 'identity info) "&")
+		 (org-element-map row 'table-cell #'identity info) "&")
 		(or (cdr (assoc env org-latex-table-matrix-macros)) "\\\\")
 		"\n")))
-	   (org-element-map table 'table-row 'identity info) ""))
-	 ;; Variables related to math clusters (contiguous math tables
-	 ;; of the same type).
-	 (mode (org-export-read-attribute :attr_latex table :mode))
-	 (prev (org-export-get-previous-element table info))
-	 (next (org-export-get-next-element table info))
-	 (same-mode-p
-	  (lambda (table)
-	    ;; Non-nil when TABLE has the same mode as current table.
-	    (string= (or (org-export-read-attribute :attr_latex table :mode)
-			 (plist-get info :latex-default-table-mode))
-		     mode))))
+	   (org-element-map table 'table-row #'identity info) "")))
     (concat
-     ;; Opening string.  If TABLE is in the middle of a table cluster,
-     ;; do not insert any.
-     (cond ((and prev
-		 (eq (org-element-type prev) 'table)
-		 (memq (org-element-property :post-blank prev) '(0 nil))
-		 (funcall same-mode-p prev))
-	    nil)
-	   (inlinep "\\(")
-	   ((org-string-nw-p caption) (concat "\\begin{equation}\n" caption))
-	   (t "\\["))
      ;; Prefix.
-     (or (plist-get attr :math-prefix) "")
+     (plist-get attr :math-prefix)
      ;; Environment.  Also treat special cases.
-     (cond ((equal env "array")
-	    (let ((align (org-latex--align-string table info)))
-	      (format "\\begin{array}{%s}\n%s\\end{array}" align contents)))
+     (cond ((member env '("array" "tabular"))
+	    (let ((align (make-string
+			  (cdr (org-export-table-dimensions table info)) ?c)))
+	      (format "\\begin{%s}{%s}\n%s\\end{%s}" env align contents env)))
 	   ((assoc env org-latex-table-matrix-macros)
 	    (format "\\%s%s{\n%s}"
 		    env
@@ -2746,28 +2843,7 @@ This function assumes TABLE has `org' as its `:type' property and
 		    contents))
 	   (t (format "\\begin{%s}\n%s\\end{%s}" env contents env)))
      ;; Suffix.
-     (or (plist-get attr :math-suffix) "")
-     ;; Closing string.  If TABLE is in the middle of a table cluster,
-     ;; do not insert any.  If it closes such a cluster, be sure to
-     ;; close the cluster with a string matching the opening string.
-     (cond ((and next
-		 (eq (org-element-type next) 'table)
-		 (memq (org-element-property :post-blank table) '(0 nil))
-		 (funcall same-mode-p next))
-	    nil)
-	   (inlinep "\\)")
-	   ;; Find cluster beginning to know which environment to use.
-	   ((let ((cluster-beg table) prev)
-	      (while (and (setq prev (org-export-get-previous-element
-				      cluster-beg info))
-			  (memq (org-element-property :post-blank prev)
-				'(0 nil))
-			  (funcall same-mode-p prev))
-		(setq cluster-beg prev))
-	      (and (or (org-element-property :caption cluster-beg)
-		       (org-element-property :name cluster-beg))
-		   "\n\\end{equation}")))
-	   (t "\\]")))))
+     (plist-get attr :math-suffix))))
 
 
 ;;;; Table Cell
