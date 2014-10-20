@@ -28,11 +28,21 @@
 (require 'ispell)
 (setq ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
-(if (eq system-type 'darwin)
+(when (eq system-type 'darwin)
     (if (file-executable-p "/usr/local/bin/aspell")
         (progn
           (setq ispell-program-name "/usr/local/bin/aspell")
-          (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))
+          (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi"))))
+    ;; Fix for right click on Mac OS X
+    (eval-after-load "flyspell"
+      '(progn
+         (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+         (define-key flyspell-mouse-map [mouse-3] #'undefined))))
+
+;; Use hunspell if available instead
+(when (executable-find "hunspell")
+  (setq-default ispell-program-name "hunspell")
+  (setq ispell-really-hunspell t))
 
 ;; change dictionary: "C-c e" = engelska, "C-c s"=spanish, "C-c w"=turn off flyspell
 (add-hook 'text-mode-hook
@@ -51,17 +61,21 @@
                             (lambda () (interactive)
                               (flyspell-mode -1)))))
 
+;; Langtool
+(add-to-list 'load-path "~/.emacs.d/langtool")
+(require 'langtool)
+(setq langtool-language-tool-jar (expand-file-name "~/.emacs.d/jar/LanguageTool-2.7/languagetool-commandline.jar")
+      langtool-mother-tongue "en"
+      langtool-disabled-rules '("WHITESPACE_RULE"
+                                "EN_UNPAIRED_BRACKETS"
+                                "COMMA_PARENTHESIS_WHITESPACE"
+                                "EN_QUOTES"))
+
 ;; flyspell
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
-
-;; Right mouse tweak
-(eval-after-load "flyspell"
-  '(progn
-     (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-     (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
 ;; Disable flyspell keybindings
 (eval-after-load "flyspell"

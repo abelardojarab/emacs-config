@@ -336,11 +336,13 @@
 (setq org-image-actual-width '(400))
 
 ;; Rendering plantuml
-(setq org-plantuml-jar-path (expand-file-name "~/Downloads/plantuml.jar"))
+(setq org-plantuml-jar-path (expand-file-name "~/.emacs.d/jar/plantuml.jar"))
 (defun plantuml-render-buffer ()
   (interactive)
   (message "PLANTUML Start rendering")
-  (shell-command (concat "java -jar ~/Downloads/plantuml.jar "
+  (shell-command (concat "java -jar "
+                         (expand-file-name "~/.emacs.d/jar/plantuml.jar")
+                         " "
                          buffer-file-name))
   (message (concat "PLANTUML Rendered:  " (buffer-name))))
 

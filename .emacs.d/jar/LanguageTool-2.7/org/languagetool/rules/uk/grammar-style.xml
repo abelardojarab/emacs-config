@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../../../../../languagetool-core/src/main/resources/org/languagetool/rules/print.xsl" title="Pretty print" ?>
+<?xml-stylesheet type="text/css" href="../../../../../../../../../languagetool-core/src/main/resources/org/languagetool/rules/rules.css" title="Easy editing stylesheet" ?>
+<!--
+Ukrainian grammar and typo rules for LanguageTool
+Copyright (C) 2007 Andriy Rysin
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+$Id$
+-->
+<rules lang="uk" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../../../languagetool-core/src/main/resources/org/languagetool/rules/rules.xsd">
+
+  <category name="Стиль">
+    <rulegroup name="Самий з прикметниками" id="SAMYI">
+        <!-- TODO: якщо робити це правило загальним фальшивих помилок більше ніж правильних позначень,
+                   тож поки що обмежимося лише двома більш-менш стабільними випадками 
+    
+            <rule>
+                <pattern>
+                  <unify>
+                   <feature id="gender"/>
+                   <feature id="number"/>
+                   <feature id="case"/>
+                      
+                    <token inflected="yes">самий
+                        <exception scope="previous" regexp="yes" inflected="yes">(який|такий|отой|той|цей|же?|чим|лише)</exception>
+                    </token>
+                    <token postag_regexp="yes" postag="adj:.*:(comp).*">
+                        <exception postag_regexp="yes" postag="(pron|noun|verb).*"></exception>
+                        <exception regexp="yes">(дуже|мала)</exception>
+                    </token>
+                  </unify>
+                </pattern>
+                <message>Замість «самий» + прикметник тре вживати найвищу ступінь з <suggestion>най-</suggestion></message>
+                <example type="correct">Самий цвіт</example>
+                <example type="correct">Сама прийшла</example>
+                <example type="correct">Саме такий</example>
+                <example type="correct">Саме вони</example>
+                <example type="correct">представник саме романтичного націоналізму</example>
+                <example type="correct">вирізняється саме гострою конкуренцією</example>
+                <example type="correct">частину галузі становить саме чорна металургія</example>
+                <example type="correct">Ті ж самі пісні</example>
+                <example type="correct">пояснюється саме дуже високим відсотком людей</example>
+                <example type="correct">повідомляти самого великого князя</example>
+                <example type="correct">вона й сама мала би зректися посади</example>
+                <example type="correct">вона й сама зрозуміла це</example>
+                <example type="correct">з цим самим білим піском</example>
+                <example type="correct">лише самих економічних санкцій</example>
+                <example type="incorrect"><marker>Самий кращий</marker>.</example>
+                <example type="incorrect"><marker>Сама гірша</marker>.</example>
+                <example type="incorrect"><marker>Самий сильний</marker>.</example>
+                <example type="incorrect"><marker>Сама тривала</marker>.</example>
+            </rule>
+            -->
+            <rule>
+                <pattern>
+                  <unify>
+                   <feature id="gender"/>
+                   <feature id="number"/>
+                   <feature id="case"/>
+                      
+                    <token inflected="yes">самий
+                        <exception scope="previous" regexp="yes" inflected="yes">(який|такий|отой|той|цей|же?|чим|лише)</exception>
+                    </token>
+                    <token postag_regexp="yes" postag="adj:.*:(compr).*">
+                        <exception postag_regexp="yes" postag="(pron|noun|verb).*"></exception>
+                    </token>
+                  </unify>
+                </pattern>
+                <message>Замість «самий» + прикметник тре вживати найвищу ступінь з <suggestion>най-</suggestion></message>
+                <example type="correct">Сама прийшла</example>
+                <example type="correct">Саме такий</example>
+                <example type="correct">Саме кращий</example>
+                <example type="incorrect"><marker>Самий кращий</marker>.</example>
+                <example type="incorrect"><marker>Сама гірша</marker>.</example>
+            </rule>
+            <rule>
+                <pattern>
+                    <token>самий
+                        <exception scope="previous" regexp="yes">(який|такий|отой|той|цей|же?|чим|лише)</exception>
+                    </token>
+                    <token postag_regexp="yes" postag="adj.*:v_(naz|zna).*:comp.*">
+                        <exception postag_regexp="yes" postag="(pron|noun|verb).*"></exception>
+                    </token>
+                </pattern>
+                <message>Замість «самий» + прикметник тре вживати найвищу ступінь з най-: <suggestion><match no="2" postag_regexp="yes"
+                                         postag="(adj:.*:)comp[br](.*)" postag_replace="$1super$2"/></suggestion></message>
+                <example type="correct">Самий цвіт</example>
+                <example type="correct">Саме такий</example>
+                <example type="correct">той самий страшний сон</example>
+                <example type="correct">лише самих економічних санкцій</example>
+                <example type="incorrect"><marker>Самий кращий</marker>.</example>
+                <example type="incorrect">Він — <marker>самий сильний</marker>.</example>
+            </rule>
+            <rule>
+                <pattern>
+                  <unify>
+                   <feature id="gender"/>
+                   <feature id="number"/>
+                   <feature id="case"/>
+                      
+                    <marker>
+                    <token inflected="yes">самий
+                        <exception scope="previous" regexp="yes" inflected="yes">(який|такий|отой|той|цей|же?|чим|лише)</exception>
+                    </token>
+                    <token postag_regexp="yes" postag="adj:.*:(comp).*">
+                        <exception postag_regexp="yes" postag="(pron|noun|verb).*"></exception>
+                        <exception regexp="yes">(дуже|мала)</exception>
+                    </token>
+                    </marker>
+                  </unify>
+                    <token regexp="yes">[—–-]</token>
+                </pattern>
+                <message>Замість «самий» + прикметник тре вживати найвищу ступінь з най-: <suggestion><match no="2" postag_regexp="yes"
+                                         postag="(adj:.*:)comp[br](.*)" postag_replace="$1super$2"/></suggestion></message>
+                <example type="correct">Самий цвіт</example>
+                <example type="correct">Сама прийшла</example>
+                <example type="correct">Саме такий</example>
+                <example type="correct">Саме вони</example>
+                <example type="correct">представник саме романтичного націоналізму</example>
+                <example type="incorrect" correction="Найкраще|Щонайкраще|Якнайкраще"><marker>Саме краще</marker> — ливарний цех.</example>
+            </rule>
+            <rule>
+                <pattern>
+                  <unify>
+                   <feature id="gender"/>
+                   <feature id="number"/>
+                   <feature id="case"/>
+                      
+                    <marker>
+                    <token inflected="yes">самий
+                        <exception scope="previous" regexp="yes" inflected="yes">(який|такий|отой|той|цей|же?|чим|лише)</exception>
+                    </token>
+                    <token postag_regexp="yes" postag="adj:.*:(comp).*">
+                        <exception postag_regexp="yes" postag="(pron|noun|verb).*"></exception>
+                        <exception regexp="yes">(дуже|мала)</exception>
+                    </token>
+                    </marker>
+                  </unify>
+                    <token>,</token>
+                    <token regexp="yes">що|який</token>
+                </pattern>
+                <message>Замість «самий» + прикметник тре вживати найвищу ступінь з най-: <suggestion><match no="2" postag_regexp="yes"
+                                         postag="(adj:.*:)comp[br](.*)" postag_replace="$1super$2"/></suggestion></message>
+                <example type="correct">Самий цвіт</example>
+                <example type="correct">Сама прийшла до нього</example>
+                <example type="correct">Саме такий</example>
+                <example type="correct">Саме вони</example>
+                <example type="correct">представник саме романтичного націоналізму</example>
+                <example type="incorrect" correction="Найкраще|Щонайкраще|Якнайкраще"><marker>Саме краще</marker>, що в нас є.</example>
+            </rule>
+            <rule>
+                <pattern>
+                  <unify>
+                   <feature id="gender"/>
+                   <feature id="number"/>
+                   <feature id="case"/>
+                    <token inflected="yes">самий
+                        <exception scope="previous" regexp="yes" inflected="yes">(той|же?|чим)</exception>
+                    </token>
+                    <token inflected="yes" regexp="yes">перший|найперший</token>
+                  </unify>
+                </pattern>
+                <message>Замість «самий перший» тре вживати найвищу ступінь: <suggestion>найперший</suggestion></message>
+                <example type="incorrect"><marker>Самий перший</marker>.</example>
+                <example type="correct">самі першими втікали</example>
+                <example type="correct">найперший</example>
+            </rule>
+        </rulegroup>
+
+        <rulegroup name="Більш з прикметниками" id="BILSH_WITH_ADJ">
+            <rule>
+                <pattern>
+                    <token>більш</token>
+                    <token postag_regexp="yes" postag="adj.*:compr.*"/>
+                </pattern>
+                <message>Замість «більш» + вищий ступінь прикметника треба вживати «більш» + нульова форма прикметника</message>
+                <example type="incorrect"><marker>Більш світліший</marker>.</example>
+                <example type="correct">Більш світлий.</example>
+            </rule>
+        </rulegroup>
+<!--
+    Уживання складеної форми є дозволеним, хоча перевага надається простій формі
+        <rulegroup name="Більш/менш з прикметниками" id="BILSH_WITH_ADJ">
+            <rule>
+                <pattern>
+                    <token>більш</token>
+                    <token postag_regexp="yes" postag="adj.*"/>
+                </pattern>
+                <message>Замість «більш» + прикметник тре вживати -іший</message>
+                <example type="incorrect"><marker>Більш високий</marker>.</example>
+                <example type="incorrect"><marker>Більш світла</marker>.</example>
+            </rule>
+        </rulegroup>
+-->
+        <rulegroup name="Більш з числівниками та іменниками часу" id="BILSHE_WITH_TIME_NOUNS">
+            <rule>
+                <pattern>
+                <!-- треба розбити всі варіанти з не-, щоб не пропонувати «понад»
+                    <token><exception scope="previous">не</exception>більше</token>
+                    -->
+                    <token>більше</token>
+                    <token postag_regexp="yes" postag="numr:.*v_rod">
+                        <exception inflected="yes">один</exception>
+                    </token>
+                </pattern>
+                <message>З числівником замість «більше» треба вживати «понад», або «ніж/як»: <suggestion>понад <match no="2" postag="numr:v_zna"/></suggestion></message>
+                <suggestion>більш як <match no="2" postag="numr:v_zna"/></suggestion>
+                <suggestion>більш ніж <match no="2" postag="numr:v_zna"/></suggestion>
+                <example type="correct">Більше одного</example>
+<!--
+                <example type="correct">цюпка не більше шести кроків вдовж</example>
+-->
+                <example type="incorrect" correction="понад сто|більш як сто|більш ніж сто"><marker>більше ста</marker>.</example>
+            </rule>
+            <rule>
+                <pattern>
+                    <token>більше</token>
+                    <token postag="number"/>
+                </pattern>
+                <message>З числівником замість «більше» треба вживати «понад», або «ніж/як»: <suggestion>понад <match no="2"/></suggestion></message>
+                <suggestion>більш як <match no="2"/></suggestion>
+                <suggestion>більш ніж <match no="2"/></suggestion>
+                <example type="correct">Більш як 40</example>
+                <example type="incorrect" correction="понад 500|більш як 500|більш ніж 500"><marker>більше 500</marker>.</example>
+            </rule>
+
+            <rule>
+                <pattern>
+                    <token>більше</token>
+                    <token regexp="yes" inflected="yes" postag_regexp="yes" postag="noun:[mf]:v_rod">хвилина|година|день|доба|тиждень|місяць|рік</token>
+                </pattern>
+                <message>З іменником часу замість «більше» треба вживати «понад», або «ніж/як»: <suggestion>понад <match no="2" postag_regexp="yes" postag="(noun:[mf]):v_rod" postag_replace="$1:v_zna"/></suggestion></message>
+                <suggestion>більше як <match no="2" postag_regexp="yes" postag="(noun:[mf]):v_rod" postag_replace="$1:v_zna"/></suggestion>
+                <suggestion>більше ніж <match no="2" postag_regexp="yes" postag="(noun:[mf]):v_rod" postag_replace="$1:v_zna"/></suggestion>
+                <example type="correct">Більше галасу</example>
+                <example type="correct">Більше одного</example>
+                <example type="incorrect" correction="понад тиждень|більше як тиждень|більше ніж тиждень"><marker>більше тижня</marker>.</example>
+                <example type="incorrect" correction="понад хвилину|більше як хвилину|більше ніж хвилину"><marker>більше хвилини</marker>.</example>
+                <example type="incorrect" correction="понад добу|більше як добу|більше ніж добу"><marker>більше доби</marker>.</example>
+                <!-- TODO: fix the correction
+                <example type="incorrect" correction="понад рік|більше як рік"><marker>більше року</marker>.</example>
+                -->
+            </rule>
+    </rulegroup>
+
+    <rulegroup name="Через понад, за понад" id="CHERZ_ZA_PONAD">
+            <rule>
+                <pattern>
+                    <token regexp="yes">через|за</token>
+                    <marker>
+                    <token>понад</token>
+                    </marker>
+                </pattern>
+                <message>Правильно: <suggestion>більш ніж</suggestion>, <suggestion>більш як</suggestion></message>
+                <example type="correct">Понад сто років</example>
+                <example type="correct">Через сто років</example>
+                <example type="incorrect" correction="більш ніж|більш як">Через <marker>понад</marker> сто років.</example>
+                <example type="incorrect" correction="більш ніж|більш як">За <marker>понад</marker> сто років.</example>
+            </rule>
+    </rulegroup>
+
+<!--
+    <rulegroup name="Канцелярзми" id="KANZ">
+       <rule>   
+           <pattern>
+               <marker>
+                   <token>настільки</token>
+               </marker>
+           </pattern>
+           <message>Канцеляризм, краще: <suggestion>стільки</suggestion>, <suggestion>так</suggestion>, <suggestion>такий</suggestion>, <suggestion>такою мірою (в такій мірі, так сильно)</suggestion></message>
+           <url>http://r2u.org.ua/s?w=настолько&amp;dicts=1</url>
+           <short>Краще: стільки, так, такий, такою мірою</short>
+           <example type="incorrect"><marker>настільки</marker> ж драматичний ефект</example>
+           <example type="correct">такий же драматичний ефект</example>
+       </rule>   
+       <rule>   
+           <pattern>
+               <marker>
+                   <token>наскільки</token>
+               </marker>
+           </pattern>
+           <message>Канцеляризм, краще: <suggestion>скільки</suggestion>, <suggestion>як</suggestion>, <suggestion>який</suggestion>, <suggestion>якою мірою (в якій мірі, як сильно)</suggestion></message>
+           <url>http://r2u.org.ua/s?w=насколько&amp;dicts=1</url>
+           <example type="incorrect"><marker>наскільки</marker> ж драматичний ефект</example>
+           <example type="correct">який же драматичний ефект</example>
+       </rule>   
+       <rule>   
+           <pattern>
+               <marker>
+                   <token regexp="yes">[ву]</token>
+                   <token>більшості</token>
+                   <token>випадків</token>
+               </marker>
+           </pattern>
+           <message>Краще: <suggestion>здебільшого</suggestion>, <suggestion>здебільш</suggestion>, <suggestion>здебільша</suggestion></message>
+           <short>Краще «здебільшого»</short>
+           <example type="incorrect"><marker>У більшості випадків</marker> це не проблема.</example>
+           <example type="correct">Здебільшого це не проблема</example>
+       </rule>   
+    </rulegroup>
+-->
+
+    <rulegroup name="Милозвучність" id="EUPHONY">
+        <!--
+            <rule>
+                <pattern>
+                    <token regexp="yes">.*[156789ґйцкнгшщзхфвпрлджчсмтбьqwrtpsdfghjklzxcvbnm]</token>
+                    <marker>
+                        <token>в</token>
+                    </marker>
+                    <token regexp="yes">[23456789ґйцкнгшщзхфвпрлджчсмтьбqwrtpsdfghjklzxcvbnm][^у].*</token>
+                </pattern>
+                <message>Між двома приголосними варто писати у: \1 <suggestion>у</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/11.html</url>
+                <example type="correct">Стіг у степу.</example>
+                <example type="correct">скинув в 0</example>
+                <example type="correct">Однотипний апарат в музеї Монако</example>
+                <example type="incorrect">Стіг <marker>в</marker> степу.</example>
+            </rule>
+        -->
+            <!-- прийменник: в -> у -->
+            <rule>
+                <pattern>
+                    <token><exception regexp="yes">.*[юу]</exception></token>
+                    <marker>
+                        <token>в</token>
+                    </marker>
+                    <token regexp="yes">[28вфvfw].*|[ґйцкнгшщзхпрлджчсмтбqwrtpsdghjklzxcbnm]ь?[вфvfw].*</token>
+                </pattern>
+                <message>Перед словами, що починаються на в, ф або збігом приголосних із в, ф пишемо у: <suggestion>у</suggestion> \2</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/11.html</url>
+                <example type="incorrect"><marker>в</marker> вівторок.</example>
+                <example type="incorrect"><marker>В</marker> вольєрі сталася пожежа.</example>
+                <example type="incorrect">Наприклад, <marker>в</marker> фанерних будинках.</example>
+                <example type="incorrect">Сьогодні <marker>в</marker> Львові.</example>
+                <example type="correct">у вівторок.</example>
+                <example type="correct">Сьогодні у Львові.</example>
+                <example type="correct">перевагу в швидкості</example>
+            </rule>
+            <rule>
+                <pattern>
+                    <token postag="SENT_START"></token>
+                    <marker>
+                        <token>В</token>
+                    </marker>
+                    <token regexp="yes">([238]|[ґйцкнгшщзхфвпрлджчсмтьбqwrtpsdfghjklzxcvbnm]{2,}).*</token>
+                </pattern>
+                <message>На початку речення перед збігом приголосних варто писати у: <suggestion>У</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/11.html</url>
+                <example type="correct">В будинку сталася пожежа.</example>
+                <example type="correct">В установі сталася пожежа.</example>
+                <example type="incorrect"><marker>В</marker> приміщенні сталася пожежа.</example>
+                <example type="incorrect"><marker>В</marker> 88 році там сталася пожежа.</example>
+            </rule>
+            <rule>
+                <pattern>
+                    <token regexp="yes">[(){}:;,./?!]*</token>
+                    <marker>
+                        <token>в</token>
+                    </marker>
+                    <token regexp="yes">([238]|[ґйцкнгшщзхпрлджчсмтбqrtpsdghjklzxcbnm]{2,}).*</token>
+                </pattern>
+                <message>Після паузи перед збігом приголосних варто писати у: <suggestion>у</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/11.html</url>
+                <example type="correct">Звичайно, у закладі.</example>
+                <example type="correct">Звичайно, в закладі.</example>
+                <example type="incorrect">Наприклад, <marker>в</marker> простих визарах.</example>
+                <example type="incorrect">Наприклад, <marker>в</marker> 80 років.</example>
+            </rule>
+
+            <!-- прийменник: у -> в -->
+            <rule>
+                <pattern>
+                    <token postag="SENT_START"></token>
+                    <marker>
+                        <token>У</token>
+                    </marker>
+                    <token regexp="yes">[уеіаоиeuioa].*</token>
+                </pattern>
+                <message>На початку речення перед нейотованими голосними варто писати В: <suggestion>В</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/11.html</url>
+                <example type="incorrect"><marker>У</marker> Україні.</example>
+                <example type="incorrect"><marker>У</marker> арт-проекту.</example>
+                <example type="correct">В Україні.</example>
+                <example type="correct">В їхніх.</example>
+            </rule>
+
+            <!-- в-/у- на початку слів -->
+            <rule>
+                <pattern case_sensitive="yes">
+                    <token regexp="yes">.*[вф]</token>
+                    <marker>
+                        <token regexp="yes" postag_regexp="yes" postag=".*:v-u.*">в.+</token>
+                    </marker>
+                </pattern>
+                <message>Після слів, що закінчуються на в, ф, краще вжити слово на у-: <suggestion><match no="2" regexp_match="в(.*)" regexp_replace="у$1"/></suggestion></message>
+                <example type="incorrect" correction="ураз">біль пройшов <marker>враз</marker></example>
+                <example type="correct">біль пройде враз</example>
+                <example type="correct">біль пройшов ураз</example>
+                <example type="correct">приїхав в Україну</example>
+                <example type="correct">щодо певних активів в Україні</example>
+            </rule>
+            <rule>
+                <pattern case_sensitive="yes">
+                    <token regexp="yes">.*[ую]</token>
+                    <marker>
+                        <token regexp="yes" postag_regexp="yes" postag=".*:v-u">у.+</token>
+                    </marker>
+                </pattern>
+                <message>Після слів, що закінчуються на у, ю, краще вжити слово на в-: <suggestion><match no="2" regexp_match="у(.*)" regexp_replace="в$1"/></suggestion></message>
+                <example type="incorrect" correction="вмить">він побачив куму <marker>умить</marker></example>
+                <example type="correct">він побачив кумів умить</example>
+                <example type="correct">він побачив куму вмить</example>
+                <example type="correct">зі списку у місцевій раді</example>
+                <example type="correct">партію УДАР</example>
+            </rule>
+
+            <!-- TODO: і-/й- на початку слів лише для іти/йти, імовірність/ймовірність, імення/ймення, іменувати/йменуватися??? -->
+
+            <!-- сполучники і/й -->
+            <!--
+            <rule>
+                <pattern>
+                    <token postag="SENT_START"/>
+                    <marker>
+                        <token>й</token>
+                    </marker>
+                </pattern>
+                <message>На початку речення треба писати «і»: \1 <suggestion>і</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="incorrect"><marker>Й</marker> долом геть собі село понад водою простяглось.</example>
+                <example type="correct">І долом геть собі село понад водою простяглось</example>
+            </rule>
+            <rule>
+                <pattern>
+                    <token regexp="yes">(.*[ґйцкнгшщзхпрлджчсмтьбqwrtpsdghjklzxcbnm156789]|[,:;…])</token>
+                    <marker>
+                        <token>й</token>
+                    </marker>
+                    <token regexp="yes">[ґйцкнгшщзхпрлджчсмтьбqwrtpsdghjklzxcbnm23456789].*</token>
+                </pattern>
+                <message>Після приголосної або після паузи треба писати «і»: \1 <suggestion>і</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="correct">Пам’ять і серце</example>
+                <example type="incorrect">Пам’ять <marker>й</marker> серце.</example>
+                <example type="incorrect">1 <marker>й</marker> 3.</example>
+            </rule>
+            -->
+            <rule>
+                <pattern>
+                    <marker>
+                        <token>й</token>
+                    </marker>
+                    <token regexp="yes">[йїєяюyu].*</token>
+                </pattern>
+                <message>Перед й, ї, є, я, ю треба писати і: <suggestion>і</suggestion> \2</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="correct">Хто і як?</example>
+                <example type="incorrect">Хто <marker>й</marker> як?</example>
+                <example type="incorrect">Йому <marker>й</marker> їй?</example>
+            </rule>
+
+            <rule>
+                <pattern>
+                    <token regexp="yes">.*[уеїіаоєяиюeyuioa234]</token>
+                    <marker>
+                        <token>і</token>
+                    </marker>
+                    <token regexp="yes">([уеіаоиeioa].*|11?)</token>
+                </pattern>
+                <message>Між двома голосними варто писати й: \1 <suggestion>й</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="correct">Марко й Іван.</example>
+                <example type="incorrect">Марко <marker>і</marker> Іван.</example>
+                <example type="incorrect">2 <marker>і</marker> 1.</example>
+            </rule>
+            
+            <!-- сполучники зі/із/з -->
+            <rule>
+                <pattern>
+                    <marker>
+                        <token regexp="yes">зі|із</token>
+                    </marker>
+                    <token regexp="yes">[уеіаоиeioa].*</token>
+                </pattern>
+                <message>Перед голосною вживаємо з: <suggestion>з</suggestion> \2</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="correct">Потяг з Австрії.</example>
+                <example type="correct">Родина із шести осіб.</example>
+                <example type="correct">Один із яскравих.</example>
+                <example type="incorrect">Потяг <marker>зі</marker> Австрії.</example>
+                <example type="incorrect">Потяг <marker>із</marker> Австрії.</example>
+            </rule>
+            <rule>
+                <pattern>
+                    <token postag="SENT_START"/>
+                    <marker>
+                        <token regexp="yes">зі|із</token>
+                    </marker>
+                    <token regexp="yes">[^зсшщ].*</token>
+                </pattern>
+                <message>Після голосної та на початку речення перед приголосною (крім с, ш) вживаємо з: <suggestion>з</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="correct">3 її приходом</example>
+                <example type="incorrect"><marker>Із</marker> її приходом.</example>
+            </rule>
+            <!--
+            <rule>
+                <pattern>
+                    <token regexp="yes">(.*[уеїіаоєяиюeyuioa]|[,:;…])</token>
+                    <marker>
+                        <token regexp="yes">зі|із</token>
+                    </marker>
+                    <token regexp="yes">[ґйцкнгхпрлджчмтьбqwrtpsdghjklzxcbnm][аеєиіоуюя].*|6789.*</token>
+                </pattern>
+                <message>Після голосної (та після паузи) перед приголосною (крім с, ш) вживаємо з: <suggestion>з</suggestion> \2</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="correct">Плугатарі з плугами</example>
+                <example type="correct">свій погляд я з любов’ю повертав</example>
+                <example type="incorrect">свій погляд я <marker>із</marker> любов’ю повертав.</example>
+                <example type="correct">Пішли зі мною</example>
+            </rule>
+            -->
+            <!--
+            <rule>
+                <pattern>
+                    <token regexp="yes">.*[уеїіаоєяиюeyuioa]</token>
+                    <marker>
+                        <token regexp="yes">з|зі</token>
+                    </marker>
+                    <token regexp="yes">[зсцчшщ][ь]*[^ґйцкнгшщзхфвпрлджчсмтьб].*</token>
+                </pattern>
+                <message>Після голосної перед свистячими і шиплячими пишемо із: \1 <suggestion>із</suggestion> \3</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="correct">Родина із шести осіб</example>
+                <example type="incorrect">Родина <marker>з</marker> шести осіб.</example>
+                <example type="incorrect">Родина <marker>зі</marker> шести осіб.</example>
+            </rule>
+            -->
+            <rule>
+                <pattern>
+                    <marker>
+                        <token regexp="yes">із|з</token>
+                    </marker>
+                    <token regexp="yes">[зсшщ]ь?[ґйцкнгшщзхфвпрлджчсмтбqwrtpsdfghjklzxcvbnm].*
+                        <exception regexp="yes">\p{Lu}\p{Lu}.*</exception>
+                    </token>
+                </pattern>
+                <message>Перед сполученням приголосних із початковим свистячим або шиплячим пишемо зі: <suggestion>зі</suggestion> \2</message>
+                <url>http://vlada.kiev.ua/pravopys/pravXXI/13.html</url>
+                <example type="correct">Бере книжку зі стола.</example>
+                <example type="correct">Висновок із цього.</example>
+                <example type="correct">Балада зі знаком запитання.</example>
+                <example type="correct">Організація з США підкуплена.</example>
+                <example type="incorrect">Бере книжку <marker>із</marker> стола.</example>
+                <example type="incorrect">Бере книжку <marker>з</marker> стола.</example>
+            </rule>
+    </rulegroup>
+
+
+    <rulegroup id="PLEONAZM" name="Плеоназм">
+       <rule>   
+           <pattern>
+             <unify>
+               <feature id="gender"/>
+               <feature id="number"/>
+               <feature id="case"/>
+
+               <marker>
+                   <token inflected="yes">перший</token>
+                   <token inflected="yes">прем'єра</token>
+               </marker>
+             </unify>
+           </pattern>
+           <message>Надлишковість засобів, що використовуються для передачі змісту. Ви мали на увазі <suggestion>прем'єра</suggestion>?</message>
+           <short>Правильно «прем'єра»</short>
+           <example type="incorrect" correction="Прем'єра"><marker>Перша прем'єра</marker> відбулася місяць тому.</example>
+           <example type="correct">Прем'єра відбулася місяць тому.</example>
+           <example type="correct">На першому прем'єрі висів страшний злочин.</example>
+       </rule>
+
+       <rule>   
+           <pattern>
+               <marker>
+                   <token inflected="yes">перший</token>
+                   <token inflected="yes">дебют</token>
+               </marker>
+           </pattern>
+           <message>Надлишковість засобів, що використовуються для передачі змісту. Ви мали на увазі <suggestion>дебют</suggestion>?</message>
+           <short>Правильно «дебют»</short>
+           <example type="incorrect" correction="дебют">Це її <marker>перший дебют</marker> на сцені.</example>
+           <example type="correct">Це її дебют на сцені.</example>
+       </rule>   
+
+       <rule>   
+           <pattern>
+               <marker>
+                   <token inflected="yes">головний</token>
+                   <token inflected="yes">пріоритет</token>
+               </marker>
+           </pattern>
+           <message>Надлишковість засобів, що використовуються для передачі змісту. Ви мали на увазі <suggestion>пріоритет</suggestion>?</message>
+           <short>Правильно «пріоритет»</short>
+           <example type="incorrect" correction="пріоритет">На сьогодні це <marker>головний пріоритет</marker>.</example>
+           <example type="correct">На сьогодні це пріоритет.</example>
+       </rule>   
+
+       <rule>   
+           <pattern>
+               <marker>
+                   <token>двічі</token>
+                   <token inflected="yes">дублювати</token>
+               </marker>
+           </pattern>
+           <message>Надлишковість засобів, що використовуються для передачі змісту. Ви мали на увазі <suggestion>дублювати</suggestion>?</message>
+           <short>Правильно «дублювати»</short>
+           <example type="incorrect">Не треба <marker>двічі дублювати</marker> цей текст.</example>
+           <example type="correct">Не треба дублювати цей текст.</example>
+       </rule>   
+
+       <rule>
+         <pattern>
+            <token inflected="yes" postag_regexp="yes" postag="adj.*compr.*">великий</token>
+            <token inflected="yes">половина</token>
+         </pattern>
+         <message>Правильно: <suggestion>більша частина</suggestion>, <suggestion>більш ніж половина</suggestion></message>
+         <example type="incorrect"><marker>Більшої половини</marker> класу</example>
+         <example type="correct">Більш ніж половина</example>
+       </rule>
+       <rule>
+         <pattern>
+           <token inflected="yes">вільний</token>
+           <token inflected="yes">вакансія</token>
+          </pattern>
+         <message>Правильно: <suggestion><match no="1"/></suggestion>.</message>
+         <example type="incorrect"><marker>Вільної вакансії</marker></example>
+         <example type="correct"><marker>вакансію</marker></example>
+       </rule>
+
+    </rulegroup>
+
+  </category>
+
+</rules>
