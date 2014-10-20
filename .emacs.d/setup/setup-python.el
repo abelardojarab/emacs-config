@@ -25,7 +25,18 @@
 ;;; Code:
 
 ;; Python tweaks
+(eval-after-load "python"
+  `(progn
+     (remove-hook 'python-mode-hook 'wisent-python-default-setup)))
+
+(defun python-reset-imenu ()
+  (interactive)
+  (if (fboundp 'setq-mode-local)
+      (setq-mode-local python-mode
+                       imenu-create-index-function 'python-imenu-create-index))
+  (setq imenu-create-index-function 'python-imenu-create-index))
 (when (featurep 'python) (unload-feature 'python t))
+
 (add-to-list 'load-path "~/.emacs.d/python-mode")
 (require 'python-mode)
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
