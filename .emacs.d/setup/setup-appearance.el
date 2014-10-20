@@ -226,7 +226,7 @@
 (setq djcb-read-only-cursor-type 'hbar)
 (setq djcb-overwrite-color "red")
 (setq djcb-overwrite-cursor-type 'box)
-(setq djcb-normal-color "gray")
+(setq djcb-normal-color "yellow")
 (setq djcb-normal-cursor-type 'bar)
 (defun djcb-set-cursor-according-to-mode ()
   "change cursor color and type according to some minor modes."
@@ -294,6 +294,10 @@
 (add-hook 'c-mode-common-hook 'indent-vline)
 (add-hook 'lisp-mode-hook 'indent-vline)
 (add-hook 'python-mode-hook 'indent-vline)
+
+;; Highlight blocks
+(add-to-list 'load-path "~/.emacs.d/highlight-blocks")
+(require 'highlight-blocks)
 
 ;; Higlight indentation
 (add-to-list 'load-path "~/.emacs.d/Highlight-Indentation-for-Emacs")
@@ -416,47 +420,6 @@
            (dolist (regexp regexps)
              (when (string-match regexp string)
                (throw 'matched t)))))))
-
-;; Heartbeat cursor
-(require 'cl)
-(require 'color)
-(defvar heartbeat-fps 16)
-(defvar heartbeat-period 5)
-
-(defun heartbeat-range (from to cnt)
-  (let ((step (/ (- to from) (float cnt))))
-    (loop for i below cnt collect (+ from (* step i)))))
-
-(defun heartbeat-cursor-colors ()
-  (let ((cnt (* heartbeat-period heartbeat-fps)))
-    (mapcar (lambda (r)
-              (color-rgb-to-hex r 1 0))
-            (nconc (heartbeat-range .2 1 (/ cnt 2))
-                   (heartbeat-range 1 .2 (/ cnt 2))))))
-
-(defvar heartbeat-cursor-timer nil)
-(defvar heartbeat-cursor-old-color)
-
-(define-minor-mode heartbeat-cursor-mode
-  "Change cursor color with the heartbeat effect."
-  nil "" nil
-  :global t
-  (when heartbeat-cursor-timer
-    (cancel-timer heartbeat-cursor-timer)
-    (setq heartbeat-cursor-timer nil)
-    (set-face-background 'cursor heartbeat-cursor-old-color))
-  (when heartbeat-cursor-mode
-    (setq heartbeat-cursor-old-color (face-background 'cursor)
-          heartbeat-cursor-timer
-          (run-with-timer
-           0 (/ 1 (float heartbeat-fps))
-           (lexical-let ((colors (heartbeat-cursor-colors)) tail)
-             (lambda ()
-               (setq tail (or (cdr tail) colors))
-               (set-face-background 'cursor (car tail))))))))
-
-(add-hook 'prog-mode-hook (heartbeat-cursor-mode t))
-(add-hook 'text-mode-hook (heartbeat-cursor-mode t))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
