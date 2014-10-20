@@ -27,6 +27,7 @@
 ;; Tabbar mode
 (add-to-list 'load-path "~/.emacs.d/tabbar")
 (require 'tabbar)
+(setq 'tabbar-use-images nil)
 (tabbar-mode)
 (global-set-key [C-prior] 'tabbar-backward-tab)
 (global-set-key [C-next] 'tabbar-forward-tab)
@@ -37,7 +38,7 @@
 (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
   (setq ad-return-value
         (if (and (buffer-modified-p (tabbar-tab-value tab))
-               (buffer-file-name (tabbar-tab-value tab)))
+                 (buffer-file-name (tabbar-tab-value tab)))
             (concat "+" (concat ad-return-value ""))
           (concat "" (concat ad-return-value "")))))
 
