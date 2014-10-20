@@ -60,18 +60,21 @@
 (setq semantic-idle-scheduler-max-buffer-size 100000)
 
 ;; Small workloads
-(setq semantic-idle-scheduler-idle-time 5)
+(setq semantic-idle-scheduler-idle-time 10)
 
 ;; Big workloads
 (setq semantic-idle-scheduler-work-idle-time 60)
 
 ;; Default directory
-(setq semanticdb-default-save-directory
-      (expand-file-name "~/.emacs.cache/semanticdb"))
+(setq semanticdb-default-system-save-directory
+      (setq semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
 (setq ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
 
-;; what to cache
-(setq semanticdb-persistent-path '(never))
+;; which function
+(if (fboundp #'which-func-mode)
+    (add-hook 'semantic-init-hooks
+              (lambda ()
+                (which-func-mode 1))))
 
 ;; ctags
 (defun my-semantic-hook ()
