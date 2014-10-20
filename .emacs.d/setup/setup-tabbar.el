@@ -27,7 +27,9 @@
 ;; Tabbar mode
 (add-to-list 'load-path "~/.emacs.d/tabbar")
 (require 'tabbar)
-(setq tabbar-use-images nil)
+(setq tabbar-use-images t)
+(setq tabbar-cycle-scope (quote tabs))
+(setq table-time-before-update 0.1)
 (tabbar-mode)
 (global-set-key [C-prior] 'tabbar-backward-tab)
 (global-set-key [C-next] 'tabbar-forward-tab)
