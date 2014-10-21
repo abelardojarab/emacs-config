@@ -66,13 +66,21 @@
 (setq org-default-notes-file "~/workspace/Documents/agenda.org")
 (setq org-indent-mode t)
 
-;; (setq org-export-with-sub-superscripts nil)
-;; (setq org-use-sub-superscripts "{}")
-
 ;; deadline warning day
 (setq org-deadline-warning-days 3)
 
 ;; Org Agenda
+(setq org-agenda-span 2)
+(setq org-agenda-sticky nil)
+(setq org-agenda-show-log t)
+(setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-skip-deadline-if-done t)
+(setq org-agenda-time-grid
+      '((daily today require-timed)
+        "----------------"
+        (800 1000 1200 1400 1600 1800)))
+(setq org-columns-default-format "%50ITEM %12SCHEDULED %TODO %3PRIORITY %Effort{:} %TAGS")
+
 (eval-after-load 'org-agenda
   '(setq org-agenda-custom-commands
          '(("a" "Agenda"
