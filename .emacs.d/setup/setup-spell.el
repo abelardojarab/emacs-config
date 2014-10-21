@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Enable ispell at the end
+(require 'ispell)
+
 ;; We need tell emacs to use aspell, and where your custom dictionary is.
 (setq ispell-silently-savep t)
 
@@ -33,7 +36,6 @@
       (setq ispell-dictionary "american")
       (setq ispell-program-name "hunspell")
       (setq ispell-really-hunspell t)
-      (setq ispell-really-aspell nil)
       (setq ispell-extra-args '()) ;; TeX mode "-t"
       (setq ispell-local-dictionary-alist '(
                                             (nil
@@ -71,9 +73,6 @@
             (setq ispell-program-name "/usr/local/bin/aspell")
             (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))))
 
-;; Enable ispell at the end
-(require 'ispell)
-
 ;; change dictionary: "C-c e" = english, "C-c s"=spanish, "C-c w"=turn off flyspell
 (add-hook 'text-mode-hook
           '(lambda ()
@@ -105,7 +104,7 @@
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode -1))))
+  (add-hook hook (lambda () (flyspell-mode 1))))
 
 (eval-after-load "flyspell"
   '(defun flyspell-ajust-cursor-point (save cursor-location old-max)
