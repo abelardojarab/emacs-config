@@ -166,45 +166,8 @@
 (global-set-key [(control mouse-5)] 'text-scale-decrease)
 (global-set-key [(control mouse-4)] 'text-scale-increase)
 
-;; higlight changes in documents
-(global-highlight-changes-mode t)
-(setq highlight-changes-visibility-initial-state nil)
-
-;; higlight changes in documents
-(global-highlight-changes-mode t)
-(setq highlight-changes-visibility-initial-state nil)
-
-;; Fix highlight bug of marking a file as modified
-(defadvice highlight-changes-rotate-faces (around around-rotate-faces)
-  (let ((was-modified (buffer-modified-p))
-        (buffer-undo-list t))
-    ad-do-it
-    (unless was-modified
-      (set-buffer-modified-p nil))))
-(ad-activate 'highlight-changes-rotate-faces)
-
-;; toggle visibility
-(global-set-key (kbd "<f6>") 'highlight-changes-visible-mode) ;; changes
-
-;; remove the change-highlight in region
-(global-set-key (kbd "S-<f6>") 'highlight-changes-remove-highlight)
-
-;; If you're not already using it for something else...
-(global-set-key (kbd "<M-next>") 'highlight-changes-next-change)
-(global-set-key (kbd "<M-prior>")  'highlight-changes-previous-change)
-(set-face-foreground 'highlight-changes nil)
-(set-face-background 'highlight-changes "#882020")
-(set-face-foreground 'highlight-changes-delete nil)
-(set-face-background 'highlight-changes-delete "#916868")
-
 ;; toggle truncate lines
 (global-set-key (kbd "<f8>") 'toggle-truncate-lines)
-
-;; Bookmark keys
-(global-set-key (kbd "<C-f2>") 'bm-toggle)
-(global-set-key (kbd "<f2>")   'bm-next)
-(global-set-key (kbd "<S-f2>") 'bm-previous)
-(global-set-key (kbd "<left-margin> <mouse-3>") 'bm-toggle)
 
 ;; Refresh file on F9
 (defun refresh-file ()

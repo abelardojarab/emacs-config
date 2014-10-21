@@ -147,9 +147,6 @@
 ;; Setup gnus and Newsticker
 (require 'setup-gnus)
 
-;; Setup keys
-(require 'setup-keys)
-
 ;; Setup modeline and Smex
 (require 'setup-modeline)
 
@@ -173,6 +170,9 @@
 
 ;; Setup Spelling
 (require 'setup-spell)
+
+;; Setup keys
+(require 'setup-keys)
 
 ;; Setup server
 (unless (string-equal system-type "windows-nt")
