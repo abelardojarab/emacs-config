@@ -52,5 +52,8 @@
                               (bm-buffer-save-all)
                               (bm-repository-save)))
 
+;; Better bookmark font
+(set-face-attribute 'bm-face nil :underline t :foreground nil :background nil)
+
 (provide 'setup-bookmarks)
 ;;; setup-bookmarks.el ends here
