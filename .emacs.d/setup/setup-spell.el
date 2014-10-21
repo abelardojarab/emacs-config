@@ -28,7 +28,7 @@
 (require 'ispell)
 (setq ispell-silently-savep t)
 (setq ispell-program-name "aspell"
-              ispell-extra-args '("--sug-mode=ultra"))
+      ispell-extra-args '("--sug-mode=ultra"))
 (when (eq system-type 'darwin)
   (if (file-executable-p "/usr/local/bin/aspell")
       (progn
@@ -37,8 +37,7 @@
 
 ;; Use hunspell if available instead
 (when (executable-find "hunspell")
-  (setq ispell-program-name
-        (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p))
+  (setq ispell-program-name "hunspell")
   (setq ispell-really-hunspell t)
   (setq ispell-extra-args '()) ;; TeX mode "-t"
   (setq ispell-local-dictionary-alist '(
