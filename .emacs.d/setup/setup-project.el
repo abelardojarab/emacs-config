@@ -50,7 +50,6 @@
   (require 'dired-async))
 
 ;; iMenu
-(require 'imenu+)
 (set-default 'imenu-auto-rescan t)
 (add-hook 'lisp-mode-hook
           (lambda ()
