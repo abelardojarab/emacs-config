@@ -401,9 +401,8 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
 (defun ergoemacs-global-set-key-after (key)
   (if ergoemacs-ignore-advice nil
     (let ((kd (key-description key)))
-(ignore-errors 	
       (unless (or (and (vectorp key)
-                       (memq (elt key 0) '(menu-bar 27 remap)))
+                       (ignore-errors (memq (elt key 0) '(menu-bar 27 remap))))
                   ;; FIXME: don't unbind for packages that use
                   ;; global-set-key.  Like undo-tree
                   (and (not (vectorp key))
@@ -412,7 +411,7 @@ Also adds keymap-flag for user-defined keys run with `run-mode-hooks'."
         (pushnew kd ergoemacs-global-changed-cache :test 'equal)
         (setq ergoemacs-global-not-changed-cache (delete kd ergoemacs-global-not-changed-cache))
         ;; Remove the key from `ergoemacs-mode' bindings
-        (ergoemacs-theme-component--ignore-globally-defined-key key t))))))
+        (ergoemacs-theme-component--ignore-globally-defined-key key t)))))
 
 (defvar ergoemacs-use-M-x-p)
 (eval-after-load "helm"
