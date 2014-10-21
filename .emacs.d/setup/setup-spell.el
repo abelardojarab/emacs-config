@@ -26,25 +26,50 @@
 
 ;; We need tell emacs to use aspell, and where your custom dictionary is.
 (require 'ispell)
+(setq ispell-silently-savep t)
 (setq ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra"))
+              ispell-extra-args '("--sug-mode=ultra"))
 (when (eq system-type 'darwin)
-    (if (file-executable-p "/usr/local/bin/aspell")
-        (progn
-          (setq ispell-program-name "/usr/local/bin/aspell")
-          (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi"))))
-    ;; Fix for right click on Mac OS X
-    (eval-after-load "flyspell"
-      '(progn
-         (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-         (define-key flyspell-mouse-map [mouse-3] #'undefined))))
+  (if (file-executable-p "/usr/local/bin/aspell")
+      (progn
+        (setq ispell-program-name "/usr/local/bin/aspell")
+        (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))
 
 ;; Use hunspell if available instead
 (when (executable-find "hunspell")
-  (setq-default ispell-program-name "hunspell")
-  (setq ispell-really-hunspell t))
+  (setq ispell-program-name
+        (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p))
+  (setq ispell-really-hunspell t)
+  (setq ispell-extra-args '()) ;; TeX mode "-t"
+  (setq ispell-local-dictionary-alist '(
+                                        (nil
+                                         "[[:alpha:]]"
+                                         "[^[:alpha:]]"
+                                         "[']"
+                                         t
+                                         ("-d" "en_US" "-i" "utf-8" "-p" (expand-file-name "~/.emacs.d/dictionaries"))
+                                         nil
+                                         utf-8)
 
-;; change dictionary: "C-c e" = engelska, "C-c s"=spanish, "C-c w"=turn off flyspell
+                                        ("english"
+                                         "[[:alpha:]]"
+                                         "[^[:alpha:]]"
+                                         "[']"
+                                         t
+                                         ("-d" "en_US" "-i" "utf-8" "-p" (expand-file-name "~/.emacs.d/dictionaries"))
+                                         nil
+                                         utf-8)
+
+                                        ("american"
+                                         "[[:alpha:]]"
+                                         "[^[:alpha:]]"
+                                         "[']"
+                                         t
+                                         ("-d" "en_US" "-i" "utf-8" "-p" (expand-file-name "~/.emacs.d/dictionaries"))
+                                         nil
+                                         utf-8))))
+
+;; change dictionary: "C-c e" = english, "C-c s"=spanish, "C-c w"=turn off flyspell
 (add-hook 'text-mode-hook
           '(lambda ()
              (local-set-key (kbd "C-c s 2")
@@ -76,6 +101,18 @@
   (add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
+
+(eval-after-load "flyspell"
+  '(defun flyspell-ajust-cursor-point (save cursor-location old-max)
+     (when (not (looking-at "\\b"))
+       (forward-word))))
+
+;; Fix for right click on Mac OS X
+(when (eq system-type 'darwin)
+  (eval-after-load "flyspell"
+    '(progn
+       (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+       (define-key flyspell-mouse-map [mouse-3] #'undefined))))
 
 ;; Disable flyspell keybindings
 (eval-after-load "flyspell"
