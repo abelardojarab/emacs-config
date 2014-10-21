@@ -26,48 +26,50 @@
 
 ;; We need tell emacs to use aspell, and where your custom dictionary is.
 (setq ispell-silently-savep t)
-(setq ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra"))
-(when (eq system-type 'darwin)
-  (if (file-executable-p "/usr/local/bin/aspell")
-      (progn
-        (setq ispell-program-name "/usr/local/bin/aspell")
-        (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))
 
 ;; Use hunspell if available instead
-(when (executable-find "hunspell")
-  (setq ispell-dictionary "american")
-  (setq ispell-program-name "hunspell")
-  (setq-default ispell-program-name "hunspell")
-  (setq ispell-really-hunspell t)
-  (setq ispell-extra-args '()) ;; TeX mode "-t"
-  (setq ispell-local-dictionary-alist '(
-                                        (nil
-                                         "[[:alpha:]]"
-                                         "[^[:alpha:]]"
-                                         "[']"
-                                         t
-                                         ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
-                                         nil
-                                         utf-8)
+(if (executable-find "hunspell")
+    (progn
+      (setq ispell-dictionary "american")
+      (setq ispell-program-name "hunspell")
+      (setq ispell-really-hunspell t)
+      (setq ispell-really-aspell nil)
+      (setq ispell-extra-args '()) ;; TeX mode "-t"
+      (setq ispell-local-dictionary-alist '(
+                                            (nil
+                                             "[[:alpha:]]"
+                                             "[^[:alpha:]]"
+                                             "[']"
+                                             t
+                                             ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
+                                             nil
+                                             utf-8)
 
-                                        ("english"
-                                         "[[:alpha:]]"
-                                         "[^[:alpha:]]"
-                                         "[']"
-                                         t
-                                         ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
-                                         nil
-                                         utf-8)
+                                            ("english"
+                                             "[[:alpha:]]"
+                                             "[^[:alpha:]]"
+                                             "[']"
+                                             t
+                                             ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
+                                             nil
+                                             utf-8)
 
-                                        ("american"
-                                         "[[:alpha:]]"
-                                         "[^[:alpha:]]"
-                                         "[']"
-                                         t
-                                         ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
-                                         nil
-                                         utf-8))))
+                                            ("american"
+                                             "[[:alpha:]]"
+                                             "[^[:alpha:]]"
+                                             "[']"
+                                             t
+                                             ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
+                                             nil
+                                             utf-8))))
+  (progn
+    (setq ispell-program-name "aspell"
+          ispell-extra-args '("--sug-mode=ultra"))
+    (when (eq system-type 'darwin)
+      (if (file-executable-p "/usr/local/bin/aspell")
+          (progn
+            (setq ispell-program-name "/usr/local/bin/aspell")
+            (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))))
 
 ;; Enable ispell at the end
 (require 'ispell)
