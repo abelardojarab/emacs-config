@@ -46,7 +46,7 @@
                                          "[^[:alpha:]]"
                                          "[']"
                                          t
-                                         ("-d" "en_US" "-i" "utf-8" "-p" (expand-file-name "~/.emacs.d/dictionaries"))
+                                         ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
                                          nil
                                          utf-8)
 
@@ -55,7 +55,7 @@
                                          "[^[:alpha:]]"
                                          "[']"
                                          t
-                                         ("-d" "en_US" "-i" "utf-8" "-p" (expand-file-name "~/.emacs.d/dictionaries"))
+                                         ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
                                          nil
                                          utf-8)
 
@@ -64,7 +64,7 @@
                                          "[^[:alpha:]]"
                                          "[']"
                                          t
-                                         ("-d" "en_US" "-i" "utf-8" "-p" (expand-file-name "~/.emacs.d/dictionaries"))
+                                         ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
                                          nil
                                          utf-8))))
 
