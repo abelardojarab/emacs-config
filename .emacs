@@ -53,6 +53,7 @@
  '(magit-use-overlays nil)
  '(nyan-mode t)
  '(org-CUA-compatible nil)
+ '(org-support-shift-select (quote always))
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
  '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
@@ -63,7 +64,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument)))))
+ '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument))))
+ '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
+ '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
 
 ;; Setup general
 (require 'setup-general)
@@ -113,9 +116,6 @@
 
 ;; Setup Auto-Complete
 (require 'setup-auto-complete)
-
-;; Setup Spelling
-(require 'setup-spell)
 
 ;; Setup Hideshow
 (require 'setup-hideshow)
@@ -170,6 +170,9 @@
 
 ;; Setup ECB
 (require 'setup-ecb)
+
+;; Setup Spelling
+(require 'setup-spell)
 
 ;; Setup server
 (unless (string-equal system-type "windows-nt")
