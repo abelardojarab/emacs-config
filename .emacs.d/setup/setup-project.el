@@ -34,6 +34,11 @@
 (global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
 (global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
+;; Helm bm support
+(add-to-list 'load-path "~/.emacs.d/helm-bm")
+(require 'helm-bm) ;; Not necessary if using ELPA package
+(global-set-key (kbd "C-c b") 'helm-bm)
+
 ;; Helm themes
 (add-to-list 'load-path "~/.emacs.d/helm-themes")
 (require 'helm-themes)
@@ -88,7 +93,7 @@
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
 (setq projectile-remember-window-configs t)
 (unless (string-equal system-type "windows-nt")
-    (setq projectile-indexing-method 'git)
+  (setq projectile-indexing-method 'git)
   ) ;; unless
 (projectile-global-mode t)
 
