@@ -25,7 +25,6 @@
 ;;; Code:
 
 ;; We need tell emacs to use aspell, and where your custom dictionary is.
-(require 'ispell)
 (setq ispell-silently-savep t)
 (setq ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
@@ -37,7 +36,9 @@
 
 ;; Use hunspell if available instead
 (when (executable-find "hunspell")
+  (setq ispell-dictionary "american")
   (setq ispell-program-name "hunspell")
+  (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t)
   (setq ispell-extra-args '()) ;; TeX mode "-t"
   (setq ispell-local-dictionary-alist '(
@@ -67,6 +68,9 @@
                                          ("-d" "en_US" "-i" "utf-8" "-p" "~/.emacs.d/dictionaries")
                                          nil
                                          utf-8))))
+
+;; Enable ispell at the end
+(require 'ispell)
 
 ;; change dictionary: "C-c e" = english, "C-c s"=spanish, "C-c w"=turn off flyspell
 (add-hook 'text-mode-hook
