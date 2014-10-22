@@ -292,7 +292,7 @@
 (load "~/.emacs.d/elisp/00_func.el")
 (require 'aux-line)
 (add-hook 'c-mode-common-hook 'indent-vline)
-(add-hook 'lisp-mode-hook 'indent-vline)
+(add-hook 'js2-mode-hook 'indent-vline)
 (add-hook 'python-mode-hook 'indent-vline)
 
 ;; Highlight blocks
