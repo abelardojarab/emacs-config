@@ -1,8 +1,8 @@
-This is /tmp/w3m208366nr/w3m-20141006.1656/emacs-w3m-ja.info, produced
+This is /tmp/w3m24413qQ8/w3m-20141022.147/emacs-w3m-ja.info, produced
 by makeinfo version 4.13 from
 /home/melpa/melpa/working/w3m/doc/emacs-w3m-ja.texi.
 
-Copyright (C) 2000-2011 TSUCHIYA Masatoshi
+Copyright (C) 2000-2014 TSUCHIYA Masatoshi
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU General Public License,
@@ -64,7 +64,7 @@ Emacs-w3m ユーザマニュアル
    この文書は emacs-w3m バージョン {No value for
 `VERSION'} に対応します。
 
-   Copyright (C) 2000-2011 TSUCHIYA Masatoshi
+   Copyright (C) 2000-2014 TSUCHIYA Masatoshi
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU General Public License,
