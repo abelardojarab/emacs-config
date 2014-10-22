@@ -95,6 +95,9 @@
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
+;; Setup regular expressions
+(require 'setup-regexp)
+
 ;; Setup Etags and GTAGS
 (require 'setup-tags)
 
@@ -172,6 +175,9 @@
 
 ;; Setup ECB
 (require 'setup-ecb)
+
+;; Setup eshell
+(require 'setup-eshell)
 
 ;; Setup keys
 (require 'setup-keys)
