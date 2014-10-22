@@ -118,6 +118,20 @@
                                ac-source-math-latex) ac-sources))))
 (add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
 
+;; Autocomplete using Aspell
+(add-to-list 'load-path "~/.emacs.d/ac-ispell")
+(require 'ac-ispell)
+(custom-set-variables
+ '(ac-ispell-requires 4)
+ '(ac-ispell-fuzzy-limit 2))
+
+(eval-after-load "auto-complete"
+  '(progn
+     (ac-ispell-setup)))
+
+(add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
+(add-hook 'mail-mode-hook 'ac-ispell-ac-setup)
+
 ;; Enable auto-complete on more modes
 (dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
                                     sass-mode yaml-mode csv-mode espresso-mode haskell-mode

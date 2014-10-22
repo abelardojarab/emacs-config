@@ -26,9 +26,7 @@
  '(auto-indent-delete-trailing-whitespace-on-save-file t)
  '(auto-indent-delete-trailing-whitespace-on-visit-file t)
  '(cua-enable-cua-keys nil)
- '(custom-safe-themes
-   (quote
-    ("96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
+ '(custom-safe-themes (quote ("96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
  '(delete-selection-mode t nil (delsel))
  '(ecb-auto-activate t)
  '(ecb-display-image-icons-for-semantic-tags t)
@@ -37,14 +35,7 @@
  '(ecb-highlight-tag-with-point (quote highlight-scroll))
  '(ecb-kill-buffer-clears-history (quote auto))
  '(ecb-layout-name "leftright-sa-m")
- '(ecb-methods-menu-sorter
-   (lambda
-     (entries)
-     (let
-         ((sorted
-           (copy-list entries)))
-       (sort sorted
-             (quote string-lessp)))))
+ '(ecb-methods-menu-sorter (lambda (entries) (let ((sorted (copy-list entries))) (sort sorted (quote string-lessp)))))
  '(ecb-options-version "2.40")
  '(ecb-prescan-directories-for-emptyness t)
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
@@ -107,6 +98,9 @@
 ;; Setup Etags and GTAGS
 (require 'setup-tags)
 
+;; Setup Spelling
+(require 'setup-spell)
+
 ;; Setup Flycheck
 (require 'setup-flycheck)
 
@@ -167,20 +161,17 @@
 ;; Setup project support
 (require 'setup-project)
 
-;; Setup utilities
-(require 'setup-utilities)
-
 ;; Setup tabbar
 (require 'setup-tabbar)
+
+;; Setup utilities
+(require 'setup-utilities)
 
 ;; Setup elnode
 (require 'setup-elnode)
 
 ;; Setup ECB
 (require 'setup-ecb)
-
-;; Setup Spelling
-(require 'setup-spell)
 
 ;; Setup keys
 (require 'setup-keys)

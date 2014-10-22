@@ -86,19 +86,5 @@
 (eval-after-load "flyspell"
   '(define-key flyspell-mode-map (kbd "C-.") nil))
 
-;; Autocomplete using Aspell
-(add-to-list 'load-path "~/.emacs.d/ac-ispell")
-(require 'ac-ispell)
-(custom-set-variables
- '(ac-ispell-requires 4)
- '(ac-ispell-fuzzy-limit 2))
-
-(eval-after-load "auto-complete"
-  '(progn
-     (ac-ispell-setup)))
-
-(add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
-(add-hook 'mail-mode-hook 'ac-ispell-ac-setup)
-
 (provide 'setup-spell)
 ;;; setup-spell.el ends here
