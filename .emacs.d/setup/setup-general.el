@@ -267,10 +267,11 @@
       (indent-region (region-beginning) (region-end) nil)))
 
 ;; Autosave
-(setq auto-save-list-file-prefix "~/.emacs.cache/auto-save-list/.saves-")
-
-;; Autosave every 500 typed characters
 (setq auto-save-interval 500)
+(defvar my-auto-save-folder "~/.emacs.cache/auto-save/") ;; folder for auto-saves
+(setq auto-save-list-file-prefix "~/.emacs.cache/auto-save/.saves-") ;; set prefix for auto-saves
+(setq auto-save-file-name-transforms `((".*" ,my-auto-save-folder t))) ;; location for all auto-save files
+(setq tramp-auto-save-directory my-auto-save-folder) ;; auto-save tramp files in local directory
 
 ;; Backups
 (setq make-backup-files t
