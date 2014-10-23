@@ -96,7 +96,7 @@
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
 ;; Setup regular expressions
-(require 'setup-regexp)
+;; (require 'setup-regexp)
 
 ;; Setup Etags and GTAGS
 (require 'setup-tags)
@@ -177,7 +177,7 @@
 (require 'setup-ecb)
 
 ;; Setup eshell
-(require 'setup-eshell)
+;; (require 'setup-eshell)
 
 ;; Setup keys
 (require 'setup-keys)
