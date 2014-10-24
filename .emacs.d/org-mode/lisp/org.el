@@ -16503,10 +16503,10 @@ So these are more for recording a certain time/date."
                   (message "")))
     (org-defkey map ">"
                 (lambda () (interactive)
-                  (org-eval-in-calendar '(scroll-calendar-left 1))))
+                  (org-eval-in-calendar '(calendar-scroll-left 1))))
     (org-defkey map "<"
                 (lambda () (interactive)
-                  (org-eval-in-calendar '(scroll-calendar-right 1))))
+                  (org-eval-in-calendar '(calendar-scroll-right 1))))
     (org-defkey map "\C-v"
                 (lambda () (interactive)
                   (org-eval-in-calendar
@@ -18002,7 +18002,7 @@ tables are not re-aligned, etc."
 
 (define-obsolete-variable-alias
   'org-agenda-ignore-drawer-properties
-  'org-agenda-ignore-properties "24.5")
+  'org-agenda-ignore-properties "25.1")
 
 (defcustom org-agenda-ignore-properties nil
   "Avoid updating text properties when building the agenda.
@@ -18017,7 +18017,7 @@ The value is a list, with zero or more of the symbols `effort', `appt',
 	      (const appt)
 	      (const stats)
 	      (const category))
-  :version "24.5"
+  :version "25.1"
   :package-version '(Org . "8.3")
   :group 'org-agenda)
 
@@ -18181,8 +18181,10 @@ used by the agenda files.  If ARCHIVE is `ifmode', do this only if
   "Return non-nil, if FILE is an agenda file.
 If FILE is omitted, use the file associated with the current
 buffer."
-  (member (or file (buffer-file-name))
-          (org-agenda-files t)))
+  (let ((fname (or file (buffer-file-name))))
+    (and fname
+         (member (file-truename fname)
+                 (mapcar #'file-truename (org-agenda-files t))))))
 
 (defun org-edit-agenda-file-list ()
   "Edit the list of agenda files.
