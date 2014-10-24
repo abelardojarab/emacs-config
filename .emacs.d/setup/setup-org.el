@@ -805,5 +805,9 @@ a link to this file."
    ((((class color) (min-colors 16) (background dark))
      (:foreground "LightSalmon" :strike-through t)))))
 
+;; Org Journal
+(add-to-list 'load-path "~/.emacs.d/org-journal")
+(require 'org-journal)
+
 (provide 'setup-org)
 ;;; setup-org.el ends here

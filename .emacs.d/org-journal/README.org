@@ -1,0 +1,118 @@
+* org-journal.el
+
+Adapted from http://www.emacswiki.org/PersonalDiary
+
+Functions to maintain a simple personal diary / journal in Emacs.
+Feel free to use, modify and improve the code!
+— mtvoid, bastibe
+
+This file is also available from [[http://marmalade-repo.org/][marmalade]], [[http://melpa.milkbox.net/][melpa]] and [[http://melpa-stable.milkbox.net/][melpa-stable]]
+under the name org-journal. You may also want to specify the directory
+where your journal files will be saved. You can do this by setting the
+variable =org-journal-dir= (remember to add a trailing slash).
+=org-journal-dir= is also a customizable variable. The default value
+for =org-journal-dir= is =~/Documents/journal/=.
+
+You can add all those calendar files to your org-agenda by adding
+=org-journal-dir= to =org-agenda-files= and setting
+=org-agenda-file-regexp= to include files with an all-numeric name
+(=\\`[^.].*\\.org'\\|[0-9]+=). That way, you can use org-agenda to
+search for /TODO/ items or tagged items in your org-journal.
+
+Inside the journal directory, a separate file is created for each day
+with a journal entry, with a file name in the format /YYYYMMDD/. Each
+journal entry is an org-mode file that begins with a date entry on the
+top, followed by a entries for different times. Any subsequent entries
+on the same day are written as additional headings in the same file,
+with their own time. To start writing a journal entry, press =C-c j=.
+
+You can customize the date and time formats using the variables
+=org-journal-date-format= and =org-journal-time-format=. If you do not
+want to use org headings and sub-headings for date and time entries,
+customize =org-journal-date-prefix= and =org-journal-time-prefix=. For
+example, you could set =org-journal-date-prefix= to =#+TITLE:= in
+order to begin every file with a title instead of a heading. If you
+want to store your journal entries with different file names,
+customize =org-journal-file-format=.
+
+You can browse through existing journal entries on disk via the
+calendar. All dates for which an entry is present are highlighted.
+Pressing =j= will open it up for viewing. Pressing =[= or =]= will
+select the date with the previous or next journal entry, respectively.
+Pressing =i j= will create a new entry for the chosen date.
+
+Quick summary:
+To create a new journal entry: =C-c j=
+
+In calendar view:
+- =j= to view an entry
+- =i j= to add a new entry
+- =[= to go to previous entry
+- =]= to go to next entry
+
+When viewing a journal entry:
+- =C-c f= to view next entry
+- =C-c b= to view previous entry
+
+A typical journal entry for a day would look like this:
+
+(it will actually look a lot nicer, depending on your org-mode settings)
+
+#+BEGIN_SRC
+  * Tuesday, 06/04/13
+  ** 10:28 Company meeting
+  Endless discussions about projects. Not much progress
+
+  ** 11:33 Work on org-journal                                   :org-journal:
+  For the longest time, I wanted to have a cool diary app on my
+  computer. However, I simply lacked the right tool for that job. After
+  many hours of searching, I finally found PersonalDiary on EmacsWiki.
+  PersonalDiary is a very simple diary system based on the emacs
+  calendar. It works pretty well, but I don't really like that it only
+  uses unstructured text.
+
+  Thus, I spent the last two hours with making that diary use org-mode
+  and represent every entry as an org-mode headline. Very cool!
+
+  ** 15:33 Work on org-journal                                   :org-journal:
+  Now my journal automatically creates the right headlines (adds the
+  current time stamp if on the current day, does not add a time stamp
+  for any other day). Additionally, it automatically collapses the
+  headlines in the org-file to the right level (shows everything if in
+  view mode, shows only headlines in new-entry-mode). Emacs and elisp
+  are really cool!
+
+  ** 16:40 Work on org-journal                                   :org-journal:
+  I uploaded my journal mode to marmalade and Github! Awesome!
+
+  ** TODO teach org-journal how to brew coffee                   :org-journal:
+#+END_SRC
+
+** Changelog
+
+- 2013-06-04 V1.0 Bastian Bechtold
+  Initial working prototype. More or less simply an extension of personal-diary with org-mode files.
+
+- 2013-06-12 V1.3.4 Bastian Bechtold
+  Several bug fixes and documentation improvements.
+
+- 2013-08-23 V1.4 Bastian Bechtold
+  Now supports more customization
+
+- 2013-09-17 V1.4.3 Bastian Bechtold
+  Several bugfixes and autoloading (which kind of mostly works)
+
+- 2013-10-02 V1.4.4 Bastian Bechtold
+  Create org-journal directory if not present (thank you, Donghyun Cho!)
+
+- 2013-11-10 V1.4.8 Bastian Bechtold
+  Fixed opening of journal files for reading (thank you, Matthew M. Keeler!)
+  View mode now stays active when switching between files (thank you, Matthew M. Keeler!)
+  Some autoload fixes
+
+- 2014-03-10 V1.4.8 Bastian Bechtold
+  Some bug fixes on opening files (thank you, Ram Raghunathan!)
+
+- 2014-06-17 V1.5 Bastian Bechtold
+  Some more bug fixes for autoloading
+  Simplified setup by auto generating the file pattern from the file format.
