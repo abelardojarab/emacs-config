@@ -10,9 +10,17 @@
           :target: https://readthedocs.org/projects/flycheck/?badge=latest
           :alt: Documentation Status
 
-====================================
- Flycheck |license| |docs| |travis|
-====================================
+.. |melpa| image:: http://melpa.org/packages/flycheck-badge.svg
+           :target: http://melpa.org/#/flycheck
+           :alt: MELPA Status
+
+.. |melpa-stable| image:: http://stable.melpa.org/packages/flycheck-badge.svg
+                  :target: http://stable.melpa.org/#/flycheck
+                  :alt: MELPA Stable Status
+
+============================================================
+ Flycheck |license| |docs|  |melpa| |melpa-stable| |travis|
+============================================================
 
 .. image:: https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/logo.png
    :target: http://flycheck.readthedocs.org
