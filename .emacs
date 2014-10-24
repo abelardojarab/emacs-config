@@ -96,7 +96,7 @@
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
 ;; Setup regular expressions
-;; (require 'setup-regexp)
+(require 'setup-regexp)
 
 ;; Setup Etags and GTAGS
 (require 'setup-tags)
@@ -145,6 +145,9 @@
 
 ;; Setup VHDL/Verilog mode
 (require 'setup-vhdl)
+
+;; Setup bison/yacc/lex
+(require 'setup-bison)
 
 ;; Setup bookmarks
 (require 'setup-bookmarks)
