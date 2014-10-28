@@ -179,6 +179,9 @@
 ;; Setup ECB
 (require 'setup-ecb)
 
+;; Setup eclim
+(require 'setup-eclim)
+
 ;; Setup eshell
 ;; (require 'setup-eshell)
 
