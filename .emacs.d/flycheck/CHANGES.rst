@@ -3,6 +3,13 @@
 master (in development)
 -----------------------
 
+- Bug fixes:
+
+  - Properly parse notes in `sh-shellcheck` [GH-508]
+
+0.21 (Oct 26, 2014)
+-------------------
+
 - **Breaking changes**:
 
   - `html-tidy` is not enabled in Web Mode anymore [GH-464]
@@ -31,6 +38,8 @@ master (in development)
     the syntax checker name in the error list [GH-500]
   - Add `flycheck-shellcheck-excluded-warnings` to exclude warnings from
     ShellCheck reports [GH-499]
+  - Add `flycheck-add-mode` to add a new major mode to a syntax checker [GH-506]
+  - Add `flycheck-gcc-openmp` to enable OpenMP for GCC in C/C++ [GH-507]
 
 - Improvements:
 

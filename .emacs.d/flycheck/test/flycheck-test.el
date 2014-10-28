@@ -1438,6 +1438,31 @@ check with.  ERRORS is the list of expected errors."
       (should (equal (flycheck-checker-next-checkers 'emacs-lisp)
                      next-checkers)))))
 
+(ert-deftest flycheck-add-mode/no-valid-checker ()
+  :tags '(extending)
+  (let ((err-data (should-error (flycheck-add-mode 'foo 'emacs-lisp-mode))))
+    (should (string= (cadr err-data) "foo is not a valid syntax checker"))))
+
+(ert-deftest flycheck-add-mode/no-valid-mode ()
+  :tags '(extending)
+  (let ((err-data (should-error (flycheck-add-mode 'python-pylint "foo"))))
+    (should (string= (cadr err-data) "foo is not a symbol"))))
+
+(ert-deftest flycheck-add-mode ()
+  :tags '(extending)
+  (let ((modes (flycheck-checker-modes 'python-pylint)))
+    (flycheck-add-mode 'python-pylint 'emacs-lisp-mode)
+    (unwind-protect
+        (progn
+          (should (equal (flycheck-checker-modes 'python-pylint)
+                         (cons 'emacs-lisp-mode modes)))
+          (flycheck-test-with-resource-buffer "automatic-check-dummy.el"
+            (should (flycheck-may-use-checker 'python-pylint))))
+      (put 'python-pylint 'flycheck-modes modes)
+      (should (equal (flycheck-checker-modes 'python-pylint) modes))
+      (flycheck-test-with-resource-buffer "automatic-check-dummy.el"
+        (should-not (flycheck-may-use-checker 'python-pylint))))))
+
 
 ;;; Checker API
 (ert-deftest flycheck-valid-checker-p/not-a-symbol ()
@@ -3974,6 +3999,26 @@ evaluating BODY."
      '(4 56 error "‘dynamic_cast’ not permitted with -fno-rtti"
          :checker c/c++-gcc))))
 
+(ert-deftest flycheck-define-checker/c/c++-openmp-disabled ()
+  :tags '(builtin-checker external-tool language-c)
+  (skip-unless (flycheck-check-executable 'c/c++-gcc))
+  (let ((flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck))
+        (flycheck-gcc-language-standard "c99"))
+    (flycheck-test-should-syntax-check
+     "checkers/c_c++-warning-openmp.c" 'c-mode
+     '(3 8 warning "variable ‘a’ set but not used" :checker c/c++-gcc)
+     '(5 nil warning "ignoring #pragma omp parallel" :checker c/c++-gcc))))
+
+(ert-deftest flycheck-define-checker/c/c++-openmp-enabled ()
+  :tags '(builtin-checker external-tool language-c)
+  (skip-unless (flycheck-check-executable 'c/c++-gcc))
+  (let ((flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck))
+        (flycheck-gcc-language-standard "c99")
+        (flycheck-gcc-openmp t))
+    (flycheck-test-should-syntax-check
+     "checkers/c_c++-warning-openmp.c" 'c-mode
+     '(3 8 warning "variable ‘a’ set but not used" :checker c/c++-gcc))))
+
 (ert-deftest flycheck-define-checker/c/c++-cppcheck-error ()
   :tags '(builtin-checker external-tool language-c)
   (skip-unless (flycheck-check-executable 'c/c++-cppcheck))
@@ -5365,6 +5410,8 @@ Why not:
    '(2 5 warning "Note that ~ does not expand in quotes. [SC2088]"
        :checker sh-shellcheck)
    '(3 7 error "Double quote array expansions, otherwise they're like $* and break on spaces. [SC2068]"
+       :checker sh-shellcheck)
+   '(4 11 info "Use $(..) instead of deprecated `..` [SC2006]"
        :checker sh-shellcheck)))
 
 (ert-deftest flycheck-define-checker/sh-shellcheck-excluded-warning ()
@@ -5374,6 +5421,8 @@ Why not:
     (flycheck-test-should-syntax-check
      "checkers/sh-shellcheck.sh" 'sh-mode
      '(3 7 error "Double quote array expansions, otherwise they're like $* and break on spaces. [SC2068]"
+         :checker sh-shellcheck)
+     '(4 11 info "Use $(..) instead of deprecated `..` [SC2006]"
          :checker sh-shellcheck))))
 
 (ert-deftest flycheck-define-checker/slim ()

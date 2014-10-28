@@ -20,7 +20,7 @@ When making changes to the documentation, you need to rebuild the Texinfo
 version with, by following the :ref:`instructions to build the documentation
 <building-docs>`.
 
-.. _MELPA: http://melpa.milkbox.net/
+.. _MELPA: http://melpa.org/
 
 Rasterized logo files
 =====================
@@ -47,4 +47,4 @@ You need :program:`convert` from ImageMagick_ and Inkscape_.  Make sure that
 properly render the logo.
 
 .. _ImageMagick: http://www.imagemagick.org/
-.. _Inkscape: http://www.inkscape.org/
+.. _Inkscape: https://www.inkscape.org/

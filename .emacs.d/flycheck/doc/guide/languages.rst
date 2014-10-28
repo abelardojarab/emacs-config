@@ -111,6 +111,9 @@ C/C++
    .. option:: flycheck-gcc-no-rtti
       :auto:
 
+   .. option:: flycheck-gcc-openmp
+      :auto:
+
    .. option:: flycheck-gcc-warnings
       :auto:
 
@@ -146,7 +149,7 @@ Chef
 .. flyc-checker:: chef-foodcritic
    :auto:
 
-.. _Chef: http://www.getchef.com/chef/
+.. _Chef: https://www.getchef.com/chef/
 
 Coffeescript
 ============
