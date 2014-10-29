@@ -446,5 +446,78 @@
 ;; Better help
 (require 'help-fns+)
 
+;; Fix longlines in Latex/Org
+(require 'longlines nil t)
+(add-hook 'LaTeX-mode-hook #'longlines-mode)
+(add-hook 'org-mode-hook #'longlines-mode)
+
+(defun longlines-encode-region (beg end &optional _buffer)
+  "Replace each soft newline between BEG and END with exactly one space.
+Hard newlines are left intact. The optional argument BUFFER exists for
+compatibility with `format-alist', and is ignored."
+  (save-excursion
+    (let ((reg-max (max beg end))
+          (mod (buffer-modified-p)))
+      (goto-char (min beg end))
+      ;; Changed this line to "swallow" indendation when decoding.
+      (while (search-forward-regexp " *\\(\n\\) *" reg-max t)
+        (let ((pos (match-beginning 1)))
+          (unless (get-text-property pos 'hard)
+            (goto-char (match-end 0))   ; This line too
+            (insert-and-inherit " ")
+            (replace-match "" :fixedcase :literal) ; This line too
+            (remove-text-properties pos (1+ pos) 'hard))))
+      (set-buffer-modified-p mod)
+      end)))
+
+(defun longlines-wrap-line ()
+  "If the current line needs to be wrapped, wrap it and return nil.
+If wrapping is performed, point remains on the line. If the line does
+not need to be wrapped, move point to the next line and return t."
+  (if (and (bound-and-true-p latex-extra-mode)
+           (null (latex/do-auto-fill-p)))
+      (progn (forward-line 1) t)
+    ;; The conditional above was added for latex equations. It relies
+    ;; on the latex-extra package (on Melpa).
+    (if (and (longlines-set-breakpoint)
+             ;; Make sure we don't break comments.
+             (null (nth 4 (parse-partial-sexp
+                           (line-beginning-position) (point)))))
+        (progn
+          ;; This `let' and the `when' below add indentation to the
+          ;; wrapped line.
+          (let ((indent (save-excursion (back-to-indentation)
+                                        (current-column))))
+            (insert-before-markers-and-inherit ?\n)
+            (backward-char 1)
+            (delete-char -1)
+            (forward-char 1)
+            (when (> indent 0)
+              (save-excursion
+                (insert (make-string indent ? )))
+              (setq longlines-wrap-point
+                    (+ longlines-wrap-point indent))))
+          nil)
+      (if (longlines-merge-lines-p)
+          (progn (end-of-line)
+                 (if (or (prog1 (bolp) (forward-char 1)) (eolp))
+                     (progn
+                       (delete-char -1)
+                       (if (> longlines-wrap-point (point))
+                           (setq longlines-wrap-point
+                                 (1- longlines-wrap-point))))
+                   (insert-before-markers-and-inherit ?\s)
+                   (backward-char 1)
+                   (delete-char -1)
+                   (forward-char 1)
+                   ;; This removes whitespace added for indentation.
+                   (while (eq (char-after) ? )
+                     (delete-char 1)
+                     (setq longlines-wrap-point
+                           (1- longlines-wrap-point))))
+                 nil)
+        (forward-line 1)
+        t))))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
