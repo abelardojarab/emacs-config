@@ -1,6 +1,8 @@
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
+[![MELPA](http://melpa.org/packages/projectile-badge.svg)](http://melpa.org/#/projectile)
+[![MELPA Stable](http://stable.melpa.org/packages/projectile-badge.svg)](http://stable.melpa.org/#/projectile)
 [![Build Status](https://travis-ci.org/bbatsov/projectile.png?branch=master)](https://travis-ci.org/bbatsov/projectile)
-[![Gittip](http://img.shields.io/gittip/bbatsov.svg)](https://www.gittip.com/bbatsov/)
+[![Gratipay](http://img.shields.io/gratipay/bbatsov.svg)](https://www.gratipay.com/bbatsov/)
 
 ## Synopsis
 
@@ -45,6 +47,10 @@ Here's a glimpse of Projectile in action:
 
 ![Projectile Screenshot](https://github.com/bbatsov/projectile/raw/master/screenshots/projectile.png)
 
+You can support my work on Projectile and [all my other projects](https://github.com/bbatsov) via [gratipay](https://www.gratipay.com/bbatsov).
+
+[![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.1.3/dist/gratipay.png)](https://gratipay.com/bbatsov)
+
 ## Installation
 
 The recommended way to install Projectile is via `package.el`.
@@ -54,14 +60,14 @@ The recommended way to install Projectile is via `package.el`.
 #### MELPA
 
 You can install a snapshot version of Projectile from the
-[MELPA](http://melpa.milkbox.net) repository. The version of
+[MELPA](http://melpa.org) repository. The version of
 Projectile there will always be up-to-date, but it might be unstable
 (albeit rarely).
 
 #### MELPA Stable
 
 You can install the last stable version of Projectile from the
-[MELPA Stable](http://melpa-stable.milkbox.net) repository.
+[MELPA Stable](http://stable.melpa.org) repository.
 
 ### el-get
 
@@ -752,9 +758,9 @@ Run all tests with:
 $ make test
 ```
 
-I'm also accepting financial contributions via [gittip](https://www.gittip.com/bbatsov).
+You can also support my work on Projectile and [all my other projects](https://github.com/bbatsov) via [gratipay](https://www.gratipay.com/bbatsov).
 
-[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
+[![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.1.3/dist/gratipay.png)](https://gratipay.com/bbatsov)
 
 ## Changelog
 

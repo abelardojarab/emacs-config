@@ -408,7 +408,7 @@ timer if no more items are in the cache."
   (let ((now (current-time)))
     (maphash (lambda (key value)
                (if (time-less-p (cdr value) now)
-                   (remhash key  projectile-file-exists-cache)))
+                   (remhash key projectile-file-exists-cache)))
              projectile-file-exists-cache)
     (setq projectile-file-exists-cache-timer
           (if (> (hash-table-count projectile-file-exists-cache) 0)
@@ -876,7 +876,9 @@ looping at a single point."
                (mapcar (lambda (f)
                          (concat s f))
                        (projectile-files-via-ext-command projectile-git-command))))
-           (projectile-get-all-sub-projects (projectile-project-root)))))
+           (condition-case nil
+               (projectile-get-all-sub-projects (projectile-project-root))
+             nil))))
 
 (defun projectile-get-repo-files ()
   "Get a list of the files in the project, including sub-projects."
