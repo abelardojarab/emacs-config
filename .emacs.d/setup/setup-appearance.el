@@ -53,6 +53,11 @@
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
 
+;; Fix for visual line mode
+(require 'adaptive-wrap)
+(add-hook 'visual-line-mode-hook 'adaptive-wrap-prefix-mode)
+(setq adaptive-wrap-extra-indent 4)
+
 ;; Zenburn theme
 (add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
 ;; (require 'zenburn-theme)
