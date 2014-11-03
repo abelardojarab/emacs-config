@@ -1,3 +1,3 @@
 @c automatically generated, do not edit
-@set VERSION N/A (N/A)
-@set DATE 2014-10-24
+@set VERSION 8.3beta (release_8.3beta-525-gff1305)
+@set DATE 2014-11-03

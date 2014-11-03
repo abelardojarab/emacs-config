@@ -220,12 +220,14 @@
 
 ;;;; Generic
 
-(defcustom org-latex-caption-above t
+(defcustom org-latex-caption-above '(table)
   "When non-nil, place caption string at the beginning of elements.
 Otherwise, place it near the end.  When value is a list of
 symbols, put caption above selected elements only.  Allowed
 symbols are: `image', `table', `src-block' and `special-block'."
   :group 'org-export-latex
+  :version "25.1"
+  :package-version '(Org . "8.3")
   :type '(choice
 	  (const :tag "For all elements" t)
 	  (const :tag "For no element" nil)
@@ -234,8 +236,6 @@ symbols are: `image', `table', `src-block' and `special-block'."
 	       (const :tag "Tables" table)
 	       (const :tag "Source code" src-block)
 	       (const :tag "Special blocks" special-block))))
-(define-obsolete-variable-alias
-  'org-latex-table-caption-above 'org-latex-caption-above "25.1") ; Since 8.3.
 
 ;;;; Preamble
 

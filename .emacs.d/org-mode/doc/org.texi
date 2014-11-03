@@ -4244,11 +4244,10 @@ unique keys across both sets of keywords.}
 @cindex #+SEQ_TODO
 
 It can be very useful to use different aspects of the TODO mechanism in
-different files.  For file-local settings, you need to add special lines
-to the file which set the keywords and interpretation for that file
-only.  For example, to set one of the two examples discussed above, you
-need one of the following lines, starting in column zero anywhere in the
-file:
+different files.  For file-local settings, you need to add special lines to
+the file which set the keywords and interpretation for that file only.  For
+example, to set one of the two examples discussed above, you need one of the
+following lines anywhere in the file:
 
 @example
 #+TODO: TODO FEEDBACK VERIFY | DONE CANCELED
@@ -4545,6 +4544,10 @@ actual habit with some history:
 @example
 ** TODO Shave
    SCHEDULED: <2009-10-17 Sat .+2d/4d>
+   :PROPERTIES:
+   :STYLE:    habit
+   :LAST_REPEAT: [2009-10-19 Mon 00:36]
+   :END:
    - State "DONE"       from "TODO"       [2009-10-15 Thu]
    - State "DONE"       from "TODO"       [2009-10-12 Mon]
    - State "DONE"       from "TODO"       [2009-10-10 Sat]
@@ -4555,10 +4558,6 @@ actual habit with some history:
    - State "DONE"       from "TODO"       [2009-09-19 Sat]
    - State "DONE"       from "TODO"       [2009-09-16 Wed]
    - State "DONE"       from "TODO"       [2009-09-12 Sat]
-   :PROPERTIES:
-   :STYLE:    habit
-   :LAST_REPEAT: [2009-10-19 Mon 00:36]
-   :END:
 @end example
 
 What this habit says is: I want to shave at most every 2 days (given by the
@@ -5207,10 +5206,12 @@ Properties can be conveniently edited and viewed in column view
 @cindex drawer, for properties
 
 Properties are key-value pairs.  When they are associated with a single entry
-or with a tree they need to be inserted into a special
-drawer (@pxref{Drawers}) with the name @code{PROPERTIES}.  Each property
-is specified on a single line, with the key (surrounded by colons)
-first, and the value after it.  Here is an example:
+or with a tree they need to be inserted into a special drawer
+(@pxref{Drawers}) with the name @code{PROPERTIES}, which has to be located
+right below a headline, and its planning line (@pxref{Deadlines and
+scheduling}) when applicable.  Each property is specified on a single line,
+with the key (surrounded by colons) first, and the value after it.  Keys are
+case-insensitives.  Here is an example:
 
 @example
 * CD collection
@@ -6240,14 +6241,6 @@ keywords @code{logreschedule}, @code{lognotereschedule}, and
 @code{nologreschedule}}, a note will be taken when changing an existing
 scheduling time.
 @c
-@orgcmd{C-c C-x C-k,org-mark-entry-for-agenda-action}
-@kindex k a
-@kindex k s
-Mark the current entry for agenda action.  After you have marked the entry
-like this, you can open the agenda or the calendar to find an appropriate
-date.  With the cursor on the selected date, press @kbd{k s} or @kbd{k d} to
-schedule the marked item.
-@c
 @orgcmd{C-c / d,org-check-deadlines}
 @cindex sparse tree, for deadlines
 @vindex org-deadline-warning-days
@@ -6737,11 +6730,10 @@ with @code{org-clock-in} and two @kbd{C-u C-u} with @code{org-clock-in-last}.
 If you want to plan your work in a very detailed way, or if you need to
 produce offers with quotations of the estimated work effort, you may want to
 assign effort estimates to entries.  If you are also clocking your work, you
-may later want to compare the planned effort with the actual working time, a
-great way to improve planning estimates.  Effort estimates are stored in a
-special property @samp{Effort}@footnote{You may change the property being
-used with the variable @code{org-effort-property}.}.  You can set the effort
-for an entry with the following commands:
+may later want to compare the planned effort with the actual working time,
+a great way to improve planning estimates.  Effort estimates are stored in
+a special property @code{EFFORT}.  You can set the effort for an entry with
+the following commands:
 
 @table @kbd
 @orgcmd{C-c C-x e,org-set-effort}
@@ -10180,7 +10172,7 @@ Angles are written as Greek letters \alpha, \beta and \gamma.
 @vindex org-entities
 During export, these symbols will be transformed into the native format of
 the exporter back-end.  Strings like @code{\alpha} will be exported as
-@code{&alpha;} in the HTML output, and as @code{$\alpha$} in the @LaTeX{}
+@code{&alpha;} in the HTML output, and as @code{\(\alpha\)} in the @LaTeX{}
 output.  Similarly, @code{\nbsp} will become @code{&nbsp;} in HTML and
 @code{~} in @LaTeX{}.  If you need such a symbol inside a word, terminate it
 like this: @samp{\Aacute@{@}stor}.
@@ -10259,8 +10251,8 @@ Environments of any kind@footnote{When @file{MathJax} is used, only the
 environments recognized by @file{MathJax} will be processed.  When
 @file{dvipng} program or @file{imagemagick} suite is used to create images,
 any @LaTeX{} environment will be handled.}.  The only requirement is that the
-@code{\begin} and @code{\end} statements appear on a new line, at the
-beginning of the line or after whitespaces only.
+@code{\begin} statement appears on a new line, at the beginning of the line
+or after whitespaces only.
 @item
 Text within the usual @LaTeX{} math delimiters.  To avoid conflicts with
 currency specifications, single @samp{$} characters are only recognized as
@@ -18169,7 +18161,7 @@ Get all property keys in the current buffer.
 @end defun
 
 @defun org-insert-property-drawer
-Insert a property drawer for the current entry.  Also
+Insert a property drawer for the current entry.
 @end defun
 
 @defun org-entry-put-multivalued-property pom property &rest values
