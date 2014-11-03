@@ -301,8 +301,8 @@ I.e use the -path/ipath arguments of find instead of -name/iname."
     (define-key map (kbd "C-c X")         'helm-ff-run-open-file-with-default-tool)
     (define-key map (kbd "M-!")           'helm-ff-run-eshell-command-on-file)
     (define-key map (kbd "M-%")           'helm-ff-run-query-replace-on-marked)
-    (define-key map (kbd "C-=")           'helm-ff-run-ediff-file)
-    (define-key map (kbd "C-c =")         'helm-ff-run-ediff-merge-file)
+    (define-key map (kbd "C-c =")         'helm-ff-run-ediff-file)
+    (define-key map (kbd "M-=")           'helm-ff-run-ediff-merge-file)
     (define-key map (kbd "M-p")           'helm-ff-run-switch-to-history)
     (define-key map (kbd "C-c h")         'helm-ff-file-name-history)
     (define-key map (kbd "M-i")           'helm-ff-properties-persistent)
@@ -1354,7 +1354,10 @@ or when `helm-pattern' is equal to \"~/\"."
 
 (defun helm-substitute-in-filename (fname)
   "Substitute all parts of FNAME from start up to \"~/\" or \"/\".
-On windows system substitute from start up to \"/[[:lower:]]:/\"."
+On windows system substitute from start up to \"/[[:lower:]]:/\".
+This function is needed for `helm-ff-auto-expand-to-home-or-root'
+and should be used carefully elsewhere, or not at all, using
+`substitute-in-file-name' instead."
   (if (and ffap-url-regexp
            (string-match-p ffap-url-regexp fname))
       fname

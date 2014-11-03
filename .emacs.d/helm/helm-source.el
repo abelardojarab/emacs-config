@@ -716,23 +716,23 @@
                         "Switch to buffer" 'helm-switch-to-buffer
                         (lambda () (and (locate-library "popwin") "Switch to buffer in popup window"))
                         'popwin:popup-buffer
-                        "Switch to buffer other window" 'switch-to-buffer-other-window
-                        "Switch to buffer other frame" 'switch-to-buffer-other-frame
+                        "Switch to buffer other window `C-c o'" 'switch-to-buffer-other-window
+                        "Switch to buffer other frame `C-c C-o'" 'switch-to-buffer-other-frame
                         (lambda () (and (locate-library "elscreen") "Display buffer in Elscreen"))
                         'helm-find-buffer-on-elscreen
-                        "Query replace regexp" 'helm-buffer-query-replace-regexp
-                        "Query replace" 'helm-buffer-query-replace
+                        "Query replace regexp `C-M-%'" 'helm-buffer-query-replace-regexp
+                        "Query replace `M-%'" 'helm-buffer-query-replace
                         "View buffer" 'view-buffer
                         "Display buffer" 'display-buffer
-                        "Grep buffers (C-u grep all buffers)" 'helm-zgrep-buffers
-                        "Multi occur buffer(s)" 'helm-multi-occur-as-action
-                        "Revert buffer(s)" 'helm-revert-marked-buffers
+                        "Grep buffers `M-g s' (C-u grep all buffers)" 'helm-zgrep-buffers
+                        "Multi occur buffer(s) `C-s'" 'helm-multi-occur-as-action
+                        "Revert buffer(s) `M-U'" 'helm-revert-marked-buffers
                         "Insert buffer" 'insert-buffer
-                        "Kill buffer(s)" 'helm-kill-marked-buffers
-                        "Diff with file" 'diff-buffer-with-file
-                        "Ediff Marked buffers" 'helm-ediff-marked-buffers
-                        "Ediff Merge marked buffers" (lambda (candidate)
-                                                       (helm-ediff-marked-buffers candidate t))))
+                        "Kill buffer(s) `M-D'" 'helm-kill-marked-buffers
+                        "Diff with file `C-='" 'diff-buffer-with-file
+                        "Ediff Marked buffers `C-c ='" 'helm-ediff-marked-buffers
+                        "Ediff Merge marked buffers `M-='" (lambda (candidate)
+                                                             (helm-ediff-marked-buffers candidate t))))
       (oset source :persistent-help "Show this buffer")
       (oset source :filtered-candidate-transformer '(helm-skip-boring-buffers
                                                      helm-buffers-sort-transformer
@@ -892,21 +892,25 @@ an eieio class."
 (defmacro helm-build-sync-source (name &rest args)
   "Build a synchronous helm source with name NAME.
 Args ARGS are keywords provided by `helm-source-sync'."
+  (declare (indent 1))
   `(helm-make-source ,name 'helm-source-sync ,@args))
 
 (defmacro helm-build-async-source (name &rest args)
   "Build a asynchronous helm source with name NAME.
 Args ARGS are keywords provided by `helm-source-async'."
+  (declare (indent 1))
   `(helm-make-source ,name 'helm-source-async ,@args))
 
 (defmacro helm-build-in-buffer-source (name &rest args)
   "Build a helm source with name NAME using `candidates-in-buffer' method.
 Args ARGS are keywords provided by `helm-source-in-buffer'."
+  (declare (indent 1))
   `(helm-make-source ,name 'helm-source-in-buffer ,@args))
 
 (defmacro helm-build-dummy-source (name &rest args)
   "Build a helm source with name NAME using `dummy' method.
 Args ARGS are keywords provided by `helm-source-dummy'."
+  (declare (indent 1))
   `(helm-make-source ,name 'helm-source-dummy ,@args))
 
 ;; Types

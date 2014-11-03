@@ -4547,16 +4547,16 @@ Returns nil if NODE is not inside a function."
       (setq node (js2-node-parent node)))
     node))
 
-(defun js2-mode-find-enclosing-node (beg end)
-  "Find script or function fully enclosing BEG and END."
+ (defun js2-mode-find-enclosing-node (beg end)
+  "Find node fully enclosing BEG and END."
   (let ((node (js2-node-at-point beg))
         pos
         (continue t))
     (while continue
       (if (or (js2-ast-root-p node)
-              (and (js2-function-node-p node)
-                   (<= (setq pos (js2-node-abs-pos node)) beg)
-                   (>= (+ pos (js2-node-len node)) end)))
+              (and
+               (<= (setq pos (js2-node-abs-pos node)) beg)
+               (>= (+ pos (js2-node-len node)) end)))
           (setq continue nil)
         (setq node (js2-node-parent node))))
     node))
@@ -5946,10 +5946,7 @@ its relevant fields and puts it into `js2-ti-tokens'."
       (if (js2-alpha-p (js2-peek-char))
           (js2-report-scan-error "msg.invalid.re.flag" t
                                  js2-ts-cursor 1))
-      (js2-set-string-from-buffer token)
-      ;; tell `parse-partial-sexp' to ignore this range of chars
-      (js2-record-text-property (js2-current-token-beg)
-                                (js2-current-token-end) 'syntax-class '(2)))
+      (js2-set-string-from-buffer token))
     (js2-collect-string flags)))
 
 (defun js2-get-first-xml-token ()
@@ -9208,11 +9205,7 @@ For instance, @[expr], @*::[expr], or ns::[expr]."
 Includes complex literals such as functions, object-literals,
 array-literals, array comprehensions and regular expressions."
   (let (pn      ; parent node  (usually return value)
-        tt
-        px-pos  ; paren-expr pos
-        len
-        flags   ; regexp flags
-        expr)
+        tt)
     (setq tt (js2-current-token-type))
     (cond
      ((= tt js2-FUNCTION)
@@ -9238,15 +9231,16 @@ array-literals, array comprehensions and regular expressions."
         (js2-record-face 'font-lock-string-face)))
      ((or (= tt js2-DIV) (= tt js2-ASSIGN_DIV))
       ;; Got / or /= which in this context means a regexp literal
-      (setq px-pos (js2-current-token-beg))
-      (setq flags (js2-read-regexp tt))
-      (prog1
-          (make-js2-regexp-node :pos px-pos
-                                :len (- js2-ts-cursor px-pos)
-                                :value (js2-current-token-string)
-                                :flags flags)
-        (js2-set-face px-pos js2-ts-cursor 'font-lock-string-face 'record)
-        (js2-record-text-property px-pos js2-ts-cursor 'syntax-table '(2))))
+      (let ((px-pos (js2-current-token-beg))
+            (flags (js2-read-regexp tt))
+            (end (js2-current-token-end)))
+        (prog1
+            (make-js2-regexp-node :pos px-pos
+                                  :len (- end px-pos)
+                                  :value (js2-current-token-string)
+                                  :flags flags)
+          (js2-set-face px-pos end 'font-lock-string-face 'record)
+          (js2-record-text-property px-pos end 'syntax-table '(2)))))
      ((or (= tt js2-NULL)
           (= tt js2-THIS)
           (= tt js2-FALSE)
@@ -9281,9 +9275,9 @@ array-literals, array comprehensions and regular expressions."
       ;; the scanner or one of its subroutines reported the error.
       (make-js2-error-node))
      ((= tt js2-EOF)
-      (setq px-pos (point-at-bol)
-            len (- js2-ts-cursor px-pos))
-      (js2-report-error "msg.unexpected.eof" nil px-pos len)
+      (let* ((px-pos (point-at-bol))
+             (len (- js2-ts-cursor px-pos)))
+        (js2-report-error "msg.unexpected.eof" nil px-pos len))
       (make-js2-error-node :pos (1- js2-ts-cursor)))
      (t
       (js2-report-error "msg.syntax")

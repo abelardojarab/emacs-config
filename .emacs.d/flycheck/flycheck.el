@@ -330,6 +330,24 @@ node `(elisp)Hooks'."
   :type 'hook
   :risky t)
 
+(defcustom flycheck-checker-error-threshold 400
+  "Maximum errors allowed per syntax checker.
+
+The value of this variable is either an integer denoting the
+maximum number of errors per syntax checker and buffer, or nil to
+not limit the errors reported from a syntax checker.
+
+If this variable is a number and a syntax checker reports more
+errors than the value of this variable, its errors are not
+discarded, and not highlighted in the buffer or available in the
+error list.  The affected syntax checker is also disabled for
+future syntax checks of the buffer."
+  :group 'flycheck
+  :type '(choice (const :tag "Do not limit reported errors" nil)
+                 (integer :tag "Maximum number of errors"))
+  :risky t
+  :package-version '(flycheck . "0.22"))
+
 (defcustom flycheck-process-error-functions '(flycheck-add-overlay)
   "Functions to process errors.
 
@@ -1214,8 +1232,8 @@ to a number and return it.  Otherwise return nil."
 
 (defun flycheck-same-files-p (file-a file-b)
   "Determine whether FILE-A and FILE-B refer to the same file."
-  (string= (directory-file-name (file-truename file-a))
-           (directory-file-name (file-truename file-b))))
+  (string= (directory-file-name (expand-file-name file-a))
+           (directory-file-name (expand-file-name file-b))))
 
 (defvar-local flycheck-temporaries nil
   "Temporary files and directories created by Flycheck.")
@@ -1916,22 +1934,6 @@ A checker is disabled if it is contained in
 `flycheck-disabled-checkers'."
   (memq checker flycheck-disabled-checkers))
 
-(defun flycheck-enabled-checker-p (checker)
-  "Determine whether CHECKER is an enabled checker.
-
-A syntax checker is enabled, if it is registered and not
-disabled."
-  (and (flycheck-registered-checker-p checker)
-       (not (flycheck-disabled-checker-p checker))))
-
-(defun flycheck-enabled-checkers ()
-  "Get all enabled syntax checkers.
-
-These are all syntax checkers which are registered in
-`flycheck-checkers' and not disabled via
-`flycheck-disabled-checkers'."
-  (-reject #'flycheck-disabled-checker-p flycheck-checkers))
-
 (defun flycheck-checker-executable-variable (checker)
   "Get the executable variable of CHECKER."
   (get checker 'flycheck-executable-var))
@@ -2279,7 +2281,8 @@ otherwise."
   (if (flycheck-valid-checker-p checker)
       (and (flycheck-check-modes checker)
            (flycheck-check-predicate checker)
-           (flycheck-check-executable checker))
+           (flycheck-check-executable checker)
+           (not (flycheck-disabled-checker-p checker)))
     (lwarn 'flycheck :warning "%S is no valid Flycheck syntax checker.
 Try to reinstall the package defining this syntax checker." checker)
     nil))
@@ -2292,7 +2295,7 @@ Try to reinstall the package defining this syntax checker." checker)
         (next-checker (cdr next-checker)))
     (and (or (eq level t)
              (flycheck-has-max-current-errors-p level))
-         (flycheck-enabled-checker-p next-checker)
+         (flycheck-registered-checker-p next-checker)
          (flycheck-may-use-checker next-checker))))
 
 
@@ -2393,7 +2396,7 @@ modified, or nil otherwise."
 Return the checker if it may be used, or nil otherwise."
   ;; We should not use the last checker if it was removed from the list of
   ;; allowed checkers in the meantime
-  (when (and (flycheck-enabled-checker-p flycheck-last-checker)
+  (when (and (flycheck-registered-checker-p flycheck-last-checker)
              (flycheck-may-use-checker flycheck-last-checker))
     flycheck-last-checker))
 
@@ -2404,7 +2407,7 @@ If a checker is found set `flycheck-last-checker' to re-use this
 checker for the next check.
 
 Return the checker if there is any, or nil otherwise."
-  (let ((checkers (flycheck-enabled-checkers)))
+  (let ((checkers flycheck-checkers))
     (while (and checkers (not (flycheck-may-use-checker (car checkers))))
       (setq checkers (cdr checkers)))
     (when checkers
@@ -2418,7 +2421,7 @@ nil otherwise."
   (if flycheck-checker
       (if (flycheck-may-use-checker flycheck-checker)
           flycheck-checker
-        (user-error "Configured syntax checker %s cannot be used"
+        (user-error "Selected syntax checker %s cannot be used"
                     flycheck-checker))
     (or (flycheck-try-last-checker-for-buffer)
         (flycheck-get-new-checker-for-buffer))))
@@ -2648,20 +2651,20 @@ Return a cons cell `(BEG . END)' where BEG is the first
 non-whitespace character on the line ERR refers to, and END the
 end of the line."
   (flycheck-error-with-buffer err
-    (save-excursion
-      (save-restriction
+    (save-restriction
+      (save-excursion
         (widen)
         (goto-char (point-min))
         (forward-line (- (flycheck-error-line err) 1))
-        (back-to-indentation)
-        (let ((beg (point))
-              (end (line-end-position)))
-          (when (= beg end)
-            ;; The current line is empty, so include the previous line break
-            ;; character(s) to have any region at all
-            (forward-line -1)
-            (setq beg (line-end-position)))
-          (cons beg end))))))
+        ;; We are at the beginning of the line now, so move to the beginning of
+        ;; its indentation, similar to `back-to-indentation'
+        (let ((end (line-end-position)))
+          (skip-syntax-forward " " end)
+          (backward-prefix-chars)
+          ;; If the current line is empty, include the previous line break
+          ;; character(s) to have any region at all.  When called with 0,
+          ;; `line-end-position' gives us the end of the previous line
+          (cons (if (eolp) (line-end-position 0) (point)) end))))))
 
 (defun flycheck-error-column-region (err)
   "Get the error column region of ERR.
@@ -2671,31 +2674,30 @@ ERR is a Flycheck error whose region to get.
 Return a cons cell `(BEG . END)' where BEG is the character
 before the error column, and END the actual error column, or nil
 if ERR has no column."
-  (-when-let (column (flycheck-error-column err))
-    (save-excursion
-      (save-restriction
-        (widen)
-        (let ((line (flycheck-error-line err)))
+  (flycheck-error-with-buffer err
+    (save-restriction
+      (save-excursion
+        (-when-let (column (flycheck-error-column err))
+          (widen)
           (goto-char (point-min))
-          (forward-line (- line 1))
-          (cond
-           ((> line (line-number-at-pos))
-            ;; If the line is beyond the end of the file, return the very last
-            ;; column in the file
-            (cons (- (point-max) 1) (point-max)))
-           ((= (line-beginning-position) (line-end-position))
-            ;; The line is empty, so there is no column to highlight on this
-            ;; line.  Thus, return the last column of the previous line
-            (let ((end (line-beginning-position)))
-              (forward-line -1)
-              (cons (line-end-position) end)))
-           (:else
-            ;; The end is either the column offset of the line, or
-            ;; the end of the line, if the column offset points beyond the end
-            ;; of the line.
-            (let ((end (min (+ (line-beginning-position) column)
-                            (+ (line-end-position) 1))))
-              (cons (- end 1) end)))))))))
+          (forward-line (- (flycheck-error-line err) 1))
+          (let ((line (flycheck-error-line err)))
+            (cond
+             ((eobp)                    ; Line beyond EOF
+              ;; If we are at the end of the file (i.e. the line was beyond the
+              ;; end of the file), use the very last column in the file.
+              (cons (- (point-max) 1) (point-max)))
+             ((eolp)                    ; Empty line
+              ;; If the target line is empty, there's no column to highlight on
+              ;; this line, so return the last column of the previous line.
+              (cons (line-end-position 0) (point)))
+             (t
+              ;; The end is either the column offset of the line, or the end of
+              ;; the line, if the column offset points beyond the end of the
+              ;; line.
+              (let ((end (min (+ (point) column)
+                              (+ (line-end-position) 1))))
+                (cons (- end 1) end))))))))))
 
 (defun flycheck-error-thing-region (thing err)
   "Get the region of THING at the column of ERR.
@@ -2708,11 +2710,12 @@ the THING at the error column, and END the end of the symbol.  If
 ERR has no error column, or if there is no THING at this column,
 return nil."
   (-when-let (column (car (flycheck-error-column-region err)))
-    (save-excursion
-      (save-restriction
-        (widen)
-        (goto-char column)
-        (bounds-of-thing-at-point thing)))))
+    (flycheck-error-with-buffer err
+      (save-excursion
+        (save-restriction
+          (widen)
+          (goto-char column)
+          (bounds-of-thing-at-point thing))))))
 
 (defun flycheck-error-region-for-mode (err mode)
   "Get the region of ERR for the highlighting MODE.
@@ -3380,30 +3383,29 @@ If LEVEL is omitted if the current buffer has any errors at all."
   "Add overlay for ERR.
 
 Return the created overlay."
-  (flycheck-error-with-buffer err
-    ;; We must have a proper error region for the sake of fringe indication,
-    ;; error display and error navigation, even if the highlighting is disabled.
-    ;; We erase the highlighting later on in this case
-    (pcase-let* ((`(,beg . ,end) (flycheck-error-region-for-mode
-                                  err (or flycheck-highlighting-mode 'lines)))
-                 (overlay (make-overlay beg end))
-                 (level (flycheck-error-level err))
-                 (category (flycheck-error-level-overlay-category level)))
-      (unless (flycheck-error-level-p level)
-        (error "Undefined error level: %S" level))
-      (overlay-put overlay 'flycheck-overlay t)
-      (overlay-put overlay 'flycheck-error err)
-      ;; TODO: Consider hooks to re-check if overlay contents change
-      (overlay-put overlay 'category category)
-      (unless flycheck-highlighting-mode
-        ;; Erase the highlighting from the overlay if requested by the user
-        (overlay-put overlay 'face nil))
-      (when flycheck-indication-mode
-        (overlay-put overlay 'before-string
-                     (flycheck-error-level-make-fringe-icon
-                      level flycheck-indication-mode)))
-      (overlay-put overlay 'help-echo (flycheck-error-message err))
-      overlay)))
+  ;; We must have a proper error region for the sake of fringe indication,
+  ;; error display and error navigation, even if the highlighting is disabled.
+  ;; We erase the highlighting later on in this case
+  (pcase-let* ((`(,beg . ,end) (flycheck-error-region-for-mode
+                                err (or flycheck-highlighting-mode 'lines)))
+               (overlay (make-overlay beg end))
+               (level (flycheck-error-level err))
+               (category (flycheck-error-level-overlay-category level)))
+    (unless (flycheck-error-level-p level)
+      (error "Undefined error level: %S" level))
+    (overlay-put overlay 'flycheck-overlay t)
+    (overlay-put overlay 'flycheck-error err)
+    ;; TODO: Consider hooks to re-check if overlay contents change
+    (overlay-put overlay 'category category)
+    (unless flycheck-highlighting-mode
+      ;; Erase the highlighting from the overlay if requested by the user
+      (overlay-put overlay 'face nil))
+    (when flycheck-indication-mode
+      (overlay-put overlay 'before-string
+                   (flycheck-error-level-make-fringe-icon
+                    level flycheck-indication-mode)))
+    (overlay-put overlay 'help-echo (flycheck-error-message err))
+    overlay))
 
 (defun flycheck-filter-overlays (overlays)
   "Get all Flycheck overlays from OVERLAYS."
@@ -4121,12 +4123,12 @@ output: %s\nChecker definition probably flawed."
                     (flycheck-filter-errors
                      (mapcar (lambda (e) (flycheck-fix-error-filename e files))
                              errors) checker)))
-      (setq flycheck-current-errors
-            ;; Keep errors sorted by location
-            (sort (append errors flycheck-current-errors) #'flycheck-error-<))
-      ;; Process all new errors
-      (mapc (apply-partially #'run-hook-with-args-until-success
-                             'flycheck-process-error-functions) errors)
+      (unless (flycheck-disable-excessive-checker checker errors)
+        ;; Remember and process the new errors if allowed
+        (setq flycheck-current-errors
+              (sort (append errors flycheck-current-errors) #'flycheck-error-<))
+        (mapc (apply-partially #'run-hook-with-args-until-success
+                               'flycheck-process-error-functions) errors))
       (flycheck-report-status 'finished)
       (let ((next-checker (flycheck-get-next-checker-for-buffer checker)))
         (if next-checker
@@ -4140,6 +4142,23 @@ output: %s\nChecker definition probably flawed."
           ;; were triggered by intermediate automatic check event, to make sure
           ;; that we quickly refine outdated error information
           (flycheck-perform-deferred-syntax-check))))))
+
+(defun flycheck-disable-excessive-checker (checker errors)
+  "Disable CHECKER if it reported excessive ERRORS.
+
+If ERRORS has more items than `flycheck-checker-error-threshold',
+add CHECKER to `flycheck-disabled-checkers', and show a warning.
+
+Return t when CHECKER was disabled, or nil otherwise."
+  (when (and flycheck-checker-error-threshold
+             (> (length errors) flycheck-checker-error-threshold))
+    ;; Disable CHECKER for this buffer (`flycheck-disabled-checkers' is a local
+    ;; variable).
+    (lwarn '(flycheck syntax-checker) :warning
+           "Syntax checker %s reported too many errors (%s) and is disabled."
+           checker (length errors))
+    (push checker flycheck-disabled-checkers)
+    t))
 
 (defun flycheck-handle-signal (process _event)
   "Handle a signal from the syntax checking PROCESS.

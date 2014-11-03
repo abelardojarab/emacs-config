@@ -3,6 +3,16 @@
 master (in development)
 -----------------------
 
+- **Breaking changes**:
+
+  - Never allow use of disabled checkers anymore, even with
+    `flycheck-select-checker`
+
+- Improvements:
+
+  - Automatically disable syntax checkers that report too many errors [GH-476]
+  - Reduce filesystem access when parsing errors to improve parsing speed
+
 - Bug fixes:
 
   - Properly parse notes in `sh-shellcheck` [GH-508]
