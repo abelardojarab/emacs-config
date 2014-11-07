@@ -31,6 +31,7 @@
     (describe-variable . helm-completing-read-symbols)
     (debug-on-entry . helm-completing-read-symbols)
     (find-function . helm-completing-read-symbols)
+    (execute-extended-command . helm-completing-read-symbols)
     (find-tag . helm-completing-read-with-cands-in-buffer)
     (ffap-alternate-file . nil)
     (tmm-menubar . nil))
@@ -119,6 +120,12 @@ when non--nil."
     (helm-quit-and-execute-action
      #'(lambda (_candidate)
          (identity "")))))
+
+(defun helm-mode--keyboard-quit ()
+  ;; Use this instead of `keyboard-quit'
+  ;; to avoid deactivating mark in current-buffer.
+  (let ((debug-on-quit nil))
+    (signal 'quit nil)))
 
 (defun helm-comp-read-get-candidates (collection &optional test sort-fn alistp)
   "Convert COLLECTION to list removing elements that don't match TEST.
@@ -452,7 +459,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
        (unless (or (eq helm-exit-status 1)
                    must-match)  ; FIXME this should not be needed now.
          default)
-       (keyboard-quit)))))
+       (helm-mode--keyboard-quit)))))
 
 ;; Generic completing-read
 ;;
@@ -513,7 +520,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
     :history hist
     :resume 'noresume
     :default (or default ""))
-   (keyboard-quit)))
+   (helm-mode--keyboard-quit)))
 
 
 ;;; Generic completing read
@@ -821,7 +828,7 @@ Keys description:
                 (eq helm-exit-status 0)
                 (eq must-match 'confirm))
        (identity helm-pattern))
-     (keyboard-quit))))
+     (helm-mode--keyboard-quit))))
 
 (cl-defun helm--generic-read-file-name
     (prompt &optional dir default-filename mustmatch initial predicate)

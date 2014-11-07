@@ -41,7 +41,7 @@
 
 ;; Newsticker and w3m
 (when (executable-find "w3m")
-  (add-to-list 'load-path "~/.emacs.d/apel")	
+  (add-to-list 'load-path "~/.emacs.d/apel")
   (add-to-list 'load-path "~/.emacs.d/newsticker")
   (add-to-list 'load-path "~/.emacs.d/w3m")
   (require 'newsticker)

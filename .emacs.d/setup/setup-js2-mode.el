@@ -1,5 +1,8 @@
 ;;; setup-js2-mode.el --- tweak js2 settings -*- lexical-binding: t; -*-
 
+(add-to-list 'load-path "~/.emacs.d/web-mode")
+(require 'web-mode)
+
 (add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (add-to-list 'load-path "~/.emacs.d/js2-mode")
 (add-to-list 'load-path "~/.emacs.d/js2-refactor")

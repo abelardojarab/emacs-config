@@ -58,8 +58,7 @@
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
  '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
- '(shift-select-mode nil)
- '(tabbar-mode t nil (tabbar)))
+ '(shift-select-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
