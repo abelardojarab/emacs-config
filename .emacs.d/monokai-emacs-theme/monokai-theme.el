@@ -44,7 +44,7 @@
 ;;
 ;;; Code:
 
-(unless (>= 24 emacs-major-version)
+(unless (>= emacs-major-version 24)
   (error "The monokai theme requires Emacs 24 or later!"))
 
 (deftheme monokai "The Monokai colour theme")
@@ -614,7 +614,7 @@ Takes and optional `FRAME' as reference."
                              :inverse-video nil))))
 
      `(ace-jump-face-foreground
-       ((,class (:foreground ,red :background ,monokai-bg
+       ((,class (:foreground ,yellow :background ,monokai-bg
                              :inverse-video nil
                              :weight bold))))
 
@@ -1803,6 +1803,9 @@ Takes and optional `FRAME' as reference."
      `(helm-ls-git-added-copied-face
        ((,class :foreground ,green)))
 
+     `(helm-ls-git-added-modified-face
+       ((,class :foreground ,green-l)))
+
      `(helm-ls-git-deleted-not-staged-face
        ((,class :foreground ,red)))
 
@@ -2080,6 +2083,17 @@ Takes and optional `FRAME' as reference."
 
      `(magit-log-sha1
        ((,class (:foreground ,yellow))))
+
+     ;; monky
+     `(monky-section-title
+       ((,class (:foreground ,yellow
+                             :weight bold))))
+
+     `(monky-diff-add
+       ((,class (:foreground ,green))))
+
+     `(monky-diff-del
+       ((,class (:foreground ,red))))
 
      ;; markdown-mode
      `(markdown-header-face
