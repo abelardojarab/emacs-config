@@ -2,7 +2,7 @@
 ;;
 ;;; Code:
 
-
+
 ;;;### (autoloads (semantic-default-matlab-setup) "semantic-matlab"
 ;;;;;;  "semantic-matlab.el" (17213 40186))
 ;;; Generated autoloads from semantic-matlab.el
@@ -13,7 +13,7 @@ Set up a buffer for parsing of MATLAB files." nil nil)
 (add-hook (quote matlab-mode-hook) (quote semantic-default-matlab-setup))
 
 ;;;***
-
+
 ;;;### (autoloads (semantic-tag-folding-mode global-semantic-tag-folding-mode
 ;;;;;;  global-semantic-tag-folding-mode) "semantic-tag-folding"
 ;;;;;;  "semantic-tag-folding.el" (17213 40189))
@@ -43,7 +43,7 @@ the current buffer was set up for parsing.  Return non-nil if the
 minor mode is enabled." t nil)
 
 ;;;***
-
+
 ;;;### (autoloads (wisent-csharp-default-setup) "wisent-csharp" "wisent-csharp.el"
 ;;;;;;  (17880 37474))
 ;;; Generated autoloads from wisent-csharp.el
@@ -53,7 +53,7 @@ minor mode is enabled." t nil)
 (add-hook (quote csharp-mode-hook) (function wisent-csharp-default-setup))
 
 ;;;***
-
+
 ;;;### (autoloads (wisent-javascript-setup-parser) "wisent-javascript"
 ;;;;;;  "wisent-javascript.el" (17213 40199))
 ;;; Generated autoloads from wisent-javascript.el
@@ -66,7 +66,7 @@ Setup buffer for parse." nil nil)
 (add-hook (quote ecmascript-mode-hook) (quote wisent-javascript-setup-parser))
 
 ;;;***
-
+
 (add-hook (quote lisp-mode-hook) (quote semantic-default-elisp-setup))
 
 ;; Local Variables:

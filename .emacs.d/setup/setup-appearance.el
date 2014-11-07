@@ -294,11 +294,10 @@
   (w32-send-sys-command #xf030))
 
 ;; highlight indentation using vertical lines, old version
-(load "~/.emacs.d/elisp/00_func.el")
-(require 'aux-line)
-(add-hook 'c-mode-common-hook 'indent-vline)
-(add-hook 'js2-mode-hook 'indent-vline)
-(add-hook 'python-mode-hook 'indent-vline)
+;; (load "~/.emacs.d/elisp/00_func.el")
+;; (require 'aux-line)
+;; (add-hook 'js2-mode-hook 'indent-vline)
+;; (add-hook 'python-mode-hook 'indent-vline)
 
 ;; Highlight blocks
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")

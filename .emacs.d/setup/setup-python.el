@@ -25,9 +25,6 @@
 ;;; Code:
 
 ;; Python tweaks
-(eval-after-load "python"
-  `(progn
-     (remove-hook 'python-mode-hook 'wisent-python-default-setup)))
 
 (defun python-reset-imenu ()
   (interactive)
@@ -44,6 +41,7 @@
 (setq py-electric-colon-active t)
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
+(add-hook 'python-mode-hook 'semantic-default-python-setup)
 
 ;; Python Hook
 (add-hook 'python-mode-hook
