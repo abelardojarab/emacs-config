@@ -105,5 +105,44 @@
 (require 'cmake-ide)
 (cmake-ide-setup)
 
+;; cmake IDE
+(add-to-list 'load-path "~/.emacs.d/helm-dash")
+(require 'helm-dash)
+
+(defun jwintz/dash-path (docset)
+  (if (string= docset "OpenGL_2")
+      (concat (concat helm-dash-docsets-path "/") "OpenGL2.docset")
+    (if (string= docset "OpenGL_3")
+        (concat (concat helm-dash-docsets-path "/") "OpenGL3.docset")
+      (if (string= docset "OpenGL_4")
+          (concat (concat helm-dash-docsets-path "/") "OpenGL4.docset")
+        (if (string= docset "Emacs_Lisp")
+            (concat (concat helm-dash-docsets-path "/") "Emacs Lisp.docset")
+          (concat
+           (concat
+            (concat
+             (concat helm-dash-docsets-path "/")
+             (nth 0 (split-string docset "_")))) ".docset"))))))
+
+(defun jwintz/dash-install (docset)
+  (unless (file-exists-p (jwintz/dash-path docset))
+    (helm-dash-install-docset docset)))
+
+(defun jwintz/dash-hook ()
+  (local-set-key "\C-h\C-df" 'helm-dash)
+  (local-set-key "\C-h\C-dg" 'helm-dash-at-point)
+  (local-set-key "\C-h\C-dh" 'helm-dash-reset-connections))
+
+(defun jwintz/dash-hook-java ()
+  (interactive)
+  (setq-local helm-dash-docsets '("Java_SE8")))
+
+(setq helm-dash-docsets-path (format "%s/.emacs.d/docsets" (getenv "HOME")))
+(setq helm-dash-common-docsets '("C" "C++"))
+(setq helm-dash-min-length 2)
+
+(add-hook 'prog-mode-hook 'jwintz/dash-hook)
+(add-hook 'java-mode-hook 'jwintz/dash-hook-java)
+
 (provide 'setup-project)
 ;;; setup-project.el ends here
