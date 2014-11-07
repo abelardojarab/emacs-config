@@ -5541,10 +5541,10 @@ The following commands are available:
 (add-to-list 'customize-package-emacs-version-alist
 	     '(Org ("6.21b" . "23.1")  ("6.33x" . "23.2")
 		   ("7.8.11" . "24.1") ("7.9.4" . "24.3")
-		   ("8.2.6" . "24.4")))
+		   ("8.2.6" . "24.4") ("8.3" . "25.1")))
 
 (defvar org-mode-transpose-word-syntax-table
-  (let ((st (make-syntax-table)))
+  (let ((st (make-syntax-table text-mode-syntax-table)))
     (mapc (lambda(c) (modify-syntax-entry
 		      (string-to-char (car c)) "w p" st))
 	  org-emphasis-alist)
@@ -7523,8 +7523,14 @@ or nil."
 
 (defvar org-goto-local-auto-isearch-map (make-sparse-keymap))
 (set-keymap-parent org-goto-local-auto-isearch-map isearch-mode-map)
-(define-key org-goto-local-auto-isearch-map "\C-i" 'isearch-other-control-char)
-(define-key org-goto-local-auto-isearch-map "\C-m" 'isearch-other-control-char)
+;; `isearch-other-control-char' was removed in Emacs 24.4.
+(if (fboundp 'isearch-other-control-char)
+    (progn
+      (define-key org-goto-local-auto-isearch-map "\C-i" 'isearch-other-control-char)
+      (define-key org-goto-local-auto-isearch-map "\C-m" 'isearch-other-control-char))
+  (define-key org-goto-local-auto-isearch-map "\C-i" nil)
+  (define-key org-goto-local-auto-isearch-map "\C-m" nil)
+  (define-key org-goto-local-auto-isearch-map [return] nil))
 
 (defun org-goto-local-search-headings (string bound noerror)
   "Search and make sure that any matches are in headlines."
@@ -21293,8 +21299,8 @@ on context.  See the individual commands for more information."
     ("Edit Structure"
      ["Refile Subtree" org-refile (org-in-subtree-not-table-p)]
      "--"
-     ["Move Subtree Up" org-shiftmetaup (org-in-subtree-not-table-p)]
-     ["Move Subtree Down" org-shiftmetadown (org-in-subtree-not-table-p)]
+     ["Move Subtree Up" org-metaup (org-at-heading-p)]
+     ["Move Subtree Down" org-metadown (org-at-heading-p)]
      "--"
      ["Copy Subtree"  org-copy-special (org-in-subtree-not-table-p)]
      ["Cut Subtree"  org-cut-special (org-in-subtree-not-table-p)]

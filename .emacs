@@ -54,6 +54,7 @@
  '(magit-use-overlays nil)
  '(nyan-mode t)
  '(org-CUA-compatible nil)
+ '(org-replace-disputed-keys nil)
  '(org-support-shift-select (quote always))
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
