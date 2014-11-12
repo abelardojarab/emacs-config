@@ -2571,6 +2571,53 @@ CANDIDATE is a string, a symbol, or \(DISPLAY . REAL\) cons cell."
 Default function to match candidates according to `helm-pattern'."
   (string-match helm-pattern candidate))
 
+(defun helm--mapconcat-pattern (pattern)
+  "Transform string PATTERN in regexp for further fuzzy matching.
+e.g helm.el$
+    => \"[^h]*h[^e]*e[^l]*l[^m]*m[^.]*[.][^e]*e[^l]*l$\"
+    ^helm.el$
+    => \"helm[.]el$\"."
+  (let ((ls (split-string pattern "" t)))
+    (if (string= "^" (car ls))
+        ;; Exact match.
+        (mapconcat (lambda (c)
+                     (if (and (string= c "$")
+                              (string-match "$\\'" pattern))
+                         c (regexp-quote c)))
+                   (cdr ls) "")
+        ;; Fuzzy match.
+        (mapconcat (lambda (c)
+                     (if (and (string= c "$")
+                              (string-match "$\\'" pattern))
+                         c (format "[^%s]*%s" c (regexp-quote c))))
+                   ls ""))))
+
+(defun helm-fuzzy-match (candidate)
+  "Check if `helm-pattern' fuzzy match CANDIDATE."
+  (let ((fun (if (string-match "\\`\\^" helm-pattern)
+                 #'identity
+                 #'helm--mapconcat-pattern)))
+  (if (string-match "\\`!" helm-pattern)
+      (not (string-match (funcall fun (substring helm-pattern 1))
+                         candidate))
+    (string-match (funcall fun helm-pattern) candidate))))
+
+(defun helm-fuzzy-search (pattern)
+  "Same as `helm-fuzzy-match' but for sources using `candidates-in-buffer'."
+  (let ((fun (if (string-match "\\`\\^" pattern)
+                 #'identity
+                 #'helm--mapconcat-pattern)))
+  (if (or (string-match "\\`!" pattern)
+          (cl-loop for p in (split-string pattern " " t)
+                   thereis (string-match "\\`!" p)))
+      ;; Don't try to search here, just return
+      ;; the position of line and go ahead,
+      ;; letting match-part fn checking if
+      ;; pattern match against this line.
+      (prog1 (list (point-at-bol) (point-at-eol))
+        (forward-line 1))
+    (re-search-forward (funcall fun pattern) nil t))))
+
 (defun helm-match-functions (source)
   (let ((matchfns (or (assoc-default 'match source)
                       (assoc-default 'match-strict source)
@@ -3905,52 +3952,65 @@ To customize `helm-candidates-in-buffer' behavior, use `search',
            pattern get-line-fn search-fns limit search-from-end
            start-point match-part-fn source))))))
 
-(defun helm-point-is-moved (proc)
-  "If point is moved after executing PROC, return t, otherwise nil."
-  (/= (point) (save-excursion (funcall proc) (point))))
-
 (defun helm-search-from-candidate-buffer (pattern get-line-fn search-fns
                                           limit search-from-end
                                           start-point match-part-fn source)
   (let (buffer-read-only
         matches 
         newmatches
-        (case-fold-search (helm-set-case-fold-search)))
+        (case-fold-search (helm-set-case-fold-search))
+        (stopper (if search-from-end #'bobp #'eobp)))
     (helm-search-from-candidate-buffer-internal
      (lambda ()
        (clrhash helm-cib-hash)
        (cl-dolist (searcher search-fns)
          (goto-char start-point)
          (setq newmatches nil)
-         (cl-loop with item-count = 0
-               while (funcall searcher pattern)
-               for cand = (funcall get-line-fn (point-at-bol) (point-at-eol))
-               when (and (not (gethash cand helm-cib-hash))
-                         (or
-                          ;; Always collect when cand is matched by searcher funcs
-                          ;; and match-part attr is not present.
-                          (not match-part-fn)
-                          ;; If match-part attr is present, collect only if PATTERN
-                          ;; match the part of CAND specified by the match-part func.
-                          (helm-search-match-part cand pattern match-part-fn)))
-               do (helm--accumulate-candidates
-                   cand newmatches helm-cib-hash item-count limit source)
-               unless (helm-point-is-moved
-                       (lambda ()
-                         (if search-from-end
-                             (goto-char (1- (point-at-bol)))
-                           (forward-line 1))))
-               return nil)
+         (cl-loop with pos-lst
+                  with item-count = 0
+                  while (and (setq pos-lst (funcall searcher pattern))
+                             (not (funcall stopper)))
+                  for cand = (apply get-line-fn
+                                    (if (and pos-lst (listp pos-lst))
+                                        pos-lst
+                                        (list (point-at-bol) (point-at-eol))))
+                  when (and (not (gethash cand helm-cib-hash))
+                            (or
+                             ;; Always collect when cand is matched by searcher funcs
+                             ;; and match-part attr is not present.
+                             (not match-part-fn)
+                             ;; If match-part attr is present, collect only if PATTERN
+                             ;; match the part of CAND specified by the match-part func.
+                             (helm-search-match-part cand pattern match-part-fn)))
+                  do (helm--accumulate-candidates
+                      cand newmatches helm-cib-hash item-count limit source))
          (setq matches (append matches (nreverse newmatches))))
        (delq nil matches)))))
 
 (defun helm-search-match-part (candidate pattern match-part-fn)
-  "Match PATTERN only on part of CANDIDATE returned by MATCH-PART-FN."
-  (let ((part (funcall match-part-fn candidate)))
+  "Match PATTERN only on part of CANDIDATE returned by MATCH-PART-FN.
+When using fuzzy matching, this function should be always called."
+  (let ((part (funcall match-part-fn candidate))
+        (fuzzy-p (assoc 'fuzzy-match (helm-get-current-source))))
     (if (string-match " " pattern)
-        (cl-loop for i in (split-string pattern " " t)
-              always (string-match i part))
-      (string-match pattern part))))
+        (cl-loop for i in (split-string pattern " " t) always
+                 (if (string-match "\\`!" i)
+                     (not (string-match
+                           (if fuzzy-p
+                               (helm--mapconcat-pattern
+                                (substring i 1))
+                               (substring i 1))
+                           part))
+                     (string-match
+                      (if fuzzy-p
+                          (helm--mapconcat-pattern i) i)
+                      part)))
+        (if (string-match "\\`!" pattern)
+            (let ((reg (substring pattern 1)))
+              (not (string-match (if fuzzy-p (helm--mapconcat-pattern reg) reg)
+                                 part)))
+            (string-match (if fuzzy-p (helm--mapconcat-pattern pattern) pattern)
+                          part)))))
 
 (defun helm-initial-candidates-from-candidate-buffer (endp
                                                       get-line-fn

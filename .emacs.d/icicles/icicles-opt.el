@@ -6,9 +6,9 @@
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
 ;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
 ;; Created: Mon Feb 27 09:22:14 2006
-;; Last-Updated: Sun Oct 19 10:08:40 2014 (-0700)
+;; Last-Updated: Mon Oct 27 22:50:09 2014 (-0700)
 ;;           By: dradams
-;;     Update #: 6066
+;;     Update #: 6087
 ;; URL: http://www.emacswiki.org/icicles-opt.el
 ;; Doc URL: http://www.emacswiki.org/Icicles
 ;; Keywords: internal, extensions, help, abbrev, local, minibuffer,
@@ -187,6 +187,7 @@
 ;;    `icicle-prefix-cycle-previous-alt-action-keys',
 ;;    `icicle-prefix-cycle-previous-help-keys',
 ;;    `icicle-quote-shell-file-name-flag',
+;;    `icicle-read-char-by-name-multi-completion-flag' (Emacs 23+),
 ;;    `icicle-read+insert-file-name-keys', `icicle-regexp-quote-flag',
 ;;    `icicle-regexp-search-ring-max', `icicle-region-background',
 ;;    `icicle-require-match-flag', `icicle-saved-completion-sets',
@@ -2906,7 +2907,9 @@ See also option `icicle-buffer-skip-functions'."
     ess-complete-object-name             gud-gdb-complete-command
     Info-goto-node                       Info-index
     Info-menu
-    lisp-complete-symbol                 lisp-completion-at-point
+    lisp-complete-symbol
+    ;; Emacs 25+ uses `elisp-completion-at-point', not `lisp-completion-at-point'.
+    ,@(if (fboundp 'elisp-completion-at-point) '(elisp-completion-at-point) '(lisp-completion-at-point))
     minibuffer-default-add-completions
     read-char-by-name                    read-color
     read-from-minibuffer                 read-string
@@ -3924,6 +3927,31 @@ information about the characters that, like SPC, lead to quoting.
 Remember that you can use multi-command `icicle-toggle-option' anytime
 to toggle the option value."
   :type 'boolean :group 'Icicles-Miscellaneous)
+
+(when (fboundp 'read-char-by-name)      ; Emacs 23+
+  (defcustom icicle-read-char-by-name-multi-completion-flag t
+    "*Non-nil means `icicle-read-char-by-name' uses multi-completion.
+If nil then a candidate is just as in vanilla Emacs.
+If non-nil then it is a 3-part multi-completion: NAME CODE CHAR,
+showing three ways to represent the character as text:
+
+* NAME is the Unicode name
+* CODE is the Unicode code point, as a hexidecimal numeral
+* CHAR is the char itself (as it appears in text, not as an integer)
+
+In addition, if non-nil then properties `help-echo' and
+`icicle-mode-line-help' are put on NAME, showing both NAME and the
+code point (in hex, octal, and decimal).
+
+Setting this option to nil can speed up reading a character
+considerably, but it does not give you the advantages of seeing the
+character (WYSIWYG) or matching its code point.
+
+Instead of using a nil value, you can also speed things up by:
+* turning off incremental completion
+* choosing a strong input pattern, before asking for candidate
+  matching."
+    :type 'boolean :group 'Icicles-Completions-Display :group 'Icicles-Matching))
 
 (defcustom icicle-read+insert-file-name-keys '([(control meta shift ?f)]) ; `C-M-S-f'
   "*Key sequences to invoke `icicle-read+insert-file-name'.

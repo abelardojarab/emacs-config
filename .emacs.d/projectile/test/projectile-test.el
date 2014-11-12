@@ -380,6 +380,29 @@
          (projectile-file-exists-cache-cleanup)
          (should-not projectile-file-exists-cache-timer))))))
 
+(ert-deftest projectile-test-cache-current-file ()
+  (with-sandbox
+   (f-mkdir "project")
+   (f-touch "project/.projectile")
+   (f-touch "project/file1.el")
+   (f-touch "project/file2.el")
+   (f-touch "project/file3.el")
+   (f-touch "project/file4.el")
+   (f-touch "project/file5.el")
+   (cd "project")
+   (let ((projectile-projects-cache (make-hash-table :test #'equal))
+         (projectile-enable-caching t))
+     (noflet ((projectile-project-root () (f-full "./"))
+              (projectile-project-vcs () 'none))
+       (with-current-buffer (find-file-noselect  "file1.el")
+         (projectile-cache-current-file)
+         (dolist (f '("file1.el" "file2.el" "file3.el" "file4.el" "file5.el" ".projectile"))
+           (should (member f (gethash (projectile-project-root) projectile-projects-cache)))))
+       (with-current-buffer (find-file-noselect "file2.el")
+         (projectile-cache-current-file)
+         (dolist (f '("file1.el" "file2.el" "file3.el" "file4.el" "file5.el" ".projectile"))
+           (should (member f (gethash (projectile-project-root) projectile-projects-cache)))))))))
+
 (ert-deftest projectile-test-git-grep-prefix ()
   (require 'vc-git)
   (with-sandbox
@@ -480,3 +503,44 @@
     (should (equal '("src/Makefile")
                    (projectile-get-other-files "Makefile.lock" source-tree)))
     ))
+
+
+(ert-deftest projectile-test-dirname-matching-count ()
+  (should (equal 2
+                 (projectile-dirname-matching-count "src/food/sea.c"
+                                                    "src/food/cat.c")))
+  (should (equal 0
+                 (projectile-dirname-matching-count "src/weed/sea.c"
+                                                    "src/food/sea.c"))))
+
+(ert-deftest projectile-test-find-matching-test ()
+  (with-sandbox
+   (f-mkdir "project" "app" "models" "weed")
+   (f-mkdir "project" "app" "models" "food")
+   (f-mkdir "project" "spec" "models" "weed")
+   (f-mkdir "project" "spec" "models" "food")
+   (f-touch "project/app/models/weed/sea.rb")
+   (f-touch "project/app/models/food/sea.rb")
+   (f-touch "project/spec/models/weed/sea_spec.rb")
+   (f-touch "project/spec/models/food/sea_spec.rb")
+   (let ((projectile-indexing-method 'native))
+     (noflet ((projectile-project-type () 'rails-rspec)
+              (projectile-project-root () (f-full "project/")))
+             (should (equal "spec/models/food/sea_spec.rb"
+                            (projectile-find-matching-test "app/models/food/sea.rb")))))))
+
+(ert-deftest projectile-test-find-matching-file ()
+  (with-sandbox
+   (f-mkdir "project" "app" "models" "weed")
+   (f-mkdir "project" "app" "models" "food")
+   (f-mkdir "project" "spec" "models" "weed")
+   (f-mkdir "project" "spec" "models" "food")
+   (f-touch "project/app/models/weed/sea.rb")
+   (f-touch "project/app/models/food/sea.rb")
+   (f-touch "project/spec/models/weed/sea_spec.rb")
+   (f-touch "project/spec/models/food/sea_spec.rb")
+   (let ((projectile-indexing-method 'native))
+     (noflet ((projectile-project-type () 'rails-rspec)
+              (projectile-project-root () (f-full "project/")))
+             (should (equal "app/models/food/sea.rb"
+                            (projectile-find-matching-file "spec/models/food/sea_spec.rb")))))))

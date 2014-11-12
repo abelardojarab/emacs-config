@@ -6,9 +6,9 @@
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
 ;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
 ;; Created: Tue Aug  1 14:21:16 1995
-;; Last-Updated: Sun Oct 19 10:13:52 2014 (-0700)
+;; Last-Updated: Fri Nov  7 16:45:41 2014 (-0800)
 ;;           By: dradams
-;;     Update #: 29710
+;;     Update #: 29724
 ;; URL: http://www.emacswiki.org/icicles-doc2.el
 ;; Doc URL: http://www.emacswiki.org/Icicles
 ;; Keywords: internal, extensions, help, abbrev, local, minibuffer,
@@ -6448,6 +6448,32 @@
 ;;    such option saving using their own function instead of the
 ;;    default value, `customize-save-variable'.
 ;;
+;;  * Non-`nil' option
+;;    `icicle-read-char-by-name-multi-completion-flag' means that
+;;    `icicle-read-char-by-name' (which, by the default value of
+;;    option `icicle-functions-to-redefine', replaces vanilla
+;;    `read-char-by-name' in Icicle mode) uses multi-completion and
+;;    shows helpful information about the current completion candidate
+;;    in the mode line (the character name and code point, in hex,
+;;    octal, and decimal notation).
+;;
+;;    The 3-part multi-completion, NAME CODE CHAR, shows three ways to
+;;    represent the character as text:
+;;
+;;    * NAME is the Unicode name
+;;    * CODE is the Unicode code point, as a hexidecimal numeral
+;;    * CHAR is the character (as it appears in text, not an integer)
+;;
+;;    Setting this option to `nil' can speed up reading a character
+;;    considerably, but it does not give you the advantages of seeing
+;;    the character (WYSIWYG) or matching its code point.
+;;    
+;;    Instead of using a `nil' value, you can also speed things up by:
+;;
+;;    * turning off incremental completion
+;;    * choosing a strong input pattern, before asking for candidate
+;;      matching
+;;
 ;;  * Option `icicle-zap-to-char-candidates' determines which
 ;;    character names are used for `icicle-zap-to-char' (bound to
 ;;    `M-z' by default) when completing.  The default value of `nil'
@@ -7773,7 +7799,8 @@
 ;;    `comint-replace-by-expanded-filename',
 ;;    `ess-complete-object-name' (from ESS),
 ;;    `gud-gdb-complete-command', `Info-goto-node', `Info-index',
-;;    `Info-menu', `lisp-complete-symbol', `lisp-completion-at-point',
+;;    `Info-menu', `lisp-complete-symbol', `elisp-completion-at-point'
+;;    (or `lisp-completion-at-point', prior to Emacs 25),
 ;;    `minibuffer-default-add-completions', `read-char-by-name',
 ;;    `read-color', `read-from-minibuffer', `read-string',
 ;;    `recentf-make-menu-items'.
@@ -9937,7 +9964,25 @@
 ;;     doc string to tell users that they can cycle
 ;;     `icicle-incremental-completion' using `C-#'.
 ;;
-;;  9. Another of my libraries that can help programmers provide
+;;  9. Yes, you can define commands that do or do not use Icicles.
+;;     That is, users can take advantage of Icicles behavior during
+;;     particular commands, even while in general leaving Icicle mode
+;;     off.  Conversely, they can get vanilla Emacs behavior while in
+;;     general leaving Icicle mode on.
+;;
+;;     When you define a command, you can use macro
+;;     `icicle-with-icy-mode-ON' to enable Icicle mode during the
+;;     evaluation of its body sexps.  The original value of Icicle
+;;     mode (on or off) is restored when done.  If Icicle mode was
+;;     already on then enabling it is skipped (a no-op).
+;;
+;;     Similarly, you can use macro `icicle-with-icy-mode-OFF' to
+;;     disable Icicle mode during the evaluation of its body sexps.
+;;     The original value of Icicle mode (on or off) is restored when
+;;     done.  If Icicle mode was already off then disabling it is
+;;     skipped (a no-op).
+;;
+;; 10. Another of my libraries that can help programmers provide
 ;;     default values is `thingatpt+.el'.  It provides functions for
 ;;     picking up symbols, sexps, numbers, words, and other sorts of
 ;;     thing near the text cursor (`point').

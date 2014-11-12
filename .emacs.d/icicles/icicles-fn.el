@@ -6,9 +6,9 @@
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
 ;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
 ;; Created: Mon Feb 27 09:25:53 2006
-;; Last-Updated: Sun Oct 19 11:08:10 2014 (-0700)
+;; Last-Updated: Sat Nov  8 19:01:05 2014 (-0800)
 ;;           By: dradams
-;;     Update #: 15025
+;;     Update #: 15043
 ;; URL: http://www.emacswiki.org/icicles-fn.el
 ;; Doc URL: http://www.emacswiki.org/Icicles
 ;; Keywords: internal, extensions, help, abbrev, local, minibuffer,
@@ -491,7 +491,8 @@
 (when (< emacs-major-version 23)
   (defvar completion--embedded-envvar-re) ; In `minibuffer.el'.
   (defvar completion-styles)            ; In `minibuffer.el'
-  (defvar icicle-Completions-text-scale-decrease)) ; In `icicles-opt.el' (for Emacs 23)
+  (defvar icicle-Completions-text-scale-decrease) ; In `icicles-opt.el' (for Emacs 23+)
+  (defvar icicle-read-char-by-name-multi-completion-flag)) ; In `icicles-opt.el' (for Emacs 23+)
 
 (defvar completion-root-regexp)         ; In `simple.el' (for Emacs 22 and 23.1)
 (defvar crm-local-completion-map)       ; In `crm.el'
@@ -2248,7 +2249,8 @@ CHARS defaults to the value of `icicle-read-char-history'."
 ;;
 ;; 1. Use `icicle-ucs-names', not `ucs-names'.
 ;; 2. Exclude character names "" and "VARIATION SELECTOR*".
-;; 3. Display the character itself, after its name, in `*Completions*'.
+;; 3. If `icicle-read-char-by-name-multi-completion-flag' is non-nil, show the character itself, after its name,
+;;    in `*Completions*'.
 ;; 4. Added optional arg NAMES.
 ;; 5. Add char read to `icicle-read-char-history'.
 ;; 6. See doc string for the rest.
@@ -2270,14 +2272,15 @@ character, but whose car is a list (NAME CODE SCHAR), where:
 Properties `help-echo' and `icicle-mode-line-help' are put on NAME,
 showing both NAME and the code point (in hex, octal, and decimal)."
     (and (not (string= "" (car name.char)))
-         ;; $$$$$$ Maybe make this optional?
-         ;; (not (string-match "\\`VARIATION SELECTOR" (car name.char))))
-         (let* ((name  (copy-sequence (car name.char)))
-                (char  (cdr name.char)))
-           (icicle-candidate-short-help (format "Char: %-10cCode Point: x%X, o%o, %d" char char char char) name)
-           (cons (list name (format "%X" char) (format "%c" char)) char))))
-
-
+         (if icicle-read-char-by-name-multi-completion-flag
+             ;; $$$$$$ Maybe make this optional?
+             ;; (not (string-match "\\`VARIATION SELECTOR" (car name.char))))
+             (let* ((name  (copy-sequence (car name.char)))
+                    (char  (cdr name.char)))
+               (icicle-candidate-short-help
+                (format "Char: %-10cCode Point: x%X, o%o, %d" char char char char) name)
+               (cons (list name (format "%X" char) (format "%c" char)) char))
+           name.char)))
 
   (unless (fboundp 'icicle-ORIG-read-char-by-name)
     (defalias 'icicle-ORIG-read-char-by-name (symbol-function 'read-char-by-name)))
@@ -2289,7 +2292,8 @@ Unicode property `name' or `old-name'.  Return the char as a number.
 
 You can use completion against the Unicode name of the character.
 
-In Icicle mode:
+In Icicle mode, if `icicle-read-char-by-name-multi-completion-flag' is
+non-nil:
 
 * The Unicode code point of the char and the char itself appear next
   to the char name in `*Completions*' - WYSIWYG.
@@ -2326,13 +2330,13 @@ such a return value: (CHAR-NAME . CHAR-CODE)."
     (let* ((new-prompt                             (copy-sequence prompt))
            (enable-recursive-minibuffers           t)
            (completion-ignore-case                 t)
-           (icicle-show-multi-completion-flag      t) ; Override user setting.
-           (icicle-multi-completing-p              t)
+           (icicle-multi-completing-p              (and icicle-read-char-by-name-multi-completion-flag
+                                                        icicle-show-multi-completion-flag))
            (icicle-list-use-nth-parts              '(1))
            (icicle-transform-before-sort-p         t)
            (icicle-list-join-string                "\t")
            (icicle-candidate-properties-alist      '((3 (face icicle-candidate-part))))
-           (icicle-whole-candidate-as-text-prop-p  t)
+           (icicle-whole-candidate-as-text-prop-p  icicle-multi-completing-p)
            (mctized-cands                          (car (icicle-mctize-all names nil)))
            (collection-fn                          `(lambda (string pred action)
                                                      (if (eq action 'metadata)
@@ -2343,8 +2347,10 @@ such a return value: (CHAR-NAME . CHAR-CODE)."
            chr)
       (setq chr  (cond ((string-match-p "\\`[0-9a-fA-F]+\\'" input)  (string-to-number input 16))
                        ((string-match-p "^#" input)                  (read input))
-                       ((cddr (assoc-string input mctized-cands t))) ; INPUT is a multi-completion.
-                       (t
+                       ((if icicle-multi-completing-p
+                            (cddr (assoc-string input mctized-cands t)) ; INPUT is one of the multi-completions.
+                          (cdr (assoc-string input mctized-cands t)))) ; INPUT is a character name.
+                       (icicle-multi-completing-p
                         (let ((completion  (try-completion input collection-fn)))
                           (and (stringp completion)
                                ;; INPUT is not a multi-completion, but it may match a single sulti-completion.
@@ -2366,7 +2372,7 @@ such a return value: (CHAR-NAME . CHAR-CODE)."
       (add-to-list 'icicle-read-char-history chr)
       chr))
 
-  ;; This would not be needed if there were not Emacs bug #9653.
+  ;; This would not be needed if there were not STILL Emacs bug #9653.
   (defun icicle-ucs-names ()
     "Same as `ucs-names', except remove entries with an empty name: \"\"."
     (setq ucs-names  (assq-delete-all "" (ucs-names))))) ; Free var here: `ucs-names'.
@@ -6092,24 +6098,27 @@ Character FROM is affected (possibly deleted).  Character TO is not."
       (buffer-string))))
 
 (defun icicle-barf-if-outside-minibuffer ()
-  "Raise an error if `this-command' is called outside the minibuffer."
-  (unless (eq (current-buffer) (window-buffer (minibuffer-window)))
-    (icicle-user-error "Command `%s' must be called from the minibuffer" this-command)))
+  "Raise an error if `this-command' is called outside the minibuffer.
+Return non-nil otherwise."
+  (or (eq (current-buffer) (window-buffer (minibuffer-window)))
+      (icicle-user-error "Command `%s' must be called from the minibuffer" this-command)))
 
 (defun icicle-barf-if-outside-Completions ()
-  "Raise error if `this-command' is called outside buffer `*Completions*'."
-  (unless (eq (current-buffer) (get-buffer "*Completions*"))
-    (icicle-user-error "Command `%s' must be called from `*Completions*' buffer" this-command)))
+  "Raise error if `this-command' is called outside buffer `*Completions*'.
+Return non-nil otherwise."
+  (or (eq (current-buffer) (get-buffer "*Completions*"))
+      (icicle-user-error "Command `%s' must be called from `*Completions*' buffer" this-command)))
 
 (defun icicle-barf-if-outside-Completions-and-minibuffer ()
-  "Error if `this-command' called outside `*Completions*' and minibuffer."
-  (unless (or (eq (current-buffer) (window-buffer (minibuffer-window)))
-              (eq (current-buffer) (get-buffer "*Completions*")))
-    (icicle-user-error "`%s' must be called from `*Completions*' or minibuffer" this-command)))
+  "Error if `this-command' called outside `*Completions*' and minibuffer.
+Return non-nil otherwise."
+  (or (or (eq (current-buffer) (window-buffer (minibuffer-window)))
+          (eq (current-buffer) (get-buffer "*Completions*")))
+      (icicle-user-error "`%s' must be called from `*Completions*' or minibuffer" this-command)))
 
 (defun icicle-command-abbrev-save ()
   "Save `icicle-command-abbrev-alist'.  Used on `kill-emacs-hook'."
-  (icicle-condition-case-no-debug err   ; Don't raise an error, since it's on `kill-emacs-hook.
+  (icicle-condition-case-no-debug err   ; Don't raise an error, since it's on `kill-emacs-hook'.
       (let ((sav  (get 'icicle-command-abbrev-alist 'saved-value)))
         (unless (and (or (null sav)
                          (and (consp sav)  (consp (car sav))  (consp (cdar sav))

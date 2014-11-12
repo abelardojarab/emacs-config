@@ -1532,6 +1532,11 @@ translated into normal lambda, so there is no performance
 penalty.
 
 See `-let' for the description of destructuring mechanism."
+  (declare (doc-string 2) (indent defun)
+           (debug (&define sexp
+                           [&optional stringp]
+                           [&optional ("interactive" interactive)]
+                           def-body)))
   (cond
    ((not (consp match-form))
     (signal 'wrong-type-argument "match-form must be a list"))
@@ -1906,7 +1911,8 @@ returns non-nil, apply FUN to this node and do not descend
 further."
   (if (funcall pred tree)
       (funcall fun tree)
-    (if (listp tree)
+    (if (and (listp tree)
+             (not (-cons-pair? tree)))
         (-map (lambda (x) (-tree-map-nodes pred fun x)) tree)
       tree)))
 

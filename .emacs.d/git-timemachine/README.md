@@ -4,6 +4,8 @@
 
 ## Installation
 
+[![MELPA](http://melpa.org/packages/git-timemachine-badge.svg)](http://melpa.org/#/git-timemachine)
+
 Installation alternatives:
 
 - Download git-timemachine.el and drop it somewhere in your `load-path`.
@@ -25,5 +27,9 @@ Use the following keys to navigate historic version of the file
 ## Customize
 
 Set `git-timemachine-abbreviation-length` (default 12) to your
-preferred length for abbreviated commit hashes. Also `M-x customize
-[git-timemachine]`.
+preferred length for abbreviated commit hashes.
+
+Set `git-timemachine-show-minibuffer-details` (default t) to control
+whether details of the commit are shown in the minibuffer.
+
+Also `M-x customize [git-timemachine]`.

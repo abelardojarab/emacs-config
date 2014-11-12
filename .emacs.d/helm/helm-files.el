@@ -334,11 +334,13 @@ I.e use the -path/ipath arguments of find instead of -name/iname."
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map helm-map)
     (define-key map (kbd "<C-return>")    'helm-cr-empty-string)
+    (define-key map (kbd "<M-RET>")       'helm-cr-empty-string)
     (define-key map (kbd "C-]")           'helm-ff-run-toggle-basename)
     (define-key map (kbd "C-.")           'helm-find-files-up-one-level)
     (define-key map (kbd "C-l")           'helm-find-files-up-one-level)
     (define-key map (kbd "C-c h")         'helm-ff-file-name-history)
     (define-key map (kbd "C-<backspace>") 'helm-ff-run-toggle-auto-update)
+    (define-key map (kbd "C-c <DEL>")     'helm-ff-run-toggle-auto-update)
     (define-key map (kbd "C-c ?")         'helm-read-file-name-help)
     (helm-define-key-with-subkeys map (kbd "DEL") ?\d 'helm-ff-delete-char-backward
                                   nil nil 'helm-ff-delete-char-backward--exit-fn)
@@ -1589,7 +1591,7 @@ systems."
   "Maybe return PATTERN with it's basename modified as a regexp.
 This happen only when `helm-ff-smart-completion' is enabled.
 This provide a similar behavior as `ido-enable-flex-matching'.
-See also `helm--mapconcat-candidate'.
+See also `helm--mapconcat-pattern'.
 If PATTERN is an url returns it unmodified.
 When PATTERN contain a space fallback to match-plugin.
 If basename contain one or more space fallback to match-plugin.
@@ -1630,7 +1632,7 @@ If PATTERN is a valid directory name,return PATTERN unchanged."
                (replace-regexp-in-string "[*]" "[*]" bn)))
       (t
        (setq bn (if (>= (length bn) 2) ; wait 2nd char before concating.
-                    (helm--mapconcat-candidate bn)
+                    (helm--mapconcat-pattern bn)
                   (concat ".*" (regexp-quote bn))))
        (concat (regexp-quote bd) bn)))))
 
