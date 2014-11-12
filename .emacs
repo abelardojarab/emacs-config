@@ -49,31 +49,24 @@
  '(ecb-vc-enable-support t)
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(helm-mode t)
- '(initial-scratch-message #(";; This buffer is for notes you don't want to save, and for Lisp evaluation.
-;; If you want to create a file, visit that file with Ctrl+O,
-;; then enter the text in that file's own buffer." 131 135 (face ergoemacs-pretty-key) 136 137 (face ergoemacs-pretty-key)))
+ '(initial-scratch-message ";; scratch buffer created -- start typing...
+")
  '(magit-use-overlays nil)
  '(nyan-mode t)
- '(org-CUA-compatible t)
+ '(org-CUA-compatible nil)
  '(org-replace-disputed-keys nil)
- '(org-special-ctrl-a/e t)
- '(org-support-shift-select t)
- '(recentf-menu-before "Close")
+ '(org-support-shift-select (quote always))
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
- '(scroll-error-top-bottom t)
  '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
- '(set-mark-command-repeat-pop t)
- '(smex-prompt-string #("Alt+A " 0 3 (face ergoemacs-pretty-key) 4 5 (face ergoemacs-pretty-key))))
+ '(shift-select-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument))))
- '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
- '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
+ '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument)))))
 
 ;; Setup Org and LaTeX
 (require 'setup-org)

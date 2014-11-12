@@ -632,9 +632,12 @@ customize the resulting theme."
      `(diff-header ((,class (:background ,base03))))
      `(diff-file-header
        ((,class (:background ,base03 :foreground ,base0 :weight bold))))
-     `(diff-refine-added ((,class :foreground ,base03 :background ,green)))
-     `(diff-refine-change ((,class :foreground ,base03 :background ,blue)))
-     `(diff-refine-removed ((,class (:foreground ,base03 :background ,red))))
+     `(diff-refine-added ((,class (:foreground ,green :background ,base03
+                                               :inverse-video t))))
+     `(diff-refine-change ((,class (:foreground ,blue :background ,base03
+                                                :inverse-video t))))
+     `(diff-refine-removed ((,class (:foreground ,red :background ,base03
+                                                 :inverse-video t))))
 
      ;; ediff
      `(ediff-fine-diff-A ((,class (:background ,orange-lc))))
@@ -655,6 +658,87 @@ customize the resulting theme."
                                                :foreground ,base0 ))))
      `(ediff-odd-diff-C ((,class (:background ,base01
                                               :foreground ,base03 ))))
+
+     ;;;; alternative ediiff (not finished)
+     ;; ;; ediff
+     ;; `(ediff-fine-diff-A ((,class (
+     ;;                               :background ,(solarized-color-blend blue base03 0.25))
+     ;;                              )))
+     ;; `(ediff-fine-diff-B ((,class (
+     ;;                               :background ,(solarized-color-blend violet base03 0.25))
+     ;;                              )))
+     ;; `(ediff-fine-diff-C ((,class (
+     ;;                               :background ,(solarized-color-blend yellow base03 0.25))
+     ;;                              )))
+
+     ;; `(ediff-current-diff-A ((,class (
+     ;;                                  :background ,(solarized-color-blend blue base03 0.15)
+
+     ;;                                              ))))
+     ;; `(ediff-current-diff-B ((,class (
+     ;;                                   :background ,(solarized-color-blend violet base03 0.15)
+
+     ;;                                              ))))
+     ;; `(ediff-current-diff-C ((,class (
+     ;;                                  :background ,(solarized-color-blend yellow base03 0.15)
+
+     ;;                                              ))))
+
+     ;; `(ediff-even-diff-A ((,class (
+     ;;                                ;; :background ,(solarized-color-blend base0 base03 0.15)
+     ;;                               :background ,base02
+     ;;                               ;; :foreground ,base2
+     ;;                                ;; :background ,(solarized-color-blend green base02 0.15)
+     ;;                                           ))))
+     ;; `(ediff-even-diff-B ((,class (
+     ;;                               ;; :background ,base01
+     ;;                               :background ,base02
+     ;;                               ;; :foreground ,base2
+     ;;                                           ))))
+     ;; `(ediff-even-diff-C ((,class (
+     ;;                               ;; :background ,base01
+     ;;                               :background ,base02
+     ;;                                           ;; :foreground ,base2
+     ;;                                           ))))
+
+
+     ;; `(ediff-odd-diff-A ((,class (
+     ;;                              ;; :background ,base01
+     ;;                                          :background ,base02
+     ;;                                          ))))
+     ;; `(ediff-odd-diff-B ((,class (
+     ;;                              ;; :background ,base01
+     ;;                                          :background ,base02
+     ;;                                          ))))
+     ;; `(ediff-odd-diff-C ((,class (
+     ;;                              ;; :background ,base01
+     ;;                                          :background ,base03
+     ;;                                          ))))
+
+     ;; `(ediff-current-diff-Ancestor ((,class (:background "VioletRed" :foreground "Black"))))
+     ;; `(ediff-even-diff-Ancestor ((,class (:background "Grey" :foreground "White"))))
+     ;; `(ediff-fine-diff-Ancestor ((,class (:background "Green" :foreground "Black"))))
+     ;; `(ediff-odd-diff-Ancestor ((,class (:background "gray40" :foreground "cyan3"))))
+
+
+     ;; `(ediff-even-diff-A ((,class (:underline ,base01))))
+     ;; `(ediff-odd-diff-A ((,class (:underline ,base01
+
+     ;;                                          ))))
+
+     ;; `(ediff-even-diff-B ((,class (:background ,base01
+     ;;                                           :foreground ,base03
+     ;;                                           ))))
+     ;; `(ediff-odd-diff-B ((,class (:background ,base01
+     ;;                                          :foreground ,base03
+     ;;                                          ))))
+
+     ;; `(ediff-even-diff-C ((,class (:background ,base01
+     ;;                                           :foreground ,base0
+     ;;                                           ))))
+     ;; `(ediff-odd-diff-C ((,class (:background ,base01
+     ;;                                          :foreground ,base03
+     ;;                                          ))))
 
      ;; diff-hl
      `(diff-hl-change ((,class (:background ,blue-lc  :foreground ,blue-hc))))
@@ -960,6 +1044,9 @@ customize the resulting theme."
      `(helm-css-scss-selector-depth-face-5 ((,class (:foreground ,yellow))))
      `(helm-css-scss-selector-depth-face-6 ((,class (:foreground ,violet))))
      `(helm-css-scss-target-line-face ((,class (:background unspecified :foreground ,magenta))))
+
+     ;; helm-go-package
+     `(helm-source-go-package-godoc-description ((,class (:foreground ,base01))))
 
      ;; helm-swoop
      `(helm-swoop-target-line-face ((,class (:foreground unspecified :background ,base02))))
@@ -1400,10 +1487,59 @@ customize the resulting theme."
      `(nav-face-hdir ((,class (:foreground ,red))))
      `(nav-face-file ((,class (:foreground ,base0))))
      `(nav-face-hfile ((,class (:foreground ,red))))
-
      ;; nav-flash
-     `(nav-flash-face ((,class (:background ,base02))))
-
+     ;; `(nav-flash-face ((,class (:background ,base02))))
+     `(nav-flash-face ((,class (:foreground
+                                ,(apply 'solarized-color-blend
+                                        (if
+                                            (eq variant 'light)
+                                            (list yellow base1 0.2)
+                                          (list cyan base1 0.1)))
+                                :background
+                                ,(apply 'solarized-color-blend
+                                        (if
+                                            (eq variant 'light)
+                                            (list yellow base03 0.2)
+                                          (list cyan base03 0.3)))))))
+     ;;navi2ch
+     `(navi2ch-list-category-face ((,class (:foreground ,base0 :background ,blue  :weight bold))))
+     `(navi2ch-list-category-face ((,class (:foreground ,blue ))))
+     `(navi2ch-list-add-board-name-face ((,class (:foreground ,yellow))))
+     `(navi2ch-list-board-name-face ((,class (:foreground ,blue))))
+     `(navi2ch-list-change-board-name-face ((,class (:foreground ,green :weight bold))))
+     `(navi2ch-bm-unread-face ((,class (:foreground ,green))))
+     `(navi2ch-bm-view-face ((,class (:foreground ,yellow))))
+     `(navi2ch-bm-cache-face ((,class (:foreground ,blue))))
+     `(navi2ch-bm-update-face ((,class (:foreground ,orange))))
+     `(navi2ch-bm-down-face ((,class (:foreground ,base03))))
+     `(navi2ch-bm-mark-face ((,class (:foreground ,red))))
+     `(navi2ch-bm-new-unread-face ((,class (:foreground ,green))))
+     `(navi2ch-bm-new-view-face ((,class (:foreground ,yellow))))
+     `(navi2ch-bm-new-cache-face ((,class (:foreground ,blue))))
+     `(navi2ch-bm-new-update-face ((,class (:foreground ,orange))))
+     `(navi2ch-bm-new-mark-face ((,class (:foreground ,red))))
+     `(navi2ch-bm-updated-unread-face ((,class (:foreground ,green))))
+     `(navi2ch-bm-updated-view-face ((,class (:foreground ,yellow))))
+     `(navi2ch-bm-updated-cache-face ((,class (:foreground ,blue))))
+     `(navi2ch-bm-updated-update-face ((,class (:foreground ,orange))))
+     `(navi2ch-bm-updated-navi2ch-bm-updated-mark-facemark-face ((,class (:foreground ,red))))
+     `(navi2ch-bm-seen-unread-face ((,class (:foreground ,green))))
+     `(navi2ch-bm-seen-view-face ((,class (:foreground ,yellow))))
+     `(navi2ch-bm-seen-cache-face ((,class (:foreground ,blue))))
+     `(navi2ch-bm-seen-update-face ((,class (:foreground ,orange))))
+     `(navi2ch-bm-seen-mark-face ((,class (:foreground ,red))))
+     `(navi2ch-article-header-face ((,class (:foreground ,base03))))
+     `(navi2ch-article-header-contents-face ((,class (:foreground ,blue))))
+     `(navi2ch-article-header-fusianasan-face ((,class (:foreground ,blue :underline t))))
+     `(navi2ch-article-link-face ((,class (:weight bold))))
+     `(navi2ch-article-url-face ((,class (:weight bold))))
+     `(navi2ch-article-citation-face ((,class (:foreground ,yellow))))
+     `(navi2ch-article-auto-decode-face ((,class (:foreground ,base03))))
+     `(navi2ch-article-message-separator-face ((,class (:foreground ,green))))
+     `(navi2ch-splash-screen-face ((,class (:foreground ,cyan))))
+     `(navi2ch-message-link-face ((,class (:weight bold))))
+     `(navi2ch-message-url-face ((,class (:weight bold))))
+     `(navi2ch-message-citation-face ((,class (:foreground ,magenta))))
 
      ;; org-mode
      `(org-agenda-structure

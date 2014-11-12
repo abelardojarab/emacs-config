@@ -1,10 +1,15 @@
+[![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
+[![MELPA](http://melpa.org/packages/zenburn-theme-badge.svg)](http://melpa.org/#/zenburn-theme)
+[![MELPA Stable](http://stable.melpa.org/packages/zenburn-theme-badge.svg)](http://stable.melpa.org/#/zenburn-theme)
+[![Gratipay](http://img.shields.io/gratipay/bbatsov.svg)](https://www.gratipay.com/bbatsov/)
+
 ## About
 
 Zenburn for Emacs is a direct port of the popular
 [Zenburn](http://slinky.imukuppi.org/zenburnpage/) theme for vim,
 developed by Jani Nurminen. It's my personal belief (and
 that of its many users I presume) that it's one of the best low
-contrast color themes out there and that it's is exceptionally easy on
+contrast color themes out there and that it is exceptionally easy on
 the eyes.
 
 This theme uses the new built-in theming support available starting
@@ -28,7 +33,7 @@ Now you can load the theme with the interactive function `load-theme` like this:
 ### Package.el
 
 Zenburn is available in both [Marmalade](http://marmalade-repo.org)
-and [MELPA](http://melpa.milkbox.net).
+and [MELPA](http://melpa.org).
 Keep in mind the fact the version in the Marmalade repo may not always
 be up-to-date.
 
@@ -69,9 +74,11 @@ included upstream don't hesitate to send me a patch or even better - a
 GitHub pull request. [These](https://github.com/bbatsov/zenburn-emacs/contributors)
 contributors have done so.
 
-If you like the project, consider supporting its development via [gittip](https://www.gittip.com/bbatsov).
+You can support my work on Zenburn and [all my other projects](https://github.com/bbatsov) via [gratipay](https://www.gratipay.com/bbatsov).
 
-[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
+[![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.1.3/dist/gratipay.png)](https://gratipay.com/bbatsov)
 
 Cheers,<br\>
 [Bozhidar](http://twitter.com/bbatsov)
+
+[badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg

@@ -60,12 +60,16 @@
 
 ;; Zenburn theme
 (add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
-;; (require 'zenburn-theme)
-;; (load-theme 'zenburn t)
+(require 'zenburn-theme)
+(load-theme 'zenburn t)
 
 ;; Monokai theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
 ;; (load-theme 'monokai t)
+
+;; Solarized theme
+(add-to-list 'load-path "~/.emacs.d/solarized-emacs")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-emacs")
 
 ;; Extra color tweaks
 (set-face-foreground 'variable-pitch "#ffffff")
