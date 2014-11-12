@@ -55,7 +55,6 @@
  '(magit-use-overlays nil)
  '(nyan-mode t)
  '(org-CUA-compatible t)
- '(org-replace-disputed-keys nil)
  '(org-special-ctrl-a/e t)
  '(org-support-shift-select t)
  '(recentf-menu-before "Close")
@@ -64,7 +63,8 @@
  '(scroll-error-top-bottom t)
  '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
  '(set-mark-command-repeat-pop t)
- '(smex-prompt-string #("Alt+A " 0 3 (face ergoemacs-pretty-key) 4 5 (face ergoemacs-pretty-key))))
+ '(smex-prompt-string #("Alt+A " 0 3 (face ergoemacs-pretty-key) 4 5 (face ergoemacs-pretty-key)))
+ '(tabbar-mode t nil (tabbar)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -74,9 +74,6 @@
  '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument))))
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
-
-;; Setup Org and LaTeX
-(require 'setup-org)
 
 ;; Setup general
 (require 'setup-general)
@@ -138,6 +135,9 @@
 
 ;; Setup markdown and Yaml
 (require 'setup-markdown)
+
+;; Setup Org and LaTeX
+(require 'setup-org)
 
 ;; Setup Python
 (require 'setup-python)
