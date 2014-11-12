@@ -167,7 +167,7 @@ list of semantic tokens found.
 ;;;***
 
 ;;;### (autoloads (semantic-c-add-preprocessor-symbol semantic-default-c-setup)
-;;;;;;  "semantic/bovine/c" "bovine/c.el" (21510 8044 1429 0))
+;;;;;;  "semantic/bovine/c" "bovine/c.el" (21603 52862 595 0))
 ;;; Generated autoloads from bovine/c.el
 
 (autoload 'semantic-default-c-setup "semantic/bovine/c" "\
@@ -268,7 +268,7 @@ Setup hook function for Emacs Lisp files and Semantic.
 ;;;;;;  semantic-complete-analyze-and-replace semantic-complete-jump-local-members
 ;;;;;;  semantic-complete-jump semantic-complete-jump-local semantic-displayor-tooltip-initial-max-tags
 ;;;;;;  semantic-displayor-tooltip-mode) "semantic/complete" "complete.el"
-;;;;;;  (21510 8044 1704 0))
+;;;;;;  (21603 52862 662 0))
 ;;; Generated autoloads from complete.el
 
 (defvar semantic-displayor-tooltip-mode 'standard "\
@@ -678,7 +678,7 @@ into the tags)
 ;;;***
 
 ;;;### (autoloads (global-semanticdb-minor-mode semanticdb-minor-mode-p)
-;;;;;;  "semantic/db-mode" "db-mode.el" (21510 8044 1965 0))
+;;;;;;  "semantic/db-mode" "db-mode.el" (21603 52862 734 0))
 ;;; Generated autoloads from db-mode.el
 
 (autoload 'semanticdb-minor-mode-p "semantic/db-mode" "\
@@ -860,7 +860,7 @@ Parse the current buffer and run in debug mode.
 
 ;;;### (autoloads (semantic-decoration-unparsed-include-do-reset
 ;;;;;;  semantic-decoration-include-visit) "semantic/decorate/include"
-;;;;;;  "decorate/include.el" (21510 8044 2139 0))
+;;;;;;  "decorate/include.el" (21603 52862 759 0))
 ;;; Generated autoloads from decorate/include.el
 
 (autoload 'semantic-decoration-include-visit "semantic/decorate/include" "\
@@ -1019,7 +1019,7 @@ return nil.
 ;;;***
 
 ;;;### (autoloads (semantic-edits-incremental-parser semantic-change-function)
-;;;;;;  "semantic/edit" "edit.el" (21510 8044 2321 0))
+;;;;;;  "semantic/edit" "edit.el" (21603 52862 800 0))
 ;;; Generated autoloads from edit.el
 
 (autoload 'semantic-change-function "semantic/edit" "\
@@ -1063,7 +1063,7 @@ Load an old run from FILE, and show it.
 ;;;;;;  semantic-current-tag semantic-find-tag-parent-by-overlay
 ;;;;;;  semantic-find-tag-by-overlay-prev semantic-find-tag-by-overlay-next
 ;;;;;;  semantic-find-tag-by-overlay-in-region semantic-find-tag-by-overlay)
-;;;;;;  "semantic/find" "find.el" (21510 8044 2366 0))
+;;;;;;  "semantic/find" "find.el" (21603 52862 844 0))
 ;;; Generated autoloads from find.el
 
 (autoload 'semantic-find-tag-by-overlay "semantic/find" "\
@@ -1121,7 +1121,7 @@ containing a field.  Return nil if there is no parent.
 Find the first tag with NAME in TABLE.
 NAME is a string.
 TABLE is a semantic tags table.  See `semantic-something-to-tag-table'.
-This routine uses `assoc' to quickly find the first matching entry.
+Respects `semantic-case-fold'.
 
 \(fn NAME &optional TABLE)" nil nil)
 
@@ -1198,8 +1198,8 @@ Set up a buffer for parsing of HTML files.
 ;;;### (autoloads (semantic-ia-describe-class semantic-ia-show-doc
 ;;;;;;  semantic-ia-fast-mouse-jump semantic-ia-fast-jump semantic-ia-show-variants
 ;;;;;;  semantic-ia-show-summary semantic-ia-complete-tip semantic-ia-complete-symbol-menu
-;;;;;;  semantic-ia-complete-symbol) "semantic/ia" "ia.el" (21510
-;;;;;;  8044 2533 0))
+;;;;;;  semantic-ia-complete-symbol) "semantic/ia" "ia.el" (21603
+;;;;;;  52862 1042 0))
 ;;; Generated autoloads from ia.el
 
 (autoload 'semantic-ia-complete-symbol "semantic/ia" "\
@@ -1259,7 +1259,7 @@ parts of the parent classes are displayed.
 ;;;***
 
 ;;;### (autoloads (semantic-speedbar-analysis) "semantic/ia-sb" "ia-sb.el"
-;;;;;;  (21510 8044 2517 0))
+;;;;;;  (21603 52862 1007 0))
 ;;; Generated autoloads from ia-sb.el
 
 (autoload 'semantic-speedbar-analysis "semantic/ia-sb" "\
@@ -1272,7 +1272,7 @@ list of possible completions.
 ;;;***
 
 ;;;### (autoloads (global-semantic-idle-scheduler-mode semantic-idle-scheduler-mode)
-;;;;;;  "semantic/idle" "idle.el" (21510 8044 2556 0))
+;;;;;;  "semantic/idle" "idle.el" (21603 52862 1077 0))
 ;;; Generated autoloads from idle.el
 
 (autoload 'semantic-idle-scheduler-mode "semantic/idle" "\
@@ -1344,8 +1344,8 @@ Optional argument STREAM is an optional stream of tags used to create menus.
 
 ;;;***
 
-;;;### (autoloads (semantic-lex) "semantic/lex" "lex.el" (21510 8044
-;;;;;;  2663 0))
+;;;### (autoloads (semantic-lex) "semantic/lex" "lex.el" (21603 52862
+;;;;;;  1133 0))
 ;;; Generated autoloads from lex.el
 
 (autoload 'semantic-lex "semantic/lex" "\
@@ -1452,7 +1452,7 @@ The class returned from the scope calculation is variable
 ;;;;;;  senator-completion-menu-popup senator-complete-symbol senator-jump-regexp
 ;;;;;;  senator-jump senator-previous-tag senator-next-tag senator-step-at-start-end-tag-classes
 ;;;;;;  senator-step-at-tag-classes) "semantic/senator" "senator.el"
-;;;;;;  (21510 8044 2776 0))
+;;;;;;  (21603 52862 1196 0))
 ;;; Generated autoloads from senator.el
 
 (defvar senator-step-at-tag-classes nil "\
@@ -1585,6 +1585,9 @@ yanked to.
 Copy the current tag into REGISTER.
 Optional argument KILL-FLAG will delete the text of the tag to the
 kill ring.
+
+Interactively, reads the register using `register-read-with-preview',
+if available.
 
 \(fn REGISTER &optional KILL-FLAG)" t nil)
 
@@ -1730,7 +1733,7 @@ Returns an object of class `semantic-symref-result'.
 
 ;;;### (autoloads (semantic-symref-regexp semantic-symref-symbol
 ;;;;;;  semantic-symref) "semantic/symref/list" "symref/list.el"
-;;;;;;  (21510 8044 2938 0))
+;;;;;;  (21603 52862 1252 0))
 ;;; Generated autoloads from symref/list.el
 
 (autoload 'semantic-symref "semantic/symref/list" "\
@@ -1766,7 +1769,7 @@ Display the references in`semantic-symref-results-mode'.
 ;;;***
 
 ;;;### (autoloads (semantic-tag-components) "semantic/tag" "tag.el"
-;;;;;;  (21510 8044 3006 0))
+;;;;;;  (21603 52862 1292 0))
 ;;; Generated autoloads from tag.el
 
 (autoload 'semantic-tag-components "semantic/tag" "\
@@ -1827,7 +1830,7 @@ The VALUE is a list of tags.
 ;;;***
 
 ;;;### (autoloads (semantic-default-texi-setup) "semantic/texi" "texi.el"
-;;;;;;  (21510 8044 3038 0))
+;;;;;;  (21603 52862 1340 0))
 ;;; Generated autoloads from texi.el
 
 (autoload 'semantic-default-texi-setup "semantic/texi" "\
@@ -2119,7 +2122,7 @@ Setup buffer for parse.
 ;;;;;;  "wisent/comp.el" "wisent/expr.el" "wisent/grammar-macros.el"
 ;;;;;;  "wisent/java-tags-wy.el" "wisent/java-wy.el" "wisent/java.el"
 ;;;;;;  "wisent/javascript-wy.el" "wisent/python-wy.el" "wisent/wisent.el")
-;;;;;;  (21541 34202 99348 0))
+;;;;;;  (21603 52920 805716 0))
 
 ;;;***
 

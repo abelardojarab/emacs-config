@@ -1,0 +1,5 @@
+;; Object Configuration
+;; EDE Arduino Project Configuration
+(ede-arduino-config "Configuration"
+  :file "Config.ede"
+  :c-preprocessor-table '(("TEST" . "1")))

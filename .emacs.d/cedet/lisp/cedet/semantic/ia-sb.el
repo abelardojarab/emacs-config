@@ -139,7 +139,7 @@ DIRECTORY is the current directory, which is ignored, and ZERO is 0."
       )))
 
 (defmethod semantic-ia-sb-show-doc ((context semantic-analyze-context))
-  "Show documentation about CONTEXT iff CONTEXT points at a complete symbol."
+  "Show documentation about CONTEXT if CONTEXT points at a complete symbol."
   (let ((sym (car (reverse (oref context prefix))))
 	(doc nil))
     (when (semantic-tag-p sym)

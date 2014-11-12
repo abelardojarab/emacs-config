@@ -1,6 +1,6 @@
 ;;; eieio-custom.el -- eieio object customization
 
-;; Copyright (C) 1999-2001, 2005, 2007-2013 Free Software Foundation,
+;; Copyright (C) 1999-2001, 2005, 2007-2014 Free Software Foundation,
 ;; Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
@@ -383,7 +383,7 @@ These groups are specified with the `:group' slot flag."
     (make-local-variable 'eieio-co)
     (setq eieio-co obj)
     (make-local-variable 'eieio-cog)
-    (setq eieio-cog group)))
+    (setq eieio-cog g)))
 
 (defmethod eieio-custom-object-apply-reset ((obj eieio-default-superclass))
   "Insert an Apply and Reset button into the object editor.

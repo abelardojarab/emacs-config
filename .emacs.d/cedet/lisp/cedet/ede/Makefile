@@ -17,9 +17,9 @@ ede_FILES=Project.ede Makefile
 
 LOADDEFS=loaddefs.el
 LOADDIRS=.
-ede_LISP=auto.el detect.el base.el custom.el dired.el source.el util.el system.el speedbar.el srecode.el files.el locate.el make.el shell.el android.el m3.el arduino.el
+ede_LISP=auto.el detect.el base.el custom.el dired.el source.el util.el system.el speedbar.el srecode.el files.el locate.el make.el shell.el m3.el
 proj-project_LISP=proj.el pmake.el pconf.el proj-elisp.el proj-misc.el proj-obj.el proj-prog.el proj-archive.el proj-shared.el proj-info.el proj-scheme.el proj-aux.el proj-comp.el
-projects_LISP=project-am.el cpp-root.el emacs.el linux.el generic.el java-root.el jvm-base.el maven2.el lein2.el ant.el
+projects_LISP=project-am.el cpp-root.el java-root.el jvm-base.el maven2.el lein2.el ant.el config.el emacs.el linux.el generic.el arduino.el android.el
 aux-lisp_LISP=autoconf-edit.el makefile-edit.el
 VERSION=1.1beta
 DISTDIR=$(top)cedet-topdir-$(VERSION)/cedet/ede

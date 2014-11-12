@@ -151,7 +151,7 @@ into memory.")
 		       :type (or null string ede-project-autoload-dirmatch)
 		       :documentation
 		       "To avoid loading a project, check if the directory matches this.
-Specifying this matcher object will  allow EDE to perform a complex
+Specifying this matcher object will allow EDE to perform a complex
 check without loading the project.
 
 NOTE: If you use dirmatch, you may need to set :root-only to `nil'.

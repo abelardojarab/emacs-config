@@ -162,11 +162,14 @@ Completion options are calculated with `semantic-analyze-possible-completions'."
     ;; Complete this symbol.
     (if (not syms)
 	(progn
-	  (message "No smart completions found.  Trying Senator.")
-	  (when (semantic-analyze-context-p a)
-	    ;; This is a quick way of getting a nice completion list
-	    ;; in the menu if the regular context mechanism fails.
-	    (senator-completion-menu-popup)))
+	  (message "No smart completions found.")
+          ;; Disabled - see http://debbugs.gnu.org/14522
+	  ;; (message "No smart completions found.  Trying Senator.")
+	  ;; (when (semantic-analyze-context-p a)
+	  ;;   ;; This is a quick way of getting a nice completion list
+	  ;;   ;; in the menu if the regular context mechanism fails.
+	  ;;   (senator-completion-menu-popup))
+          )
 
       (let* ((menu
 	      (mapcar
@@ -180,7 +183,7 @@ Completion options are calculated with `semantic-analyze-possible-completions'."
 	       ;; XEmacs needs that the menu has at least 2 items.  So,
 	       ;; include a nil item that will be ignored by imenu.
 	       (cons nil menu)
-	       (senator-completion-menu-point-as-event)
+	       `(down-mouse-1 ,(posn-at-point))
 	       "Completions")))
 	(when ans
 	  (if (not (semantic-tag-p ans))

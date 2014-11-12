@@ -97,6 +97,7 @@
   (expand-file-name (make-temp-name "CEDET_INTEG-") temporary-file-directory)
   "Root of multiple project integration tests.")
 
+(require 'cit-checkenv)
 (require 'cit-cpp)
 (require 'cit-symref)
 (require 'cit-uml)
@@ -118,10 +119,12 @@
 ;;; Code:
 (defun cedet-integ-test-Make ()
   "Run the full CEDET integration test using a Make style project."
+  (cit-checkenv "Make")
   (cedet-integ-test-proj "Make"))
 
 (defun cedet-integ-test-Automake ()
   "Run the full CEDET integration test using a Automake style project."
+  (cit-checkenv "Automake")
   (let ((ede-pconf-create-file-query nil))
     (cedet-integ-test-proj "Automake")))
 
@@ -199,6 +202,8 @@ Optional argument MAKE-TYPE is the style of EDE project to test."
   "Run the CEDET integration test using the Android style project."
   (interactive)
 
+  (cit-checkenv "Android")
+
   (let ((ede-auto-add-method 'never))
     (global-ede-mode 1)
     ;; Do an EDE Android project. Use cedet-android.el for project fabrication.
@@ -211,6 +216,8 @@ Optional argument MAKE-TYPE is the style of EDE project to test."
   "Run the CEDET integration test using the Android style project."
   (interactive)
 
+  (cit-checkenv "Arduino")
+
   (let ((ede-auto-add-method 'never))
     (global-ede-mode 1)
     ;; Do an EDE Arduino project.
@@ -222,6 +229,8 @@ Optional argument MAKE-TYPE is the style of EDE project to test."
 (defun cedet-integ-test-cpproot ()
   "Run the CEDET integration test using the Android style project."
   (interactive)
+
+  (cit-checkenv "cpp")
 
   (let ((ede-auto-add-method 'never))
     (global-ede-mode 1)
@@ -241,6 +250,8 @@ Optional argument MAKE-TYPE is the style of EDE project to test."
   "Run the CEDET integration test using the Android style project."
   (interactive)
 
+  (cit-checkenv "Java")
+
   (let ((ede-auto-add-method 'never))
     (global-ede-mode 1)
     ;; Do an EDE cpproot project. 
@@ -253,6 +264,8 @@ Optional argument MAKE-TYPE is the style of EDE project to test."
   "Run the tests using Global to find symbols.
 This test is about optimizing for minimal file loads."
   (interactive)
+
+  (cit-checkenv "globalref")
 
   (let ((ede-auto-add-method 'never))
     (global-ede-mode 1)

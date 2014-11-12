@@ -1,6 +1,6 @@
 ;;; cit-arduino.el --- Arduino testing.
 ;;
-;; Copyright (C) 2012 Eric M. Ludlam
+;; Copyright (C) 2012, 2014 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;;
@@ -36,7 +36,7 @@
 	   (error nil))))
 
 (defvar cit-integ-arduino-sketchdir
-  (expand-file-name "edeprojearduino" cedet-integ-base)
+  (expand-file-name "edeprojectarduino" cedet-integ-base)
   "Root of arduino sketches during the execution of this test.")
 
 (defvar cit-integ-arduino-preftext
@@ -75,7 +75,10 @@ board=uno
 	    (message "Cannot run Arduino tests without arduino-mode. Install in ~/lisp/arduino-mode.el")
 	  ))
 
+    (message "Using Arduino environment version %s." (ede-arduino-Arduino-Version))
+
     ;; Reset the preferences file.
+    (message "Arduino tests in: %S" cit-integ-arduino-sketchdir)
     (cit-make-dir cit-integ-arduino-sketchdir)
     (save-current-buffer
       (find-file cit-integ-arduino-preffile)
@@ -87,15 +90,35 @@ board=uno
     ;; file correctly.
     (setq ede-arduino-preferences-file cit-integ-arduino-preffile)
     (let ((prefs (ede-arduino-sync)))
-      (unless (and (string= (oref prefs board) "uno")
-		   (string= (oref prefs port) "/dev/ttyBOGUS")
-		   (string= (file-name-as-directory (oref prefs sketchbook))
-			    (file-name-as-directory cit-integ-arduino-sketchdir)))
+      (if (and (string= (oref prefs board) "uno")
+	       (string= (oref prefs port) "/dev/ttyBOGUS")
+	       (string= (file-name-as-directory (oref prefs sketchbook))
+			(file-name-as-directory cit-integ-arduino-sketchdir)))
+	  (message "Preferences Redirect success!")
 	(error "Preferences redirect read failed.")))
 
     ;; Create the sketch directory
     (cit-make-dir cit-integ-arduino-testsketch)
     
+    ;; Force the autoloader to detect in the new location.
+    (let* ((arduinoauto (object-assoc 'ede/arduino :file
+				      ede-project-class-files))
+	   (adm (oref arduinoauto proj-root-dirmatch))
+	   (testfn (expand-file-name "foo.cpp" cit-integ-arduino-testsketch)))
+      ;; Splice the new tmp pref file into the system.
+      (oset adm :fromconfig ede-arduino-preferences-file)
+      ;; Clear the cache.
+      (slot-makeunbound adm 'configdatastash)
+      ;; Try it out
+      (if (ede-do-dirmatch adm testfn)
+	  (message "Arduino dirmatch slice success!")
+	(error "Arduino dirmatch splicing from:
+  %s 
+failed to find:
+  %s."
+	       ede-arduino-preferences-file testfn))
+      )
+
     ;; Load in the sketch file.
     (let* ((vers (ede-arduino-Arduino-Version))
 	   (fn (expand-file-name (concat "testsketch."
@@ -105,6 +128,10 @@ board=uno
 				 cit-integ-arduino-testsketch)))
       (cit-srecode-fill-with-stuff fn nil)
       (revert-buffer t t);; Force EDE detection.
+
+      (unless (ede-arduino-project-p ede-object-root-project)
+	(error "Arduino EDE project failed to detect.  Found:
+%S" ede-object))
 
       ;; Try compiling the empty sketch.
       (cit-compile-and-wait-using-ede-command)

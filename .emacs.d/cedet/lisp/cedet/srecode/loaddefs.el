@@ -173,8 +173,8 @@ Return a list of menu items based on SRecode features.
 
 ;;;***
 
-;;;### (autoloads (srecode-get-maps) "srecode/map" "map.el" (21510
-;;;;;;  8045 87 0))
+;;;### (autoloads (srecode-get-maps) "srecode/map" "map.el" (21603
+;;;;;;  52862 1522 0))
 ;;; Generated autoloads from map.el
 
 (autoload 'srecode-get-maps "srecode/map" "\
@@ -235,7 +235,7 @@ MODE - The mode of this buffer.  If not declared yet, guess.
 ;;;***
 
 ;;;### (autoloads (srecode-template-mode) "srecode/srt-mode" "srt-mode.el"
-;;;;;;  (21510 8045 133 0))
+;;;;;;  (21603 52862 1573 0))
 ;;; Generated autoloads from srt-mode.el
 
 (autoload 'srecode-template-mode "srecode/srt-mode" "\
@@ -281,7 +281,7 @@ Adds the following:
 
 ;;;### (autoloads nil nil ("args.el" "ctxt.el" "dictionary.el" "extract.el"
 ;;;;;;  "fields.el" "filters.el" "find.el" "semantic.el" "srt-wy.el"
-;;;;;;  "table.el") (21541 34202 589009 0))
+;;;;;;  "table.el") (21603 52921 687551 0))
 
 ;;;***
 

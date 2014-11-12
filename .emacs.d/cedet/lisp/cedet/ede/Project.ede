@@ -13,7 +13,7 @@
     (ede-proj-target-elisp "ede"
       :name "ede"
       :path ""
-      :source '("auto.el" "detect.el" "base.el" "custom.el" "dired.el" "source.el" "util.el" "system.el" "speedbar.el" "srecode.el" "files.el" "locate.el" "make.el" "shell.el" "android.el" "m3.el" "arduino.el")
+      :source '("auto.el" "detect.el" "base.el" "custom.el" "dired.el" "source.el" "util.el" "system.el" "speedbar.el" "srecode.el" "files.el" "locate.el" "make.el" "shell.el" "m3.el")
       :versionsource '("ede.el")
       :aux-packages '("cedet-compat" "cedet" "eieio")
       :pre-load-packages '("cedet-compat"))
@@ -26,7 +26,7 @@
     (ede-proj-target-elisp "projects"
       :name "projects"
       :path ""
-      :source '("project-am.el" "cpp-root.el" "emacs.el" "linux.el" "generic.el" "java-root.el" "jvm-base.el" "maven2.el" "lein2.el" "ant.el")
+      :source '("project-am.el" "cpp-root.el" "java-root.el" "jvm-base.el" "maven2.el" "lein2.el" "ant.el" "config.el" "emacs.el" "linux.el" "generic.el" "arduino.el" "android.el")
       :aux-packages '("cedet-compat" "cedet" "eieio")
       :pre-load-packages '("cedet-compat"))
     (ede-proj-target-elisp "aux-lisp"

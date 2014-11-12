@@ -1,6 +1,6 @@
 ;;; cedet-android.el --- Misc android external application support
 ;;
-;; Copyright (C) 2011, 2013 Eric M. Ludlam
+;; Copyright (C) 2011, 2013, 2014 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;; X-RCS: $Id$
@@ -36,7 +36,7 @@
 (defvar cedet-android-sdk-adb-min-version "1.0.26"
   "Minimum version of the Android SDB ADB program required.")
 
-(defcustom cedet-android-sdk-root "~/src/android-sdk-linux/"
+(defcustom cedet-android-sdk-root "/usr/local/android/android-sdk-linux/"
   "The root to the android SDK."
   :group 'android
   :type 'file)

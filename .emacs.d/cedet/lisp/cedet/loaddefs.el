@@ -7,7 +7,7 @@
 ;;;;;;  cedet-android-adb-version-check cedet-android-adb-devices
 ;;;;;;  cedet-android-adb-help cedet-android-start-ddms cedet-android-layoutopt
 ;;;;;;  cedet-android-target-list cedet-android-create-project) "cedet-android"
-;;;;;;  "cedet-android.el" (21510 8043 7335 0))
+;;;;;;  "cedet-android.el" (21591 45246 357 0))
 ;;; Generated autoloads from cedet-android.el
 
 (autoload 'cedet-android-create-project "cedet-android" "\
@@ -77,7 +77,7 @@ Update the classpath for `cedet-java' to include the android compile-time librar
 ;;;***
 
 ;;;### (autoloads (cedet-gnu-global-version-check) "cedet-global"
-;;;;;;  "cedet-global.el" (21510 8044 51 0))
+;;;;;;  "cedet-global.el" (21591 45246 391 0))
 ;;; Generated autoloads from cedet-global.el
 
 (autoload 'cedet-gnu-global-version-check "cedet-global" "\
@@ -190,7 +190,7 @@ Optional argument GRAPH-CLASS indicates the type of graph to create.
 ;;;***
 
 ;;;### (autoloads (data-debug-new-buffer) "data-debug" "data-debug.el"
-;;;;;;  (21510 8044 358 0))
+;;;;;;  (21603 52862 177 0))
 ;;; Generated autoloads from data-debug.el
 
 (autoload 'data-debug-new-buffer "data-debug" "\
@@ -200,7 +200,7 @@ Create a new data-debug buffer with NAME.
 
 ;;;***
 
-;;;### (autoloads (global-ede-mode) "ede" "ede.el" (21510 8044 387
+;;;### (autoloads (global-ede-mode) "ede" "ede.el" (21603 52862 220
 ;;;;;;  0))
 ;;; Generated autoloads from ede.el
 
@@ -299,7 +299,7 @@ See a pretty-printed representation of FUNCTION-NAME.
 ;;;***
 
 ;;;### (autoloads (semantic-mode semantic-default-submodes) "semantic"
-;;;;;;  "semantic.el" (21511 19232 217 0))
+;;;;;;  "semantic.el" (21603 52862 499 0))
 ;;; Generated autoloads from semantic.el
 
 (defvar semantic-default-submodes '(global-semantic-idle-scheduler-mode global-semanticdb-minor-mode) "\
@@ -357,7 +357,7 @@ Semantic mode.
 
 ;;;### (autoloads nil nil ("cedet-compat.el" "cedet-cscope.el" "cedet-files.el"
 ;;;;;;  "cedet-idutils.el" "cedet.el" "pulse.el" "srecode.el" "working.el")
-;;;;;;  (21541 34201 625584 0))
+;;;;;;  (21603 52920 152806 0))
 
 ;;;***
 

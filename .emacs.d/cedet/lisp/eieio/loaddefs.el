@@ -20,7 +20,7 @@ It creates an autoload function for CNAME's constructor.
 ;;;***
 
 ;;;### (autoloads (customize-object) "eieio-custom" "eieio-custom.el"
-;;;;;;  (21510 8045 361 0))
+;;;;;;  (21591 45247 20 0))
 ;;; Generated autoloads from eieio-custom.el
 
 (autoload 'customize-object "eieio-custom" "\
@@ -33,7 +33,7 @@ Optional argument GROUP is the sub-group of slots to display.
 
 ;;;### (autoloads (eieio-describe-generic eieio-describe-constructor
 ;;;;;;  eieio-describe-class eieio-browse) "eieio-opt" "eieio-opt.el"
-;;;;;;  (21510 8045 389 0))
+;;;;;;  (21603 52862 1618 0))
 ;;; Generated autoloads from eieio-opt.el
 
 (autoload 'eieio-browse "eieio-opt" "\
@@ -67,7 +67,7 @@ Also extracts information about all methods specific to this generic.
 ;;;***
 
 ;;;### (autoloads nil nil ("chart.el" "eieio-base.el" "eieio-datadebug.el"
-;;;;;;  "eieio-speedbar.el" "eieio.el") (21541 34201 128941 0))
+;;;;;;  "eieio-speedbar.el" "eieio.el") (21603 52919 792353 0))
 
 ;;;***
 

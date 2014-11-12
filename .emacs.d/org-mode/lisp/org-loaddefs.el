@@ -839,7 +839,7 @@ Otherwise, return nil.
 ;;;### (autoloads (org-agenda-columns org-insert-columns-dblock org-dblock-write:columnview
 ;;;;;;  org-columns-number-to-string org-columns-compute org-columns
 ;;;;;;  org-columns-get-format-and-top-level org-columns-remove-overlays)
-;;;;;;  "org-colview" "org-colview.el" (21556 3831))
+;;;;;;  "org-colview" "org-colview.el" (21603 52971))
 ;;; Generated autoloads from org-colview.el
 
 (autoload 'org-columns-remove-overlays "org-colview" "\
@@ -928,9 +928,14 @@ tree can be found.
 ;;;***
 
 ;;;### (autoloads (org-element-context org-element-at-point org-element-cache-refresh
-;;;;;;  org-element-cache-reset org-element-interpret-data) "org-element"
-;;;;;;  "org-element.el" (21591 45285))
+;;;;;;  org-element-cache-reset org-element-interpret-data org-element-update-syntax)
+;;;;;;  "org-element" "org-element.el" (21603 52971))
 ;;; Generated autoloads from org-element.el
+
+(autoload 'org-element-update-syntax "org-element" "\
+Update parser internals.
+
+\(fn)" t nil)
 
 (autoload 'org-element-interpret-data "org-element" "\
 Interpret DATA as Org syntax.
@@ -1222,8 +1227,8 @@ agenda view showing the flagged items.
 
 ;;;***
 
-;;;### (autoloads (org-plot/gnuplot) "org-plot" "org-plot.el" (21556
-;;;;;;  3831))
+;;;### (autoloads (org-plot/gnuplot) "org-plot" "org-plot.el" (21603
+;;;;;;  52971))
 ;;; Generated autoloads from org-plot.el
 
 (autoload 'org-plot/gnuplot "org-plot" "\
@@ -1968,7 +1973,7 @@ using three `C-u' prefix arguments.
 ;;;***
 
 ;;;### (autoloads (org-git-version org-release) "org-version" "org-version.el"
-;;;;;;  (21597 12526))
+;;;;;;  (21603 52980))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -1994,7 +1999,7 @@ The location of ODT styles.")
 ;;;;;;  org-run-like-in-org-mode turn-on-orgstruct++ turn-on-orgstruct
 ;;;;;;  orgstruct-mode org-global-cycle org-cycle org-mode org-clock-persistence-insinuate
 ;;;;;;  turn-on-orgtbl org-version org-babel-load-file org-babel-do-load-languages)
-;;;;;;  "org" "org.el" (21597 12513))
+;;;;;;  "org" "org.el" (21603 52971))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\

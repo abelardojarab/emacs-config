@@ -43,7 +43,7 @@ ROOTPROJ is nil, since there is only one project.
 ;;;***
 
 ;;;### (autoloads (ede-arduino-load ede-arduino-file ede-arduino-root)
-;;;;;;  "ede/arduino" "arduino.el" (21510 8044 483 0))
+;;;;;;  "ede/arduino" "arduino.el" (21591 45246 512 0))
 ;;; Generated autoloads from arduino.el
 
 (autoload 'ede-arduino-root "ede/arduino" "\
@@ -71,12 +71,12 @@ ROOTPROJ is nil, sinc there is only one project for a directory tree.
 
 \(fn DIR &optional ROOTPROJ)" nil nil)
 
-(ede-add-project-autoload (ede-project-autoload "arduino" :name "ARDUINO SKETCH" :file 'ede/arduino :root-only nil :proj-root-dirmatch (ede-project-autoload-dirmatch "arduino" :fromconfig (if (boundp 'ede-arduino-preferences-file) ede-arduino-preferences-file "~/.arduino/preferences.txt") :configregex "^sketchbook.path=\\([^\n]+\\)$" :configregexidx 1) :proj-file 'ede-arduino-file :load-type 'ede-arduino-load :class-sym 'ede-arduino-project :safe-p t :new-p t) 'unique)
+(ede-add-project-autoload (ede-project-autoload "arduino" :name "ARDUINO SKETCHBOOK" :file 'ede/arduino :root-only nil :proj-root-dirmatch (ede-project-autoload-dirmatch "arduino" :fromconfig (if (boundp 'ede-arduino-preferences-file) ede-arduino-preferences-file "~/.arduino/preferences.txt") :configregex "^sketchbook.path=\\([^\n]+\\)$" :configregexidx 1) :proj-file 'ede-arduino-file :load-type 'ede-arduino-load :class-sym 'ede-arduino-project :safe-p t :new-p t) 'unique)
 
 ;;;***
 
 ;;;### (autoloads (ede-cpp-root-project) "ede/cpp-root" "cpp-root.el"
-;;;;;;  (21510 8044 551 0))
+;;;;;;  (21603 52862 272 0))
 ;;; Generated autoloads from cpp-root.el
 
 (eieio-defclass-autoload 'ede-cpp-root-project '(ede-project eieio-instance-tracker) "ede/cpp-root" "EDE cpp-root project class.\nEach directory needs a project file to control it.")
@@ -109,7 +109,20 @@ Create a custom-like buffer for sorting targets of current project.
 
 ;;;***
 
-;;;### (autoloads nil "ede/emacs" "emacs.el" (21510 8044 602 0))
+;;;### (autoloads (ede-dired-minor-mode) "ede/dired" "dired.el" (21603
+;;;;;;  52862 307 0))
+;;; Generated autoloads from dired.el
+
+(autoload 'ede-dired-minor-mode "ede/dired" "\
+A minor mode that should only be activated in DIRED buffers.
+If ARG is nil or a positive number, force on, if
+negative, force off.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "ede/emacs" "emacs.el" (21603 52862 330 0))
 ;;; Generated autoloads from emacs.el
 
 (ede-add-project-autoload (ede-project-autoload "emacs" :name "EMACS ROOT" :file 'ede/emacs :proj-file "src/emacs.c" :load-type 'ede-emacs-load :class-sym 'ede-emacs-project :new-p nil :safe-p t) 'unique)
@@ -130,7 +143,7 @@ the current EDE project.
 ;;;***
 
 ;;;### (autoloads (ede-enable-generic-projects) "ede/generic" "generic.el"
-;;;;;;  (21510 8044 637 0))
+;;;;;;  (21591 45246 597 0))
 ;;; Generated autoloads from generic.el
 
 (autoload 'ede-enable-generic-projects "ede/generic" "\
@@ -310,11 +323,11 @@ Argument NEWVERSION is the version number to use in the current project.
 ;;;***
 
 ;;;### (autoloads nil nil ("auto.el" "autoconf-edit.el" "base.el"
-;;;;;;  "detect.el" "dired.el" "makefile-edit.el" "pconf.el" "pmake.el"
+;;;;;;  "config.el" "detect.el" "makefile-edit.el" "pconf.el" "pmake.el"
 ;;;;;;  "proj-archive.el" "proj-aux.el" "proj-comp.el" "proj-elisp.el"
 ;;;;;;  "proj-info.el" "proj-misc.el" "proj-obj.el" "proj-prog.el"
 ;;;;;;  "proj-scheme.el" "proj-shared.el" "proj.el" "project-am.el"
-;;;;;;  "shell.el" "source.el" "srecode.el") (21541 34201 865303
+;;;;;;  "shell.el" "source.el" "srecode.el") (21603 52920 393173
 ;;;;;;  0))
 
 ;;;***

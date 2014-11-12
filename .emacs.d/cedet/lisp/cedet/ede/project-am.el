@@ -409,7 +409,7 @@ Argument COMMAND is the command to use for compiling the target."
 	  (setq default-directory dd)
 	  (setq cmd (read-from-minibuffer
 		     "Run (like this): "
-		     (concat (ede-target-name obj))))
+		     (concat "./" (ede-target-name obj))))
 	  (ede-shell-run-something obj cmd))
       (kill-buffer tb))))
 

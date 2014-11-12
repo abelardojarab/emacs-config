@@ -47,7 +47,8 @@
 (require 'ede/auto)
 (require 'ede/detect)
 
-(load "ede/loaddefs" nil 'nomessage)
+(eval-and-compile
+  (load "ede/loaddefs" nil 'nomessage))
 
 (declare-function ede-commit-project "ede/custom")
 (declare-function ede-convert-path "ede/files")
@@ -100,7 +101,7 @@ target willing to take the file.  'never means never perform the check."
 If the value is t, EDE may search in any directory.
 
 If the value is a function, EDE calls that function with one
-argument, the directory name; the function should return t iff
+argument, the directory name; the function should return t if
 EDE should look for project files in the directory.
 
 Otherwise, the value should be a list of fully-expanded directory
@@ -451,8 +452,6 @@ If optional argument CURRENT is non-nil, return sub-menu code."
 
 ;;; Mode Declarations
 ;;
-(eval-and-compile
-  (autoload 'ede-dired-minor-mode "ede/dired" "EDE commands for dired" t))
 
 (defun ede-apply-target-options ()
   "Apply options to the current buffer for the active project/target."
@@ -714,11 +713,15 @@ Otherwise, create a new project for DIR."
     (error "%s is not an allowed project directory in `ede-project-directories'"
 	   dir)))
 
+(defvar ede-check-project-query-fcn 'y-or-n-p
+  "Function used to ask the user if they want to permit a project to load.
+This is abstracted out so that tests can answer this question.")
+
 (defun ede-check-project-directory (dir)
   "Check if DIR should be in `ede-project-directories'.
 If it is not, try asking the user if it should be added; if so,
 add it and save `ede-project-directories' via Customize.
-Return nil iff DIR should not be in `ede-project-directories'."
+Return nil if DIR should not be in `ede-project-directories'."
   (setq dir (directory-file-name (expand-file-name dir))) ; strip trailing /
   (or (eq ede-project-directories t)
       (and (functionp ede-project-directories)
@@ -726,9 +729,10 @@ Return nil iff DIR should not be in `ede-project-directories'."
       ;; If `ede-project-directories' is a list, maybe add it.
       (when (listp ede-project-directories)
 	(or (member dir ede-project-directories)
-	    (when (y-or-n-p (format "`%s' is not listed in `ede-project-directories'.
+	    (when (funcall ede-check-project-query-fcn
+			   (format "`%s' is not listed in `ede-project-directories'.
 Add it to the list of allowed project directories? "
-				    dir))
+				   dir))
 	      (push dir ede-project-directories)
 	      ;; If possible, save `ede-project-directories'.
 	      (if (or custom-file user-init-file)
