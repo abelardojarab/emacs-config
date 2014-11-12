@@ -105,5 +105,8 @@
                     :foreground "green")
 (add-hook 'python-mode-hook 'jedi-eldoc-mode)
 
+;; Restore semantic
+(add-hook 'python-mode-hook 'semantic-default-python-setup)
+
 (provide 'setup-python)
 ;;; setup-python.el ends here
