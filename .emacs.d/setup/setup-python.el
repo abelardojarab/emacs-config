@@ -106,7 +106,7 @@
 (add-hook 'python-mode-hook 'jedi-eldoc-mode)
 
 ;; Restore semantic
-(add-hook 'python-mode-hook 'semantic-default-python-setup)
+(add-hook 'python-mode-hook 'wisent-python-default-setup)
 
 (provide 'setup-python)
 ;;; setup-python.el ends here
