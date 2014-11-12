@@ -26,7 +26,7 @@
  '(auto-indent-delete-trailing-whitespace-on-save-file t)
  '(auto-indent-delete-trailing-whitespace-on-visit-file t)
  '(cua-enable-cua-keys nil)
- '(custom-safe-themes (quote ("96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
+ '(custom-safe-themes (quote ("756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
  '(delete-selection-mode t nil (delsel))
  '(ecb-auto-activate t)
  '(ecb-display-image-icons-for-semantic-tags t)
@@ -49,17 +49,22 @@
  '(ecb-vc-enable-support t)
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(helm-mode t)
- '(initial-scratch-message ";; scratch buffer created -- start typing...
-")
+ '(initial-scratch-message #(";; This buffer is for notes you don't want to save, and for Lisp evaluation.
+;; If you want to create a file, visit that file with Ctrl+O,
+;; then enter the text in that file's own buffer." 131 135 (face ergoemacs-pretty-key) 136 137 (face ergoemacs-pretty-key)))
  '(magit-use-overlays nil)
  '(nyan-mode t)
- '(org-CUA-compatible nil)
+ '(org-CUA-compatible t)
  '(org-replace-disputed-keys nil)
- '(org-support-shift-select (quote always))
+ '(org-special-ctrl-a/e t)
+ '(org-support-shift-select t)
+ '(recentf-menu-before "Close")
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
+ '(scroll-error-top-bottom t)
  '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
- '(shift-select-mode nil))
+ '(set-mark-command-repeat-pop t)
+ '(smex-prompt-string #("Alt+A " 0 3 (face ergoemacs-pretty-key) 4 5 (face ergoemacs-pretty-key))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -69,6 +74,9 @@
  '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument))))
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
+
+;; Setup Org and LaTeX
+(require 'setup-org)
 
 ;; Setup general
 (require 'setup-general)
@@ -130,9 +138,6 @@
 
 ;; Setup markdown and Yaml
 (require 'setup-markdown)
-
-;; Setup Org and LaTeX
-(require 'setup-org)
 
 ;; Setup Python
 (require 'setup-python)

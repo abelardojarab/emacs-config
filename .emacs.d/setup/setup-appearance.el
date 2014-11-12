@@ -65,7 +65,7 @@
 
 ;; Monokai theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs-theme")
-(load-theme 'monokai t)
+;; (load-theme 'monokai t)
 
 ;; Extra color tweaks
 (set-face-foreground 'variable-pitch "#ffffff")
