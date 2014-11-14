@@ -49,21 +49,16 @@
  '(ecb-vc-enable-support t)
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(helm-mode t)
- '(initial-scratch-message #(";; This buffer is for notes you don't want to save, and for Lisp evaluation.
-;; If you want to create a file, visit that file with Ctrl+O,
-;; then enter the text in that file's own buffer." 131 135 (face ergoemacs-pretty-key) 136 137 (face ergoemacs-pretty-key)))
+ '(initial-scratch-message nil)
  '(magit-use-overlays nil)
  '(nyan-mode t)
- '(org-CUA-compatible t)
- '(org-special-ctrl-a/e t)
- '(org-support-shift-select t)
- '(recentf-menu-before "Close")
+ '(org-CUA-compatible nil)
+ '(recentf-menu-before nil)
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
- '(scroll-error-top-bottom t)
  '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
- '(set-mark-command-repeat-pop t)
- '(smex-prompt-string #("Alt+A " 0 3 (face ergoemacs-pretty-key) 4 5 (face ergoemacs-pretty-key)))
+ '(shift-select-mode nil)
+ '(smex-prompt-string nil)
  '(tabbar-mode t nil (tabbar)))
 
 (custom-set-faces
