@@ -53,6 +53,7 @@
  '(magit-use-overlays nil)
  '(nyan-mode t)
  '(org-CUA-compatible nil)
+ '(org-support-shift-select (quote always))
  '(recentf-menu-before nil)
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
@@ -69,6 +70,9 @@
  '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument))))
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
+
+;; Setup Org and LaTeX
+(require 'setup-org)
 
 ;; Setup general
 (require 'setup-general)
@@ -130,9 +134,6 @@
 
 ;; Setup markdown and Yaml
 (require 'setup-markdown)
-
-;; Setup Org and LaTeX
-(require 'setup-org)
 
 ;; Setup Python
 (require 'setup-python)
