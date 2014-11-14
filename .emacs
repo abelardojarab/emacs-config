@@ -49,17 +49,16 @@
  '(ecb-vc-enable-support t)
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(helm-mode t)
- '(initial-scratch-message nil)
+ '(initial-scratch-message ";; scratch buffer created -- start typing...
+")
  '(magit-use-overlays nil)
  '(nyan-mode t)
  '(org-CUA-compatible nil)
  '(org-support-shift-select (quote always))
- '(recentf-menu-before nil)
  '(recentf-mode t)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
  '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
  '(shift-select-mode nil)
- '(smex-prompt-string nil)
  '(tabbar-mode t nil (tabbar)))
 
 (custom-set-faces
@@ -134,8 +133,6 @@
 
 ;; Setup markdown and Yaml
 (require 'setup-markdown)
-
-
 
 ;; Setup Python
 (require 'setup-python)
