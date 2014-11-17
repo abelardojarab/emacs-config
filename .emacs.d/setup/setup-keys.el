@@ -62,21 +62,15 @@
 (global-set-key "\C-l" 'goto-line)
 (global-set-key (kbd "") 'other-window)
 (global-set-key [f5] 'compile)
-(global-set-key [f11] 'djcb-full-screen-toggle)
 (global-set-key [C-tab] 'comment-or-uncomment-region)
 (global-set-key [kp-prior] 'scroll-down)
 (global-set-key [prior] 'scroll-down)
 (global-set-key [kp-next] 'scroll-up)
 (global-set-key [next] 'scroll-up)
-(global-set-key "\M-g" 'goto-line)
 (global-set-key [home] 'beginning-of-line)
 (global-set-key [end] 'end-of-line)
 (global-set-key [delete] 'delete-char)
 (global-set-key [kp-delete] 'delete-char)
-(global-set-key [(meta delete)] '(lambda () (interactive) (backward-or-forward-kill-word -1)))
-(global-set-key [(alt delete)] '(lambda () (interactive) (backward-or-forward-kill-word -1)))
-(global-set-key [M-up] 'enlarge-window)
-(global-set-key [M-down] 'shrink-window)
 (global-set-key [(control o)] 'find-file)
 (global-set-key [(control n)] 'find-file-other-frame)
 (global-set-key [(control s)] 'save-buffer)
@@ -85,9 +79,22 @@
 (global-set-key [(meta q)] 'kill-this-buffer)
 (global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
-(global-set-key [(control z)] 'undo)
 (global-set-key "\C-a" 'mark-whole-buffer)
-(global-set-key (kbd "\C-c \C-c") 'kill-ring-save)
+
+;; C-v
+(global-set-key (kbd "C-v") 'yank)
+(global-set-key (kbd "C-S-v") 'browse-kill-ring)
+
+;; Region bindings mode
+(add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
+(require 'region-bindings-mode)
+(region-bindings-mode-enable)
+(define-key region-bindings-mode-map (kbd "C-p") 'mc/mark-previous-like-this)
+(define-key region-bindings-mode-map (kbd "C-n") 'mc/mark-next-like-this)
+(define-key region-bindings-mode-map (kbd "C-a") 'mc/mark-all-like-this)
+(define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
+(define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
+(define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
 
 ;; search forward with Ctrl-f
 (global-set-key [(control f)] 'isearch-forward)
@@ -182,7 +189,7 @@
 (defun toggle-selective-display ()
   (interactive)
   (set-selective-display (if selective-display nil 1)))
-(global-set-key [f1] 'toggle-selective-display)
+(global-set-key [f11] 'toggle-selective-display)
 
 ;; Redo
 (require 'redo+)
@@ -193,6 +200,8 @@
 ;; Better undo
 (require 'undo-tree)
 (global-undo-tree-mode)
+(global-set-key (kbd "C-z") 'undo-tree-undo)
+(global-set-key (kbd "C-S-z") 'undo-tree-redo)
 (setq undo-tree-visualizer-diff t)
 (setq undo-tree-visualizer-timestamps t)
 
