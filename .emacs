@@ -182,9 +182,6 @@
 ;; Setup eclim
 (require 'setup-eclim)
 
-;; Setup eshell
-;; (require 'setup-eshell)
-
 ;; Setup keys
 (require 'setup-keys)
 

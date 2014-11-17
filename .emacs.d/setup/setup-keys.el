@@ -24,15 +24,6 @@
 
 ;;; Code:
 
-;; Ergoemacs
-(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
-(add-to-list 'load-path "~/.emacs.d/global-set-keybindings")
-(setq ergoemacs-ignore-prev-global nil) ;; Will not ignore any globally defined keybinding
-(require 'ergoemacs-mode)
-(setq ergoemacs-theme nil) ;; Uses Standard Ergoemacs keyboard theme
-(setq ergoemacs-keyboard-layout "us")
-(ergoemacs-mode 1)
-
 ;; Enter changes lines and auto-indents the new line
 (mapc (lambda (mode)
         (add-hook mode '(lambda () (define-key java-mode-map "\C-m" 'newline-and-indent))))
