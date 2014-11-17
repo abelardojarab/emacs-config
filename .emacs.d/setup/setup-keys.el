@@ -24,6 +24,15 @@
 
 ;;; Code:
 
+;; Ergoemacs
+(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
+(setq ergoemacs-theme nil)
+(setq ergoemacs-keyboard-layout "us")
+(setq ergoemacs-use-menus nil)
+(setq ergoemacs-ignore-prev-global nil) ;; Will not ignore any globally defined keybinding
+(require 'ergoemacs-mode)
+(ergoemacs-mode 1)
+
 ;; Windows-like mouse/arrow movement & selection
 (transient-mark-mode t)
 (setq cua-keep-region-after-copy t)
