@@ -79,7 +79,7 @@
 
 ;; search forward with Ctrl-f
 (global-set-key [(control f)] 'isearch-forward)
-(define-key isearch-mode-map [(control f)] (lookup-key isearch-mode-map "\C-f"))
+(define-key isearch-mode-map [(control f)] (lookup-key isearch-mode-map "\C-s"))
 (define-key minibuffer-local-isearch-map [(control f)]
   (lookup-key minibuffer-local-isearch-map "\C-s"))
 
@@ -172,17 +172,6 @@
   (set-selective-display (if selective-display nil 1)))
 (global-set-key [f1] 'toggle-selective-display)
 
-;; Windows-like mouse/arrow movement & selection
-(transient-mark-mode 1)
-(setq cua-keep-region-after-copy t)
-(cua-mode 1)
-(setq shift-select-mode t)
-
-;; As in Windows, replace after typing a letter
-(require 'delsel)
-(delete-selection-mode 1)
-(setq mouse-drag-copy-region nil)
-
 ;; Redo
 (require 'redo+)
 (global-set-key (kbd "C-S-z") 'redo) ; Mac style
@@ -257,6 +246,17 @@
 (require 'eassist)
 (eval-after-load "eassist"
   '(global-set-key (kbd "<C-f4>") 'psw-switch-function))
+
+;; Windows-like mouse/arrow movement & selection
+(transient-mark-mode 1)
+(setq cua-keep-region-after-copy t)
+(setq shift-select-mode t)
+(cua-mode 1)
+
+;; As in Windows, replace after typing a letter
+(require 'delsel)
+(delete-selection-mode 1)
+(setq mouse-drag-copy-region nil)
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
