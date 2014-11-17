@@ -248,8 +248,9 @@
   '(global-set-key (kbd "<C-f4>") 'psw-switch-function))
 
 ;; Windows-like mouse/arrow movement & selection
-(transient-mark-mode 1)
+(transient-mark-mode t)
 (setq cua-keep-region-after-copy t)
+(setq cua-enable-cua-keys t)
 (setq shift-select-mode t)
 (cua-mode 1)
 
