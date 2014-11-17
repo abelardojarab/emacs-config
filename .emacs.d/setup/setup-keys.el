@@ -36,6 +36,10 @@
 (delete-selection-mode 1)
 (setq mouse-drag-copy-region nil)
 
+;; Multiple cursors
+(add-to-list 'load-path "~/.emacs.d/multiple-cursors")
+(require 'multiple-cursors)
+
 ;; Enter changes lines and auto-indents the new line
 (mapc (lambda (mode)
         (add-hook mode '(lambda () (define-key java-mode-map "\C-m" 'newline-and-indent))))
