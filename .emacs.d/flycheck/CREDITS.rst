@@ -5,6 +5,8 @@
 The following people—listed in alphabetical order—contributed substantial code
 to Flycheck:
 
+- `Alain Kalker <https://github.com/ackalker>`_ (fix quoting for
+  `flycheck-compile`)
 - `Atila Neves <https://github.com/atilaneves>`_ (include paths for DMD)
 - `Bozhidar Batsov <https://github.com/bbatsov>`_ (improved Flycheck menu,
   RuboCop syntax checker, improvements to Ruby)
@@ -40,6 +42,7 @@ to Flycheck:
 - `Peter Vasil <https://github.com/ptrv>`_ (Lua and Go build/test syntax
   checkers)
 - `Robert Zaremba <https://github.com/robert-zaremba>`_ (gofmt syntax checker)
+- `Sean Gillespie <https://github.com/swgillespie>`_ (help messages in Rust)
 - `Sean Salmon <https://github.com/phatcabbage>`_ (platform-independent
   directory handling)
 - `Sebastian Wiesner <https://github.com/lunaryorn>`_ (primary maintainer)

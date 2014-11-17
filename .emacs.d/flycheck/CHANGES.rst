@@ -8,14 +8,22 @@ master (in development)
   - Never allow use of disabled checkers anymore, even with
     `flycheck-select-checker`
 
+- New features:
+
+  - `flycheck-ert.el` library to write unit tests for Flycheck extensions
+
 - Improvements:
 
   - Automatically disable syntax checkers that report too many errors [GH-476]
   - Reduce filesystem access when parsing errors to improve parsing speed
+  - Add explicit `load-path` inheritance to `flycheck-emacs-lisp-load-path`, via
+    new `inherit` value [GH-511]
+  - Parse help messages from `rustc` [GH-517]
 
 - Bug fixes:
 
   - Properly parse notes in `sh-shellcheck` [GH-508]
+  - Fix shell quoting in `flycheck-compile` [GH-522] [GH-523]
 
 0.21 (Oct 26, 2014)
 -------------------
