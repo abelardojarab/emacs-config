@@ -53,7 +53,6 @@
                                   (current-buffer)))))
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-;; (add-to-list 'ac-modes 'org-mode)
 (setq org-startup-folded 'nofold)
 (setq org-startup-indented t)
 (setq org-startup-with-inline-images t)

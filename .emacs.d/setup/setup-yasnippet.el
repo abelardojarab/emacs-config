@@ -53,7 +53,7 @@
 
 ;; Provide headers or templates for new files using Yasnippet
 (defun yas--expand-by-uuid (mode uuid)
-  "Exapnd snippet template in MODE by its UUID"
+  "Expand snippet template in MODE by its UUID"
   (yas--expand-snippet
    (yas--template-content
     (yas--get-template-by-uuid mode uuid))))
@@ -78,8 +78,8 @@
   "Expand Content Auto-inserted as yasnippet Templete,
   so That WE could use yasnippet in autoinsert mode "
   (let ((is-new-File (and (not buffer-read-only)
-                            (or (eq this-command 'auto-insert)
-                               (and auto-insert (bobp) (eobp))))))
+                          (or (eq this-command 'auto-insert)
+                              (and auto-insert (bobp) (eobp))))))
     ad-do-it
     (let ((old-point-max (point-max)))
       (when is-new-File
@@ -129,7 +129,6 @@
             (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
                                    (yas-snippet-dirs)))
             ac-modes))))
-
 ;; Expand snippet synchronously
 (defvar yas/recursive-edit-flag nil)
 (defun yas-expand-sync ()
