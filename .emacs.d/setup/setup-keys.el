@@ -24,6 +24,18 @@
 
 ;;; Code:
 
+;; Windows-like mouse/arrow movement & selection
+(transient-mark-mode t)
+(setq cua-keep-region-after-copy t)
+(setq cua-enable-cua-keys t)
+(setq shift-select-mode t)
+(cua-mode 1)
+
+;; As in Windows, replace after typing a letter
+(require 'delsel)
+(delete-selection-mode 1)
+(setq mouse-drag-copy-region nil)
+
 ;; Enter changes lines and auto-indents the new line
 (mapc (lambda (mode)
         (add-hook mode '(lambda () (define-key java-mode-map "\C-m" 'newline-and-indent))))
@@ -246,18 +258,6 @@
 (require 'eassist)
 (eval-after-load "eassist"
   '(global-set-key (kbd "<C-f4>") 'psw-switch-function))
-
-;; Windows-like mouse/arrow movement & selection
-(transient-mark-mode t)
-(setq cua-keep-region-after-copy t)
-(setq cua-enable-cua-keys t)
-(setq shift-select-mode t)
-(cua-mode 1)
-
-;; As in Windows, replace after typing a letter
-(require 'delsel)
-(delete-selection-mode 1)
-(setq mouse-drag-copy-region nil)
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
