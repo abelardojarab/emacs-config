@@ -84,6 +84,7 @@
 (global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key "\C-a" 'mark-whole-buffer)
+(global-set-key [f12] 'ecb-redraw-layout)
 
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
