@@ -108,13 +108,14 @@
   (let ((i 0))
     (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
       (setq i (1+ i)) (previous-buffer))))
-(global-set-key (kbd "C-2")  'xah-previous-user-buffer)
-(global-set-key (kbd "C-3")  'xah-next-user-buffer)
+(global-set-key (kbd "C-3")  'xah-previous-user-buffer)
+(global-set-key (kbd "C-4")  'xah-next-user-buffer)
 
 ;; Jump between windows
 (require 'popup-select-window)
 (global-set-key (kbd "C-0") 'psw-switch-buffer)
-(global-set-key (kbd "C-1") 'popup-select-window)
+(global-set-key (kbd "C-1") 'psw-switch-function)
+(global-set-key (kbd "C-2") 'popup-select-window)
 
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
