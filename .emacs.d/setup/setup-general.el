@@ -84,10 +84,14 @@
   ;; Custom $PATH
   (when (file-directory-p "c:/cygwin/bin")
     (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
-    (add-to-list 'exec-path "c:/cygwin/bin"))
-  (if (file-directory-p "c:/cygwin64/bin")
-      (setenv "PATH" (concat "c:/cygwin64/bin:" (getenv "PATH")))
-    (add-to-list 'exec-path "c:/cygwin64/bin"))
+    (add-to-list 'exec-path "c:/cygwin/bin")
+    (setq explicit-shell-file-name "C:/cygwin/bin/bash.exe")
+    (setq shell-file-name explicit-shell-file-name))
+  (when (file-directory-p "c:/cygwin64/bin")
+    (setenv "PATH" (concat "c:/cygwin64/bin:" (getenv "PATH")))
+    (add-to-list 'exec-path "c:/cygwin64/bin")
+    (setq explicit-shell-file-name "C:/cygwin64/bin/bash.exe")
+    (setq shell-file-name explicit-shell-file-name))
 
   (require 'w32browser-dlgopen)
   (setq dlgopen-executable-path "~/.emacs.d/elisp/getfile.exe")))
