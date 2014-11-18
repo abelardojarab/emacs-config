@@ -113,6 +113,7 @@
                  '(project unloaded))
 
 ;; Include settings
+(add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
 (ignore-errors
   (require 'semantic/bovine/c))
 (require 'semantic/bovine/gcc)

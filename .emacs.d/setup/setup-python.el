@@ -41,15 +41,17 @@
 (setq py-electric-colon-active t)
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'semantic-default-python-setup)
 
-;; Python Hook
+;; Restore semantic
+(add-hook 'python-mode-hook 'wisent-python-default-setup)
+
+;; Python hook
 (add-hook 'python-mode-hook
           (function (lambda ()
                       (setq indent-tabs-mode nil
                             tab-width 2))))
-(setq-default python-indent 2)
-(setq-default python-guess-indent nil)
+(add-hook 'python-mode-hook '(lambda ()
+                               (setq python-indent 2)))
 
 ;; Jedi settings
 (add-to-list 'load-path "~/.emacs.d/ctable")
@@ -104,9 +106,6 @@
 (set-face-attribute 'jedi-eldoc:highlight-function-argument nil
                     :foreground "green")
 (add-hook 'python-mode-hook 'jedi-eldoc-mode)
-
-;; Restore semantic
-(add-hook 'python-mode-hook 'wisent-python-default-setup)
 
 (provide 'setup-python)
 ;;; setup-python.el ends here
