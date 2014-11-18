@@ -144,23 +144,6 @@
             (or subtree-end (point-max)))
         next-headline))))
 
-;; I tend not to consult the agenda often enough, so let’s show it after Emacs is idle for a while.
-(defun nox/jump-to-org-agenda ()
-  (interactive)
-  (let ((buf (get-buffer "*Org Agenda*"))
-        wind)
-    (if buf
-        (if (setq wind (get-buffer-window buf))
-            (select-window wind)
-          (if (called-interactively-p)
-              (progn
-                (select-window (display-buffer buf t t))
-                (org-fit-window-to-buffer))
-            (with-selected-window (display-buffer buf)
-              (org-fit-window-to-buffer))))
-      (call-interactively 'org-agenda-list))))
-(run-with-idle-timer 2400 t 'nox/jump-to-org-agenda)
-
 ;; Org Capture
 (defun org-capture-todo (note)
   (let* ((org-file org-default-notes-file)
