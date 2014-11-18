@@ -52,8 +52,11 @@
       ecb-tip-of-the-day nil
       ecb-tip-of-the-day-file "~/.emacs.cache/auto-save-list/.ecb-tip-of-day.el"
       ecb-primary-secondary-mouse-buttons 'mouse-1--mouse-2
-      semantic-decoration-styles (list '("semantic-decoration-on-includes" . t)
-                                       '("semantic-tag-boundary" . t)))
+      semantic-decoration-styles (list
+                                  '("semantic-decoration-on-protected-members" . t)
+                                  '("semantic-decoration-on-private-members" . t)
+                                  '("semantic-decoration-on-includes" . t)
+                                  '("semantic-tag-boundary" . t)))
 
 (add-hook 'ecb-show-ecb-windows-before-hook
           'ecb-enlarge-frame-width-before-show)
@@ -72,32 +75,32 @@
 (defun ecb-enlarge-frame-width-before-show ()
   "Enlarge frame width before ecb shows layout."
   (if (and (ecb-windows-all-hidden)
-         (<= (+ (frame-pixel-width) (* (frame-char-width)
-                                      (+ ecb-windows-width 2)))
-            (display-pixel-width)))
+           (<= (+ (frame-pixel-width) (* (frame-char-width)
+                                         (+ ecb-windows-width 2)))
+               (display-pixel-width)))
       (set-frame-width (selected-frame) (+ (frame-width) (+ ecb-windows-width 2)))))
 (defun ecb-shrink-frame-width-before-hide ()
   "Shrink frame width before ecb hide layout."
   (if (and (not (ecb-windows-all-hidden))
 
-         (not (eq (frame-pixel-width)
-                (display-pixel-width))))
+           (not (eq (frame-pixel-width)
+                    (display-pixel-width))))
       (if (< (- (frame-width) (+ ecb-windows-width 2)) initial-frame-width)
           (set-frame-width (selected-frame) initial-frame-width)
         (set-frame-width (selected-frame) (- (frame-width) (+ ecb-windows-width 2))))))
 (defun ecb-enlarge-frame-width-before-activate ()
   "Enlarge frame width when ecb active and need it to."
   (let ((use-last-win-conf (and ecb-last-window-config-before-deactivation
-                              (equal ecb-split-edit-window-after-start
-                                     'before-deactivation)
-                              (not (ecb-window-configuration-invalidp
-                                  ecb-last-window-config-before-deactivation)))))
+                                (equal ecb-split-edit-window-after-start
+                                       'before-deactivation)
+                                (not (ecb-window-configuration-invalidp
+                                      ecb-last-window-config-before-deactivation)))))
     (unless (or (and use-last-win-conf
-                  (eq (nth 5 ecb-last-window-config-before-deactivation)
-                      ecb-windows-hidden-all-value))
-               (> (+ (frame-pixel-width) (* (frame-char-width)
-                                            (+ ecb-windows-width 2)))
-                  (display-pixel-width)))
+                     (eq (nth 5 ecb-last-window-config-before-deactivation)
+                         ecb-windows-hidden-all-value))
+                (> (+ (frame-pixel-width) (* (frame-char-width)
+                                             (+ ecb-windows-width 2)))
+                   (display-pixel-width)))
       (set-frame-width (selected-frame) (+ (frame-width) (+ ecb-windows-width 2))))))
 
 ;; reference path-to-ecb/ecb-layout-defs.el
@@ -129,7 +132,6 @@ If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
   (ecb-set-sources-buffer)
-  ;; (ecb-set-speedbar-buffer)
   (ecb-split-ver 0.5)
   (ecb-set-analyse-buffer)
   (select-window (next-window (next-window)))
@@ -282,7 +284,7 @@ little more place. "
 
 ;; Nicer fonts for speedbar when in GUI
 (when (and (window-system)
-         (find-font (font-spec :name "Consolas")))
+           (find-font (font-spec :name "Consolas")))
   ;; keep monospace buttons, but smaller height
   (set-face-attribute 'speedbar-button-face nil :height 100)
 
