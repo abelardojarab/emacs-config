@@ -308,8 +308,9 @@
 (require 'highlight-blocks)
 
 ;; Higlight indentation
-(add-to-list 'load-path "~/.emacs.d/Highlight-Indentation-for-Emacs")
+(add-to-list 'load-path "~/.emacs.d/highlight-indentation")
 (require 'highlight-indentation)
+(add-hook 'python-mode-hook 'highlight-indentation)
 
 ;; Indent guide
 (add-to-list 'load-path "~/.emacs.d/indent-guide")
