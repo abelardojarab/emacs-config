@@ -36,9 +36,13 @@
 
 (add-to-list 'load-path "~/.emacs.d/python-mode")
 (require 'python-mode)
+(setq py-split-windows-on-execute-p nil)
+(setq py-electric-colon-active t)
+(if (equal system-type 'windows-nt)
+    (if (file-exists-p "C:/Program Files (x86)/WinPython-32bit-2.7.6.4/python-2.7.6/python.exe")
+        (setq python-shell-interpreter "C:\\Program Files (x86)\\WinPython-32bit-2.7.6.4\\python-2.7.6\\python.exe")))
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-(setq py-electric-colon-active t)
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
 
