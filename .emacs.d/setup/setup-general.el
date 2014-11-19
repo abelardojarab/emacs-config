@@ -526,6 +526,7 @@ not need to be wrapped, move point to the next line and return t."
         t))))
 
 ;; Improved buffer menu
+(load "~/.emacs.d/elisp/buff-menu.el")
 (require 'buff-menu+)
 
 (provide 'setup-general)
