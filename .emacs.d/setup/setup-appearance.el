@@ -218,9 +218,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
@@ -267,41 +267,36 @@
 
 ;; Adjust Emacs size according to resolution
 ;; Next code work with Emacs 21.4, 22.3, 23.1.
-(when window-system
-  (add-hook 'window-setup-hook
-            (let ((px (display-pixel-width))
-                  (py (display-pixel-height))
-                  (fx (frame-char-width))
-                  (fy (frame-char-height))
-                  tx ty)
-              ;; Next formulas discovered empiric on Windows host with default font.
-              (setq tx (- (/ px fx) 3))
-              (setq ty (- (/ py fy) 8))
-              (setq initial-frame-alist '((top . 2) (left . 2)))
-              (add-to-list 'initial-frame-alist (cons 'width tx))
-              (add-to-list 'initial-frame-alist (cons 'height ty))
-              t)))
-
-;; Maximize window if function is found
-(if (fboundp 'toggle-frame-maximized)
-    (add-hook 'emacs-startup-hook 'toggle-frame-maximized))
 
 (defun x11-maximize-frame ()
   "Maximize the current frame (to full screen)"
   (interactive)
   (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
-  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0)))
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+  (ecb-redraw-layout))
 
 (defun w32-maximize-frame ()
   "Maximize the current frame (to full screen)"
   (interactive)
-  (w32-send-sys-command #xf030))
+  (w32-send-sys-command #xf030)
+  (ecb-redraw-layout))
 
-;; highlight indentation using vertical lines, old version
-;; (load "~/.emacs.d/elisp/00_func.el")
-;; (require 'aux-line)
-;; (add-hook 'js2-mode-hook 'indent-vline)
-;; (add-hook 'python-mode-hook 'indent-vline)
+(when window-system
+  (if (equal system-type 'windows-nt)
+      (add-hook 'window-setup-hook 'w32-maximize-frame)
+    (add-hook 'window-setup-hook
+              (let ((px (display-pixel-width))
+                    (py (display-pixel-height))
+                    (fx (frame-char-width))
+                    (fy (frame-char-height))
+                    tx ty)
+                ;; Next formulas discovered empiric on Windows host with default font.
+                (setq tx (- (/ px fx) 3))
+                (setq ty (- (/ py fy) 8))
+                (setq initial-frame-alist '((top . 2) (left . 2)))
+                (add-to-list 'initial-frame-alist (cons 'width tx))
+                (add-to-list 'initial-frame-alist (cons 'height ty))
+                t))))
 
 ;; Highlight blocks
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
@@ -455,11 +450,11 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-       (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
-           (dolist (regexp regexps)
-             (when (string-match regexp string)
-               (throw 'matched t)))))))
+     (catch 'matched
+       (let ((inhibit-changing-match-data t)) ; small optimization
+         (dolist (regexp regexps)
+           (when (string-match regexp string)
+             (throw 'matched t)))))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

@@ -252,9 +252,9 @@
 
 ;; Function arguments
 (add-to-list 'load-path "~/.emacs.d/functions-args")
-;; (load "~/.emacs.d/function-args/function-args.el")
-;; (require 'function-args)
-;; (fa-config-default)
+(load "~/.emacs.d/function-args/function-args.el")
+(require 'function-args)
+(fa-config-default)
 
 ;; Formatting
 (require 'zjl-hl)
