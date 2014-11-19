@@ -57,7 +57,7 @@
 (global-semantic-tag-folding-mode)
 
 ;; Don't reparse really big buffers.
-(setq semantic-idle-scheduler-max-buffer-size 10000)
+(setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Small workloads
 (setq semantic-idle-scheduler-idle-time 10)
