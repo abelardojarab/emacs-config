@@ -70,6 +70,7 @@
 (add-to-list 'sml/hidden-modes " Wrap")
 (add-to-list 'sml/hidden-modes " FlyC")
 (add-to-list 'sml/hidden-modes " FlyC-")
+(add-to-list 'sml/hidden-modes " ll")
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
