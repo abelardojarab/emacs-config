@@ -43,10 +43,6 @@
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
 
-;; Windows specifics
-(when (equal system-type 'windows-nt)
-  (setenv "PYTHONPATH"  "~\workspace\pythonlibs\lib\python2.7\site-packages;C:\Python27\Lib\site-packages;C:\cygwin64\lib\python2.7\site-packages"))
-
 ;; Restore semantic
 (add-hook 'python-mode-hook 'wisent-python-default-setup)
 
