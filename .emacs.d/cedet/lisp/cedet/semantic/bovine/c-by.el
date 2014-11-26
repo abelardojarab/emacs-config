@@ -3,7 +3,7 @@
 ;; Copyright (C) 1999-2012, 2014 Free Software Foundation, Inc.
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
-;; Created: 2014-09-26 08:26:20-0700
+;; Created: 2014-11-26 12:01:16-0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -352,9 +352,20 @@
 	  (nth 0 vals))
 	 'label))
       )
+     (FRIEND
+      symbol
+      punctuation
+      "\\`[;]\\'"
+      ,(semantic-lambda
+	(semantic-tag
+	 (nth 1 vals)
+	 'friend))
+      )
      (var-or-fun)
      (FRIEND
       func-decl
+      punctuation
+      "\\`[;]\\'"
       ,(semantic-lambda
 	(semantic-tag
 	 (car
@@ -364,6 +375,8 @@
      (FRIEND
       CLASS
       symbol
+      punctuation
+      "\\`[;]\\'"
       ,(semantic-lambda
 	(semantic-tag
 	 (nth 2 vals)

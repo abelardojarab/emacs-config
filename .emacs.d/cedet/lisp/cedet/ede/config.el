@@ -391,7 +391,14 @@ the preprocessor map, and include paths.")
   "Class to mix into a configuration for compilation.")
 
 (defclass ede-project-with-config-java ()
-  ()
+  ((classpath :initarg :classpath
+	      :initform nil
+	      :type list
+	      :group java
+	      :custom (repeat (string :tag "Classpath"))
+	      :documentation
+	      "The default classpath used within a project.
+ All files listed in the local path are full paths to files."))
   "Class to mix into a project to support java.
 This brings in methods to support Semantic querying the
 java class path.")

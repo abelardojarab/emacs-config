@@ -1,6 +1,6 @@
 ;;; semantic/grammar.el --- Major mode framework for Semantic grammars
 
-;; Copyright (C) 2002-2005, 2007-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2005, 2007-2014 Free Software Foundation, Inc.
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
@@ -270,17 +270,19 @@ That is tag names plus names defined in tag attribute `:rest'."
 No argument or nil as argument means use the current buffer."
   (file-name-nondirectory (buffer-file-name buffer)))
 
-(defun semantic-grammar-package ()
+(defun semantic-grammar-package (&optional fromfile)
   "Return the %package value as a string.
-If there is no %package statement in the grammar, return a default
-package name derived from the grammar file name.  For example, the
-default package name for the grammar file foo.wy is foo-wy, and for
-foo.by it is foo-by."
-  (or (semantic-grammar-first-tag-name 'package)
+If there is no %package statement in the grammar, or if FROMFILE
+is non-nil, return a default package name derived from the
+grammar file name.  For example, the default package name for the
+grammar file foo.wy is foo-wy, and for foo.by it is foo-by."
+  (let ((pkgtoken (semantic-grammar-first-tag-name 'package)))
+    (if (and (not fromfile) pkgtoken)
+	pkgtoken
       (let* ((file (semantic-grammar-buffer-file))
              (ext  (file-name-extension file))
              (i    (string-match (format "\\([.]\\)%s\\'" ext) file)))
-        (concat (substring file 0 i) "-" ext))))
+        (concat (substring file 0 i) "-" ext)))))
 
 (defsubst semantic-grammar-languagemode ()
   "Return the %languagemode value as a list of symbols or nil."
@@ -934,29 +936,32 @@ Lisp code."
                 (make-backup-files t)
                 (vc-make-backup-files t))
             (kill-buffer (current-buffer)))
-        ;; If running interactively, eval declarations and epilogue
-        ;; code, then pop to the buffer visiting the generated file.
-        (eval-region (point) (point-max))
-	;; Loop over the defvars and eval them explicitly to force
-	;; them to be evaluated and ready to use.
-        (goto-char (point-min))
-	(while (re-search-forward "(defvar " nil t)
-	  (eval-defun nil))
-	;; Move cursor to a logical spot in the generated code.
-        (goto-char (point-min))
-        (pop-to-buffer (current-buffer))
-        ;; The generated code has been evaluated and updated into
-        ;; memory.  Now find all buffers that match the major modes we
-        ;; have created this language for, and force them to call our
-        ;; setup function again, refreshing all semantic data, and
-        ;; enabling them to work with the new code just created.
-;;;; FIXME?
-        ;; At this point, I don't know any user's defined setup code :-(
-        ;; At least, what I can do for now, is to run the generated
-        ;; parser-install function.
-        (semantic-map-mode-buffers
-         (semantic-grammar-setupfunction)
-         (semantic-grammar-languagemode)))
+
+	(let ((setupfcn (with-current-buffer semantic--grammar-input-buffer
+			  (intern (semantic-grammar-setupfunction))))
+	      (mode (with-current-buffer semantic--grammar-input-buffer
+		      (semantic-grammar-languagemode))))
+	  ;; If running interactively, eval declarations and epilogue
+	  ;; code, then pop to the buffer visiting the generated file.
+	  (eval-region (point) (point-max))
+	  ;; Move cursor to a logical spot in the generated code.
+	  (goto-char (point-min))
+	  (pop-to-buffer (current-buffer))
+	  ;; The generated code has been evaluated and updated into
+	  ;; memory.  Now find all buffers that match the major modes we
+	  ;; have created this language for, and force them to call our
+	  ;; setup function again, refreshing all semantic data, and
+	  ;; enabling them to work with the new code just created.
+
+	  ;; At this point, I don't know any user's defined setup code :-(
+	  ;; At least, what I can do for now, is to run the generated
+	  ;; parser-install function.
+	  (semantic-map-mode-buffers 
+	   (lambda ()
+	     (semantic-clear-toplevel-cache)
+	     (funcall setupfcn))
+	   mode)
+	  ))
       )
     ;; Return the name of the generated package file.
     output))
@@ -1195,7 +1200,6 @@ END is the limit of the search."
     (define-key km ":" 'semantic-grammar-electric-punctuation)
 
     (define-key km "\t"       'semantic-grammar-indent)
-    (define-key km "\M-\t"    'semantic-grammar-complete)
     (define-key km "\C-c\C-c" 'semantic-grammar-create-package)
     (define-key km "\C-cm"    'semantic-grammar-find-macro-expander)
     (define-key km "\C-cik"    'semantic-grammar-insert-keyword)
@@ -1208,7 +1212,7 @@ END is the limit of the search."
 (defvar semantic-grammar-menu
   '("Grammar"
     ["Indent Line" semantic-grammar-indent]
-    ["Complete Symbol" semantic-grammar-complete]
+    ["Complete Symbol" completion-at-point]
     ["Find Macro" semantic-grammar-find-macro-expander]
     "--"
     ["Insert %keyword" semantic-grammar-insert-keyword]
@@ -1316,7 +1320,7 @@ the change bounds to encompass the whole nonterminal tag."
   (semantic-grammar-wy--install-parser)
   (setq semantic-lex-comment-regex ";;"
         semantic-lex-analyzer 'semantic-grammar-lexer
-        semantic-type-relation-separator-character '(":")
+        semantic-type-relation-separator-character '()
         semantic-symbol->name-assoc-list
         '(
           (code         . "Setup Code")
@@ -1483,39 +1487,6 @@ Use the Lisp or grammar indenter depending on point location."
   (self-insert-command 1)
   (save-excursion
     (semantic-grammar-indent)))
-
-(defun semantic-grammar-complete ()
-  "Attempt to complete the symbol under point.
-Completion is position sensitive.  If the cursor is in a match section of
-a rule, then nonterminals symbols are scanned.  If the cursor is in a Lisp
-expression then Lisp symbols are completed."
-  (interactive)
-  (if (semantic-grammar-in-lisp-p)
-      ;; We are in lisp code.  Do lisp completion.
-      (let ((completion-at-point-functions
-             (append '(lisp-completion-at-point)
-                     completion-at-point-functions)))
-        (completion-at-point))
-    ;; We are not in lisp code.  Do rule completion.
-    (let* ((nonterms (semantic-find-tags-by-class 'nonterminal (current-buffer)))
-           (sym (car (semantic-ctxt-current-symbol)))
-           (ans (try-completion sym nonterms)))
-      (cond ((eq ans t)
-             ;; All done
-             (message "Symbols is already complete"))
-            ((and (stringp ans) (string= ans sym))
-             ;; Max matchable.  Show completions.
-	     (with-output-to-temp-buffer "*Completions*"
-	       (display-completion-list (all-completions sym nonterms)))
-	     )
-            ((stringp ans)
-             ;; Expand the completions
-             (forward-sexp -1)
-             (delete-region (point) (progn (forward-sexp 1) (point)))
-             (insert ans))
-            (t (message "No Completions."))
-            ))
-    ))
 
 (defun semantic-grammar-insert-keyword (name)
   "Insert a new %keyword declaration with NAME.
@@ -1758,7 +1729,7 @@ Only tags of type 'nonterminal will be so marked."
     (if (semantic-grammar-in-lisp-p)
         (with-mode-local emacs-lisp-mode
           (semantic-ctxt-current-class-list))
-      '(nonterminal keyword))))
+      '(nonterminal token keyword))))
 
 (define-mode-local-override semantic-ctxt-current-mode
   semantic-grammar-mode (&optional point)
@@ -1898,14 +1869,15 @@ Optional argument COLOR determines if color is added to the text."
       context-return)))
 
 (define-mode-local-override semantic-analyze-possible-completions
-  semantic-grammar-mode (context)
-  "Return a list of possible completions based on CONTEXT."
+  semantic-grammar-mode (context &rest flags)
+  "Return a list of possible completions based on CONTEXT.
+Optional FLAGS are ignored."
   (require 'semantic/analyze/complete)
   (if (semantic-grammar-in-lisp-p)
       (with-mode-local emacs-lisp-mode
 	(semantic-analyze-possible-completions context))
     (with-current-buffer (oref context buffer)
-      (let* ((prefix (car (oref context :prefix)))
+      (let* ((prefix (car (reverse (oref context :prefix))))
 	     (completetext (cond ((semantic-tag-p prefix)
 				  (semantic-tag-name prefix))
 				 ((stringp prefix)

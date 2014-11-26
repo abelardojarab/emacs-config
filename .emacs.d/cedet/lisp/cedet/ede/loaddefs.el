@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (ede-android-project ede-android-load) "ede/android"
-;;;;;;  "android.el" (21510 8044 453 0))
+;;;;;;  "android.el" (21622 12609 54 0))
 ;;; Generated autoloads from android.el
 
 (autoload 'ede-android-load "ede/android" "\
@@ -327,7 +327,7 @@ Argument NEWVERSION is the version number to use in the current project.
 ;;;;;;  "proj-archive.el" "proj-aux.el" "proj-comp.el" "proj-elisp.el"
 ;;;;;;  "proj-info.el" "proj-misc.el" "proj-obj.el" "proj-prog.el"
 ;;;;;;  "proj-scheme.el" "proj-shared.el" "proj.el" "project-am.el"
-;;;;;;  "shell.el" "source.el" "srecode.el") (21603 52920 393173
+;;;;;;  "shell.el" "source.el" "srecode.el") (21622 12679 789986
 ;;;;;;  0))
 
 ;;;***

@@ -1,6 +1,6 @@
 ;;; semantic/db-cscope.el --- Use CSCOPE databases w/ Semantic
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011 Eric M. Ludlam
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2014 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -73,7 +73,8 @@ values."
 When CScope is not available for this directory, display a message
 if optional DONT-ERR-IF-NOT-AVAILABLE is non-nil; else throw an error."
   (interactive "P")
-  (if (cedet-cscope-support-for-directory (semantic-symref-calculate-rootdir))
+  (if (and (file-exists-p  (semantic-symref-calculate-rootdir))
+	   (cedet-cscope-support-for-directory (semantic-symref-calculate-rootdir)))
       (setq
        ;; Add to the system database list.
        semanticdb-project-system-databases

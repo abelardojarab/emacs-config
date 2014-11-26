@@ -3,7 +3,7 @@
 ;; Copyright (C) 1999-2012, 2014 Free Software Foundation, Inc.
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
-;; Created: 2014-09-15 09:51:59-0700
+;; Created: 2014-09-26 08:26:20-0700
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -918,7 +918,11 @@
       ,(semantic-lambda
 	(semantic-tag-new-type
 	 (car
-	  (nth 1 vals)) nil nil nil :constant-flag
+	  (nth 1 vals)) nil nil nil :template-specifier
+	 (plist-get
+	  (nth
+	   2
+	   (nth 1 vals)) :template-specifier) :constant-flag
 	 (if
 	     (member
 	      "const"
@@ -933,7 +937,9 @@
 	 (car
 	  (nth 4 vals)) :pointer
 	 (car
-	  (nth 3 vals))))
+	  (nth 3 vals)) :typevar
+	 (car
+	  (nth 5 vals))))
       )
      ) ;; end template-type
 

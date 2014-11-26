@@ -120,3 +120,32 @@ int func(void)
 }
 
 
+// ------------------
+// Example from Dixon Ryan
+
+
+namespace NS2 {
+   class MyClass {
+
+   public:
+      void myFunction() { }
+   };
+}
+
+typedef class NS2::MyClass* MyClassHandle;
+
+int dixon ( void ) {
+  MyClassHandle mch = getMyClassHandle();
+  NS2::MyClass* mcptr = getMyClassHandle();
+
+  mch-> // -8-
+    ; // #8# ( "myFunction" )
+
+  mcptr-> // -9-
+    ; // #9# ( "myFunction" )
+
+  deleteMyClassHandle(mch);
+
+  return 0;
+}
+

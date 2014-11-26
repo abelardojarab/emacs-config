@@ -1,6 +1,6 @@
 ;;; semantic/ede-grammar.el --- EDE support for Semantic Grammar Files
 
-;; Copyright (C) 2003-2004, 2007-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2003-2004, 2007-2014 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: project, make
@@ -134,6 +134,7 @@ Lays claim to all -by.el, and -wy.el files."
     (call-next-method) ; The usual thing.
     ))
 
+
 (defmethod project-compile-target ((obj semantic-ede-proj-target-grammar))
   "Compile all sources in a Lisp target OBJ."
   (let* ((cb (current-buffer))
@@ -187,7 +188,7 @@ Lays claim to all -by.el, and -wy.el files."
     (insert
      (mapconcat (lambda (src)
 		  (with-current-buffer (find-file-noselect src)
-		    (concat (semantic-grammar-package) ".el")))
+		    (concat (semantic-grammar-package t) ".el")))
 		(oref this source)
 		" ")))
   )

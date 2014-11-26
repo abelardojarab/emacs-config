@@ -1425,9 +1425,8 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 	     (org-export-get-footnote-number footnote-reference info)))
     ;; Use \footnotemark if reference is within another footnote
     ;; reference, footnote definition or table cell.
-    ((loop for parent in (org-export-get-genealogy footnote-reference)
-	   thereis (memq (org-element-type parent)
-			 '(footnote-reference footnote-definition table-cell)))
+    ((org-element-lineage footnote-reference
+			  '(footnote-reference footnote-definition table-cell))
      "\\footnotemark")
     ;; Otherwise, define it with \footnote command.
     (t
@@ -3164,19 +3163,20 @@ Return PDF file name or an error if it couldn't be produced."
 	    (error (format "PDF file %s wasn't produced" pdffile))
 	  ;; Else remove log files, when specified, and signal end of
 	  ;; process to user, along with any error encountered.
-	  (when (and (not snippet) org-latex-remove-logfiles)
-	    (dolist (file (directory-files
-			   out-dir t
-			   (concat (regexp-quote base-name)
-				   "\\(?:\\.[0-9]+\\)?"
-				   "\\."
-				   (regexp-opt org-latex-logfiles-extensions))))
-	      (delete-file file)))
-	  (message (concat "PDF file produced"
-			   (cond
-			    ((eq warnings 'error) " with errors.")
-			    (warnings (concat " with warnings: " warnings))
-			    (t ".")))))
+	  (unless snippet
+	    (when org-latex-remove-logfiles
+	      (dolist (file (directory-files
+			     out-dir t
+			     (concat (regexp-quote base-name)
+				     "\\(?:\\.[0-9]+\\)?"
+				     "\\."
+				     (regexp-opt org-latex-logfiles-extensions))))
+		(delete-file file)))
+	    (message (concat "PDF file produced"
+			     (cond
+			      ((eq warnings 'error) " with errors.")
+			      (warnings (concat " with warnings: " warnings))
+			      (t "."))))))
 	;; Return output file name.
 	pdffile))))
 

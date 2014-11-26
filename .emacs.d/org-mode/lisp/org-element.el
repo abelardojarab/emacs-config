@@ -5698,7 +5698,7 @@ Providing it allows for quicker computation."
 	 (if (not (member (org-element-property :key element)
 			  org-element-document-properties))
 	     (throw 'objects-forbidden element)
-	   (beginning-of-line)
+	   (goto-char (org-element-property :begin element))
 	   (search-forward ":")
 	   (if (and (>= pos (point)) (< pos (line-end-position)))
 	       (narrow-to-region (point) (line-end-position))
@@ -5811,6 +5811,30 @@ Providing it allows for quicker computation."
 		      (t (throw 'exit next)))))))
 	   ;; Store results in cache, if applicable.
 	   (org-element--cache-put element cache)))))))
+
+(defun org-element-lineage (blob &optional types with-self)
+  "List all ancestors of a given element or object.
+
+BLOB is an object or element.
+
+When optional argument TYPES is a list of symbols, return the
+first element or object in the lineage whose type belongs to that
+list.
+
+When optional argument WITH-SELF is non-nil, lineage includes
+BLOB itself as the first element, and TYPES, if provided, also
+apply to it.
+
+When BLOB is obtained through `org-element-context' or
+`org-element-at-point', only ancestors from its section can be
+found.  There is no such limitation when BLOB belongs to a full
+parse tree."
+  (let ((up (if with-self blob (org-element-property :parent blob)))
+	ancestors)
+    (while (and up (not (memq (org-element-type up) types)))
+      (unless types (push up ancestors))
+      (setq up (org-element-property :parent up)))
+    (if types up (nreverse ancestors))))
 
 (defun org-element-nested-p (elem-A elem-B)
   "Non-nil when elements ELEM-A and ELEM-B are nested."

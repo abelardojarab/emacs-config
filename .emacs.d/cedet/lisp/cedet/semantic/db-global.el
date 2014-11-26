@@ -1,6 +1,6 @@
 ;;; semantic/db-global.el --- Semantic database extensions for GLOBAL
 
-;; Copyright (C) 2002-2006, 2008-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2006, 2008-2014 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
@@ -90,7 +90,8 @@ MODE is the major mode to support."
 When GNU Global is not available for this directory, display a message
 if optional DONT-ERR-IF-NOT-AVAILABLE is non-nil; else throw an error."
   (interactive "P")
-  (if (cedet-gnu-global-root)
+  (if (and (file-exists-p default-directory)
+	   (cedet-gnu-global-root))
       (setq
        ;; Add to the system database list.
        semanticdb-project-system-databases

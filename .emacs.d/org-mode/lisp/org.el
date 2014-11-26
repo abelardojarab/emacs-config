@@ -5008,12 +5008,11 @@ related expressions."
 	(org-set-local 'org-todo-sets nil)
 	(org-set-local 'org-todo-log-states nil)
 	(let ((todo-sequences
-	       (reverse
-		(or (cdr (assq 'todo alist))
-		    (let ((d (default-value 'org-todo-keywords)))
-		      (if (not (stringp (car d))) d
-			;; XXX: Backward compatibility code.
-			(list (cons org-todo-interpretation d))))))))
+	       (or (nreverse (cdr (assq 'todo alist)))
+		   (let ((d (default-value 'org-todo-keywords)))
+		     (if (not (stringp (car d))) d
+		       ;; XXX: Backward compatibility code.
+		       (list (cons org-todo-interpretation d)))))))
 	  (dolist (sequence todo-sequences)
 	    (let* ((sequence (or (run-hook-with-args-until-success
 				  'org-todo-setup-filter-hook sequence)
@@ -7762,9 +7761,7 @@ command."
 	       (insert "\n* ")))
       (run-hooks 'org-insert-heading-hook))
 
-     ((and itemp (not (member arg '((4) (16)))))
-      ;; Insert an item
-      (org-insert-item))
+     ((and itemp (not (member arg '((4) (16)))) (org-insert-item)))
 
      (t
       ;; Maybe move at the end of the subtree
@@ -10794,8 +10791,13 @@ link in a property drawer line."
 			   (>= (point) (match-beginning 5)))))
 	  (org-tags-view arg (substring (match-string 5) 0 -1)))
 	 ((eq type 'link)
-	  (let ((type (org-element-property :type context))
-		(path (org-link-unescape (org-element-property :path context))))
+	  ;; When link is located within the description of another
+	  ;; link (e.g., an inline image), always open the parent
+	  ;; link.
+	  (let*((link (let ((up (org-element-property :parent context)))
+			(if (eq (org-element-type up) 'link) up context)))
+		(type (org-element-property :type link))
+		(path (org-link-unescape (org-element-property :path link))))
 	    ;; Switch back to REFERENCE-BUFFER needed when called in
 	    ;; a temporary buffer through `org-open-link-from-string'.
 	    (with-current-buffer (or reference-buffer (current-buffer))
@@ -10814,8 +10816,8 @@ link in a property drawer line."
 		  ;; Note : "file+emacs" and "file+sys" types are
 		  ;; hard-coded in order to escape the previous
 		  ;; limitation.
-		  (let* ((option (org-element-property :search-option context))
-			 (app (org-element-property :application context))
+		  (let* ((option (org-element-property :search-option link))
+			 (app (org-element-property :application link))
 			 (dedicated-function
 			  (nth 1 (assoc app org-link-protocols))))
 		    (if dedicated-function
@@ -10892,11 +10894,11 @@ link in a property drawer line."
 		     (org-get-buffer-for-internal-link (current-buffer))))
 		  (let ((cmd `(org-link-search
 			       ,(if (member type '("custom-id" "coderef"))
-				    (org-element-property :raw-link context)
+				    (org-element-property :raw-link link)
 				  path)
 			       ,(cond ((equal arg '(4)) 'occur)
 				      ((equal arg '(16)) 'org-occur))
-			       ,(org-element-property :begin context))))
+			       ,(org-element-property :begin link))))
 		    (condition-case nil
 			(let ((org-link-search-inhibit-query t))
 			  (eval cmd))
@@ -15632,25 +15634,23 @@ strings."
 	      (forward-line)
 	      (when (org-looking-at-p org-planning-line-re)
 		(end-of-line)
-		(let ((bol (line-beginning-position)))
-		  ;; Backward compatibility: time keywords used to be
-		  ;; configurable (before 8.3).  Make sure we get the
-		  ;; correct keyword.
-		  (dolist (k (if (not specific)
-				 (list org-closed-string
-				       org-deadline-string
-				       org-scheduled-string)
-			       (list (cond ((string= specific "CLOSED")
-					    org-closed-string)
-					   ((string= specific "DEADLINE")
-					    org-deadline-string)
-					   (t org-scheduled-string)))))
+		(let ((bol (line-beginning-position))
+		      ;; Backward compatibility: time keywords used to
+		      ;; be configurable (before 8.3).  Make sure we
+		      ;; get the correct keyword.
+		      (key-assoc `(("CLOSED" . ,org-closed-string)
+				   ("DEADLINE" . ,org-deadline-string)
+				   ("SCHEDULED" . ,org-scheduled-string))))
+		  (dolist (pair (if specific (list (assoc specific key-assoc))
+				  key-assoc))
 		    (save-excursion
-		      (when (search-backward k bol t)
+		      (when (search-backward (cdr pair) bol t)
 			(goto-char (match-end 0))
 			(skip-chars-forward " \t")
 			(and (looking-at org-ts-regexp-both)
-			     (push (cons specific (match-string 0)) props)))))))
+			     (push (cons (car pair)
+					 (org-match-string-no-properties 0))
+				   props)))))))
 	      (when specific (throw 'exit props)))
 	    (when (or (not specific)
 		      (member specific '("TIMESTAMP" "TIMESTAMP_IA")))
@@ -15735,7 +15735,7 @@ strings."
 			      (if p (setcdr p (concat value " " (cdr p)))
 				(push (cons key value) props))))))))))))
 	  (unless (assoc "CATEGORY" props)
-	    (push (cons "CATEGORY" (org-get-category)) props)
+	    (push (cons "CATEGORY" (org-get-category beg)) props)
 	    (when (string= specific "CATEGORY") (throw 'exit props)))
 	  ;; Return value.
 	  (append (get-text-property beg 'org-summaries) props))))))
@@ -16600,8 +16600,7 @@ So these are more for recording a certain time/date."
 (defvar org-read-date-inactive)
 
 (defvar org-read-date-minibuffer-local-map
-  (let* ((org-replace-disputed-keys nil)
-	 (map (make-sparse-keymap)))
+  (let* ((map (make-sparse-keymap)))
     (set-keymap-parent map minibuffer-local-map)
     (org-defkey map (kbd ".")
                 (lambda () (interactive)
@@ -18466,7 +18465,7 @@ Optional argument FILE means use this file instead of the current."
 	(progn
 	  (org-store-new-agenda-file-list files)
 	  (org-install-agenda-files-menu)
-	  (message "Removed file: %s" afile))
+	  (message "Removed from Org Agenda list: %s" afile))
       (message "File was not in list: %s (not removed)" afile))))
 
 (defun org-file-menu-entry (file)
@@ -20662,6 +20661,7 @@ See the individual commands for more information."
 When at a table, call the formula editor with `org-table-edit-formulas'.
 When in a source code block, call `org-edit-src-code'.
 When in a fixed-width region, call `org-edit-fixed-width-region'.
+When in an export block, call `org-edit-export-block'.
 When at an #+INCLUDE keyword, visit the included file.
 On a link, call `ffap' to visit the link at point.
 Otherwise, return a user error."
@@ -20699,11 +20699,12 @@ Otherwise, return a user error."
          (user-error "No special environment to edit here")))
       (table
        (if (eq (org-element-property :type element) 'table.el)
-           (org-edit-src-code)
+           (org-edit-table.el)
          (call-interactively 'org-table-edit-formulas)))
       ;; Only Org tables contain `table-row' type elements.
       (table-row (call-interactively 'org-table-edit-formulas))
-      ((example-block export-block) (org-edit-src-code))
+      ((example-block src-block) (org-edit-src-code))
+      (export-block (org-edit-export-block))
       (fixed-width (org-edit-fixed-width-region))
       (otherwise
        ;; No notable element at point.  Though, we may be at a link,
@@ -20954,44 +20955,57 @@ If `org-special-ctrl-o' is nil, just call `open-line' everywhere."
 
 (defun org-return (&optional indent)
   "Goto next table row or insert a newline.
+
 Calls `org-table-next-row' or `newline', depending on context.
-See the individual commands for more information."
+
+When optional INDENT argument is non-nil, call
+`newline-and-indent' instead of `newline'.
+
+When `org-return-follows-link' is non-nil and point is on
+a timestamp or a link, call `org-open-at-point'.  However, it
+will not happen if point is in a table or on a \"dead\"
+object (e.g., within a comment).  In these case, you need to use
+`org-open-at-point' directly."
   (interactive)
-  (let (org-ts-what)
-    (cond
-     ((or (bobp) (org-in-src-block-p))
-      (if indent (newline-and-indent) (newline)))
-     ((org-at-table-p)
-      (org-table-justify-field-maybe)
-      (call-interactively 'org-table-next-row))
-     ;; when `newline-and-indent' is called within a list, make sure
-     ;; text moved stays inside the item.
-     ((and (org-in-item-p) indent)
-      (if (and (org-at-item-p) (>= (point) (match-end 0)))
-	  (progn
-	    (save-match-data (newline))
-	    (org-indent-line-to (length (match-string 0))))
-	(let ((ind (org-get-indentation)))
-	  (newline)
-	  (if (org-looking-back org-list-end-re)
-	      (org-indent-line)
-	    (org-indent-line-to ind)))))
-     ((and org-return-follows-link
-	   (org-at-timestamp-p t)
-	   (not (eq org-ts-what 'after)))
-      (org-follow-timestamp-link))
-     ((and org-return-follows-link
-	   (let ((tprop (get-text-property (point) 'face)))
-	     (or (eq tprop 'org-link)
-		 (and (listp tprop) (memq 'org-link tprop)))))
-      (call-interactively 'org-open-at-point))
-     ((and (org-at-heading-p)
-	   (looking-at
-	    (org-re "\\([ \t]+\\(:[[:alnum:]_@#%:]+:\\)\\)[ \t]*$")))
-      (org-show-entry)
-      (end-of-line 1)
-      (newline))
-     (t (if indent (newline-and-indent) (newline))))))
+  (if (and (save-excursion
+	     (beginning-of-line)
+	     (looking-at org-todo-line-regexp))
+	   (match-beginning 3)
+	   (>= (point) (match-beginning 3)))
+      ;; Point is on headline tags.  Do not break them: add a newline
+      ;; after the headline instead.
+      (progn (org-show-entry)
+	     (end-of-line)
+	     (if indent (newline-and-indent) (newline)))
+    (let* ((context (if org-return-follows-link (org-element-context)
+		      (org-element-at-point)))
+	   (type (org-element-type context)))
+      (cond
+       ;; In a table, call `org-table-next-row'.
+       ((or (and (eq type 'table)
+		 (>= (point) (org-element-property :contents-begin context))
+		 (< (point) (org-element-property :contents-end context)))
+	    (org-element-lineage context '(table-row table-cell) t))
+	(org-table-justify-field-maybe)
+	(call-interactively #'org-table-next-row))
+       ;; On a link or a timestamp but not on white spaces after it,
+       ;; call `org-open-line' if `org-return-follows-link' allows it.
+       ((and org-return-follows-link
+	     (memq type '(link timestamp))
+	     (< (point)
+		(save-excursion (goto-char (org-element-property :end context))
+				(skip-chars-backward " \t")
+				(point))))
+	(call-interactively #'org-open-at-point))
+       ;; In a list, make sure indenting keeps trailing text within.
+       ((and indent
+	     (not (eolp))
+	     (org-element-lineage context '(item plain-list) t))
+	(let ((trailing-data
+	       (delete-and-extract-region (point) (line-end-position))))
+	  (newline-and-indent)
+	  (save-excursion (insert trailing-data))))
+       (t (if indent (newline-and-indent) (newline)))))))
 
 (defun org-return-indent ()
   "Goto next table row or insert a newline and indent.
@@ -22643,8 +22657,9 @@ ELEMENT."
 	  ;; As a special case, if point is at the end of a footnote
 	  ;; definition or an item, indent like the very last element
 	  ;; within.
-	  ((let ((cend (org-element-property :contents-end element)))
-	     (and cend (<= cend pos)))
+	  ((and (not (eq type 'paragraph))
+		(let ((cend (org-element-property :contents-end element)))
+		  (and cend (<= cend pos))))
 	   (if (memq type '(footnote-definition item plain-list))
 	       (org--get-expected-indentation (org-element-at-point) nil)
 	     (goto-char start)
@@ -22681,15 +22696,22 @@ Indentation is done according to the following rules:
     2. If element has a parent, indent like its contents.  More
        precisely, if parent is an item, indent after the
        description part, if any, or the bullet (see
-       ``org-list-description-max-indent').  Else, indent like
+       `org-list-description-max-indent').  Else, indent like
        parent's first line.
 
     3. Otherwise, indent relatively to current level, if
        `org-adapt-indentation' is non-nil, or to left margin.
 
-  - On a blank line at the end of a plain list, an item, or
-    a footnote definition, indent like the very last element
-    within.
+  - On a blank line at the end of an element, indent according to
+    the type of the element.  More precisely
+
+    1. If element is a plain list, an item, or a footnote
+       definition, indent like the very last element within.
+
+    2. If element is a paragraph, indent like its last non blank
+       line.
+
+    3. Otherwise, indent like its very first line.
 
   - In the code part of a source block, use language major mode
     to indent current line if `org-src-tab-acts-natively' is
@@ -22725,8 +22747,7 @@ Also align node properties according to `org-property-format'."
 		      (goto-char (org-element-property :end element))
 		      (skip-chars-backward " \r\t\n")
 		      (line-beginning-position))))
-	     (let ((org-src-strip-leading-and-trailing-blank-lines nil))
-	       (org-babel-do-key-sequence-in-edit-buffer (kbd "TAB"))))
+	     (org-babel-do-key-sequence-in-edit-buffer (kbd "TAB")))
 	    (t
 	     (let ((column (org--get-expected-indentation element nil)))
 	       ;; Preserve current column.
@@ -22812,7 +22833,8 @@ assumed to be significant there."
 				(org-with-wide-buffer
 				 (goto-char element-end)
 				 (skip-chars-backward " \r\t\n")
-				 (line-beginning-position))))))
+				 (line-beginning-position)))
+			    t)))
 		;; Do not change items indentation individually as it
 		;; might break the list as a whole.  On the other
 		;; hand, when at a plain list, indent it as a whole.
@@ -22834,12 +22856,8 @@ assumed to be significant there."
 		     ;; `org-src-tab-acts-natively' is non-nil.
 		     (when (and (< (point) end) org-src-tab-acts-natively)
 		       (ignore-errors
-			 (let (org-src-strip-leading-and-trailing-blank-lines
-			       ;; Region boundaries in edit buffer.
-			       (start (1+ (- (point) cbeg)))
-			       (end (- (min cend end) cbeg)))
-			   (org-babel-do-in-edit-buffer
-			    (indent-region start end))))))
+			 (org-babel-do-in-edit-buffer
+			  (indent-region (point-min) (point-max))))))
 		    (t (org-indent-region (point) (min cend end))))
 		  (goto-char (min cend end))
 		  (when (< (point) end) (funcall indent-to ind element-end)))

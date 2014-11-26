@@ -77,7 +77,7 @@ Report debug info for checking STARTFILE for up-to-date tags.
 ;;;***
 
 ;;;### (autoloads (semantic-analyze-current-context) "semantic/analyze"
-;;;;;;  "analyze.el" (21510 8044 1216 0))
+;;;;;;  "analyze.el" (21622 12609 118 0))
 ;;; Generated autoloads from analyze.el
 
 (autoload 'semantic-analyze-current-context "semantic/analyze" "\
@@ -167,7 +167,7 @@ list of semantic tokens found.
 ;;;***
 
 ;;;### (autoloads (semantic-c-add-preprocessor-symbol semantic-default-c-setup)
-;;;;;;  "semantic/bovine/c" "bovine/c.el" (21603 52862 595 0))
+;;;;;;  "semantic/bovine/c" "bovine/c.el" (21622 12609 192 0))
 ;;; Generated autoloads from bovine/c.el
 
 (autoload 'semantic-default-c-setup "semantic/bovine/c" "\
@@ -194,7 +194,7 @@ Activate clang completions for C/C++.
 ;;;***
 
 ;;;### (autoloads (semantic-default-elisp-setup) "semantic/bovine/el"
-;;;;;;  "bovine/el.el" (21510 8044 1499 0))
+;;;;;;  "bovine/el.el" (21622 12609 255 0))
 ;;; Generated autoloads from bovine/el.el
 
 (autoload 'semantic-default-elisp-setup "semantic/bovine/el" "\
@@ -361,7 +361,7 @@ will perform the completion.
 ;;;***
 
 ;;;### (autoloads (semantic-ctxt-current-mode) "semantic/ctxt" "ctxt.el"
-;;;;;;  (21510 8044 1748 0))
+;;;;;;  (21622 12609 288 0))
 ;;; Generated autoloads from ctxt.el
 
 (autoload 'semantic-ctxt-current-mode "semantic/ctxt" "\
@@ -444,7 +444,7 @@ DONTLOAD does not affect the creation of new database objects.
 ;;;***
 
 ;;;### (autoloads (semanticdb-enable-cscope-databases) "semantic/db-cscope"
-;;;;;;  "db-cscope.el" (21510 8044 1780 0))
+;;;;;;  "db-cscope.el" (21622 12609 319 0))
 ;;; Generated autoloads from db-cscope.el
 
 (autoload 'semanticdb-enable-cscope-databases "semantic/db-cscope" "\
@@ -646,7 +646,7 @@ associated with that tag should be loaded into a buffer.
 ;;;***
 
 ;;;### (autoloads (semanticdb-enable-gnu-global-databases) "semantic/db-global"
-;;;;;;  "db-global.el" (21510 8044 1894 0))
+;;;;;;  "db-global.el" (21622 12609 344 0))
 ;;; Generated autoloads from db-global.el
 
 (autoload 'semanticdb-enable-gnu-global-databases "semantic/db-global" "\
@@ -1433,7 +1433,7 @@ If ARG is positive or nil, enable, if it is negative, disable.
 ;;;***
 
 ;;;### (autoloads (semantic-calculate-scope) "semantic/scope" "scope.el"
-;;;;;;  (21510 8044 2749 0))
+;;;;;;  (21622 12609 450 0))
 ;;; Generated autoloads from scope.el
 
 (autoload 'semantic-calculate-scope "semantic/scope" "\
@@ -2099,7 +2099,7 @@ Setup buffer for parse.
 ;;;***
 
 ;;;### (autoloads (wisent-python-default-setup) "semantic/wisent/python"
-;;;;;;  "wisent/python.el" (21510 8044 3410 0))
+;;;;;;  "wisent/python.el" (21622 12609 483 0))
 ;;; Generated autoloads from wisent/python.el
 
 (autoload 'wisent-python-default-setup "semantic/wisent/python" "\
@@ -2122,7 +2122,7 @@ Setup buffer for parse.
 ;;;;;;  "wisent/comp.el" "wisent/expr.el" "wisent/grammar-macros.el"
 ;;;;;;  "wisent/java-tags-wy.el" "wisent/java-wy.el" "wisent/java.el"
 ;;;;;;  "wisent/javascript-wy.el" "wisent/python-wy.el" "wisent/wisent.el")
-;;;;;;  (21603 52920 805716 0))
+;;;;;;  (21622 12680 42857 0))
 
 ;;;***
 

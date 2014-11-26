@@ -1,6 +1,6 @@
 ;;; semantic/wisent/python.el --- Semantic support for Python
 
-;; Copyright (C) 2002, 2004, 2006-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2002, 2004, 2006-2014 Free Software Foundation, Inc.
 
 ;; Author: Richard Kim  <emacs18@gmail.com>
 ;; Maintainer: Richard Kim  <emacs18@gmail.com>
@@ -533,6 +533,10 @@ Shortens 'code' tags, but passes through for others."
   ;; Give python modes the possibility to overwrite this:
   (if (not comment-start-skip)
       (set (make-local-variable 'comment-start-skip) "#+\\s-*"))
+  ;; Fix up some syntax for the lexer.
+  (setq semantic-lex-syntax-modifications '((?. ".")
+                                            )
+        )
   (setq
   ;; Character used to separation a parent/child relationship
    semantic-type-relation-separator-character '(".")

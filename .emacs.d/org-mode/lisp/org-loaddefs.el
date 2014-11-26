@@ -14,7 +14,7 @@
 ;;;;;;  org-babel-execute-src-block org-babel-pop-to-session-maybe
 ;;;;;;  org-babel-load-in-session-maybe org-babel-expand-src-block-maybe
 ;;;;;;  org-babel-view-src-block-info org-babel-execute-maybe org-babel-execute-safely-maybe)
-;;;;;;  "ob-core" "ob-core.el" (21578 32985))
+;;;;;;  "ob-core" "ob-core.el" (21622 12754))
 ;;; Generated autoloads from ob-core.el
 
 (autoload 'org-babel-execute-safely-maybe "ob-core" "\
@@ -306,7 +306,7 @@ used to limit the exported source code blocks by language.
 ;;;;;;  org-search-view org-agenda-list org-batch-store-agenda-views
 ;;;;;;  org-store-agenda-views org-batch-agenda-csv org-batch-agenda
 ;;;;;;  org-agenda org-toggle-sticky-agenda) "org-agenda" "org-agenda.el"
-;;;;;;  (21597 12513))
+;;;;;;  (21622 12754))
 ;;; Generated autoloads from org-agenda.el
 
 (autoload 'org-toggle-sticky-agenda "org-agenda" "\
@@ -929,7 +929,7 @@ tree can be found.
 
 ;;;### (autoloads (org-element-context org-element-at-point org-element-cache-refresh
 ;;;;;;  org-element-cache-reset org-element-interpret-data org-element-update-syntax)
-;;;;;;  "org-element" "org-element.el" (21603 52971))
+;;;;;;  "org-element" "org-element.el" (21622 12754))
 ;;; Generated autoloads from org-element.el
 
 (autoload 'org-element-update-syntax "org-element" "\
@@ -1973,7 +1973,7 @@ using three `C-u' prefix arguments.
 ;;;***
 
 ;;;### (autoloads (org-git-version org-release) "org-version" "org-version.el"
-;;;;;;  (21603 52980))
+;;;;;;  (21622 12761))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -1999,7 +1999,7 @@ The location of ODT styles.")
 ;;;;;;  org-run-like-in-org-mode turn-on-orgstruct++ turn-on-orgstruct
 ;;;;;;  orgstruct-mode org-global-cycle org-cycle org-mode org-clock-persistence-insinuate
 ;;;;;;  turn-on-orgtbl org-version org-babel-load-file org-babel-do-load-languages)
-;;;;;;  "org" "org.el" (21603 52971))
+;;;;;;  "org" "org.el" (21622 12754))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -2223,7 +2223,7 @@ Call the customize function with org as argument.
 
 ;;;### (autoloads (org-ascii-publish-to-utf8 org-ascii-publish-to-latin1
 ;;;;;;  org-ascii-publish-to-ascii org-ascii-export-to-ascii org-ascii-export-as-ascii)
-;;;;;;  "ox-ascii" "ox-ascii.el" (21578 32985))
+;;;;;;  "ox-ascii" "ox-ascii.el" (21622 12754))
 ;;; Generated autoloads from ox-ascii.el
 
 (autoload 'org-ascii-export-as-ascii "ox-ascii" "\
@@ -2326,7 +2326,7 @@ Return output file name.
 ;;;### (autoloads (org-beamer-publish-to-pdf org-beamer-publish-to-latex
 ;;;;;;  org-beamer-select-environment org-beamer-export-to-pdf org-beamer-export-to-latex
 ;;;;;;  org-beamer-export-as-latex org-beamer-mode) "ox-beamer" "ox-beamer.el"
-;;;;;;  (21597 12513))
+;;;;;;  (21622 12754))
 ;;; Generated autoloads from ox-beamer.el
 
 (autoload 'org-beamer-mode "ox-beamer" "\
@@ -2571,7 +2571,7 @@ Return output file name.
 
 ;;;### (autoloads (org-icalendar-combine-agenda-files org-icalendar-export-agenda-files
 ;;;;;;  org-icalendar-export-to-ics) "ox-icalendar" "ox-icalendar.el"
-;;;;;;  (21556 3831))
+;;;;;;  (21622 12754))
 ;;; Generated autoloads from ox-icalendar.el
 
 (autoload 'org-icalendar-export-to-ics "ox-icalendar" "\
@@ -2623,8 +2623,8 @@ The file is stored under the name chosen in
 
 ;;;### (autoloads (org-latex-publish-to-pdf org-latex-publish-to-latex
 ;;;;;;  org-latex-export-to-pdf org-latex-export-to-latex org-latex-convert-region-to-latex
-;;;;;;  org-latex-export-as-latex) "ox-latex" "ox-latex.el" (21591
-;;;;;;  45285))
+;;;;;;  org-latex-export-as-latex) "ox-latex" "ox-latex.el" (21622
+;;;;;;  12754))
 ;;; Generated autoloads from ox-latex.el
 
 (autoload 'org-latex-export-as-latex "ox-latex" "\
@@ -2824,7 +2824,7 @@ Return output file name.
 ;;;***
 
 ;;;### (autoloads (org-odt-convert org-odt-export-to-odt org-odt-export-as-odf-and-open
-;;;;;;  org-odt-export-as-odf) "ox-odt" "ox-odt.el" (21591 45286))
+;;;;;;  org-odt-export-as-odf) "ox-odt" "ox-odt.el" (21622 12755))
 ;;; Generated autoloads from ox-odt.el
 
 (put 'org-odt-preferred-output-format 'safe-local-variable 'stringp)
@@ -3037,7 +3037,7 @@ this command to convert it.
 
 ;;;### (autoloads (org-export-dispatch org-export-to-file org-export-to-buffer
 ;;;;;;  org-export-insert-default-template org-export-replace-region-by
-;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" (21597 12513))
+;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" (21622 12755))
 ;;; Generated autoloads from ox.el
 
 (autoload 'org-export-as "ox" "\

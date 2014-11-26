@@ -44,10 +44,12 @@ Return (NAME VERSION PACKAGE)."
 	(setq package (match-string 1))
 	(condition-case nil
 	    (progn
-	      (re-search-forward "^ *android:versionName *= *\"\\([.0-9]+\\)\"")
+	      (re-search-forward "^\\s-**android:versionName\\s-*=\\s-*\"\\([.0-9]+[abcd]*\\)\"")
 	      (setq version (match-string 1)))
 	  (error (setq version "1.0")))
-	(re-search-forward "activity\\s-+android:name *= *\"\\([^\"\n]+\\)\"")
+	(re-search-forward "<activity")
+	(let ((end (save-excursion (re-search-forward "<"))))
+	  (re-search-forward "android:name *= *\"\\([^\"\n]+\\)\"" end))
 	(setq name (match-string 1))
 	(prog1
 	    (list name version package)
