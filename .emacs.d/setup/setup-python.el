@@ -38,13 +38,14 @@
 (require 'python-mode)
 (setq py-split-windows-on-execute-p nil)
 (setq py-electric-colon-active t)
-(if (equal system-type 'windows-nt)
-    (if (file-exists-p "C:/Program Files (x86)/WinPython-32bit-2.7.6.4/python-2.7.6/python.exe")
-        (setq python-shell-interpreter "C:\\Program Files (x86)\\WinPython-32bit-2.7.6.4\\python-2.7.6\\python.exe")))
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
+
+;; Windows specifics
+(when (equal system-type 'windows-nt)
+  (setenv "PYTHONPATH"  "~\workspace\pythonlibs\lib\python2.7\site-packages;C:\Python27\Lib\site-packages;C:\cygwin64\lib\python2.7\site-packages"))
 
 ;; Restore semantic
 (add-hook 'python-mode-hook 'wisent-python-default-setup)

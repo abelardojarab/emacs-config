@@ -282,21 +282,19 @@
   (ecb-redraw-layout))
 
 (when window-system
-  (if (equal system-type 'windows-nt)
-      (add-hook 'window-setup-hook 'w32-maximize-frame)
-    (add-hook 'window-setup-hook
-              (let ((px (display-pixel-width))
-                    (py (display-pixel-height))
-                    (fx (frame-char-width))
-                    (fy (frame-char-height))
-                    tx ty)
-                ;; Next formulas discovered empiric on Windows host with default font.
-                (setq tx (- (/ px fx) 3))
-                (setq ty (- (/ py fy) 8))
-                (setq initial-frame-alist '((top . 2) (left . 2)))
-                (add-to-list 'initial-frame-alist (cons 'width tx))
-                (add-to-list 'initial-frame-alist (cons 'height ty))
-                t))))
+  (add-hook 'window-setup-hook
+            (let ((px (display-pixel-width))
+                  (py (display-pixel-height))
+                  (fx (frame-char-width))
+                  (fy (frame-char-height))
+                  tx ty)
+              ;; Next formulas discovered empiric on Windows host with default font.
+              (setq tx (- (/ px fx) 3))
+              (setq ty (- (/ py fy) 8))
+              (setq initial-frame-alist '((top . 2) (left . 2)))
+              (add-to-list 'initial-frame-alist (cons 'width tx))
+              (add-to-list 'initial-frame-alist (cons 'height ty))
+              t)))
 
 ;; Highlight blocks
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
@@ -450,11 +448,11 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-     (catch 'matched
-       (let ((inhibit-changing-match-data t)) ; small optimization
-         (dolist (regexp regexps)
-           (when (string-match regexp string)
-             (throw 'matched t)))))))
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
