@@ -7,10 +7,18 @@ master (in development)
 
   - Never allow use of disabled checkers anymore, even with
     `flycheck-select-checker`
+  - Error parsers **must** set the `:buffer` and `:checker` slots of
+    `flycheck-error` now
+  - The internals of syntax checker definitions have changed again.  **All
+    packages depending on Flycheck must be recompiled!** [GH-524]
 
 - New features:
 
   - `flycheck-ert.el` library to write unit tests for Flycheck extensions
+  - Add `flycheck-define-generic-checker` to define syntax checkers over
+    arbitrary Emacs Lisp functions [GH-169] [GH-524]
+  - Add `flycheck-define-command-checker` as non-macro variant of
+    `flycheck-define-checker` [GH-524]
 
 - Improvements:
 
@@ -24,6 +32,8 @@ master (in development)
 
   - Properly parse notes in `sh-shellcheck` [GH-508]
   - Fix shell quoting in `flycheck-compile` [GH-522] [GH-523]
+  - Fix faulty properties of customize options which broke `customize-changed`
+    and related functions
 
 0.21 (Oct 26, 2014)
 -------------------

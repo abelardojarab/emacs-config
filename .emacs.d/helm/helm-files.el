@@ -229,45 +229,51 @@ I.e use the -path/ipath arguments of find instead of -name/iname."
 ;;; Faces
 ;;
 ;;
+(defgroup helm-files-faces nil
+  "Customize the appearance of helm-files."
+  :prefix "helm-"
+  :group 'helm-files
+  :group 'helm-faces)
+
 (defface helm-ff-prefix
     '((t (:background "yellow" :foreground "black")))
   "Face used to prefix new file or url paths in `helm-find-files'."
-  :group 'helm-files)
+  :group 'helm-files-faces)
 
 (defface helm-ff-executable
     '((t (:foreground "green")))
   "Face used for executable files in `helm-find-files'."
-  :group 'helm-files)
+  :group 'helm-files-faces)
 
 (defface helm-ff-directory
     '((t (:foreground "DarkRed" :background "LightGray")))
   "Face used for directories in `helm-find-files'."
-  :group 'helm-files)
+  :group 'helm-files-faces)
 
 (defface helm-ff-symlink
     '((t (:foreground "DarkOrange")))
   "Face used for symlinks in `helm-find-files'."
-  :group 'helm-files)
+  :group 'helm-files-faces)
 
 (defface helm-ff-invalid-symlink
     '((t (:foreground "black" :background "red")))
   "Face used for invalid symlinks in `helm-find-files'."
-  :group 'helm-files)
+  :group 'helm-files-faces)
 
 (defface helm-ff-file
     '((t (:inherit font-lock-builtin-face)))
   "Face used for file names in `helm-find-files'."
-  :group 'helm-files)
+  :group 'helm-files-faces)
 
 (defface helm-history-deleted
     '((t (:inherit helm-ff-invalid-symlink)))
   "Face used for deleted files in `file-name-history'."
-  :group 'helm-files)
+  :group 'helm-files-faces)
 
 (defface helm-history-remote
     '((t (:foreground "Indianred1")))
   "Face used for remote files in `file-name-history'."
-  :group 'helm-files)
+  :group 'helm-files-faces)
 
 
 ;;; Helm-find-files - The helm file browser.
@@ -438,7 +444,7 @@ Should not be used among other sources.")
      "Etags `M-., C-u reload tag file'" 'helm-ff-etags-select
      "Eshell command on file(s) `M-!, C-u take all marked as arguments.'"
      'helm-find-files-eshell-command-on-file
-     "Find file as root `C-x @'" 'helm-find-file-as-root
+     "Find file as root `C-c r'" 'helm-find-file-as-root
      "Ediff File `C-='" 'helm-find-files-ediff-files
      "Ediff Merge File `C-c ='" 'helm-find-files-ediff-merge-files
      "Delete File(s) `M-D'" 'helm-delete-marked-files

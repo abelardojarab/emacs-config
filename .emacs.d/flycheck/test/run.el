@@ -1,5 +1,5 @@
 #!/bin/bash
-":"; exec ${EMACS:-emacs} -Q --script "$0" "${@}" # -*- mode: emacs-lisp; lexical-binding: t; -*-
+":"; exec ${EMACS:-emacs} -Q --script "$0" -- "${@}" # -*- mode: emacs-lisp; lexical-binding: t; -*-
 ;;; run.el --- Flycheck: Test runner
 
 ;; Copyright (C) 2014  Sebastian Wiesner <swiesner@lunaryorn.com>
@@ -31,6 +31,19 @@
 
 (require 'thingatpt)                    ; For `read-from-whole-string'
 
+(defun flycheck-run-check-selector (selector)
+  "Check SELECTOR if it fails loading."
+  (with-temp-buffer
+    (insert selector)
+    (goto-char (point-min))
+    (condition-case nil
+        (progn
+          (check-parens)
+          (message "Invalid selector: %S" selector))
+      (error
+       (message "Unbalanced parenthesis in selector %S at %s"
+                selector (1+ (current-column)))))))
+
 (defun flycheck-run-tests-batch-and-exit ()
   "Run test cases matching tags in `argv' and exit.
 
@@ -51,7 +64,11 @@ Node `(ert)Test Selectors' for information about test selectors."
                     ((= (length selector) 0)
                      (message "Warning: Empty test selector, defaulting to t")
                      t)
-                    (t (read-from-whole-string selector))))
+                    (t (condition-case nil
+                           (read-from-whole-string selector)
+                         (error
+                          (flycheck-run-check-selector selector)
+                          (kill-emacs 1))))))
     (ert-run-tests-batch-and-exit selector)))
 
 (defun flycheck-runs-this-script-p ()

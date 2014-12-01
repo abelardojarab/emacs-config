@@ -47,9 +47,15 @@ Show all candidates on startup when 0 (default)."
 ;;; Faces
 ;;
 ;;
+(defgroup helm-command-faces nil
+  "Customize the appearance of helm-command."
+  :prefix "helm-"
+  :group 'helm-command
+  :group 'helm-faces)
+
 (defface helm-M-x-key '((t (:foreground "orange" :underline t)))
   "Face used in helm-M-x to show keybinding."
-  :group 'helm-command)
+  :group 'helm-command-faces)
 
 
 (defvar helm-M-x-input-history nil)
@@ -163,10 +169,13 @@ You can get help on each command by persistent action."
                           (setq help-cand candidate))))
          (tm (run-at-time 1 0.1 'helm-M-x--notify-prefix-arg)))
     (unwind-protect
-         (progn
+         (let ((msg "Error: Specifying a prefix arg before calling `helm-M-x'"))
            (when current-prefix-arg
-             (user-error
-              "Error: Specifying a prefix arg before calling `helm-M-x'"))
+             (ding)
+             (message "%s" msg)
+             (while (not (sit-for 1))
+               (discard-input))
+             (user-error msg))
            (setq current-prefix-arg nil)
            (setq command (helm-comp-read
                           "M-x " obarray
