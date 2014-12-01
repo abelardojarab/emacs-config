@@ -116,7 +116,7 @@
 
 ;; Highlight the line
 (require 'hl-line)
-(global-hl-line-mode +1)
+(global-hl-line-mode t)
 (defun local-hl-line-mode-off ()
   (interactive)
   (make-local-variable 'global-hl-line-mode)
@@ -125,7 +125,100 @@
 
 ;; Do not use linum, but nlinum instead
 (require 'nlinum)
-(global-nlinum-mode)
+(global-nlinum-mode t)
+
+;; Preset width nlinum
+(add-hook 'nlinum-mode-hook
+          (lambda ()
+            (setq nlinum--width
+                  (+ 2 (length (number-to-string
+                                   (count-lines (point-min) (point-max))))))))
+
+(defvar nlinum-highlight-current-line-number-string nil
+  "An overlay string used to highlight the current line number.")
+(make-variable-buffer-local 'nlinum-highlight-current-line-number-string)
+
+(defvar nlinum-highlight-p nil
+  "Set to non-`nil` when overlay is present, and `nil` when not present.")
+(make-variable-buffer-local 'nlinum-highlight-p)
+
+(defface ln-active-face
+  '((t (:foreground "black" :background "#eab700" :bold nil :italic nil
+                    :underline nil :box nil :overline nil)))
+  "Face for `ln-active-face`."
+  :group 'linum)
+
+(defface ln-inactive-face
+  '((t (:foreground "SteelBlue" :background "black" :bold t :italic nil
+                    :underline nil :box nil :overline nil)))
+  "Face for `ln-active-face`."
+  :group 'linum)
+
+(defun hl-nlinum-remove-overlay ()
+  (when nlinum-highlight-p
+    (remove-overlays (point-min) (point-max)
+                     'before-string nlinum-highlight-current-line-number-string)
+    (setq nlinum-highlight-p nil)))
+
+(defun nlinum-highlight-current-line-number ()
+  (when nlinum-mode
+    (hl-nlinum-remove-overlay)
+    (let* (
+           (pbol (point-at-bol))
+           (line (nlinum--line-number-at-pos))
+           (line-mod
+            (cond
+             ((eq nlinum--width 2)
+              (cond
+               ((< line 10)
+                (concat " " (format "%s" line)))
+               (t (format "%s" line))))
+             ((eq nlinum--width 3)
+              (cond
+               ((< line 10)
+                (concat "  " (format "%s" line)))
+               ((and
+                 (> line 9)
+                 (< line 100))
+                (concat " " (format "%s" line)))
+               (t (format "%s" line))))
+             ((eq nlinum--width 4)
+              (cond
+               ((< line 10)
+                (concat "   " (format "%s" line)))
+               ((and
+                 (> line 9)
+                 (< line 100))
+                (concat "  " (format "%s" line)))
+               ((and
+                 (> line 99)
+                 (< line 1000))
+                (concat " " (format "%s" line)))
+               (t (format "%s" line))))
+             (t (format "%s" line))))
+           (str (propertize line-mod 'face 'ln-active-face) )
+           (final-line-number (propertize " " 'display `((margin left-margin) ,str))))
+      (setq nlinum-highlight-current-line-number-string final-line-number)
+      (overlay-put (make-overlay pbol pbol)
+                   'before-string nlinum-highlight-current-line-number-string)
+      (setq nlinum-highlight-p t))))
+
+(define-minor-mode hl-nlinum-mode
+  "A minor-mode for highlighting the current line number when nlinum-mode is active."
+  :init-value nil
+  :lighter " HL#"
+  :keymap nil
+  :global nil
+  :group 'linum
+  (cond
+   (hl-nlinum-mode
+    (when (not nlinum-mode)
+      (nlinum-mode 1))
+    (add-hook 'post-command-hook #'nlinum-highlight-current-line-number nil t))
+   (t
+    (remove-hook 'post-command-hook #'nlinum-highlight-current-line-number t)
+    (remove-overlays (point-min) (point-max)
+                     'before-string nlinum-highlight-current-line-number-string))))
 
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
