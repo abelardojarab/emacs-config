@@ -92,7 +92,7 @@
 (add-to-list 'load-path "~/.emacs.d/yafolding")
 (require 'yafolding)
 (add-hook 'prog-mode-hook
-          (lambda () (yafolding-mode)))
+          (lambda () (yafolding-mode t)))
 (define-key yafolding-mode-map (kbd "<C-S-return>") nil)
 (define-key yafolding-mode-map (kbd "<C-return>") nil)
 (define-key yafolding-mode-map (kbd "C-c <C-S-return>") 'yafolding-toggle-all)

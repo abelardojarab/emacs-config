@@ -283,9 +283,10 @@
 ;; Indent guide
 (add-to-list 'load-path "~/.emacs.d/indent-guide")
 
-;; Alternative indent hint, new version
+;; Alternative indent hint
 (require 'indent-hint)
-(add-hook 'js2-mode-hook 'indent-hint-js)
+
+;; Indentation guide
 (require 'indent-guide)
 (indent-guide-global-mode)
 
