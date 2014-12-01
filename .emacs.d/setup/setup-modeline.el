@@ -73,6 +73,7 @@
 (add-to-list 'sml/hidden-modes " ll")
 (add-to-list 'sml/hidden-modes " FA")
 (add-to-list 'sml/hidden-modes " hl-s")
+(add-to-list 'sml/hidden-modes " Outl")
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
