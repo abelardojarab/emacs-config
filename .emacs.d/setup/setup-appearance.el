@@ -131,8 +131,8 @@
 (add-hook 'nlinum-mode-hook
           (lambda ()
             (setq nlinum--width
-                  (+ 2 (length (number-to-string
-                                   (count-lines (point-min) (point-max))))))))
+                  (+ 1 (length (number-to-string
+                                (count-lines (point-min) (point-max))))))))
 
 (defvar nlinum-highlight-current-line-number-string nil
   "An overlay string used to highlight the current line number.")
