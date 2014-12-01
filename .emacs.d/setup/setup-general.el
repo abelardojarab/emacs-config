@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+(add-to-list 'load-path "~/.emacs.d/makey")
+(add-to-list 'load-path "~/.emacs.d/discover")
+(require 'discover)
+
 ;; Set path environment depending on OS.
 (add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
 (require 'exec-path-from-shell)
