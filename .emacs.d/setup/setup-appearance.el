@@ -28,9 +28,6 @@
 ;; Instead, give each line of text just one screen line.
 (set-default 'truncate-lines t)
 
-;; disable line wrap
-(setq-default default-truncate-lines t)
-
 ;; make side by side buffers function the same as the main window
 (setq-default truncate-partial-width-windows nil)
 
@@ -117,42 +114,18 @@
     (set-fontset-font "fontset-default" nil
                       (font-spec :size 18 :name "Symbola")))
 
-;; Line numbers, vim style
-(require 'linum)
-(global-linum-mode 1)
-(set-face-attribute 'linum nil :height 125)
-(setq linum-delay t)
-
-;; Format the line number
+;; Highlight the line
 (require 'hl-line)
-(defface my-linum-hl
-  `((t :inherit linum :foreground "yellow" :background ,(face-background 'hl-line nil t)))
-  "Face for the current line number."
-  :group 'linum)
+(global-hl-line-mode +1)
+(defun local-hl-line-mode-off ()
+  (interactive)
+  (make-local-variable 'global-hl-line-mode)
+  (setq global-hl-line-mode nil))
+(add-hook 'org-mode-hook 'local-hl-line-mode-off)
 
-(defvar my-linum-format-string "%3d")
-(add-hook 'linum-before-numbering-hook 'my-linum-get-format-string)
-
-(defun my-linum-get-format-string ()
-  (let* ((width (1+ (length (number-to-string
-                             (count-lines (point-min) (point-max))))))
-         (format (concat "%" (number-to-string width) "d")))
-    (setq my-linum-format-string format)))
-
-(defvar my-linum-current-line-number 0)
-
-(setq linum-format 'my-linum-format)
-
-(defun my-linum-format (line-number)
-  (propertize (format my-linum-format-string line-number) 'face
-              (if (eq line-number my-linum-current-line-number)
-                  'my-linum-hl
-                'linum)))
-
-(defadvice linum-update (around my-linum-update)
-  (let ((my-linum-current-line-number (line-number-at-pos)))
-    ad-do-it))
-(ad-activate 'linum-update)
+;; Do not use linum, but nlinum instead
+(require 'nlinum)
+(global-nlinum-mode)
 
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
@@ -218,9 +191,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
@@ -313,14 +286,6 @@
 (add-hook 'js2-mode-hook 'indent-hint-js)
 (require 'indent-guide)
 (indent-guide-global-mode)
-
-;; In every buffer, the line which contains the cursor will be fully highlighted
-(global-hl-line-mode 1)
-(defun local-hl-line-mode-off ()
-  (interactive)
-  (make-local-variable 'global-hl-line-mode)
-  (setq global-hl-line-mode nil))
-(add-hook 'org-mode-hook 'local-hl-line-mode-off)
 
 ;; Highlight symbol
 (add-to-list 'load-path "~/.emacs.d/highlight-symbol")
