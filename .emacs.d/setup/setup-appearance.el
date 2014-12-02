@@ -123,6 +123,11 @@
   (setq global-hl-line-mode nil))
 (add-hook 'org-mode-hook 'local-hl-line-mode-off)
 
+;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
+(add-to-list 'load-path "~/.emacs.d/volatile-highlights")
+(when (require 'volatile-highlights nil 'noerror)
+  (volatile-highlights-mode t))
+
 ;; Do not use linum, but nlinum instead
 (require 'nlinum)
 

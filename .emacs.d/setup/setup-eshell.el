@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;;When compiling from shell, display error result as in compilation
+;;buffer, with links to errors.
+(add-hook 'shell-mode-hook 'compilation-shell-minor-mode)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 (provide 'setup-eshell)

@@ -24,6 +24,16 @@
 
 ;;; Code:
 
+;; Printing
+;; 2 column landscape size 7 prints column 0-78, lines 1 to 70
+(setq ps-paper-type 'a4
+      ps-font-size 7.0
+      ps-print-header nil
+      ps-print-color-p t
+      ps-landscape-mode nil    ; for two pages per page: t
+      ps-number-of-columns 1)  ; for two pages per page: 2
+
+;; Extra stuff
 (add-to-list 'load-path "~/.emacs.d/makey")
 (add-to-list 'load-path "~/.emacs.d/discover")
 (require 'discover)
@@ -192,8 +202,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                    (save-excursion
-                      (untabify (point-min) (point-max)))) nil))
+                         (save-excursion
+                           (untabify (point-min) (point-max)))) nil))
 
 ;; Try not to split windows
 (setq same-window-regexps '("."))
@@ -256,8 +266,8 @@
 (setq require-final-newline t)
 
 ;; When in text (or related mode) break the lines at 80 chars
-(setq fill-column 160)
 (require 'fill-column-indicator)
+(setq fill-column 80)
 
 ;; Filladapt mode for text files
 (require 'filladapt)
@@ -354,11 +364,11 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-     (catch 'matched
-       (let ((inhibit-changing-match-data t)) ; small optimization
-         (dolist (regexp regexps)
-           (when (string-match regexp string)
-             (throw 'matched t)))))))
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
 
 ;; Better search, similar to vim
 (require 'isearch+)
@@ -374,7 +384,7 @@
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-             (eq 'not-yanks search-upper-case))
+               (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message
@@ -480,6 +490,9 @@
 (require 'benchmark-init)
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
 
+;; Make URLs in comments/strings clickable, (emacs > v22)
+(add-hook 'find-file-hooks 'goto-address-prog-mode)
+
 ;; Better help
 (require 'help-fns+)
 
@@ -512,14 +525,14 @@ compatibility with `format-alist', and is ignored."
 If wrapping is performed, point remains on the line. If the line does
 not need to be wrapped, move point to the next line and return t."
   (if (and (bound-and-true-p latex-extra-mode)
-         (null (latex/do-auto-fill-p)))
+           (null (latex/do-auto-fill-p)))
       (progn (forward-line 1) t)
     ;; The conditional above was added for latex equations. It relies
     ;; on the latex-extra package (on Melpa).
     (if (and (longlines-set-breakpoint)
-           ;; Make sure we don't break comments.
-           (null (nth 4 (parse-partial-sexp
-                         (line-beginning-position) (point)))))
+             ;; Make sure we don't break comments.
+             (null (nth 4 (parse-partial-sexp
+                           (line-beginning-position) (point)))))
         (progn
           ;; This `let' and the `when' below add indentation to the
           ;; wrapped line.
