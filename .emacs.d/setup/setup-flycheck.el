@@ -38,6 +38,9 @@
 (add-hook 'python-mode-hook
           (lambda () (flycheck-mode t)))
 
+;; Show tip both in echo area and popup
+(setq flycheck-tip-avoid-show-func nil)
+
 ;; Configuration
 (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
 
