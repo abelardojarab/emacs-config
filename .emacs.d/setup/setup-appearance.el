@@ -280,18 +280,11 @@
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
 (require 'highlight-blocks)
 
-;; Higlight indentation
-(add-to-list 'load-path "~/.emacs.d/highlight-indentation")
-(require 'highlight-indentation)
-(add-hook 'python-mode-hook 'highlight-indentation)
-
-;; Indent guide
-(add-to-list 'load-path "~/.emacs.d/indent-guide")
-
 ;; Alternative indent hint
 (require 'indent-hint)
 
 ;; Indentation guide
+(add-to-list 'load-path "~/.emacs.d/indent-guide")
 (require 'indent-guide)
 (indent-guide-global-mode)
 
