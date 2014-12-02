@@ -280,9 +280,6 @@
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
 (require 'highlight-blocks)
 
-;; Alternative indent hint
-(require 'indent-hint)
-
 ;; Indentation guide
 (add-to-list 'load-path "~/.emacs.d/indent-guide")
 (require 'indent-guide)
