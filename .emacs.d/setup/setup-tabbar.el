@@ -33,6 +33,8 @@
 (tabbar-mode)
 (global-set-key [C-prior] 'tabbar-backward-tab)
 (global-set-key [C-next] 'tabbar-forward-tab)
+(global-set-key [C-S-prior] 'tabbar-backward-group)
+(global-set-key [C-S-next] 'tabbar-forward-group)
 (global-set-key [M-prior] 'tabbar-backward-group)
 (global-set-key [M-next] 'tabbar-forward-group)
 
