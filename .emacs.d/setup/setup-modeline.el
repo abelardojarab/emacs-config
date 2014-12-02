@@ -75,6 +75,8 @@
 (add-to-list 'sml/hidden-modes " hl-s")
 (add-to-list 'sml/hidden-modes " Outl")
 (add-to-list 'sml/hidden-modes " VHl")
+(add-to-list 'sml/hidden-modes " Tern")
+(add-to-list 'sml/hidden-modes " skewer")
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
