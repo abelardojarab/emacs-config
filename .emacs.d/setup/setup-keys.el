@@ -84,7 +84,33 @@
 (global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key "\C-a" 'mark-whole-buffer)
-(global-set-key [f12] 'ecb-redraw-layout)
+(global-set-key (kbd "<f8>") 'toggle-truncate-lines)
+(global-set-key (kbd "<f12>") 'ecb-redraw-layout)
+
+;; Native file opening
+(cond
+ ;; Windows
+ ((equal system-type 'windows-nt)
+  (global-set-key [(control o)] 'dlgopen-open-files)
+  (define-key menu-bar-file-menu [open-file] '("Open File..." . dlgopen-open-files))
+  ) ;; if
+
+ ;; Linux
+ ((and (equal system-type 'gnu/linux)
+     (executable-find "kdialog"))
+  (global-set-key [(control o)] 'kde-open-file)
+  (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
+  ) ;; if
+
+ ;; Mac
+ ((equal system-type 'darwin)
+  (global-set-key [(control o)] 'mac-open-file)
+  (define-key menu-bar-file-menu [open-file] '("Open File..." . mac-open-file))
+  ) ;; if
+
+ (t
+  (global-set-key [(control o)] 'find-file)
+  )) ;; cond
 
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
@@ -207,9 +233,6 @@
 (global-set-key [(shift mouse-4)] '(lambda () (interactive) (scroll-down-line)))
 (global-set-key [(control mouse-5)] 'text-scale-decrease)
 (global-set-key [(control mouse-4)] 'text-scale-increase)
-
-;; toggle truncate lines
-(global-set-key (kbd "<f8>") 'toggle-truncate-lines)
 
 ;; Refresh file on F9
 (defun refresh-file ()

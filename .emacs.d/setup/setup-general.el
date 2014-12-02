@@ -78,6 +78,33 @@
   (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
   (push "/usr/local/bin" exec-path)
   (push "/opt/local/bin" exec-path)
+
+  (defun mac-open-file ()
+    (interactive)
+    (let ((file (do-applescript "try
+ POSIX path of (choose file)
+ end try")))
+      (if (> (length file) 3)
+          (setq file
+                (substring file 1 (- (length file) 1))
+                ))
+      (if (and (not (equal file ""))(file-readable-p file))
+          (find-file file)
+        (beep))))
+
+  (defun mac-save-file-as ()
+    (interactive)
+    (let ((file (do-applescript "try
+ POSIX path of (choose file name with prompt \"Save As...\")
+ end try")))
+      (if (> (length file) 3)
+          (setq file
+                (substring file 1 (- (length file) 1))
+                ))
+      (if (not (equal file ""))
+          (write-file file)
+        (beep))))
+
   ;; Point Org to LibreOffice executable
   (when (file-exists-p "/Applications/LibreOffice.app/Contents/MacOS/soffice")
     (setq org-export-odt-convert-processes '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")))))
@@ -165,8 +192,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; Try not to split windows
 (setq same-window-regexps '("."))
@@ -327,11 +354,11 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-       (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
-           (dolist (regexp regexps)
-             (when (string-match regexp string)
-               (throw 'matched t)))))))
+     (catch 'matched
+       (let ((inhibit-changing-match-data t)) ; small optimization
+         (dolist (regexp regexps)
+           (when (string-match regexp string)
+             (throw 'matched t)))))))
 
 ;; Better search, similar to vim
 (require 'isearch+)
@@ -347,7 +374,7 @@
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-               (eq 'not-yanks search-upper-case))
+             (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message
@@ -485,14 +512,14 @@ compatibility with `format-alist', and is ignored."
 If wrapping is performed, point remains on the line. If the line does
 not need to be wrapped, move point to the next line and return t."
   (if (and (bound-and-true-p latex-extra-mode)
-           (null (latex/do-auto-fill-p)))
+         (null (latex/do-auto-fill-p)))
       (progn (forward-line 1) t)
     ;; The conditional above was added for latex equations. It relies
     ;; on the latex-extra package (on Melpa).
     (if (and (longlines-set-breakpoint)
-             ;; Make sure we don't break comments.
-             (null (nth 4 (parse-partial-sexp
-                           (line-beginning-position) (point)))))
+           ;; Make sure we don't break comments.
+           (null (nth 4 (parse-partial-sexp
+                         (line-beginning-position) (point)))))
         (progn
           ;; This `let' and the `when' below add indentation to the
           ;; wrapped line.
