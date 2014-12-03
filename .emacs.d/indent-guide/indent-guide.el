@@ -70,29 +70,36 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 (defconst indent-guide-version "2.1.6")
 
 ;; * customs
 
 (defgroup indent-guide nil
-  "show vertical lines to guide indentation"
+  "Show vertical lines to guide indentation."
   :group 'emacs)
 
 (defcustom indent-guide-char "|"
-  "character used as vertical line"
+  "Character used as vertical line."
+  :type 'string
   :group 'indent-guide)
 
 (defcustom indent-guide-inhibit-modes '(dired-mode)
-  "list of major-modes in which indent-guide should be turned off"
+  "List of major-modes in which indent-guide should be turned off."
+  :type '(repeat symbol)
   :group 'indent-guide)
 
 (defcustom indent-guide-recursive nil
-  "when non-nil, draw multiple guide lines recursively."
+  "When non-nil, draw multiple guide lines recursively."
+  :type 'boolean
   :group 'indent-guide)
 
 (defcustom indent-guide-delay nil
   "When a positive number, rendering guide lines is delayed DELAY
-  seconds.")
+  seconds."
+  :type 'number
+  :group 'indent-guide)
 
 (defface indent-guide-face '((t (:foreground "#535353")))
   "Face used to indent guide lines."
@@ -257,6 +264,7 @@ the point."
 (defun indent-guide-pre-command-hook ()
   (indent-guide-remove))
 
+;;;###autoload
 (define-minor-mode indent-guide-mode
   "show vertical lines to guide indentation"
   :init-value nil
@@ -269,10 +277,11 @@ the point."
     (remove-hook 'pre-command-hook 'indent-guide-pre-command-hook t)
     (remove-hook 'post-command-hook 'indent-guide-post-command-hook t)))
 
+;;;###autoload
 (define-globalized-minor-mode indent-guide-global-mode
   indent-guide-mode
   (lambda ()
-    (unless (memq major-mode indent-guide-inhibit-modes)
+    (unless (cl-some 'derived-mode-p indent-guide-inhibit-modes)
       (indent-guide-mode 1))))
 
 ;; * provide
