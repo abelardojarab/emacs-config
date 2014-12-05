@@ -91,57 +91,30 @@
 (cond
  ;; Windows
  ((equal system-type 'windows-nt)
-  (global-set-key [(control o)] 'dlgopen-open-files)
+  (global-set-key "\C-x\C-f" 'dlgopen-open-files)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . dlgopen-open-files))
   ) ;; if
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
      (executable-find "kdialog"))
-  (global-set-key [(control o)] 'kde-open-file)
+  (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
   ) ;; if
 
  ;; Mac
  ((equal system-type 'darwin)
-  (global-set-key [(control o)] 'mac-open-file)
+  (global-set-key "\C-x\C-f" 'mac-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . mac-open-file))
   ) ;; if
 
  (t
-  (global-set-key [(control o)] 'find-file)
+  nil
   )) ;; cond
 
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-S-v") 'browse-kill-ring)
-
-;; Jump between buffers
-(defun xah-next-user-buffer ()
-  "Switch to the next user buffer.
- (buffer name does not start with *.)"
-  (interactive)
-  (next-buffer)
-  (let ((i 0))
-    (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
-      (setq i (1+ i)) (next-buffer))))
-
-(defun xah-previous-user-buffer ()
-  "Switch to the previous user buffer.
- (buffer name does not start with *.)"
-  (interactive)
-  (previous-buffer)
-  (let ((i 0))
-    (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
-      (setq i (1+ i)) (previous-buffer))))
-(global-set-key (kbd "C-3")  'xah-previous-user-buffer)
-(global-set-key (kbd "C-4")  'xah-next-user-buffer)
-
-;; Jump between windows
-(require 'popup-select-window)
-(global-set-key (kbd "C-0") 'psw-switch-buffer)
-(global-set-key (kbd "C-1") 'psw-switch-function)
-(global-set-key (kbd "C-2") 'popup-select-window)
 
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
@@ -288,9 +261,42 @@
 ;; Mac Key mode
 (require 'mac-key-mode)
 
+;; Faster buffer switching
+(add-to-list 'load-path "~/.emacs.d/popup-switcher")
+(require 'popup-switcher)
+(require 'popup-select-window)
+
+;; Jump between buffers
+(defun xah-next-user-buffer ()
+  "Switch to the next user buffer.
+ (buffer name does not start with *.)"
+  (interactive)
+  (next-buffer)
+  (let ((i 0))
+    (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
+      (setq i (1+ i)) (next-buffer))))
+
+(defun xah-previous-user-buffer ()
+  "Switch to the previous user buffer.
+ (buffer name does not start with *.)"
+  (interactive)
+  (previous-buffer)
+  (let ((i 0))
+    (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
+      (setq i (1+ i)) (previous-buffer))))
+(global-set-key [C-M-prior]  'popup-select-window-previous)
+(global-set-key [C-M-next]  'popup-select-window-next)
+
+;; Jump between windows
+(require 'eassist)
+(global-set-key (kbd "C-0") 'psw-switch-buffer)
+(global-set-key (kbd "C-1") 'psw-switch-function)
+
 ;; Overwrite other modes
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
+(define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'ecb-redraw-layout)
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
@@ -302,6 +308,11 @@
 
 ;; Disable overwrite for some modes
 (add-hook 'org-mode-hook 'my-minibuffer-setup-hook)
+(add-hook 'python-mode-hook 'my-minibuffer-setup-hook)
+(add-hook 'c-common-mode-hook 'my-minibuffer-setup-hook)
+
+;; Selecting line with the mouse
+(require 'drag-select-lines)
 
 ;; Advice to set proper order for keymaps
 (defadvice load (after give-my-keybindings-priority)
@@ -311,17 +322,6 @@
         (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
-
-;; Faster buffer switching
-(add-to-list 'load-path "~/.emacs.d/popup-switcher")
-(require 'popup-switcher)
-(global-set-key [f4] 'psw-switch-buffer)
-(global-set-key [(control shift mouse-3)] 'psw-switch-buffer)
-
-;; Enable function switching too
-(require 'eassist)
-(eval-after-load "eassist"
-  '(global-set-key (kbd "<C-f4>") 'psw-switch-function))
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here

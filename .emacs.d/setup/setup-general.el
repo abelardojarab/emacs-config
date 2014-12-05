@@ -24,9 +24,6 @@
 
 ;;; Code:
 
-;; Disable menu bar
-(menu-bar-mode -1)
-
 ;; Printing
 ;; 2 column landscape size 7 prints column 0-78, lines 1 to 70
 (setq ps-paper-type 'a4
