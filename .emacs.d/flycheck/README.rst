@@ -18,32 +18,35 @@
                   :target: http://stable.melpa.org/#/flycheck
                   :alt: MELPA Stable Status
 
-===========================================================
- Flycheck |license| |melpa| |melpa-stable| |docs| |travis|
-===========================================================
+.. |waffle| image:: https://badge.waffle.io/flycheck/flycheck.svg?label=ready&title=Ready
+            :target: https://waffle.io/flycheck/flycheck
+            :alt: Ready issues
 
-.. image:: https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/logo.png
-   :target: http://www.flycheck.org
-   :align: center
+.. |logo| image:: https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/logo.png
+          :target: http://www.flycheck.org
+          :alt: Flycheck logo
+
+========
+ |logo|
+========
+
+|license| |melpa| |melpa-stable| |waffle| |docs| |travis|
 
 .. default-role:: code
 
-Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs 24,
+**Flycheck** is a modern on-the-fly syntax checking extension for GNU Emacs 24,
 intended as replacement for the older Flymake extension which is part of GNU
 Emacs.
 
 It uses various syntax checking and linting tools to check the contents of
 buffers, and reports warnings and errors directly in the buffer, or in an
-optional error list.  The following screenshot shows Flycheck in an Emacs Lisp
-buffer, with error highlights, indicators and the error list:
+optional error list.  The following screenshow shows Flycheck at work in a
+Haskell buffer, using GHC and Hlint for syntax checking:
 
-.. figure:: https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/screenshot.png
+.. figure:: https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/screencast.gif
    :align: center
-   :width: 731
-   :height: 519
-   :scale: 75%
 
-The color theme in the screenshot is `Solarized Light`_, together with the the
+The color theme in this screencast is `Solarized Light`_, with the the
 `Source Code Pro`_ font.
 
 .. _Solarized Light: https://github.com/bbatsov/solarized-emacs
@@ -106,11 +109,12 @@ Documentation is available at http://www.flycheck.org:
 Support & Contribution
 ======================
 
-- `Issue tracker`_
+- `Issue tracker`_ and `Waffle Board`_
 - Github_
 - `Contributor Guide`_
 
 .. _Issue tracker: https://github.com/flycheck/flycheck/issues
+.. _Waffle Board: https://waffle.io/flycheck/flycheck
 .. _Github: https://github.com/flycheck/flycheck
 .. _Contributor Guide: http://www.flycheck.org/en/latest/index.html#contributor-guide
 

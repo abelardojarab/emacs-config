@@ -16,6 +16,34 @@ You will also find this document helpful if you want to develop Flycheck itself.
 .. contents:: Contents
    :local:
 
+.. _api-syntax-checks:
+
+Syntax checks
+=============
+
+A syntax check performs the following steps:
+
+1. Run hooks in :hook:`flycheck-before-syntax-check-hook`
+2. Clear error information from previous syntax checks.
+3. Select a :term:`suitable syntax checker`.
+4. Copy the contents of the buffer to be checked to a temporary file.
+5. Run the syntax checker.
+6. Parse the output of the tool, and report all errors and warnings, via
+   :hook:`flycheck-process-error-functions`
+7. If the buffer can be checked with another syntax checker, continue from step
+   4, but with the next syntax checker.  This is called :term:`chaining` of
+   syntax checkers.
+8. Run hooks in :hook:`flycheck-after-syntax-check-hook`.
+
+.. hook:: flycheck-after-syntax-check-hook
+   :auto:
+
+.. hook:: flycheck-before-syntax-check-hook
+   :auto:
+
+.. hook:: flycheck-syntax-check-failed-hook
+   :auto:
+
 .. _api-generic-syntax-checkers:
 
 Generic syntax checkers
@@ -99,10 +127,23 @@ Additionally, Flycheck has some built-in error filters for generic checkers:
 .. function:: flycheck-sanitize-errors
    :auto:
 
+.. function:: flycheck-increment-error-columns
+   :auto:
+
 .. function:: flycheck-collapse-error-message-whitespace
    :auto:
 
+.. function:: flycheck-dedent-error-messages
+   :auto:
+
 .. function:: flycheck-fold-include-errors
+   :auto:
+
+.. function:: flycheck-dequalify-error-ids
+   :auto:
+
+.. function:: flycheck-remove-error-ids
+   :auto:
 
 .. _api-command-syntax-checkers:
 
@@ -242,11 +283,6 @@ See :infonode:`(cl)Structures` for more information about CL structures.
 
       The buffer object referring to the buffer this error belongs to.
 
-      .. note::
-
-         You do not need to set this attribute when creating errors in an error
-         parser.  Flycheck automatically keeps track of the buffer itself.
-
    .. cl-slot:: checker
 
       The syntax checker that reported this error.
@@ -261,10 +297,22 @@ See :infonode:`(cl)Structures` for more information about CL structures.
 
    .. cl-slot:: column
 
-      An integer providing the column the error refers to.
+      An *optional* integer providing the column the error refers to.
 
       If this attribute is `nil`, Flycheck will assume that the error refers to
       the whole line.
+
+      .. warning::
+
+         For compatibility with external programs and **unlike** Emacs itself
+         (e.g. in Compile Mode), Flycheck uses 1-based columns, not 0-based: The
+         first character on a line is column 1.
+
+         This is the format used by most external programs, but occasionally a
+         program tries to proactively adapt to Emacs' convention, and outputs
+         0-based columns.  In this case, you need to adapt the column numbers
+         for Flycheck, via :function:`flycheck-increment-error-columns` as
+         `:error-filter`.
 
    .. cl-slot:: message
 
@@ -275,10 +323,17 @@ See :infonode:`(cl)Structures` for more information about CL structures.
       The error level of the message, as symbol denoting an error level defined
       with :function:`flycheck-define-error-level`.
 
+   .. cl-slot:: id
+
+      An *optional* unique identifier for this kind of error.
+
+      This field should identify the kind of an error, not the individual error
+      itself.
+
    There are two constructors to create new :cl-struct:`flycheck-error` objects:
 
    .. function:: flycheck-error-new-at line column &optional level message &key \
-                    checker filename buffer
+                    checker id filename buffer
 
       Create a new Flycheck error at the given :var:`line` and :var:`column`.
 
@@ -287,10 +342,11 @@ See :infonode:`(cl)Structures` for more information about CL structures.
       :var:`message` arguments fill the :cl-slot:`level` and cl-slot:`message`
       slots respectively.
 
-      :var:`checker`, :var:`filename` and :var:`buffer` are keyword arguments,
-      for :cl-slot:`checker`, :cl-slot:`filename` and :cl-slot:`buffer`
-      respectively.  :var:`buffer` defaults to the current buffer, the other two
-      default to `nil`.
+      :var:`checker`, :var:`id`, :var:`filename` and :var:`buffer` are keyword
+      arguments, for :cl-slot:`checker`, :cl-slot:`id`, :cl-slot:`filename` and
+      :cl-slot:`buffer` respectively.  :var:`buffer` defaults to the current
+      buffer and :var:`filename` to the file name of the current buffer.  The
+      other keyword arguments default to `nil`.
 
       .. warning::
 
@@ -339,6 +395,8 @@ See :infonode:`(cl)Structures` for more information about CL structures.
 Error processing
 ----------------
 
+.. hook:: flycheck-process-error-functions
+
 .. function:: flycheck-add-overlay
 
 Error analysis
@@ -379,6 +437,9 @@ You can define new error levels with :function:`flycheck-define-error-level`:
 
 Flycheck buffer status
 ======================
+
+.. hook:: flycheck-status-changed-functions
+   :auto:
 
 .. function:: flycheck-report-status
    :auto:

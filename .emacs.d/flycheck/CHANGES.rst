@@ -11,6 +11,11 @@ master (in development)
     `flycheck-error` now
   - The internals of syntax checker definitions have changed again.  **All
     packages depending on Flycheck must be recompiled!** [GH-524]
+  - `flycheck-error-list-refresh` is not an interactive command anymore
+  - Replace `flycheck-perlcritic-verbosity` with `flycheck-perlcritic-severity`
+  - Replace `flycheck-copy-messages-as-kill` with `flycheck-copy-errors-as-kill`
+    [GH-529]
+  - Remove `flycheck-google-messages` command
 
 - New features:
 
@@ -19,6 +24,11 @@ master (in development)
     arbitrary Emacs Lisp functions [GH-169] [GH-524]
   - Add `flycheck-define-command-checker` as non-macro variant of
     `flycheck-define-checker` [GH-524]
+  - Add support for IDs of errors [GH-529]
+  - Add special `id` sexp to parse error ids with `:error-patterns` [GH-529]
+  - Parse error IDs from Checkstyle XML [GH-259]
+  - `flycheck-copy-errors-as-kill` can put error ids into kill ring now [GH-529]
+  - Parse error IDs from many error checks [GH-259]
 
 - Improvements:
 
@@ -27,6 +37,8 @@ master (in development)
   - Add explicit `load-path` inheritance to `flycheck-emacs-lisp-load-path`, via
     new `inherit` value [GH-511]
   - Parse help messages from `rustc` [GH-517]
+  - `g` in the error list checks the source buffer again [GH-532]
+  - `haskell-ghc` supports literate Haskell now [GH-535]
 
 - Bug fixes:
 
@@ -34,6 +46,8 @@ master (in development)
   - Fix shell quoting in `flycheck-compile` [GH-522] [GH-523]
   - Fix faulty properties of customize options which broke `customize-changed`
     and related functions
+  - Fix use deprecated option in `coffee-coffeelint`
+  - Fix error columns of `python-pylint` [GH-536]
 
 0.21 (Oct 26, 2014)
 -------------------
