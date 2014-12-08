@@ -163,11 +163,11 @@
 ;; Setup eshell
 (require 'setup-eshell)
 
-;; Setup keys
-(require 'setup-keys)
-
 ;; Setup ECB
 (require 'setup-ecb)
+
+;; Setup keys
+(require 'setup-keys)
 
 ;; Setup server
 (unless (string-equal system-type "windows-nt")
