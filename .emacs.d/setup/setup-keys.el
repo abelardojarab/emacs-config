@@ -292,7 +292,7 @@
 (require 'eassist)
 (global-set-key (kbd "C-0") 'psw-switch-buffer)
 (global-set-key (kbd "C-1") 'psw-switch-function)
-(global-set-key [(meta left)] 'psw-switch-buffer)
+(global-set-key [(meta left)] 'psw-switch-function)
 (global-set-key [(meta right)] 'psw-switch-buffer)
 
 ;; Overwrite other modes
@@ -302,7 +302,7 @@
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'ecb-redraw-layout)
 (define-key my-keys-minor-mode-map (kbd "C-S-<left>") 'popup-select-window)
 (define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
-(define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-buffer)
+(define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
 (define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-buffer)
 
 (define-minor-mode my-keys-minor-mode
