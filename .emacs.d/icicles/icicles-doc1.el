@@ -6,14 +6,14 @@
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
 ;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
 ;; Created: Tue Aug  1 14:21:16 1995
-;; Last-Updated: Mon Oct 27 23:36:51 2014 (-0700)
+;; Last-Updated: Sat Dec  6 10:02:58 2014 (-0800)
 ;;           By: dradams
-;;     Update #: 28310
+;;     Update #: 28339
 ;; URL: http://www.emacswiki.org/icicles-doc1.el
 ;; Doc URL: http://www.emacswiki.org/Icicles
 ;; Keywords: internal, extensions, help, abbrev, local, minibuffer,
 ;;           keys, apropos, completion, matching, regexp, command
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -2296,15 +2296,27 @@
 ;;  You need not make a final choice once and for all between
 ;;  `alternatives' and `more-of-the-same'.  You can also make an
 ;;  interactive choice by using a prefix argument (`C-u') at any time
-;;  to override the value of `icicle-default-thing-insertion'.  If you
-;;  use plain `C-u', then `M-.' inserts alternative strings.  If you
-;;  use a numeric prefix argument N (not just plain `C-u'), then it is
-;;  the same as using `M-.' N times with `more-of-the-same' as the
-;;  value of `icicle-default-thing-insertion'.
+;;  to override the value of `icicle-default-thing-insertion'.
 ;;
-;;  And, if the numeric argument is negative, then text is grabbed to
-;;  the left of the cursor, instead of to the right.  In the example
-;;  above, if you used `M-- M-. M-. M-.', then the successive
+;;  If you use plain `C-u', then `M-.' flips the behavior specified by
+;;  `icicle-default-thing-insertion'.
+;;
+;;  If you use a numeric prefix argument N (not just plain `C-u'),
+;;  then:
+;;
+;;  * If `M-.' would normally grab the next thing of the same type,
+;;    then N such things are grabbed in succession.  If N is negative
+;;    then the things are grabbed successively from the left, not the
+;;    right.
+;;
+;;  * If `M-.' would normally grab an alternative thing of a different
+;;    type, then numeric N tells Icicles to grab the particular thing
+;;    at point and then evaluate it as a Lisp sexp and insert the
+;;    result of that evaluation in the minibuffer.
+;;
+;;  So for example, returning to the example above, with the cursor is
+;;  at the beginning of the word "use" in the first paragraph of this
+;;  section, if you used `M-- M-. M-. M-.', then the successive
 ;;  insertions would be as follows:
 ;;
 ;;  differently
@@ -2312,8 +2324,19 @@
 ;;  differently if you
 ;;  ...
 ;;
-;;  If you used `M--3 M-.', then you would immediately insert
-;;  `differently if you'.
+;;  And if you instead used `M--3 M-.', then you would immediately
+;;  insert `differently if you'.
+;;
+;;  The use of a numeric prefix arg to evaluate a Lisp sexp does
+;;  require that you know when the particular thing-grabbing function
+;;  that you want is coming up next.  So if, for example, you want to
+;;  evaluate the active region and insert the resulting value, then
+;;  you use `M-. C-9 M-.', since (by default) it is the second `M-.'
+;;  that grabs the region text.
+;;
+;;  There are thus lots of possibilities when you use `M-.'
+;;  repeatedly.  You need not bother with them until you need them.
+;;  You can build up to using them all gradually.
 ;;
 ;;(@* "Resolve File Names")
 ;;  ** Resolve File Names **
@@ -3790,6 +3813,55 @@
 ;;  not in general, then customize either or both options
 ;;  `icicle-buffers-ido-like-flag' and `icicle-files-ido-like-flag' to
 ;;  non-`nil'.
+;;
+;;(@* "IswitchB-Like Behavior for `icicle-buffer'")
+;;  ** IswitchB-Like Behavior for `icicle-buffer' **
+;;
+;;  As mentioned, you can use IswitchB with Icicles.  GNU Emacs
+;;  deprecated IswitchB starting with Emacs 24.4, but it is still
+;;  available.
+;;
+;;  If you want to get IswitchB-like behavior with Icicles without
+;;  using IswitchB then you can advise `icicle-buffer'.
+;;
+;;  There are at least two ways to do this, depending on what behavior
+;;  you want.  Let's assume that in any case (a) you want incremental
+;;  completion from the outset (no need to hit `TAB' or `S-TAB', and
+;;  (b) you want to Emacs to accept as your choice the sole candidate
+;;  as soon as you narrow matching to a single candidate.  For (a),
+;;  you bind `icicle-incremental-completion' to `always'.  For (b),
+;;  you bind `icicle-top-level-when-sole-completion-flag' to `t'.
+;;
+;;  1. In the first case, prefix completion is the default (as usual),
+;;     but `icicle-buffer' uses vanilla Emacs completion as the
+;;     Icicles `TAB' completion method.  This reflects IswitchB's
+;;     substring matching.  To do this, you bind
+;;     `icicle-current-TAB-method' to `vanilla'.
+;;
+;;  2. In the second case, `icicle-buffer' starts out with apropos
+;;     completion, not prefix completion.  This too reflects
+;;     IswitchB's substring matching, but it extends it to regexp
+;;     completion.  To do this, you bind `icicle-default-cycling-mode'
+;;     to `apropos'.
+;;
+;;  ;; 1. Use vanilla Emacs matching for prefix completion by default.
+;;  (defadvice icicle-buffer (around iswitchb-like-1 activate)
+;;    (interactive)
+;;    (let* ((icicle-current-TAB-method                   'vanilla)
+;;           (icicle-incremental-completion               'always)
+;;           (icicle-top-level-when-sole-completion-flag  't))
+;;      ad-do-it))
+;;  (ad-activate 'icicle-buffer)
+;;
+;;  ;; 2. Start with apropos completion by default.
+;;  (defadvice icicle-buffer (around iswitchb-like-2 activate)
+;;    (interactive)
+;;    (let* ((icicle-default-cycling-mode  'apropos)
+;; 	     (icicle-incremental-completion  'always)
+;; 	     (icicle-top-level-when-sole-completion-flag 't))
+;;      ad-do-it))
+;;  (ad-activate 'icicle-buffer)
+;;
 ;;
 ;;  See Also:
 ;;
@@ -5580,10 +5652,10 @@
 ;;  Icicles file-name commands that use multi-completion include
 ;;  `icicle-locate-file', `icicle-locate-file-other-window',
 ;;  `icicle-recent-file', and `icicle-recent-file-other-window'.
-;;  These commands let you match against two-part multi-completion
-;;  candidates that are composed of an absolute file name and the
-;;  file's last modification date.  This means that you can easily
-;;  find those notes you took sometime last week...
+;;  These commands let you match against multi-completion candidates
+;;  that have an absolute file name part and a part that is the file's
+;;  last modification date.  This means that you can easily find those
+;;  notes you took sometime last week...
 ;;
 ;;  The way multi-completion commands work is a bit inelegant perhaps,
 ;;  and it can take a little getting used to, but it is quite powerful
@@ -6531,6 +6603,7 @@
 ;;  * `icicle-find-file-read-only' (`C-x C-r') - Visit read-only
 ;;  * `icicle-find-first-tag' (`C-x 4 .') - Trip among tag hits
 ;;  * `icicle-find-tag' (`M-.')        - Trip among tag hits
+;;  * `icicle-goto-any-marker' (`C-0 C-SPC') - Trip among all markers
 ;;  * `icicle-goto-global-marker' (`C-- C-x C-SPC') - Trip among
 ;;                                       global markers
 ;;  * `icicle-goto-marker' (`C-- C-SPC') - Trip among local markers
@@ -6604,11 +6677,12 @@
 ;;  `wide-n.el' for `icicle-wide-n'.)
 ;;
 ;;  Note: Icicles search commands and commands `icicle-find-tag',
-;;  `icicle-goto-marker', and `icicle-goto-global-marker' effectively
-;;  bind user option `icicle-incremental-completion' to `always',
-;;  because I think you typically want to start them out with
-;;  incremental completion turned on.  Remember that you can use `C-#'
-;;  (once or twice) to turn incremental completion off.
+;;  `icicle-goto-marker', `icicle-goto-any-marker', and
+;;  `icicle-goto-global-marker' effectively bind user option
+;;  `icicle-incremental-completion' to `always', because I think you
+;;  typically want to start them out with incremental completion
+;;  turned on.  Remember that you can use `C-#' (once or twice) to
+;;  turn incremental completion off.
 ;;
 ;;(@* "Highlighting the Destination")
 ;;  ** Highlighting the Destination **

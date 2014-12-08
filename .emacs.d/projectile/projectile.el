@@ -6,7 +6,7 @@
 ;; URL: https://github.com/bbatsov/projectile
 ;; Keywords: project, convenience
 ;; Version: 0.11.0
-;; Package-Requires: ((s "1.6.0") (dash "1.5.0") (pkg-info "0.4"))
+;; Package-Requires: ((s "1.6.0") (f "0.17.1") (dash "1.5.0") (pkg-info "0.4"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -38,6 +38,7 @@
 
 (require 'thingatpt)
 (require 's)
+(require 'f)
 (require 'dash)
 (require 'grep)           ; For `rgrep'
 (require 'pkg-info)       ; For `pkg-info-version-info'
@@ -365,6 +366,12 @@ The saved data can be restored with `projectile-unserialize'."
   "List of locations where we have previously seen projects.
 The list of projects is ordered by the time they have been accessed.")
 
+(defvar projectile-known-projects-on-file nil
+  "List of known projects reference point.
+
+Contains a copy of `projectile-known-projects' when it was last
+synchronized with `projectile-known-projects-file'.")
+
 (defcustom projectile-known-projects-file
   (expand-file-name "projectile-bookmarks.eld"
                     user-emacs-directory)
@@ -512,6 +519,7 @@ The cache is created both in memory and on the hard drive."
   "Check if FILE is already in PROJECT cache."
   (member file (gethash project projectile-projects-cache)))
 
+;;;###autoload
 (defun projectile-cache-current-file ()
   "Add the currently visited file to the cache."
   (interactive)
@@ -541,8 +549,12 @@ The cache is created both in memory and on the hard drive."
 (defun projectile-cache-projects-find-file-hook ()
   "Function for caching projects with `find-file-hook'."
   (when (projectile-project-p)
-    (projectile-add-known-project (projectile-project-root))
-    (projectile-save-known-projects)))
+    (let ((known-projects (and (sequencep projectile-known-projects)
+                               (copy-sequence projectile-known-projects))))
+      (projectile-add-known-project (projectile-project-root))
+      (unless (equal known-projects projectile-known-projects)
+        (projectile-merge-known-projects)))))
+
 
 (defun projectile-maybe-invalidate-cache (force)
   "Invalidate if FORCE or project's dirconfig newer than cache."
@@ -728,7 +740,7 @@ Files are returned as relative paths to the project root."
   :group 'projectile
   :type 'string)
 
-(defcustom projectile-git-submodule-command "git submodule --quiet foreach 'echo $name' | tr '\\n' '\\0'"
+(defcustom projectile-git-submodule-command "git submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'"
   "Command used by projectile to get the files in git submodules."
   :group 'projectile
   :type 'string)
@@ -781,67 +793,9 @@ Files are returned as relative paths to the project root."
      ((eq vcs 'git) projectile-git-submodule-command)
      (t ""))))
 
-(defun projectile-get-all-sub-projects (project &optional known-projects)
+(defun projectile-get-all-sub-projects (project)
   "Get all sub-projects for a given projects.
-PROJECT is base directory to start search recursively.
-KNOWN-PROJECTS is all the currently known sub-projects.  It is used for testing
-already traversed sub-projects.
-
-The function handles also the case that a project has sub-projects that
-includes themselves as modules and could create a infinite loop when traverse
-the sub-project tree.  A sub-project is a another project inside current project
-that could also be consider a project when standing on its own.  Git submodule
-is an example of a sub-project.  This function is designed to extend with
-more VCS in general, since it uses the function `projectile-get-sub-projects-command'
-to return appropriate command for a VCS to list sup-project.
-
-Now, consider a project tree like this:
-
-root/
-    sub-project1/
-    sub-project2/
-    sub-project3/
-    .... main project's files and directories....
-
-Each such sub-project can also have sub-projects.  In the normal
-case, we can walk the directory tree all they way down.  The problem is,
-sub-projects can include itself as a sub-project! To solve this problem,
-the function checks that if it encounters existing sub-projects already
-processed before (this means the function walks up the directory tree again),
-it simply ignores to avoid infinite loop.
-
-An example is `yasnippet' Git project at the time of writing this:
-
-yasnippet/
-    snippets/  -> submodule
-    yasmate/   -> submodule
-
-
-Running \"git submodule\" inside `yasnippet/' returns this result:
-
- 16154e1462a8bbb2c5cf48e1101bd3f2c090e0fc snippets (remotes/origin/cleanup_html_tags-7-g16154e1)
- 0543618bd34a6715918992f01161c118f136bb37 yasmate (0543618)
-
-Running \"git submodule\" inside `yasnippet/yasmate' returns this result:
-
--993588a35d665427209936618a9e524679480e95 bundles/html-tmbundle
--d0c1ae22d326d310edaf126acf93588b7958f682 bundles/objc-tmbundle
--8091f39a6efd288c8793321e8822a639db3cc940 bundles/rails-tmbundle
--da63813a86d46f17abf0a9303de1149ca7cee60a bundles/ruby-tmbundle
-
-We change into the directory of either of those directory, for example:
-
-cd bundles/ruby-tmbundle
-
-Running \"git submodule\" any of those submodule returns this result:
-
--993588a35d665427209936618a9e524679480e95 ../html-tmbundle
--d0c1ae22d326d310edaf126acf93588b7958f682 ../objc-tmbundle
--8091f39a6efd288c8793321e8822a639db3cc940 ../rails-tmbundle
--da63813a86d46f17abf0a9303de1149ca7cee60a ../ruby-tmbundle
-
-So, each of those modules is point to itself! We must only check to avoid
-looping at a single point."
+PROJECT is base directory to start search recursively."
   (let* ((default-directory project)
          ;; search for sub-projects under current project `project'
          (submodules (mapcar
@@ -849,19 +803,14 @@ looping at a single point."
                         (file-name-as-directory (expand-file-name s default-directory)))
                       (projectile-files-via-ext-command (projectile-get-sub-projects-command)))))
 
-    ;; check if there are more submodules to be processed
-    ;; if not, returns found submodules since we reach the base case of recursion.
-    ;; or, if the current project already in the sub-project list;
-    ;; we are simply getting into a loop, so better terminate it here and returns nil
-    ;; because we already processed it..
     (cond
-     ((null submodules) known-projects)
-     ((member project known-projects) submodules)
+     ((null submodules)
+      nil)
      (t
-      (-flatten
-       ;; recursively get sub-projects of each sub-project
-       (mapcar (lambda (s)
-                 (projectile-get-all-sub-projects s (nconc known-projects submodules))) submodules))))))
+      (nconc submodules (-flatten
+                         ;; recursively get sub-projects of each sub-project
+                         (mapcar (lambda (s)
+                                   (projectile-get-all-sub-projects s)) submodules)))))))
 
 (defun projectile-get-sub-projects-files ()
   "Get files from sub-projects recursively."
@@ -873,7 +822,7 @@ looping at a single point."
                        (projectile-files-via-ext-command projectile-git-command))))
            (condition-case nil
                (projectile-get-all-sub-projects (projectile-project-root))
-             nil))))
+             (error nil)))))
 
 (defun projectile-get-repo-files ()
   "Get a list of the files in the project, including sub-projects."
@@ -997,6 +946,7 @@ opened through use of recentf."
   "Prepend the current project's name to STRING."
   (format "[%s] %s" (projectile-project-name) string))
 
+;;;###autoload
 (defun projectile-switch-to-buffer ()
   "Switch to a project buffer."
   (interactive)
@@ -1005,6 +955,7 @@ opened through use of recentf."
     "Switch to buffer: "
     (projectile-project-buffer-names))))
 
+;;;###autoload
 (defun projectile-switch-to-buffer-other-window ()
   "Switch to a project buffer and show it in another window."
   (interactive)
@@ -1013,6 +964,7 @@ opened through use of recentf."
     "Switch to buffer: "
     (projectile-project-buffer-names))))
 
+;;;###autoload
 (defun projectile-display-buffer ()
   "Display a project buffer in another window without selecting it."
   (interactive)
@@ -1021,6 +973,7 @@ opened through use of recentf."
     "Display buffer: "
     (projectile-project-buffer-names))))
 
+;;;###autoload
 (defun projectile-project-buffers-other-buffer ()
   "Switch to the most recently selected buffer project buffer.
 Only buffers not visible in windows are returned."
@@ -1033,6 +986,7 @@ Only buffers not visible in windows are returned."
              (not (get-buffer-window buffer 'visible)))
            (projectile-project-buffers)))
 
+;;;###autoload
 (defun projectile-multi-occur ()
   "Do a `multi-occur' in the project's buffers."
   (interactive)
@@ -1603,12 +1557,14 @@ PROJECT-ROOT is the targeted directory. If nil, use
           (projectile-expand-root test-file)
         (error "No matching test file found")))))
 
+;;;###autoload
 (defun projectile-find-implementation-or-test-other-window ()
   "Open matching implementation or test file in other window."
   (interactive)
   (find-file-other-window
    (projectile-find-implementation-or-test (buffer-file-name))))
 
+;;;###autoload
 (defun projectile-toggle-between-implementation-and-test ()
   "Toggle between an implementation file and its test file."
   (interactive)
@@ -1736,12 +1692,21 @@ to `projectile-grep-default-files'."
     (dolist (root-dir roots)
       (require 'grep)
       ;; in git projects users have the option to use `vc-git-grep' instead of `rgrep'
-      (if (and (eq (projectile-project-vcs) 'git) projectile-use-git-grep)
+      (if (and (eq (projectile-project-vcs) 'git)
+               projectile-use-git-grep
+               (fboundp 'vc-git-grep))
           (vc-git-grep search-regexp (or files "") root-dir)
         ;; paths for find-grep should relative and without trailing /
-        (let ((grep-find-ignored-directories (-union (-map (lambda (dir) (s-chop-suffix "/" (file-relative-name dir root-dir)))
-                                                           (cdr (projectile-ignored-directories))) grep-find-ignored-directories))
-              (grep-find-ignored-files (-union (-map (lambda (file) (file-relative-name file root-dir)) (projectile-ignored-files)) grep-find-ignored-files)))
+        (let ((grep-find-ignored-directories
+               (-union (-map (lambda (dir)
+                               (s-chop-suffix "/" (file-relative-name dir root-dir)))
+                             (cdr (projectile-ignored-directories)))
+                       grep-find-ignored-directories))
+              (grep-find-ignored-files
+               (-union (-map (lambda (file)
+                               (file-relative-name file root-dir))
+                             (projectile-ignored-files))
+                       grep-find-ignored-files)))
           (grep-compute-defaults)
           (rgrep search-regexp (or files "* .*") root-dir))))))
 
@@ -1793,6 +1758,7 @@ regular expression."
                                        (directory-file-name pattern)))
              (projectile-ignored-directories-rel) " "))
 
+;;;###autoload
 (defun projectile-regenerate-tags ()
   "Regenerate the project's [e|g]tags."
   (interactive)
@@ -1826,6 +1792,7 @@ regular expression."
           "Error loading tags-file: %s"
           (visit-tags-table tags-file t))))))
 
+;;;###autoload
 (defun projectile-find-tag ()
   "Find tag in project."
   (interactive)
@@ -1855,18 +1822,21 @@ regular expression."
   `(let ((default-directory ,dir))
      ,@body))
 
+;;;###autoload
 (defun projectile-run-command-in-root ()
   "Invoke `execute-extended-command' in the project's root."
   (interactive)
   (projectile-with-default-dir (projectile-project-root)
     (call-interactively 'execute-extended-command)))
 
+;;;###autoload
 (defun projectile-run-shell-command-in-root ()
   "Invoke `shell-command' in the project's root."
   (interactive)
   (projectile-with-default-dir (projectile-project-root)
     (call-interactively 'shell-command)))
 
+;;;###autoload
 (defun projectile-run-async-shell-command-in-root ()
   "Invoke `async-shell-command' in the project's root."
   (interactive)
@@ -1963,6 +1933,7 @@ to run the replacement."
                (projectile-project-p))
       (projectile-restore-window-config name))))
 
+;;;###autoload
 (defun projectile-save-project-buffers ()
   "Save all project buffers."
   (interactive)
@@ -1971,23 +1942,25 @@ to run the replacement."
       (when buffer-file-name
         (save-buffer)))))
 
+;;;###autoload
 (defun projectile-dired ()
   "Open `dired' at the root of the project."
   (interactive)
   (dired (projectile-project-root)))
 
+;;;###autoload
 (defun projectile-vc (&optional project-root)
   "Open `vc-dir' at the root of the project.
 
-For git projects `magit-status' is used if available."
+For git projects `magit-status-internal' is used if available."
   (interactive)
   (or project-root (setq project-root (projectile-project-root)))
-  (cond
-   ((and (eq (projectile-project-vcs project-root) 'git)
-         (fboundp 'magit-status))
-    (magit-status project-root))
-   (t (vc-dir project-root))))
+  (if (and (eq (projectile-project-vcs project-root) 'git)
+           (fboundp 'magit-status-internal))
+      (magit-status-internal project-root)
+    (vc-dir project-root)))
 
+;;;###autoload
 (defun projectile-recentf ()
   "Show a list of recently visited files in a project."
   (interactive)
@@ -2045,35 +2018,35 @@ For git projects `magit-status' is used if available."
 (defvar projectile-rust-cargo-compile-cmd "cargo build")
 (defvar projectile-rust-cargo-test-cmd "cargo test")
 
-(cl-dolist (var '(projectile-rails-compile-cmd
-                  projectile-ruby-compile-cmd
-                  projectile-ruby-test-cmd
-                  projectile-ruby-rspec-cmd
-                  projectile-django-compile-cmd
-                  projectile-django-test-cmd
-                  projectile-python-compile-cmd
-                  projectile-python-test-cmd
-                  projectile-symfony-compile-cmd
-                  projectile-symfony-test-cmd
-                  projectile-scons-compile-cmd
-                  projectile-scons-test-cmd
-                  projectile-maven-compile-cmd
-                  projectile-maven-test-cmd
-                  projectile-lein-compile-cmd
-                  projectile-lein-test-cmd
-                  projectile-rebar-compile-cmd
-                  projectile-rebar-test-cmd
-                  projectile-sbt-compile-cmd
-                  projectile-sbt-test-cmd
-                  projectile-make-compile-cmd
-                  projectile-make-test-cmd
-                  projectile-grunt-compile-cmd
-                  projectile-grunt-test-cmd
-                  projectile-haskell-cabal-compile-cmd
-                  projectile-haskell-cabal-test-cmd
-                  projectile-rust-cargo-compile-cmd
-                  projectile-rust-cargo-test-cmd))
-  (put var 'safe-local-variable #'stringp))
+(--each '(projectile-rails-compile-cmd
+          projectile-ruby-compile-cmd
+          projectile-ruby-test-cmd
+          projectile-ruby-rspec-cmd
+          projectile-django-compile-cmd
+          projectile-django-test-cmd
+          projectile-python-compile-cmd
+          projectile-python-test-cmd
+          projectile-symfony-compile-cmd
+          projectile-symfony-test-cmd
+          projectile-scons-compile-cmd
+          projectile-scons-test-cmd
+          projectile-maven-compile-cmd
+          projectile-maven-test-cmd
+          projectile-lein-compile-cmd
+          projectile-lein-test-cmd
+          projectile-rebar-compile-cmd
+          projectile-rebar-test-cmd
+          projectile-sbt-compile-cmd
+          projectile-sbt-test-cmd
+          projectile-make-compile-cmd
+          projectile-make-test-cmd
+          projectile-grunt-compile-cmd
+          projectile-grunt-test-cmd
+          projectile-haskell-cabal-compile-cmd
+          projectile-haskell-cabal-test-cmd
+          projectile-rust-cargo-compile-cmd
+          projectile-rust-cargo-test-cmd)
+  (put it 'safe-local-variable #'stringp))
 
 
 (defvar projectile-compilation-cmd-map
@@ -2169,12 +2142,13 @@ fallback to the original function."
                (find-file-noselect filename))
            ;; Try to find the filename using projectile
            (and (projectile-project-p)
-                (loop with root = (projectile-project-root)
-                      for dir in (cons "" (projectile-current-project-dirs))
-                      for file = (expand-file-name filename
-                                                   (expand-file-name dir root))
-                      if (file-exists-p file)
-                      return (find-file-noselect file)))
+                (let ((root (projectile-project-root))
+                      (dirs (cons "" (projectile-current-project-dirs))))
+                  (-when-let (full-filename (->> dirs
+                                              (--map (f-join root it filename))
+                                              (-filter #'file-exists-p)
+                                              (-first-item)))
+                    (find-file-noselect full-filename))))
            ;; Fall back to the old function `compilation-find-file'
            ad-do-it))))
 
@@ -2260,6 +2234,7 @@ This command will first prompt for the directory the file is in."
                        (projectile-current-project-files)))))
            projectile-known-projects))
 
+;;;###autoload
 (defun projectile-find-file-in-known-projects ()
   "Jump to a file in any of the known projects."
   (interactive)
@@ -2281,18 +2256,22 @@ It handles the case of remote files as well. See `projectile-cleanup-known-proje
    ((file-remote-p project))
    ((file-readable-p project))))
 
+;;;###autoload
 (defun projectile-cleanup-known-projects ()
   "Remove known projects that don't exist anymore."
   (interactive)
-  (let* ((separated-projects (-separate #'projectile-keep-project-p projectile-known-projects))
+  (projectile-merge-known-projects)
+  (let* ((separated-projects
+          (-separate #'projectile-keep-project-p projectile-known-projects))
          (projects-kept (car separated-projects))
          (projects-removed (cadr separated-projects)))
     (setq projectile-known-projects projects-kept)
-    (projectile-save-known-projects)
+    (projectile-merge-known-projects)
     (if projects-removed
         (message "Projects removed: %s" (s-join ", " projects-removed))
       (message "No projects needed to be removed."))))
 
+;;;###autoload
 (defun projectile-clear-known-projects ()
   "Clear both `projectile-known-projects' and `projectile-known-projects-file'."
   (interactive)
@@ -2305,10 +2284,11 @@ It handles the case of remote files as well. See `projectile-cleanup-known-proje
                                                  projectile-known-projects)))
   (setq projectile-known-projects
         (--reject (string= project it) projectile-known-projects))
-  (projectile-save-known-projects)
+  (projectile-merge-known-projects)
   (when projectile-verbose
     (message "Project %s removed from the list of known projects." project)))
 
+;;;###autoload
 (defun projectile-remove-current-project-from-known-projects ()
   "Remove the current project from the list of known projects."
   (interactive)
@@ -2330,14 +2310,40 @@ It handles the case of remote files as well. See `projectile-cleanup-known-proje
   "Load saved projects from `projectile-known-projects-file'.
 Also set `projectile-known-projects'."
   (setq projectile-known-projects
-        (projectile-unserialize projectile-known-projects-file)))
+        (projectile-unserialize projectile-known-projects-file))
+  (setq projectile-known-projects-on-file
+        (and (sequencep projectile-known-projects)
+             (copy-sequence projectile-known-projects))))
 
 ;; load the known projects
 (projectile-load-known-projects)
 
 (defun projectile-save-known-projects ()
   "Save PROJECTILE-KNOWN-PROJECTS to PROJECTILE-KNOWN-PROJECTS-FILE."
-  (projectile-serialize projectile-known-projects projectile-known-projects-file))
+  (projectile-serialize projectile-known-projects
+                        projectile-known-projects-file)
+  (setq projectile-known-projects-on-file
+        (and (sequencep projectile-known-projects)
+             (copy-sequence projectile-known-projects))))
+
+(defun projectile-merge-known-projects ()
+  "Merge any change from `projectile-known-projects-file' and save to disk.
+
+This enables multiple Emacs processes to make changes without
+overwriting each other's changes."
+  (let* ((known-now projectile-known-projects)
+         (known-on-last-sync projectile-known-projects-on-file)
+         (known-on-file
+          (projectile-unserialize projectile-known-projects-file))
+         (removed-after-sync (-difference known-on-last-sync known-now))
+         (removed-in-other-process
+          (-difference known-on-last-sync known-on-file))
+         (result (-distinct
+                  (-difference
+                   (-concat known-now known-on-file)
+                   (-concat removed-after-sync removed-in-other-process)))))
+    (setq projectile-known-projects result)
+    (projectile-save-known-projects)))
 
 (define-ibuffer-filter projectile-files
   "Show Ibuffer with all buffers in the current project."
@@ -2384,20 +2390,11 @@ available actions.
 
 See `def-projectile-commander-method' for defining new methods."
   (interactive)
-  (message "Commander [%s]: "
-           (apply #'string (mapcar #'car projectile-commander-methods)))
-  (let* ((ch (save-window-excursion
-               (select-window (minibuffer-window))
-               (read-char)))
-         (method (cl-find ch projectile-commander-methods :key #'car)))
-    (cond (method
-           (funcall (cl-caddr method)))
-          (t
-           (message "No method for character: ?\\%c" ch)
-           (ding)
-           (sleep-for 1)
-           (discard-input)
-           (projectile-commander)))))
+  (-let* ((choices (-map #'car projectile-commander-methods))
+          (prompt (concat "Commander [" choices "]: "))
+          (ch (read-char-choice prompt choices))
+          ((_ _ fn) (assq ch projectile-commander-methods)))
+    (funcall fn)))
 
 (defmacro def-projectile-commander-method (key description &rest body)
   "Define a new `projectile-commander' method.
@@ -2411,16 +2408,17 @@ is chosen."
   (let ((method `(lambda ()
                    ,@body)))
     `(setq projectile-commander-methods
-           (cl-sort (cons (list ,key ,description ,method)
-                          (cl-remove ,key projectile-commander-methods :key #'car))
-                    #'< :key #'car))))
+           (--sort (< (car it) (car other))
+                   (cons (list ,key ,description ,method)
+                         (assq-delete-all ,key projectile-commander-methods))))))
 
 (def-projectile-commander-method ?? "Commander help buffer."
   (ignore-errors (kill-buffer projectile-commander-help-buffer))
   (with-current-buffer (get-buffer-create projectile-commander-help-buffer)
     (insert "Projectile Commander Methods:\n\n")
-    (loop for (key line nil) in projectile-commander-methods
-          do (insert (format "%c:\t%s\n" key line)))
+    (--each projectile-commander-methods
+      (-let [(key line _) it]
+        (insert (format "%c:\t%s\n" key line))))
     (goto-char (point-min))
     (help-mode)
     (display-buffer (current-buffer) t))

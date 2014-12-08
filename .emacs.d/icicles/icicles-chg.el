@@ -6,14 +6,14 @@
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
 ;; Copyright (C) 2007-2014, Drew Adams, all rights reserved.
 ;; Created: Tue Nov 27 07:47:53 2007
-;; Last-Updated: Sun Nov 16 16:56:44 2014 (-0800)
+;; Last-Updated: Fri Nov 28 20:30:06 2014 (-0800)
 ;;           By: dradams
-;;     Update #: 11334
+;;     Update #: 11353
 ;; URL: http://www.emacswiki.org/icicles-chg.el
 ;; Doc URL: http://www.emacswiki.org/Icicles
 ;; Keywords: extensions, help, abbrev, local, minibuffer,
 ;;           keys, apropos, completion, matching, regexp, command
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -85,6 +85,8 @@
  
 ;;;(@* "CHANGE LOG FOR `icicles-cmd1.el'")
 ;;
+;; 2014/11/22 dadams
+;;     icicle-buffer-multi-complete: Do not prepend ^ if TAB completion method is not basic.
 ;; 2014/10/26 dadams
 ;;     For Emacs 25+: defalias icicle-ORIG-elisp-completion-at-point to elisp-completion-at-point.
 ;; 2014/08/22 dadams
@@ -1133,6 +1135,14 @@
  
 ;;;(@* "CHANGE LOG FOR `icicles-cmd2.el'")
 ;;
+;; 2014/11/28 dadams
+;;     Added: icicle-goto-any-marker.
+;;     icicle-goto-marker-or-set-mark-command: C-0 is now icicle-goto-any-marker. 
+;;     icicle-goto-marker-1:
+;;       Handle symbol all as arg.  Pass buffers or symbol global, not rings, to icicle-markers.
+;;       Remove duplicates.
+;;     icicle-marker+text: No-op if MARKER buffer is invalid.
+;;     icicle-markers: Arg is now BUFFERS, not a marker ring: the symbol global or a list of buffers.
 ;; 2014/10/19 dadams
 ;;     icicle-Info-index: Updated doc string for highlighting of visited nodes.
 ;; 2014/10/17 dadams
@@ -6168,6 +6178,11 @@
  
 ;;;(@* "CHANGE LOG FOR `icicles-mode.el'")
 ;;
+;; 2014/11/28 dadams
+;;     icicle-define-icicle-maps:
+;;       Added entry for icicle-goto-any-marker.
+;;       Check global-mark-ring for :enable - do not call icicle-markers.
+;;     icicle-show-help-in-mode-line: No-op if last command exited minibuffer.
 ;; 2014/11/15 dadams
 ;;     Moved here from icicles-fn.el: icicle-help-line-buffer, icicle-help-line-file,
 ;;                                    icicle-show-help-in-mode-line, icicle-show-in-mode-line.

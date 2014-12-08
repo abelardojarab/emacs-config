@@ -133,6 +133,15 @@
 (add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
 (add-hook 'mail-mode-hook 'ac-ispell-ac-setup)
 
+;; HTMl completion
+(add-to-list 'load-path "~/.emacs.d/ac-html")
+(when (require 'ac-html nil 'noerror)
+  (add-hook 'html-mode-hook 'ac-html-enable)
+  (add-to-list 'web-mode-ac-sources-alist
+               '("html" . (ac-source-html-attribute-value
+                           ac-source-html-tag
+                           ac-source-html-attribute))))
+
 ;; Enable auto-complete on more modes
 (dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
                                     sass-mode yaml-mode csv-mode espresso-mode haskell-mode
