@@ -24,10 +24,6 @@
 
 ;;; Code:
 
-;; Non-nil means do not display continuation lines.
-;; Instead, give each line of text just one screen line.
-(set-default 'truncate-lines t)
-
 ;; make side by side buffers function the same as the main window
 (setq-default truncate-partial-width-windows nil)
 
@@ -36,10 +32,6 @@
 
 ;; Do not improve Emacs display engine
 (setq redisplay-dont-pause t)
-
-;; Enables narrow possibility (`narrow-to-page' function).
-(put 'narrow-to-page 'disabled nil)
-(put 'narrow-to-region 'disabled nil)
 
 ;; Disable bidirectional text support
 (setq-default bidi-display-reordering nil)
@@ -57,16 +49,19 @@
 
 ;; Zenburn theme
 (add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
 (require 'zenburn-theme)
-(load-theme 'zenburn t)
 
 ;; Monokai theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
-;; (load-theme 'monokai t)
 
 ;; Solarized theme
 (add-to-list 'load-path "~/.emacs.d/solarized-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-emacs")
+(require 'solarized)
+
+;; Choose zenburn
+(load-theme 'zenburn t)
 
 ;; Extra color tweaks
 (set-face-foreground 'variable-pitch "#ffffff")
@@ -86,17 +81,6 @@
       jit-lock-defer-contextually t
       jit-lock-stealth-nice 0.5)
 (setq-default font-lock-multiline t)
-
-;; Reduce line spacing
-(defun toggle-line-spacing ()
-  "Toggle line spacing between no extra space to extra half line height."
-  (interactive)
-  (if (eq line-spacing nil)
-      (setq-default line-spacing 0.5) ;; add 0.5 height between lines
-    (setq-default line-spacing nil)   ;; no extra heigh between lines
-    ) ;; if
-  (redraw-display))
-(global-set-key (kbd "<C-f7>") 'toggle-line-spacing)
 
 ;; Use 10-pt Consolas as default font
 (if (find-font (font-spec :name "Consolas"))
@@ -324,8 +308,6 @@
 (global-set-key (kbd "S-<f6>") 'highlight-changes-remove-highlight)
 
 ;; If you're not already using it for something else...
-(global-set-key (kbd "<M-next>") 'highlight-changes-next-change)
-(global-set-key (kbd "<M-prior>")  'highlight-changes-previous-change)
 (set-face-foreground 'highlight-changes nil)
 (set-face-background 'highlight-changes "#882020")
 (set-face-foreground 'highlight-changes-delete nil)
@@ -342,7 +324,6 @@
   "Regexp matching buffer names that will never have scroll bars.")
 
 (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
-
 (modify-all-frames-parameters (list (cons 'vertical-scroll-bars nil)))
 
 (defun lawlist-scroll-bar ()

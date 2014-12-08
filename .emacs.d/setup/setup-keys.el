@@ -84,6 +84,7 @@
 (global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key "\C-a" 'mark-whole-buffer)
+(global-set-key (kbd "<f7>") 'toggle-line-spacing)
 (global-set-key (kbd "<f8>") 'toggle-truncate-lines)
 (global-set-key (kbd "<f12>") 'ecb-redraw-layout)
 
@@ -97,7 +98,7 @@
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
-     (executable-find "kdialog"))
+       (executable-find "kdialog"))
   (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
   ) ;; if
@@ -284,8 +285,8 @@
   (let ((i 0))
     (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
       (setq i (1+ i)) (previous-buffer))))
-(global-set-key [C-M-prior]  'popup-select-window-previous)
-(global-set-key [C-M-next]  'popup-select-window-next)
+(global-set-key (kbd "M-<left>") 'popup-select-window-previous)
+(global-set-key (kbd "M-<right>") 'popup-select-window-next)
 
 ;; Jump between windows
 (require 'eassist)
@@ -297,6 +298,8 @@
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'ecb-redraw-layout)
+(define-key my-keys-minor-mode-map (kbd "M-<left>") 'popup-select-window-previous)
+(define-key my-keys-minor-mode-map (kbd "M-<right>") 'popup-select-window-next)
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."

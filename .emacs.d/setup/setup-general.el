@@ -284,13 +284,13 @@
 (add-hook 'js2-mode-hook 'turn-on-auto-fill)
 
 ;; Set indent to 4 instead of 2
-(setq standard-indent 4)
+(setq standard-indent 2)
 
 ;; Use spaces instead of tab
 (setq-default indent-tabs-mode nil)
 
 ;; Set tab width
-(setq-default tab-width 4)
+(setq-default tab-width 2)
 
 ;; Auto-indent mode
 (add-to-list 'load-path "~/.emacs.d/auto-indent-mode")
