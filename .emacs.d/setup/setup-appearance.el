@@ -41,6 +41,7 @@
 (setq line-move-visual nil)
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
+(toggle-truncate-lines)
 
 ;; Fix for visual line mode
 (require 'adaptive-wrap)
