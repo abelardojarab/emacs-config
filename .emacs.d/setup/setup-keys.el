@@ -311,8 +311,6 @@
 
 ;; Disable overwrite for some modes
 (add-hook 'org-mode-hook 'my-minibuffer-setup-hook)
-(add-hook 'python-mode-hook 'my-minibuffer-setup-hook)
-(add-hook 'c-common-mode-hook 'my-minibuffer-setup-hook)
 
 ;; Selecting line with the mouse
 (require 'drag-select-lines)
