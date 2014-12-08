@@ -63,7 +63,7 @@
 (setq org-confirm-babel-evaluate nil)
 (setq org-use-speed-commands t)
 (setq org-default-notes-file "~/workspace/Documents/agenda.org")
-(setq org-indent-mode t)
+(setq org-indent-mode nil) ;; this causes problem in other modes
 
 ;; deadline warning day
 (setq org-deadline-warning-days 3)
