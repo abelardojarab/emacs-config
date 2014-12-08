@@ -1,7 +1,18 @@
 ;;; setup-js2-mode.el --- tweak js2 settings -*- lexical-binding: t; -*-
 
+;; HTML mode
 (add-to-list 'load-path "~/.emacs.d/web-mode")
 (require 'web-mode)
+
+;; HTMl completion
+(add-to-list 'load-path "~/.emacs.d/ac-html")
+(when (require 'ac-html nil 'noerror)
+  (add-hook 'html-mode-hook 'ac-html-enable)
+  (add-to-list 'web-mode-ac-sources-alist
+               '("html" . (ac-source-html-attribute-value
+                           ac-source-html-tag
+                           ac-source-html-attribute))))
+
 
 (add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (add-to-list 'load-path "~/.emacs.d/js2-mode")
