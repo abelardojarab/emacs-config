@@ -46,6 +46,9 @@
 
  ;; Linux
  ((equal system-type 'gnu/linux)
+  ;; Get back font antialiasing
+  (push '(font-backend xft x) default-frame-alist)
+
   ;; Inspired by the windows version. Also used call-process here because
   ;; shell-command-to-string gave me 100% CPU usage by lisp.run until
   ;; kdialog returned.

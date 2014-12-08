@@ -296,8 +296,14 @@ little more place. "
         (set-face-attribute face nil :family "Consolas" :height 110))
     (set-face-attribute face nil :family "Consolas" :height 135)))
 
+;; Resize ECB at the end
+(add-hook 'window-setup-hook 'ecb-redraw-layout t)
+
 ;; Projectile integration
 (require'projectile-speedbar)
+
+;; Finally activate ecb
+(ecb-activate)
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

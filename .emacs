@@ -22,7 +22,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes (quote ("756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
- '(ecb-auto-activate t)
  '(ecb-display-image-icons-for-semantic-tags t)
  '(ecb-grep-find-function (quote if))
  '(ecb-grep-recursive-function (quote rgrep))
@@ -161,14 +160,14 @@
 ;; Setup elnode
 (require 'setup-elnode)
 
-;; Setup ECB
-(require 'setup-ecb)
-
 ;; Setup eshell
 (require 'setup-eshell)
 
 ;; Setup keys
 (require 'setup-keys)
+
+;; Setup ECB
+(require 'setup-ecb)
 
 ;; Setup server
 (unless (string-equal system-type "windows-nt")

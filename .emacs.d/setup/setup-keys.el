@@ -285,8 +285,8 @@
   (let ((i 0))
     (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
       (setq i (1+ i)) (previous-buffer))))
-(global-set-key (kbd "C-S-<left>") 'popup-select-window-previous)
-(global-set-key (kbd "C-S-<right>") 'popup-select-window-next)
+(global-set-key (kbd "C-S-<left>") 'popup-select-window)
+(global-set-key (kbd "C-S-<right>") 'popup-select-window)
 
 ;; Jump between windows
 (require 'eassist)
@@ -298,8 +298,8 @@
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'ecb-redraw-layout)
-(define-key my-keys-minor-mode-map (kbd "C-S-<left>") 'popup-select-window-previous)
-(define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window-next)
+(define-key my-keys-minor-mode-map (kbd "C-S-<left>") 'popup-select-window)
+(define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
