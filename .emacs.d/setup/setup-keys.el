@@ -316,9 +316,6 @@
 ;; Disable overwrite for some modes
 (add-hook 'org-mode-hook 'my-minibuffer-setup-hook)
 
-;; Selecting line with the mouse
-(require 'drag-select-lines)
-
 ;; Advice to set proper order for keymaps
 (defadvice load (after give-my-keybindings-priority)
   "Try to ensure that my keybindings always have priority."
@@ -327,6 +324,9 @@
         (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
+
+;; Selecting line with the mouse
+(require 'drag-select-lines)
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here

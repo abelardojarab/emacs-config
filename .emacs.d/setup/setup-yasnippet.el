@@ -34,6 +34,7 @@
 ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
 (define-key yas-minor-mode-map (kbd "<tab>") nil)
 (define-key yas-minor-mode-map (kbd "TAB") nil)
+
 ;; Set Yasnippet's key binding to shift+tab
 (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
 
@@ -129,6 +130,7 @@
             (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
                                    (yas-snippet-dirs)))
             ac-modes))))
+
 ;; Expand snippet synchronously
 (defvar yas/recursive-edit-flag nil)
 (defun yas-expand-sync ()

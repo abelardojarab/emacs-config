@@ -24,9 +24,6 @@
 
 ;;; Code:
 
-;; make side by side buffers function the same as the main window
-(setq-default truncate-partial-width-windows nil)
-
 ;; Non-nil means no need to redraw entire frame after suspending.
 (setq no-redraw-on-reenter nil)
 
@@ -41,7 +38,13 @@
 (setq line-move-visual nil)
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
+
+;; Truncate lines
 (toggle-truncate-lines)
+(set-default 'truncate-lines t)
+
+;; Make side by side buffers function the same as the main window
+(setq-default truncate-partial-width-windows nil)
 
 ;; Fix for visual line mode
 (require 'adaptive-wrap)
