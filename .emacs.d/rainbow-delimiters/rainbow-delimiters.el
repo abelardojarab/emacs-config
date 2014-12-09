@@ -1,4 +1,4 @@
-;;; rainbow-delimiters.el --- Highlight nested parens, brackets, braces a different color at each depth. -*- lexical-binding: t -*-
+;;; rainbow-delimiters.el --- Highlight nested brackets a different color at each depth -*- lexical-binding: t -*-
 
 ;; Copyright (C)
 ;;   2010-2013 Jeremy Rayman
@@ -7,7 +7,7 @@
 ;;         Fanael Linithien <fanael4@gmail.com>
 ;; Maintainer: Fanael Linithien <fanael4@gmail.com>
 ;; Created: 2010-09-02
-;; Version: 2.0
+;; Version: 2.0.1
 ;; Keywords: faces, convenience, lisp, tools
 ;; Homepage: https://github.com/Fanael/rainbow-delimiters
 
@@ -28,6 +28,15 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;; Installation:
+
+;; The recommended way is to use MELPA (http://melpa.org/) or MELPA Stable
+;; (http://stable.melpa.org/). If either is in your `package-archives', do
+;;   M-x package-install RET rainbow-delimiters RET
+;; Otherwise, open `rainbow-delimiters.el' in Emacs and use
+;;   M-x package-install-from-buffer
+;; Any other methods of installation are unsupported.
+
 ;;; Commentary:
 ;;
 ;; Rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
@@ -39,15 +48,8 @@
 ;; Great care has been taken to make this mode fast. You shouldn't see
 ;; any discernible change in scrolling or editing speed while using it,
 ;; even in delimiter-rich languages like Clojure, Lisp, and Scheme.
-
-;;; Installation:
-
-;; The recommended way is to use MELPA (http://melpa.org/) or MELPA Stable
-;; (http://stable.melpa.org/). If either is in your `package-archives', do
-;;   M-x package-install RET rainbow-delimiters RET
-;; Otherwise, open `rainbow-delimiters.el' in Emacs and use
-;;   M-x package-install-from-buffer
-;; Any other methods of installation are unsupported.
+;;
+;; Usage:
 ;;
 ;; To toggle the mode in the current buffer:
 ;;   M-x rainbow-delimiters-mode
@@ -57,9 +59,9 @@
 ;; To start the mode automatically in most programming modes (Emacs 24 and
 ;; above):
 ;;   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-
-;;; Customization:
-
+;;
+;; Customization:
+;;
 ;; To customize various options, including the color theme:
 ;;   M-x customize-group rainbow-delimiters
 ;;

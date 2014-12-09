@@ -5,7 +5,7 @@
 ;; Author:   Dmitry Gutov <dgutov@yandex.ru>
 ;; URL:      https://github.com/dgutov/diff-hl
 ;; Keywords: vc, diff
-;; Version:  1.5.3
+;; Version:  1.6.0
 ;; Package-Requires: ((cl-lib "0.2"))
 
 ;; This file is part of GNU Emacs.
@@ -86,10 +86,6 @@
   "Face used to highlight changed lines."
   :group 'diff-hl)
 
-(defface diff-hl-unknown
-  '((default :inherit diff-header))
-  "Face used to highlight unregistered files.")
-
 (defcustom diff-hl-command-prefix (kbd "C-x v")
   "The prefix for all `diff-hl' commands."
   :group 'diff-hl
@@ -114,6 +110,12 @@
                  (const diff-hl-fringe-bmp-from-type)
                  function))
 
+(defcustom diff-hl-fringe-face-function 'diff-hl-fringe-face-from-type
+  "Function to choose the fringe face for a given change type
+  and position within a hunk.  Should accept two arguments."
+  :group 'diff-hl
+  :type 'function)
+
 (defvar diff-hl-reference-revision nil
   "Revision to diff against.  nil means the most recent one.")
 
@@ -122,11 +124,11 @@
                          (numberp text-scale-mode-amount))
                     (expt text-scale-mode-step text-scale-mode-amount)
                   1))
-         (spacing (or (default-value 'line-spacing) 0))
-         (h (round (+ (* (frame-char-height) scale)
-                      (if (floatp spacing)
-                          (* (frame-char-height) spacing)
-                        spacing))))
+         (spacing (or (and (display-graphic-p) (default-value 'line-spacing)) 0))
+         (h (+ (ceiling (* (frame-char-height) scale))
+               (if (floatp spacing)
+                   (truncate (* (frame-char-height) spacing))
+                 spacing)))
          (w (frame-parameter nil 'left-fringe))
          (middle (make-vector h (expt 2 (1- w))))
          (ones (1- (expt 2 w)))
@@ -152,8 +154,7 @@
       (aset insert-bmp (1+ middle-pos) delete-row)
       (aset insert-bmp (1- w2) 0)
       (define-fringe-bitmap 'diff-hl-bmp-insert insert-bmp w2 w2)
-      (define-fringe-bitmap 'diff-hl-bmp-change (make-vector
-                                                 w2 (* 3 middle-bit)) w2 w2))))
+      )))
 
 (defun diff-hl-maybe-define-bitmaps ()
   (when (window-system) ;; No fringes in the console.
@@ -167,19 +168,24 @@
   (let* ((key (list type pos diff-hl-fringe-bmp-function))
          (val (gethash key diff-hl-spec-cache)))
     (unless val
-      (let* ((face-sym (intern (format "diff-hl-%s" type)))
+      (let* ((face-sym (funcall diff-hl-fringe-face-function type pos))
              (bmp-sym (funcall diff-hl-fringe-bmp-function type pos)))
         (setq val (propertize " " 'display `((left-fringe ,bmp-sym ,face-sym))))
         (puthash key val diff-hl-spec-cache)))
     val))
 
+(defun diff-hl-fringe-face-from-type (type _pos)
+  (intern (format "diff-hl-%s" type)))
+
 (defun diff-hl-fringe-bmp-from-pos (_type pos)
   (intern (format "diff-hl-bmp-%s" pos)))
 
 (defun diff-hl-fringe-bmp-from-type (type _pos)
-  (if (eq type 'unknown)
-      'question-mark
-    (intern (format "diff-hl-bmp-%s" type))))
+  (cl-case type
+    (unknown 'question-mark)
+    (change 'exclamation-mark)
+    (ignored 'filled-square)
+    (t (intern (format "diff-hl-bmp-%s" type)))))
 
 (defvar vc-svn-diff-switches)
 
@@ -213,7 +219,8 @@
             (with-current-buffer buf-name
               (goto-char (point-min))
               (unless (eobp)
-                (diff-beginning-of-hunk t)
+                (ignore-errors
+                  (diff-beginning-of-hunk t))
                 (while (looking-at diff-hunk-header-re-unified)
                   (let ((line (string-to-number (match-string 3)))
                         (len (let ((m (match-string 4)))
@@ -425,12 +432,24 @@ in the source file, or the last line of the hunk above it."
         (diff-hl-maybe-define-bitmaps)
         (add-hook 'after-save-hook 'diff-hl-update nil t)
         (add-hook 'after-change-functions 'diff-hl-edit nil t)
-        (if vc-mode
-            (diff-hl-update)
-          (add-hook 'find-file-hook 'diff-hl-update t t))
+        (add-hook (if vc-mode
+                      ;; Defer until the end of this hook, so that its
+                      ;; elements can modify the update behavior.
+                      'diff-hl-mode-on-hook
+                    ;; If we're only opening the file now,
+                    ;; `vc-find-file-hook' likely hasn't run yet, so
+                    ;; let's wait until the state information is
+                    ;; saved, in order not to fetch it twice.
+                    'find-file-hook)
+                  'diff-hl-update t t)
         (add-hook 'vc-checkin-hook 'diff-hl-update nil t)
         (add-hook 'after-revert-hook 'diff-hl-update nil t)
+        ;; Magit does call `auto-revert-handler', but it usually
+        ;; doesn't do much, because `buffer-stale--default-function'
+        ;; doesn't care about changed VC state.
+        ;; https://github.com/magit/magit/issues/603
         (add-hook 'magit-revert-buffer-hook 'diff-hl-update nil t)
+        (add-hook 'auto-revert-mode-hook 'diff-hl-update nil t)
         (add-hook 'text-scale-mode-hook 'diff-hl-define-bitmaps nil t))
     (remove-hook 'after-save-hook 'diff-hl-update t)
     (remove-hook 'after-change-functions 'diff-hl-edit t)
@@ -438,6 +457,7 @@ in the source file, or the last line of the hunk above it."
     (remove-hook 'vc-checkin-hook 'diff-hl-update t)
     (remove-hook 'after-revert-hook 'diff-hl-update t)
     (remove-hook 'magit-revert-buffer-hook 'diff-hl-update t)
+    (remove-hook 'auto-revert-mode-hook 'diff-hl-update t)
     (remove-hook 'text-scale-mode-hook 'diff-hl-define-bitmaps t)
     (diff-hl-remove-overlays)))
 

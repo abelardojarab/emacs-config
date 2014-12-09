@@ -69,15 +69,16 @@
   "Method to select a candidate from a list of strings."
   :type '(choice
           (const :tag "Helm" helm)
+          (const :tag "Helm fuzzy" helm-fuzzy)
           (const :tag "Plain" display-completion-list))
   :group 'function-args)
 
 (defcustom fa-insert-method 'name
   "How to insert a function completed with `moo-complete'."
   :type '(choice
-          (const :tag "name only" name)
-          (const :tag "name and parens" name-and-parens)
-          (const :tag "name and parens and hint" name-and-parens-and-hint))
+          (const :tag "Name only" name)
+          (const :tag "Name and parens" name-and-parens)
+          (const :tag "Name and parens and hint" name-and-parens-and-hint))
   :group 'function-args)
 
 (defface fa-face-hint
@@ -113,6 +114,11 @@
 
 (defconst fa-comma (propertize "," 'face 'fa-face-semi)
   "String to join arguments.")
+
+(defcustom moo-do-includes t
+  "When t, `moo-jump-local' will list includes as well."
+  :type 'boolean
+  :group 'function-args)
 
 ;; ——— Minor mode ——————————————————————————————————————————————————————————————
 (defvar function-args-mode-map (make-sparse-keymap))
@@ -150,7 +156,8 @@
   (define-key map (kbd "M-n") 'fa-idx-cycle-down)
   (define-key map (kbd "M-h") 'fa-idx-cycle-up)
   (define-key map (kbd "M-u") 'fa-abort)
-  (define-key map (kbd "M-j") 'fa-jump-maybe))
+  (define-key map (kbd "M-j") 'fa-jump-maybe)
+  (define-key map (kbd "C-M-j") 'moo-jump-local))
 
 (defun fa-jump-maybe ()
   "Jump to definition if `fa-show' overlay is active.
@@ -160,12 +167,15 @@ Otherwise, call `c-indent-new-comment-line' that's usually bound to \"M-j\"."
       (fa-jump)
     (c-indent-new-comment-line)))
 
+(defun turn-on-function-args-mode ()
+  (function-args-mode 1))
+
 ;; ——— Setup ———————————————————————————————————————————————————————————————————
 ;;;###autoload
 (defun fa-config-default ()
   "Set up default key bindings."
-  (add-hook 'c++-mode-hook
-            (lambda () (function-args-mode 1))))
+  (add-hook 'c++-mode-hook 'turn-on-function-args-mode)
+  (add-hook 'c-mode-hook 'turn-on-function-args-mode))
 
 ;; ——— Internal variables ——————————————————————————————————————————————————————
 (defvar fa-overlay nil
@@ -316,7 +326,7 @@ When ARG is not nil offer only variables as candidates."
   (interactive)
   (let ((tags (semantic-fetch-tags)))
     (moo-select-candidate
-     (if (eq major-mode 'c++-mode)
+     (if (memq major-mode '(c++-mode c-mode))
          (mapcar
           (lambda (x) (cons x (moo-tag->str x)))
           (moo-flatten-namepaces tags))
@@ -712,15 +722,24 @@ TYPE and NAME are strings."
                   (setq type (car type)))
                  ((null type)
                   (setq type "#define")))
-           (format "%s%s %s"
+           (format "%s%s%s %s"
                    (if (semantic-tag-get-attribute tag :constant-flag)
                        (propertize "const " 'face 'font-lock-keyword-face)
                      "")
                    (propertize type 'face 'font-lock-type-face)
+                   (if (semantic-tag-get-attribute tag :pointer) "*" "")
                    (propertize (car tag) 'face 'font-lock-variable-name-face))))
         (type
          (propertize (car tag) 'face 'font-lock-type-face))
         (label)
+        (include
+         (format "%s <%s>"
+                 (propertize "#include" 'face 'font-lock-preprocessor-face)
+                 (car tag)))
+        (using
+         (format "%s %s"
+                 (propertize "using" 'face 'font-lock-keyword-face)
+                 (car tag)))
         (t (error "Unknown tag class: %s" class))))))
 
 ;; ——— Misc non-pure ———————————————————————————————————————————————————————————
@@ -870,16 +889,16 @@ When PREFIX is not nil, erase it before inserting."
          (insert (moo-tag->str candidate)))
         ((moo-functionp candidate)
          (insert (semantic-tag-name candidate))
-         (unless (eq fa-insert-method 'name)
-           (insert "()")
-           (backward-char 1)
-           (when (eq fa-insert-method 'name-and-parens-and-hint)
-             (setq fa-hint-pos (point))
-             (setq fa-idx 0)
-             (setq fa-lst (list (fa-tfunction->fal candidate)))
-             (fa-update-arg)
-             (fa-start-tracking)
-             (fa-show))))
+         (cl-case fa-insert-method
+           (name)
+           (name-and-parens
+            (insert "()")
+            (backward-char 1))
+           (name-and-parens-and-hint
+            (insert "()")
+            (backward-char 1)
+            (semantic-fetch-tags)
+            (fa-show))))
         ((stringp candidate)
          (insert candidate))
         ((and (consp candidate)
@@ -889,28 +908,41 @@ When PREFIX is not nil, erase it before inserting."
          (error "Unexpected"))))
 
 (defun moo-select-candidate (candidates action &optional name)
-  (unless name
-    (setq name "Candidates"))
-  (case moo-select-method
-    (helm
-     (require 'helm)
-     (require 'helm-help)
-     (helm :sources `((name . ,name)
-                      (candidates . ,(delq nil (mapcar
-                                                (lambda (x)
-                                                  (if (listp x)
-                                                      (if (stringp (cdr x))
-                                                          (cons (cdr x) (car x))
-                                                        (when (stringp (car x))
-                                                          (cons (car x) x)))
-                                                    x))
-                                                candidates)))
-                      (action . ,action))))
-    (display-completion-list
-     (with-output-to-temp-buffer "*Completions*"
-       (display-completion-list candidates)))))
+  (setq name (or name "Candidates"))
+  (if (eq moo-select-method 'display-completion-list)
+      (with-output-to-temp-buffer "*Completions*"
+        (display-completion-list
+         (all-completions "" (mapcar #'caar candidates))))
 
-
+    (let ((candidates
+           (delq nil (mapcar
+                      (lambda (x)
+                        (if (listp x)
+                            (if (stringp (cdr x))
+                                (cons (cdr x) (car x))
+                              (when (stringp (car x))
+                                (cons (car x) x)))
+                          x))
+                      candidates)))
+          (preselect
+           (regexp-quote (or (moo-tag->str (semantic-current-tag))
+                             ""))))
+      (require 'helm)
+      (require 'helm-help)
+      (cl-case moo-select-method
+        (helm
+         (helm :sources
+               `((name . ,name)
+                 (candidates . ,candidates)
+                 (action . ,action))
+               :preselect preselect))
+        (helm-fuzzy
+         (helm :sources
+               (helm-build-sync-source name
+                 :candidates candidates
+                 :fuzzy-match t
+                 :action action)
+               :preselect preselect))))))
 
 (defun moo-action-jump (tag)
   (when (semantic-tag-p tag)
@@ -1058,19 +1090,20 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
 ;; this is similar to stype->tag
 ;; I should refactor this
 (defun moo-complete-type-member (var-tag)
-  (let ((type-name (semantic-tag-get-attribute var-tag :type)))
-    (cond
-      ;; this happens sometimes
-      ((equal type-name "class")
-       var-tag)
-      ;; this as well
-      ((or (equal type-name "namespace") (eq type-name 'namespace))
-       (moo-sname->tag (car var-tag)))
-      (t
-       (when (listp type-name)
-         (setq type-name (car type-name)))
-       (or (moo-stype->tag type-name)
-           (moo-type-tag-at-point type-name))))))
+  (when var-tag
+    (let ((type-name (semantic-tag-get-attribute var-tag :type)))
+      (cond
+        ;; this happens sometimes
+        ((equal type-name "class")
+         var-tag)
+        ;; this as well
+        ((or (equal type-name "namespace") (eq type-name 'namespace))
+         (moo-sname->tag (car var-tag)))
+        (t
+         (when (listp type-name)
+           (setq type-name (car type-name)))
+         (or (moo-stype->tag type-name)
+             (moo-type-tag-at-point type-name)))))))
 
 (defun moo-ctxt-current-symbol ()
   (or (semantic-ctxt-current-symbol)
@@ -1373,7 +1406,8 @@ Returns TAG if it's not a typedef."
   (cl-labels ((namespace-reduce
                   (func tags out)
                 (dolist (tag tags)
-                  (cond ((or (moo-includep tag) (moo-usingp tag))
+                  (cond ((and (not moo-do-includes)
+                          (or (moo-includep tag) (moo-usingp tag)))
                          ;; skip
                          )
 
