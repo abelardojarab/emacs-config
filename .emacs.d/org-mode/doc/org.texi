@@ -462,8 +462,7 @@ Dates and times
 * Deadlines and scheduling::    Planning your work
 * Clocking work time::          Tracking how long you spend on a task
 * Effort estimates::            Planning work effort in advance
-* Relative timer::              Notes with a running timer
-* Countdown timer::             Starting a countdown timer for a task
+* Timers::                      Notes with a running timer
 
 Creating timestamps
 
@@ -2149,6 +2148,9 @@ table.  But it is easier just to start typing, like
 @tsubheading{Re-aligning and field motion}
 @orgcmd{C-c C-c,org-table-align}
 Re-align the table and don't move to another field.
+@c
+@orgcmd{C-c SPC,org-table-blank-field}
+Blank the field at point.
 @c
 @orgcmd{<TAB>,org-table-next-field}
 Re-align the table, move to the next field.  Creates a new row if
@@ -4313,6 +4315,7 @@ foreground or a background color.
 @subsection TODO dependencies
 @cindex TODO dependencies
 @cindex dependencies, of TODO states
+@cindex TODO dependencies, NOBLOCKING
 
 @vindex org-enforce-todo-dependencies
 @cindex property, ORDERED
@@ -4339,6 +4342,16 @@ example:
 ** TODO a
 ** TODO b, needs to wait for (a)
 ** TODO c, needs to wait for (a) and (b)
+@end example
+
+You can ensure an entry is never blocked by using the @code{NOBLOCKING}
+property:
+
+@example
+* This entry is never blocked
+  :PROPERTIES:
+  :NOBLOCKING: t
+  :END:
 @end example
 
 @table @kbd
@@ -5352,7 +5365,8 @@ should not be used as keys in the properties drawer:
 @cindex property, special, TODO
 @example
 ALLTAGS      @r{All tags, including inherited ones.}
-BLOCKED      @r{"t" if task is currently blocked by children or siblings}
+BLOCKED      @r{"t" if task is currently blocked by children or siblings.}
+NOBLOCKING   @r{"t" if blocking is disabled for this task.}
 CATEGORY     @r{The category of an entry.}
 CLOCKSUM     @r{The sum of CLOCK intervals in the subtree.  @code{org-clock-sum}}
              @r{must be run first to compute the values in the current buffer.}
@@ -5775,8 +5789,7 @@ is used in a much wider sense.
 * Deadlines and scheduling::    Planning your work
 * Clocking work time::          Tracking how long you spend on a task
 * Effort estimates::            Planning work effort in advance
-* Relative timer::              Notes with a running timer
-* Countdown timer::             Starting a countdown timer for a task
+* Timers::                      Notes with a running timer
 @end menu
 
 
@@ -6722,7 +6735,6 @@ with @code{org-clock-in} and two @kbd{C-u C-u} with @code{org-clock-in-last}.
 @cindex effort estimates
 
 @cindex property, Effort
-@vindex org-effort-property
 If you want to plan your work in a very detailed way, or if you need to
 produce offers with quotations of the estimated work effort, you may want to
 assign effort estimates to entries.  If you are also clocking your work, you
@@ -6779,59 +6791,55 @@ with the @kbd{/} key in the agenda (@pxref{Agenda commands}).  If you have
 these estimates defined consistently, two or three key presses will narrow
 down the list to stuff that fits into an available time slot.
 
-@node Relative timer
-@section Taking notes with a relative timer
+@node Timers
+@section Taking notes with a timer
 @cindex relative timer
+@cindex countdown timer
+@kindex ;
 
-When taking notes during, for example, a meeting or a video viewing, it can
-be useful to have access to times relative to a starting time.  Org provides
-such a relative timer and make it easy to create timed notes.
+Org provides provides two types of timers.  There is a relative timer that
+counts up, which can be useful when taking notes during, for example, a
+meeting or a video viewing.  There is also a countdown timer.
+
+The relative and countdown are started with separate commands.
+
+@table @kbd
+@orgcmd{C-c C-x 0,org-timer-start}
+Start or reset the relative timer.  By default, the timer is set to 0.  When
+called with a @kbd{C-u} prefix, prompt the user for a starting offset.  If
+there is a timer string at point, this is taken as the default, providing a
+convenient way to restart taking notes after a break in the process.  When
+called with a double prefix argument @kbd{C-u C-u}, change all timer strings
+in the active region by a certain amount.  This can be used to fix timer
+strings if the timer was not started at exactly the right moment.
+@orgcmd{C-c C-x ;,org-timer-set-timer}
+Start a countdown timer.  The user is prompted for a duration.
+@code{org-timer-default-timer} sets the default countdown value.  Giving a
+prefix numeric argument overrides this default value.  This command is
+available as @kbd{;} in agenda buffers.
+@end table
+
+Once started, relative and countdown timers are controlled with the same
+commands.
 
 @table @kbd
 @orgcmd{C-c C-x .,org-timer}
-Insert a relative time into the buffer.  The first time you use this, the
-timer will be started.  When called with a prefix argument, the timer is
-restarted.
+Insert the value of the current relative or countdown timer into the buffer.
+If no timer is running, the relative timer will be started.  When called with
+a prefix argument, the relative timer is restarted.
 @orgcmd{C-c C-x -,org-timer-item}
-Insert a description list item with the current relative time.  With a prefix
-argument, first reset the timer to 0.
+Insert a description list item with the value of the current relative or
+countdown timer.  With a prefix argument, first reset the relative timer to
+0.
 @orgcmd{M-@key{RET},org-insert-heading}
 Once the timer list is started, you can also use @kbd{M-@key{RET}} to insert
 new timer items.
-@c for key sequences with a comma, command name macros fail :(
-@kindex C-c C-x ,
-@item C-c C-x ,
-Pause the timer, or continue it if it is already paused
-(@command{org-timer-pause-or-continue}).
-@c removed the sentence because it is redundant to the following item
-@kindex C-u C-c C-x ,
-@item C-u C-c C-x ,
+@orgcmd{C-c C-x \,,org-timer-pause-or-continue}
+Pause the timer, or continue it if it is already paused.
+@orgcmd{C-c C-x _,org-timer-stop}
 Stop the timer.  After this, you can only start a new timer, not continue the
 old one.  This command also removes the timer from the mode line.
-@orgcmd{C-c C-x 0,org-timer-start}
-Reset the timer without inserting anything into the buffer.  By default, the
-timer is reset to 0.  When called with a @kbd{C-u} prefix, reset the timer to
-specific starting offset.  The user is prompted for the offset, with a
-default taken from a timer string at point, if any, So this can be used to
-restart taking notes after a break in the process.  When called with a double
-prefix argument @kbd{C-u C-u}, change all timer strings in the active region
-by a certain amount.  This can be used to fix timer strings if the timer was
-not started at exactly the right moment.
 @end table
-
-@node Countdown timer
-@section Countdown timer
-@cindex Countdown timer
-@kindex C-c C-x ;
-@kindex ;
-
-Calling @code{org-timer-set-timer} from an Org mode buffer runs a countdown
-timer.  Use @kbd{;} from agenda buffers, @key{C-c C-x ;} everywhere else.
-
-@code{org-timer-set-timer} prompts the user for a duration and displays a
-countdown timer in the modeline.  @code{org-timer-default-timer} sets the
-default countdown value.  Giving a prefix numeric argument overrides this
-default value.
 
 @node Capture - Refile - Archive
 @chapter Capture - Refile - Archive
@@ -8107,12 +8115,10 @@ time as matching tags.  The properties may be real properties, or special
 properties that represent other metadata (@pxref{Special properties}).  For
 example, the ``property'' @code{TODO} represents the TODO keyword of the
 entry and the ``property'' @code{PRIORITY} represents the PRIORITY keyword of
-the entry.  The ITEM special property cannot currently be used in tags/property
-searches@footnote{But @pxref{x-agenda-skip-entry-regexp,
-,skipping entries based on regexp}.}.
+the entry.
 
-In addition to the @pxref{Special properties}, one other ``property'' can
-also be used. @code{LEVEL} represents the level of an entry.  So a search
+In addition to the @ref{Special properties}, one other ``property'' can also
+be used. @code{LEVEL} represents the level of an entry.  So a search
 @samp{+LEVEL=3+boss-TODO="DONE"} lists all level three headlines that have
 the tag @samp{boss} and are @emph{not} marked with the TODO keyword DONE@.
 In buffers with @code{org-odd-levels-only} set, @samp{LEVEL} does not count
@@ -8169,11 +8175,6 @@ not @samp{:boss:}, which also have a priority value @samp{A}, a
 property that is numerically smaller than 2, a @samp{:With:} property that is
 matched by the regular expression @samp{Sarah\|Denny}, and that are scheduled
 on or after October 11, 2008.
-
-Accessing TODO, LEVEL, and CATEGORY during a search is fast.  Accessing any
-other properties will slow down the search.  However, once you have paid the
-price by accessing one property, testing additional properties is cheap
-again.
 
 You can configure Org mode to use property inheritance during a search, but
 beware that this can slow down searches considerably.  See @ref{Property
@@ -10670,7 +10671,7 @@ Toggle fixed-width sections
 Toggle inclusion of any time/date active/inactive stamps
 (@code{org-export-with-timestamps}).
 
-@item :
+@item \n:
 @vindex org-export-preserve-breaks
 Toggle line-break-preservation (@code{org-export-preserve-breaks}).
 
@@ -11309,15 +11310,17 @@ All lines between these markers are exported literally
 @cindex links, in HTML export
 @cindex internal links, in HTML export
 @cindex external links, in HTML export
+@vindex org-html-link-org-files-as-html
 Internal links (@pxref{Internal links}) will continue to work in HTML@.  This
 includes automatic links created by radio targets (@pxref{Radio
 targets}).  Links to external files will still work if the target file is on
 the same @i{relative} path as the published Org file.  Links to other
 @file{.org} files will be translated into HTML links under the assumption
 that an HTML version also exists of the linked file, at the same relative
-path.  @samp{id:} links can then be used to jump to specific entries across
-files.  For information related to linking files while publishing them to a
-publishing directory see @ref{Publishing links}.
+path; setting @code{org-html-link-org-files-as-html} to @code{nil} disables
+this translation.  @samp{id:} links can then be used to jump to specific
+entries across files.  For information related to linking files while
+publishing them to a publishing directory see @ref{Publishing links}.
 
 If you want to specify attributes for links, you can do so using a special
 @code{#+ATTR_HTML} line to define attributes that will be added to the
@@ -17434,8 +17437,8 @@ back-end from scratch) and @file{ox-beamer.el} (for how to derive a new
 back-end from an existing one.
 
 When creating a new back-end from scratch, the basic idea is to set the name
-of the back-end (as a symbol) and an an alist of elements and export
-functions.  On top of this, you will need to set additional keywords like
+of the back-end (as a symbol) and an alist of elements and export functions.
+On top of this, you will need to set additional keywords like
 @code{:menu-entry} (to display the back-end in the export dispatcher),
 @code{:export-block} (to specify what blocks should not be exported by this
 back-end), and @code{:options-alist} (to let the user set export options that

@@ -27,7 +27,7 @@ them.
 #+BEGIN_SRC emacs-lisp
 (defun org-repair-property-drawers ()
   "Fix properties drawers in current buffer.
-Ignore non Org buffers."
+ Ignore non Org buffers."
   (when (eq major-mode 'org-mode)
     (org-with-wide-buffer
      (goto-char (point-min))
@@ -45,7 +45,10 @@ Ignore non Org buffers."
                 (when (and (< (point) end)
                            (not (org-looking-at-p org-property-drawer-re))
                            (save-excursion
-                             (re-search-forward org-property-drawer-re end t)))
+                             (and (re-search-forward org-property-drawer-re end t)
+                                  (eq (org-element-type
+                                       (save-match-data (org-element-at-point)))
+                                      'drawer))))
                   (insert (delete-and-extract-region
                            (match-beginning 0)
                            (min (1+ (match-end 0)) end)))
@@ -62,11 +65,15 @@ docstring for more information.
 - ~org-latex-format-headline-function~
 - ~org-latex-format-inlinetask-function~
 ** Removed functions
+*** Removed function ~org-translate-time~
+Use ~org-timestamp-translate~ instead.
 *** Removed function ~org-beamer-insert-options-template~
 This function inserted a Beamer specific template at point or in
 current subtree.  Use ~org-export-insert-default-template~ instead, as
 it provides more features and covers all export back-ends.  It is also
 accessible from the export dispatcher.
+*** Removed function ~org-timer-cancel-timer~
+~org-timer-stop~ now stops both relative and countdown timers.
 ** Removed options
 *** ~org-list-empty-line-terminates-plain-lists~ is deprecated
 It will be kept in code base until next release, for backward
@@ -86,6 +93,10 @@ styles when changing the shell type.  Changing the shell type can now
 be done directly from the source block and the quoting style has to be
 compatible across all shells, so a customization doesn't make sense
 anymore.  The chosen hard coded quoting style conforms to POSIX.
+*** Removed option ~org-insert-labeled-timestamps-at-point~
+Setting this option to anything else that the default value (nil)
+would create invalid planning info.  This dangerous option is now
+removed.
 ** New features
 *** Additional markup with =#+INCLUDE= keyword
 The content of the included file can now be optionally marked up, for
@@ -165,6 +176,9 @@ special blocks and images.  See docstring for more information.
 Headlines, for which the property ~UNNUMBERED~ is non-nil, are now
 exported without section numbers irrespective of their levels.  The
 property is inherited by children.
+*** Countdown timers can now be paused.
+~org-timer-pause-time~ wil now pause and restart both relative and
+countdown timers.
 ** Miscellaneous
 *** Strip all meta data from ITEM special property
 ITEM special property does not contain TODO, priority or tags anymore.

@@ -3100,14 +3100,6 @@ as an argument and return the numeric priority."
   :tag "Org Time"
   :group 'org)
 
-(defcustom org-insert-labeled-timestamps-at-point nil
-  "Non-nil means SCHEDULED and DEADLINE timestamps are inserted at point.
-When nil, these labeled time stamps are forces into the second line of an
-entry, just after the headline.  When scheduling from the global TODO list,
-the time stamp will always be forced into the second line."
-  :group 'org-time
-  :type 'boolean)
-
 (defcustom org-time-stamp-rounding-minutes '(0 5)
   "Number of minutes to round time stamps to.
 These are two values, the first applies when first creating a time stamp.
@@ -4956,8 +4948,8 @@ related expressions."
 		   (append '("FILETAGS" "TAGS" "SETUPFILE")
 			   (and (not tags-only)
 				'("ARCHIVE" "CATEGORY" "COLUMNS" "CONSTANTS"
-				  "LINK" "PRIORITIES" "PROPERTY" "SEQ_TODO"
-				  "STARTUP" "TODO" "TYP_TODO")))))))
+				  "LINK" "OPTIONS" "PRIORITIES" "PROPERTY"
+				  "SEQ_TODO" "STARTUP" "TODO" "TYP_TODO")))))))
       (org--setup-process-tags
        (cdr (assq 'tags alist)) (cdr (assq 'filetags alist)))
       (unless tags-only
@@ -4987,6 +4979,10 @@ related expressions."
 	    (org-set-local 'org-highest-priority (nth 0 priorities))
 	    (org-set-local 'org-lowest-priority (nth 1 priorities))
 	    (org-set-local 'org-default-priority (nth 2 priorities))))
+	;; Scripts.
+	(let ((scripts (assq 'scripts alist)))
+	  (when scripts
+	    (org-set-local 'org-use-sub-superscripts (cdr scripts))))
 	;; Startup options.
 	(let ((startup (cdr (assq 'startup alist))))
 	  (dolist (option startup)
@@ -5102,7 +5098,7 @@ files.  ALIST, when non-nil, is the alist computed so far.
 
 Return value contains the following keys: `archive', `category',
 `columns', `constants', `filetags', `link', `priorities',
-`property', `startup', `tags' and `todo'."
+`property', `scripts', `startup', `tags' and `todo'."
   (org-with-wide-buffer
    (goto-char (point-min))
    (let ((case-fold-search t))
@@ -5145,6 +5141,10 @@ Return value contains the following keys: `archive', `category',
 				   (org-match-string-no-properties 2 value))))
 		   (if links (push pair (cdr links))
 		     (push (list 'link pair) alist)))))
+	      ((equal key "OPTIONS")
+	       (when (and (org-string-nw-p value)
+			  (string-match "\\^:\\(t\\|nil\\|{}\\)" value))
+		 (push (cons 'scripts (read (match-string 1 value))) alist)))
 	      ((equal key "PRIORITIES")
 	       (push (cons 'priorities
 			   (let ((prio (org-split-string value)))
@@ -12469,7 +12469,8 @@ nil or a string to be used for the todo mark." )
   (interactive "P")
   (if (eq major-mode 'org-agenda-mode)
       (apply 'org-agenda-todo-yesterday arg)
-    (let* ((hour (third (decode-time
+    (let* ((org-use-effective-time t)
+	   (hour (third (decode-time
 			 (org-current-time))))
 	   (org-extend-today-until (1+ hour)))
       (org-todo arg))))
@@ -13487,12 +13488,12 @@ nil."
 (defvar org-end-time-was-given) ; dynamically scoped parameter
 
 (defun org-add-planning-info (what &optional time &rest remove)
-  "Insert new timestamp with keyword in the line directly after the headline.
-WHAT indicates what kind of time stamp to add.  TIME indicates the time to use.
-If non is given, the user is prompted for a date.
-REMOVE indicates what kind of entries to remove.  An old WHAT entry will also
-be removed."
-  (interactive)
+  "Insert new timestamp with keyword in the planning line.
+WHAT indicates what kind of time stamp to add.  It is a symbol
+among `closed', `deadline', `scheduled' and nil.  TIME indicates
+the time to use.  If none is given, the user is prompted for
+a date.  REMOVE indicates what kind of entries to remove.  An old
+WHAT entry will also be removed."
   (let (org-time-was-given org-end-time-was-given default-time default-input)
     (catch 'exit
       (when (and (memq what '(scheduled deadline))
@@ -13513,79 +13514,63 @@ be removed."
       (when what
 	(setq time
 	      (if (stringp time)
-		  ;; This is a string (relative or absolute), set proper date
-		  (apply 'encode-time
+		  ;; This is a string (relative or absolute), set
+		  ;; proper date.
+		  (apply #'encode-time
 			 (org-read-date-analyze
 			  time default-time (decode-time default-time)))
 		;; If necessary, get the time from the user
 		(or time (org-read-date nil 'to-time nil nil
 					default-time default-input)))))
 
-      (when (and org-insert-labeled-timestamps-at-point
-		 (memq what '(scheduled deadline)))
-	(insert
-	 (if (eq what 'scheduled) org-scheduled-string org-deadline-string) " ")
-	(org-insert-time-stamp time org-time-was-given
-			       nil nil nil (list org-end-time-was-given))
-	(setq what nil))
       (org-with-wide-buffer
-       (let (col list elt ts buffer-invisibility-spec)
-	 (org-back-to-heading t)
-	 (looking-at (concat org-outline-regexp "\\( *\\)[^\r\n]*"))
-	 (goto-char (match-end 1))
-	 (setq col (current-column))
-	 (goto-char (match-end 0))
-	 (if (eobp) (insert "\n") (forward-char 1))
-	 (unless (or what (org-looking-at-p org-planning-line-re))
-	   ;; Nothing to add, nothing to remove...... :-)
-	   (throw 'exit nil))
-	 (if (and (not (looking-at org-outline-regexp))
-		  (looking-at (concat "[^\r\n]*?" org-keyword-time-regexp
-				      "[^\r\n]*"))
-		  (not (equal (match-string 1) org-clock-string)))
-	     (narrow-to-region (match-beginning 0) (match-end 0))
-	   (insert-before-markers "\n")
-	   (backward-char 1)
-	   (narrow-to-region (point) (point))
-	   (and org-adapt-indentation (org-indent-to-column col)))
-	 ;; Check if we have to remove something.
-	 (setq list (cons what remove))
-	 (while list
-	   (setq elt (pop list))
-	   (when (or (and (eq elt 'scheduled)
-			  (re-search-forward org-scheduled-time-regexp nil t))
-		     (and (eq elt 'deadline)
-			  (re-search-forward org-deadline-time-regexp nil t))
-		     (and (eq elt 'closed)
-			  (re-search-forward org-closed-time-regexp nil t)))
-	     (replace-match "")
-	     (if (looking-at "--+<[^>]+>") (replace-match ""))))
-	 (and (looking-at "[ \t]+") (replace-match ""))
-	 (and org-adapt-indentation (bolp) (org-indent-to-column col))
-	 (when what
-	   (insert
-	    (if (or (bolp) (eq (char-before) ?\s)) "" " ")
-	    (cond ((eq what 'scheduled) org-scheduled-string)
-		  ((eq what 'deadline) org-deadline-string)
-		  ((eq what 'closed) org-closed-string))
-	    " ")
-	   (setq ts (org-insert-time-stamp
-		     time
-		     (or org-time-was-given
-			 (and (eq what 'closed) org-log-done-with-time))
-		     (eq what 'closed)
-		     nil nil (list org-end-time-was-given)))
-	   (unless (or (bolp)
-		       (eq (char-before) ?\s)
-		       (memq (char-after) '(?\n ?\s))
-		       (eobp))
-	     (insert " "))
-	   (end-of-line 1))
-	 (goto-char (point-min))
-	 (widen)
-	 (when (and (looking-at "[ \t]*\n") (eq (char-before) ?\n))
-	   (delete-region (1- (point)) (line-end-position)))
-	 ts)))))
+       (org-back-to-heading t)
+       (forward-line)
+       (unless (bolp) (insert "\n"))
+       (cond ((org-looking-at-p org-planning-line-re)
+	      ;; Move to current indentation.
+	      (skip-chars-forward " \t")
+	      ;; Check if we have to remove something.
+	      (dolist (type (if what (cons what remove) remove))
+		(when (save-excursion
+			(re-search-forward
+			 (case type
+			   (closed org-closed-time-regexp)
+			   (deadline org-deadline-time-regexp)
+			   (scheduled org-scheduled-time-regexp)
+			   (otherwise (error "Invalid planning type: %s" type)))
+			 (line-end-position) t))
+		  (replace-match "")
+		  (when (looking-at "--+<[^>]+>") (replace-match ""))
+		  (when (and (not what) (eq type 'closed))
+		    (save-excursion
+		      (beginning-of-line)
+		      (if (looking-at "[ \t]*$")
+			  (delete-region (point) (1+ (point-at-eol)))))))
+		;; Remove leading white spaces.
+		(when (and (not (bolp)) (looking-at "[ \t]+")) (replace-match ""))))
+	     ((not what) (throw 'exit nil)) ; Nothing to do.
+	     (t (insert-before-markers "\n")
+		(backward-char 1)
+		(when org-adapt-indentation
+		  (org-indent-to-column (1+ (org-outline-level))))))
+       (when what
+	 ;; Insert planning keyword.
+	 (insert (case what
+		   (closed org-closed-string)
+		   (deadline org-deadline-string)
+		   (scheduled org-scheduled-string)
+		   (otherwise (error "Invalid planning type: %s" what)))
+		 " ")
+	 ;; Insert associated timestamp.
+	 (let ((ts (org-insert-time-stamp
+		    time
+		    (or org-time-was-given
+			(and (eq what 'closed) org-log-done-with-time))
+		    (eq what 'closed)
+		    nil nil (list org-end-time-was-given))))
+	   (unless (eolp) (insert " "))
+	   ts))))))
 
 (defvar org-log-note-marker (make-marker))
 (defvar org-log-note-purpose nil)
@@ -13668,6 +13653,9 @@ EXTRA is additional text that will be inserted into the notes buffer."
        (skip-chars-backward " \t\n\r")
        (forward-line)))
    (move-marker org-log-note-marker (point))
+   ;; Preserve position even if a property drawer is inserted in the
+   ;; process.
+   (set-marker-insertion-type org-log-note-marker t)
    (setq org-log-note-purpose purpose
 	 org-log-note-state state
 	 org-log-note-previous-state prev-state
@@ -14379,15 +14367,17 @@ also TODO lines."
 (defun org-cached-entry-get (pom property)
   (if (or (eq t org-use-property-inheritance)
 	  (and (stringp org-use-property-inheritance)
-	       (string-match org-use-property-inheritance property))
+	       (let ((case-fold-search t))
+		 (org-string-match-p org-use-property-inheritance property)))
 	  (and (listp org-use-property-inheritance)
-	       (member property org-use-property-inheritance)))
-      ;; Caching is not possible, check it directly
+	       (member-ignore-case property org-use-property-inheritance)))
+      ;; Caching is not possible, check it directly.
       (org-entry-get pom property 'inherit)
-    ;; Get all properties, so that we can do complicated checks easily
-    (cdr (assoc property (or org-cached-props
-			     (setq org-cached-props
-				   (org-entry-properties pom)))))))
+    ;; Get all properties, so we can do complicated checks easily.
+    (cdr (assoc-string property
+		       (or org-cached-props
+			   (setq org-cached-props (org-entry-properties pom)))
+		       t))))
 
 (defun org-global-tags-completion-table (&optional files)
   "Return the list of all tags in all agenda buffer/files.
@@ -17205,33 +17195,6 @@ The command returns the inserted time stamp."
 	  (put-text-property beg end 'end-glyph (make-glyph str)))
       (put-text-property beg end 'display str))))
 
-(defun org-translate-time (string)
-  "Translate all timestamps in STRING to custom format.
-But do this only if the variable `org-display-custom-times' is set."
-  (when org-display-custom-times
-    (save-match-data
-      (let* ((start 0)
-	     (re org-ts-regexp-both)
-	     t1 with-hm inactive tf time str beg end)
-	(while (setq start (string-match re string start))
-	  (setq beg (match-beginning 0)
-		end (match-end 0)
-		t1 (save-match-data
-		     (org-parse-time-string (substring string beg end) t))
-		with-hm (and (nth 1 t1) (nth 2 t1))
-		inactive (equal (substring string beg (1+ beg)) "[")
-		tf (funcall (if with-hm 'cdr 'car)
-			    org-time-stamp-custom-formats)
-		time (org-fix-decoded-time t1)
-		str (format-time-string
-		     (concat
-		      (if inactive "[" "<") (substring tf 1 -1)
-		      (if inactive "]" ">"))
-		     (apply 'encode-time time))
-		string (replace-match str t t string)
-		start (+ start (length str)))))))
-  string)
-
 (defun org-fix-decoded-time (time)
   "Set 0 instead of nil for the first 6 elements of time.
 Don't touch the rest."
@@ -17497,14 +17460,15 @@ The variable `date' is bound by the calendar when this is called."
 
 (defun org-small-year-to-year (year)
   "Convert 2-digit years into 4-digit years.
-38-99 are mapped into 1938-1999.  1-37 are mapped into 2001-2037.
-The year 2000 cannot be abbreviated.  Any year larger than 99
-is returned unchanged."
-  (if (< year 38)
-      (setq year (+ 2000 year))
-    (if (< year 100)
-	(setq year (+ 1900 year))))
-  year)
+YEAR is expanded into one of the 30 next years, if possible, or
+into a past one.  Any year larger than 99 is returned unchanged."
+  (if (>= year 100) year
+    (let* ((current (string-to-number (format-time-string "%Y" (current-time))))
+	   (century (/ current 100))
+	   (offset (- year (% current 100))))
+      (cond ((> offset 30) (+ (* (1- century) 100) year))
+	    ((> offset -70) (+ (* century 100) year))
+	    (t (+ (* (1+ century) 100) year))))))
 
 (defun org-time-from-absolute (d)
   "Return the time corresponding to date D.
@@ -19873,8 +19837,8 @@ overwritten, and the table is not marked as requiring realignment."
      (progn
        ;; check if we blank the field, and if that triggers align
        (and (featurep 'org-table) org-table-auto-blank-field
-	    (member last-command
-		    '(org-cycle org-return org-shifttab org-ctrl-c-ctrl-c yas-expand))
+	    (memq last-command
+		  '(org-cycle org-return org-shifttab org-ctrl-c-ctrl-c))
 	    (if (or (equal (char-after) ?\ ) (looking-at "[^|\n]*  |"))
 		;; got extra space, this field does not determine column width
 		(let (org-table-may-need-update) (org-table-blank-field))
@@ -23495,27 +23459,28 @@ TIMESTAMP."
 	   split-ts :raw-value (org-element-interpret-data split-ts)))))))
 
 (defun org-timestamp-translate (timestamp &optional boundary)
-  "Apply `org-translate-time' on a TIMESTAMP object.
+  "Translate TIMESTAMP object to custom format.
+
+Format string is defined in `org-time-stamp-custom-formats',
+which see.
+
 When optional argument BOUNDARY is non-nil, it is either the
 symbol `start' or `end'.  In this case, only translate the
 starting or ending part of TIMESTAMP if it is a date or time
-range.  Otherwise, translate both parts."
-  (if (and (not boundary)
-	   (memq (org-element-property :type timestamp)
-		 '(active-range inactive-range)))
-      (concat
-       (org-translate-time
-	(org-element-property :raw-value
-			      (org-timestamp-split-range timestamp)))
-       "--"
-       (org-translate-time
-	(org-element-property :raw-value
-			      (org-timestamp-split-range timestamp t))))
-    (org-translate-time
-     (org-element-property
-      :raw-value
-      (if (not boundary) timestamp
-	(org-timestamp-split-range timestamp (eq boundary 'end)))))))
+range.  Otherwise, translate both parts.
+
+Return timestamp as-is if `org-display-custom-times' is nil or if
+it has a `diary' type."
+  (let ((type (org-element-property :type timestamp)))
+    (if (or (not org-display-custom-times) (eq type 'diary))
+	(org-element-interpret-data timestamp)
+      (let ((fmt (funcall (if (org-timestamp-has-time-p timestamp) #'cdr #'car)
+			  org-time-stamp-custom-formats)))
+	(if (and (not boundary) (memq type '(active-range inactive-range)))
+	    (concat (org-timestamp-format timestamp fmt)
+		    "--"
+		    (org-timestamp-format timestamp fmt t))
+	  (org-timestamp-format timestamp fmt (eq boundary 'end)))))))
 
 
 
