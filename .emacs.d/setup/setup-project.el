@@ -109,6 +109,10 @@
 (add-to-list 'load-path "~/.emacs.d/helm-dash")
 (require 'helm-dash)
 
+(setq helm-dash-min-length 2)
+(setq helm-dash-docsets-path (format "%s/.emacs.d/docsets" (getenv "HOME")))
+(setq helm-dash-common-docsets '("C" "C++"))
+
 (defun jwintz/dash-path (docset)
   (if (string= docset "OpenGL_2")
       (concat (concat helm-dash-docsets-path "/") "OpenGL2.docset")
@@ -119,30 +123,29 @@
         (if (string= docset "Emacs_Lisp")
             (concat (concat helm-dash-docsets-path "/") "Emacs Lisp.docset")
           (concat
-           (concat
             (concat
-             (concat helm-dash-docsets-path "/")
-             (nth 0 (split-string docset "_")))) ".docset"))))))
+             (concat
+              (concat helm-dash-docsets-path "/")
+              (nth 0 (split-string docset "_")))) ".docset"))))))
 
 (defun jwintz/dash-install (docset)
   (unless (file-exists-p (jwintz/dash-path docset))
     (helm-dash-install-docset docset)))
 
-(defun jwintz/dash-hook ()
-  (local-set-key "\C-h\C-df" 'helm-dash)
-  (local-set-key "\C-h\C-dg" 'helm-dash-at-point)
-  (local-set-key "\C-h\C-dh" 'helm-dash-reset-connections))
-
-(defun jwintz/dash-hook-java ()
+(defun c-doc-hook ()
   (interactive)
-  (setq-local helm-dash-docsets '("Java_SE8")))
+  (setq-local helm-dash-docsets '("C" "C++" "OpenCV_C" "OpenCV_C++")))
+(add-hook 'c-mode-common-hook 'c-doc-hook)
 
-(setq helm-dash-docsets-path (format "%s/.emacs.d/docsets" (getenv "HOME")))
-(setq helm-dash-common-docsets '("C" "C++"))
-(setq helm-dash-min-length 2)
+(defun emacs-doc-hook ()
+  (interactive)
+  (setq-local helm-dash-docsets '("Emacs_Lisp")))
+(add-hook 'emacs-lisp-mode-hook 'emacs-doc-hook)
 
-(add-hook 'prog-mode-hook 'jwintz/dash-hook)
-(add-hook 'java-mode-hook 'jwintz/dash-hook-java)
+(defun python-doc-hook ()
+  (interactive)
+  (setq-local helm-dash-docsets '("Python")))
+(add-hook 'python-mode-hook 'python-doc-hook)
 
 (provide 'setup-project)
 ;;; setup-project.el ends here

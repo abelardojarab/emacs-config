@@ -85,7 +85,10 @@ Suggested values are:
 (defun helm-dash-sql (db-path sql)
   ""
   (mapcar (lambda (x) (split-string x "|" t))
-	  (split-string (shell-command-to-string (format "sqlite3 \"%s\" \"%s\"" db-path sql)) "\n" t)))
+          (split-string
+           (with-output-to-string
+             (call-process-shell-command
+              (format "sqlite3 \"%s\" \"%s\"" db-path sql) nil standard-output)) "\n" t)))
 
 (defun helm-dash-filter-connections ()
   "Filter connections using `helm-dash-connections-filters'."
@@ -298,17 +301,20 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
     full-res))
 
 (defun helm-dash-result-url (docset-name filename &optional anchor)
-  "Return the absolute path joining docsets path, DOCSET-NAME,FILENAME & ANCHOR.
-Sanitization of spaces in the path."
+  "Return the full, absolute URL to documentation: either a file:// URL joining
+DOCSET-NAME, FILENAME & ANCHOR with sanitization of spaces or a http(s):// URL
+formed as-is if FILENAME is a full HTTP(S) URL."
   (let ((path (format "%s%s" filename (if anchor (format "#%s" anchor) ""))))
-    (replace-regexp-in-string
-     " "
-     "%20"
-     (format "%s%s%s%s"
-	     "file:///"
-	     helm-dash-docsets-path
-	     (format "/%s.docset/Contents/Resources/Documents/" docset-name)
-	     path))))
+    (if (string-match-p "^https?://" path)
+        path
+      (replace-regexp-in-string
+       " "
+       "%20"
+       (format "%s%s%s%s"
+               "file:///"
+               helm-dash-docsets-path
+               (format "/%s.docset/Contents/Resources/Documents/" docset-name)
+               path)))))
 
 (defun helm-dash-browse-url (search-result)
   "Call to `browse-url' with the result returned by `helm-dash-result-url'.

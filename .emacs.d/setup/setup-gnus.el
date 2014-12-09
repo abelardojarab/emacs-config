@@ -35,7 +35,8 @@
 (setq gnus-summary-line-format "%U%R%z%d %I%(%[ %F %] %s %)\n")
 (setq gnus-secondary-select-methods '((nntp "news.gmane.org")
                                       (nntp "news.gwene.org")))
-(setq mm-text-html-renderer 'w3m)
+
+;; Message tweak
 (setq message-generate-headers-first t)
 (add-hook 'message-mode-hook 'turn-on-auto-fill)
 
@@ -47,6 +48,9 @@
   (require 'newsticker)
   (require 'newsticker-notify)
   (require 'w3m)
+  (setq browse-url-browser-function 'w3m-browse-url)
+  (setq w3m-home-page "http://www.google.com")
+  (setq mm-text-html-renderer 'w3m)
   (setq newsticker-dir "~/.emacs.cache/Newsticker")
   (setq newsticker-url-list-defaults nil)
   (setq newsticker-automatically-mark-items-as-old t)
