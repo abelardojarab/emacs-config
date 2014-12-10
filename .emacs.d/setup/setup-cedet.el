@@ -201,11 +201,8 @@
    ) ;; cond
   ) ;; defun
 
-(require 'eassist nil 'noerror)
-(define-key c-mode-base-map [f12] 'eassist-switch-h-cpp)
-(define-key c-mode-base-map [C-f12] 'dts-switch-between-header-and-source)
-
 ;; Eassist header switches
+(require 'eassist nil 'noerror)
 (setq eassist-header-switches
       '(("h" . ("cpp" "cxx" "c++" "CC" "cc" "C" "c" "mm" "m"))
         ("hh" . ("cc" "CC" "cpp" "cxx" "c++" "C"))

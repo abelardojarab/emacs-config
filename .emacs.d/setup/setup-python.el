@@ -50,9 +50,9 @@
 (add-hook 'python-mode-hook
           (function (lambda ()
                       (setq indent-tabs-mode nil
-                            tab-width 2))))
+                            tab-width 4))))
 (add-hook 'python-mode-hook '(lambda ()
-                               (setq python-indent 2)))
+                               (setq python-indent 4)))
 
 ;; Jedi settings
 (add-to-list 'load-path "~/.emacs.d/ctable")

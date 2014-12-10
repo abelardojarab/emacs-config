@@ -290,6 +290,8 @@
 
 ;; Jump between windows
 (require 'eassist)
+(define-key c-mode-base-map [f4] 'eassist-switch-h-cpp)
+(define-key c-mode-base-map [C-f4] 'dts-switch-between-header-and-source)
 (global-set-key (kbd "C-0") 'psw-switch-buffer)
 (global-set-key (kbd "C-1") 'psw-switch-function)
 (global-set-key [(meta left)] 'psw-switch-function)
