@@ -168,10 +168,17 @@
                         (setq main-writing-font (concat main-writing-font "-16"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))))
                 (progn ;; Small display
-                  (setq main-programming-font "Consolas-10:antialias=subpixel")
-                  (set-default-font main-programming-font frame)
-                  (setq main-writing-font (concat main-writing-font "-14"))
-                  (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))))))
+                  (if (equal system-type 'darwin)
+                      (progn
+                        (setq main-programming-font "Consolas-14:antialias=subpixel")
+                        (set-default-font main-programming-font frame)
+                        (setq main-writing-font (concat main-writing-font "-17"))
+                        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
+                    (progn
+                      (setq main-programming-font "Consolas-10:antialias=subpixel")
+                      (set-default-font main-programming-font frame)
+                      (setq main-writing-font (concat main-writing-font "-14"))
+                      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))))))))
 
     ;; Fontify current frame
     (fontify-frame nil)
@@ -186,9 +193,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
