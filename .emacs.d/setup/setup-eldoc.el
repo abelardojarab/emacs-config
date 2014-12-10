@@ -29,22 +29,12 @@
 (require 'eldoc-extension)
 (setq eldoc-echo-area-use-multiline-p t)
 (setq eldoc-idle-delay 0)
-(add-hook 'c-mode-common-hook
-          '(lambda ()
-             (turn-on-eldoc-mode)))
 (add-hook 'emacs-lisp-mode-hook
           '(lambda ()
              (turn-on-eldoc-mode)))
 (add-hook 'lisp-mode-hook
           '(lambda ()
              (turn-on-eldoc-mode)))
-(add-hook 'python-mode-hook
-          '(lambda ()
-             (turn-on-eldoc-mode)))
-(add-hook 'js2-mode-hook
-          '(lambda ()
-             (turn-on-eldoc-mode)))
-
 (eldoc-add-command
  'paredit-backward-delete
  'paredit-close-round)
@@ -54,6 +44,14 @@
 (add-to-list 'load-path "~/.emacs.d/eldoc-eval")
 (require 'eldoc-eval)
 (eldoc-in-minibuffer-mode 1)
+
+;; Setup Eldoc for C
+(add-to-list 'load-path "~/.emacs.d/c-eldoc")
+(add-to-list 'load-path "~/.emacs.d/deferred")
+(require 'deferred)
+(when (require 'c-eldoc nil 'noerror)
+  (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
+  (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode))
 
 (provide 'setup-eldoc)
 ;;; setup-eldoc.el ends here
