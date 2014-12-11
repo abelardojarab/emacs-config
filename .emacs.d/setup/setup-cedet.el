@@ -121,7 +121,7 @@
 (require 'semantic/bovine/scm-by)
 
 ;; Legacy
-(require 'semantic-util-modes)
+;; (require 'semantic-util-modes)
 
 (defconst cedet-user-include-dirs
   (list ".." "../include" "../inc" "../common" "../public" "."

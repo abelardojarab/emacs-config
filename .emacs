@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-to-list 'load-path "~/.emacs.d/elisp")
-(add-to-list 'load-path "~/.emacs.d/elisp/semanticold")
+;; (add-to-list 'load-path "~/.emacs.d/elisp/semanticold")
 (add-to-list 'load-path "~/.emacs.d/setup")
 (add-to-list 'load-path "~/.emacs.d/elp")
 (add-to-list 'load-path "~/.emacs.d/pkg-info")
