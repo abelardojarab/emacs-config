@@ -120,6 +120,9 @@
 (require 'semantic/bovine/clang)
 (require 'semantic/bovine/scm-by)
 
+;; Legacy
+(require 'semantic-util-modes)
+
 (defconst cedet-user-include-dirs
   (list ".." "../include" "../inc" "../common" "../public" "."
         "../.." "../../include" "../../inc" "../../common" "../../public"))
