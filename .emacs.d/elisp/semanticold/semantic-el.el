@@ -35,7 +35,7 @@
   )
 
 ;;; Code:
-
+
 ;;; Lexer
 ;;
 (define-lex semantic-emacs-lisp-lexer
@@ -53,7 +53,7 @@ syntax as specified by the syntax table."
   semantic-lex-ignore-comments
   semantic-lex-punctuation
   semantic-lex-default-action)
-
+
 ;;; Parser
 ;;
 (defvar semantic--elisp-parse-table
@@ -206,7 +206,7 @@ Return a bovination list to use."
      (t
       (semantic-tag-new-code (format "%S" (car form)) nil)
       ))))
-
+
 ;;; Form parsers
 ;;
 (semantic-elisp-setup-form-parser
