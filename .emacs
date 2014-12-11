@@ -124,6 +124,9 @@
 ;; Setup Javascript mode
 (require 'setup-js2-mode)
 
+;; Setup C# mode
+(require 'setup-csharp)
+
 ;; Setup Lisp mode
 (require 'setup-lisp)
 
