@@ -30,8 +30,9 @@
 (add-to-list 'load-path "~/.emacs.d/omnisharp-emacs/src/actions")
 
 (when (require 'csharp-mode nil 'noerror)
-  (require 'omnisharp)
-  (add-hook 'csharp-mode-hook 'omnisharp-mode))
+  (when (executable-find "mono")
+    (require 'omnisharp)
+    (add-hook 'csharp-mode-hook 'omnisharp-mode)))
 
 (provide 'setup-csharp)
 ;;; setup-csharp.el ends here
