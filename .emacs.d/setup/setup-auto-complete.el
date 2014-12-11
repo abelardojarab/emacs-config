@@ -53,7 +53,6 @@
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(add-to-list 'ac-modes 'org-mode)
 
 ;; General settings
 (setq
@@ -134,12 +133,23 @@
 (add-hook 'mail-mode-hook 'ac-ispell-ac-setup)
 
 ;; Enable auto-complete on more modes
-(dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
-                                    sass-mode yaml-mode csv-mode espresso-mode haskell-mode
-                                    html-mode nxml-mode sh-mode smarty-mode clojure-mode
-                                    lisp-mode textile-mode markdown-mode tuareg-mode
-                                    js3-mode css-mode less-css-mode))
+(dolist (mode '(magit-log-edit-mode
+                log-edit-mode org-mode text-mode haml-mode
+                sass-mode yaml-mode csv-mode espresso-mode haskell-mode
+                html-mode nxml-mode sh-mode smarty-mode clojure-mode
+                lisp-mode textile-mode markdown-mode tuareg-mode
+                csharp-mode js2-mode js3-mode css-mode less-css-mode))
   (add-to-list 'ac-modes mode))
+
+;; Autocomplete for Org
+(add-to-list 'load-path "~/.emacs.d/log4e")
+(add-to-list 'load-path "~/.emacs.d/yaxception")
+(add-to-list 'load-path "~/.emacs.d/auto-complete-pcmp")
+(add-to-list 'load-path "~/.emacs.d/org-ac")
+(require 'log4e)
+(require 'yaxception)
+(when (require 'org-ac nil 'noerror)
+  (org-ac/config-default))
 
 ;; font face setting
 (when (find-font (font-spec :name "Consolas"))
