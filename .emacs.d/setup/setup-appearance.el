@@ -81,8 +81,10 @@
 (setq font-lock-support-mode 'jit-lock-mode ;; lazy-lock-mode
       fast-lock-cache-directories '("~/.emacs.cache"))
 (setq font-lock-support-mode 'jit-lock-mode)
-(setq jit-lock-stealth-time 16
-      jit-lock-defer-contextually t
+(setq jit-lock-stealth-time 1
+      jit-lock-stealth-load 100
+      jit-lock-chunk-size 1000
+      jit-lock-defer-time 0.01
       jit-lock-stealth-nice 0.5)
 (setq-default font-lock-multiline t)
 
@@ -193,9 +195,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")

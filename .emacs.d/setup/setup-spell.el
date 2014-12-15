@@ -31,6 +31,7 @@
 (setq ispell-silently-savep t)
 (setq ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
+(add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
 (when (eq system-type 'darwin)
   (if (file-executable-p "/usr/local/bin/aspell")
       (progn
