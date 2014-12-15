@@ -14,7 +14,7 @@
 ;;;;;;  org-babel-execute-src-block org-babel-pop-to-session-maybe
 ;;;;;;  org-babel-load-in-session-maybe org-babel-expand-src-block-maybe
 ;;;;;;  org-babel-view-src-block-info org-babel-execute-maybe org-babel-execute-safely-maybe)
-;;;;;;  "ob-core" "ob-core.el" (21622 12754))
+;;;;;;  "ob-core" "ob-core.el" (21647 12479))
 ;;; Generated autoloads from ob-core.el
 
 (autoload 'org-babel-execute-safely-maybe "ob-core" "\
@@ -707,7 +707,7 @@ Set `org-capture-templates' to be similar to `org-remember-templates'.
 ;;;;;;  org-clock-remove-overlays org-clock-display org-clock-sum
 ;;;;;;  org-clock-goto org-clock-cancel org-clock-out org-clock-in-last
 ;;;;;;  org-clock-in org-resolve-clocks) "org-clock" "org-clock.el"
-;;;;;;  (21639 26272))
+;;;;;;  (21647 12479))
 ;;; Generated autoloads from org-clock.el
 
 (autoload 'org-resolve-clocks "org-clock" "\
@@ -1261,7 +1261,7 @@ line directly before or after the table.
 ;;;;;;  org-table-begin org-table-align org-table-export org-table-import
 ;;;;;;  org-table-convert-region org-table-create org-table-create-or-convert-from-region
 ;;;;;;  org-table-create-with-table\.el) "org-table" "org-table.el"
-;;;;;;  (21591 45285))
+;;;;;;  (21647 12479))
 ;;; Generated autoloads from org-table.el
 
 (autoload 'org-table-create-with-table\.el "org-table" "\
@@ -1973,7 +1973,7 @@ using three `C-u' prefix arguments.
 ;;;***
 
 ;;;### (autoloads (org-git-version org-release) "org-version" "org-version.el"
-;;;;;;  (21639 26287))
+;;;;;;  (21647 12489))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -1999,7 +1999,7 @@ The location of ODT styles.")
 ;;;;;;  org-run-like-in-org-mode turn-on-orgstruct++ turn-on-orgstruct
 ;;;;;;  orgstruct-mode org-global-cycle org-cycle org-mode org-clock-persistence-insinuate
 ;;;;;;  turn-on-orgtbl org-version org-babel-load-file org-babel-do-load-languages)
-;;;;;;  "org" "org.el" (21639 26272))
+;;;;;;  "org" "org.el" (21647 12479))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -2326,7 +2326,7 @@ Return output file name.
 ;;;### (autoloads (org-beamer-publish-to-pdf org-beamer-publish-to-latex
 ;;;;;;  org-beamer-select-environment org-beamer-export-to-pdf org-beamer-export-to-latex
 ;;;;;;  org-beamer-export-as-latex org-beamer-mode) "ox-beamer" "ox-beamer.el"
-;;;;;;  (21622 12754))
+;;;;;;  (21647 12479))
 ;;; Generated autoloads from ox-beamer.el
 
 (autoload 'org-beamer-mode "ox-beamer" "\
@@ -2751,7 +2751,7 @@ Return output file name.
 
 ;;;### (autoloads (org-md-publish-to-md org-md-export-to-markdown
 ;;;;;;  org-md-convert-region-to-md org-md-export-as-markdown) "ox-md"
-;;;;;;  "ox-md.el" (21591 45285))
+;;;;;;  "ox-md.el" (21647 12480))
 ;;; Generated autoloads from ox-md.el
 
 (autoload 'org-md-export-as-markdown "ox-md" "\
