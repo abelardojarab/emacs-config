@@ -218,6 +218,7 @@ attention to case differences."
     puppet-lint
     python-flake8
     python-pylint
+    python-pycompile
     racket
     rpm-rpmlint
     rst
@@ -757,18 +758,19 @@ This variable is a normal hook.  See Info node `(elisp)Hooks'."
 
 (defvar flycheck-command-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "c" 'flycheck-buffer)
-    (define-key map "C" 'flycheck-clear)
-    (define-key map (kbd "C-c") 'flycheck-compile)
-    (define-key map "n" 'flycheck-next-error)
-    (define-key map "p" 'flycheck-previous-error)
-    (define-key map "l" 'flycheck-list-errors)
-    (define-key map (kbd "C-w") 'flycheck-copy-errors-as-kill)
-    (define-key map "s" 'flycheck-select-checker)
-    (define-key map "e" 'flycheck-set-checker-executable)
-    (define-key map "?" 'flycheck-describe-checker)
-    (define-key map "i" 'flycheck-info)
-    (define-key map "V" 'flycheck-version)
+    (define-key map "c"         #'flycheck-buffer)
+    (define-key map "C"         #'flycheck-clear)
+    (define-key map (kbd "C-c") #'flycheck-compile)
+    (define-key map "n"         #'flycheck-next-error)
+    (define-key map "p"         #'flycheck-previous-error)
+    (define-key map "l"         #'flycheck-list-errors)
+    (define-key map (kbd "C-w") #'flycheck-copy-errors-as-kill)
+    (define-key map "s"         #'flycheck-select-checker)
+    (define-key map "e"         #'flycheck-set-checker-executable)
+    (define-key map "?"         #'flycheck-describe-checker)
+    (define-key map "i"         #'flycheck-info)
+    (define-key map "V"         #'flycheck-version)
+    (define-key map "v"         #'flycheck-verify-setup)
     map)
   "Keymap of Flycheck interactive commands.")
 
@@ -1266,6 +1268,28 @@ A checker is disabled if it is contained in
 `flycheck-disabled-checkers'."
   (memq checker flycheck-disabled-checkers))
 
+(defun flycheck-possibly-suitable-checkers ()
+  "Find possibly suitable checkers for the current buffer.
+
+Return a list of all syntax checkers which could possibly be
+suitable for the current buffer, if any problems in their setup
+were fixed.
+
+Currently this function collects all registered syntax checkers
+whose `:modes' contain the current major mode or which do not
+have any `:modes', but a `:predicate' that returns non-nil for
+the current buffer."
+  (let (checkers)
+    (dolist (checker flycheck-checkers)
+      (let ((modes (flycheck-checker-modes checker))
+            (predicate (flycheck-checker-predicate checker)))
+        (when (or (memq major-mode modes)
+                  (and (not modes)
+                       (functionp predicate)
+                       (funcall predicate)))
+          (push checker checkers))))
+    (nreverse checkers)))
+
 
 ;;; Generic syntax checkers
 (defconst flycheck-generic-checker-version 2
@@ -1345,10 +1369,14 @@ are mandatory.
 
      FUNCTION is called with the syntax checker and the context
      object returned by the `:start' function and shall try to
-     interrupt the syntax check.  If it cannot do so, it may
-     either signal an error or silently ignore the attempt to
-     interrupt the syntax checker, depending on the severity of
-     the situation.
+     interrupt the syntax check.  The context may be nil, if the
+     syntax check is interrupted before actually started.
+     FUNCTION should handle this situation.
+
+     If it cannot interrupt the syntax check, it may either
+     signal an error or silently ignore the attempt to interrupt
+     the syntax checker, depending on the severity of the
+     situation.
 
      If interrupting the syntax check failed, Flycheck will let
      the syntax check continue, but ignore any status reports.
@@ -1359,7 +1387,7 @@ are mandatory.
      attempt to interrupt syntax checks wit this syntax checker,
      and simply ignore their results.
 
-`:doc-printer FUNCTION'
+`:print-doc FUNCTION'
      A function to print additional documentation into the Help
      buffer of this checker.
 
@@ -1377,6 +1405,21 @@ are mandatory.
 
      This property is optional.  If omitted, no additional
      documentation is printed for this syntax checker.
+
+:verify FUNCTION
+     A function to verify the checker for the current buffer.
+
+     FUNCTION is called with the syntax checker as single
+     argument, and shall return a list of
+     `flycheck-verification-result' objects indicating whether
+     the syntax checker could be used in the current buffer, and
+     highlighting potential setup problems.
+
+     This property is optional.  If omitted, no additional
+     verification occurs for this syntax checker.  It is however
+     absolutely recommended that you add a `:verify' function to
+     your syntax checker, because it will help users to spot
+     potential setup problems.
 
 `:modes MODES'
      A major mode symbol or a list thereof, denoting major modes
@@ -1454,9 +1497,10 @@ Signal an error, if any property has an invalid value."
            (doc-string 2))
   (let ((start (plist-get properties :start))
         (interrupt (plist-get properties :interrupt))
-        (doc-printer (plist-get properties :doc-printer))
+        (print-doc (plist-get properties :print-doc))
         (modes (plist-get properties :modes))
         (predicate (plist-get properties :predicate))
+        (verify (plist-get properties :verify))
         (filter (or (plist-get properties :error-filter)
                     #'flycheck-sanitize-errors))
         (next-checkers (plist-get properties :next-checkers))
@@ -1470,9 +1514,12 @@ Signal an error, if any property has an invalid value."
     (unless (or (null interrupt) (functionp interrupt))
       (error ":interrupt %S of syntax checker %s is not a function"
              symbol interrupt))
-    (unless (or (null doc-printer) (functionp doc-printer))
-      (error ":doc-printer %S of syntax checker %s is not a function"
-             symbol doc-printer))
+    (unless (or (null print-doc) (functionp print-doc))
+      (error ":print-doc %S of syntax checker %s is not a function"
+             symbol print-doc))
+    (unless (or (null verify) (functionp verify))
+      (error ":verify %S of syntax checker %S is not a function"
+             symbol verify))
     (unless (or modes predicate)
       (error "Missing :modes or :predicate in syntax checker %s" symbol))
     (dolist (mode modes)
@@ -1497,9 +1544,10 @@ Try to reinstall the package defining this syntax checker." symbol)
       (pcase-dolist (`(,prop . ,value)
                      `((flycheck-start         . ,start)
                        (flycheck-interrupt     . ,interrupt)
-                       (flycheck-doc-printer   . ,doc-printer)
+                       (flycheck-print-doc     . ,print-doc)
                        (flycheck-modes         . ,modes)
                        (flycheck-predicate     . ,real-predicate)
+                       (flycheck-verify        . ,verify)
                        (flycheck-error-filter  . ,filter)
                        (flycheck-next-checkers . ,next-checkers)
                        (flycheck-documentation . ,docstring)
@@ -1629,7 +1677,7 @@ Pop up a help buffer with the documentation of CHECKER."
         (let ((filename (flycheck-checker-file checker))
               (modes (flycheck-checker-modes checker))
               (predicate (flycheck-checker-predicate checker))
-              (doc-printer (get checker 'flycheck-doc-printer)))
+              (print-doc (get checker 'flycheck-print-doc)))
           (princ (format "%s is a Flycheck syntax checker" checker))
           (when filename
             (princ (format " in `%s'" (file-name-nondirectory filename)))
@@ -1656,12 +1704,123 @@ Pop up a help buffer with the documentation of CHECKER."
               (save-excursion
                 (fill-region-as-paragraph modes-start (point-max)))))
           (princ "\n")
-          ;; Call the custom doc-printer of the checker, if present
-          (when doc-printer
-            (funcall doc-printer checker))
+          ;; Call the custom print-doc function of the checker, if present
+          (when print-doc
+            (funcall print-doc checker))
           ;; Ultimately, print the docstring
           (princ "\nDocumentation:\n")
           (princ (flycheck-checker-documentation checker)))))))
+
+
+;;; Syntax checker verification
+(cl-defstruct (flycheck-verification-result
+               (:constructor flycheck-verification-result-new))
+  "Structure for storing a single verification result.
+
+Slots:
+
+`label'
+     A label for this result, as string
+
+`message'
+     A message for this result, as string
+
+`face'
+     The face to use for the `message'.
+
+     You can either use a face symbol, or a list of face symbols."
+  label message face)
+
+(defun flycheck-verify-generic-checker (checker)
+  "Verify a generic CHECKER in the current buffer.
+
+Return a list of `flycheck-verification-result' objects."
+  (let (results
+        (predicate (flycheck-checker-predicate checker))
+        (verify (get checker 'flycheck-verify)))
+    (when predicate
+      (let ((result (funcall predicate)))
+        (push (flycheck-verification-result-new
+               :label "predicate"
+               :message (prin1-to-string (not (null result)))
+               :face (if result 'success '(bold warning)))
+              results)))
+    (append (nreverse results)
+            (and verify (funcall verify checker)))))
+
+(define-button-type 'help-flycheck-checker-doc
+  :supertype 'help-xref
+  'help-function #'flycheck-describe-checker
+  'help-echo "mouse-2, RET: describe Flycheck checker")
+
+(defun flycheck-verify-setup ()
+  "Check whether Flycheck can be used in this buffer.
+
+Display a new buffer listing all syntax checkers that could be
+applicable in the current buffer.  For each syntax checkers,
+possible problems are shown."
+  (interactive)
+  (when (and (buffer-file-name) (buffer-modified-p))
+    ;; Save the buffer
+    (save-buffer))
+
+  (let ((buffer (current-buffer))
+        (checkers (flycheck-possibly-suitable-checkers)))
+
+    ;; Now print all applicable checkers
+    (with-help-window (get-buffer-create " *Flycheck checkers*")
+      (with-current-buffer standard-output
+        (princ "Syntax checkers for buffer ")
+        (insert (propertize (buffer-name buffer) 'face 'bold))
+        (princ " in ")
+        (let ((mode (buffer-local-value 'major-mode buffer)))
+          (insert-button (symbol-name mode)
+                         'type 'help-function
+                         'help-args (list mode)))
+        (princ ":\n\n")
+        (unless checkers
+          (insert (propertize "There are no syntax checkers for this buffer!\n\n"
+                              'face '(bold error))))
+        (dolist (checker checkers)
+          (princ "  ")
+          (insert-button (symbol-name checker)
+                         'type 'help-flycheck-checker-doc
+                         'help-args (list checker))
+          (princ "\n")
+          (let* ((results (with-current-buffer buffer
+                            (flycheck-verify-generic-checker checker)))
+                 (label-length
+                  (-max (mapcar
+                         (lambda (res)
+                           (length (flycheck-verification-result-label res)))
+                         results)))
+                 (message-column (+ 8 label-length)))
+            (dolist (result results)
+              (princ "    - ")
+              (princ (flycheck-verification-result-label result))
+              (princ ": ")
+              (princ (make-string (- message-column (current-column)) ?\ ))
+              (let ((message (flycheck-verification-result-message result))
+                    (face (flycheck-verification-result-face result)))
+                (insert (propertize message 'face face)))
+              (princ "\n")))
+          (princ "\n"))
+        (princ "Flycheck Mode is ")
+        (let ((enabled (buffer-local-value 'flycheck-mode buffer)))
+          (insert (propertize (if enabled "enabled" "disabled")
+                              'face (if enabled 'success '(warning bold)))))
+        (princ ".\n")
+
+        (let ((unregistered-checkers (-difference (flycheck-defined-checkers)
+                                                  flycheck-checkers)))
+          (when unregistered-checkers
+            (insert (propertize "\nThe following syntax checkers are not registered:\n\n"
+                                'face '(bold warning)))
+            (dolist (checker unregistered-checkers)
+              (princ "  - ")
+              (princ checker)
+              (princ "\n"))
+            (princ "\nTry adding these syntax checkers to `flycheck-checkers'.")))))))
 
 
 ;;; Predicates for generic syntax checkers
@@ -2846,57 +3005,50 @@ Return ERRORS, with in-place modifications."
               (buffer-substring-no-properties (point-min) (point-max))))))
   errors)
 
-(defun flycheck-fold-include-errors (errors sentinel-message)
-  "Fold errors from included files.
+(defun flycheck-fold-include-levels (errors sentinel-message)
+  "Fold levels of ERRORS from included files.
 
-ERRORS is a list of errors in which to fold errors.
-SENTINEL-MESSAGE is the error message which denotes an error on
-an include.
-
-The function will fold the messages of all subsequent errors in
-the included file into the error on the include.
-
-Returns ERRORS, with folded messages."
-  ;; Fold messages from faulty includes into the errors on the corresponding
-  ;; include lines.  The user still needs to visit the affected include to
-  ;; list and navigate these errors, but they can at least get an idea of
-  ;; what is wrong.
-  (let (including-filename              ; The name of the file including a
-                                        ; faulty include
-        include-error                   ; The error on the include line
-        errors-in-include)              ; All errors in the include, as strings
-    (dolist (err errors)
-      (-when-let* ((message (flycheck-error-message err))
-                   (filename (flycheck-error-filename err)))
-        (cond
-         ((and (string= message sentinel-message)
-               ;; Don't handle faulty includes recursively, we are only
-               ;; interested in “top-level” errors
-               (not including-filename))
-          ;; We are looking at an error denoting a faulty include, so let's
-          ;; remember the error and the name of the include, and initialize
-          ;; our folded error message
-          (setq include-error err
-                including-filename filename
-                errors-in-include (list "Errors in included file:")))
-         ((and include-error (not (string= filename including-filename)))
-          ;; We are looking at an error *inside* the last faulty include, so
-          ;; let's record err, as human-readable string
-          (push (flycheck-error-format err) errors-in-include))
-         (include-error
-          ;; We are looking at an unrelated error, so fold all include
-          ;; errors, if there are any
-          (when (and include-error errors-in-include)
-            (setf (flycheck-error-message include-error)
-                  (string-join (nreverse errors-in-include) "\n")))
-          (setq include-error nil
-                including-filename nil
-                errors-in-include nil)))))
-    ;; If there are still pending errors to be folded, do so now
-    (when (and include-error errors-in-include)
-      (setf (flycheck-error-message include-error)
-            (string-join (nreverse errors-in-include) "\n"))))
-  errors)
+ERRORS is a list of `flycheck-error' objects.  SENTINEL-MESSAGE
+is a regular expression matched against the error message to
+determine whether the errror denotes errors from an included
+file.  Alternatively, it is a function that is given an error and
+shall return non-nil, if the error denotes errors from an
+included file."
+  (unless (or (stringp sentinel-message) (functionp sentinel-message))
+    (error "Sentinel must be string or function: %S" sentinel-message))
+  (let ((sentinel (if (functionp sentinel-message)
+                      sentinel-message
+                    (lambda (err)
+                      (string-match-p sentinel-message
+                                      (flycheck-error-message err)))))
+        (remaining-errors errors))
+    (while remaining-errors
+      (let* ((current-error (pop remaining-errors)))
+        (when (funcall sentinel current-error)
+          ;; We found an error denoting errors in the included file, so process
+          ;; all subsequent errors until an error has the current file name
+          ;; again, and find the most severe error level
+          (let ((current-filename (flycheck-error-filename current-error))
+                (current-level nil)
+                (faulty-include-filename (flycheck-error-filename
+                                          (car remaining-errors))))
+            (while (and remaining-errors
+                        (not (string= (flycheck-error-filename
+                                       (car remaining-errors))
+                                      current-filename)))
+              (let* ((error-in-include (pop remaining-errors))
+                     (in-include-level (flycheck-error-level error-in-include)))
+                (unless (funcall sentinel error-in-include)
+                  ;; Ignore nested "included file" errors, we are only
+                  ;; interested in real errors because these define our level
+                  (when (or (not current-level)
+                            (> (flycheck-error-level-severity in-include-level)
+                               (flycheck-error-level-severity current-level)))
+                    (setq current-level in-include-level)))))
+            (setf (flycheck-error-level current-error) current-level
+                  (flycheck-error-message current-error)
+                  (format "In include %s" faulty-include-filename))))))
+    errors))
 
 (defun flycheck-dequalify-error-ids (errors)
   "De-qualify error ids in ERRORS.
@@ -3685,10 +3837,13 @@ Unless otherwise noted, all properties are mandatory.
 
 In addition to these PROPERTIES, all properties from
 `flycheck-define-generic-checker' may be specified, except of
-`:start', `:interrupt', and `:doc-printer'."
+`:start', `:interrupt', and `:print-doc'.  You may specify a
+custom `:verify' function, but you should take care to call
+`flycheck-verify-command-checker' in a custom `:verify'
+function."
   (declare (indent 1)
            (doc-string 2))
-  (dolist (prop '(:start :interrupt :doc-printer))
+  (dolist (prop '(:start :interrupt :print-doc))
     (when (plist-get properties prop)
       (error "%s not allowed in definition of command syntax checker %s"
              prop symbol)))
@@ -3722,7 +3877,8 @@ In addition to these PROPERTIES, all properties from
     (apply #'flycheck-define-generic-checker symbol docstring
            :start #'flycheck-start-command-checker
            :interrupt #'flycheck-interrupt-command-checker
-           :doc-printer #'flycheck-command-checker-print-doc
+           :print-doc #'flycheck-command-checker-print-doc
+           :verify #'flycheck-verify-command-checker
            properties)
 
     ;; Pre-compile all errors patterns into strings, so that we don't need to do
@@ -4016,7 +4172,8 @@ symbols in the command."
 (defun flycheck-interrupt-command-checker (_checker process)
   "Interrupt a PROCESS."
   ;; Deleting the process always triggers the sentinel, which does the cleanup
-  (delete-process process))
+  (when process
+    (delete-process process)))
 
 (defun flycheck-command-checker-print-doc (checker)
   "Print additional documentation for a command CHECKER."
@@ -4048,6 +4205,18 @@ symbols in the command."
       (princ "\n  This syntax checker can be configured with these options:\n\n")
       (dolist (var option-vars)
         (princ (format "     * `%s'\n" var))))))
+
+(defun flycheck-verify-command-checker (checker)
+  "Verify a command CHECKER in the current buffer.
+
+Return a list of `flycheck-verification-result' objects for
+CHECKER."
+  (let ((executable (executable-find (flycheck-checker-executable checker))))
+    (list
+     (flycheck-verification-result-new
+      :label "executable"
+      :message (if executable (format "Found at %s" executable) "Not found")
+      :face (if executable 'success '(bold error))))))
 
 
 ;;; Process management for command syntax checkers
@@ -4284,11 +4453,10 @@ directory, or nil otherwise."
                                           &rest custom-args)
   "Define SYMBOL as option variable with INIT-VALUE for CHECKER.
 
-SYMBOL is declared as customizable variable, buffer-local
-variable using `defcustom', to provide an option for the given
-syntax CHECKER.  INIT-VALUE is the initial value of the variable,
-and DOCSTRING is its docstring.  CUSTOM-ARGS are forwarded to
-`defcustom'.
+SYMBOL is declared as customizable, buffer-local variable using
+`defcustom', to provide an option for the given syntax CHECKER.
+INIT-VALUE is the initial value of the variable, and DOCSTRING is
+its docstring.  CUSTOM-ARGS are forwarded to `defcustom'.
 
 Use this together with the `option', `option-list' and
 `option-flag' forms in the `:command' argument to
@@ -4334,6 +4502,26 @@ SEPARATOR is ignored in this case."
         (-when-let (value (delq nil (mapcar filter value)))
           (string-join value separator))
       (funcall filter value))))
+
+(defmacro flycheck-def-args-var (symbol checker &rest custom-args)
+  "Define SYMBOL as argument variable for CHECKER.
+
+SYMBOL is declared as customizable, risky and buffer-local
+variable using `defcustom' to provide an option for arbitrary
+arguments for the given syntax CHECKER.  CUSTOM-ARGS is forwarded
+to `defcustom'.
+
+Use the `eval' form to splice this variable into the
+`:command'."
+  (declare (indent 2))
+  `(flycheck-def-option-var ,symbol nil ,checker
+     ,(format "A list of additional arguments for `%s'.
+
+The value of this variable is a list of strings with additional
+command line arguments." checker)
+     :risky t
+     :type '(repeat (string :tag "Argument"))
+     ,@custom-args))
 
 
 ;;; Command syntax checkers as compile commands
@@ -4690,6 +4878,9 @@ SYMBOL with `flycheck-def-executable-var'."
 
 
 ;;; Built-in checkers
+(flycheck-def-args-var flycheck-gnat-args ada-gnat
+  :package-version '(flycheck . "0.20"))
+
 (flycheck-def-option-var flycheck-gnat-include-path nil ada-gnat
   "A list of include directories for GNAT.
 
@@ -4740,6 +4931,7 @@ Uses the GNAT compiler from GCC.  See URL
             (option-list "-gnat" flycheck-gnat-warnings concat)
             (option-list "-I" flycheck-gnat-include-path concat)
             (option "-gnat" flycheck-gnat-language-standard concat)
+            (eval flycheck-gnat-args)
             source)
   :error-patterns
   ((error line-start
@@ -4765,6 +4957,9 @@ See URL `http://www.methods.co.nz/asciidoc'."
    (warning line-start "asciidoc: " (or "WARNING" "DEPRECATED") ": " (file-name)
             ": Line " line ": " (message) line-end))
   :modes adoc-mode)
+
+(flycheck-def-args-var flycheck-clang-args c/c++-clang
+  :package-version '(flycheck . "0.22"))
 
 (flycheck-def-option-var flycheck-clang-blocks nil c/c++-clang
   "Enable blocks in Clang.
@@ -4912,6 +5107,7 @@ See URL `http://clang.llvm.org/'."
             (option-list "-W" flycheck-clang-warnings concat)
             (option-list "-D" flycheck-clang-definitions concat)
             (option-list "-I" flycheck-clang-include-path)
+            (eval flycheck-clang-args)
             "-x" (eval
                   (pcase major-mode
                     (`c++-mode "c++")
@@ -4936,9 +5132,12 @@ See URL `http://clang.llvm.org/'."
         ;; them past our error filtering
         (setf (flycheck-error-message err)
               (or (flycheck-error-message err) "no message")))
-      (flycheck-fold-include-errors errors "In file included from")))
+      (flycheck-fold-include-levels errors "In file included from")))
   :modes (c-mode c++-mode)
   :next-checkers ((warning . c/c++-cppcheck)))
+
+(flycheck-def-args-var flycheck-gcc-args c/c++-gcc
+  :package-version '(flycheck . "0.22"))
 
 (flycheck-def-option-var flycheck-gcc-definitions nil c/c++-gcc
   "Additional preprocessor definitions for GCC.
@@ -5042,6 +5241,7 @@ Requires GCC 4.8 or newer.  See URL `https://gcc.gnu.org/'."
             (option-list "-W" flycheck-gcc-warnings concat)
             (option-list "-D" flycheck-gcc-definitions concat)
             (option-list "-I" flycheck-gcc-include-path)
+            (eval flycheck-gcc-args)
             "-x" (eval
                   (pcase major-mode
                     (`c++-mode "c++")
@@ -5064,7 +5264,7 @@ Requires GCC 4.8 or newer.  See URL `https://gcc.gnu.org/'."
           ": " (or "fatal error" "error") ": " (message) line-end))
   :error-filter
   (lambda (errors)
-    (flycheck-fold-include-errors (flycheck-sanitize-errors errors)
+    (flycheck-fold-include-levels (flycheck-sanitize-errors errors)
                                   "In file included from"))
   :modes (c-mode c++-mode)
   :next-checkers ((warning . c/c++-cppcheck)))
@@ -5512,6 +5712,9 @@ See URL `http://www.kuwata-lab.com/erubis/'."
   ((error line-start  (file-name) ":" line ": " (message) line-end))
   :modes (html-erb-mode rhtml-mode))
 
+(flycheck-def-args-var flycheck-gfortran-args fortran-gfortran
+  :package-version '(flycheck . "0.22"))
+
 (flycheck-def-option-var flycheck-gfortran-include-path nil fortran-gfortran
   "A list of include directories for GCC Fortran.
 
@@ -5589,6 +5792,7 @@ Uses GCC's Fortran compiler gfortran.  See URL
                     flycheck-option-gfortran-layout)
             (option-list "-W" flycheck-gfortran-warnings concat)
             (option-list "-I" flycheck-gfortran-include-path concat)
+            (eval flycheck-gfortran-args)
             source)
   :error-patterns
   ((error line-start (file-name) ":" line "." column ":\n"
@@ -5783,6 +5987,9 @@ See URL `http://handlebarsjs.com/'."
       (group (one-or-more (not (any space "\n")))))
   "Regular expression for a Haskell module name.")
 
+(flycheck-def-args-var flycheck-ghc-args haskell-ghc
+  :package-version '(flycheck . "0.22"))
+
 (flycheck-def-option-var flycheck-ghc-no-user-package-database nil haskell-ghc
   "Whether to disable the user package database in GHC.
 
@@ -5838,9 +6045,7 @@ See URL `http://www.haskell.org/ghc/'."
                    (flycheck-module-root-directory
                     (flycheck-find-in-buffer flycheck-haskell-module-re))))
             (option-list "-X" flycheck-ghc-language-extensions concat)
-            ;; Force GHC to treat the file as Haskell file, even if it doesn't
-            ;; have an extension.  Otherwise GHC would fail on files without an
-            ;; extension
+            (eval flycheck-ghc-args)
             "-x" (eval
                   (pcase major-mode
                     (`haskell-mode "hs")
@@ -6302,6 +6507,22 @@ See URL `http://www.pylint.org/'."
    (info line-start (file-name) ":" line ":" column ":"
          "C:" (id (one-or-more (not (any ":")))) ":"
          (message) line-end))
+  :modes python-mode)
+
+(flycheck-define-checker python-pycompile
+  "A Python syntax checker using Python's builtin compiler.
+
+See URL `https://docs.python.org/3.4/library/py_compile.html'."
+  :command ("python" "-m" "py_compile" source)
+  :error-patterns
+  ;; Python 2.7
+  ((error line-start "  File \"" (file-name) "\", line " line "\n"
+          (= 2 (zero-or-more not-newline) "\n")
+          "SyntaxError: " (message) line-end)
+   ;; 2.6
+   (error line-start "SyntaxError: ('" (message (one-or-more (not (any "'"))))
+          "', ('" (file-name (one-or-more (not (any "'")))) "', "
+          line ", " column ", " (one-or-more not-newline) line-end))
   :modes python-mode)
 
 (flycheck-define-checker racket
@@ -6787,6 +7008,9 @@ See URL `http://www.nongnu.org/chktex/'."
   :error-patterns
   ((warning line-start (file-name) ":" line ":" column ":"
             (id (one-or-more digit)) ":" (message) line-end))
+  :error-filter
+  (lambda (errors)
+    (flycheck-sanitize-errors (flycheck-increment-error-columns errors)))
   :modes (latex-mode plain-tex-mode))
 
 (flycheck-define-checker tex-lacheck

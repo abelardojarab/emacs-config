@@ -26,6 +26,8 @@
 (require 'helm-regexp)
 
 (declare-function ido-make-buffer-list "ido" (default))
+(declare-function ido-add-virtual-buffers-to-list "ido")
+
 
 (defgroup helm-buffers nil
   "Buffers related Applications and libraries for Helm."
@@ -67,6 +69,10 @@ Only buffer names are fuzzy matched when this is enabled,
   :group 'helm-buffers
   :type 'boolean)
 
+(defcustom helm-buffer-skip-remote-checking nil
+  "Ignore checking for `file-exists-p' on remote files."
+  :group 'helm-buffers
+  :type 'boolean)
 
 ;;; Faces
 ;;
@@ -181,7 +187,7 @@ Only buffer names are fuzzy matched when this is enabled,
     :initform
     "Show this buffer / C-u \\[helm-execute-persistent-action]: Kill this buffer")))
 
-(defvar helm-source-buffers-list (helm-make-source "Buffers" 'helm-source-buffers))
+(defvar helm-source-buffers-list nil)
 
 (defvar helm-source-buffer-not-found
   (helm-build-dummy-source
@@ -202,28 +208,31 @@ Only buffer names are fuzzy matched when this is enabled,
 (defvar ido-temp-list)
 (defvar ido-ignored-list)
 (defvar ido-process-ignore-lists)
+(defvar ido-use-virtual-buffers)
+(defvar ido-virtual-buffers)
 
 (defvar helm-source-ido-virtual-buffers
-  `((name . "Ido virtual buffers")
-    (candidates . (lambda ()
-                    (let (ido-temp-list
-                          ido-ignored-list
-                          (ido-process-ignore-lists t))
-                      (when ido-use-virtual-buffers
-                        (ido-add-virtual-buffers-to-list)
-                        ido-virtual-buffers))))
-    (keymap . ,helm-buffers-ido-virtual-map)
-    (mode-line . helm-buffers-ido-virtual-mode-line-string)
-    (action . (("Find file" . helm-find-many-files)
-               ("Find file other window" . find-file-other-window)
-               ("Find file other frame" . find-file-other-frame)
-               ("Find file as root" . helm-find-file-as-root)
-               ("Grep File(s) `C-u recurse'" . helm-find-files-grep)
-               ("Zgrep File(s) `C-u Recurse'" . helm-ff-zgrep)
-               ("View file" . view-file)
-               ("Delete file(s)" . helm-delete-marked-files)
-               ("Open file externally (C-u to choose)"
-                . helm-open-file-externally)))))
+  (helm-build-sync-source "Ido virtual buffers"
+    :candidates (lambda ()
+                  (let (ido-temp-list
+                        ido-ignored-list
+                        (ido-process-ignore-lists t))
+                    (when ido-use-virtual-buffers
+                      (ido-add-virtual-buffers-to-list)
+                      ido-virtual-buffers)))
+    :fuzzy-match helm-buffers-fuzzy-matching
+    :keymap helm-buffers-ido-virtual-map
+    :mode-line helm-buffers-ido-virtual-mode-line-string
+    :action '(("Find file" . helm-find-many-files)
+              ("Find file other window" . find-file-other-window)
+              ("Find file other frame" . find-file-other-frame)
+              ("Find file as root" . helm-find-file-as-root)
+              ("Grep File(s) `C-u recurse'" . helm-find-files-grep)
+              ("Zgrep File(s) `C-u Recurse'" . helm-ff-zgrep)
+              ("View file" . view-file)
+              ("Delete file(s)" . helm-delete-marked-files)
+              ("Open file externally (C-u to choose)"
+               . helm-open-file-externally))))
 
 
 (defvar ido-use-virtual-buffers)
@@ -276,38 +285,45 @@ See `ido-make-buffer-list' for more infos."
          (name (buffer-name buf))
          (name-prefix (when (file-remote-p dir)
                         (propertize "@ " 'face 'helm-ff-prefix))))
-    (cond
-      ( ;; A dired buffer.
-       (rassoc buf dired-buffers)
-       (helm-buffer--show-details
-        name name-prefix dir size mode dir
-        'helm-buffer-directory 'helm-buffer-process nil details 'dired))
-      ;; A buffer file modified somewhere outside of emacs.=>red
-      ((and file-name (file-exists-p file-name)
-            (not (verify-visited-file-modtime buf)))
-       (helm-buffer--show-details
-        name name-prefix file-name size mode dir
-        'helm-buffer-saved-out 'helm-buffer-process nil details 'modout))
-      ;; A new buffer file not already saved on disk.=>indianred2
-      ((and file-name (not (verify-visited-file-modtime buf)))
-       (helm-buffer--show-details
-        name name-prefix file-name size mode dir
-        'helm-buffer-not-saved 'helm-buffer-process nil details 'notsaved))
-      ;; A buffer file modified and not saved on disk.=>orange
-      ((and file-name (buffer-modified-p buf))
-       (helm-buffer--show-details
-        name name-prefix file-name size mode dir
-        'helm-ff-symlink 'helm-buffer-process nil details 'mod))
-      ;; A buffer file not modified and saved on disk.=>green
-      (file-name
-       (helm-buffer--show-details
-        name name-prefix file-name size mode dir
-        'helm-buffer-file 'helm-buffer-process nil details 'filebuf))
-      ;; Any non--file buffer.=>grey italic
-      (t
-       (helm-buffer--show-details
-        name (and proc name-prefix) dir size mode dir
-        'italic 'helm-buffer-process proc details 'nofile)))))
+    ;; No fancy things on remote buffers.
+    (if (and name-prefix helm-buffer-skip-remote-checking)
+        (helm-buffer--show-details
+         name name-prefix file-name size mode dir
+         'helm-buffer-file 'helm-buffer-process nil details 'filebuf)
+      (cond
+        ( ;; A dired buffer.
+         (rassoc buf dired-buffers)
+         (helm-buffer--show-details
+          name name-prefix dir size mode dir
+          'helm-buffer-directory 'helm-buffer-process nil details 'dired))
+        ;; A buffer file modified somewhere outside of emacs.=>red
+        ((and file-name
+              (file-exists-p file-name)
+              (not (verify-visited-file-modtime buf)))
+         (helm-buffer--show-details
+          name name-prefix file-name size mode dir
+          'helm-buffer-saved-out 'helm-buffer-process nil details 'modout))
+        ;; A new buffer file not already saved on disk.=>indianred2
+        ((and file-name
+              (not (verify-visited-file-modtime buf)))
+         (helm-buffer--show-details
+          name name-prefix file-name size mode dir
+          'helm-buffer-not-saved 'helm-buffer-process nil details 'notsaved))
+        ;; A buffer file modified and not saved on disk.=>orange
+        ((and file-name (buffer-modified-p buf))
+         (helm-buffer--show-details
+          name name-prefix file-name size mode dir
+          'helm-ff-symlink 'helm-buffer-process nil details 'mod))
+        ;; A buffer file not modified and saved on disk.=>green
+        (file-name
+         (helm-buffer--show-details
+          name name-prefix file-name size mode dir
+          'helm-buffer-file 'helm-buffer-process nil details 'filebuf))
+        ;; Any non--file buffer.=>grey italic
+        (t
+         (helm-buffer--show-details
+          name (and proc name-prefix) dir size mode dir
+          'italic 'helm-buffer-process proc details 'nofile))))))
 
 (defun helm-highlight-buffers (buffers _source)
   "Transformer function to highlight BUFFERS list.
@@ -784,6 +800,9 @@ displayed with the `file-name-shadow' face if available."
 (defun helm-buffers-list ()
   "Preconfigured `helm' to list buffers."
   (interactive)
+  (unless helm-source-buffers-list
+    (setq helm-source-buffers-list
+          (helm-make-source "Buffers" 'helm-source-buffers)))
   (helm :sources '(helm-source-buffers-list
                    helm-source-ido-virtual-buffers
                    helm-source-buffer-not-found)

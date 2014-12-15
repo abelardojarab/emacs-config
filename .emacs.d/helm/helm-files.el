@@ -48,6 +48,8 @@
 (declare-function helm-ls-git-ls "ext:helm-ls-git")
 (declare-function helm-hg-find-files-in-project "ext:helm-ls-hg")
 
+(defvar recentf-list)
+
 
 ;;; Type attributes
 ;;
@@ -1447,6 +1449,14 @@ purpose."
            (expand-file-name "/")) ; Expand to "/" or "c:/"
           ((string-match "\\`\\(~/\\|.*/~/\\)\\'" pattern)
            (expand-file-name "~/"))
+          ;; Match "/method:maybe_hostname:~"
+          ((and (string-match (concat reg "~") pattern)
+                (setq cur-method (match-string 1 pattern))
+                (member cur-method methods))
+           (setq tramp-name (expand-file-name
+                             (helm-create-tramp-name
+                              (match-string 0 pattern))))
+           (replace-match tramp-name nil t pattern))
           ;; Match "/method:maybe_hostname:"
           ((and (string-match reg pattern)
                 (setq cur-method (match-string 1 pattern))
@@ -2502,14 +2512,24 @@ Else return ACTIONS unmodified."
    (help-message :initform helm-generic-file-help-message)
    (mode-line :initform helm-generic-file-mode-line-string)))
 
-(defvar helm-source-file-cache
-  (helm-make-source
-   "File Cache" 'helm-file-cache
-   :data (lambda ()
-           (cl-loop for item in file-cache-alist append
-                    (cl-destructuring-bind (base &rest dirs) item
-                      (cl-loop for dir in dirs collect
-                               (concat dir base)))))))
+(defun helm-file-cache-get-candidates ()
+  (cl-loop for item in file-cache-alist append
+           (cl-destructuring-bind (base &rest dirs) item
+             (cl-loop for dir in dirs collect
+                      (concat dir base)))))
+
+(defvar helm-source-file-cache nil)
+
+(defcustom helm-file-cache-fuzzy-match nil
+  "Enable fuzzy matching in `helm-source-file-cache' when non--nil."
+  :group 'helm-files
+  :type 'boolean
+  :set (lambda (var val)
+         (set var val)
+         (setq helm-source-file-cache
+               (helm-make-source "File Cache" 'helm-file-cache
+                 :fuzzy-match helm-file-cache-fuzzy-match
+                 :data 'helm-file-cache-get-candidates))))
 
 (cl-defun helm-file-cache-add-directory-recursively
     (dir &optional match (ignore-dirs t))
@@ -2563,28 +2583,7 @@ Else return ACTIONS unmodified."
     (action . ,(cdr (helm-get-actions-from-type
                      helm-source-locate)))))
 
-(defvar helm-source--ff-file-name-history
-  '((name . "File name history")
-    (init . (lambda ()
-              (with-helm-alive-p
-                (when helm-ff-file-name-history-use-recentf
-                  (require 'recentf)
-                  (or recentf-mode (recentf-mode 1))))))
-    (candidates . (lambda ()
-                    (if helm-ff-file-name-history-use-recentf
-                        recentf-list
-                      file-name-history)))
-    (persistent-action . ignore)
-    (filtered-candidate-transformer . helm-file-name-history-transformer)
-    (action . (("Find file"
-                . (lambda (candidate)
-                    (helm-set-pattern
-                     (expand-file-name candidate))
-                    (with-helm-after-update-hook (helm-exit-minibuffer))))
-               ("Find file in helm"
-                . (lambda (candidate)
-                    (helm-set-pattern
-                     (expand-file-name candidate)))))))
+(defvar helm-source--ff-file-name-history nil
   "[Internal] This source is build to be used with `helm-find-files'.
 Don't use it in your own code unless you know what you are doing.")
 
@@ -2599,6 +2598,29 @@ Don't use it in your own code unless you know what you are doing.")
 (defun helm-ff-file-name-history ()
   "Switch to `file-name-history' without quitting `helm-find-files'."
   (interactive)
+  (unless helm-source--ff-file-name-history
+    (setq helm-source--ff-file-name-history
+          (helm-build-sync-source "File name history"
+            :init (lambda ()
+                    (with-helm-alive-p
+                      (when helm-ff-file-name-history-use-recentf
+                        (require 'recentf)
+                        (or recentf-mode (recentf-mode 1)))))
+            :candidates (lambda ()
+                          (if helm-ff-file-name-history-use-recentf
+                              recentf-list
+                              file-name-history))
+            :fuzzy-match t
+            :persistent-action 'ignore
+            :filtered-candidate-transformer 'helm-file-name-history-transformer
+            :action (helm-make-actions
+                     "Find file" (lambda (candidate)
+                                   (helm-set-pattern
+                                    (expand-file-name candidate))
+                                   (with-helm-after-update-hook (helm-exit-minibuffer)))
+                      "Find file in helm" (lambda (candidate)
+                                            (helm-set-pattern
+                                             (expand-file-name candidate)))))))
   (with-helm-alive-p
     (helm :sources 'helm-source--ff-file-name-history
           :buffer "*helm-file-name-history*"
@@ -2608,56 +2630,116 @@ Don't use it in your own code unless you know what you are doing.")
 ;;; Recentf files
 ;;
 ;;
-(defvar helm-source-recentf
-  `((name . "Recentf")
-    (init . (lambda ()
-              (require 'recentf)
-              (recentf-mode 1)))
-    (candidates . recentf-list)
-    (match . helm-files-match-only-basename)
-    (filtered-candidate-transformer . (lambda (candidates _source)
-                                        (cl-loop for i in candidates
-                                              if helm-ff-transformer-show-only-basename
-                                              collect (cons (helm-basename i) i)
-                                              else collect i)))
-    (keymap . ,helm-generic-files-map)
-    (help-message . helm-generic-file-help-message)
-    (mode-line . helm-generic-file-mode-line-string)
-    (action . ,(cdr (helm-get-actions-from-type
-                     helm-source-locate))))
+(defvar helm-recentf--basename-flag nil)
+
+(defun helm-recentf-pattern-transformer (pattern)
+  (let ((pattern-no-flag (replace-regexp-in-string " -b" "" pattern)))
+    (cond ((and (string-match " " pattern-no-flag)
+                (string-match " -b\\'" pattern))
+           (setq helm-recentf--basename-flag t)
+           pattern-no-flag)
+        ((string-match "\\([^ ]*\\) -b\\'" pattern)
+         (prog1 (match-string 1 pattern)
+           (setq helm-recentf--basename-flag t)))
+        (t (setq helm-recentf--basename-flag nil)
+           pattern))))
+
+(defclass helm-recentf-source (helm-source-sync)
+  ((init :initform (lambda ()
+                     (require 'recentf)
+                     (recentf-mode 1)))
+   (candidates :initform (lambda () recentf-list))
+   (pattern-transformer :initform 'helm-recentf-pattern-transformer)
+   (match-part :initform (lambda (candidate)
+                           (if (or helm-ff-transformer-show-only-basename
+                                   helm-recentf--basename-flag)
+                               (helm-basename candidate) candidate)))
+   (filter-one-by-one :initform (lambda (c)
+                                  (if helm-ff-transformer-show-only-basename
+                                      (cons (helm-basename c) c) c)))
+   (keymap :initform helm-generic-files-map)
+   (help-message :initform helm-generic-file-help-message)
+   (mode-line :initform helm-generic-file-mode-line-string)
+   (action :initform (helm-actions-from-type-file))))
+
+(defvar helm-source-recentf nil 
   "See (info \"(emacs)File Conveniences\").
 Set `recentf-max-saved-items' to a bigger value if default is too small.")
 
+(defcustom helm-recentf-fuzzy-match nil
+  "Enable fuzzy matching in `helm-source-recentf' when non--nil."
+  :group 'helm-files
+  :type 'boolean
+  :set (lambda (var val)
+         (set var val)
+         (setq helm-source-recentf
+               (helm-make-source "Recentf" 'helm-recentf-source
+                 :fuzzy-match helm-recentf-fuzzy-match))))
+
 ;;; Browse project
 ;; Need dependencies:
-;; <https://github.com/emacs-helm/helm-ls-git.git>
-;; <https://github.com/emacs-helm/helm-mercurial-queue/blob/master/helm-ls-hg.el>
+;; <https://github.com/emacs-helm/helm-ls-git>
+;; <https://github.com/emacs-helm/helm-ls-hg>
 ;; Only hg and git are supported for now.
+(defvar helm--browse-project-cache (make-hash-table :test 'equal))
+(defun helm-browse-project-find-files (directory &optional refresh)
+  (when refresh (remhash directory helm--browse-project-cache))
+  (unless (gethash directory helm--browse-project-cache)
+    (puthash directory (helm-walk-directory
+                        directory
+                        :directories nil :path 'full :skip-subdirs t)
+             helm--browse-project-cache))
+  (helm :sources (helm-build-in-buffer-source "Browse project"
+                   :data (gethash directory helm--browse-project-cache)
+                   :match-part (lambda (c)
+                                 (if helm-ff-transformer-show-only-basename
+                                     (helm-basename c) c))
+                   :filter-one-by-one
+                   (lambda (c)
+                     (if helm-ff-transformer-show-only-basename
+                         (cons (propertize (helm-basename c)
+                                           'face 'helm-ff-file)
+                               c)
+                       (propertize c 'face 'helm-ff-file)))
+                   :keymap helm-generic-files-map
+                   :action (helm-actions-from-type-file))
+        :buffer "*helm browse project*"))
 
 ;;;###autoload
-(defun helm-browse-project ()
+(defun helm-browse-project (arg)
   "Browse files and see status of project with its vcs.
-Only hg and git are supported for now.
-Fall back to `helm-find-files' if directory is not under
-control of one of those vcs.
-Need dependencies:
+Only HG and GIT are supported for now.
+Fall back to `helm-find-files' or `helm-browse-project-find-files'
+if current directory is not under control of one of those vcs.
+With a prefix ARG browse files recursively, with two prefix ARG
+rebuild the cache.
+If the current directory is found in the cache, start
+`helm-browse-project-find-files' even with no prefix ARG.
+NOTE: The prefix ARG have no effect on the VCS controlled directories.
+
+Need dependencies for VCS:
 <https://github.com/emacs-helm/helm-ls-git.git>
 and
 <https://github.com/emacs-helm/helm-mercurial-queue/blob/master/helm-ls-hg.el>."
-  (interactive)
+  (interactive "P")
   (cond ((and (fboundp 'helm-ls-git-root-dir)
               (helm-ls-git-root-dir))
          (helm-ls-git-ls))
         ((and (fboundp 'helm-hg-root)
               (helm-hg-root))
          (helm-hg-find-files-in-project))
-        (t (helm-find-files nil))))
+        (t (let ((cur-dir (helm-current-directory)))
+             (if (or arg (gethash cur-dir helm--browse-project-cache)) 
+                 (helm-browse-project-find-files cur-dir (equal arg '(16)))
+               (helm-find-files nil))))))
 
 (defun helm-ff-browse-project (_candidate)
+  "Browse project in current directory.
+See `helm-browse-project'."
   (with-helm-default-directory helm-ff-default-directory
       ;; `helm-browse-project' will call `helm-ls-git-ls'
       ;; which will set locally `helm-default-directory'
-      (helm-browse-project)))
+      (helm-browse-project helm-current-prefix-arg)))
 
 (defun helm-ff-run-browse-project ()
   (interactive)
@@ -2716,18 +2798,25 @@ Colorize only symlinks, directories and files."
                                    'help-echo (expand-file-name i))
                        i)))))
 
+(defclass helm-files-in-current-dir-source (helm-source-sync helm-type-file)
+  ((candidates :initform (lambda ()
+                           (with-helm-current-buffer
+                             (let ((dir (helm-current-directory)))
+                               (when (file-accessible-directory-p dir)
+                                 (directory-files dir t))))))
+   (pattern-transformer :initform 'helm-recentf-pattern-transformer)
+   (match-part :initform (lambda (candidate)
+                           (if (or helm-ff-transformer-show-only-basename
+                                   helm-recentf--basename-flag)
+                               (helm-basename candidate) candidate)))
+   (fuzzy-match :initform t)
+   (keymap :initform helm-generic-files-map)
+   (help-message :initform helm-generic-file-help-message)
+   (mode-line :initform helm-generic-file-mode-line-string)))
+
 (defvar helm-source-files-in-current-dir
-  `((name . "Files from Current Directory")
-    (candidates . (lambda ()
-                    (with-helm-current-buffer
-                      (let ((dir (helm-current-directory)))
-                        (when (file-accessible-directory-p dir)
-                          (directory-files dir t))))))
-    (match . helm-files-match-only-basename)
-    (keymap . ,helm-generic-files-map)
-    (help-message . helm-generic-file-help-message)
-    (mode-line . helm-generic-file-mode-line-string)
-    (type . file)))
+  (helm-make-source "Files from Current Directory"
+      helm-files-in-current-dir-source))
 
 
 ;;; External searching file tools.
@@ -2918,8 +3007,11 @@ This is the starting point for nearly all actions you can do on files."
   "Preconfigured `helm' for opening files.
 Run all sources defined in `helm-for-files-preferred-list'."
   (interactive)
+  (unless helm-source-buffers-list
+    (setq helm-source-buffers-list
+          (helm-make-source "Buffers" 'helm-source-buffers)))
   (let ((helm-ff-transformer-show-only-basename nil))
-    (helm-other-buffer helm-for-files-preferred-list "*helm for files*")))
+    (helm :sources helm-for-files-preferred-list :buffer "*helm for files*")))
 
 ;;;###autoload
 (defun helm-recentf ()

@@ -196,7 +196,7 @@ turned on to facilitate locating the right match.
 
 ``M-=``
 
-   Move to the file where navigation session starts
+   Move to the file where navigation session starts.
 
 ``M-<``
 
@@ -274,8 +274,8 @@ Integration with other packages
 
 * eldoc
 
-  ``Eldoc`` support can be enabled by, for example, setting this in
-  the desired major mode with:
+  ``Eldoc`` support is set up by default on emacs 24.4+. For older
+  versions set, for example, in the desired major mode:
 
   ::
 
@@ -308,10 +308,23 @@ Integration with other packages
 NEWS
 ~~~~
 
-(devel) 0.8.7
+(devel) 0.8.9
 +++++++++++++
 
+#. ``ggtags-visit-project-root`` can visit past projects.
+#. ``eldoc`` support enabled for emacs 24.4+.
+
+[2014-12-03 Wed] 0.8.8
+++++++++++++++++++++++
+
+#. Command ``ggtags-update-tags`` now runs in the background for large
+   projects (per ``ggtags-oversize-limit``) without blocking emacs.
+
+[2014-11-10 Mon] 0.8.7
+++++++++++++++++++++++
+
 #. New navigation command ``ggtags-navigation-start-file``.
+#. New variable ``ggtags-use-sqlite3`` to enable sqlite3 storage.
 
 [2014-09-12 Fri] 0.8.6
 ++++++++++++++++++++++

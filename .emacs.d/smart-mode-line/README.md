@@ -1,5 +1,7 @@
-smart-mode-line [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GLZLRLW72Q8G2)
+smart-mode-line
 ---------------
+<!--     [![Say Thank You](https://img.shields.io/gratipay/Malabarba.svg)](https://gratipay.com/Malabarba/) -->
+(_[Wanna say thank you?](https://gratipay.com/Malabarba/)_)
 
 Smart Mode Line is a sexy mode-line for Emacs. It aims to be easy to
 read from small to large monitors by using *colors*, a *prefix feature*, and
@@ -26,6 +28,8 @@ Images
 
 **Powerline Theme**  
 ![Powerline Theme Screenshot](https://raw.github.com/Bruce-Connor/smart-mode-line/master/screenshot-powerline-theme.png)
+
+(Note: to use the powerline theme, install the "smart-mode-line-powerline-theme" package from MELPA)
 
 Installation
 ===

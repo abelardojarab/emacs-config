@@ -17,6 +17,10 @@ master (in development)
     [GH-529]
   - Remove `flycheck-google-messages` command
 
+- New syntax checkers:
+
+  - Python with `py_compile` [GH-484]
+
 - New features:
 
   - `flycheck-ert.el` library to write unit tests for Flycheck extensions
@@ -29,6 +33,8 @@ master (in development)
   - Parse error IDs from Checkstyle XML [GH-259]
   - `flycheck-copy-errors-as-kill` can put error ids into kill ring now [GH-529]
   - Parse error IDs from many error checks [GH-259]
+  - Verify Flycheck setup in a buffer with `flycheck-verify-setup` [GH-338]
+  - Add options for arbitrary arguments to some syntax checkers [GH-542]
 
 - Improvements:
 
@@ -47,7 +53,9 @@ master (in development)
   - Fix faulty properties of customize options which broke `customize-changed`
     and related functions
   - Fix use deprecated option in `coffee-coffeelint`
-  - Fix error columns of `python-pylint` [GH-536]
+  - Fix error columns of `python-pylint` and `tex-chktex` [GH-536]
+  - Correctly compute error level of errors on included files in `c/c++-clang`
+    and `c/c++-gcc` [GH-451]
 
 0.21 (Oct 26, 2014)
 -------------------

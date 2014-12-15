@@ -259,7 +259,7 @@ Otherwise, call `c-indent-new-comment-line' that's usually bound to \"M-j\"."
   (interactive)
   (when (overlayp fa-overlay)
     (fa-abort)
-    (push-mark (point) t)
+    (ring-insert find-tag-marker-ring (point-marker))
     (let ((tag (nth 2 (car (nth fa-idx fa-lst)))))
       (let ((fname (or (car tag)
                        (save-excursion
@@ -1324,7 +1324,9 @@ Returns TAG if it's not a typedef."
   (let ((typedef (semantic-tag-get-attribute tag :typedef)))
     (when typedef
       (setq tag
-            (moo-sname->tag (car typedef))))
+            (or
+             (moo-sname->tag (car typedef))
+             typedef)))
     (semantic-tag-get-attribute tag :members)))
 
 (defun moo-ttype->tmembers (ttype)

@@ -136,7 +136,7 @@ Additionally, Flycheck has some built-in error filters for generic checkers:
 .. function:: flycheck-dedent-error-messages
    :auto:
 
-.. function:: flycheck-fold-include-errors
+.. function:: flycheck-fold-include-levels
    :auto:
 
 .. function:: flycheck-dequalify-error-ids
@@ -191,6 +191,9 @@ Command syntax checkers can define options, whose values are substituted into
 the external command.
 
 .. macro:: flycheck-def-option-var
+   :auto:
+
+.. macro:: flycheck-def-args-var
    :auto:
 
 Flycheck provides some built-in filters for such options:

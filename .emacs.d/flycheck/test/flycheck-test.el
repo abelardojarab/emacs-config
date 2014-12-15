@@ -1835,56 +1835,61 @@ and extension, as in `file-name-base'."
   (flycheck-ert-with-file-buffer
       (expand-file-name "doc/guide/languages.rst"
                         flycheck-test-source-directory)
-    (dolist (checker flycheck-checkers)
-      (re-search-forward (rx ".. flyc-checker:: "
-                             (group (one-or-more not-newline))
-                             line-end))
-      (should (string= (symbol-name checker) (match-string 1))))))
+    (let (documented-checkers)
+      (while (re-search-forward (rx line-start ".. flyc-checker:: "
+                                    (group (1+ not-newline))
+                                    "\n   :auto:" line-end)
+                                nil 'noerror)
+        (push (intern (match-string 1)) documented-checkers))
+      (should (equal flycheck-checkers (nreverse documented-checkers))))))
 
 (ert-deftest flycheck--manual/all-options-are-documented ()
   :tags '(documentation)
   (flycheck-ert-with-file-buffer
       (expand-file-name "doc/guide/languages.rst"
                         flycheck-test-source-directory)
-    (dolist (checker flycheck-checkers)
-      (-when-let (vars (-sort #'string< (flycheck-checker-option-vars checker)))
-        (re-search-forward (concat (rx line-start ".. flyc-checker::"
-                                       (one-or-more space))
-                                   (regexp-quote (symbol-name checker))))
-        (re-search-forward (rx line-start "   .. rubric:: Options" line-end))
-        (dolist (var vars)
-          ;; Move across empty lines
-          (while (progn
-                   (forward-line 1)
-                   (looking-at (rx line-start (zero-or-more space) line-end))))
-          (should (looking-at (rx line-start "   .. option:: "
-                                  (group (one-or-more not-newline))
-                                  line-end)))
-          (should (string= (match-string 1) (symbol-name var)))
-          (forward-line 1)
-          (should (looking-at (rx line-start (= 6 " ") ":auto:" line-end))))))))
+    (while (re-search-forward (rx line-start ".. flyc-checker::" (1+ space)
+                                  (group (1+ not-newline))
+                                  line-end)
+                              nil 'noerror)
+      (let* ((checker (intern (match-string 1)))
+             (bound (save-excursion
+                      (search-forward ".. flyc-checker::" nil 'noerror)))
+             documented-vars)
+        (when (search-forward ".. rubric:: Options" bound 'noerror)
+          (while (and (re-search-forward (rx line-start "   .. "
+                                             (group (1+ (not (any ":"))))
+                                             "::" (1+ space)
+                                             (group (1+ not-newline))
+                                             (group (optional "\n      :auto:"))
+                                             line-end)
+                                         bound 'noerror)
+                      (equal (match-string 1) "option")
+                      (not (string-empty-p (match-string 3))))
+            (push (intern (match-string 2)) documented-vars)))
+        (should (equal (-sort #'string< (flycheck-checker-option-vars checker))
+                       (nreverse documented-vars)))))))
 
 (ert-deftest flycheck--manual/all-config-file-vars-are-documented ()
   :tags '(documentation)
   (flycheck-ert-with-file-buffer
       (expand-file-name "doc/guide/languages.rst" flycheck-test-source-directory)
-    (dolist (checker flycheck-checkers)
-      (-when-let (config-file-var (flycheck-checker-config-file-var checker))
-        (re-search-forward (concat (rx line-start ".. flyc-checker::"
-                                       (one-or-more space))
-                                   (regexp-quote (symbol-name checker))))
-        (re-search-forward (rx line-start
-                               "   .. rubric:: Configuration file"
-                               line-end))
-        (while (progn
-                 (forward-line 1)
-                 (looking-at (rx line-start (zero-or-more space) line-end))))
-        (should (looking-at (rx line-start "   .. option:: "
-                                (group (one-or-more not-newline))
-                                line-end)))
-        (should (string= (match-string 1) (symbol-name config-file-var)))
-        (forward-line 1)
-        (should (looking-at (rx line-start (= 6 " ") ":auto:" line-end)))))))
+    (while (re-search-forward (rx line-start ".. flyc-checker::" (1+ space)
+                                  (group (1+ not-newline)) line-end)
+                              nil 'noerror)
+      (let* ((checker (intern (match-string 1)))
+             (bound (save-excursion
+                      (search-forward ".. flyc-checker::" nil 'noerror)))
+             documented-var)
+        (when (search-forward ".. rubric:: Configuration file" bound 'noerror)
+          (re-search-forward (rx "   .. option:: "
+                                 (group (1+ not-newline))
+                                 "\n      :auto:"
+                                 line-end)
+                             bound 'noerror)
+          (setq documented-var (intern (match-string 1))))
+        (should (equal (flycheck-checker-config-file-var checker)
+                       documented-var))))))
 
 
 ;;; Checker error API
@@ -3458,14 +3463,12 @@ evaluating BODY."
 
 (flycheck-ert-def-checker-test c/c++-clang (c c++) included-file-error
   (let ((flycheck-clang-include-path '("./c_c++-include"))
-        (flycheck-disabled-checkers '(c/c++-gcc)))
+        (flycheck-disabled-checkers '(c/c++-gcc))
+        (include-file (flycheck-ert-resource-filename
+                       "checkers/c_c++-warning.c")))
     (flycheck-ert-should-syntax-check
      "checkers/c_c++-included-file-error.cpp" 'c++-mode
-     '(3 nil error "Errors in included file:
-2:3:error: unknown type name 'this_is_bad' (c/c++-clang)
-3:1:error: expected member name or ';' after declaration specifiers (c/c++-clang)
-3:2:error: expected ';' after class (c/c++-clang)
-1:1:error: anonymous structs and classes must be class members (c/c++-clang)"
+     `(3 nil warning ,(format "In include %s" include-file)
          :checker c/c++-clang))))
 
 (flycheck-ert-def-checker-test c/c++-clang (c c++) includes
@@ -3606,13 +3609,12 @@ evaluating BODY."
 
 (flycheck-ert-def-checker-test c/c++-gcc (c c++) included-file-error
   (let ((flycheck-gcc-include-path '("./c_c++-include"))
-        (flycheck-disabled-checkers '(c/c++-clang)))
+        (flycheck-disabled-checkers '(c/c++-clang))
+        (include-file (flycheck-ert-resource-filename
+                       "checkers/c_c++-warning.c")))
     (flycheck-ert-should-syntax-check
      "checkers/c_c++-included-file-error.cpp" 'c++-mode
-     '(3 nil error "Errors in included file:
-2:3:error: ‘this_is_bad’ does not name a type (c/c++-gcc)
-3:1:error: expected ‘;’ after class definition (c/c++-gcc)
-3:1:error: abstract declarator ‘<anonymous class>’ used as declaration (c/c++-gcc)"
+     `(3 nil warning ,(format "In include %s" include-file)
          :checker c/c++-gcc))))
 
 (flycheck-ert-def-checker-test c/c++-gcc (c c++) includes
@@ -4590,6 +4592,36 @@ Why not:
      '(22 1 error "Undefined variable 'antigravity'" :id "E0602"
           :checker python-pylint))))
 
+(flycheck-ert-def-checker-test python-pycompile python python26
+  (skip-unless (executable-find "python2.6"))
+  (let ((flycheck-disabled-checkers '(python-flake8 python-pylint))
+        (flycheck-python-pycompile-executable "python2.6")
+        ;; Silence Python Mode
+        (python-indent-guess-indent-offset nil))
+    (flycheck-ert-should-syntax-check
+     "checkers/python-syntax-error.py" 'python-mode
+     '(3 12 error "invalid syntax" :checker python-pycompile))))
+
+(flycheck-ert-def-checker-test python-pycompile python python27
+  (skip-unless (executable-find "python2.7"))
+  (let ((flycheck-disabled-checkers '(python-flake8 python-pylint))
+        (flycheck-python-pycompile-executable "python2.7")
+        (python-version (flycheck-ert-extract-version-command
+                         (rx line-start
+                             "Python " (group (1+ not-newline))
+                             line-end)
+                         "python2.7" "--version"))
+        (python-indent-guess-indent-offset nil))
+    (flycheck-ert-should-syntax-check
+     "checkers/python-syntax-error.py" 'python-mode
+     `(3 ,(if (version< python-version "2.7.6") 12 nil)
+         error "invalid syntax" :checker python-pycompile))))
+
+(flycheck-ert-def-checker-test python-pycompile python has-no-warnings
+  (let ((flycheck-disabled-checkers '(python-flake8 python-pylint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/python/test.py" 'python-mode)))
+
 (flycheck-ert-def-checker-test racket racket nil
   (flycheck-ert-should-syntax-check
    "checkers/racket-syntax-error.rkt" 'racket-mode
@@ -4950,7 +4982,7 @@ Why not:
 (flycheck-ert-def-checker-test tex-chktex (tex latex) nil
   (flycheck-ert-should-syntax-check
    "checkers/tex-warning.tex" 'latex-mode
-   '(5 28 warning "Intersentence spacing (`\\@') should perhaps be used."
+   '(5 29 warning "Intersentence spacing (`\\@') should perhaps be used."
        :id "13" :checker tex-chktex)))
 
 (flycheck-ert-def-checker-test tex-lacheck (tex latex) nil

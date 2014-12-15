@@ -3,7 +3,7 @@
 ;; Copyright (C) 2013-2014  Free Software Foundation, Inc.
 
 ;; Author: Leo Liu <sdl.web@gmail.com>
-;; Version: 0.8.7
+;; Version: 0.8.9
 ;; Keywords: tools, convenience
 ;; Created: 2013-01-29
 ;; URL: https://github.com/leoliu/ggtags
@@ -36,6 +36,13 @@
 ;;
 ;; All commands are available from the `Ggtags' menu in `ggtags-mode'.
 
+;;; NEWS 0.8.8 (2014-12-03):
+
+;; - Command `ggtags-update-tags' now runs in the background for large
+;;   projects (per `ggtags-oversize-limit') without blocking emacs.
+;;
+;; See full NEWS on https://github.com/leoliu/ggtags#news
+
 ;;; Code:
 
 (eval-when-compile
@@ -57,6 +64,9 @@
       (declare (debug defvar) (doc-string 3))
       (list 'progn (list 'defvar var val docstring)
             (list 'make-variable-buffer-local (list 'quote var)))))
+
+  (or (fboundp 'add-function) (defmacro add-function (&rest _))) ;24.4
+  (or (fboundp 'remove-function) (defmacro remove-function (&rest _)))
 
   (defmacro ignore-errors-unless-debug (&rest body)
     "Ignore all errors while executing BODY unless debug is on."
@@ -186,6 +196,14 @@ If an integer abbreviate only names longer than that number."
 (defcustom ggtags-use-idutils (and (executable-find "mkid") t)
   "Non-nil to also generate the idutils DB."
   :type 'boolean
+  :group 'ggtags)
+
+(defcustom ggtags-use-sqlite3 nil
+  "Use sqlite3 for storage instead of Berkeley DB.
+This feature requires GNU Global 6.3.3+ and is ignored if `gtags'
+isn't built with sqlite3 support."
+  :type 'boolean
+  :safe 'booleanp
   :group 'ggtags)
 
 (defcustom ggtags-global-output-format 'grep
@@ -391,6 +409,14 @@ Nil means using the value of `completing-read-function'."
       (expand-file-name name ggtags-executable-directory)
     name))
 
+(defun ggtags-process-succeed-p (program &rest args)
+  "Return non-nil if successfully running PROGRAM with ARGS."
+  (let ((program (ggtags-program-path program)))
+    (condition-case err
+        (zerop (apply #'process-file program nil nil nil args))
+      (error (message "`%s' failed: %s" program (error-message-string err))
+             nil))))
+
 (defun ggtags-process-string (program &rest args)
   (with-temp-buffer
     (let ((exit (apply #'process-file
@@ -431,19 +457,11 @@ Nil means using the value of `completing-read-function'."
                     'has-refs)))
             ;; http://thread.gmane.org/gmane.comp.gnu.global.bugs/1518
             (has-path-style
-             (with-demoted-errors "ggtags-make-project: %S"
-               ;; in case `global' not found
-               (and (zerop (process-file (ggtags-program-path "global")
-                                         nil nil nil
-                                         "--path-style" "shorter" "--help"))
-                    'has-path-style)))
+             (and (ggtags-process-succeed-p "global" "--path-style" "shorter" "--help")
+                  'has-path-style))
             ;; http://thread.gmane.org/gmane.comp.gnu.global.bugs/1542
-            (has-color
-             (with-demoted-errors "ggtags-make-project: %S"
-               (and (zerop (process-file (ggtags-program-path "global")
-                                         nil nil nil
-                                         "--color" "--help"))
-                    'has-color))))
+            (has-color (and (ggtags-process-succeed-p "global" "--color" "--help")
+                            'has-color)))
        (puthash default-directory
                 (ggtags-project--make :root default-directory
                                       :tag-size tag-size
@@ -593,10 +611,15 @@ Value is new modtime if updated."
       (message "Project read-only-mode is %s" (if val "on" "off")))
     val))
 
-(defun ggtags-visit-project-root ()
-  (interactive)
-  (ggtags-ensure-project)
-  (dired (ggtags-current-project-root)))
+(defun ggtags-visit-project-root (&optional project)
+  "Visit the root directory of (current) PROJECT in dired.
+When called with a prefix \\[universal-argument], choose from past projects."
+  (interactive (list (and current-prefix-arg
+                          (completing-read "Project: " ggtags-projects))))
+  (dired (cl-typecase project
+           (string project)
+           (ggtags-project (ggtags-project-root project))
+           (t (ggtags-ensure-project) (ggtags-current-project-root)))))
 
 (defmacro ggtags-with-current-project (&rest body)
   "Eval BODY in current project's `process-environment'."
@@ -639,8 +662,11 @@ Value is new modtime if updated."
   (when (ggtags-find-project)
     (with-temp-buffer
       (ggtags-with-current-project
-        (process-file (ggtags-program-path "global") nil t nil
-                      "-vP" (concat "^" (ggtags-project-relative-file file) "$")))
+        ;; NOTE: `process-file' requires all files in ARGS be relative
+        ;; to `default-directory'; see its doc string for details.
+        (let ((default-directory (ggtags-current-project-root)))
+          (process-file (ggtags-program-path "global") nil t nil
+                        "-vP" (concat "^" (ggtags-project-relative-file file) "$"))))
       (goto-char (point-min))
       (not (re-search-forward "^file not found" nil t)))))
 
@@ -676,10 +702,14 @@ source trees. See Info node `(global)gtags' for details."
           (setenv "GTAGSLABEL" "ctags"))
         (ggtags-with-temp-message "`gtags' in progress..."
           (let ((default-directory (file-name-as-directory root))
-                (args (cl-remove-if #'null
-                                    (list (and ggtags-use-idutils "--idutils")
-                                          (and conf "--gtagsconf")
-                                          (and conf (ggtags-ensure-localname conf))))))
+                (args (cl-remove-if
+                       #'null
+                       (list (and ggtags-use-idutils "--idutils")
+                             (and ggtags-use-sqlite3
+                                  (ggtags-process-succeed-p "gtags" "--sqlite3" "--help")
+                                  "--sqlite3")
+                             (and conf "--gtagsconf")
+                             (and conf (ggtags-ensure-localname conf))))))
             (condition-case err
                 (apply #'ggtags-process-string "gtags" args)
               (error (if (and ggtags-use-idutils
@@ -695,26 +725,49 @@ source trees. See Info node `(global)gtags' for details."
 
 (defun ggtags-update-tags (&optional force)
   "Update GNU Global tag database.
-Do nothing if GTAGS exceeds the oversize limit unless FORCE."
+Do nothing if GTAGS exceeds the oversize limit unless FORCE.
+
+When called interactively on large (per `ggtags-oversize-limit')
+projects, the update process runs in the background without
+blocking emacs."
   (interactive (progn
                  (ggtags-check-project)
                  ;; Mark project info expired.
                  (setf (ggtags-project-timestamp (ggtags-find-project)) -1)
-                 (list t)))
-  (when (or force (and (ggtags-find-project)
-                       (not (ggtags-project-oversize-p))
-                       (ggtags-project-dirty-p (ggtags-find-project))))
-    (ggtags-with-current-project
-      (ggtags-with-temp-message "`global -u' in progress..."
-        (ggtags-process-string "global" "-u")
-        (setf (ggtags-project-dirty-p (ggtags-find-project)) nil)
-        (setf (ggtags-project-mtime (ggtags-find-project)) (float-time))))))
+                 (list 'interactive)))
+  (cond ((and (eq force 'interactive) (ggtags-project-oversize-p))
+         (ggtags-with-current-project
+           (with-display-buffer-no-window
+             (with-current-buffer (compilation-start "global -u")
+               ;; A hack to fool compilation mode to display `global
+               ;; -u finished' on finish.
+               (setq mode-name "global -u")
+               (add-hook 'compilation-finish-functions
+                         #'ggtags-update-tags-finish nil t)))))
+        ((or force (and (ggtags-find-project)
+                        (not (ggtags-project-oversize-p))
+                        (ggtags-project-dirty-p (ggtags-find-project))))
+         (ggtags-with-current-project
+           (ggtags-with-temp-message "`global -u' in progress..."
+             (ggtags-process-string "global" "-u")
+             (ggtags-update-tags-finish))))))
+
+(defun ggtags-update-tags-finish (&optional buf how)
+  (if (and how buf (string-prefix-p "exited abnormally" how))
+      (display-buffer buf)
+    (setf (ggtags-project-dirty-p (ggtags-find-project)) nil)
+    (setf (ggtags-project-mtime (ggtags-find-project)) (float-time))))
 
 (defun ggtags-update-tags-single (file &optional nowait)
+  ;; NOTE: NOWAIT is ignored if file is remote file; see
+  ;; `tramp-sh-handle-process-file'.
   (cl-check-type file string)
-  (ggtags-with-current-project
-    (process-file (ggtags-program-path "global") nil (and nowait 0) nil
-                  "--single-update" (ggtags-project-relative-file file))))
+  (let ((nowait (unless (file-remote-p file) nowait)))
+    (ggtags-with-current-project
+      ;; See comment in `ggtags-project-file-p'.
+      (let ((default-directory (ggtags-current-project-root)))
+        (process-file (ggtags-program-path "global") nil (and nowait 0) nil
+                      "--single-update" (ggtags-project-relative-file file))))))
 
 (defun ggtags-delete-tags ()
   "Delete file GTAGS, GRTAGS, GPATH, ID etc. generated by gtags."
@@ -2120,6 +2173,12 @@ to nil disables displaying this information.")
         ;; Append to serve as a fallback method.
         (add-hook 'completion-at-point-functions
                   #'ggtags-completion-at-point t t)
+        ;; Work around http://debbugs.gnu.org/19324
+        (or eldoc-documentation-function
+            (setq-local eldoc-documentation-function #'ignore))
+        (add-function :after-until (local 'eldoc-documentation-function)
+                      #'ggtags-eldoc-function '((name . ggtags-eldoc-function)
+                                                (depth . -100)))
         (unless (memq 'ggtags-mode-line-project-name
                       mode-line-buffer-identification)
           (setq mode-line-buffer-identification
@@ -2127,6 +2186,7 @@ to nil disables displaying this information.")
                         '(ggtags-mode-line-project-name)))))
     (remove-hook 'after-save-hook 'ggtags-after-save-function t)
     (remove-hook 'completion-at-point-functions #'ggtags-completion-at-point t)
+    (remove-function (local 'eldoc-documentation-function) 'ggtags-eldoc-function)
     (setq mode-line-buffer-identification
           (delq 'ggtags-mode-line-project-name mode-line-buffer-identification))
     (and (overlayp ggtags-highlight-tag-overlay)

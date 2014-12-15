@@ -1,3 +1,6 @@
+[![Melpa Status](http://melpa.org/packages/exec-path-from-shell-badge.svg)](http://melpa.milkbox.net/#/exec-path-from-shell)
+[![Melpa Stable Status](http://stable.melpa.org/packages/exec-path-from-shell-badge.svg)](http://stable.melpa.org/#/exec-path-from-shell)
+
 exec-path-from-shell
 =====================
 
@@ -38,9 +41,9 @@ the latest release or clone the repository, and install
 Usage
 -----
 
-Add the following to your `init.el`:
+Add the following to your `init.el` (after calling `package-initialize`):
 
-```scheme
+```el
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 ```
@@ -52,7 +55,7 @@ You can copy values of other environment variables by customizing
 `exec-path-from-shell-initialize`, or by calling
 `exec-path-from-shell-copy-env`, e.g.:
 
-```scheme
+```el
 (exec-path-from-shell-copy-env "PYTHONPATH")
 ```
 
