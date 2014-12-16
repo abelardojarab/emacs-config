@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; Inhibit startup window, very annoying
+(setq inhibit-startup-message t)
+
+;; ;; hit `C-g' while it's frozen to get an ELisp backtrace
+;; (setq debug-on-quit t)
+
 ;; Backported function
 (when (version< emacs-version "24.4")
   (defun define-error (name message &optional parent)
@@ -191,9 +197,6 @@ Defaults to `error'."
 
 ;; Make ?, ? and such work
 (set-language-environment 'spanish)
-
-;; Inhibit startup window, very annoying
-(setq inhibit-startup-message t)
 
 ;; Garantee utf8 as input-method
 (set-input-method nil)

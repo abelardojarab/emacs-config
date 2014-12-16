@@ -5,6 +5,7 @@
 ;; GNU General Public License, version 3 or later.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq debug-on-error t)
 (add-to-list 'load-path "~/.emacs.d/elisp")
 ;; (add-to-list 'load-path "~/.emacs.d/elisp/semanticold")
 (add-to-list 'load-path "~/.emacs.d/setup")
@@ -176,3 +177,6 @@
 ;; Setup server
 (unless (string-equal system-type "windows-nt")
   (require 'setup-server))
+
+;; Turn off debugging, now that initialization has ended
+(setq debug-on-error nil)

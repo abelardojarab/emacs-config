@@ -120,7 +120,31 @@ When there is a text selection, act on the region."
 
       (put this-command 'stateIsCompact-p (if currentStateIsCompact nil t)) ) ) )
 
-;; Beautify (poner bonito) tabulaciones en nuestro pograma en C/C++
+(defun number-rectangle (start end format-string from)
+  "Delete (don't save) text in the region-rectangle, then number it."
+  (interactive
+   (list (region-beginning) (region-end)
+         (read-string "Number rectangle: "
+                      (if (looking-back "^ *") "%d. " "%d"))
+         (read-number "From: " 1)))
+  (save-excursion
+    (goto-char start)
+    (setq start (point-marker))
+    (goto-char end)
+    (setq end (point-marker))
+    (delete-rectangle start end)
+    (goto-char start)
+    (loop with column = (current-column)
+          while (and (<= (point) end) (not (eobp)))
+          for i from from   do
+          (move-to-column column t)
+          (insert (format format-string i))
+          (forward-line 1)))
+  (goto-char start))
+
+(global-set-key (kbd "C-x r N") 'number-rectangle)
+
+;; Beautify buffer in C/C++
 (defun beautify-region (beg end)
   (interactive "r")
   (setq end (save-excursion (goto-char end) (point-marker)))
@@ -171,6 +195,22 @@ buffer."
 (global-set-key [M-down] 'move-text-down)
 (global-set-key [M-S-up] 'move-text-up)
 (global-set-key [M-S-down] 'move-text-down)
+
+;; Fix for SSH
+(defun find-agent ()
+  (first (split-string
+          (shell-command-to-string
+           (concat
+            "ls -t1 "
+            "$(find /tmp/ -uid $UID -path \\*ssh\\* -type s 2> /dev/null)"
+            "|"
+            "head -1")))))
+
+(defun fix-agent ()
+  (interactive)
+  (let ((agent (find-agent)))
+    (setenv "SSH_AUTH_SOCK" agent)
+    (message agent)))
 
 (provide 'setup-utilities)
 ;;; setup-utilities.el ends here
