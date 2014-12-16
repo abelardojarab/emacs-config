@@ -54,7 +54,7 @@
 (setq-default bidi-display-reordering nil)
 
 ;; Truncate lines
-(toggle-truncate-lines)
+(toggle-truncate-lines 1)
 (set-default 'truncate-lines t)
 
 ;; Marker if the line goes beyond the end of the screen (arrows)

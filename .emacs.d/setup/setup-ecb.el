@@ -308,5 +308,9 @@ little more place. "
 ;; Finally activate ecb
 (ecb-activate)
 
+;; Redundant truncate lines
+(toggle-truncate-lines 1)
+(set-default 'truncate-lines t)
+
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
