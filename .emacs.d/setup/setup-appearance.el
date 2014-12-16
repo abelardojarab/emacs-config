@@ -55,14 +55,20 @@
 
 ;; Truncate lines
 (set-default 'truncate-lines t)
-(add-hook 'prog-mode-hook 'toggle-truncate-lines)
-(add-hook 'text-mode-hook 'toggle-truncate-lines)
+(toggle-truncate-lines 1)
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
-(global-visual-line-mode 1)
-(setq-default global-visual-line-mode t)
+(setq line-move-visual nil)
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
 
 ;; Make side by side buffers function the same as the main window
 (setq-default truncate-partial-width-windows nil)
