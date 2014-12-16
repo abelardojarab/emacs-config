@@ -53,15 +53,15 @@
 ;; Disable bidirectional text support
 (setq-default bidi-display-reordering nil)
 
-;; Marker if the line goes beyond the end of the screen (arrows)
-(global-visual-line-mode 1)
-(setq line-move-visual nil)
-(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
-(setq visual-line-fringe-indicators '(nil right-curly-arrow))
-
 ;; Truncate lines
 (toggle-truncate-lines)
 (set-default 'truncate-lines t)
+
+;; Marker if the line goes beyond the end of the screen (arrows)
+(global-visual-line-mode 1)
+(setq-default global-visual-line-mode t)
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+(setq visual-line-fringe-indicators '(nil right-curly-arrow))
 
 ;; Make side by side buffers function the same as the main window
 (setq-default truncate-partial-width-windows nil)

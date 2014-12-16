@@ -58,6 +58,9 @@
                                   '("semantic-decoration-on-includes" . t)
                                   '("semantic-tag-boundary" . t)))
 
+;; Keep line truncation
+(setq ecb-truncate-lines t)
+
 (add-hook 'ecb-show-ecb-windows-before-hook
           'ecb-enlarge-frame-width-before-show)
 (add-hook 'ecb-hide-ecb-windows-before-hook
