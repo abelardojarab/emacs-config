@@ -27,26 +27,6 @@
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 
-;; Fix Windows characters
-(standard-display-ascii ?\200 [15])
-(standard-display-ascii ?\201 [21])
-(standard-display-ascii ?\202 [24])
-(standard-display-ascii ?\203 [13])
-(standard-display-ascii ?\204 [22])
-(standard-display-ascii ?\205 [25])
-(standard-display-ascii ?\206 [12])
-(standard-display-ascii ?\210 [23])
-(standard-display-ascii ?\211 [14])
-(standard-display-ascii ?\212 [18])
-(standard-display-ascii ?\214 [11])
-(standard-display-ascii ?\221 [?\'])
-(standard-display-ascii ?\222 [?\'])
-(standard-display-ascii ?\223 [?\"])
-(standard-display-ascii ?\224 [?\"])
-(standard-display-ascii ?\225 [?\*])
-(standard-display-ascii ?\226 "---")
-(standard-display-ascii ?\227 "--")
-
 ;; ;; hit `C-g' while it's frozen to get an ELisp backtrace
 ;; (setq debug-on-quit t)
 
