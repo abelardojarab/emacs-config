@@ -35,8 +35,7 @@
     "Push the current position to the ring of markers so that
     \\[pop-tag-mark] can be used to come back to current position."
     (interactive)
-    (ring-insert find-tag-marker-ring (point-marker))
-    ))
+    (ring-insert find-tag-marker-ring (point-marker))))
 
 ;; better searching of tags
 (add-to-list 'load-path "~/.emacs.d/ggtags")
