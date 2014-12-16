@@ -56,14 +56,14 @@
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
 
-;; Setup Org and LaTeX
-(require 'setup-org)
-
 ;; Setup general
 (require 'setup-general)
 
 ;; Setup appearance
 (require 'setup-appearance)
+
+;; Setup Org and LaTeX
+(require 'setup-org)
 
 ;; CEDET
 (add-to-list 'load-path "~/.emacs.d/cedet")
