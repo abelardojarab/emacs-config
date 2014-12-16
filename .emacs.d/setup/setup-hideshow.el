@@ -83,7 +83,7 @@
       (put-text-property 0 marker-length 'display (list 'left-fringe
                                                         'hs-marker 'hs-fringe-face) marker-string)
       (overlay-put ov 'before-string marker-string)
-      (put-text-property 0 (length display-string) 'face 'hs-face
+      (put-text-property 1 (length display-string) 'face 'hs-face
                          display-string)
       (overlay-put ov 'display display-string))))
 (setq hs-set-up-overlay 'display-code-line-counts)
