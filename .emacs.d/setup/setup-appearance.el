@@ -56,6 +56,12 @@
 ;; Truncate lines
 (toggle-truncate-lines 1)
 (set-default 'truncate-lines t)
+(add-hook 'text-mode-hook 'toggle-truncate-line)
+(add-hook 'prog-mode-hook 'toggle-truncate-line)
+(add-hook 'lisp-mode-hook 'toggle-truncate-line)
+(add-hook 'python-mode-hook 'toggle-truncate-line)
+(add-hook 'c-mode-common-hook 'toggle-truncate-line)
+(add-hook 'js2-mode-hook 'toggle-truncate-line)
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
 (global-visual-line-mode 1)
