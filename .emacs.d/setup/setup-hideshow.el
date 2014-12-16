@@ -24,6 +24,54 @@
 
 ;;; Code:
 
+(require 'fold-dwim)
+(defun folding-marker-p (&optional pos)
+  (eq (get-char-property (or pos (point)) 'face) 'fringe))
+
+(defadvice fold-dwim-toggle (around toggle-folding-on-folding-marker activate)
+  (if (folding-marker-p)
+      (folding-toggle-show-hide)
+    ad-do-it))
+
+(defadvice forward-comment (around stop-at-folding-header (count) activate)
+  (if (= 0 (ad-get-arg 0))
+      (progn ad-do-it)
+    (if (folding-marker-p)
+        (setq ad-return-value nil)
+      (let ((loop-times (abs count))
+            (direction (/ count (abs count))))
+        (ad-set-arg 0 direction)
+        (setq ad-return-value t)
+        (while (and (> loop-times 0) ad-return-value)
+          ad-do-it
+          (when ad-return-value
+            (if (> direction 0)
+                (if (folding-marker-p)
+                    (setq ad-return-value nil)
+                  (when (folding-marker-p (- (point) 2))
+                    (setq ad-return-value nil)
+                    (forward-char -2)
+                    (beginning-of-line)))
+              (when (folding-marker-p)
+                (end-of-line)
+                (setq ad-return-value nil)))
+            (setq loop-times (1- loop-times))))))))
+
+(defadvice fold-dwim-hide-all (around folding-open-first activate)
+  (if (and (boundp 'folding-mode) folding-mode)
+      (progn
+        (folding-uninstall)
+        (let ((hs-hide-comments-when-hiding-all nil))
+          ad-do-it)
+        (folding-mode))
+    ad-do-it))
+
+;; Keys
+(global-set-key (kbd "M-s <SPC>") 'fold-dwim-toggle)
+(global-set-key (kbd "M-s M-<SPC>") 'fold-dwim-toggle)
+(global-set-key (kbd "M-s C-<SPC>") 'fold-dwim-hide-all)
+(global-set-key (kbd "M-s M-<SPC>") 'fold-dwim-show-all)
+
 ;; Code folding
 (autoload 'hideshowvis-enable "hideshowvis" "Highlight foldable regions")
 (autoload 'hideshowvis-minor-mode
