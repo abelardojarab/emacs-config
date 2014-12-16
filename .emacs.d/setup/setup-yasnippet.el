@@ -39,7 +39,8 @@
 (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
 
 ;; Select a snippet with popup library
-(setq yas-prompt-functions '(yas-popup-prompt yas-no-prompt))
+(require 'dropdown-list)
+(setq yas-prompt-functions '(yas-dropdown-prompt yas-ido-prompt yas-completing-prompt yas-no-prompt))
 
 ;; Tweaking Yasnippet for Org mode
 (defun yas--org-very-safe-expand ()
@@ -65,6 +66,8 @@
 (setq auto-insert-query nil)
 (define-auto-insert "\.R"
   '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
+(define-auto-insert "\.py"
+  '(lambda () (yas--expand-by-uuid 'python-mode "header")))
 
 (defun autoinsert-yas-expand()
   "Replace text in yasnippet template."
@@ -98,7 +101,6 @@
 
 ;; Fast creation of snippets
 (defvaralias 'yas/init-snippet-template 'yas-new-snippet-default)
-
 (defun yas-new-snippet-with-content (s e)
   "Create snippet from region to speed-up snippet development."
   (interactive "r")
@@ -130,6 +132,7 @@
             (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
                                    (yas-snippet-dirs)))
             ac-modes))))
+(yas/set-ac-modes)
 
 ;; Expand snippet synchronously
 (defvar yas/recursive-edit-flag nil)

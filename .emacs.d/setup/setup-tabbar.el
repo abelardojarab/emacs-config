@@ -83,6 +83,7 @@
 (add-to-list 'crs-hated-buffers "*etags tmp*")
 (add-to-list 'crs-hated-buffers "*Python*")
 (add-to-list 'crs-hated-buffers "vc")
+(add-to-list 'crs-hated-buffers "html-tag-list")
 
 ;; might as well use this for both
 (setq iswitchb-buffer-ignore (append '("^ " "*Buffer") crs-hated-buffers))
