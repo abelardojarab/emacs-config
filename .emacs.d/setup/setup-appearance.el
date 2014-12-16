@@ -54,10 +54,9 @@
 (setq-default bidi-display-reordering nil)
 
 ;; Truncate lines
-(toggle-truncate-lines 1)
 (set-default 'truncate-lines t)
-(add-hook 'text-mode-hook 'toggle-truncate-line)
-(add-hook 'prog-mode-hook 'toggle-truncate-line)
+(add-hook 'prog-mode-hook 'toggle-truncate-lines)
+(add-hook 'text-mode-hook 'toggle-truncate-lines)
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
 (global-visual-line-mode 1)
