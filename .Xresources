@@ -1,0 +1,112 @@
+!* Use the command "xrdb < $HOME/.Xdefaults" to reread in changes to .Xdefaults
+!*
+
+Emacs.fontBackend: xft
+Emacs.bitmapIcon: on
+Emacs.font: Consolas-12
+Emacs*menubar*font: Consolas-12
+Emacs.pane.menubar.font: Consolas-12
+Emacs.menuBar: on
+Emacs.toolBar: off
+Emacs.borderWidth: 0
+Emacs.internalBorder: 0
+
+Xft.dpi: 125
+Xft.antialias: true
+Xft.autohint: false
+Xft.hinting: true
+Xft.hintstyle: hintfull
+Xft.lcdfilter: lcddefault
+Xft.rgba: rgb
+
+! *** Xdefaults Affecting CADENCE TOOLS ***
+!* NOTE:
+!*
+! ********************************************************
+! * These resources set the default position of the CIW. *
+! ********************************************************
+!Opus.x:            0
+!Opus.y:            0
+!Opus.width:            1400
+!Opus.height:           600
+Opus.geometry:          =1000x1000+0+0
+
+! **********************************************
+! * These resources allow you to set the fonts *
+! **********************************************
+Opus.labelFont:   -b&h-lucidatypewriter-medium-r-normal-sans-18-180-75-75-m-110-iso8859-4
+Opus.textFont:    -b&h-lucidatypewriter-medium-r-normal-sans-18-180-75-75-m-110-iso8859-4
+Opus.helpFont:    -b&h-lucidatypewriter-medium-r-normal-sans-18-180-75-75-m-110-iso8859-4
+
+! ****************************************************
+! * This resource lets you specify which text editor *
+! * you want to use.                                 *
+! ****************************************************
+Opus.textEditor:  emacs
+
+! **************************************
+! * This resource lets you set the     *
+! * colors used by the user interface. *
+! **************************************
+Opus.foreground:               #101010
+Opus.background:               #000000
+Opus.borderColor:              #0000c0
+Opus.recessColor:              #bfbfbf
+Opus.activeBannerColor:        #bdcccc
+Opus.inactiveBannerColor:      #cccccc
+Opus.textColor:                #bbbbbb
+Opus.attentionTextColor:       #dddddd
+Opus.flashColor:               #c0c0c0
+Opus.topShadowColor:           #ffffff
+Opus.bottomShadowColor:        #999999
+Opus.buttonColor:              #800000
+Opus.editorBackground:         #000000
+Opus.showFixedMenuLabels: True
+
+cdsLibManager*textFontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*buttonFontList: -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*labelFontList: -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*XbaeMatrix*fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*Tree.XmHierButton.fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*copyErrorDestLib.fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*copyErrorMessage.fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*cdsComboBox.edit.fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*XmMenuShell.buttonFontList: -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+cdsLibManager*menuBar.XmCascadeButtonGadget.fontList: -adobe-helvetica-bold-r-*-*-12-*-*
+
+! ****************************************************
+! * These resources allow you to specify the default *
+! * positions for forms.                             *
+! ****************************************************
+Opus.formPlacement: top
+Opus.formRelativeTo: currentWindow
+Opus.optionFormPlacement: center
+Opus.optionFormRelativeTo: screen
+!
+! added 1/2/93 to try to fix the problem with a black opus window
+OpenWindows.ColorFocusLocked: True
+Twm*colormapFocusPolicy: explicit
+
+! **************
+! ** END OPUS RESOURCES
+! **************
+! Mwm options that Cadence recommends
+Mwm*clientAutoPlace: False
+Mwm*colormapFocusPolicy: explicit
+Mwm*keyboardFocusPolicy: pointer
+Mwm*interactivePlacement: False
+Mwm*positionIsFrame: False
+! **************
+! FrameMaker options recommended by Cadence
+! **************
+Maker*background: #c0c0c0
+Maker*bottomShadowColor:#999999
+Maker*topShadowColor: #ffffff
+Maker*foreground: #800000
+Maker*fontList: -b&h-lucidatypewriter-medium-r-normal-sans-18-180-75-75-m-110-iso8859-4
+Maker.colorDocs: True
+Maker.useBackingStore: True
+Maker.colorImages: True
+! ********************
+! * END of XDEFAULTS *
+! ********************
