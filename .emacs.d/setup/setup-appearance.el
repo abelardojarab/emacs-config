@@ -58,7 +58,7 @@
 (toggle-truncate-lines 1)
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
-(setq line-move-visual nil)
+(global-visual-line-mode 1)
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
 (add-hook 'lisp-mode-hook
