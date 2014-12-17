@@ -117,7 +117,7 @@
                 (append '((:eval (hs-display-headline))) mode-line-format))
 
   ;; Add the following to your .emacs and uncomment it in order to get a + symbol
-  (define-fringe-bitmap 'hs-marker [128 192 96 48 24 48 96 192 128] 9 8 'center)
+  (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
 
   (defcustom hs-fringe-face 'hs-fringe-face
     "*Specify face used to highlight the fringe on hidden regions."
