@@ -798,17 +798,5 @@ a link to this file."
   (add-hook 'org-mode-hook 'pandoc-load-default-settings)
   (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
-;; Helm-bibtex
-(add-to-list 'load-path "~/.emacs.d/parsebib")
-(add-to-list 'load-path "~/.emacs.d/helm-bibtex")
-(when (require 'parsebib nil 'noerror)
-  (require 'helm-bibtex)
-  (defun helm-bibtex-cite ()
-    "Helm command to cite bibliography."
-    (interactive)
-    (helm-other-buffer
-     '(helm-c-source-bibtex)
-     "*helm bibtex:")))
-
 (provide 'setup-org)
 ;;; setup-org.el ends here

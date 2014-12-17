@@ -43,6 +43,18 @@
 (add-to-list 'load-path "~/.emacs.d/helm-themes")
 (require 'helm-themes)
 
+;; Helm-bibtex
+(add-to-list 'load-path "~/.emacs.d/parsebib")
+(add-to-list 'load-path "~/.emacs.d/helm-bibtex")
+(when (require 'parsebib nil 'noerror)
+  (require 'helm-bibtex)
+  (defun helm-bibtex-cite ()
+    "Helm command to cite bibliography."
+    (interactive)
+    (helm-other-buffer
+     '(helm-c-source-bibtex)
+     "*helm bibtex:")))
+
 ;; Async
 (require 'dired+)
 (add-to-list 'load-path "~/.emacs.d/async")
