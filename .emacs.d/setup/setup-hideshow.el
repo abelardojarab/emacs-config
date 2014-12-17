@@ -98,53 +98,117 @@
 (add-hook 'js2-mode-hook
           (lambda () (hs-minor-mode 1)))
 
-;; Add the following to your .emacs and uncomment it in order to get a + symbol
-(define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
+(defun hs-minor-mode-settings ()
+  "settings of `hs-minor-mode'."
+  (defvar hs-headline-max-len 30 "*Maximum length of `hs-headline' to display.")
 
-(defcustom hs-fringe-face 'hs-fringe-face
-  "*Specify face used to highlight the fringe on hidden regions."
-  :type 'face
-  :group 'hideshow)
+  (setq hs-isearch-open t)
 
-(defface hs-fringe-face
-  '((t (:foreground "#999" :box (:line-width 2 :color "grey75" :style released-button))))
-  "Face used to highlight the fringe on folded regions"
-  :group 'hideshow)
+  (defun hs-display-headline ()
+    (let* ((len (length hs-headline))
+           (headline hs-headline)
+           (postfix ""))
+      (when (>= len hs-headline-max-len)
+        (setq postfix "...")
+        (setq headline (substring hs-headline 0 hs-headline-max-len)))
+      (if hs-headline (concat headline postfix " ") "")))
 
-(defcustom hs-face 'hs-face
-  "*Specify the face to to use for the hidden region indicator"
-  :type 'face
-  :group 'hideshow)
+  (setq-default mode-line-format
+                (append '((:eval (hs-display-headline))) mode-line-format))
 
-(defface hs-face
-  '((t (:background "#558" :box t)))
-  "Face to hightlight the ... area of hidden regions"
-  :group 'hideshow)
+  ;; Add the following to your .emacs and uncomment it in order to get a + symbol
+  (define-fringe-bitmap 'hs-marker [128 192 96 48 24 48 96 192 128] 9 8 'center)
 
-(defun display-code-line-counts (ov)
-  (when (eq 'code (overlay-get ov 'hs))
-    (let* ((marker-string "*fringe-dummy*")
-           (marker-length (length marker-string))
-           (display-string (format "(%d)..." (count-lines
-                                              (overlay-start ov) (overlay-end ov)))))
-      (overlay-put ov 'help-echo "Hiddent text. C-c,= to show")
-      (put-text-property 0 marker-length 'display (list 'left-fringe
-                                                        'hs-marker 'hs-fringe-face) marker-string)
-      (overlay-put ov 'before-string marker-string)
-      (put-text-property 1 (length display-string) 'face 'hs-face
-                         display-string)
-      (overlay-put ov 'display display-string))))
-(setq hs-set-up-overlay 'display-code-line-counts)
+  (defcustom hs-fringe-face 'hs-fringe-face
+    "*Specify face used to highlight the fringe on hidden regions."
+    :type 'face
+    :group 'hideshow)
+
+  (defface hs-fringe-face
+    '((t (:foreground "#999" :box (:line-width 2 :color "grey75" :style released-button))))
+    "Face used to highlight the fringe on folded regions"
+    :group 'hideshow)
+
+  (defcustom hs-face 'hs-face
+    "*Specify the face to to use for the hidden region indicator"
+    :type 'face
+    :group 'hideshow)
+
+  (defface hs-face
+    '((t (:background "#558" :box t)))
+    "Face to hightlight the ... area of hidden regions"
+    :group 'hideshow)
+
+  (defun display-code-line-counts (ov)
+    (when (eq 'code (overlay-get ov 'hs))
+      (let* ((marker-string "*fringe-dummy*")
+             (marker-length (length marker-string))
+             (display-string (format "(%d)..." (count-lines
+                                                (overlay-start ov) (overlay-end ov)))))
+        (overlay-put ov 'help-echo "Hiddent text. C-c,= to show")
+        (put-text-property 0 marker-length 'display (list 'left-fringe
+                                                          'hs-marker 'hs-fringe-face) marker-string)
+        (overlay-put ov 'before-string marker-string)
+        (put-text-property 1 (length display-string) 'face 'hs-face
+                           display-string)
+        (overlay-put ov 'display display-string))))
+  (setq hs-set-up-overlay 'display-code-line-counts)
+
+  (defvar hs-overlay-map (make-sparse-keymap) "Keymap for hs minor mode overlay.")
+  ;; (define-key hs-overlay-map "<mouse-1>" hs-show-block)
+
+  (defvar hs-hide-all nil "Current state of hideshow for toggling all.")
+  (make-local-variable 'hs-hide-all)
+
+  (defun hs-toggle-hiding-all ()
+    "Toggle hideshow all."
+    (interactive)
+    (setq hs-hide-all (not hs-hide-all))
+    (if hs-hide-all
+        (hs-hide-all)
+      (hs-show-all)))
+
+  (defvar fold-all-fun nil "Function to fold all.")
+  (make-variable-buffer-local 'fold-all-fun)
+  (defvar fold-fun nil "Function to fold.")
+  (make-variable-buffer-local 'fold-fun)
+
+  (defun toggle-fold-all ()
+    "Toggle fold all."
+    (interactive)
+    (if fold-all-fun
+        (call-interactively fold-all-fun)
+      (hs-toggle-hiding-all)))
+
+  (defun toggle-fold ()
+    "Toggle fold."
+    (interactive)
+    (if fold-fun
+        (call-interactively fold-fun)
+      (hs-toggle-hiding)))
+
+  (defun hs-minor-mode-4-emaci-settings ()
+    "Settings of `hs-minor-mode' for `emaci'."
+    (eal-define-keys
+     'emaci-mode-map
+     `(("s" toggle-fold)
+       ("S" toggle-fold-all))))
+
+  (eval-after-load "emaci"
+    '(hs-minor-mode-4-emaci-settings)))
+
+(eval-after-load "hideshow"
+  '(hs-minor-mode-settings))
 
 ;; Yafolding
 (add-to-list 'load-path "~/.emacs.d/yafolding")
-(require 'yafolding)
-(add-hook 'prog-mode-hook
-          (lambda () (yafolding-mode t)))
-(define-key yafolding-mode-map (kbd "<C-S-return>") nil)
-(define-key yafolding-mode-map (kbd "<C-return>") nil)
-(define-key yafolding-mode-map (kbd "C-c <C-S-return>") 'yafolding-toggle-all)
-(define-key yafolding-mode-map (kbd "C-c <C-return>") 'yafolding-toggle-element)
+(when (require 'yafolding nil 'noerror)
+  (add-hook 'prog-mode-hook
+            (lambda () (yafolding-mode t)))
+  (define-key yafolding-mode-map (kbd "<C-S-return>") nil)
+  (define-key yafolding-mode-map (kbd "<C-return>") nil)
+  (define-key yafolding-mode-map (kbd "C-c <C-S-return>") 'yafolding-toggle-all)
+  (define-key yafolding-mode-map (kbd "C-c <C-return>") 'yafolding-toggle-element))
 
 (provide 'setup-hideshow)
 ;;; setup-hideshow.el ends here
