@@ -53,6 +53,28 @@
 ;; Disable bidirectional text support
 (setq-default bidi-display-reordering nil)
 
+;; Modify toggle truncate lines to avoid messages
+(defun toggle-truncate-lines (&optional arg)
+  "Toggle truncating of long lines for the current buffer.
+When truncating is off, long lines are folded.
+With prefix argument ARG, truncate long lines if ARG is positive,
+otherwise fold them.  Note that in side-by-side windows, this
+command has no effect if `truncate-partial-width-windows' is
+non-nil."
+  (interactive "P")
+  (setq truncate-lines
+        (if (null arg)
+            (not truncate-lines)
+          (> (prefix-numeric-value arg) 0)))
+  (force-mode-line-update)
+  (unless truncate-lines
+    (let ((buffer (current-buffer)))
+      (walk-windows (lambda (window)
+                      (if (eq buffer (window-buffer window))
+                          (set-window-hscroll window 0)))
+                    nil t)))
+  t)
+
 ;; Truncate lines
 (set-default 'truncate-lines t)
 (toggle-truncate-lines 1)
@@ -223,9 +245,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
@@ -433,11 +455,11 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-       (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
-           (dolist (regexp regexps)
-             (when (string-match regexp string)
-               (throw 'matched t)))))))
+     (catch 'matched
+       (let ((inhibit-changing-match-data t)) ; small optimization
+         (dolist (regexp regexps)
+           (when (string-match regexp string)
+             (throw 'matched t)))))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
