@@ -237,63 +237,6 @@
 (setq gdb-many-windows t
       gdb-max-frames 120)
 
-;; Tags table
-(setq tags-always-build-completion-table t)
-(setq tag-table-alist
-      '(("\\.il$" . "~/workspace/frametools/TAGS")
-        ("\\.ils$" . "~/workspace/frametools/TAGS")))
-(defun create-tags (dir-name)
-  "Create tags file."
-  (interactive "DDirectory: ")
-  (eshell-command
-   (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
-
-(defun pm/find-tags-file ()
-  "Recursively searches each parent directory for a file named `TAGS'
-   and returns the path to that file or nil if a tags file is not found.
-   Returns nil if the buffer is not visiting a file.
-   (from jds-find-tags-file in the emacs-wiki)"
-  (labels ((find-tags-file-r
-            (path)
-            (let* ((parent (if path (file-name-directory path)
-                             default-directory))
-                   (possible-tags-file (concat parent "TAGS")))
-              (cond
-               ((file-exists-p possible-tags-file)
-                (shell-command (concat "make -C" parent " TAGS"))
-                (throw 'found-it possible-tags-file))
-               ((string= "/TAGS" possible-tags-file)
-                (error "no tags file found"))
-               (t
-                (find-tags-file-r (directory-file-name parent)))))))
-    (catch 'found-it
-      (find-tags-file-r (buffer-file-name)))))
-
-(defadvice find-tag (before pm/before-find-tag activate)
-  (setq tags-file-name (pm/find-tags-file)))
-
-;; find-tag that automagically reruns etags when it cant find a
-;; requested item and then makes a new try to locate it.
-(defadvice find-tag (around refresh-etags activate)
-  "Rerun etags and reload tags if tag not found and redo find-tag.
-   If buffer is modified, ask about save before running etags."
-  (let ((extension (file-name-extension (buffer-file-name))))
-    (condition-case err
-        ad-do-it
-      (error (and (buffer-modified-p)
-                  (not (ding))
-                  (y-or-n-p "Buffer is modified, save it? ")
-                  (save-buffer))
-             (er-refresh-etags extension)
-             ad-do-it))))
-
-(defun er-refresh-etags (&optional extension)
-  "Run etags on all peer files in current dir and reload them silently."
-  (interactive)
-  (shell-command (format "etags *.%s -o TAGS" (or extension "el")))
-  (let ((tags-revert-without-query t))  ; don't query, revert silently
-    (visit-tags-table default-directory nil)))
-
 ;; working with tags
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
