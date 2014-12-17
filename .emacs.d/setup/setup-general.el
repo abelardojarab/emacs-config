@@ -33,6 +33,10 @@
 ;; Undefined function
 (require 'let-alist)
 
+;; GUI-specific thing
+(when (window-system)
+  (setenv "EMACS_GUI" "t"))
+
 ;; ;; hit `C-g' while it's frozen to get an ELisp backtrace
 ;; (setq debug-on-quit t)
 
@@ -321,7 +325,7 @@ Defaults to `error'."
 (setq-default indent-tabs-mode nil)
 
 ;; Set tab width
-(setq-default tab-width 4)
+(setq-default default-tab-width 4)
 
 ;; Auto-indent mode
 (add-to-list 'load-path "~/.emacs.d/auto-indent-mode")

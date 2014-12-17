@@ -244,6 +244,17 @@
 (semanticdb-enable-gnu-global-databases 'python-mode)
 (semanticdb-enable-gnu-global-databases 'js2-mode)
 
+;; C/C++ style
+(defun my/c-mode-init ()
+  (c-set-style "k&r")
+  (c-toggle-electric-state -1)
+  (define-key c-mode-map (kbd "C-c o") 'ff-find-other-file)
+  (define-key c++-mode-map (kbd "C-c o") 'ff-find-other-file)
+  (setq c-basic-offset 4))
+
+(add-hook 'c-mode-hook #'my/c-mode-init)
+(add-hook 'c++-mode-hook #'my/c-mode-init)
+
 ;; Function arguments
 (add-to-list 'load-path "~/.emacs.d/functions-args")
 (load "~/.emacs.d/function-args/function-args.el")
