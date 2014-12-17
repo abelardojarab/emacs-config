@@ -791,5 +791,12 @@ a link to this file."
 (add-to-list 'load-path "~/.emacs.d/org-journal")
 (require 'org-journal)
 
+;; Pandoc
+(add-to-list 'load-path "~/.emacs.d/pandoc-mode")
+(when (require 'pandoc-mode nil 'noerror)
+  (add-hook 'markdown-mode-hook 'turn-on-pandoc)
+  (add-hook 'org-mode-hook 'pandoc-load-default-settings)
+  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+
 (provide 'setup-org)
 ;;; setup-org.el ends here

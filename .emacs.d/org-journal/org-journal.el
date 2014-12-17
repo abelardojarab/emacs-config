@@ -1,8 +1,8 @@
 ;;; org-journal.el --- a simple org-mode based journaling mode
 
 ;; Author: Bastian Bechtold
-;; URL: http://github.com/bastibe/emacs-journal
-;; Version: 1.5.3
+;; URL: http://github.com/bastibe/org-journal
+;; Version: 1.6.4
 
 ;; Adapted from http://www.emacswiki.org/PersonalDiary
 
@@ -25,23 +25,27 @@
 ;; different times. Any subsequent entries on the same day are written
 ;; in the same file, with their own timestamp. You can customize the
 ;; date and time formats (or remove them entirely). To start writing a
-;; journal entry, press "C-c j".
+;; journal entry, press "C-c C-j". You can also open the current day's
+;; entry without adding a new entry with "C-u C-c C-j".
 ;;
 ;; You can browse through existing journal entries on disk via the
 ;; calendar. All dates for which an entry is present are highlighted.
-;; Pressing "j" will open it up for viewing. Pressing "[" or "]" will
+;; Pressing "j" will open it up for viewing. Pressing "C-j" will open
+;; it for viewing, but not switch to it. Pressing "[" or "]" will
 ;; select the date with the previous or next journal entry,
 ;; respectively. Pressing "i j" will create a new entry for the chosen
 ;; date.
 ;;
 ;; Quick summary:
-;; To create a new journal entry for the current time and day: C-c j
-;; In calendar view: j to view an entry
+;; To create a new journal entry for the current time and day: C-c C-j
+;; To open today's journal without creating a new entry: C-u C-c C-j
+;; In calendar view: j to view an entry in a new buffer
+;;                   C-j to view an entry but not switch to it
 ;;                   i j to add a new entry
 ;;                   [ to go to previous entry
 ;;                   ] to go to next entry
-;; When viewing a journal entry: C-c b to view previous entry
-;;                               C-c f to view next entry
+;; When viewing a journal entry: C-c C-b to view previous entry
+;;                               C-c C-f to view next entry
 
 ;; use this function to update auto-mode-alist whenever
 ;; org-journal-dir or org-journal-file-pattern change.
@@ -131,6 +135,7 @@ string if you want to disable timestamps."
 (add-hook 'calendar-today-invisible-hook 'org-journal-mark-entries)
 
 ;; Journal mode definition
+;;;###autoload
 (define-derived-mode org-journal-mode org-mode "Journal"
   "Mode for writing or viewing entries written in the journal"
   (turn-on-visual-line-mode)
@@ -139,19 +144,20 @@ string if you want to disable timestamps."
   (run-mode-hooks))
 
 ;; Key bindings
-(define-key org-journal-mode-map (kbd "C-c f") 'org-journal-open-next-entry)
-(define-key org-journal-mode-map (kbd "C-c b") 'org-journal-open-previous-entry)
+(define-key org-journal-mode-map (kbd "C-c C-f") 'org-journal-open-next-entry)
+(define-key org-journal-mode-map (kbd "C-c C-b") 'org-journal-open-previous-entry)
 
 ;;;###autoload
 (eval-after-load "calendar"
   '(progn
      (define-key calendar-mode-map "j" 'org-journal-read-entry)
+     (define-key calendar-mode-map (kbd "C-j") 'org-journal-display-entry)
      (define-key calendar-mode-map "]" 'org-journal-next-entry)
      (define-key calendar-mode-map "[" 'org-journal-previous-entry)
      (define-key calendar-mode-map (kbd "i j") 'org-journal-new-date-entry)))
 
 ;;;###autoload
-(global-set-key (kbd "C-c j") 'org-journal-new-entry)
+(global-set-key (kbd "C-c C-j") 'org-journal-new-entry)
 
 (defun org-journal-dir-check-or-create ()
   "Check existence of `org-journal-dir'. If it doesn't exist, try to make directory."
@@ -163,22 +169,30 @@ string if you want to disable timestamps."
 
 ;; Creates a new entry
 ;;;###autoload
-(defun org-journal-new-entry ()
-  "Open today's journal file and start a new entry"
-  (interactive)
+(defun org-journal-new-entry (prefix)
+  "Open today's journal file and start a new entry.
+
+Giving the command a prefix arg will just open a today's file,
+without adding an entry"
+  (interactive "P")
   (org-journal-dir-check-or-create)
   (find-file (concat org-journal-dir
                      (format-time-string org-journal-file-format)))
   (goto-char (point-max))
   (let ((unsaved (buffer-modified-p)))
-    (if (equal (point-max) 1)
-        (insert org-journal-date-prefix
-                (format-time-string org-journal-date-format)))
-    (unless (eq (current-column) 0) (insert "\n"))
-    (insert "\n" org-journal-time-prefix
-            (format-time-string org-journal-time-format))
+    ;; skip entry adding if a universal prefix is given
+    (unless prefix
+      (if (equal (point-max) 1)
+          (insert org-journal-date-prefix
+                  (format-time-string org-journal-date-format)))
+      (unless (eq (current-column) 0) (insert "\n"))
+      (insert "\n" org-journal-time-prefix
+              (format-time-string org-journal-time-format)))
     (org-journal-mode)
     (hide-sublevels 2)
+    ;; open the last entry
+    (when prefix
+      (show-entry))
     (set-buffer-modified-p unsaved)))
 
 (defun org-journal-calendar-date->time (calendar-date)
@@ -293,7 +307,7 @@ If the date is not today, it won't be given a time."
   "Mark days in the calendar for which a diary entry is present"
   (dolist (journal-entry org-journal-date-list)
     (if (calendar-date-is-visible-p journal-entry)
-      (calendar-mark-visible-date journal-entry))))
+        (calendar-mark-visible-date journal-entry))))
 
 ;;;###autoload
 (defun org-journal-read-entry (arg &optional event)
@@ -302,15 +316,42 @@ If the date is not today, it won't be given a time."
    (list current-prefix-arg last-nonmenu-event))
 
   (let* ((time (org-journal-calendar-date->time
-                (calendar-cursor-to-date t event)))
-         (org-journal-file (concat org-journal-dir
-                                   (format-time-string org-journal-file-format time))))
+                (calendar-cursor-to-date t event))))
+    (org-journal-read-or-display-entry time nil)))
 
+;;;###autoload
+(defun org-journal-display-entry (arg &optional event)
+  "Display journal entry for selected date in another
+  window (without switсhing to it)"
+  (interactive
+   (list current-prefix-arg last-nonmenu-event))
+  (let* ((time (org-journal-calendar-date->time
+                (calendar-cursor-to-date t event))))
+    (org-journal-read-or-display-entry time t)))
+
+;;;###autoload
+(defun org-journal-read-or-display-entry (time &optional noselect)
+  "Read an entry for the TIME and either select the new
+  window (NOSELECT is nil) or avoid switching (NOSELECT is
+  non-nil"
+  (let ((org-journal-file (concat org-journal-dir
+                                  (format-time-string org-journal-file-format time))))
     (if (file-exists-p org-journal-file)
         (progn
-          (view-file-other-window org-journal-file)
-          (setq-local org-hide-emphasis-markers t)
-          (org-show-subtree))
+          ;; open file in view-mode if not opened already
+          (let ((had-a-buf (get-file-buffer org-journal-file))
+                ;; use find-file... instead of view-file... since
+                ;; view-file does not respect auto-mode-alist
+                (buf (find-file-noselect org-journal-file)))
+            (with-current-buffer buf
+              (when (not had-a-buf)
+                (view-mode)
+                (setq view-exit-action 'kill-buffer))
+              (setq-local org-hide-emphasis-markers t)
+              (org-show-subtree))
+            (if (not noselect)
+                (find-file-other-window org-journal-file)
+              (display-buffer buf t))))
       (message "No journal entry for this date."))))
 
 ;;;###autoload

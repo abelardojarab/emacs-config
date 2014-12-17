@@ -1,10 +1,16 @@
-* org-journal.el
+* org-journal.el [[http://melpa.org/#/org-journal][file:http://melpa.org/packages/org-journal-badge.svg]] [[http://stable.melpa.org/#/org-journal][file:http://stable.melpa.org/packages/org-journal-badge.svg]]
 
 Adapted from http://www.emacswiki.org/PersonalDiary
 
 Functions to maintain a simple personal diary / journal in Emacs.
 Feel free to use, modify and improve the code!
 — mtvoid, bastibe
+
+*_BREAKING CHANGE_*
+
+Org-journal used to use the key bindings =C-c j=, =C-c b=, and
+=C-c f=. These however are [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Conventions.html][reserved]] for user-defined actions. Instead,
+org-journal now uses =C-c C-j=, =C-c C-b= and =C-c C-f=.
 
 This file is also available from [[http://marmalade-repo.org/][marmalade]], [[http://melpa.milkbox.net/][melpa]] and [[http://melpa-stable.milkbox.net/][melpa-stable]]
 under the name org-journal. You may also want to specify the directory
@@ -24,7 +30,9 @@ with a journal entry, with a file name in the format /YYYYMMDD/. Each
 journal entry is an org-mode file that begins with a date entry on the
 top, followed by a entries for different times. Any subsequent entries
 on the same day are written as additional headings in the same file,
-with their own time. To start writing a journal entry, press =C-c j=.
+with their own time. To start writing a journal entry, press =C-c
+C-j=. You can also open the current day's entry without adding a new
+entry with =C-u C-c C-j=.
 
 You can customize the date and time formats using the variables
 =org-journal-date-format= and =org-journal-time-format=. If you do not
@@ -37,22 +45,25 @@ customize =org-journal-file-format=.
 
 You can browse through existing journal entries on disk via the
 calendar. All dates for which an entry is present are highlighted.
-Pressing =j= will open it up for viewing. Pressing =[= or =]= will
-select the date with the previous or next journal entry, respectively.
-Pressing =i j= will create a new entry for the chosen date.
+Pressing =j= will open it up for viewing. Pressing =C-j= will open it
+for viewing, but not switch to it. Pressing =[= or =]= will select the
+date with the previous or next journal entry, respectively. Pressing
+=i j= will create a new entry for the chosen date.
 
 Quick summary:
-To create a new journal entry: =C-c j=
+- To create a new journal entry: =C-c C-j=
+- To open today's journal without creating a new entry: =C-u C-c C-j=
 
 In calendar view:
-- =j= to view an entry
+- =j= to view an entry in a new buffer
+- =C-j= to view an entry but not switch to it
 - =i j= to add a new entry
 - =[= to go to previous entry
 - =]= to go to next entry
 
 When viewing a journal entry:
-- =C-c f= to view next entry
-- =C-c b= to view previous entry
+- =C-c C-f= to view next entry
+- =C-c C-b= to view previous entry
 
 A typical journal entry for a day would look like this:
 
@@ -90,29 +101,41 @@ A typical journal entry for a day would look like this:
 
 ** Changelog
 
-- 2013-06-04 V1.0 Bastian Bechtold
+- 2013-06-04 V1.0 Bastian Bechtold ::
   Initial working prototype. More or less simply an extension of personal-diary with org-mode files.
 
-- 2013-06-12 V1.3.4 Bastian Bechtold
+- 2013-06-12 V1.3.4 Bastian Bechtold ::
   Several bug fixes and documentation improvements.
 
-- 2013-08-23 V1.4 Bastian Bechtold
+- 2013-08-23 V1.4 Bastian Bechtold ::
   Now supports more customization
 
-- 2013-09-17 V1.4.3 Bastian Bechtold
+- 2013-09-17 V1.4.3 Bastian Bechtold ::
   Several bugfixes and autoloading (which kind of mostly works)
 
-- 2013-10-02 V1.4.4 Bastian Bechtold
+- 2013-10-02 V1.4.4 Bastian Bechtold ::
   Create org-journal directory if not present (thank you, Donghyun Cho!)
 
-- 2013-11-10 V1.4.8 Bastian Bechtold
+- 2013-11-10 V1.4.8 Bastian Bechtold ::
   Fixed opening of journal files for reading (thank you, Matthew M. Keeler!)
   View mode now stays active when switching between files (thank you, Matthew M. Keeler!)
   Some autoload fixes
 
-- 2014-03-10 V1.4.8 Bastian Bechtold
+- 2014-03-10 V1.4.8 Bastian Bechtold ::
   Some bug fixes on opening files (thank you, Ram Raghunathan!)
 
-- 2014-06-17 V1.5 Bastian Bechtold
+- 2014-06-17 V1.5 Bastian Bechtold ::
   Some more bug fixes for autoloading
   Simplified setup by auto generating the file pattern from the file format.
+
+- 2014-11-19 V1.6 Bastian Bechtold ::
+  Changed default key bindings to comply with Emacs' standards.
+
+- 2014-08-12 V1.6.2 Bastian Bechtold ::
+  Added prefix argument to open-current-entry (thank you, Vladimir Kazanov!)
+
+- 2014-08-12 V1.6.3 Bastian Bechtold ::
+  Added key binding for viewing but not switching to entry (thank you, Vladimit Kazanov!)
+
+- 2014-17-12 V1.6.4 Bastian Bechtold ::
+  Journal files should open correctly when restored by desktop-save-mode now.

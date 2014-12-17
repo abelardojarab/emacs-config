@@ -30,6 +30,9 @@
 ;; Disable tool-bar
 (tool-bar-mode -1)
 
+;; Undefined function
+(require 'let-alist)
+
 ;; ;; hit `C-g' while it's frozen to get an ELisp backtrace
 ;; (setq debug-on-quit t)
 

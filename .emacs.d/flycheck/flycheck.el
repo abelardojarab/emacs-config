@@ -7,7 +7,7 @@
 ;; URL: https://www.flycheck.org
 ;; Keywords: convenience languages tools
 ;; Version: 0.22-cvs1
-;; Package-Requires: ((dash "2.4.0") (pkg-info "0.4") (cl-lib "0.3") (emacs "24.1"))
+;; Package-Requires: ((dash "2.4.0") (pkg-info "0.4") (let-alist "1.0.1") (cl-lib "0.3") (emacs "24.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -38,6 +38,7 @@
 ;;; Code:
 
 (eval-when-compile
+  (require 'let-alist)      ; `let-alist'
   (require 'cl-lib)         ; `cl-defstruct'
   (require 'compile)        ; Compile Mode integration
   (require 'package)        ; Tell Emacs about package-user-dir
@@ -2771,11 +2772,8 @@ nil."
                 (`errored "!")
                 (`finished
                  (if flycheck-current-errors
-                     (let ((error-counts (flycheck-count-errors
-                                          flycheck-current-errors)))
-                       (format ":%s/%s"
-                               (or (cdr (assq 'error error-counts)) 0)
-                               (or (cdr (assq 'warning error-counts)) 0)))
+                     (let-alist (flycheck-count-errors flycheck-current-errors)
+                       (format ":%s/%s" (or .error 0) (or .warning 0)))
                    ""))
                 (`interrupted "-")
                 (`suspicious "?"))))
@@ -4672,25 +4670,20 @@ about Checkstyle."
             (dolist (node error-nodes)
               (pcase node
                 (`(error ,error-attrs . ,_)
-                 (let ((filename (cdr (assq 'name file-attrs)))
-                       (line (cdr (assq 'line error-attrs)))
-                       (column (cdr (assq 'column error-attrs)))
-                       (severity (cdr (assq 'severity error-attrs)))
-                       (message (cdr (assq 'message error-attrs)))
-                       (source (cdr (assq 'source error-attrs))))
+                 (let-alist error-attrs
                    (push (flycheck-error-new-at
-                          (flycheck-string-to-number-safe line)
-                          (flycheck-string-to-number-safe column)
-                          (pcase severity
+                          (flycheck-string-to-number-safe .line)
+                          (flycheck-string-to-number-safe .column)
+                          (pcase .severity
                             (`"error"   'error)
                             (`"warning" 'warning)
                             (`"info"    'info)
-                            ;; Default to error for unknown severity
+                            ;; Default to error for unknown .severity
                             (_          'error))
-                          message
-                          :checker checker :id source
+                          .message
+                          :checker checker :id .source
                           :buffer buffer
-                          :filename filename)
+                          :filename (cdr (assq 'name file-attrs)))
                          errors))))))))
        (nreverse errors)))))
 
@@ -4720,16 +4713,15 @@ about Cppcheck."
                    (dolist (node loc-nodes)
                      (pcase node
                        (`(location ,loc-attrs . ,_)
-                        (let ((line (cdr (assq'line loc-attrs)))
-                              (filename (cdr (assq 'file loc-attrs))))
+                        (let-alist loc-attrs
                           (push (flycheck-error-new-at
-                                 (flycheck-string-to-number-safe line)
+                                 (flycheck-string-to-number-safe .line)
                                  nil
                                  level message
                                  :id id
                                  :checker checker
                                  :buffer buffer
-                                 :filename filename)
+                                 :filename .file)
                                 errors))))))))))))
        (nreverse errors)))))
 
@@ -4747,16 +4739,15 @@ See URL `http://phpmd.org/' for more information about phpmd."
               (dolist (node violation-nodes)
                 (pcase node
                   (`(violation ,vio-attrs ,(and message (pred stringp)))
-                   (let ((line (cdr (assq 'beginline vio-attrs)))
-                         (rule (cdr (assq 'rule vio-attrs))))
+                   (let-alist vio-attrs
                      ;; TODO: Map priority to an error level?
                      ;; TODO: Respect endline
                      (push
                       (flycheck-error-new-at
-                       (flycheck-string-to-number-safe line)
+                       (flycheck-string-to-number-safe .beginline)
                        nil
                        'warning (string-trim message)
-                       :id rule
+                       :id .rule
                        :checker checker
                        :buffer buffer
                        :filename filename)
@@ -6410,6 +6401,34 @@ See URL `http://puppet-lint.com/'."
 (flycheck-def-config-file-var flycheck-flake8rc python-flake8 ".flake8rc"
   :safe #'stringp)
 
+(flycheck-def-option-var flycheck-flake8-error-level-alist
+    '(("^E9.*$"  . error)               ; Syntax errors from pep8
+      ("^F82.*$" . error)               ; undefined variables from pyflakes
+      ("^F83.*$" . error)               ; Duplicate arguments from flake8
+      ("^N.*$"   . info)                ; Naming issues from naming
+      )
+    python-flake8
+  "An alist mapping flake8 error IDs to Flycheck error levels.
+
+Each item in this list is a cons cell `(PATTERN . LEVEL)' where
+PATTERN is a regular expression matched against the error ID, and
+LEVEL is a Flycheck error level symbol.
+
+Each PATTERN is matched in the order of appearance in this list
+against the error ID.  If it matches the ID, the level of the
+corresponding error is set to LEVEL.  An error that is not
+matched by any PATTERN defaults to warning level.
+
+This option exists because flake8 categorises errors by the
+underlying tool that produced them (e.g. F for pyflakes messages,
+E for pep8 messages, etc.).  These categorisations do not map
+directly to Flycheck error levels.  Hence, this option exists to
+allow for a custom mapping.  The default value handles all of the
+built-in tools of flake8, and naming errors from pep8-naming."
+  :type '(repeat (cons (regexp :tag "Error ID pattern")
+                       (symbol :tag "Error level")))
+  :package-version '(flycheck . "0.22"))
+
 (flycheck-def-option-var flycheck-flake8-maximum-complexity nil python-flake8
   "The maximum McCabe complexity of methods.
 
@@ -6438,12 +6457,21 @@ of 79 characters if there is no configuration with this setting."
                  (integer :tag "Maximum line length in characters"))
   :safe #'integerp)
 
+(defun flycheck-flake8-fix-error-level (err)
+  "Fix the error level of ERR.
+
+Update the error level of ERR according to
+`flycheck-flake8-error-level-alist'."
+  (pcase-dolist (`(,pattern . ,level) flycheck-flake8-error-level-alist)
+    (when (string-match-p pattern (flycheck-error-id err))
+      (setf (flycheck-error-level err) level)))
+  err)
+
 (flycheck-define-checker python-flake8
   "A Python syntax and style checker using Flake8.
 
-For best error reporting, use Flake8 2.0 or newer.
-
-See URL `https://pypi.python.org/pypi/flake8'."
+Requires Flake8 2.0 or newer. See URL
+`https://pypi.python.org/pypi/flake8'."
   :command ("flake8"
             (config-file "--config" flycheck-flake8rc)
             (option "--max-complexity" flycheck-flake8-maximum-complexity nil
@@ -6451,28 +6479,16 @@ See URL `https://pypi.python.org/pypi/flake8'."
             (option "--max-line-length" flycheck-flake8-maximum-line-length nil
                     flycheck-option-int)
             source)
+  :error-filter (lambda (errors)
+                  (let ((errors (flycheck-sanitize-errors errors)))
+                    (mapc #'flycheck-flake8-fix-error-level errors)
+                    errors))
   :error-patterns
-  ((error line-start
-          (file-name) ":" line ":" (optional column ":") " "
-          (id "E" (one-or-more digit)) " "
-          (message (one-or-more not-newline))
-          line-end)
-   (warning line-start
+  ((warning line-start
             (file-name) ":" line ":" (optional column ":") " "
-            (id  (or "F"                ; Pyflakes in Flake8 >= 2.0
-                     "W"                ; Pyflakes in Flake8 < 2.0
-                     "C")               ; McCabe in Flake >= 2.0
-                 (one-or-more digit)) " "
-                 (message (one-or-more not-newline))
-                 line-end)
-   (info line-start
-         (file-name) ":" line ":" (optional column ":") " "
-         (id "N" (one-or-more digit)) " " ; pep8-naming in Flake8 >= 2.0
-         (message (one-or-more not-newline))
-         line-end)
-   ;; Syntax errors in Flake8 < 2.0, in Flake8 >= 2.0 syntax errors are caught
-   ;; by the E.* pattern above
-   (error line-start (file-name) ":" line ":" (message) line-end))
+            (id (one-or-more (any alpha)) (one-or-more digit)) " "
+            (message (one-or-more not-newline))
+            line-end))
   :modes python-mode)
 
 (flycheck-def-config-file-var flycheck-pylintrc python-pylint
