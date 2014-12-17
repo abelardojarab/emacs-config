@@ -27,6 +27,12 @@
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 
+;; Disable tool-bar
+(tool-bar-mode -1)
+
+;; Disable the menu
+(menu-bar-mode -1)
+
 ;; ;; hit `C-g' while it's frozen to get an ELisp backtrace
 ;; (setq debug-on-quit t)
 
@@ -191,9 +197,6 @@ Defaults to `error'."
 
 ;; turn-off info about of pointee for symlinks
 (setq dired-listing-switches "-alLF")
-
-;; Disable tool-bar
-(tool-bar-mode -1)
 
 ;; Make ?, ? and such work
 (set-language-environment 'spanish)
