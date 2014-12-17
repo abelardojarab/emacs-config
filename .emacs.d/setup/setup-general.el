@@ -30,9 +30,6 @@
 ;; Disable tool-bar
 (tool-bar-mode -1)
 
-;; Disable the menu
-(menu-bar-mode -1)
-
 ;; ;; hit `C-g' while it's frozen to get an ELisp backtrace
 ;; (setq debug-on-quit t)
 
