@@ -27,7 +27,7 @@
 ;; Eldoc
 (require 'eldoc)
 (require 'eldoc-extension)
-(setq eldoc-echo-area-use-multiline-p t)
+(setq eldoc-echo-area-use-multiline-p nil)
 (setq eldoc-idle-delay 0)
 (add-hook 'emacs-lisp-mode-hook
           '(lambda ()
