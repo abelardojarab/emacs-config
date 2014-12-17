@@ -69,6 +69,10 @@
           (lambda ()
             (visual-line-mode -1)
             (toggle-truncate-lines 1)))
+(add-hook 'minibuffer-setup-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
 
 ;; Make side by side buffers function the same as the main window
 (setq-default truncate-partial-width-windows nil)
