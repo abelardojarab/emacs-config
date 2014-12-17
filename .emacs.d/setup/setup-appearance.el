@@ -61,7 +61,7 @@
 (setq line-move-visual nil)
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
-(add-hook 'prog-mode-hook
+(add-hook 'lisp-mode-hook
           (lambda ()
             (visual-line-mode -1)
             (toggle-truncate-lines 1)))
@@ -76,6 +76,7 @@
 ;; Fix for visual line mode
 (require 'adaptive-wrap)
 (add-hook 'visual-line-mode-hook 'adaptive-wrap-prefix-mode)
+(add-hook 'visual-line-mode-hook 'toggle-truncate-lines)
 (setq adaptive-wrap-extra-indent 4)
 
 ;; Zenburn theme
