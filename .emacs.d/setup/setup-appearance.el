@@ -101,11 +101,6 @@ non-nil."
 (add-hook 'visual-line-mode-hook 'toggle-truncate-lines)
 (setq adaptive-wrap-extra-indent 4)
 
-;; Zenburn theme
-(add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
-(require 'zenburn-theme)
-
 ;; Monokai theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
 
@@ -114,7 +109,11 @@ non-nil."
 (add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-emacs")
 (require 'solarized)
 
-;; Choose zenburn
+;; Zenburn theme
+(add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
+(require 'zenburn-theme)
+
 (load-theme 'zenburn t)
 
 ;; Extra color tweaks
