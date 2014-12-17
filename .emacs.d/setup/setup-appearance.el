@@ -184,7 +184,7 @@
                       (progn ;; HD monitor in Windows
                         (setq main-programming-font "Consolas-12:antialias=subpixel")
                         (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-15"))
+                        (setq main-writing-font (concat main-writing-font "-16"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
@@ -195,7 +195,7 @@
                       (progn ;; HD monitor in Windows and Mac
                         (setq main-programming-font "Consolas-13:antialias=subpixel")
                         (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-16"))
+                        (setq main-writing-font (concat main-writing-font "-17"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))))
                 (progn ;; Small display
                   (if (equal system-type 'darwin)
