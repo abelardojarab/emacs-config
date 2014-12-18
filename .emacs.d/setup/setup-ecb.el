@@ -32,7 +32,6 @@
 ;; Enable ecb
 (require 'ecb)
 (setq ecb-show-sources-in-directories-buffer 'always)
-(set-face-foreground 'ecb-default-general-face "#ffffff")
 (setq ecb-tip-of-the-day nil)
 (if (ecb--semantic-active-p)
     (ecb-update-methods-buffer--internal nil nil t)

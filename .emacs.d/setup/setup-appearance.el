@@ -102,25 +102,19 @@ non-nil."
 (setq adaptive-wrap-extra-indent 4)
 
 ;; Monokai theme
+(add-to-list 'load-path "~/.emacs.d/monokai-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
+
+;; Zenburn theme
+(add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
 
 ;; Solarized theme
 (add-to-list 'load-path "~/.emacs.d/solarized-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-emacs")
 (require 'solarized)
 
-;; Zenburn theme
-(add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
-(require 'zenburn-theme)
-
 (load-theme 'zenburn t)
-
-;; Extra color tweaks
-(set-face-foreground 'variable-pitch "#ffffff")
-(set-face-foreground 'font-lock-string-face "#95e454")
-(set-face-italic-p 'font-lock-string-face t)
-(set-face-foreground 'font-lock-doc-face "orange")
 
 ;; Syntax coloring
 (require 'font-lock+)
