@@ -115,17 +115,6 @@
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-S-v") 'browse-kill-ring)
 
-;; Region bindings mode
-(add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
-(require 'region-bindings-mode)
-(region-bindings-mode-enable)
-(define-key region-bindings-mode-map (kbd "C-p") 'mc/mark-previous-like-this)
-(define-key region-bindings-mode-map (kbd "C-n") 'mc/mark-next-like-this)
-(define-key region-bindings-mode-map (kbd "C-a") 'mc/mark-all-like-this)
-(define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
-(define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
-(define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
-
 ;; search forward with Ctrl-f
 (global-set-key [(control f)] 'isearch-forward)
 (define-key isearch-mode-map [(control f)] (lookup-key isearch-mode-map "\C-s"))
@@ -206,6 +195,9 @@
 (global-set-key [(control mouse-5)] 'text-scale-decrease)
 (global-set-key [(control mouse-4)] 'text-scale-increase)
 
+;; Mac Key mode
+(require 'mac-key-mode)
+
 ;; Refresh file on F9
 (defun refresh-file ()
   (interactive)
@@ -238,12 +230,10 @@
 (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
 (global-set-key (kbd "<mouse-3>") 'mouse3-popup-menu)
 
-;; Trick emacs when opening a file through menu-find-file-existing
-(defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
-  "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
-  (let ((last-nonmenu-event nil)
-        (use-dialog-box t))
-    ad-do-it))
+;; Move text
+(require 'move-text)
+(global-set-key [M-up] 'move-text-up)
+(global-set-key [M-down] 'move-text-down)
 
 ;; Show guide for shortcuts
 (add-to-list 'load-path "~/.emacs.d/guide-key")
@@ -256,9 +246,6 @@
 (add-to-list 'load-path "~/.emacs.d/guide-key-tip")
 (require 'guide-key-tip)
 (setq guide-key-tip/enabled t)
-
-;; Mac Key mode
-(require 'mac-key-mode)
 
 ;; Faster buffer switching
 (add-to-list 'load-path "~/.emacs.d/popup-switcher")
@@ -295,6 +282,19 @@
 (global-set-key [(meta left)] 'psw-switch-function)
 (global-set-key [(meta right)] 'psw-switch-buffer)
 
+;; Region bindings mode
+(add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
+(require 'region-bindings-mode)
+(region-bindings-mode-enable)
+(define-key region-bindings-mode-map (kbd "C-p") 'mc/mark-previous-like-this)
+(define-key region-bindings-mode-map (kbd "C-n") 'mc/mark-next-like-this)
+(define-key region-bindings-mode-map (kbd "C-a") 'mc/mark-all-like-this)
+(define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
+(define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
+(define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
+(define-key region-bindings-mode-map [M-up] 'move-text-up)
+(define-key region-bindings-mode-map [M-down] 'move-text-down)
+
 ;; Overwrite other modes
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
@@ -304,6 +304,8 @@
 (define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
 (define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
 (define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-buffer)
+(define-key my-keys-minor-mode-map [M-up] 'move-text-up)
+(define-key my-keys-minor-mode-map [M-down] 'move-text-down)
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."

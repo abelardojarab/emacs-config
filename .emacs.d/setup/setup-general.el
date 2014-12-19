@@ -179,6 +179,13 @@ Defaults to `error'."
   (require 'w32browser-dlgopen)
   (setq dlgopen-executable-path "~/.emacs.d/elisp/getfile.exe")))
 
+;; Trick emacs when opening a file through menu-find-file-existing
+(defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
+  "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
+  (let ((last-nonmenu-event nil)
+        (use-dialog-box t))
+    ad-do-it))
+
 ;; Define preferred shell
 (cond
  ((executable-find "bash")
@@ -189,9 +196,7 @@ Defaults to `error'."
   (setq shell-file-name "cmdproxy"))
  (t
   (setq shell-file-name "bash")))
-
 (setq explicit-shell-file-name shell-file-name)
-(add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
 
 ;; avoid garbage collection up to 20M (default is only 400k)
 (setq gc-cons-threshold 20000000)
@@ -517,7 +522,6 @@ Defaults to `error'."
   "Show Emacs's startup time in the minibuffer"
   (message "Startup time: %s seconds."
            (emacs-uptime "%s")))
-
 (add-hook 'emacs-startup-hook 'nox/show-startup-time 'append)
 
 ;; Benchmark-init can give us a breakdown of time spent on require and load calls:
