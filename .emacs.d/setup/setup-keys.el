@@ -285,7 +285,7 @@
 ;; Drag stuff
 (add-to-list 'load-path "~/.emacs.d/drag-stuff")
 (when (require 'drag-stuff nil 'noerror)
-  (drag-stuff-mode t))
+  (drag-stuff-global-mode t))
 
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
