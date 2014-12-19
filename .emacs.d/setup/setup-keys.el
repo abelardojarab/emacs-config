@@ -232,8 +232,8 @@
 
 ;; Move text
 (require 'move-text)
-(global-set-key [M-up] 'move-text-up)
-(global-set-key [M-down] 'move-text-down)
+(global-set-key [M-S-up] 'move-text-up)
+(global-set-key [M-S-down] 'move-text-down)
 
 ;; Show guide for shortcuts
 (add-to-list 'load-path "~/.emacs.d/guide-key")
@@ -282,6 +282,11 @@
 (global-set-key [(meta left)] 'psw-switch-function)
 (global-set-key [(meta right)] 'psw-switch-buffer)
 
+;; Drag stuff
+(add-to-list 'load-path "~/.emacs.d/drag-stuff")
+(when (require 'drag-stuff nil 'noerror)
+  (drag-stuff-mode t))
+
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
 (require 'region-bindings-mode)
@@ -292,8 +297,6 @@
 (define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
 (define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
 (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
-(define-key region-bindings-mode-map [M-up] 'move-text-up)
-(define-key region-bindings-mode-map [M-down] 'move-text-down)
 
 ;; Overwrite other modes
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
@@ -304,8 +307,6 @@
 (define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
 (define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
 (define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-buffer)
-(define-key my-keys-minor-mode-map [M-up] 'move-text-up)
-(define-key my-keys-minor-mode-map [M-down] 'move-text-down)
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
