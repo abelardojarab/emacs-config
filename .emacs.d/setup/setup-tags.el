@@ -1,6 +1,6 @@
 ;;; setup-tags.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -94,30 +94,6 @@
   (interactive "DDirectory: ")
   (eshell-command
    (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
-
-(defun pm/find-tags-file ()
-  "Recursively searches each parent directory for a file named `TAGS'
-   and returns the path to that file or nil if a tags file is not found.
-   Returns nil if the buffer is not visiting a file.
-   (from jds-find-tags-file in the emacs-wiki)"
-  (labels ((find-tags-file-r
-            (path)
-            (let* ((parent (if path (file-name-directory path)
-                             default-directory))
-                   (possible-tags-file (concat parent "TAGS")))
-              (cond
-               ((file-exists-p possible-tags-file)
-                (shell-command (concat "make -C" parent " TAGS"))
-                (throw 'found-it possible-tags-file))
-               ((string= "/TAGS" possible-tags-file)
-                (error "no tags file found"))
-               (t
-                (find-tags-file-r (directory-file-name parent)))))))
-    (catch 'found-it
-      (find-tags-file-r (buffer-file-name)))))
-
-(defadvice find-tag (before pm/before-find-tag activate)
-  (setq tags-file-name (pm/find-tags-file)))
 
 (provide 'setup-tags)
 ;;; setup-tags.el ends here
