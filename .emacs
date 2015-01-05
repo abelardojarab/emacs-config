@@ -1,5 +1,5 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2014 Abelardo Jara-Berrocal
+;; Copyright (C) 1996-2015 Abelardo Jara-Berrocal
 ;; URL: http://pintucoperu.wordpress.com
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
@@ -17,6 +17,15 @@
 (add-to-list 'load-path "~/.emacs.d/dash")
 (add-to-list 'load-path "~/.emacs.d/fringe-helper")
 (add-to-list 'load-path "~/.emacs.d/tabbar")
+
+;; CEDET
+(add-to-list 'load-path "~/.emacs.d/cedet")
+(add-to-list 'load-path "~/projects/cedet/contrib")
+(require 'cedet-remove-builtin)
+(setq byte-compile-warnings nil)
+(load-file "~/.emacs.d/cedet/cedet-devel-load.el")
+(load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
+(global-ede-mode 1)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -62,17 +71,7 @@
 ;; Setup appearance
 (require 'setup-appearance)
 
-;; Setup Org and LaTeX
-(require 'setup-org)
 
-;; CEDET
-(add-to-list 'load-path "~/.emacs.d/cedet")
-(add-to-list 'load-path "~/projects/cedet/contrib")
-(require 'cedet-remove-builtin)
-(setq byte-compile-warnings nil)
-(load-file "~/.emacs.d/cedet/cedet-devel-load.el")
-(load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
-(global-ede-mode 1)
 
 ;; Setup Cedet
 (require 'setup-cedet)
@@ -83,6 +82,9 @@
   (let ((p plist))
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
+
+;; Setup Org and LaTeX
+(require 'setup-org)
 
 ;; Setup regular expressions
 (require 'setup-regexp)
