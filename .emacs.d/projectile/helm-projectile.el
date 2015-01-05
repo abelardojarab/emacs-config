@@ -376,6 +376,7 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
                 (helm-exit-minibuffer))
                ((> (length files) 1) files)
                (t  project-files))))
+    :fuzzy-match t
     :coerce 'helm-projectile-coerce-file
     :action-transformer 'helm-find-files-action-transformer
     :keymap (let ((map (copy-keymap helm-find-files-map)))
@@ -391,6 +392,7 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
   (helm-build-in-buffer-source "Projectile files"
     :data (lambda ()
             (projectile-current-project-files))
+    :fuzzy-match t
     :coerce 'helm-projectile-coerce-file
     :keymap (let ((map (copy-keymap helm-find-files-map)))
               (helm-projectile-define-key map
@@ -465,6 +467,7 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
             (if projectile-find-dir-includes-top-level
                 (append '("./") (projectile-current-project-dirs))
               (projectile-current-project-dirs)))
+    :fuzzy-match t
     :coerce 'helm-projectile-coerce-file
     :action-transformer 'helm-find-files-action-transformer
     :keymap (let ((map (make-sparse-keymap)))
@@ -519,6 +522,7 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
   (helm-build-in-buffer-source "Projectile recent files"
     :data (lambda ()
             (projectile-recentf-files))
+    :fuzzy-match t
     :coerce 'helm-projectile-coerce-file
     :keymap helm-projectile-find-file-map
     :help-message 'helm-ff-help-message
@@ -753,6 +757,7 @@ If it is nil, or ack/ack-grep not found then use default grep command."
   "Toggle Helm version of Projectile commands."
   (if (> toggle 0)
       (progn
+        (setq projectile-switch-project-action 'helm-projectile-find-file)
         (define-key projectile-command-map (kbd "a") 'helm-projectile-find-other-file)
         (define-key projectile-command-map (kbd "f") 'helm-projectile-find-file)
         (define-key projectile-command-map (kbd "F") 'helm-projectile-find-file-in-known-projects)
@@ -766,6 +771,7 @@ If it is nil, or ack/ack-grep not found then use default grep command."
         (define-key projectile-command-map (kbd "s s") 'helm-projectile-ag)
         (helm-projectile-commander-bindings))
     (progn
+      (setq projectile-switch-project-action 'projectile-find-file)
       (define-key projectile-command-map (kbd "a") 'projectile-find-other-file)
       (define-key projectile-command-map (kbd "f") 'projectile-find-file)
       (define-key projectile-command-map (kbd "F") 'projectile-find-file-in-known-projects)

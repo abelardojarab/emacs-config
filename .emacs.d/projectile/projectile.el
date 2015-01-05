@@ -41,7 +41,6 @@
 (require 'f)
 (require 'dash)
 (require 'grep)           ; For `rgrep'
-(require 'pkg-info)       ; For `pkg-info-version-info'
 (require 'ibuffer)
 (require 'ibuf-ext)
 
@@ -53,6 +52,7 @@
 (declare-function ack-and-a-half "ack-and-a-half")
 (declare-function ggtags-ensure-project "ggtags")
 (declare-function ggtags-update-tags "ggtags")
+(declare-function pkg-info-version-info "pkg-info")
 (declare-function tags-completion-table "etags")
 
 ;;;; Compatibility
@@ -92,8 +92,9 @@ method is that it's not well supported on Windows systems.
 By default alien indexing is the default on all operating
 systems, except Windows."
   :group 'projectile
-  :type 'symbol
-  :options '(native alien))
+  :type '(radio
+          (const :tag "Native" native)
+          (const :tag "Alien" alien)))
 
 (defcustom projectile-enable-caching (eq projectile-indexing-method 'native)
   "When t enables project files caching.
@@ -131,8 +132,12 @@ Otherwise consider the current directory the project root."
 (defcustom projectile-completion-system 'ido
   "The completion system to be used by Projectile."
   :group 'projectile
-  :type 'symbol
-  :options '(ido grizzl helm default))
+  :type '(radio
+          (const :tag "Ido" ido)
+          (const :tag "Grizzl" grizzl)
+          (const :tag "Helm" helm)
+          (const :tag "Default" default)
+          (function :tag "Custom function")))
 
 (defcustom projectile-keymap-prefix (kbd "C-c p")
   "Projectile keymap prefix."
@@ -158,8 +163,12 @@ Otherwise consider the current directory the project root."
 (defcustom projectile-sort-order 'default
   "The sort order used for a project's files."
   :group 'projectile
-  :type 'symbol
-  :options '(default recentf recently-active access-time modification-time))
+  :type '(radio
+          (const :tag "default" default)
+          (const :tag "recentf" recentf)
+          (const :tag "recently active" recently-active)
+          (const :tag "access time" access-time)
+          (const :tag "modification time" modification-time)))
 
 (defcustom projectile-verbose t
   "Echo messages that are not errors."
@@ -298,12 +307,6 @@ Any function that does not take arguments will do."
   "If true, use `vc-git-grep' in git projects."
   :group 'projectile
   :type 'boolean)
-
-(defcustom projectile-remember-window-configs nil
-  "If true, restore the last window configuration when switching projects.
-If no configuration exists, just run `projectile-switch-project-action' as usual."
-  :group 'projectile
-  :type 'boolean)
 
 ;;; Idle Timer
 (defvar projectile-idle-timer nil
@@ -401,10 +404,12 @@ If the version number could not be determined, signal an error,
 if called interactively, or if SHOW-VERSION is non-nil, otherwise
 just return nil."
   (interactive (list t))
-  (let ((version (pkg-info-version-info 'projectile)))
-    (when show-version
-      (message "Projectile version: %s" version))
-    version))
+  (if (require 'pkg-info nil t)
+      (let ((version (pkg-info-version-info 'projectile)))
+        (when show-version
+          (message "Projectile version: %s" version))
+        version)
+    (error "Cannot determine version without package pkg-info")))
 
 
 ;;; Caching
@@ -482,6 +487,7 @@ to invalidate."
   "Cache PROJECTs FILES.
 The cache is created both in memory and on the hard drive."
   (when projectile-enable-caching
+    (message "Empty cache. Projectile is initializing cache...")
     (puthash project files projectile-projects-cache)
     (projectile-serialize-cache)))
 
@@ -526,19 +532,17 @@ The cache is created both in memory and on the hard drive."
   (let* ((current-project (projectile-project-root))
          (abs-current-file (buffer-file-name (current-buffer)))
          (current-file (file-relative-name abs-current-file current-project)))
-    (if (gethash (projectile-project-root) projectile-projects-cache)
-        (unless (or (projectile-file-cached-p current-file current-project)
-                    (projectile-ignored-directory-p (file-name-directory abs-current-file))
-                    (projectile-ignored-file-p abs-current-file))
-          (puthash current-project
-                   (cons current-file (gethash current-project projectile-projects-cache))
-                   projectile-projects-cache)
-          (projectile-serialize-cache)
-          (message "File %s added to project %s cache."
-                   (propertize current-file 'face 'font-lock-keyword-face)
-                   (propertize current-project 'face 'font-lock-keyword-face)))
-      (message "Empty cache. Projectile is initializing cache...")
-      (projectile-current-project-files))))
+    (when (gethash (projectile-project-root) projectile-projects-cache)
+      (unless (or (projectile-file-cached-p current-file current-project)
+                  (projectile-ignored-directory-p (file-name-directory abs-current-file))
+                  (projectile-ignored-file-p abs-current-file))
+        (puthash current-project
+                 (cons current-file (gethash current-project projectile-projects-cache))
+                 projectile-projects-cache)
+        (projectile-serialize-cache)
+        (message "File %s added to project %s cache."
+                 (propertize current-file 'face 'font-lock-keyword-face)
+                 (propertize current-project 'face 'font-lock-keyword-face))))))
 
 ;; cache opened files automatically to reduce the need for cache invalidation
 (defun projectile-cache-files-find-file-hook ()
@@ -563,28 +567,6 @@ The cache is created both in memory and on the hard drive."
     (projectile-invalidate-cache nil)))
 
 
-;;; Window configurations
-(defvar projectile-window-config-map
-  (make-hash-table :test 'equal)
-  "A mapping from project names to their latest window configurations.")
-
-(defun projectile-save-window-config (project-name)
-  "Save PROJECT-NAME's configuration to `projectile-window-config-map'."
-  (puthash project-name (current-window-configuration) projectile-window-config-map))
-
-(defun projectile-get-window-config (project-name)
-  "Return the window configuration corresponding to PROJECT-NAME.
-If no such window configuration exists,
-returns nil."
-  (gethash project-name projectile-window-config-map))
-
-(defun projectile-restore-window-config (project-name)
-  "Restore the window configuration corresponding to the PROJECT-NAME.
-Returns nil if no window configuration was found"
-  (let ((window-config (projectile-get-window-config project-name)))
-    (when window-config
-      (set-window-configuration window-config))))
-
 (defadvice delete-file (before purge-from-projectile-cache (filename &optional trash))
   (if (and projectile-enable-caching (projectile-project-p))
       (let* ((project-root (projectile-project-root))
@@ -907,8 +889,8 @@ Operates on filenames relative to the project root."
   "Get a list of project buffer files."
   (let ((project-root (projectile-project-root)))
     (->> (projectile-buffers-with-file (projectile-project-buffers))
-      (-map (lambda (buffer)
-              (file-relative-name (buffer-file-name buffer) project-root))))))
+         (-map (lambda (buffer)
+                 (file-relative-name (buffer-file-name buffer) project-root))))))
 
 (defun projectile-project-buffer-p (buffer project-root)
   "Check if BUFFER is under PROJECT-ROOT."
@@ -1154,7 +1136,7 @@ https://github.com/d11wtq/grizzl")))
   (let ((project-files (projectile-current-project-files))
         (default-directory (projectile-project-root)))
     (dolist (filename project-files)
-     (funcall action filename))))
+      (funcall action filename))))
 
 (defun projectile-current-project-dirs ()
   "Return a list of dirs for the current project."
@@ -1377,11 +1359,11 @@ With a prefix ARG invalidates the cache first."
 (defun projectile-sort-by-modification-time (files)
   "Sort FILES by modification time."
   (let ((default-directory (projectile-project-root)))
-   (-sort (lambda (file1 file2)
-            (let ((file1-mtime (nth 5 (file-attributes file1)))
-                  (file2-mtime (nth 5 (file-attributes file2))))
-              (not (time-less-p file1-mtime file2-mtime))))
-          files)))
+    (-sort (lambda (file1 file2)
+             (let ((file1-mtime (nth 5 (file-attributes file1)))
+                   (file2-mtime (nth 5 (file-attributes file2))))
+               (not (time-less-p file1-mtime file2-mtime))))
+           files)))
 
 (defun projectile-sort-by-access-time (files)
   "Sort FILES by access time."
@@ -1788,8 +1770,7 @@ regular expression."
   (when (projectile-project-p)
     (let ((tags-file (projectile-expand-root projectile-tags-file-name)))
       (when (file-exists-p tags-file)
-        (with-demoted-errors
-          "Error loading tags-file: %s"
+        (with-demoted-errors "Error loading tags-file: %s"
           (visit-tags-table tags-file t))))))
 
 ;;;###autoload
@@ -1805,8 +1786,8 @@ regular expression."
                 (tags-completion-table)
                 (projectile--tags tags-completion-table))))
     (funcall find-tag-function (projectile-completing-read "Find tag: "
-                                                            tags
-                                                            (projectile-symbol-at-point)))))
+                                                           tags
+                                                           (projectile-symbol-at-point)))))
 
 (defun projectile--tags (completion-table)
   "Find tags using COMPLETION-TABLE."
@@ -1863,9 +1844,9 @@ filenames."
   (let ((default-directory directory))
     (->> (s-trim (shell-command-to-string
                   (concat cmd " | cut -d: -f1 | uniq")))
-      (s-split "\n+")
-      (-filter 's-present?)
-      (--map (concat directory (s-chop-prefix "./" it))))))
+         (s-split "\n+")
+         (-filter 's-present?)
+         (--map (concat directory (s-chop-prefix "./" it))))))
 
 (defun projectile-files-with-string (string directory)
   "Return a list of all files containing STRING in DIRECTORY.
@@ -1922,16 +1903,12 @@ to run the replacement."
   (interactive)
   (let ((name (projectile-project-name))
         (buffers (projectile-project-buffers)))
-    (remhash name projectile-window-config-map)
     (if (yes-or-no-p
          (format "Are you sure you want to kill %d buffer(s) for '%s'? "
                  (length buffers) name))
         ;; we take care not to kill indirect buffers directly
         ;; as we might encounter them after their base buffers are killed
-        (mapc 'kill-buffer (-remove 'buffer-base-buffer buffers)))
-    (when (and projectile-remember-window-configs
-               (projectile-project-p))
-      (projectile-restore-window-config name))))
+        (mapc 'kill-buffer (-remove 'buffer-base-buffer buffers)))))
 
 ;;;###autoload
 (defun projectile-save-project-buffers ()
@@ -1973,8 +1950,8 @@ For git projects `magit-status-internal' is used if available."
   (if (boundp 'recentf-list)
       (let ((project-root (projectile-project-root)))
         (->> recentf-list
-          (-filter (lambda (file) (s-starts-with-p project-root file)))
-          (-map (lambda (file) (file-relative-name file project-root)))))
+             (-filter (lambda (file) (s-starts-with-p project-root file)))
+             (-map (lambda (file) (file-relative-name file project-root)))))
     nil))
 
 (defun projectile-serialize-cache ()
@@ -2145,9 +2122,9 @@ fallback to the original function."
                 (let ((root (projectile-project-root))
                       (dirs (cons "" (projectile-current-project-dirs))))
                   (-when-let (full-filename (->> dirs
-                                              (--map (f-join root it filename))
-                                              (-filter #'file-exists-p)
-                                              (-first-item)))
+                                                 (--map (f-join root it filename))
+                                                 (-filter #'file-exists-p)
+                                                 (-first-item)))
                     (find-file-noselect full-filename))))
            ;; Fall back to the old function `compilation-find-file'
            ad-do-it))))
@@ -2182,9 +2159,6 @@ Invokes the command referenced by `projectile-switch-project-action' on switch.
 With a prefix ARG invokes `projectile-commander' instead of
 `projectile-switch-project-action.'"
   (interactive "P")
-  (when (and projectile-remember-window-configs
-             (projectile-project-p))
-    (projectile-save-window-config (projectile-project-name)))
   (-if-let (projects (projectile-relevant-known-projects))
       (projectile-switch-project-by-name
        (projectile-completing-read "Switch to project: " projects)
@@ -2200,11 +2174,7 @@ With a prefix ARG invokes `projectile-commander' instead of
          (switch-project-action (if arg
                                     'projectile-commander
                                   projectile-switch-project-action)))
-    (if projectile-remember-window-configs
-        (unless (projectile-restore-window-config (projectile-project-name))
-          (funcall switch-project-action)
-          (delete-other-windows))
-      (funcall switch-project-action))
+    (funcall switch-project-action)
     (run-hooks 'projectile-switch-project-hook)))
 
 
