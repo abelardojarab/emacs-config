@@ -1,6 +1,6 @@
 ;;; setup-appearance.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -287,20 +287,6 @@ non-nil."
 
 ;; Adjust Emacs size according to resolution
 ;; Next code work with Emacs 21.4, 22.3, 23.1.
-
-(defun x11-maximize-frame ()
-  "Maximize the current frame (to full screen)"
-  (interactive)
-  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
-  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
-  (ecb-redraw-layout))
-
-(defun w32-maximize-frame ()
-  "Maximize the current frame (to full screen)"
-  (interactive)
-  (w32-send-sys-command #xf030)
-  (ecb-redraw-layout))
-
 (when window-system
   (add-hook 'window-setup-hook
             (let ((px (display-pixel-width))
