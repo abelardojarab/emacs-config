@@ -85,9 +85,7 @@
 
 ;; Tags table
 (setq tags-always-build-completion-table t)
-(setq tag-table-alist
-      '(("\\.il$" . "~/workspace/frametools/TAGS")
-        ("\\.ils$" . "~/workspace/frametools/TAGS")))
+(setq tags-file-name "~/workspace/TAGS")
 
 (defun create-tags (dir-name)
   "Create tags file."
