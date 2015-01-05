@@ -1,6 +1,6 @@
 ;;; setup-keys.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -48,6 +48,11 @@
         js2-mode-hook
         vhdl-mode-hook
         java-mode-hook))
+
+;; Smart tab
+(add-to-list 'load-path "~/.emacs.d/smart-tab")
+(when (require 'smart-tab nil 'noerror)
+  (global-smart-tab-mode))
 
 ;; Treat 'y' or <CR> as yes, 'n' as no.
 (fset 'yes-or-no-p 'y-or-n-p)

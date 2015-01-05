@@ -260,9 +260,9 @@ Return a cons \(beg . end\)."
          (beg        (car (helm-bounds-of-thing-before-point)))
          (end        (point))
          (pred       (and beg (helm-lisp-completion--predicate-at-point beg)))
-         (loc-vars   (and (fboundp 'lisp--local-variables)
+         (loc-vars   (and (fboundp 'elisp--local-variables)
                           (ignore-errors
-                            (mapcar #'symbol-name (lisp--local-variables)))))
+                            (mapcar #'symbol-name (elisp--local-variables)))))
          (glob-syms  (and target pred (all-completions target obarray pred)))
          (candidates (append loc-vars glob-syms))
          (helm-quit-if-no-candidate t)
@@ -392,14 +392,6 @@ Filename completion happen if string start after or between a double quote."
                    (looking-back "[^'`( ]")))
         (helm-complete-file-name-at-point)
       (helm-lisp-completion-at-point))))
-
-(helm-multi-key-defun helm-multi-lisp-complete-at-point
-    "Multi key function for completion in emacs lisp buffers.
-First call indent, second complete symbol, third complete fname."
-  '(helm-lisp-indent
-    helm-lisp-completion-at-point
-    helm-complete-file-name-at-point)
-  0.3)
 
 
 ;;; Apropos
@@ -639,11 +631,11 @@ First call indent, second complete symbol, third complete fname."
 (defun helm-set-variable (var)
   "Set value to VAR interactively."
   (let* ((sym (helm-symbolify var))
-         (val (symbol-value sym)))
-    (set sym (eval-minibuffer (format "Set `%s': " var)
-                              (if (or (stringp val) (memq val '(nil t)))
-                                  (prin1-to-string val)
-                                  (format "'%s" (prin1-to-string val)))))))
+         (val (default-value sym)))
+    (set-default sym (eval-minibuffer (format "Set `%s': " var)
+                                      (if (or (stringp val) (memq val '(nil t)))
+                                          (prin1-to-string val)
+                                          (format "'%s" (prin1-to-string val)))))))
 
 
 ;;; Type attributes

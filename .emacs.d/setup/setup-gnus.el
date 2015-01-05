@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -76,7 +76,12 @@
                 ("Phoronix" "http://www.phoronix.com/rss.php")
                 ("Google News" "http://news.google.com/?output=rss"))))
   (newsticker-start)
-  (newsticker-start-ticker))
+  (newsticker-start-ticker)
+
+  ;; Support for stackexchange
+  (add-to-list 'load-path "~/.emacs.d/sx")
+  (require 'sx-load)
+  ) ;; when
 
 (provide 'setup-gnus)
 ;;; setup-gnus.el ends here

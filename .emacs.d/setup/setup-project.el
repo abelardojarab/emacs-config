@@ -1,6 +1,6 @@
 ;;; setup-project.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -96,7 +96,6 @@
 (add-to-list 'load-path "~/.emacs.d/projectile")
 (add-to-list 'load-path "~/.emacs.d/perspective")
 (require 'ack-and-a-half)
-;; (require 'perspective)
 (require 'projectile)
 (setq projectile-cache-file "~/.emacs.cache/projectile.cache")
 (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld")
@@ -107,6 +106,14 @@
   (setq projectile-indexing-method 'git)
   ) ;; unless
 (projectile-global-mode t)
+
+;; Org projectile
+(add-to-list 'load-path "~/.emacs.d/org-projectile")
+(when (require 'org-projectile nil 'noerror)
+  (setq org-projectile:projects-file "~/workspace/Documents/projects.org")
+  (add-to-list 'org-capture-templates (org-projectile:project-todo-entry))
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c n p") 'org-projectile:project-todo-completing-read))
 
 ;; cmake autocomplete/flycheck
 (add-to-list 'load-path "~/.emacs.d/cpputils-cmake")
@@ -135,10 +142,10 @@
         (if (string= docset "Emacs_Lisp")
             (concat (concat helm-dash-docsets-path "/") "Emacs Lisp.docset")
           (concat
+           (concat
             (concat
-             (concat
-              (concat helm-dash-docsets-path "/")
-              (nth 0 (split-string docset "_")))) ".docset"))))))
+             (concat helm-dash-docsets-path "/")
+             (nth 0 (split-string docset "_")))) ".docset"))))))
 
 (defun jwintz/dash-install (docset)
   (unless (file-exists-p (jwintz/dash-path docset))

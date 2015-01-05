@@ -4,7 +4,7 @@
 
 ;; Author: Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/Bruce-Connor/smart-mode-line
-;; Version: 2.7
+;; Version: 2.8
 ;; Package-Requires: ((emacs "24.3") (dash "2.2.0") (rich-minority "0.1"))
 ;; Keywords: mode-line faces theme themes
 ;; Prefix: sml
@@ -317,8 +317,8 @@
 (require 'custom)
 (require 'cus-face)
 
-(defconst sml/version "2.7" "Version of the smart-mode-line.el package.")
-(defconst sml/version-int 77 "Version of the smart-mode-line.el package, as an integer.")
+(defconst sml/version "2.8" "Version of the smart-mode-line.el package.")
+(defconst sml/version-int 78 "Version of the smart-mode-line.el package, as an integer.")
 (defun sml/bug-report ()
   "Opens github issues page in a web browser. Please send me any bugs you find, and please inclue your Emacs and sml versions."
   (interactive)
@@ -1239,18 +1239,20 @@ Also sets SYMBOL to VALUE."
              (verify-visited-file-modtime (current-buffer))))
     (propertize sml/outside-modified-char 'face 'sml/outside-modified
                 'help-echo "Modified outside Emacs!\nRevert first!"))
-   (buffer-read-only (propertize sml/read-only-char
-                                 'face 'sml/read-only
-                                 'help-echo "Read-Only Buffer"))
    ((buffer-modified-p)
-    (propertize sml/modified-char
+    (propertize (if buffer-read-only
+                    sml/read-only-char
+                  sml/modified-char)
                 'face 'sml/modified
-                'help-echo (if (buffer-file-name)
+                'help-echo (if (and (buffer-file-name) (not (file-remote-p buffer-file-name)))
                                (format-time-string
                                 sml/modified-time-string
                                 (nth 5 (file-attributes (buffer-file-name))))
                              "Buffer Modified")
                 'local-map '(keymap (mode-line keymap (mouse-1 . save-buffer)))))
+   (buffer-read-only (propertize sml/read-only-char
+                                 'face 'sml/read-only
+                                 'help-echo "Read-Only Buffer"))
    (t (propertize " " 'face 'sml/not-modified))))
 
 (defmacro sml/propertize-position (s face help)

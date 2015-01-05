@@ -71,8 +71,10 @@ _NOTE:_ That this will not work on Windows systems.
 
 ### Install from Emacs packaging system
 
-Helm is now available on Melpa at `http://melpa.milkbox.net/`
+Helm is now available on Melpa at http://melpa.milkbox.net/
 You will find there instructions to install.
+See also https://github.com/milkypostman/melpa#usage to startup correctly
+with the emacs packaging system.
 Then you should need only in your init file:
 
 ```elisp
@@ -164,6 +166,42 @@ As you can see, as you filtered out, the number of candidates decreases, as disp
 You can read [this guide](http://tuhdo.github.io/helm-intro.html) to quickly get started with Helm.
 
 You can find all the gory details on the [Helm Wiki](https://github.com/emacs-helm/helm/wiki).
+
+#### Fuzzy matching
+
+Helm has a built-in fuzzy matcher that is activated for some commands. Fuzzy matching is disabled by default. Currently these commands supports fuzzy matching:
+
+- `helm-recentf`: Enabled by setting `helm-recentf-fuzzy-match` to `t`.
+- `helm-mini`: Enable by setting `helm-buffers-fuzzy-matching` and `helm-recentf-fuzzy-match` to `t`.
+- `helm-buffers-list`: Enable by setting `helm-buffers-fuzzy-matching` to `t`.
+- `helm-find-files`: Enabled by default.
+- `helm-locate`: Enable by setting `helm-locate-fuzzy-match` to `t`.
+- `helm-M-x`: Enabled by setting `helm-M-x-fuzzy-match` to `t`.
+- `helm-semantic`: Enabled by setting `helm-semantic-fuzzy-match` to `t`.
+- `helm-imenu`: Enabled by setting `helm-imenu-fuzzy-match` to `t`.
+- `helm-apropos`: Enabled by setting `helm-apropos-fuzzy-match` to `t`.
+- `helm-lisp-completion-at-point`: Enabled by setting `helm-lisp-fuzzy-completion` to `t`.
+
+**IMPORTANT**: To make fuzzy-matching fast, you must not set `helm-candidate-number-limit` to high. It is recommended that you leave variable with its default value 100. The higher you set `helm-candidate-number-limit`, the slower fuzzy-matching.
+
+#### Autoresize
+
+Helm can now resize according to the number of candidates with `helm-autoresize-mode`:
+
+    (helm-autoresize-mode 1)
+
+Here is a demo:
+
+![helm-buffers-list](doc/helm-autoresize-mode.gif)
+
+You can customize the minimum and maximum height that Helm can resize with these two variable:
+
+- `helm-autoresize-max-height`
+- `helm-autoresize-min-height`
+
+By default, `helm-autoresize-max-height` is set to 40, which makes Helm candidate buffer has the maximum height of 40% of current frame height. Similarly, `helm-autoresize-min-height` specifies the minimum height that Helm candidate buffer cannot be smaller.
+
+If you don't want the Helm window to be resized, but a smaller Helm window, you can set `helm-autoresize-max-height` equal to `helm-autoresize-max-height`.
 
 ## Known issues
 

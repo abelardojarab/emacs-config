@@ -2,7 +2,7 @@
 ":"; exec ${EMACS:-emacs} -Q --script "$0" -- "${@}" # -*- mode: emacs-lisp; lexical-binding: t; -*-
 ;;; run.el --- Flycheck: Test runner
 
-;; Copyright (C) 2014  Sebastian Wiesner <swiesner@lunaryorn.com>
+;; Copyright (C) 2014-2015  Sebastian Wiesner <swiesner@lunaryorn.com>
 
 ;; Author: Sebastian Wiesner <swiesner@lunaryorn.com>
 
@@ -100,7 +100,8 @@ Node `(ert)Test Selectors' for information about test selectors."
     (setq package-user-dir (expand-file-name pkg-rel-dir source-directory))
     (package-initialize)
 
-    (message "Running tests on Emacs %s" emacs-version)
+    (message "Running tests on Emacs %s, built at %s"
+             emacs-version (format-time-string "%F" emacs-build-time))
     (load (expand-file-name "flycheck" source-directory))
     (load (expand-file-name "flycheck-ert" source-directory))
     (load (expand-file-name "flycheck-test"

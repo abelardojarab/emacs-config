@@ -457,7 +457,9 @@ NOTE: this have no effect if `helm-split-window-preferred-function' is not
 That is one window to display `helm-buffer' and one to display
 `helm-current-buffer'.
 Note: this have no effect when `helm-split-window-in-side-p' is non--nil,
-or when `helm-split-window-default-side' is set to 'same."
+or when `helm-split-window-default-side' is set to 'same.
+When `helm-autoresize-mode' is enabled, setting this to nil
+will have no effect until this mode will be disabled."
   :group 'helm
   :type 'boolean)
 
@@ -501,27 +503,42 @@ This happen when using `helm-next/previous-line'."
   :group 'helm
   :type 'boolean)
 
-(defcustom helm-default-fuzzy-match-fn 'helm-fuzzy-match
-  "The default function for fuzzy matching in `helm-source-sync' based sources."
+(defcustom helm-fuzzy-match-fn 'helm-fuzzy-match
+  "The function for fuzzy matching in `helm-source-sync' based sources."
   :group 'helm
   :type 'function)
 
-(defcustom helm-default-fuzzy-search-fn 'helm-fuzzy-search
-  "The default function for fuzzy matching in `helm-source-in-buffer' based sources."
+(defcustom helm-fuzzy-search-fn 'helm-fuzzy-search
+  "The function for fuzzy matching in `helm-source-in-buffer' based sources."
   :group 'helm
   :type 'function)
 
-(defcustom helm-default-fuzzy-sort-fn 'helm-fuzzy-matching-default-sort-fn
-  "The default sort transformer function used in fuzzy matching.
+(defcustom helm-fuzzy-sort-fn 'helm-fuzzy-matching-default-sort-fn
+  "The sort transformer function used in fuzzy matching.
 When nil no sorting will be done."
   :group 'helm
   :type 'function)
 
-(defcustom helm-default-fuzzy-matching-highlight-fn 'helm-fuzzy-default-highlight-match
-  "The default function to highlight matches in fuzzy matching.
+(defcustom helm-fuzzy-matching-highlight-fn 'helm-fuzzy-default-highlight-match
+  "The function to highlight matches in fuzzy matching.
 When nil no highlighting will be done."
   :group 'helm
   :type 'function)
+
+(defcustom helm-autoresize-max-height 40
+  "Specifies a maximum height and defaults to the height of helm window's frame in percentage.
+
+See `fit-window-to-buffer' for more infos."
+  :group 'helm
+  :type 'integer)
+
+(defcustom helm-autoresize-min-height 10
+  "Specifies a minimum height and defaults to the height of helm window's frame in percentage.
+
+If nil the default of `window-min-height' is used
+See `fit-window-to-buffer' for more infos."
+  :group 'helm
+  :type 'integer)
 
 
 ;;; Faces
@@ -1463,6 +1480,11 @@ of a source is deleted without updating the source."
                 (helm-pos-header-line-p))
               (bobp))))))
 
+(defun helm-symbol-name (obj)
+  (if (or (consp obj) (byte-code-function-p obj))
+      "Anonymous"
+      (symbol-name obj)))
+
 
 ;; Core: tools
 (defun helm-current-line-contents ()
@@ -2057,7 +2079,7 @@ It uses `switch-to-buffer' or `pop-to-buffer' depending of value of
           (and (eq helm-split-window-default-side 'same)
                (one-window-p t)))
       (progn (delete-other-windows) (switch-to-buffer buffer))
-    (when (and helm-always-two-windows
+    (when (and (or helm-always-two-windows helm-autoresize-mode)
                (not (eq helm-split-window-default-side 'same))
                (not (minibufferp helm-current-buffer))
                (not helm-split-window-in-side-p))
@@ -2768,42 +2790,64 @@ This function is used with sources build with `helm-source-sync'."
                    else do (goto-char eol)
                    finally return nil)))))
 
-(defsubst helm-score-candidate-for-pattern (candidate pattern)
-  "Give a score to CANDIDATE according to number of contiguous matches found with PATTERN."
-  (let* ((pat-lookup (cl-loop for str on (split-string pattern "" t) by 'cdr
-                              when (cdr str)
-                              collect (list (car str) (cadr str))))
-         (str-lookup (cl-loop for str on (split-string candidate "" t) by 'cdr
-                              when (cdr str)
-                              collect (list (car str) (cadr str))))
-         (bonus (if (equal (car pat-lookup) (car str-lookup)) 1 0)))
-    (+ bonus (length (cl-nintersection pat-lookup str-lookup :test 'equal)))))
+(defsubst helm--collect-pairs-in-string (string)
+  (cl-loop for str on (split-string string "" t) by 'cdr
+           when (cdr str)
+           collect (list (car str) (cadr str))))
 
-(defun helm-fuzzy-matching-default-sort-fn-1 (candidates &optional real-or-display)
+(defsubst helm-score-candidate-for-pattern (candidate pattern)
+  "Give a score to CANDIDATE according to PATTERN.
+Score is calculated against number of contiguous matches found with PATTERN.
+If PATTERN is fully matched in CANDIDATE a maximal score (100) is given.
+A bonus of one point is given when PATTERN prefix match CANDIDATE."
+  (let* ((pat-lookup (helm--collect-pairs-in-string pattern))
+         (str-lookup (helm--collect-pairs-in-string candidate))
+         (bonus (if (equal (car pat-lookup) (car str-lookup)) 1 0))
+         (bonus1 (and (string-match (concat "\\<" (regexp-quote pattern) "\\>")
+                                    candidate)
+                      100)))
+    (+ bonus (or bonus1 (length (cl-nintersection
+                                 pat-lookup str-lookup :test 'equal))))))
+
+(defun helm-fuzzy-matching-default-sort-fn (candidates _source &optional use-real)
+  "The transformer for sorting candidates in fuzzy matching.
+It is sorting on the display part of by default.
+
+Sort CANDIDATES according to their score calculated by
+`helm-score-candidate-for-pattern'.  When two candidates have the
+same score sort is made by length.  Set USE-REAL to non-nil to
+sort on the real part."
   (if (string= helm-pattern "")
       candidates
+    (let ((table-scr (make-hash-table :test 'equal)))
       (sort candidates
             (lambda (s1 s2)
               ;; Score and measure the length on real or display part of candidate
-              ;; according to `real-or-display'.
-              (let* ((cand1 (if (consp s1)
-                                (if (eq real-or-display 'display) (car s1) (cdr s1))
-                                s1))
+              ;; according to `use-real'.
+              (let* ((real-or-disp-fn (if use-real #'cdr #'car))
+                     (cand1 (if (consp s1)
+                                (funcall real-or-disp-fn s1)
+                              s1))
                      (cand2 (if (consp s2)
-                                (if (eq real-or-display 'display) (car s2) (cdr s2))
-                                s2))
-                     (scr1 (helm-score-candidate-for-pattern cand1 helm-pattern))
-                     (scr2 (helm-score-candidate-for-pattern cand2 helm-pattern))
-                     (len1 (length cand1))
-                     (len2 (length cand2)))
+                                (funcall real-or-disp-fn s2)
+                              s2))
+                     (data1 (or (gethash cand1 table-scr)
+                                (puthash cand1 (list (helm-score-candidate-for-pattern
+                                                      cand1 helm-pattern)
+                                                     (length cand1))
+                                         table-scr)))
+                     (data2 (or (gethash cand2 table-scr)
+                                (puthash cand2 (list (helm-score-candidate-for-pattern
+                                                      cand2 helm-pattern)
+                                                     (length cand2))
+                                         table-scr)))
+                     (len1 (cadr data1))
+                     (len2 (cadr data2))
+                     (scr1 (car data1))
+                     (scr2 (car data2)))
                 (cond ((= scr1 scr2)
                        (< len1 len2))
-                      ((> scr1 scr2))))))))
-
-(defun helm-fuzzy-matching-default-sort-fn (candidates _source)
-  "The default-function for sorting candidates in fuzzy matching.
-It is sorting on the display part of candidate."
-  (helm-fuzzy-matching-default-sort-fn-1 candidates 'display))
+                      ((> scr1 scr2)))))))))
 
 (defun helm-fuzzy-default-highlight-match (candidate)
   "The default function to highlight matches in fuzzy matching.
@@ -2882,7 +2926,7 @@ and `helm-pattern'."
 
 (defun helm-match-from-candidates (cands matchfns match-part-fn limit source)
   (let (matches)
-    (condition-case err
+    (condition-case-unless-debug err
         (let ((item-count 0)
               (case-fold-search (helm-set-case-fold-search)))
           (clrhash helm-match-hash)
@@ -4151,11 +4195,15 @@ To customize `helm-candidates-in-buffer' behavior, use `search',
 
 (defun helm-candidates-in-buffer-search-from-start (pattern)
   "Search PATTERN with `re-search-forward' with bound and noerror args."
-  (re-search-forward pattern nil t))
+  (condition-case _err
+      (re-search-forward pattern nil t)
+    (invalid-regexp nil)))
 
 (defun helm-candidates-in-buffer-search-from-end (pattern)
   "Search PATTERN with `re-search-backward' with bound and noerror args."
-  (re-search-backward pattern nil t))
+  (condition-case _err
+      (re-search-backward pattern nil t)
+    (invalid-regexp nil)))
 
 (defun helm-candidates-in-buffer-1 (buffer pattern get-line-fn
                                     search-fns limit search-from-end
@@ -4330,7 +4378,9 @@ Returns the resulting buffer."
       (erase-buffer)
       (if (listp data)
           (cl-loop for i in data
-                   for str = (if (symbolp i) (symbol-name i) i)
+                   for str = (cond ((symbolp i) (symbol-name i))
+                                   ((numberp i) (number-to-string i))
+                                   (t i))
                    do (insert (concat str "\n")))
         (and (stringp data) (insert data))))
     buf))
@@ -4960,6 +5010,31 @@ This happen after `helm-input-idle-delay' secs."
          (helm-get-selection)
          (save-excursion
            (helm-execute-persistent-action)))))
+
+
+;;; Auto-resize mode
+;;
+(defun helm--autoresize-hook ()
+  (with-helm-window
+    (fit-window-to-buffer nil
+                          (/ (* (frame-height) helm-autoresize-max-height)
+                             100)
+                          (/ (* (frame-height) helm-autoresize-min-height)
+                             100))))
+
+(define-minor-mode helm-autoresize-mode
+    "Auto resize helm window when enabled.
+Helm window is resized according to values of `helm-autoresize-max-height'
+and `helm-autoresize-min-height'.
+Note that when this mode is enabled, helm behave like when
+`helm-always-two-windows' is enabled.
+
+See `fit-window-to-buffer' for more infos."
+  :group 'helm
+  :global t
+  (if helm-autoresize-mode
+      (add-hook 'helm-after-update-hook 'helm--autoresize-hook)
+      (remove-hook 'helm-after-update-hook 'helm--autoresize-hook)))
 
 
 (provide 'helm)
