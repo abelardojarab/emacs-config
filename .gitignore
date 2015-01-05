@@ -35,3 +35,4 @@ wget*-log*
 ergoemacs-themes.elc
 ergoemacs-theme-engine.elc
 .emacs.elc
+.sx
