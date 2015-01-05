@@ -1,6 +1,6 @@
 ;;; setup-modeline.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -78,6 +78,8 @@
 (add-to-list 'sml/hidden-modes " Tern")
 (add-to-list 'sml/hidden-modes " skewer")
 (add-to-list 'sml/hidden-modes " rk")
+(add-to-list 'sml/hidden-modes " drag")
+(add-to-list 'sml/hidden-modes " Smrt")
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
