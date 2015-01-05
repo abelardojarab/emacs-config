@@ -1,0 +1,210 @@
+-*- mode: org -*-
+# This is an Org file
+#
+# Do C-c C-e to see the export menu.
+# For instance, do 'C-c C-e t A' to export to ASCII.
+
+* Introduction
+
+This document describes the recommended workflow for working on CEDET
+with Git.  Note that this is not a Git tutorial, but assumes that you
+are already familiar with the basic Git command set.
+
+This document is purely technical and does not cover stylistic issues
+like how commit messages should look.  Please read =CEDET_STYLE_GUIDE=
+for this.
+
+** Note to the Git experts
+
+If you are already familiar with Git, you probably can skip most of
+this document.  In a nutshell:
+
+- Please always create an explicit merge commit when merging your
+  feature branches (i.e., do not fast-forward).
+
+- Prefer rebasing onto master instead of merging master into your
+  branch.  However, if you really prefer merges, that's fine as well.
+
+- If you don't have direct write access to the repository, please send
+  patches through /format-patch/ to the mailing list.
+
+* <<su>>Setting up Git
+
+- Clone the repository by doing
+
+  #+BEGIN_SRC sh
+  git clone https://username@git.code.sf.net/p/cedet/git cedet
+  #+END_SRC
+
+  where =username= is your SourceForge account.
+
+- Set up your identity for this repository (can be skipped if you just
+  want to use your global settings):
+
+  #+BEGIN_SRC sh
+  git config user.name "Random Hacker"
+  git config user.email "your.mail@address.invalid"
+  #+END_SRC
+
+- Change push behavior to something safer:
+
+  #+BEGIN_SRC sh
+  git config push.default simple
+  #+END_SRC
+
+  This will make sure that when you simply type =git push=, this will
+  only push the current branch.  You can skip this if you are already
+  using Git version 2.x, since it is the default there.
+
+- Rebases should always preserve merge commits:
+
+  #+BEGIN_SRC sh
+  git config pull.rebase preserve
+  #+END_SRC
+
+* Set up additional tooling
+
+  There are many, many tools out there to make dealing with Git
+  easier.  For Emacs, the normal =vc= mode is sufficient for basic
+  tasks, like commiting or viewing logs for one file.  For advanced
+  stuff, you can install =Magit= from https://magit.github.io.  If you
+  rather want to work with more GUI-centric tools outside Emacs, you
+  can take a look at those that ship with git: =git gui= and =gitk=.
+  You might have to install them separately through your package
+  manager (Ubuntu/Debian: packages 'git-gui' and 'gitk').  Both tools
+  are written in Tcl/Tk and hence work on many platforms.  =git gui=
+  is for committing, pushing/pulling and working with branches, while
+  =gitk= is for displaying the repository's history, and it is highly
+  recommended to use it for checking branch merges or similar before
+  pushing.
+
+* Doing quick fixes
+
+  Quick fixes (meaning: changes that comprise only one commit) can be
+  done directly on the 'master' branch.  However, when working
+  directly on master, you should make sure that your local master is
+  up-to-date with the upstream 'origin/master'.  Make sure you don't
+  have some pending commits or merges you haven't yet pushed upstream.
+
+  In Emacs, call =M-x vc-dir= and do your commit.  Then push your new
+  commit upstream by doing =git push=.  If somebody else pushed a new
+  commit while you were working on yours, this will fail with an error
+  like this:
+
+  #+BEGIN_EXAMPLE
+  ! [rejected]        master -> master (fetch first)
+  #+END_EXAMPLE
+
+  In this case, you can do
+
+  #+BEGIN_EXAMPLE
+  git pull --rebase
+  #+END_EXAMPLE
+
+  This will pull the new changes into your repository and /rebase/
+  your new commit on top of it.  That means, Git will rewrite your
+  local history so that it will look like you started your quick fix
+  on the new commit(s) you just pulled.  It might be that the new
+  commits upstream have conflicts with your quick fix.  In this case,
+  the /rebase/ will abort and tell you to fix your conflicts.  Do this
+  as usual (using =smerge=, for instance), then do
+
+  #+BEGIN_EXAMPLE
+  git rebase --continue
+  #+END_EXAMPLE
+
+  When you are finished, do =git push= again.  If it fails again, repeat
+  the above procedure.
+
+* Doing larger changes
+
+  Larger changes (i.e., changes that require more than one commit),
+  should *always* be done on a feature branch.  For this, first create
+  and switch to a new branch (in the following called 'feature') by
+  doing
+
+  #+BEGIN_EXAMPLE
+  git checkout -b feature
+  #+END_EXAMPLE
+
+  Now do your hacking as usual.  If your work on your branch for a
+  long time, you probably want to pull in all the changes that
+  happened on 'master' in the meantime.  You can do this by merging
+  'master' into your feature branch.  If you rather not have this
+  merge in your history, you can explicitly rebase your feature branch
+  *onto* the master branch:
+
+  #+BEGIN_EXAMPLE
+  git checkout feature
+  git rebase master
+  #+END_EXAMPLE
+
+  This will apply all commits in 'feature' on the current 'master',
+  one by one.  If one of those commits has a conflict, the rebase will
+  stop and ask you to resolve it.  When you have done that, do =git
+  rebase --continue=.  Again, this will rewrite your local history and
+  will make it look like you started your branch 'feature' on the
+  current master.
+
+  It is recommended to do this rebase at least once when your feature
+  branch is finished.  By doing this, the final merge won't have any
+  conflicts.  For doing the merge, it is recommended to use
+
+  #+BEGIN_EXAMPLE
+  git merge --no-ff --log feature
+  #+END_EXAMPLE
+
+  This will make sure that there is an explicit merge commit, and that
+  it includes a short log of the merged changes.
+
+  Then push your merge.  If the push gets rejected, you can again do a
+  pull with rebase:
+
+  #+BEGIN_EXAMPLE
+  git pull --rebase=preserve
+  #+END_EXAMPLE
+
+  (The =preserve= will make sure your merge commit will not get
+  deleted by /rebase/.  Note that you can omit the =preserve= if you
+  have set this to be the default as described in section [[su][Setting up
+  Git]].)
+
+* Publishing a feature branch
+
+  You might want to not merge you feature right away, but first push
+  it upstream for public review.  To do this, only rebase your feature
+  branch onto master, but do *not* merge yet.  Instead, push your
+  feature branch by doing
+
+  #+BEGIN_EXAMPLE
+  git checkout feature
+  git push origin feature
+  #+END_EXAMPLE
+
+  This will create the same feature branch upstream, and you can tell
+  people on the mailing list to check it out.  After you have finally
+  merged your feature branch, delete it by doing
+
+  #+BEGIN_EXAMPLE
+  git push origin :feature
+  #+END_EXAMPLE
+
+* Sending patches to the mailing list
+
+  If your patch is only a quick fix with just one commit, you can
+  simply send a normal patch to the mailing list.  Make sure you send
+  the patch as an attachment!  Do *not* copy and paste the diff into
+  your mail program.
+
+  If you want to send a feature branch for review, you can use Git's
+  =format-patch= command:
+
+  #+BEGIN_EXAMPLE
+  git checkout feature
+  git format-patch master
+  #+END_EXAMPLE
+
+  This will create separate patch files for each commit.  Simply write
+  a message to cedet-devel and attach those files.  Alternatively, you
+  can also use the =git send-email= command to send those patches
+  directly.

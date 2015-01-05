@@ -1657,7 +1657,7 @@ In particular, this does handle wide and invisible characters."
 			      dline -1 dline))))
 
 ;;;###autoload
-(defun org-table-sort-lines (with-case &optional sorting-type)
+(defun org-table-sort-lines (with-case &optional sorting-type getkey-func compare-func)
   "Sort table lines according to the column at point.
 
 The position of point indicates the column to be used for
@@ -1677,8 +1677,15 @@ With prefix argument WITH-CASE, alphabetic sorting will be case-sensitive.
 
 If SORTING-TYPE is specified when this function is called from a Lisp
 program, no prompting will take place.  SORTING-TYPE must be a character,
-any of (?a ?A ?n ?N ?t ?T) where the capital letter indicate that sorting
-should be done in reverse order."
+any of (?a ?A ?n ?N ?t ?T ?f ?F) where the capital letters indicate that
+sorting should be done in reverse order.
+
+If the SORTING-TYPE is ?f or ?F, then GETKEY-FUNC specifies
+a function to be called to extract the key.  It must return either
+a string or a number that should serve as the sorting key for that
+row.  It will then use COMPARE-FUNC to compare entries.  If GETKEY-FUNC
+is specified interactively, the comparison will be either a string or
+numeric compare based on the type of the first key in the table."
   (interactive "P")
   (let* ((thisline (org-current-line))
 	 (thiscol (org-table-current-column))
@@ -1730,7 +1737,8 @@ should be done in reverse order."
 					(org-split-string x "[ \t]*|[ \t]*")))
 				  x))
 		      (org-split-string (buffer-substring beg end) "\n")))
-    (setq lns (org-do-sort lns "Table" with-case sorting-type))
+    (setq lns (org-table--do-sort
+	       lns "Table" with-case sorting-type getkey-func compare-func))
     (when org-table-overlay-coordinates
       (org-table-toggle-coordinate-overlays))
     (delete-region beg end)
@@ -1741,6 +1749,68 @@ should be done in reverse order."
     (org-table-goto-column thiscol)
     (when otc (org-table-toggle-coordinate-overlays))
     (message "%d lines sorted, based on column %d" (length lns) column)))
+
+(defun org-table--do-sort (table what &optional with-case sorting-type getkey-func compare-func)
+  "Sort TABLE of WHAT according to SORTING-TYPE.
+The user will be prompted for the SORTING-TYPE if the call to this
+function does not specify it.
+WHAT is only for the prompt, to indicate what is being sorted.
+The sorting key will be extracted from the car of the elements of
+the table. If WITH-CASE is non-nil, the sorting will be case-sensitive.
+
+If the SORTING-TYPE is ?f or ?F, then GETKEY-FUNC specifies
+a function to be called to extract the key.  It must return either
+a string or a number that should serve as the sorting key for that
+row.  It will then use COMPARE-FUNC to compare entries.  If GETKEY-FUNC
+is specified interactively, the comparison will be either a string or
+numeric compare based on the type of the first key in the table."
+  (unless sorting-type
+    (message
+     "Sort %s: [a]lphabetic, [n]umeric, [t]ime, [f]unc.  A/N/T/F means reversed:"
+     what)
+    (setq sorting-type (read-char-exclusive)))
+  (let (extractfun comparefun tempfun)
+    ;; Define the appropriate functions
+    (case sorting-type
+      ((?n ?N)
+       (setq extractfun #'string-to-number
+	     comparefun (if (= sorting-type ?n) #'< #'>)))
+      ((?a ?A)
+       (setq extractfun (if with-case (lambda(x) (org-sort-remove-invisible x))
+			  (lambda(x) (downcase (org-sort-remove-invisible x))))
+	     comparefun (if (= sorting-type ?a) #'string< #'org-string>)))
+      ((?t ?T)
+       (setq extractfun
+	     (lambda (x)
+	       (cond ((or (string-match org-ts-regexp x)
+			  (string-match org-ts-regexp-both x))
+		      (org-float-time
+		       (org-time-string-to-time (match-string 0 x))))
+		     ((string-match "[0-9]\\{1,2\\}:[0-9]\\{2\\}" x)
+		      (org-hh:mm-string-to-minutes x))
+		     (t 0)))
+	     comparefun (if (= sorting-type ?t) #'< #'>)))
+      ((?f ?F)
+       (setq tempfun (or getkey-func
+			 (intern (org-icompleting-read
+				  "Sort using function: "
+				  obarray #'fboundp t nil nil))))
+       (let ((extract-string-p (stringp (funcall tempfun (caar table)))))
+	 (setq extractfun (if (and extract-string-p (not with-case))
+			      (lambda (x) (downcase (funcall tempfun x)))
+			    tempfun))
+	 (setq comparefun (cond (compare-func
+				 (if (= sorting-type ?f) compare-func
+				   (lambda (a b) (funcall compare-func b a))))
+				(extract-string-p
+				 (if (= sorting-type ?f) #'string<
+				   #'org-string>))
+				(t (if (= sorting-type ?f) #'< #'>))))))
+      (t (error "Invalid sorting type `%c'" sorting-type)))
+
+    (sort (mapcar (lambda (x) (cons (funcall extractfun (car x)) (cdr x)))
+		  table)
+	  (lambda (a b) (funcall comparefun (car a) (car b))))))
 
 ;;;###autoload
 (defun org-table-cut-region (beg end)
@@ -2947,10 +3017,13 @@ and TABLE is a vector with line types."
 			  nil))
 		    t)))
       (setq n (1- n)))
-    (if (or (< i 0) (>= i l))
-	(user-error "Row descriptor %s used in line %d leads outside table"
-	       desc cline)
-      i)))
+    (cond ((or (< i 0) (>= i l))
+	   (user-error "Row descriptor %s used in line %d leads outside table"
+		       desc cline))
+	  ;; The last hline doesn't exist.  Instead, point to last row
+	  ;; in table.
+	  ((= i (1- l)) (1- i))
+	  (t i))))
 
 (defun org-table--error-on-old-row-references (s)
   (when (string-match "&[-+0-9I]" s)
@@ -4705,7 +4778,11 @@ This may be either a string or a function of two arguments:
   example \"%s\\\\times10^{%s}\".  This may also be a property
   list with column numbers and format strings or functions.
   :fmt will still be applied after :efmt."
-  (let ((backend (plist-get params :backend)))
+  (let ((backend (plist-get params :backend))
+	;; Disable user-defined export filters and hooks.
+	(org-export-filters-alist nil)
+	(org-export-before-parsing-hook nil)
+	(org-export-before-processing-hook nil))
     (when (and backend (symbolp backend) (not (org-export-get-backend backend)))
       (user-error "Unknown :backend value"))
     (when (or (not backend) (plist-get params :raw)) (require 'ox-org))

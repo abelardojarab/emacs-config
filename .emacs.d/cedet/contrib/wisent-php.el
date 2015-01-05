@@ -61,21 +61,64 @@ MSG is the message string to report."
   "Get local values from a specific context.
 Parse the current context for `field_declaration' nonterminals to
 collect tags, such as local variables or prototypes.
-This function override `get-local-variables'."
+This function override `get-local-variables'.
+
+Add `$this', `static' and `self' if needed"
   (let ((vars nil)
         ;; We want nothing to do with funny syntaxing while doing this.
         (semantic-unmatched-syntax-hook nil))
-    (while (not (semantic-up-context (point) 'function))
-      (save-excursion
-        (forward-char 1)
-        (setq vars
-              (append (semantic-parse-region
-                       (point)
-                       (save-excursion (semantic-end-of-context) (point))
-                       'field_declaration
-                       0 t)
-                      vars))))
+    (let ((class-tag (semantic-current-tag-of-class 'type)))
+      (when class-tag
+        (setq vars (append (list
+                            (semantic-tag-new-variable "$this" class-tag)
+                            (semantic-tag-new-variable "static" class-tag)
+                            (semantic-tag-new-variable "self" class-tag))
+                           vars))))
     vars))
+
+;;;;
+;;;; Member protection
+;;;;
+
+(define-mode-local-override semantic-tag-protection
+  php-mode (tag &optional parent)
+  "Return protection information about TAG with optional parent."
+  (let ((type-modifiers (semantic-tag-modifiers tag))
+        (protection nil))
+    (while (and type-modifiers (not protection))
+      (let ((modifier (car type-modifiers)))
+        (setq protection
+              (cond ((string= "private" modifier)
+                     'private)
+                    ((string= "protected" modifier)
+                     'protected)
+                    ((string= "public" modifier)
+                     'public)
+                    (t nil))))
+      (setq type-modifiers (cdr type-modifiers)))
+    (or protection 'public)))
+
+;;;;
+;;;; Name splitting / unsplitting
+;;;;
+
+(define-mode-local-override semantic-analyze-split-name
+  php-mode (name)
+  "Split a tag NAME into a sequence.
+Sometimes NAMES are gathered from the parser that are componded.
+In PHP, \"foo\bar\" means :
+  \"The class BAR in the namespace FOO.\"
+Return the string NAME for no change, or a list if it needs to be split."
+  (let ((ans (split-string name (regexp-quote "\\"))))
+    (if (= (length ans) 1)
+        name
+    (delete "" ans))))
+
+(define-mode-local-override semantic-analyze-unsplit-name
+  php-mode (namelist)
+  "Assemble a NAMELIST into a string representing a compound name.
+In PHP, (\"foo\" \"bar\") becomes \"foo\\bar\"."
+  (mapconcat 'identity namelist "\\"))
 
 ;;;;
 ;;;; Semantic integration of the Php LALR parser
@@ -96,7 +139,8 @@ Use the alternate LALR(1) parser."
    ;; Environment
    semantic-imenu-summary-function 'semantic-format-tag-prototype
    imenu-create-index-function 'semantic-create-imenu-index
-   semantic-type-relation-separator-character '(".")
+   semantic-lex-syntax-modifications '((?\\ "."))
+   semantic-type-relation-separator-character '("->" "::" "\\")
    semantic-command-separation-character ";"
    semantic-lex-comment-regex "\\(/\\*\\|//\\|#\\)"
    ;; speedbar and imenu buckets name
@@ -116,17 +160,32 @@ Use the alternate LALR(1) parser."
   ;; Setup phpdoc stuff
   ;;(semantic-php-doc-setup))
 
-	
-(defun wisent-php-expand-tag (tag)
-  "Expand TAG into a list of equivalent tags, or nil.
+(defun wisent-php-create-merge-alias (tag region)
+  "Transform alias TAG into a tag that can be expanded.
+
+REGION is a cons START . END delimiting the definition region of the tag."
+  (semantic-tag-new-alias (list (cons (semantic-tag-name tag) region))
+                          "alias"
+                          (list (semantic-tag-alias-definition tag))))
+
+(defun wisent-php-merge-alias (tag region merge-tag)
+  "Merge alias TAG with its REGION into the expandable tag MERGE-TAG."
+  (semantic-tag-new-alias (cons (cons (semantic-tag-name tag) region)
+                                (semantic-tag-name merge-tag))
+                          "alias"
+                          (cons (semantic-tag-alias-definition tag)
+                                (semantic-tag-alias-definition merge-tag))))
+
+(defun wisent-php-expand-tag-variable (tag)
+  "Expand variable TAG into a list of equivalents variable tags.
 Expand multiple variable declarations in the same statement, that is
 tags of class `variable' whose name is equal to a list of elements of
 the form (NAME START . END).  NAME is a variable name.  START and END
 are the bounds in the declaration, related to this variable NAME."
-  (let (elts elt clone start end xpand)
-    (when (and (eq 'variable (semantic-tag-class tag))
-               (consp (setq elts (semantic-tag-name tag))))
-      ;; There are multiple names in the same variable declaration.
+  (let ((elts (semantic-tag-name tag))
+        elt clone start end xpand)
+    ;; There are multiple names in the same variable declaration.
+    (when (consp elts)
       (while elts
         ;; For each name element, clone the initial tag and give it
         ;; the name of the element.
@@ -138,8 +197,42 @@ are the bounds in the declaration, related to this variable NAME."
               xpand (cons clone xpand))
         ;; Set the bounds of the cloned tag with those of the name
         ;; element.
-        (semantic-tag-set-bounds clone start end))
-      xpand)))
+        (semantic-tag-set-bounds clone start end)))
+    xpand))
+
+(defun wisent-php-expand-tag-alias (tag)
+  "Expand alias TAG into a list of equivalent alias tags.
+Expand multiple alias declaration in the same statement, that is
+tags of the class `alias' whose name is equal to a list of
+elements of the form (NAME START . END) and definition is a list
+of definitions corresponding to name elements.  NAME is a
+variable.  START and END are the bounds in the declaration,
+related to this variable NAME."
+  (let ((names (semantic-tag-name tag))
+        (defs (semantic-tag-alias-definition tag))
+        xpand '())
+    (when (and (listp names) (listp defs))
+          (dotimes (i (length names))
+            (let* ((elt (nth i names))
+                   (def (nth i defs))
+                   (name (car elt))
+                   (region (cdr elt))
+                   (clone (semantic-tag-new-alias name "alias" def))
+                   (start (car region))
+                   (end (cdr region)))
+              (setq xpand (cons clone xpand))
+              (semantic-tag-set-bounds clone start end))))
+    xpand))
+
+(defun wisent-php-expand-tag (tag)
+  "Expand TAG into a list of equivalent tags, or nil.
+
+Expand multiple variable or alias declarations merged into a single tag."
+  (cond
+   ((eq 'variable (semantic-tag-class tag))
+    (wisent-php-expand-tag-variable tag))
+   ((eq 'alias (semantic-tag-class tag))
+    (wisent-php-expand-tag-alias tag))))
 
 ;;;###autoload
 (add-hook 'php-mode-hook #'wisent-php-default-setup)

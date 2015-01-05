@@ -24,6 +24,11 @@
 
 ;;%package wisent-php-wy
 
+%{
+(declare-function wisent-php-create-merge-alias "wisent-php")
+(declare-function wisent-php-merge-alias "wisent-php")
+}
+
 %languagemode  php-mode
 
 %start start
@@ -31,10 +36,13 @@
 %start compilation_unit
 %start include_declaration
 %start require_expr
+%start use_statement
 %start type_declaration
 %start class_declaration
 %start class_body
 %start class_member_declaration
+%start namespace_declaration
+%start namespace_body
 %start interface_declaration
 %start interface_body
 %start interface_member_declaration
@@ -47,9 +55,8 @@
 %start formal_parameters
 %start formal_parameter
 %start field_declaration
-%start variable_declarators
 %start variable_declarator
-%start variable_declarator_id
+%start constant_declaration
 %start variable_initializer
 %start class_modifiers
 %start class_modifier
@@ -77,7 +84,7 @@
 ;; ------------------
 ;; Operator terminals
 ;; ------------------
-%type  <punctuation> ;;syntax "\\(\\s.\\|\\s$\\|\\s'\\)+" matchdatatype string
+%type  <punctuation> syntax "\\(\\s.\\|\\s'\\)+" matchdatatype string
 
 %token <punctuation> T_DEREF                "->"
 %token <punctuation> T_PAAMAYIM_NEKUDOTAYIM "::"
@@ -128,13 +135,16 @@
 %token <punctuation> T_OR          	    "|"
 %token <punctuation> T_COMP        	    "~"
 %token <punctuation> T_ASTERISK        	    "@"
-%token <punctuation> T_DOLLER               "$"
+%token <punctuation> T_NAMESPACE_SEP    "\\"
 
 ;; -----------------
 ;; Literal terminals
 ;; -----------------
-%type  <symbol>      ;;syntax "\\(\\sw\\|\\s_\\)+"
+%type  <symbol>      syntax "[a-zA-Z_]\\(\\sw\\|\\s_\\)*"
 %token <symbol>      IDENTIFIER
+
+%type  <variable>    syntax "\\$\\(\\sw\\|\\s_\\)+"
+%token <variable>    T_VARIABLE
 
 %type  <string>      ;;syntax "\\s\"" matchdatatype sexp
 %token <string>      STRING_LITERAL
@@ -158,7 +168,7 @@
 %keyword T_FUNCTION        "function"
 %keyword T_CONST           "const"
 %put     T_CONST summary
-"Unused reserved word"
+"const <var> [= <expr>]"
 %keyword T_RETURN          "return"
 %put     T_RETURN summary
 "return [<expr>] ;"
@@ -212,6 +222,9 @@
 "continue [<label>] ;"
 %keyword T_ECHO            "echo"
 %keyword T_PRINT           "print"
+%keyword T_NAMESPACE       "namespace"
+%put     T_NAMESPACE summary
+"Namespace declaration: namespace <name>"
 %keyword T_CLASS           "class"
 %put     T_CLASS summary
 "Class declaration: class <name>"
@@ -235,6 +248,8 @@
 %keyword T_REQUIRE         "require"
 %keyword T_REQUIRE_ONCE    "require_once"
 %keyword T_USE             "use"
+%put     T_USE summary
+"Alias definition: use <imported> {as <name>}"
 %keyword T_GLOBAL          "global"
 %keyword T_ISSET           "isset"
 %keyword T_EMPTY           "empty"
@@ -366,7 +381,9 @@ start
   ;
 
 compilation_units
-  : ;;EMPTY
+  : T_NAMESPACE namespaced_identifier T_SEMI compilation_units
+(TYPE-TAG $2 $1 $4 nil)
+  | ;; EMPTY
   | compilation_unit compilation_units 
     (if $2 (append $2 (EXPANDTAG $1)) (EXPANDTAG $1))
   ;
@@ -377,9 +394,7 @@ compilation_unit
   ;
 
 include_declaration
-  : T_USE require_expr T_SEMI
-    (identity $2)
-  | T_REQUIRE require_expr T_SEMI
+  : T_REQUIRE require_expr T_SEMI
     (identity $2)
   | T_REQUIRE_ONCE require_expr T_SEMI
     (identity $2)
@@ -400,6 +415,8 @@ type_declaration
   : function_declaration
   | class_declaration
   | interface_declaration
+  | namespace_declaration
+  | use_statement
   ;
 
 ;;; Type Declaration token
@@ -411,7 +428,7 @@ class_declaration
 
 superc_opt
   : ;;EMPTY
-  | T_EXTENDS IDENTIFIER
+  | T_EXTENDS namespaced_identifier
     (identity $2)
   ;
 
@@ -437,7 +454,38 @@ class_member_declaration
   | class_declaration
   | method_declaration
   | field_declaration
+  | constant_declaration
   ;
+
+namespace_declaration
+  : T_NAMESPACE namespaced_identifier namespace_body
+    (TYPE-TAG $2 $1 $3 nil)
+  ;
+
+namespace_body
+  : BRACE_BLOCK
+    (EXPANDFULL $1 compilation_unit)
+  ;
+
+use_statement
+  : T_USE use_declarations T_SEMI
+    (identity $2)
+  ;
+
+use_declarations
+  : use_declaration T_COMMA use_declarations
+    (wisent-php-merge-alias $1 $region1 $3)
+  | use_declaration
+    (wisent-php-create-merge-alias $1 $region1)
+  ;
+
+use_declaration
+  : namespaced_identifier T_AS IDENTIFIER
+    (ALIAS-TAG $3 "alias" $1)
+  | namespaced_identifier
+    (ALIAS-TAG (car (last (split-string $1 "\\\\"))) "alias" $1)
+  ;
+
 
 ;;; Type Declaration token
 ;; ("NAME" type "TYPE" ( PART-LIST ) ( PARENTS ) EXTRA-SPEC "DOCSTRING")
@@ -466,6 +514,7 @@ interface_member_declaration
   | class_declaration
   | method_declaration
   | field_declaration
+  | constant_declaration
   ;
 
 function_declaration
@@ -486,9 +535,9 @@ method_declarator
   ;
 
 identifier_list
-  : identifier_list T_COMMA IDENTIFIER
+  : identifier_list T_COMMA namespaced_identifier
     (cons $3 $1)
-  | IDENTIFIER
+  | namespaced_identifier
     (list $1)
   ;
 
@@ -519,36 +568,35 @@ formal_parameters
 ;;; Variable token
 ;; ("NAME" variable "TYPE" DEFAULT-VALUE EXTRA-SPEC "DOCSTRING")
 formal_parameter
-  : variable_declarator_id T_EQ expression
-    (VARIABLE-TAG $1 nil $region3)
-  | variable_declarator_id
-    (VARIABLE-TAG $1 nil nil)
+  : type_opt T_VARIABLE T_EQ expression
+    (VARIABLE-TAG $2 $1 $region4)
+  | type_opt T_VARIABLE
+    (VARIABLE-TAG $2 $1 nil)
+  ;
+
+type_opt
+  : ;; EMPTY
+  | T_ARRAY
+  | namespaced_identifier
   ;
 
 ;;; Variable token
 ;; ("NAME" variable "TYPE" DEFAULT-VALUE EXTRA-SPEC "DOCSTRING")
 field_declaration
-  : field_modifiers_opt variable_declarators T_SEMI
-    (VARIABLE-TAG $2 nil nil :typemodifiers $1)
-  ;
-
-variable_declarators
-  : variable_declarators T_COMMA variable_declarator
-    (cons $3 $1)
-  | variable_declarator
-    (list $1)
+  : field_modifiers_opt variable_declarator T_SEMI
+    (VARIABLE-TAG (car $2) nil (cdr $2) :typemodifiers $1)
   ;
 
 variable_declarator
-  : variable_declarator_id T_EQ variable_initializer
-    (list $1 nil nil $3)
-  | variable_declarator_id
-    (list $1)
+  : T_VARIABLE T_EQ variable_initializer
+    (cons $1 $3)
+  | T_VARIABLE
+    (cons $1 nil)
   ;
 
-variable_declarator_id
-  : reference_opt IDENTIFIER dims_opt
-    (concat $2 $3)
+constant_declaration
+  : T_CONST IDENTIFIER T_EQ variable_initializer T_SEMI
+    (VARIABLE-TAG $2 nil $region3 :typemodifiers (list "static" "public") :constant-flag t)
   ;
 
 reference_opt
@@ -570,12 +618,22 @@ term
   : literal
   | operator
   | IDENTIFIER
+  | namespaced_identifier
+  | T_VARIABLE
   | BRACK_BLOCK
   | PAREN_BLOCK
   | BRACE_BLOCK
   | T_NEW
   | T_CLONE
   | T_ARRAY
+  ;
+
+namespaced_identifier
+  : T_NAMESPACE_SEP namespaced_identifier
+    (concat "\\" $2)
+  | IDENTIFIER T_NAMESPACE_SEP namespaced_identifier
+    (concat $1 "\\" $3)
+  | IDENTIFIER
   ;
 
 literal
@@ -841,6 +899,7 @@ It ignores whitespaces, newlines and comments."
   wisent-php-wy--<string>-sexp-analyzer
   ;; Must detect keywords before other symbols
   wisent-php-wy--<keyword>-keyword-analyzer
+  wisent-php-wy--<variable>-regexp-analyzer
   wisent-php-wy--<symbol>-regexp-analyzer
   wisent-php-wy--<punctuation>-string-analyzer
   wisent-php-wy--<block>-block-analyzer

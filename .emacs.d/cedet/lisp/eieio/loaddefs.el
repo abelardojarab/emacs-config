@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads (eieio-defclass-autoload) "eieio-core" "eieio-core.el"
-;;;;;;  (21510 8045 319 0))
+;;;### (autoloads nil "eieio-core" "eieio-core.el" (21674 57251 1018
+;;;;;;  0))
 ;;; Generated autoloads from eieio-core.el
 
 (autoload 'eieio-defclass-autoload "eieio-core" "\
@@ -19,8 +19,8 @@ It creates an autoload function for CNAME's constructor.
 
 ;;;***
 
-;;;### (autoloads (customize-object) "eieio-custom" "eieio-custom.el"
-;;;;;;  (21591 45247 20 0))
+;;;### (autoloads nil "eieio-custom" "eieio-custom.el" (21674 57251
+;;;;;;  1060 0))
 ;;; Generated autoloads from eieio-custom.el
 
 (autoload 'customize-object "eieio-custom" "\
@@ -31,9 +31,8 @@ Optional argument GROUP is the sub-group of slots to display.
 
 ;;;***
 
-;;;### (autoloads (eieio-describe-generic eieio-describe-constructor
-;;;;;;  eieio-describe-class eieio-browse) "eieio-opt" "eieio-opt.el"
-;;;;;;  (21603 52862 1618 0))
+;;;### (autoloads nil "eieio-opt" "eieio-opt.el" (21674 57251 1089
+;;;;;;  0))
 ;;; Generated autoloads from eieio-opt.el
 
 (autoload 'eieio-browse "eieio-opt" "\
@@ -46,7 +45,6 @@ variable `eieio-default-superclass'.
 
 (autoload 'eieio-describe-class "eieio-opt" "\
 Describe a CLASS defined by a string or symbol.
-If CLASS is actually an object, then also display current values of that object.
 Optional HEADERFCN should be called to insert a few bits of info first.
 
 \(fn CLASS &optional HEADERFCN)" t nil)
@@ -67,7 +65,7 @@ Also extracts information about all methods specific to this generic.
 ;;;***
 
 ;;;### (autoloads nil nil ("chart.el" "eieio-base.el" "eieio-datadebug.el"
-;;;;;;  "eieio-speedbar.el" "eieio.el") (21622 12679 74171 0))
+;;;;;;  "eieio-speedbar.el" "eieio.el") (21674 63659 858571 0))
 
 ;;;***
 

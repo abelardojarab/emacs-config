@@ -14,7 +14,7 @@
 ;;;;;;  org-babel-execute-src-block org-babel-pop-to-session-maybe
 ;;;;;;  org-babel-load-in-session-maybe org-babel-expand-src-block-maybe
 ;;;;;;  org-babel-view-src-block-info org-babel-execute-maybe org-babel-execute-safely-maybe)
-;;;;;;  "ob-core" "ob-core.el" (21647 12479))
+;;;;;;  "ob-core" "ob-core.el" (21674 63770))
 ;;; Generated autoloads from ob-core.el
 
 (autoload 'org-babel-execute-safely-maybe "ob-core" "\
@@ -306,7 +306,7 @@ used to limit the exported source code blocks by language.
 ;;;;;;  org-search-view org-agenda-list org-batch-store-agenda-views
 ;;;;;;  org-store-agenda-views org-batch-agenda-csv org-batch-agenda
 ;;;;;;  org-agenda org-toggle-sticky-agenda) "org-agenda" "org-agenda.el"
-;;;;;;  (21639 26272))
+;;;;;;  (21674 63770))
 ;;; Generated autoloads from org-agenda.el
 
 (autoload 'org-toggle-sticky-agenda "org-agenda" "\
@@ -582,7 +582,7 @@ to override `appt-message-warning-time'.
 ;;;### (autoloads (org-archive-subtree-default-with-confirmation
 ;;;;;;  org-archive-subtree-default org-toggle-archive-tag org-archive-to-archive-sibling
 ;;;;;;  org-archive-subtree org-add-archive-files) "org-archive"
-;;;;;;  "org-archive.el" (21573 17048))
+;;;;;;  "org-archive.el" (21674 63770))
 ;;; Generated autoloads from org-archive.el
 
 (autoload 'org-add-archive-files "org-archive" "\
@@ -598,9 +598,11 @@ The archive can be a certain top-level heading in the current file, or in
 a different file.  The tree will be moved to that location, the subtree
 heading be marked DONE, and the current time will be added.
 
-When called with prefix argument FIND-DONE, find whole trees without any
+When called with a single prefix argument FIND-DONE, find whole trees without any
 open TODO items and archive them (after getting confirmation from the user).
-If the cursor is not at a headline when this command is called, try all level
+When called with a double prefix argument, find whole trees with timestamps before
+today and archive them (after getting confirmation from the user).
+If the cursor is not at a headline when these commands are called, try all level
 1 trees.  If the cursor is on a headline, only try the direct children of
 this heading.
 
@@ -839,7 +841,7 @@ Otherwise, return nil.
 ;;;### (autoloads (org-agenda-columns org-insert-columns-dblock org-dblock-write:columnview
 ;;;;;;  org-columns-number-to-string org-columns-compute org-columns
 ;;;;;;  org-columns-get-format-and-top-level org-columns-remove-overlays)
-;;;;;;  "org-colview" "org-colview.el" (21603 52971))
+;;;;;;  "org-colview" "org-colview.el" (21674 63770))
 ;;; Generated autoloads from org-colview.el
 
 (autoload 'org-columns-remove-overlays "org-colview" "\
@@ -1261,7 +1263,7 @@ line directly before or after the table.
 ;;;;;;  org-table-begin org-table-align org-table-export org-table-import
 ;;;;;;  org-table-convert-region org-table-create org-table-create-or-convert-from-region
 ;;;;;;  org-table-create-with-table\.el) "org-table" "org-table.el"
-;;;;;;  (21647 12479))
+;;;;;;  (21674 63770))
 ;;; Generated autoloads from org-table.el
 
 (autoload 'org-table-create-with-table\.el "org-table" "\
@@ -1501,10 +1503,17 @@ With prefix argument WITH-CASE, alphabetic sorting will be case-sensitive.
 
 If SORTING-TYPE is specified when this function is called from a Lisp
 program, no prompting will take place.  SORTING-TYPE must be a character,
-any of (?a ?A ?n ?N ?t ?T) where the capital letter indicate that sorting
-should be done in reverse order.
+any of (?a ?A ?n ?N ?t ?T ?f ?F) where the capital letters indicate that
+sorting should be done in reverse order.
 
-\(fn WITH-CASE &optional SORTING-TYPE)" t nil)
+If the SORTING-TYPE is ?f or ?F, then GETKEY-FUNC specifies
+a function to be called to extract the key.  It must return either
+a string or a number that should serve as the sorting key for that
+row.  It will then use COMPARE-FUNC to compare entries.  If GETKEY-FUNC
+is specified interactively, the comparison will be either a string or
+numeric compare based on the type of the first key in the table.
+
+\(fn WITH-CASE &optional SORTING-TYPE GETKEY-FUNC COMPARE-FUNC)" t nil)
 
 (autoload 'org-table-cut-region "org-table" "\
 Copy region in table to the clipboard and blank all relevant fields.
@@ -1973,7 +1982,7 @@ using three `C-u' prefix arguments.
 ;;;***
 
 ;;;### (autoloads (org-git-version org-release) "org-version" "org-version.el"
-;;;;;;  (21647 12489))
+;;;;;;  (21674 63780))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -1999,7 +2008,7 @@ The location of ODT styles.")
 ;;;;;;  org-run-like-in-org-mode turn-on-orgstruct++ turn-on-orgstruct
 ;;;;;;  orgstruct-mode org-global-cycle org-cycle org-mode org-clock-persistence-insinuate
 ;;;;;;  turn-on-orgtbl org-version org-babel-load-file org-babel-do-load-languages)
-;;;;;;  "org" "org.el" (21647 12479))
+;;;;;;  "org" "org.el" (21674 63771))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -2223,7 +2232,7 @@ Call the customize function with org as argument.
 
 ;;;### (autoloads (org-ascii-publish-to-utf8 org-ascii-publish-to-latin1
 ;;;;;;  org-ascii-publish-to-ascii org-ascii-export-to-ascii org-ascii-export-as-ascii)
-;;;;;;  "ox-ascii" "ox-ascii.el" (21639 26272))
+;;;;;;  "ox-ascii" "ox-ascii.el" (21674 63771))
 ;;; Generated autoloads from ox-ascii.el
 
 (autoload 'org-ascii-export-as-ascii "ox-ascii" "\
@@ -2326,7 +2335,7 @@ Return output file name.
 ;;;### (autoloads (org-beamer-publish-to-pdf org-beamer-publish-to-latex
 ;;;;;;  org-beamer-select-environment org-beamer-export-to-pdf org-beamer-export-to-latex
 ;;;;;;  org-beamer-export-as-latex org-beamer-mode) "ox-beamer" "ox-beamer.el"
-;;;;;;  (21647 12479))
+;;;;;;  (21674 63771))
 ;;; Generated autoloads from ox-beamer.el
 
 (autoload 'org-beamer-mode "ox-beamer" "\
@@ -2463,7 +2472,7 @@ Return output file name.
 
 ;;;### (autoloads (org-html-publish-to-html org-html-export-to-html
 ;;;;;;  org-html-convert-region-to-html org-html-export-as-html org-html-htmlize-generate-css)
-;;;;;;  "ox-html" "ox-html.el" (21639 26272))
+;;;;;;  "ox-html" "ox-html.el" (21674 63771))
 ;;; Generated autoloads from ox-html.el
 
 (put 'org-html-head-include-default-style 'safe-local-variable 'booleanp)
@@ -2623,8 +2632,8 @@ The file is stored under the name chosen in
 
 ;;;### (autoloads (org-latex-publish-to-pdf org-latex-publish-to-latex
 ;;;;;;  org-latex-export-to-pdf org-latex-export-to-latex org-latex-convert-region-to-latex
-;;;;;;  org-latex-export-as-latex) "ox-latex" "ox-latex.el" (21639
-;;;;;;  26272))
+;;;;;;  org-latex-export-as-latex) "ox-latex" "ox-latex.el" (21674
+;;;;;;  63771))
 ;;; Generated autoloads from ox-latex.el
 
 (autoload 'org-latex-export-as-latex "ox-latex" "\
@@ -2751,7 +2760,7 @@ Return output file name.
 
 ;;;### (autoloads (org-md-publish-to-md org-md-export-to-markdown
 ;;;;;;  org-md-convert-region-to-md org-md-export-as-markdown) "ox-md"
-;;;;;;  "ox-md.el" (21647 12480))
+;;;;;;  "ox-md.el" (21674 63771))
 ;;; Generated autoloads from ox-md.el
 
 (autoload 'org-md-export-as-markdown "ox-md" "\
@@ -2824,7 +2833,7 @@ Return output file name.
 ;;;***
 
 ;;;### (autoloads (org-odt-convert org-odt-export-to-odt org-odt-export-as-odf-and-open
-;;;;;;  org-odt-export-as-odf) "ox-odt" "ox-odt.el" (21622 12755))
+;;;;;;  org-odt-export-as-odf) "ox-odt" "ox-odt.el" (21674 63771))
 ;;; Generated autoloads from ox-odt.el
 
 (put 'org-odt-preferred-output-format 'safe-local-variable 'stringp)
@@ -3011,7 +3020,7 @@ the project.
 ;;;***
 
 ;;;### (autoloads (org-texinfo-convert-region-to-texinfo org-texinfo-publish-to-texinfo)
-;;;;;;  "ox-texinfo" "ox-texinfo.el" (21639 26272))
+;;;;;;  "ox-texinfo" "ox-texinfo.el" (21674 63772))
 ;;; Generated autoloads from ox-texinfo.el
 
 (autoload 'org-texinfo-publish-to-texinfo "ox-texinfo" "\
@@ -3037,7 +3046,7 @@ this command to convert it.
 
 ;;;### (autoloads (org-export-dispatch org-export-to-file org-export-to-buffer
 ;;;;;;  org-export-insert-default-template org-export-replace-region-by
-;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" (21622 12755))
+;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" (21674 63772))
 ;;; Generated autoloads from ox.el
 
 (autoload 'org-export-as "ox" "\

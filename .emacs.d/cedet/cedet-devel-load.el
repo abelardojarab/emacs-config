@@ -21,7 +21,7 @@
 
 ;;; Commentary:
 ;;
-;; This file is for using the CEDET from the CEDET standalone bzr
+;; This file is for using the CEDET from the CEDET standalone git
 ;; repository, replacing the version that comes with Emacs 23.x and greater.
 
 ;;; Code:

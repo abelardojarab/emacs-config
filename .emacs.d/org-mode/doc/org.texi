@@ -1195,7 +1195,7 @@ start with one or more stars, on the left margin@footnote{See the variables
 @code{org-special-ctrl-a/e}, @code{org-special-ctrl-k}, and
 @code{org-ctrl-k-protect-subtree} to configure special behavior of @kbd{C-a},
 @kbd{C-e}, and @kbd{C-k} in headlines.} @footnote{Clocking only works with
-headings indented less then 30 stars.}.  For example:
+headings indented less than 30 stars.}.  For example:
 
 @example
 * Top level headline
@@ -2205,8 +2205,10 @@ point is before the first column, you will be prompted for the sorting
 column.  If there is an active region, the mark specifies the first line
 and the sorting column, while point should be in the last line to be
 included into the sorting.  The command prompts for the sorting type
-(alphabetically, numerically, or by time).  When called with a prefix
-argument, alphabetic sorting will be case-sensitive.
+(alphabetically, numerically, or by time).  You can sort in normal or
+reverse order.  You can also supply your own key extraction and comparison
+functions.  When called with a prefix argument, alphabetic sorting will be
+case-sensitive.
 
 @tsubheading{Regions}
 @orgcmd{C-c C-x M-w,org-table-copy-region}
@@ -5569,7 +5571,7 @@ optional.  The individual parts have the following meaning:
                 @{@@min@}    @r{Minimum age (in days/hours/mins/seconds).}
                 @{@@max@}    @r{Maximum age (in days/hours/mins/seconds).}
                 @{@@mean@}   @r{Arithmetic mean of ages (in days/hours/mins/seconds).}
-                @{est+@}    @r{Add low-high estimates.}
+                @{est+@}    @r{Add @samp{low-high} estimates.}
 @end example
 
 @noindent
@@ -5578,11 +5580,12 @@ include.  Subsequent columns referencing the same property will all display the
 same summary information.
 
 The @code{est+} summary type requires further explanation.  It is used for
-combining estimates, expressed as low-high ranges.  For example, instead
-of estimating a particular task will take 5 days, you might estimate it as
-5--6 days if you're fairly confident you know how much work is required, or
-1--10 days if you don't really know what needs to be done.  Both ranges
-average at 5.5 days, but the first represents a more predictable delivery.
+combining estimates, expressed as @samp{low-high} ranges or plain numbers.
+For example, instead of estimating a particular task will take 5 days, you
+might estimate it as 5--6 days if you're fairly confident you know how much
+work is required, or 1--10 days if you don't really know what needs to be
+done.  Both ranges average at 5.5 days, but the first represents a more
+predictable delivery.
 
 When combining a set of such estimates, simply adding the lows and highs
 produces an unrealistically wide result.  Instead, @code{est+} adds the
@@ -7512,6 +7515,10 @@ the archive.  To do this, each subtree is checked for open TODO entries.
 If none are found, the command offers to move it to the archive
 location.  If the cursor is @emph{not} on a headline when this command
 is invoked, the level 1 trees will be checked.
+@orgkey{C-u C-u C-c C-x C-s}
+As above, but check subtree for timestamps instead of TODO entries.  The
+command will offer to archive the subtree if it @emph{does} contain a
+timestamp, and that timestamp is in the past.
 @end table
 
 @cindex archive locations

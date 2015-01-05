@@ -919,13 +919,22 @@ channel."
 	      (if (not dest) (org-ascii--translate "Unknown reference" info)
 		(format
 		 (org-ascii--translate "See section %s" info)
-		 (mapconcat 'number-to-string
-			    (org-export-get-headline-number dest info) "."))))
+		 (if (org-export-numbered-headline-p dest info)
+		     (mapconcat #'number-to-string
+				(org-export-get-headline-number dest info) ".")
+		   (org-export-data (org-element-property :title dest) info)))))
 	     width info) "\n\n")))
 	;; Do not add a link that cannot be resolved and doesn't have
 	;; any description: destination is already visible in the
 	;; paragraph.
 	((not (org-element-contents link)) nil)
+	;; Do not add a link already handled by custom export
+	;; functions.
+	((let ((protocol (nth 2 (assoc type org-link-protocols)))
+	       (path (org-element-property :path link)))
+	   (and (functionp protocol)
+		(funcall protocol (org-link-unescape path) anchor 'ascii)))
+	 nil)
 	(t
 	 (concat
 	  (org-ascii--fill-string
@@ -1509,9 +1518,9 @@ CONTENTS is nil.  INFO is a plist holding contextual
 
 DESC is the description part of the link, or the empty string.
 INFO is a plist holding contextual information."
-  (let ((raw-link (org-element-property :raw-link link))
-	(type (org-element-property :type link)))
+  (let ((type (org-element-property :type link)))
     (cond
+     ((org-export-custom-protocol-maybe link desc info))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
 	(format (org-export-get-coderef-format ref desc)
@@ -1529,17 +1538,20 @@ INFO is a plist holding contextual information."
 		   (org-export-get-ordinal
 		    destination info nil 'org-ascii--has-caption-p)))
 	      (if number
-		(if (atom number) (number-to-string number)
-		  (mapconcat #'number-to-string number "."))
+		  (if (atom number) (number-to-string number)
+		    (mapconcat #'number-to-string number "."))
 		;; Unnumbered headline.
 		(when (eq 'headline (org-element-type destination))
-		  (format "[%s]" (org-export-data
-				  (org-element-property :title destination) info)))))))))
+		  (format "[%s]"
+			  (org-export-data
+			   (org-element-property :title destination)
+			   info)))))))))
      (t
-      (if (not (org-string-nw-p desc)) (format "[%s]" raw-link)
-	(concat (format "[%s]" desc)
-		(and (not (plist-get info :ascii-links-to-notes))
-		     (format " (%s)" raw-link))))))))
+      (let ((raw-link (org-element-property :raw-link link)))
+	(if (not (org-string-nw-p desc)) (format "[%s]" raw-link)
+	  (concat (format "[%s]" desc)
+		  (and (not (plist-get info :ascii-links-to-notes))
+		       (format " (%s)" raw-link)))))))))
 
 
 ;;;; Node Properties

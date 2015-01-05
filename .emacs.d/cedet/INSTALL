@@ -11,7 +11,7 @@ including:
 
 REQUIREMENTS:
 
-   The full CEDET suite requires Emacs 23.2 or newer.
+   The full CEDET suite requires Emacs 24.1 or newer.
 
    Compilation of CEDET currently requires GNU Make.
 
@@ -95,12 +95,11 @@ INSTALL:
 
     make clean-all
 
-  and try again. If you're running the development version from bzr,
+  and try again. If you're running the development version from git,
   you can also do
 
-    bzr revert
-    bzr clean-tree
-    bzr clean-tree --ignore
+    git reset --hard
+    git clean -f
 
   to get a clean slate of all files (deleting all new files you've
   created and all changes you've made, of course).

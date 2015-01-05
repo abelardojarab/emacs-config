@@ -2078,6 +2078,8 @@ When nil, `q' will kill the single agenda buffer."
 (defvar org-agenda-this-buffer-name nil)
 (defvar org-agenda-doing-sticky-redo nil)
 (defvar org-agenda-this-buffer-is-sticky nil)
+(defvar org-agenda-last-indirect-buffer nil
+  "Last buffer loaded by `org-agenda-tree-to-indirect-buffer'.")
 
 (defconst org-agenda-local-vars
   '(org-agenda-this-buffer-name
@@ -2102,6 +2104,7 @@ When nil, `q' will kill the single agenda buffer."
     org-agenda-effort-filter
     org-agenda-markers
     org-agenda-last-search-view-search-was-boolean
+    org-agenda-last-indirect-buffer
     org-agenda-filtered-by-category
     org-agenda-filter-form
     org-agenda-cycle-counter
@@ -3630,7 +3633,7 @@ FILTER-ALIST is an alist of filters we need to apply when
     (unless (equal (current-buffer) abuf)
       (org-pop-to-buffer-same-window abuf))
     (setq org-agenda-pre-window-conf
-	  (or org-agenda-pre-window-conf wconf))))
+	  (or wconf org-agenda-pre-window-conf))))
 
 (defun org-agenda-prepare (&optional name)
   (let ((filter-alist (if org-agenda-persistent-filter
@@ -7173,69 +7176,65 @@ Allowed types are 'agenda 'timeline 'todo 'tags 'search."
 	nil))))
 
 (defun org-agenda-Quit ()
-  "Exit the agenda and kill buffers loaded by `org-agenda'.
-Also restore the window configuration."
+  "Exit the agenda, killing the agenda buffer.
+Like `org-agenda-quit', but kill the buffer even when
+`org-agenda-sticky' is non-nil."
   (interactive)
-  (if org-agenda-columns-active
-      (org-columns-quit)
-    (let ((buf (current-buffer)))
-      (if (eq org-agenda-window-setup 'other-frame)
-	  (progn
-	    (org-agenda-reset-markers)
-	    (kill-buffer buf)
-	    (org-columns-remove-overlays)
-	    (setq org-agenda-archives-mode nil)
-	    (delete-frame))
-	(and (not (eq org-agenda-window-setup 'current-window))
-	     (not (one-window-p))
-	     (delete-window))
-	(org-agenda-reset-markers)
-	(kill-buffer buf)
-	(org-columns-remove-overlays)
-	(setq org-agenda-archives-mode nil)))
-    (setq org-agenda-buffer nil)
-    ;; Maybe restore the pre-agenda window configuration.
-    (and org-agenda-restore-windows-after-quit
-	 (not (eq org-agenda-window-setup 'other-frame))
-	 org-agenda-pre-window-conf
-	 (set-window-configuration org-agenda-pre-window-conf)
-	 (setq org-agenda-pre-window-conf nil))))
+  (org-agenda--quit))
 
 (defun org-agenda-quit ()
-  "Exit the agenda and restore the window configuration.
-When `org-agenda-sticky' is non-nil, only bury the agenda."
+  "Exit the agenda.
+
+When `org-agenda-sticky' is non-nil, bury the agenda buffer
+instead of killing it.
+
+When `org-agenda-restore-windows-after-quit' is non-nil, restore
+the pre-agenda window configuration.
+
+When column view is active, exit column view instead of the
+agenda."
   (interactive)
-  (if (and (eq org-indirect-buffer-display 'other-window)
-	   org-last-indirect-buffer)
-      (let ((org-last-indirect-window
-	     (get-buffer-window org-last-indirect-buffer)))
-	(if org-last-indirect-window
-	    (delete-window org-last-indirect-window))))
+  (org-agenda--quit org-agenda-sticky))
+
+(defun org-agenda--quit (&optional bury)
   (if org-agenda-columns-active
       (org-columns-quit)
-    (if org-agenda-sticky
-	(let ((buf (current-buffer)))
-	  (if (eq org-agenda-window-setup 'other-frame)
-	      (progn
-		(delete-frame))
-	    (and (not (eq org-agenda-window-setup 'current-window))
-		 (not (one-window-p))
-		 (delete-window)))
-	  (with-current-buffer buf
-	    (bury-buffer)
-	    ;; Maybe restore the pre-agenda window configuration.
-	    (and org-agenda-restore-windows-after-quit
-		 (not (eq org-agenda-window-setup 'other-frame))
-		 org-agenda-pre-window-conf
-		 (set-window-configuration org-agenda-pre-window-conf)
-		 (setq org-agenda-pre-window-conf nil))))
-      (org-agenda-Quit))))
+    (let ((buf (current-buffer))
+	  (wconf org-agenda-pre-window-conf)
+	  (org-agenda-last-indirect-window
+	   (and (eq org-indirect-buffer-display 'other-window)
+		org-agenda-last-indirect-buffer
+		(get-buffer-window org-agenda-last-indirect-buffer))))
+      (cond
+       ((eq org-agenda-window-setup 'other-frame)
+	(delete-frame))
+       ((and org-agenda-restore-windows-after-quit
+	     wconf)
+	;; Maybe restore the pre-agenda window configuration.  Reset
+	;; `org-agenda-pre-window-conf' before running
+	;; `set-window-configuration', which loses the current buffer.
+	(setq org-agenda-pre-window-conf nil)
+	(set-window-configuration wconf))
+       (t
+	(when org-agenda-last-indirect-window
+	  (delete-window org-agenda-last-indirect-window))
+	(and (not (eq org-agenda-window-setup 'current-window))
+	     (not (one-window-p))
+	     (delete-window))))
+      (if bury
+	  (bury-buffer buf)
+	(kill-buffer buf)
+	(setq org-agenda-archives-mode nil
+	      org-agenda-buffer nil)))))
 
 (defun org-agenda-exit ()
-  "Exit the agenda and restore the window configuration.
-Also kill Org-mode buffers loaded by `org-agenda'.  Org-mode
-buffers visited directly by the user will not be touched."
+  "Exit the agenda, killing Org buffers loaded by the agenda.
+Like `org-agenda-Quit', but kill any buffers that were created by
+the agenda.  Org buffers visited directly by the user will not be
+touched.  Also, exit the agenda even if it is in column view."
   (interactive)
+  (when org-agenda-columns-active
+    (org-columns-quit))
   (org-release-buffers org-agenda-new-buffers)
   (setq org-agenda-new-buffers nil)
   (org-agenda-Quit))
@@ -8750,7 +8749,8 @@ use the dedicated frame)."
 	  (and indirect-window (select-window indirect-window))
 	  (switch-to-buffer org-last-indirect-buffer :norecord)
 	  (fit-window-to-buffer indirect-window)))
-      (select-window (get-buffer-window agenda-buffer)))))
+      (select-window (get-buffer-window agenda-buffer))
+      (setq org-agenda-last-indirect-buffer org-last-indirect-buffer))))
 
 (defun org-agenda-do-tree-to-indirect-buffer (arg)
   "Same as `org-agenda-tree-to-indirect-buffer' without saving window."
