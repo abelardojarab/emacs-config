@@ -1,11 +1,11 @@
-;;; popup-switcher.el --- switch to other buffers and files via popup.
+;;; popup-switcher.el --- switch to other buffers and files via popup. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2013-2014  Kostafey <kostafey@gmail.com>
+;; Copyright (C) 2013-2015  Kostafey <kostafey@gmail.com>
 
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/kostafey/popup-switcher
 ;; Keywords: popup, switch, buffers, functions
-;; Version: 0.2.5
+;; Version: 0.2.8
 ;; Package-Requires: ((cl-lib "0.3")(popup "0.5.0"))
 
 ;; This file is not part of GNU Emacs.
@@ -36,6 +36,9 @@ Locate popup menu in the `fill-column' center otherwise.")
 (defvar psw-use-flx nil
   "Non-nil enables `flx' fuzzy matching engine for isearch in popup menus.")
 
+(defvar psw-popup-menu-max-length 15
+  "Set maximum number of visible items in popup menus.")
+
 (defcustom psw-before-menu-hook nil
   "Hook runs before menu showed")
 
@@ -48,11 +51,11 @@ Locate popup menu in the `fill-column' center otherwise.")
     (line-number-at-pos)))
 
 (defun psw-get-buffer-list ()
-  (remove-if (lambda (buf) (or (minibufferp buf)
-                          (let ((buf-name (buffer-name buf)))
-                            (and (>= (length buf-name) 2)
-                                 (equal (substring buf-name 0 2) " *")))))
-             (buffer-list)))
+  (cl-remove-if (lambda (buf) (or (minibufferp buf)
+                             (let ((buf-name (buffer-name buf)))
+                               (and (>= (length buf-name) 2)
+                                    (equal (substring buf-name 0 2) " *")))))
+                (buffer-list)))
 
 (defun psw-copy-face (old-face new-face)
   "Safe copy face to handle absence of `flx-highlight-face' if
@@ -68,7 +71,9 @@ ITEM-NAMES-LIST - list of item names to select.
 `psw-in-window-center' - if t, overrides `psw-in-window-center' var value."
   (if (equal (length item-names-list) 0)
       (error "Popup menu items list is empty."))
-  (let* ((menu-height (min 15 (length item-names-list) (- (window-height) 4)))
+  (let* ((menu-height (min psw-popup-menu-max-length
+                           (length item-names-list)
+                           (- (window-height) 4)))
          (x (+ (/ (- (if (or psw-in-window-center window-center)
                          (window-width)
                        fill-column)
@@ -131,11 +136,11 @@ ITEM-NAMES-LIST - list of item names to select.
 
 (defun psw-compose (&rest funs)
   "Return function composed of FUNS."
-  (lexical-let ((lex-funs funs))
+  (let ((lex-funs funs))
     (lambda (&rest args)
-      (reduce 'funcall (butlast lex-funs)
-              :from-end t
-              :initial-value (apply (car (last lex-funs)) args)))))
+      (cl-reduce 'funcall (butlast lex-funs)
+                 :from-end t
+                 :initial-value (apply (car (last lex-funs)) args)))))
 
 (defun psw-get-plain-string (properties-string)
   "Remove text properties from the string."
@@ -202,7 +207,7 @@ SWITCHER - function, that describes what do with the selected item."
   (let ((start-path (or start-path
                         (expand-file-name ".." (buffer-file-name)))))
     (psw-switcher
-     :items-list (remove-if
+     :items-list (cl-remove-if
                   (lambda (path) (equal (file-name-nondirectory (car path)) "."))
                   (directory-files-and-attributes start-path t))
      :item-name-getter (psw-compose 'file-name-nondirectory 'car)
@@ -231,7 +236,7 @@ SWITCHER - function, that describes what do with the selected item."
      ;; TODO: use imenu for emacs lisp
      (defun psw-imenu-list-parser (tags)
        "Simplify list of pairs for `imenu--index-alist'."
-       (remove-if
+       (cl-remove-if
         'psw-nil?
         (loop for tag in tags
               collect (if (and (listp tag)

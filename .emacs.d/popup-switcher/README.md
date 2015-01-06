@@ -1,3 +1,6 @@
+[![License GPL 2](https://img.shields.io/badge/license-GPL_2-green.svg)](http://www.gnu.org/licenses/gpl-2.0.txt)
+[![MELPA](http://melpa.org/packages/popup-switcher-badge.svg)](http://melpa.org/#/popup-switcher)
+
 # popup-switcher
 
 popup-switcher provides (yet another) convenient way to switch buffers, optional
@@ -36,6 +39,14 @@ switching functions see
 
 ```lisp
 (global-set-key [f2] 'psw-switch-buffer)
+```
+
+### Maximum number of visible items
+
+Set maximum number of visible items in popup menus
+
+```lisp
+(setq psw-popup-menu-max-length 15)
 ```
 
 ### Menu position
@@ -81,13 +92,13 @@ functions/methods).
 
 List of interactive functions:
 
-* `psw-switch-buffer` -- switch buffers through popup menu.
-* `psw-switch-recentf` -- switch recent files.
-* `psw-navigate-files` -- simple file navigator.
-* `psw-switch-function` -- switch (navigate) through functions in the current
-  buffer *(optional)*.
-* `psw-switch-projectile-files` -- switch among projectile project files list
-  *(optional)*.
+ Command                       | Description
+-------------------------------|------------------------------------------
+ `psw-switch-buffer`           | switch buffers through popup menu
+ `psw-switch-recentf`          | switch recent files
+ `psw-navigate-files`          | simple file navigator
+ `psw-switch-function`         | switch (navigate) through functions in the current buffer *(optional)*
+ `psw-switch-projectile-files` | switch among projectile project files list *(optional)*
 
 Run <kbd>M-x psw-switch-buffer [RET]</kbd> (or your selected key).  Type some letters
 from the name of buffer of interest (since isearch is enabled on start) to
@@ -107,6 +118,6 @@ buffer.
 
 ## License
 
-Copyright © 2013-2014 Kostafey <kostafey@gmail.com>
+Copyright © 2013-2015 Kostafey <kostafey@gmail.com>
 
 Distributed under the General Public License 2.0+
