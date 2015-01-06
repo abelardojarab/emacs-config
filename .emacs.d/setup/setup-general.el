@@ -303,7 +303,7 @@ Defaults to `error'."
 (setq desktop-files-not-to-save
       "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\(^/tmp/\\)\\|\\(.gpg$\\)")
 (setq desktop-buffers-not-to-save
-      (concat "\\(" "^nn\\.a[0-9]+\\|\\.log\\|(ftp)"
+      (concat "\\(" "^nn\\.a[0-9]+\\|\\ECB\\|\\.log\\|(ftp)"
               "\\)$"))
 
 (add-to-list 'desktop-modes-not-to-save 'dired-mode)
