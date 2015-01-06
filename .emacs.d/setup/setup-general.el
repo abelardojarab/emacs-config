@@ -1,6 +1,6 @@
 ;;; setup-general.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -286,8 +286,10 @@ Defaults to `error'."
 (setq delete-by-moving-to-trash t)
 
 ;; Put something different in the scratch buffer
-(setq initial-scratch-message
-      ";; scratch buffer created -- start typing...\n")
+(setq initial-scratch-message "\
+# This buffer is for notes you don't want to save,
+# If you want to create a file, visit that file with C-x C-f,
+# then enter the text in that file's own buffer.")
 
 ;; Automatically reload files after they've been modified
 (global-auto-revert-mode 1)

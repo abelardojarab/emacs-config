@@ -71,8 +71,6 @@
 ;; Setup appearance
 (require 'setup-appearance)
 
-
-
 ;; Setup Cedet
 (require 'setup-cedet)
 
