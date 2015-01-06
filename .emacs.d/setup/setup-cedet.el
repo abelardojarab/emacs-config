@@ -1,6 +1,6 @@
 ;;; setup-cedet.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -100,17 +100,17 @@
 ;; smart completions
 (require 'semantic/ia)
 (setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
-                 '(project unloaded))
+                 '(project))
 (setq-mode-local c-mode semanticdb-find-default-throttle
-                 '(project unloaded))
+                 '(project))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
-                 '(project unloaded))
+                 '(project))
 (setq-mode-local lisp-mode semanticdb-find-default-throttle
-                 '(project unloaded))
+                 '(project))
 (setq-mode-local python-mode semanticdb-find-default-throttle
-                 '(project unloaded))
+                 '(project))
 (setq-mode-local js2-mode semanticdb-find-default-throttle
-                 '(project unloaded))
+                 '(project))
 
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")

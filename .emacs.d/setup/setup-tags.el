@@ -75,19 +75,26 @@
     (find-tag (replace-regexp-in-string "\\\\" "" (ido-completing-read "Tag: " tag-names)))))
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
-(global-set-key (kbd "M-.") (if (and (fboundp 'ggtags-find-tag-dwim)
+(global-set-key (kbd "C-,") (if (and (fboundp 'ggtags-find-tag-dwim)
                                      (executable-find "global"))
                                 'ggtags-find-tag-dwim
                               'etags-select-find-tag))
 
 ;; Use Helm instead of 'etags-select-find-tag
-(global-set-key (kbd "C-,") 'helm-etags-select)
+(global-set-key (kbd "M-.") 'helm-etags-select)
 
 ;; Tags table
 (setq tags-always-build-completion-table t)
 (setq tags-file-name "~/workspace/TAGS")
 
-(defun create-tags (dir-name)
+;; Helper functions for etags/ctags
+(defun create-ctags (dir-name)
+  "Create tags file."
+  (interactive "DDirectory: ")
+  (shell-command
+   (format "ctags -f %s -e -R %s" path-to-ctags (directory-file-name dir-name))))
+
+(defun create-etags (dir-name)
   "Create tags file."
   (interactive "DDirectory: ")
   (eshell-command

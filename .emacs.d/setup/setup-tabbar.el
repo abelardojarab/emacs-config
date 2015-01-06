@@ -40,7 +40,7 @@
 (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
   (setq ad-return-value
         (if (and (buffer-modified-p (tabbar-tab-value tab))
-                 (buffer-file-name (tabbar-tab-value tab)))
+               (buffer-file-name (tabbar-tab-value tab)))
             (concat "+" (concat ad-return-value ""))
           (concat "" (concat ad-return-value "")))))
 
@@ -66,28 +66,18 @@
 ;; Fix for tabbar under Emacs 24.4
 (eval-after-load "tabbar-ruler"
   `(progn
-     (unless (version< emacs-version "24.4")
+     ;; store tabbar-cache into a real hash,
+     ;; rather than in frame parameters
+     (defvar tabbar-caches (make-hash-table :test 'equal))
 
-       ;; store tabbar-cache into a real hash,
-       ;; rather than in frame parameters
-       (defvar tabbar-caches (make-hash-table :test 'equal))
-
-       (defun tabbar-create-or-get-tabbar-cache ()
-         "Return a frame-local hash table that acts as a memoization
+     (defun tabbar-create-or-get-tabbar-cache ()
+       "Return a frame-local hash table that acts as a memoization
        cache for tabbar. Create one if the frame doesn't have one yet."
-         (or (gethash (selected-frame) tabbar-caches)
-             (let ((frame-cache (make-hash-table :test 'equal)))
-               (puthash (selected-frame) frame-cache tabbar-caches)
-               frame-cache)))
-       )))
-
-;; Alternative solution not working,
-;; from https://bitbucket.org/bamanzi/dotemacs-elite/issue/24/tabbar-ruler-not-work-in-emacs-244-keep
-;; (defun tabbar-ruler-remove-caches
-;;     (mapc #'(lambda (frame)
-;;               (modify-frame-parameters frame '((tabbar-cache . nil))))
-;;           (frame-list)))
-;; (add-hook 'desktop-after-read-hook 'tabbar-ruler-remove-caches)
+       (or (gethash (selected-frame) tabbar-caches)
+          (let ((frame-cache (make-hash-table :test 'equal)))
+            (puthash (selected-frame) frame-cache tabbar-caches)
+            frame-cache)))
+     ))
 
 ;; necessary support function for buffer burial
 (defun crs-delete-these (delete-these from-this-list)

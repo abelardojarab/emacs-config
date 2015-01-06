@@ -55,6 +55,11 @@
      '(helm-c-source-bibtex)
      "*helm bibtex:")))
 
+;; Helm etags plus
+(add-to-list 'load-path "~/.emacs.d/helm-etags+")
+(require 'helm-etags+ nil 'noerror)
+(require 'ctags-update nil 'noerror)
+
 ;; Async
 (require 'dired+)
 (add-to-list 'load-path "~/.emacs.d/async")
