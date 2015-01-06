@@ -264,13 +264,75 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/popwin")
 (require 'popwin)
 
-;; Keep session
+;; Automatically save and restore sessions
 (require 'desktop)
-(desktop-save-mode 1)
-(setq desktop-load-locked-desktop t)
 (setq-default desktop-missing-file-warning nil)
-(setq desktop-path '("~/"))
-(setq desktop-dirname "~/")
+(setq desktop-dirname             "~/.emacs.cache/"
+      desktop-base-file-name      "emacs.desktop"
+      desktop-base-lock-name      "lock"
+      desktop-path                (list desktop-dirname)
+      desktop-save                t
+      desktop-files-not-to-save   "^$" ;reload tramp paths
+      desktop-load-locked-desktop t
+      desktop-save 'ask-if-new
+      desktop-file-name-format 'absolute
+      ;; would be nice to use some lazy loading, but if Emacs exits before
+      ;; the lazy loading, then these buffers are lost
+      desktop-restore-eager t
+      desktop-lazy-verbose t
+      desktop-lazy-idle-delay 5
+      desktop-globals-to-save
+      ;; save a bunch of variables to the desktop file
+      ;; for lists specify the len of the maximal saved data also
+      (setq desktop-globals-to-save
+            '((extended-command-history . 30)
+              (file-name-history        . 100)
+              (grep-history             . 30)
+              (compile-history          . 30)
+              (minibuffer-history       . 50)
+              (query-replace-history    . 60)
+              (read-expression-history  . 60)
+              (regexp-history           . 60)
+              (regexp-search-ring       . 20)
+              (search-ring              . 20)
+              (shell-command-history    . 50)
+              tags-file-name
+              register-alist))
+      desktop-locals-to-save
+      (nconc '(word-wrap line-move-visual) desktop-locals-to-save))
+(setq desktop-files-not-to-save
+      "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\(^/tmp/\\)\\|\\(.gpg$\\)")
+(setq desktop-buffers-not-to-save
+      (concat "\\(" "^nn\\.a[0-9]+\\|\\.log\\|(ftp)"
+              "\\)$"))
+
+(add-to-list 'desktop-modes-not-to-save 'dired-mode)
+(add-to-list 'desktop-modes-not-to-save 'Info-mode)
+(add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+(add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
+(add-to-list 'desktop-modes-not-to-save 'DocView-mode)
+
+;; buffer-display-time is changed when desktop is loaded
+(add-to-list 'desktop-locals-to-save 'buffer-display-time-1)
+(make-variable-buffer-local 'buffer-display-time-1)
+
+(defun save-buffer-display-time ()
+  (mapc (lambda (buf)
+          (with-current-buffer buf
+            (setq buffer-display-time-1
+                  (or buffer-display-time (current-time)))))
+        (buffer-list)))
+
+(add-hook 'desktop-save-hook 'save-buffer-display-time)
+
+(defun set-buffer-display-time ()
+  (mapc (lambda (buf)
+          (with-current-buffer buf
+            (setq buffer-display-time buffer-display-time-1)))
+        (buffer-list)))
+
+(add-hook 'desktop-after-read-hook 'set-buffer-display-time)
+(desktop-save-mode 1)
 
 ;; Activate highlight in search and replace
 (setq search-highlight t)
