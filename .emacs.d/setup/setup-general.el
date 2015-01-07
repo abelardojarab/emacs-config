@@ -276,15 +276,13 @@ Defaults to `error'."
       desktop-load-locked-desktop t
       desktop-save 'ask-if-new
       desktop-file-name-format 'absolute
-      ;; would be nice to use some lazy loading, but if Emacs exits before
-      ;; the lazy loading, then these buffers are lost
+      desktop-restore-frames nil
+      desktop-restore-in-current-display t
+      desktop-restore-forces-onscreen nil
       desktop-restore-eager t
       desktop-lazy-verbose t
       desktop-lazy-idle-delay 5
       desktop-globals-to-save
-      ;; save a bunch of variables to the desktop file
-      ;; for lists specify the len of the maximal saved data also
-      (setq desktop-globals-to-save
             '((extended-command-history . 30)
               (file-name-history        . 100)
               (grep-history             . 30)
@@ -297,7 +295,7 @@ Defaults to `error'."
               (search-ring              . 20)
               (shell-command-history    . 50)
               tags-file-name
-              register-alist))
+              register-alist)
       desktop-locals-to-save
       (nconc '(word-wrap line-move-visual) desktop-locals-to-save))
 (setq desktop-files-not-to-save
