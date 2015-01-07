@@ -363,7 +363,6 @@ Keybinding         | Description
 <kbd>C-c p k</kbd> | Kills all project buffers.
 <kbd>C-c p D</kbd> | Opens the root of the project in `dired`.
 <kbd>C-c p e</kbd> | Shows a list of recently visited project files.
-<kbd>C-c p s a</kbd> | Runs `ack` on the project. Requires the presence of `ack-and-a-half`.
 <kbd>C-c p s s</kbd> | Runs `ag` on the project. Requires the presence of `ag.el`.
 <kbd>C-c p !</kbd> | Runs `shell-command` in the root directory of the project.
 <kbd>C-c p &</kbd> | Runs `async-shell-command` in the root directory of the project.
@@ -621,12 +620,15 @@ If you want to use these commands, you have to activate it to replace the normal
 commands:
 
 ```lisp
+;; (setq helm-projectile-fuzzy-match nil)
 (require 'helm-projectile)
 (helm-projectile-on)
 ```
 
 If you already activate helm-projectile key bindings and you don't like it, you can turn it off
-and use the normal Projectile bindings with command `helm-projectile-off`.
+and use the normal Projectile bindings with command `helm-projectile-off`. Similarly, if you want to
+disable fuzzy matching in Helm Projectile (it is enabled by default), you must set `helm-projectile-fuzzy-match`
+to nil before loading `helm-projectile`.
 
 To fully learn Helm Projectile and see what it is capable of, you should refer to this guide:
 [Exploring large projects with Projectile and Helm Projectile](http://tuhdo.github.io/helm-projectile.html).

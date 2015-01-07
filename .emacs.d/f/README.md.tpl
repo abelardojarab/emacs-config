@@ -1,4 +1,4 @@
-# f.el [![Build Status](https://api.travis-ci.org/rejeep/f.el.png?branch=master)](http://travis-ci.org/rejeep/f.el)
+# f.el [![Build Status](https://api.travis-ci.org/rejeep/f.el.png?branch=master)](http://travis-ci.org/rejeep/f.el) [![Coverage Status](https://img.shields.io/coveralls/rejeep/f.el.svg)](https://coveralls.io/r/rejeep/f.el)
 
 Much inspired by [@magnars](https://github.com/magnars)'s excellent
 [s.el](https://github.com/magnars/s.el) and
@@ -23,6 +23,7 @@ Or you can just dump `f.el` in your load path somewhere.
 * [f-expand](#f-expand-path-optional-dir) `(path &optional dir)`
 * [f-filename](#f-filename-path) `(path)`
 * [f-dirname](#f-dirname-path) `(path)`
+* [f-common-parent](#f-common-parent-paths) `(paths)`
 * [f-ext](#f-ext-path) `(path)`
 * [f-no-ext](#f-no-ext-path) `(path)`
 * [f-base](#f-base-path) `(path)`
@@ -38,7 +39,7 @@ Or you can just dump `f.el` in your load path somewhere.
 ### I/O
 
 * [f-read-bytes](#f-read-bytes-path) `(path)`
-* [f-write-bytes](#f-write-bytes-path) `(path)`
+* [f-write-bytes](#f-write-bytes-data-path) `(data path)`
 * [f-read-text](#f-read-text-path-optional-coding) `(path &optional coding)`
 * [f-write-text](#f-write-text-text-coding-path)`(text coding path)`
 
@@ -139,6 +140,16 @@ Alias: `f-parent`
 (f-dirname "/") ;; => nil
 ```
 
+### f-common-parent `(paths)`
+
+{{f-common-parent}}
+
+```lisp
+(f-common-parent '("foo/bar/baz" "foo/bar/qux" "foo/bar/mux")) ;; => "foo/bar/"
+(f-common-parent '("/foo/bar/baz" "/foo/bar/qux" "/foo/bax/mux")) ;; => "/foo/"
+(f-common-parent '("foo/bar/baz" "quack/bar/qux" "lack/bar/mux")) ;; => ""
+```
+
 ### f-ext `(path)`
 
 {{f-ext}}
@@ -219,9 +230,9 @@ Alias: `f-abbrev`
 {{f-full}}
 
 ```lisp
-(f-slash "~/path/to/file") ;; => /home/path/to/file
-(f-slash "~/path/to/dir") ;; => /home/path/to/dir/
-(f-slash "~/path/to/dir/") ;; => /home/path/to/dir/
+(f-full "~/path/to/file") ;; => /home/path/to/file
+(f-full "~/path/to/dir") ;; => /home/path/to/dir/
+(f-full "~/path/to/dir/") ;; => /home/path/to/dir/
 ```
 
 ### f-uniquify `(paths)`
@@ -248,18 +259,18 @@ Alias: `f-abbrev`
 
 ### f-read-bytes `(path)`
 
-{{f-write-bytes}}
+{{f-read-bytes}}
 
 ```lisp
 (f-read-bytes "path/to/binary/data")
 ```
 
-### f-write-bytes `(path)`
+### f-write-bytes `(data path)`
 
-{{{f-write-bytes}}}
+{{f-write-bytes}}
 
 ```lisp
-(f-write-bytes "path/to/binary/data" (unibyte-string 72 101 108 108 111 32 119 111 114 108 100))
+(f-write-bytes (unibyte-string 72 101 108 108 111 32 119 111 114 108 100) "path/to/binary/data")
 ```
 
 ### f-read-text `(path &optional coding)`
@@ -581,9 +592,10 @@ Deprecated in favor of: [f-traverse-upwards](#f-traverse-upwards-fn-optional-pat
 ```lisp
 (f-up
  (lambda (path)
-   (f-exists? ".git" path))
- start-dir)
-(f--up (f-exists? ".git" it) start-dir) ;; same as above
+   (f-exists? (f-expand ".git" path)))
+ start-path)
+
+(f--up (f-exists? (f-expand ".git" it)) start-path) ;; same as above
 ```
 
 ### f-traverse-upwards `(fn &optional path)`
@@ -593,9 +605,10 @@ Deprecated in favor of: [f-traverse-upwards](#f-traverse-upwards-fn-optional-pat
 ```lisp
 (f-traverse-upwards
  (lambda (path)
-   (f-exists? ".git" path))
+   (f-exists? (f-expand ".git" path)))
  start-path)
-(f--traverse-upwards (f-exists? ".git" it) start-path) ;; same as above
+
+(f--traverse-upwards (f-exists? (f-expand ".git" it)) start-path) ;; same as above
 ```
 
 ### f-with-sandbox `(path-or-paths &rest body)`
@@ -613,6 +626,10 @@ Deprecated in favor of: [f-traverse-upwards](#f-traverse-upwards-fn-optional-pat
 ```
 
 ## Changelog
+
+### v0.17.0
+
+* Add `f-common-parent` (by @Fuco1)
 
 ### v0.16.0
 
