@@ -576,18 +576,6 @@ Defaults to `error'."
 ;; More exhaustive cleaning of white space
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; Measure Emacs startup time
-(defun nox/show-startup-time ()
-  "Show Emacs's startup time in the minibuffer"
-  (message "Startup time: %s seconds."
-           (emacs-uptime "%s")))
-(add-hook 'emacs-startup-hook 'nox/show-startup-time 'append)
-
-;; Benchmark-init can give us a breakdown of time spent on require and load calls:
-(add-to-list 'load-path "~/.emacs.d/benchmark-init")
-(require 'benchmark-init)
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
-
 ;; Make URLs in comments/strings clickable, (emacs > v22)
 (add-hook 'find-file-hooks 'goto-address-prog-mode)
 
@@ -670,6 +658,18 @@ not need to be wrapped, move point to the next line and return t."
 ;; Improved buffer menu
 (load "~/.emacs.d/elisp/buff-menu.el")
 (require 'buff-menu+)
+
+;; Measure Emacs startup time
+(defun nox/show-startup-time ()
+  "Show Emacs's startup time in the minibuffer"
+  (message "Startup time: %s seconds."
+           (emacs-uptime "%s")))
+(add-hook 'emacs-startup-hook 'nox/show-startup-time 'append)
+
+;; Benchmark-init can give us a breakdown of time spent on require and load calls:
+(add-to-list 'load-path "~/.emacs.d/benchmark-init")
+(require 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
