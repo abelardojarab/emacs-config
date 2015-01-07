@@ -132,6 +132,9 @@
 (define-key minibuffer-local-isearch-map [(meta f)]
   (lookup-key minibuffer-local-isearch-map "\C-r"))
 
+;; exit search mode with any key
+(setq search-exit-option t)
+
 ;; Cancel minibuffer operation if you click outside
 (defun stop-using-minibuffer ()
   "kill the minibuffer"
