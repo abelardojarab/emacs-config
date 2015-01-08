@@ -133,14 +133,14 @@ non-nil."
 
 ;; Use 10-pt Consolas as default font
 (if (find-font (font-spec :name "Consolas"))
-    (set-face-attribute 'default nil :font "Consolas-10"))
+    (set-face-attribute 'default nil :font "Consolas-11"))
 
 (if (find-font (font-spec :name "Cambria"))
-    (set-face-attribute 'variable-pitch nil :font "Cambria-14" :weight 'normal))
+    (set-face-attribute 'variable-pitch nil :font "Cambria-13" :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
 
 (if (find-font (font-spec :name "Consolas"))
-    (set-face-attribute 'fixed-pitch nil :font "Consolas-10:antialias=subpixel"))
+    (set-face-attribute 'fixed-pitch nil :font "Consolas-11:antialias=subpixel"))
 
 ;; Fallback for Unicode symbols
 (if (find-font (font-spec :name "Symbola"))
@@ -186,43 +186,41 @@ non-nil."
       (interactive)
       (let (main-writing-font main-programming-font)
         (setq main-writing-font "Consolas")
-        (setq main-programming-font "Consolas-10")
+        (setq main-programming-font "Consolas-11")
         (if (find-font (font-spec :name "Cambria"))
             (setq main-writing-font "Cambria"))
-        (if (find-font (font-spec :name "EB Garamond 12"))
-            (setq main-writing-font "EB Garamond 12"))
 
         (if window-system
             (progn
               (if (> (x-display-pixel-width) 1800)
                   (if (equal system-type 'windows-nt)
                       (progn ;; HD monitor in Windows
-                        (setq main-programming-font "Consolas-12:antialias=subpixel")
+                        (setq main-programming-font "Consolas-11:antialias=subpixel")
                         (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-16"))
+                        (setq main-writing-font (concat main-writing-font "-13"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
                           (setq main-programming-font "Consolas-15:antialias=subpixel")
                           (set-default-font main-programming-font frame)
-                          (setq main-writing-font (concat main-writing-font "-18"))
+                          (setq main-writing-font (concat main-writing-font "-17"))
                           (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
                       (progn ;; HD monitor in Windows and Mac
                         (setq main-programming-font "Consolas-13:antialias=subpixel")
                         (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-17"))
+                        (setq main-writing-font (concat main-writing-font "-16"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))))
                 (progn ;; Small display
                   (if (equal system-type 'darwin)
                       (progn
                         (setq main-programming-font "Consolas-14:antialias=subpixel")
                         (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-17"))
+                        (setq main-writing-font (concat main-writing-font "-16"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
                     (progn
                       (setq main-programming-font "Consolas-10:antialias=subpixel")
                       (set-default-font main-programming-font frame)
-                      (setq main-writing-font (concat main-writing-font "-14"))
+                      (setq main-writing-font (concat main-writing-font "-13"))
                       (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))))))))
 
     ;; Fontify current frame
@@ -238,9 +236,9 @@ non-nil."
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
@@ -434,11 +432,11 @@ non-nil."
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-     (catch 'matched
-       (let ((inhibit-changing-match-data t)) ; small optimization
-         (dolist (regexp regexps)
-           (when (string-match regexp string)
-             (throw 'matched t)))))))
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
