@@ -37,3 +37,4 @@ ergoemacs-theme-engine.elc
 .emacs.elc
 .sx
 Cask
+%backup%~
