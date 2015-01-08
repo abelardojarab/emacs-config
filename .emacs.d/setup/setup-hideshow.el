@@ -1,6 +1,6 @@
 ;;; setup-hideshow.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -23,6 +23,67 @@
 ;;
 
 ;;; Code:
+
+(defface collapsed-face '((t (:background "#e0cf9f" :foreground "#5f5f5f"))) "Collapsed Overlay")
+(defvar collapsed-face 'collapsed-face)
+
+(require 'folding)
+(defun iy-folding-check-folded ()
+  "Function to determine if this file is in folded form."
+  (let ((folding-re1 "^.?.?.?{{{")
+        (folding-re2 "[\r\n].*}}}"))
+    (save-excursion
+      (goto-char (point-min))
+      ;;  If we found both, we assume file is folded
+      (and (assq major-mode folding-mode-marks-alist)
+           (< (point-max) 10000)
+           (re-search-forward folding-re1 nil t)
+           ;; if file is folded, there are \r's
+           (re-search-forward "[\r\n]" nil t)
+           (re-search-forward folding-re2 nil t)))))
+(setq folding-check-folded-file-function 'iy-folding-check-folded)
+(folding-mode-add-find-file-hook)
+(global-set-key (kbd "M-s i") folding-mode-prefix-map)
+(folding-add-to-marks-list 'ruby-mode "# {{{" "# }}}" nil t)
+(define-key folding-mode-prefix-map (kbd "i") 'folding-shift-in)
+(define-key folding-mode-prefix-map (kbd "o") 'folding-shift-out)
+(define-key folding-mode-prefix-map (kbd "<SPC>") 'folding-context-next-action)
+(define-key folding-mode-prefix-map (kbd "j") 'folding-next-visible-heading)
+(define-key folding-mode-prefix-map (kbd "n") 'folding-next-visible-heading)
+(define-key folding-mode-prefix-map (kbd "k") 'folding-previous-visible-heading)
+(define-key folding-mode-prefix-map (kbd "p") 'folding-previous-visible-heading)
+
+;; why open-fold is defined but not called in this function?
+(defun folding-shift-in (&optional noerror)
+  (interactive)
+  (labels
+      ((open-fold nil
+                  (let ((data (folding-show-current-entry noerror t)))
+                    (and data
+                         (progn
+                           (when folding-narrow-by-default
+                             (setq folding-stack
+                                   (if folding-stack
+                                       (cons (cons (point-min-marker)
+                                                   (point-max-marker))
+                                             folding-stack)
+                                     '(folded)))
+                             (folding-set-mode-line))
+                           (folding-narrow-to-region (car data) (nth 1 data)))))))
+    (let ((goal (point)))
+      (while (folding-skip-ellipsis-backward)
+        (beginning-of-line)
+        (open-fold)
+        (goto-char goal))
+      (if folding-narrow-by-default
+          (open-fold)
+        (widen)))))
+
+;; add keywords to current buffer directly, overwrite the original function in folding.el
+(defun folding-font-lock-support ()
+  "Add font lock support."
+  (ignore-errors
+    (font-lock-add-keywords nil (folding-font-lock-keywords major-mode))))
 
 (require 'fold-dwim)
 (defun folding-marker-p (&optional pos)
@@ -101,7 +162,6 @@
 (defun hs-minor-mode-settings ()
   "settings of `hs-minor-mode'."
   (defvar hs-headline-max-len 30 "*Maximum length of `hs-headline' to display.")
-
   (setq hs-isearch-open t)
 
   (defun hs-display-headline ()
@@ -154,9 +214,34 @@
         (overlay-put ov 'display display-string))))
   (setq hs-set-up-overlay 'display-code-line-counts)
 
-  (defvar hs-overlay-map (make-sparse-keymap) "Keymap for hs minor mode overlay.")
-  ;; (define-key hs-overlay-map "<mouse-1>" hs-show-block)
+  (defadvice folding-subst-regions (around toggle-fringe (list find replace) activate)
+    ad-do-it
+    (save-excursion
+      (while list
+        (let* ((begin (car list))
+               (end (cadr list))
+               bol eol
+               (marker-string "*fringe-dummy*")
+               (marker-length (length marker-string)))
+          (dolist (ov (overlays-in begin end))
+            (when (overlay-get ov 'fringe-folding-p)
+              (delete-overlay ov)))
+          (when (and (eq find ?\n) (eq replace ?\r))
+            ;; \\n -> \\r add fringe
+            (goto-char begin)
+            (search-forward "\r")
+            (forward-char -1)
+            (let* ((ov (make-overlay (point) end))
+                   (display-string (format " (%d)..." (count-lines begin end))))
+              (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
+              (overlay-put ov 'before-string marker-string)
+              (put-text-property 1 (length display-string) 'face 'collapsed-face display-string)
+              (overlay-put ov 'display display-string)
+              (overlay-put ov 'priority 9999)
+              (overlay-put ov 'fringe-folding-p t))))
+        (setq list (cdr (cdr list))))))
 
+  ;; Support to toggle/untoggle all
   (defvar hs-hide-all nil "Current state of hideshow for toggling all.")
   (make-local-variable 'hs-hide-all)
 
@@ -185,17 +270,7 @@
     (interactive)
     (if fold-fun
         (call-interactively fold-fun)
-      (hs-toggle-hiding)))
-
-  (defun hs-minor-mode-4-emaci-settings ()
-    "Settings of `hs-minor-mode' for `emaci'."
-    (eal-define-keys
-     'emaci-mode-map
-     `(("s" toggle-fold)
-       ("S" toggle-fold-all))))
-
-  (eval-after-load "emaci"
-    '(hs-minor-mode-4-emaci-settings)))
+      (hs-toggle-hiding))))
 
 (eval-after-load "hideshow"
   '(hs-minor-mode-settings))
