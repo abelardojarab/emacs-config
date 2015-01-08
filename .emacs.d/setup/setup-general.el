@@ -255,6 +255,8 @@ Defaults to `error'."
 (setq display-buffer nil)
 (setq display-buffer-reuse-frames t)
 (setq pop-up-frames nil)
+(add-to-list 'display-buffer-alist
+             '("^[^\\*].*[^\\*]$" display-buffer-same-window) t)
 
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
