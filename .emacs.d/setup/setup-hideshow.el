@@ -24,9 +24,6 @@
 
 ;;; Code:
 
-(defface collapsed-face '((t (:background "#e0cf9f" :foreground "#5f5f5f"))) "Collapsed Overlay")
-(defvar collapsed-face 'collapsed-face)
-
 (require 'folding)
 (defun iy-folding-check-folded ()
   "Function to determine if this file is in folded form."
@@ -205,7 +202,7 @@
              (marker-length (length marker-string))
              (display-string (format "(%d)..." (count-lines
                                                 (overlay-start ov) (overlay-end ov)))))
-        (overlay-put ov 'help-echo "Hiddent text. C-c,= to show")
+        (overlay-put ov 'help-echo "Hiddent text. M-s <SPC> to show")
         (put-text-property 0 marker-length 'display (list 'left-fringe
                                                           'hs-marker 'hs-fringe-face) marker-string)
         (overlay-put ov 'before-string marker-string)
