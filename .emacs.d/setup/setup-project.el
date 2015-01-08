@@ -81,6 +81,11 @@
 (add-hook 'org-mode-hook 'imenu-add-menubar-index)
 (add-hook 'python-mode-hook 'imenu-add-menubar-index)
 
+;; iMenus
+(add-to-list 'load-path "~/.emacs.d/imenus")
+(autoload 'imenus "imenus" nil t)
+(autoload 'imenus-mode-buffers "imenus" nil t)
+
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(ecmascript-mode python-mode emacs-lisp-mode lisp-mode
                                          c-mode c++-mode makefile-mode sh-mode))
@@ -158,7 +163,7 @@
 
 (defun c-doc-hook ()
   (interactive)
-  (setq-local helm-dash-docsets '("C" "C++" "OpenCV_C" "OpenCV_C++")))
+  (setq-local helm-dash-docsets '("C" "C++")))
 (add-hook 'c-mode-common-hook 'c-doc-hook)
 
 (defun emacs-doc-hook ()
