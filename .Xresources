@@ -1,6 +1,7 @@
 !* Use the command "xrdb < $HOME/.Xdefaults" to reread in changes to .Xdefaults
 !*
-
+Emacs.pane.menubar.margin: 0
+Emacs*useXIM: false
 Emacs.fontBackend: xft
 Emacs.bitmapIcon: on
 Emacs.font: Consolas-12
