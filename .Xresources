@@ -6,6 +6,7 @@ Emacs.bitmapIcon: on
 Emacs.font: Consolas-12
 Emacs*menubar*font: Consolas-12
 Emacs.pane.menubar.font: Consolas-12
+Emacs.dialog*.font: Consolas-12
 Emacs.menuBar: on
 Emacs.toolBar: off
 Emacs.borderWidth: 0
