@@ -147,14 +147,9 @@
 (global-set-key (kbd "C-c @ SPC") 'hs-show-block) ; second binding
 
 ;; enable `hs-minor-mode' at startup
-(add-hook 'emacs-lisp-mode-hook
-          (lambda () (hs-minor-mode 1)))
-(add-hook 'lisp-mode-hook
-          (lambda () (hs-minor-mode 1)))
-(add-hook 'python-mode-hook
-          (lambda () (hs-minor-mode 1)))
-(add-hook 'js2-mode-hook
-          (lambda () (hs-minor-mode 1)))
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+(dolist (x '(emacs-lisp lisp java perl sh python js2))
+  (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hs-minor-mode))
 
 (defun hs-minor-mode-settings ()
   "settings of `hs-minor-mode'."
@@ -267,7 +262,19 @@
     (interactive)
     (if fold-fun
         (call-interactively fold-fun)
-      (hs-toggle-hiding))))
+      (hs-toggle-hiding)))
+
+  (defadvice goto-line (after expand-after-goto-line
+                              activate compile)
+    "hideshow-expand affected block when using goto-line in a collapsed buffer"
+    (save-excursion
+      (hs-show-block)))
+
+  (defadvice goto-line-with-feedback (after expand-after-goto-line-with-feedback
+                                            activate compile)
+    "hideshow-expand affected block when using goto-line in a collapsed buffer"
+    (save-excursion
+      (hs-show-block))))
 
 (eval-after-load "hideshow"
   '(hs-minor-mode-settings))
