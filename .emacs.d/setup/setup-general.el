@@ -368,6 +368,9 @@ Defaults to `error'."
 ;; Do not add empty lines at the end of our file if we press down key
 (setq next-line-add-newlines nil)
 
+;; Keep height of the echo area equal to only 1 line
+(setq message-truncate-lines t)
+
 ;; Makes final line always be a return
 (setq require-final-newline t)
 
