@@ -33,8 +33,15 @@
 
 ;; Activate template autocompletion
 (abbrev-mode t)
-(setq default-abbrev-mode t
-      save-abbrevs t)
+(setq save-abbrevs t)
+(dolist (hook '(c-common-mode-hook
+                python-mode-hook
+                js2-mode-hook
+                lisp-mode-hook
+                emacs-lisp-mode-hook
+                org-mode-hook
+                text-mode-hook))
+  (add-hook hook (lambda () (abbrev-mode 1))))
 
 ;; Auto-Complete
 (add-to-list 'load-path "~/.emacs.d/auto-complete")
