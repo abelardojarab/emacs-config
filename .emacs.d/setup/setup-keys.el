@@ -180,6 +180,10 @@
   (scroll-up increment) (sit-for 0.02)
   (scroll-up increment) (sit-for 0.02)
   (scroll-up increment) (sit-for 0.05)
+  (scroll-up increment) (sit-for 0.05)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.05)
   (scroll-up increment) (sit-for 0.06)
   (scroll-up increment))
 
