@@ -37,9 +37,6 @@
 (when (window-system)
   (setenv "EMACS_GUI" "t"))
 
-;; ;; hit `C-g' while it's frozen to get an ELisp backtrace
-;; (setq debug-on-quit t)
-
 ;; Backported function
 (when (version< emacs-version "24.4")
   (defun define-error (name message &optional parent)
@@ -255,8 +252,21 @@ Defaults to `error'."
 (setq display-buffer nil)
 (setq display-buffer-reuse-frames t)
 (setq pop-up-frames nil)
+(setq menu-bar-select-buffer-function 'switch-to-buffer)
 (add-to-list 'display-buffer-alist
              '("^[^\\*].*[^\\*]$" display-buffer-same-window) t)
+
+;; all buffers, try to reuse windows across all frames
+(add-to-list 'display-buffer-alist
+             '(".*". (display-buffer-reuse-window .
+                                                  ((reusable-frames . t)))))
+
+;; except for compilation buffers where you want new and dedicated frames when necessary
+(add-to-list 'display-buffer-alist
+             '("^\\*Compile-Log\\*". ((display-buffer-reuse-window
+                                       display-buffer-pop-up-frame) .
+                                       ((reusable-frames . t)
+                                        (inhibit-same-window . t)))))
 
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
@@ -290,19 +300,19 @@ Defaults to `error'."
       desktop-lazy-verbose t
       desktop-lazy-idle-delay 5
       desktop-globals-to-save
-            '((extended-command-history . 30)
-              (file-name-history        . 100)
-              (grep-history             . 30)
-              (compile-history          . 30)
-              (minibuffer-history       . 50)
-              (query-replace-history    . 60)
-              (read-expression-history  . 60)
-              (regexp-history           . 60)
-              (regexp-search-ring       . 20)
-              (search-ring              . 20)
-              (shell-command-history    . 50)
-              tags-file-name
-              register-alist)
+      '((extended-command-history . 30)
+        (file-name-history        . 100)
+        (grep-history             . 30)
+        (compile-history          . 30)
+        (minibuffer-history       . 50)
+        (query-replace-history    . 60)
+        (read-expression-history  . 60)
+        (regexp-history           . 60)
+        (regexp-search-ring       . 20)
+        (search-ring              . 20)
+        (shell-command-history    . 50)
+        tags-file-name
+        register-alist)
       desktop-locals-to-save
       (nconc '(word-wrap line-move-visual) desktop-locals-to-save))
 (setq desktop-files-not-to-save
