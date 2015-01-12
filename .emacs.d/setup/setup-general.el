@@ -253,12 +253,10 @@ Defaults to `error'."
 (setq display-buffer-reuse-frames t)
 (setq pop-up-frames nil)
 (setq menu-bar-select-buffer-function 'switch-to-buffer)
-(add-to-list 'display-buffer-alist
-             '("^[^\\*].*[^\\*]$" display-buffer-same-window) t)
 
 ;; all buffers, try to reuse windows across all frames
 (add-to-list 'display-buffer-alist
-             '(".*". (display-buffer-reuse-window .
+             '("^[^\\*].*[^\\*]$" (display-buffer-reuse-window .
                                                   ((reusable-frames . t)))))
 
 ;; except for compilation buffers where you want new and dedicated frames when necessary
