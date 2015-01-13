@@ -105,6 +105,10 @@ non-nil."
 (add-to-list 'load-path "~/.emacs.d/monokai-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
 
+;; Atom theme
+(add-to-list 'load-path "~/.emacs.d/atom-dark-theme-emacs")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/atom-dark-theme-emacs")
+
 ;; Zenburn theme
 (add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
@@ -113,8 +117,9 @@ non-nil."
 (add-to-list 'load-path "~/.emacs.d/solarized-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-emacs")
 (require 'solarized)
+(setq solarized-scale-org-headlines nil)
 
-(load-theme 'zenburn t)
+(load-theme 'atom-dark t)
 
 ;; Syntax coloring
 (require 'font-lock+)
