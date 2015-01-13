@@ -163,4 +163,14 @@
   (set-face-font 'ac-candidate-face "Consolas-11")
   (set-face-font 'ac-selection-face "Consolas-11"))
 
+;; Tips for auto-complete
+(add-to-list 'load-path "~/.emacs.d/pos-tip")
+(require 'pos-tip)
+(require 'popup-pos-tip)
+ (defadvice popup-tip
+   (around popup-pos-tip-wrapper (string &rest args) activate)
+   (if (eq window-system 'x)
+       (apply 'popup-pos-tip string args)
+     ad-do-it))
+
 (provide 'setup-auto-complete)

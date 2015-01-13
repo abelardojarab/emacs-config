@@ -59,6 +59,15 @@
 (define-key query-replace-map [return] 'act)
 (define-key query-replace-map [?\C-m] 'act)
 
+(defadvice yes-or-no-p (around prevent-dialog activate)
+  "Prevent yes-or-no-p from activating a dialog"
+  (let ((use-dialog-box nil))
+    ad-do-it))
+(defadvice y-or-n-p (around prevent-dialog-yorn activate)
+  "Prevent y-or-n-p from activating a dialog"
+  (let ((use-dialog-box nil))
+    ad-do-it))
+
 ;; Zoom in/out like feature, without mouse wheel
 (global-set-key '[C-kp-add] 'text-scale-increase)
 (global-set-key '[C-kp-subtract] 'text-scale-decrease)
@@ -254,7 +263,6 @@
 (guide-key-mode 1) ;; Enable guide-key-mode
 
 ;; Guide key tooltips
-(add-to-list 'load-path "~/.emacs.d/pos-tip")
 (add-to-list 'load-path "~/.emacs.d/guide-key-tip")
 (require 'guide-key-tip)
 (setq guide-key-tip/enabled t)

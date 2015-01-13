@@ -518,7 +518,7 @@ Value is new modtime if updated."
           project)
       (setq ggtags-last-default-directory default-directory)
       (setq ggtags-project-root
-            (or (ignore-errors-unless-debug
+            (or (ignore-errors
                   (file-name-as-directory
                    (concat (file-remote-p default-directory)
                            ;; Resolves symbolic links

@@ -254,18 +254,6 @@ Defaults to `error'."
 (setq pop-up-frames nil)
 (setq menu-bar-select-buffer-function 'switch-to-buffer)
 
-;; all buffers, try to reuse windows across all frames
-(add-to-list 'display-buffer-alist
-             '("^[^\\*].*[^\\*]$" (display-buffer-reuse-window .
-                                                  ((reusable-frames . t)))))
-
-;; except for compilation buffers where you want new and dedicated frames when necessary
-(add-to-list 'display-buffer-alist
-             '("^\\*Compile-Log\\*". ((display-buffer-reuse-window
-                                       display-buffer-pop-up-frame) .
-                                       ((reusable-frames . t)
-                                        (inhibit-same-window . t)))))
-
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
 (require 'popup)
