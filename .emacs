@@ -144,9 +144,6 @@
 ;; Setup versioning control
 (require 'setup-versioning)
 
-;; Setup gnus and Newsticker
-(require 'setup-gnus)
-
 ;; Setup modeline and Smex
 (require 'setup-modeline)
 
@@ -173,6 +170,9 @@
 
 ;; Setup keys
 (require 'setup-keys)
+
+;; Setup gnus and Newsticker - requires Internet
+(require 'setup-gnus)
 
 ;; Setup server
 (unless (string-equal system-type "windows-nt")

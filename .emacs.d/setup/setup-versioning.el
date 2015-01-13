@@ -1,6 +1,6 @@
 ;;; setup-versioning.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -58,7 +58,6 @@
 
 (require 'magit)
 (require 'setup-magit)
-(require 'git-emacs)
 (require 'git-gutter-fringe+)
 (require 'git-timemachine)
 (global-git-gutter+-mode t)
