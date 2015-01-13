@@ -104,5 +104,8 @@
   (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
     (ad-set-arg 0 (file-truename (ad-get-arg 0)))))
 
+;; Speed up find file
+(remove-hook 'find-file-hooks 'vc-find-file-hook)
+
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here
