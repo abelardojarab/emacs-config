@@ -171,7 +171,7 @@
 ;; Setup keys
 (require 'setup-keys)
 
-;; Setup gnus and Newsticker - requires Internet
+;; Setup gnus and Newsticker
 (require 'setup-gnus)
 
 ;; Setup server
