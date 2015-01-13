@@ -241,9 +241,13 @@ non-nil."
                     nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
+
+;; Pretty symbols mode
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
 (require 'pretty-symbols)
 (add-hook 'lisp-mode-hook 'pretty-symbols-mode)
+
+;; Additional Unicode characters
 (add-to-list 'load-path "~/.emacs.d/pretty-mode")
 (require 'pretty-mode)
 (global-pretty-mode t)
