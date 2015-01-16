@@ -4,21 +4,21 @@ Emacs.pane.menubar.margin: 0
 Emacs*useXIM: false
 Emacs.fontBackend: xft
 Emacs.bitmapIcon: on
-Emacs.font: Consolas-12
-Emacs*menubar*font: Consolas-12
-Emacs.menu*.font: Consolas-12
-Emacs.pane.menubar.font: Consolas-12
-Emacs.dialog*.font: Consolas-12
+Emacs.font: Consolas-10
+Emacs*menubar*font: Consolas-10
+Emacs.menu*.font: Consolas-10
+Emacs.pane.menubar.font: Consolas-10
+Emacs.dialog*.font: Consolas-10
 Emacs.menuBar: on
 Emacs.toolBar: off
 Emacs.borderWidth: 0
 Emacs.internalBorder: 0
 
-Xft.dpi: 125
+Xft.dpi: 96
 Xft.antialias: true
 Xft.autohint: false
 Xft.hinting: true
-Xft.hintstyle: hintfull
+Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 Xft.rgba: rgb
 
