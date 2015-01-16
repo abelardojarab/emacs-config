@@ -4443,7 +4443,7 @@ Normal means, no org-mode-specific context."
 (defvar mark-active)
 
 ;; Various packages
-(declare-function calendar-absolute-from-iso    "cal-iso"    (date))
+(declare-function calendar-iso-to-absolute    "cal-iso"    (date))
 (declare-function calendar-forward-day          "cal-move"   (arg))
 (declare-function calendar-goto-date            "cal-move"   (date))
 (declare-function calendar-goto-today           "cal-move"   ())
@@ -16936,16 +16936,35 @@ user."
 
     (setq tl (parse-time-string ans)
 	  day (or (nth 3 tl) (nth 3 org-defdecode))
-	  month (or (nth 4 tl)
-		    (if (and org-read-date-prefer-future
-			     (nth 3 tl) (< (nth 3 tl) (nth 3 nowdecode)))
-			(prog1 (1+ (nth 4 nowdecode)) (setq futurep t))
-		      (nth 4 org-defdecode)))
-	  year (or (and (not kill-year) (nth 5 tl))
-		   (if (and org-read-date-prefer-future
-			    (nth 4 tl) (< (nth 4 tl) (nth 4 nowdecode)))
-		       (prog1 (1+ (nth 5 nowdecode)) (setq futurep t))
-		     (nth 5 org-defdecode)))
+	  month
+	  (cond ((nth 4 tl))
+		((not org-read-date-prefer-future) (nth 4 org-defdecode))
+		;; Day was specified.  Make sure DAY+MONTH
+		;; combination happens in the future.
+		((nth 3 tl)
+		 (setq futurep t)
+		 (if (< day (nth 3 nowdecode)) (1+ (nth 4 nowdecode))
+		   (nth 4 nowdecode)))
+		(t (nth 4 org-defdecode)))
+	  year
+	  (cond ((and (not kill-year) (nth 5 tl)))
+		((not org-read-date-prefer-future) (nth 5 org-defdecode))
+		;; Month was guessed in the future and is at least
+		;; equal to NOWDECODE's.  Fix year accordingly.
+		(futurep
+		 (if (or (> month (nth 4 nowdecode))
+			 (>= day (nth 3 nowdecode)))
+		     (nth 5 nowdecode)
+		   (1+ (nth 5 nowdecode))))
+		;; Month was specified.  Make sure MONTH+YEAR
+		;; combination happens in the future.
+		((nth 4 tl)
+		 (setq futurep t)
+		 (cond ((> month (nth 4 nowdecode)) (nth 5 nowdecode))
+		       ((< month (nth 5 nowdecode)) (1+ (nth 5 nowdecode)))
+		       ((< day (nth 3 nowdecode)) (1+ (nth 5 nowdecode)))
+		       (t (nth 5 nowdecode))))
+		(t (nth 5 org-defdecode)))
 	  hour (or (nth 2 tl) (nth 2 org-defdecode))
 	  minute (or (nth 1 tl) (nth 1 org-defdecode))
 	  second (or (nth 0 tl) 0)
@@ -16974,7 +16993,7 @@ user."
 	    day (or iso-weekday wday 1)
 	    wday nil ; to make sure that the trigger below does not match
 	    iso-date (calendar-gregorian-from-absolute
-		      (calendar-absolute-from-iso
+		      (calendar-iso-to-absolute
 		       (list iso-week day year))))
 					; FIXME:  Should we also push ISO weeks into the future?
 					;      (when (and org-read-date-prefer-future
@@ -16983,7 +17002,7 @@ user."
 					;		    (time-to-days (current-time))))
 					;	(setq year (1+ year)
 					;	      iso-date (calendar-gregorian-from-absolute
-					;			(calendar-absolute-from-iso
+					;			(calendar-iso-to-absolute
 					;			 (list iso-week day year)))))
       (setq month (car iso-date)
 	    year (nth 2 iso-date)
@@ -17108,6 +17127,7 @@ This is used by `org-read-date' in a temporary keymap for the calendar buffer."
 
 (defun org-insert-time-stamp (time &optional with-hm inactive pre post extra)
   "Insert a date stamp for the date given by the internal TIME.
+See `format-time-string' for the format of TIME.
 WITH-HM means use the stamp format that includes the time of the day.
 INACTIVE means use square brackets instead of angular ones, so that the
 stamp will not contribute to the agenda.
