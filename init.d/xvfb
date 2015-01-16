@@ -1,0 +1,23 @@
+#!/bin/bash
+#chkconfig: 345 95 50
+#description: Starts xvfb on display 1
+
+if [ -z "$1" ]; then
+echo "`basename $0` {start|stop}"
+exit
+fi
+
+case "$1" in
+   start)
+        su abelardo -c "xinit -- /usr/bin/Xvfb :1 -screen 0 1900x1280x24 -ac +extension GLX +render -noreset" &
+        su abelardo -c "x11vnc -display :1 -bg -forever -rfbauth ~/.vnc/passwd" &
+	DISPLAY=:1 su abelardo -c "x-window-manager" &
+        ;;
+   stop)
+        killall x11vnc &
+	killall Xvfb &
+	rm -rf /tmp/.X11-unix/X1
+        ;;
+
+esac
+exit 0
