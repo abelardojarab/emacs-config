@@ -172,7 +172,7 @@
 (require 'setup-keys)
 
 ;; Setup gnus and Newsticker
-(require 'setup-gnus)
+;; (require 'setup-gnus)
 
 ;; Setup server
 (unless (string-equal system-type "windows-nt")
