@@ -5,10 +5,10 @@ Emacs*useXIM: false
 Emacs.fontBackend: xft
 Emacs.bitmapIcon: on
 Emacs.font: Monospace-10
-Emacs*menubar*font: Monospace-10
-Emacs.menu*.font: Monospace-10
-Emacs.pane.menubar.font: Monospace-10
-Emacs.dialog*.font: Monospace-10
+Emacs*menubar*font: DejaVu Sans Mono-10
+Emacs.menu*.font: DejaVu Sans Mono-10
+Emacs.pane.menubar.font: DejaVu Sans Mono-10
+Emacs.dialog*.font: DejaVu Sans Mono-10
 Emacs.menuBar: on
 Emacs.toolBar: off
 Emacs.borderWidth: 0
