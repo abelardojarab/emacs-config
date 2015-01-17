@@ -4,11 +4,11 @@ Emacs.pane.menubar.margin: 0
 Emacs*useXIM: false
 Emacs.fontBackend: xft
 Emacs.bitmapIcon: on
-Emacs.font: Consolas-10
-Emacs*menubar*font: Consolas-10
-Emacs.menu*.font: Consolas-10
-Emacs.pane.menubar.font: Consolas-10
-Emacs.dialog*.font: Consolas-10
+Emacs.font: Monospace-10
+Emacs*menubar*font: Monospace-10
+Emacs.menu*.font: Monospace-10
+Emacs.pane.menubar.font: Monospace-10
+Emacs.dialog*.font: Monospace-10
 Emacs.menuBar: on
 Emacs.toolBar: off
 Emacs.borderWidth: 0
