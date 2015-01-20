@@ -42,7 +42,6 @@
 (require 'org)
 (require 'org-list)
 (require 'ox-org)
-(require 'ox-md)
 
 (let ((todo "~/workspace/Documents/Org/agenda.org"))
   (when (file-readable-p todo)
@@ -62,13 +61,14 @@
 (setq org-src-tab-acts-natively t)
 (setq org-confirm-babel-evaluate nil)
 (setq org-use-speed-commands t)
+(setq org-completion-use-ido t)
 (setq org-default-notes-file "~/workspace/Documents/Org/notes.org")
 (setq org-indent-mode nil) ;; this causes problem in other modes
 
 ;; Better list interface
 (add-to-list 'load-path "~/.emacs.d/org-autolist")
-(when (require 'org-autolist nil 'noerror)
-  (add-hook 'org-mode-hook (lambda () (org-autolist-mode))))
+(require 'org-autolist)
+(add-hook 'org-mode-hook (lambda () (org-autolist-mode)))
 
 ;; Org Capture
 (defun org-capture-todo (note)
@@ -191,9 +191,18 @@
                  :underline "light grey" :foreground "#008ED1")))
   "Face used for the line delimiting the end of source blocks.")
 
-;; Beamer/ODT support
+;; Beamer/ODT/Markdown support
 (require 'ox-beamer)
 (require 'ox-odt)
+(require 'ox-md)
+
+;; ASCII doc
+(add-to-list 'load-path "~/.emacs.d/org-asciidoc")
+(require 'ox-asciidoc)
+
+;; Table ASCII plot
+(add-to-list 'load-path "~/.emacs.d/orgtblasciiplot")
+(require 'orgtbl-ascii-plot)
 
 ;; Org Templates
 (add-to-list 'org-structure-template-alist '("E" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC\n"))
@@ -392,10 +401,6 @@ a link to this file."
 
 ;; Configure org-mode so that when you edit source code in an indirect buffer (with C-c '), the buffer is opened in the current window. That way, your window organization isn't broken when switching.
 (setq org-src-window-setup 'current-window)
-
-;; Markdown exporter
-(require 'ox-md)
-(setq org-completion-use-ido t)
 
 ;; Tweaks for Latex exporting
 (require 'ox-latex)

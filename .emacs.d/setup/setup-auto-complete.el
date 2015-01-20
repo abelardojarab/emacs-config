@@ -51,6 +51,7 @@
 (setq-default ac-sources '(ac-source-semantic-raw))
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
 (ac-set-trigger-key "TAB")
+(ac-set-trigger-key "<tab>")
 (define-key ac-completing-map (kbd "<tab>") 'ac-complete)
 (define-key ac-completing-map (kbd "RET") 'ac-complete)
 (global-auto-complete-mode t)
@@ -155,10 +156,13 @@
 (add-to-list 'load-path "~/.emacs.d/org-ac")
 (require 'log4e)
 (require 'yaxception)
-(when (require 'org-ac nil 'noerror)
-  (org-ac/config-default))
+(require 'org-ac)
+(org-ac/config-default)
 
 ;; font face setting
+(set-face-background 'ac-candidate-face "lightgray")
+(set-face-underline 'ac-candidate-face "darkgray")
+(set-face-background 'ac-selection-face "steelblue")
 (when (find-font (font-spec :name "Consolas"))
   (set-face-font 'ac-candidate-face "Consolas-11")
   (set-face-font 'ac-selection-face "Consolas-11"))
@@ -167,10 +171,10 @@
 (add-to-list 'load-path "~/.emacs.d/pos-tip")
 (require 'pos-tip)
 (require 'popup-pos-tip)
- (defadvice popup-tip
-   (around popup-pos-tip-wrapper (string &rest args) activate)
-   (if (eq window-system 'x)
-       (apply 'popup-pos-tip string args)
-     ad-do-it))
+(defadvice popup-tip
+    (around popup-pos-tip-wrapper (string &rest args) activate)
+  (if (eq window-system 'x)
+      (apply 'popup-pos-tip string args)
+    ad-do-it))
 
 (provide 'setup-auto-complete)
