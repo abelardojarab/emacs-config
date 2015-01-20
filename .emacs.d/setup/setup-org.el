@@ -1,6 +1,6 @@
 ;;; setup-org.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -44,9 +44,9 @@
 (require 'ox-org)
 (require 'ox-md)
 
-(let ((todo "~/workspace/Documents/agenda.org"))
+(let ((todo "~/workspace/Documents/Org/agenda.org"))
   (when (file-readable-p todo)
-    (setq org-agenda-files '("~/workspace/Documents/agenda.org"))
+    (setq org-agenda-files '("~/workspace/Documents/Org/agenda.org"))
     (setq initial-buffer-choice (lambda ()
                                   (org-agenda nil "n")
                                   (delete-other-windows)
@@ -62,87 +62,13 @@
 (setq org-src-tab-acts-natively t)
 (setq org-confirm-babel-evaluate nil)
 (setq org-use-speed-commands t)
-(setq org-default-notes-file "~/workspace/Documents/agenda.org")
+(setq org-default-notes-file "~/workspace/Documents/Org/notes.org")
 (setq org-indent-mode nil) ;; this causes problem in other modes
 
-;; deadline warning day
-(setq org-deadline-warning-days 3)
-
-;; Org Agenda
-(setq org-agenda-span 2)
-(setq org-agenda-sticky nil)
-(setq org-agenda-show-log t)
-(setq org-agenda-skip-scheduled-if-done t)
-(setq org-agenda-skip-deadline-if-done t)
-(setq org-agenda-time-grid
-      '((daily today require-timed)
-        "----------------"
-        (800 1000 1200 1400 1600 1800)))
-(setq org-columns-default-format "%50ITEM %12SCHEDULED %TODO %3PRIORITY %Effort{:} %TAGS")
-
-(eval-after-load 'org-agenda
-  '(setq org-agenda-custom-commands
-         '(("a" "Agenda"
-            ((agenda "")
-             (tags-todo "/!STARTED"
-                        ((org-agenda-overriding-header "In Progress")
-                         (org-tags-match-list-sublevels nil)
-                         (org-agenda-sorting-strategy '(priority-down
-                                                        category-keep
-                                                        effort-up))))
-             (tags "REFILE"
-                   ((org-agenda-overriding-header "Entries to Refile")
-                    (org-tags-match-list-sublevels nil)))
-             (tags "-REFILE/"
-                   ((org-agenda-overriding-header "Entries to Archive")
-                    (org-agenda-skip-function 'nox/skip-non-archivable-tasks)
-                    (org-tags-match-list-sublevels nil)))))
-           ("d" "Timeline for today"
-            ((agenda ""))
-            ((org-agenda-ndays 1)
-             (org-agenda-show-log t)
-             (org-agenda-log-mode-items '(clock closed))
-             (org-agenda-clockreport-mode t)
-             (org-agenda-entry-types '())))
-           ("w" "Waiting for"
-            todo "WAITING"
-            ((org-agenda-sorting-strategy '(priority-down))))
-           ("U" "Important stuff I don't want to do"
-            ((tags-todo "focus")))
-           ("P" "By priority"
-            ((tags-todo "+PRIORITY=\"A\"")
-             (tags-todo "+PRIORITY=\"B\"")
-             (tags-todo "+PRIORITY=\"\"")
-             (tags-todo "+PRIORITY=\"C\""))
-            ((org-agenda-prefix-format "%-10c %-10T %e ")
-             (org-agenda-sorting-strategy '(priority-down
-                                            tag-up
-                                            category-keep
-                                            effort-down)))))))
-
-;; Thanks to http://doc.norang.ca/org-mode.html
-(defun nox/skip-non-archivable-tasks ()
-  "Skip trees that are not available for archiving"
-  (save-restriction
-    (widen)
-    ;; Consider only tasks with done todo headings as archivable candidates
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max))))
-          (subtree-end (save-excursion (org-end-of-subtree t))))
-      (if (member (org-get-todo-state) org-todo-keywords-1)
-          (if (member (org-get-todo-state) org-done-keywords)
-              (let* ((daynr (string-to-int (format-time-string "%d" (current-time))))
-                     (a-month-ago (* 60 60 24 (+ daynr 1)))
-                     (last-month (format-time-string "%Y-%m-" (time-subtract (current-time) (seconds-to-time a-month-ago))))
-                     (this-month (format-time-string "%Y-%m-" (current-time)))
-                     (subtree-is-current (save-excursion
-                                           (forward-line 1)
-                                           (and (< (point) subtree-end)
-                                                (re-search-forward (concat last-month "\\|" this-month) subtree-end t)))))
-                (if subtree-is-current
-                    subtree-end ; Has a date in this month or last month, skip it
-                  nil))  ; available to archive
-            (or subtree-end (point-max)))
-        next-headline))))
+;; Better list interface
+(add-to-list 'load-path "~/.emacs.d/org-autolist")
+(when (require 'org-autolist nil 'noerror)
+  (add-hook 'org-mode-hook (lambda () (org-autolist-mode))))
 
 ;; Org Capture
 (defun org-capture-todo (note)
@@ -265,17 +191,11 @@
                  :underline "light grey" :foreground "#008ED1")))
   "Face used for the line delimiting the end of source blocks.")
 
-;; Beamer support
+;; Beamer/ODT support
 (require 'ox-beamer)
-
-;; Odt export
 (require 'ox-odt)
 
 ;; Org Templates
-(setq org-capture-templates
-      '(("t" "Task" entry (file+headline "" "Tasks") "* TODO %?\n  %u\n  %a")
-        ("s" "Simple Task" entry (file+headline "" "Tasks") "* TODO %?\n  %U\n")))
-
 (add-to-list 'org-structure-template-alist '("E" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC\n"))
 (add-to-list 'org-structure-template-alist '("S" "#+BEGIN_SRC shell-script\n?\n#+END_SRC\n"))
 
@@ -479,11 +399,7 @@ a link to this file."
 
 ;; Tweaks for Latex exporting
 (require 'ox-latex)
-
-;; Choose either listings or minted for exporting source code blocks.
 (setq org-latex-listings t)
-
-;; Export " to csquotes macros
 (setq org-export-latex-quotes
       '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
 
@@ -516,7 +432,6 @@ a link to this file."
 ;; Org-Ref
 (add-to-list 'load-path "~/.emacs.d/org-ref")
 (require 'org-ref)
-;; (org-babel-load-file "~/.emacs.d/org-ref/org-ref.org")
 (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
       org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
       org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs/")
@@ -743,16 +658,16 @@ a link to this file."
           (goto-char spot))))))
 
 (defun org-text-bold () "Wraps the region with asterisks."
-  (interactive)
-  (org-text-wrapper "*"))
+       (interactive)
+       (org-text-wrapper "*"))
 
 (defun org-text-italics () "Wraps the region with slashes."
-  (interactive)
-  (org-text-wrapper "/"))
+       (interactive)
+       (org-text-wrapper "/"))
 
 (defun org-text-code () "Wraps the region with equal signs."
-  (interactive)
-  (org-text-wrapper "="))
+       (interactive)
+       (org-text-wrapper "="))
 
 ;; Stop Org splitting window vertically
 (setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
@@ -775,9 +690,8 @@ a link to this file."
 (when (require 'org-toc nil t)
   (add-hook 'org-mode-hook 'org-toc-enable))
 
-;;** misc
-;;*** strike thru headlines for DONE task
-;;stolen from http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
+;; Strike thru headlines for DONE task
+;; Stolen from http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
 (setq org-fontify-done-headline t)
 (custom-set-faces
  '(org-done ((t (:foreground "PaleGreen"
