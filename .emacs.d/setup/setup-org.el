@@ -65,11 +65,6 @@
 (setq org-default-notes-file "~/workspace/Documents/Org/notes.org")
 (setq org-indent-mode nil) ;; this causes problem in other modes
 
-;; Better list interface
-(add-to-list 'load-path "~/.emacs.d/org-autolist")
-(require 'org-autolist)
-(add-hook 'org-mode-hook (lambda () (org-autolist-mode)))
-
 ;; Org Capture
 (defun org-capture-todo (note)
   (let* ((org-file org-default-notes-file)
