@@ -123,8 +123,9 @@ Defaults to `error'."
     (setq exec-path (split-string (car exec-path) " "))
     (setenv "PATH" (mapconcat 'identity exec-path ":"))
     (setq eshell-path-env (getenv "PATH")))
-  (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
+  (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:/usr/texbin" (getenv "PATH")))
   (push "/usr/local/bin" exec-path)
+  (push "/usr/texbin" exec-path)
   (push "/opt/local/bin" exec-path)
 
   (defun mac-open-file ()
