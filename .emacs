@@ -20,7 +20,7 @@
 
 ;; CEDET
 (add-to-list 'load-path "~/.emacs.d/cedet")
-(add-to-list 'load-path "~/projects/cedet/contrib")
+(add-to-list 'load-path "~/.emacs/cedet/contrib")
 (require 'cedet-remove-builtin)
 (setq byte-compile-warnings nil)
 (load-file "~/.emacs.d/cedet/cedet-devel-load.el")
