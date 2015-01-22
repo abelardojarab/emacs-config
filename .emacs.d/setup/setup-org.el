@@ -467,7 +467,6 @@ a link to this file."
 
 \\usepackage[]{xkeyval}
 \\usepackage{paralist}
-\\usepackage{fontspec}
 
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
