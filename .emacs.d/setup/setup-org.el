@@ -471,7 +471,6 @@ a link to this file."
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
 \\renewcommand{\\rmdefault}{ptm}
-\\pagestyle{empty}
 \\title{}
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]
@@ -497,7 +496,6 @@ a link to this file."
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
 \\renewcommand{\\rmdefault}{ptm}
-\\pagestyle{empty}
 \\title{}
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]
