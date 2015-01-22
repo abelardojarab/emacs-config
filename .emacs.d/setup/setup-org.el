@@ -434,7 +434,7 @@ a link to this file."
 (require 'org-ref)
 (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
       org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
-      org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs/")
+      org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs")
 (setq org-ref-insert-cite-key "C-c )")
 (setq org-ref-default-citation-link "autocite")
 
@@ -446,54 +446,6 @@ a link to this file."
 (add-to-list 'org-latex-packages-alist '("" "listings"))
 (add-to-list 'org-latex-packages-alist '("" "color"))
 (add-to-list 'org-latex-packages-alist '("" "mathptmx"))
-
-;; Extra packages when better support available
-(when (executable-find "xelatex")
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage[]{xkeyval}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage{paralist}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage{unicode-math}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage{tikz}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage{fontspec}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\setmainfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\setromanfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\setsansfont[ItalicFont={Cambria Italic},BoldFont={Cambria Bold},BoldItalicFont={Cambria Bold Italic}]{Cambria}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\setmonofont[Scale=0.8,ItalicFont={Consolas Italic},BoldFont={Consolas Bold},BoldItalicFont={Consolas Bold Italic}]{Consolas}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage{csquotes}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage[section]{placeins}" t)
-  (add-to-list 'org-latex-packages-alist
-               "\\usepackage[backend=bibtex,sorting=none]{biblatex}" t))
-
-(add-to-list 'org-latex-classes
-             '("article"
-               "\\documentclass[10pt,article,oneside]{memoir}"
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-(add-to-list 'org-latex-classes
-             '("book"
-               "\\documentclass[10pt]{memoir}"
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
 (add-to-list 'org-latex-classes
              '("xelatex"
@@ -511,6 +463,16 @@ a link to this file."
 \\usepackage{tikz}
 \\usepackage{csquotes}
 \\usepackage[backend=bibtex,sorting=none]{biblatex}
+
+\\usepackage[]{xkeyval}
+\\usepackage{paralist}
+\\usepackage{unicode-math}
+\\usepackage{fontspec}
+\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
+\\setmainfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
+\\setromanfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
+\\setsansfont[ItalicFont={Cambria Italic},BoldFont={Cambria Bold},BoldItalicFont={Cambria Bold Italic}]{Cambria}
+\\setmonofont[Scale=0.8,ItalicFont={Consolas Italic},BoldFont={Consolas Bold},BoldItalicFont={Consolas Bold Italic}]{Consolas}
 
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
