@@ -498,8 +498,7 @@ a link to this file."
 \\renewcommand{\\rmdefault}{ptm}
 \\title{}
       [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]
-\\hypersetup{pdfencoding=auto,colorlinks=true}"
+      [NO-PACKAGES]"
                ("\\section{%s}" . "\\section*{%s}")
                ("\\subsection{%s}" . "\\subsection*{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
