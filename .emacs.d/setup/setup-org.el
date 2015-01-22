@@ -462,17 +462,12 @@ a link to this file."
 
 \\usepackage{tikz}
 \\usepackage{csquotes}
-\\usepackage[backend=bibtex,sorting=none]{biblatex}
+\\usepackage[backend=biber,sorting=none]{biblatex}
+\\addbibresource[datatype=bibtex]{~/workspace/Documents/Bibliography/biblio.bib}
 
 \\usepackage[]{xkeyval}
 \\usepackage{paralist}
-\\usepackage{unicode-math}
 \\usepackage{fontspec}
-\\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
-\\setmainfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
-\\setromanfont[ItalicFont={Calibri Italic},BoldFont={Calibri Bold},BoldItalicFont={Calibri Bold Italic}]{Calibri}
-\\setsansfont[ItalicFont={Cambria Italic},BoldFont={Cambria Bold},BoldItalicFont={Cambria Bold Italic}]{Cambria}
-\\setmonofont[Scale=0.8,ItalicFont={Consolas Italic},BoldFont={Consolas Bold},BoldItalicFont={Consolas Bold Italic}]{Consolas}
 
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
@@ -480,7 +475,8 @@ a link to this file."
 \\pagestyle{empty}
 \\title{}
       [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]"
+      [NO-PACKAGES]
+\\hypersetup{pdfencoding=auto,colorlinks=true}"
                ("\\section{%s}" . "\\section*{%s}")
                ("\\subsection{%s}" . "\\subsection*{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
@@ -505,7 +501,8 @@ a link to this file."
 \\pagestyle{empty}
 \\title{}
       [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]"
+      [NO-PACKAGES]
+\\hypersetup{pdfencoding=auto,colorlinks=true}"
                ("\\section{%s}" . "\\section*{%s}")
                ("\\subsection{%s}" . "\\subsection*{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
