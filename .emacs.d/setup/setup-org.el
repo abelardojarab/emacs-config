@@ -45,11 +45,11 @@
 
 (let ((todo "~/workspace/Documents/Org/agenda.org"))
   (when (file-readable-p todo)
-    (setq org-agenda-files '("~/workspace/Documents/Org/agenda.org"))
-    (setq initial-buffer-choice (lambda ()
-                                  (org-agenda nil "n")
-                                  (delete-other-windows)
-                                  (current-buffer)))))
+    (setq org-agenda-files '("~/workspace/Documents/Org/agenda.org"))))
+(let ((todo "~/workspace/Documents/Org/notes.org"))
+  (when (file-readable-p todo)
+    (setq org-default-notes-file "~/workspace/Documents/Org/notes.org")))
+
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (setq org-startup-folded 'nofold)
@@ -62,7 +62,6 @@
 (setq org-confirm-babel-evaluate nil)
 (setq org-use-speed-commands t)
 (setq org-completion-use-ido t)
-(setq org-default-notes-file "~/workspace/Documents/Org/notes.org")
 (setq org-indent-mode nil) ;; this causes problem in other modes
 
 ;; Org Capture
