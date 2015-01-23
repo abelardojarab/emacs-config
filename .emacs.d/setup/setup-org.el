@@ -66,6 +66,8 @@
 (setq org-blank-before-new-entry ;; Insert blank line before new
       '((heading . t)            ;; headings/list items.
         (plain-list-item . t)))
+(setq org-agenda-start-on-weekday nil)
+(setq org-agenda-ndays 7)
 
 ;; Org Capture
 (defun org-capture-todo (note)
@@ -221,9 +223,9 @@
 ;; Fix on the keys
 (add-hook 'org-mode-hook
           (lambda ()
-            (define-key org-mode-map [kp-enter] 'org-return-indent)
-            (define-key org-mode-map [enter] 'org-return-indent)
-            (define-key org-mode-map (kbd "RET") 'org-return-indent)))
+            (define-key org-mode-map [kp-enter] 'org-return)
+            (define-key org-mode-map [enter] 'org-return)
+            (define-key org-mode-map (kbd "RET") 'org-return)))
 
 ;; define todo states: set time stamps one waiting, delegated and done
 (setq org-todo-keywords
