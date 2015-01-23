@@ -322,7 +322,7 @@
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'ecb-redraw-layout)
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'ibuffer)
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
 (define-key my-keys-minor-mode-map (kbd "C-S-<left>") 'popup-select-window)
 (define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
