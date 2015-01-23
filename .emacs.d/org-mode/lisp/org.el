@@ -6983,34 +6983,33 @@ With a numeric prefix, show all headlines up to that level."
 (defun org-set-visibility-according-to-property (&optional no-cleanup)
   "Switch subtree visibilities according to :VISIBILITY: property."
   (interactive)
-  (let (org-show-entry-below state)
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward
-	      "^[ \t]*:VISIBILITY:[ \t]+\\([a-z]+\\)"
-	      nil t)
-	(setq state (match-string 1))
-	(save-excursion
-	  (org-back-to-heading t)
-	  (hide-subtree)
-	  (org-reveal)
-	  (cond
-	   ((equal state '("fold" "folded"))
-	    (hide-subtree))
-	   ((equal state "children")
-	    (org-show-hidden-entry)
-	    (show-children))
-	   ((equal state "content")
-	    (save-excursion
-	      (save-restriction
-		(org-narrow-to-subtree)
-		(org-content))))
-	   ((member state '("all" "showall"))
-	    (show-subtree)))))
-      (unless no-cleanup
-	(org-cycle-hide-archived-subtrees 'all)
-	(org-cycle-hide-drawers 'all)
-	(org-cycle-show-empty-lines 'all)))))
+  (let (org-show-entry-below)
+    (org-with-wide-buffer
+     (goto-char (point-min))
+     (while (re-search-forward "^[ \t]*:VISIBILITY:" nil t)
+       (if (not (org-at-property-p)) (outline-next-heading)
+	 (let ((state (match-string 3)))
+	   (save-excursion
+	     (org-back-to-heading t)
+	     (hide-subtree)
+	     (org-reveal)
+	     (cond
+	      ((equal state "folded")
+	       (hide-subtree))
+	      ((equal state "children")
+	       (org-show-hidden-entry)
+	       (show-children))
+	      ((equal state "content")
+	       (save-excursion
+		 (save-restriction
+		   (org-narrow-to-subtree)
+		   (org-content))))
+	      ((member state '("all" "showall"))
+	       (show-subtree)))))))
+     (unless no-cleanup
+       (org-cycle-hide-archived-subtrees 'all)
+       (org-cycle-hide-drawers 'all)
+       (org-cycle-show-empty-lines 'all)))))
 
 ;; This function uses outline-regexp instead of the more fundamental
 ;; org-outline-regexp so that org-cycle-global works outside of Org
@@ -10686,41 +10685,26 @@ link in a property drawer line."
     (setq org-window-config-before-follow-link (current-window-configuration))
     (org-remove-occur-highlights nil nil t)
     (unless (run-hook-with-args-until-success 'org-open-at-point-functions)
-      (let* ((context (org-element-context)) type value)
-	;; On an unsupported type, check if point is contained within
-	;; a support one.
-	(while (and (not (memq (setq type (org-element-type context))
-			       '(comment comment-block
-					 headline inlinetask link
-					 footnote-definition footnote-reference
-					 node-property timestamp)))
-		    (setq context (org-element-property :parent context))))
-	(setq value (org-element-property :value context))
+      (let* ((context
+	      ;; Only consider supported types, even if they are not
+	      ;; the closest one.
+	      (org-element-lineage
+	       (org-element-context)
+	       '(comment comment-block footnote-definition footnote-reference
+			 headline inlinetask link node-property timestamp)
+	       t))
+	     (type (org-element-type context))
+	     (value (org-element-property :value context)))
 	(cond
-	 ;; Blank lines at the beginning of buffer: bail out.
 	 ((not context) (user-error "No link found"))
-	 ;; Exception n°1: links in property drawers
-	 ((eq type 'node-property)
-	  (org-open-link-from-string
-	   (and (string-match org-any-link-re value)
-		(match-string-no-properties 0 value))))
-	 ;; Exception n°2: links in comments.
-	 ((memq type '(comment comment-block))
-	  (save-excursion
-	    (skip-chars-forward "\\S-" (point-at-eol))
-	    (let ((string-rear (replace-regexp-in-string
-				"^[ \t]*# [ \t]*" ""
-				(buffer-substring (point) (line-beginning-position))))
-		  (string-front (buffer-substring (point) (line-end-position))))
-	      (with-temp-buffer
-		(let ((org-inhibit-startup t)) (org-mode))
-		(insert value)
-		(goto-char (point-min))
-		(when (and (search-forward string-rear nil t)
-			   (search-forward string-front (line-end-position) t))
-		  (goto-char (match-beginning 0))
-		  (org-open-at-point)
-		  (when (string= string-rear "") (forward-char)))))))
+	 ;; Exception: open timestamps and links in properties drawers
+	 ;; and comments.
+	 ((memq type '(comment comment-block node-property))
+	  (cond ((org-in-regexp org-any-link-re)
+		 (org-open-link-from-string (match-string-no-properties 0)))
+		((or (org-at-timestamp-p t) (org-at-date-range-p t))
+		 (org-follow-timestamp-link))
+		(t (user-error "No link found"))))
 	 ;; On a headline or an inlinetask, but not on a timestamp,
 	 ;; a link, a footnote reference or on tags.
 	 ((and (memq type '(headline inlinetask))
@@ -19022,6 +19006,16 @@ share a good deal of logic."
        (plist-get info :latex-header)))
      info)))
 
+(defun org--get-display-dpi ()
+  "Get the DPI of the display.
+
+Assumes that the display has the same pixel width in the
+horizontal and vertical directions."
+  (if (display-graphic-p)
+      (round (/ (display-pixel-height)
+		(/ (display-mm-height) 25.4)))
+    (error "Attempt to calculate the dpi of a non-graphic display.")))
+
 ;; This function borrows from Ganesh Swami's latex2png.el
 (defun org-create-formula-image-with-dvipng (string tofile options buffer)
   "This calls dvipng."
@@ -19034,11 +19028,10 @@ share a good deal of logic."
 	 (texfile (concat texfilebase ".tex"))
 	 (dvifile (concat texfilebase ".dvi"))
 	 (pngfile (concat texfilebase ".png"))
-	 (fnh (if (featurep 'xemacs)
-                  (font-height (face-font 'default))
-                (face-attribute 'default :height nil)))
 	 (scale (or (plist-get options (if buffer :scale :html-scale)) 1.0))
-	 (dpi (number-to-string (* scale (floor (* 0.9 (if buffer fnh 140.))))))
+	 ;; This assumes that the display has the same pixel width in
+	 ;; the horizontal and vertical directions
+	 (dpi (number-to-string (* scale (if buffer (org--get-display-dpi) 120))))
 	 (fg (or (plist-get options (if buffer :foreground :html-foreground))
 		 "Black"))
 	 (bg (or (plist-get options (if buffer :background :html-background))
@@ -19096,11 +19089,8 @@ share a good deal of logic."
 	 (texfile (concat texfilebase ".tex"))
 	 (pdffile (concat texfilebase ".pdf"))
 	 (pngfile (concat texfilebase ".png"))
-	 (fnh (if (featurep 'xemacs)
-                  (font-height (face-font 'default))
-                (face-attribute 'default :height nil)))
 	 (scale (or (plist-get options (if buffer :scale :html-scale)) 1.0))
-	 (dpi (number-to-string (* scale (floor (if buffer fnh 120.)))))
+	 (dpi (number-to-string (* scale (if buffer (org--get-display-dpi) 120))))
 	 (fg (or (plist-get options (if buffer :foreground :html-foreground))
 		 "black"))
 	 (bg (or (plist-get options (if buffer :background :html-background))
@@ -19265,13 +19255,14 @@ INCLUDE-LINKED is passed to `org-display-inline-images'."
   (if org-inline-image-overlays
       (progn
 	(org-remove-inline-images)
-	(message "Inline image display turned off"))
+	(when (org-called-interactively-p 'interactive)
+	  (message "Inline image display turned off")))
     (org-display-inline-images include-linked)
-    (if (and (org-called-interactively-p)
-	     org-inline-image-overlays)
-	(message "%d images displayed inline"
-		 (length org-inline-image-overlays))
-      (message "No images to display inline"))))
+    (when (org-called-interactively-p 'interactive)
+      (message (if org-inline-image-overlays
+		   (format "%d images displayed inline"
+			   (length org-inline-image-overlays))
+		 "No images to display inline")))))
 
 (defun org-redisplay-inline-images ()
   "Refresh the display of inline images."
@@ -19421,34 +19412,38 @@ boundaries."
 (define-key org-mode-map [remap outline-promote] 'org-promote-subtree)
 (define-key org-mode-map [remap outline-demote] 'org-demote-subtree)
 (define-key org-mode-map [remap outline-insert-heading] 'org-ctrl-c-ret)
+(define-key org-mode-map [remap outline-next-visible-heading]
+  'org-next-visible-heading)
+(define-key org-mode-map [remap outline-previous-visible-heading]
+  'org-previous-visible-heading)
 
 ;; Outline functions from `outline-mode-prefix-map' that can not
 ;; be remapped in Org:
-;;
+
 ;; - the column "key binding" shows whether the Outline function is still
 ;;   available in Org mode on the same key that it has been bound to in
 ;;   Outline mode:
 ;;   - "overridden": key used for a different functionality in Org mode
 ;;   - else: key still bound to the same Outline function in Org mode
-;;
-;; | Outline function                   | key binding | Org replacement       |
-;; |------------------------------------+-------------+-----------------------|
-;; | `outline-next-visible-heading'     | `C-c C-n'   | still same function   |
-;; | `outline-previous-visible-heading' | `C-c C-p'   | still same function   |
-;; | `outline-up-heading'               | `C-c C-u'   | still same function   |
-;; | `outline-move-subtree-up'          | overridden  | better: org-shiftup   |
-;; | `outline-move-subtree-down'        | overridden  | better: org-shiftdown |
-;; | `show-entry'                       | overridden  | no replacement        |
-;; | `show-children'                    | `C-c C-i'   | visibility cycling    |
-;; | `show-branches'                    | `C-c C-k'   | still same function   |
-;; | `show-subtree'                     | overridden  | visibility cycling    |
-;; | `show-all'                         | overridden  | no replacement        |
-;; | `hide-subtree'                     | overridden  | visibility cycling    |
-;; | `hide-body'                        | overridden  | no replacement        |
-;; | `hide-entry'                       | overridden  | visibility cycling    |
-;; | `hide-leaves'                      | overridden  | no replacement        |
-;; | `hide-sublevels'                   | overridden  | no replacement        |
-;; | `hide-other'                       | overridden  | no replacement        |
+
+;; | Outline function                   | key binding | Org replacement          |
+;; |------------------------------------+-------------+--------------------------|
+;; | `outline-next-visible-heading'     | `C-c C-n'   | better: skip inlinetasks |
+;; | `outline-previous-visible-heading' | `C-c C-p'   | better: skip inlinetasks |
+;; | `outline-up-heading'               | `C-c C-u'   | still same function      |
+;; | `outline-move-subtree-up'          | overridden  | better: org-shiftup      |
+;; | `outline-move-subtree-down'        | overridden  | better: org-shiftdown    |
+;; | `show-entry'                       | overridden  | no replacement           |
+;; | `show-children'                    | `C-c C-i'   | visibility cycling       |
+;; | `show-branches'                    | `C-c C-k'   | still same function      |
+;; | `show-subtree'                     | overridden  | visibility cycling       |
+;; | `show-all'                         | overridden  | no replacement           |
+;; | `hide-subtree'                     | overridden  | visibility cycling       |
+;; | `hide-body'                        | overridden  | no replacement           |
+;; | `hide-entry'                       | overridden  | visibility cycling       |
+;; | `hide-leaves'                      | overridden  | no replacement           |
+;; | `hide-sublevels'                   | overridden  | no replacement           |
+;; | `hide-other'                       | overridden  | no replacement           |
 
 ;; Make `C-c C-x' a prefix key
 (org-defkey org-mode-map "\C-c\C-x" (make-sparse-keymap))
@@ -19688,8 +19683,8 @@ boundaries."
 (defconst org-speed-commands-default
   '(
     ("Outline Navigation")
-    ("n" . (org-speed-move-safe 'outline-next-visible-heading))
-    ("p" . (org-speed-move-safe 'outline-previous-visible-heading))
+    ("n" . (org-speed-move-safe 'org-next-visible-heading))
+    ("p" . (org-speed-move-safe 'org-previous-visible-heading))
     ("f" . (org-speed-move-safe 'org-forward-heading-same-level))
     ("b" . (org-speed-move-safe 'org-backward-heading-same-level))
     ("F" . org-next-block)
@@ -22152,13 +22147,13 @@ and :keyword."
     (setq clist (nreverse (delq nil clist)))
     clist))
 
-;; FIXME: Compare with at-regexp-p Do we need both?
 (defun org-in-regexp (re &optional nlines visually)
-  "Check if point is inside a match of regexp.
-Normally only the current line is checked, but you can include NLINES extra
-lines both before and after point into the search.
-If VISUALLY is set, require that the cursor is not after the match but
-really on, so that the block visually is on the match."
+  "Check if point is inside a match of RE.
+
+Normally only the current line is checked, but you can include
+NLINES extra lines after point into the search.  If VISUALLY is
+set, require that the cursor is not after the match but really
+on, so that the block visually is on the match."
   (catch 'exit
     (let ((pos (point))
           (eol (point-at-eol (+ 1 (or nlines 0))))
@@ -22169,18 +22164,8 @@ really on, so that the block visually is on the match."
 	  (if (and (<= (match-beginning 0) pos)
 		   (>= (+ inc (match-end 0)) pos))
 	      (throw 'exit (cons (match-beginning 0) (match-end 0)))))))))
-
-(defun org-at-regexp-p (regexp)
-  "Is point inside a match of REGEXP in the current line?"
-  (catch 'exit
-    (save-excursion
-      (let ((pos (point)) (end (point-at-eol)))
-	(beginning-of-line 1)
-	(while (re-search-forward regexp end t)
-	  (if (and (<= (match-beginning 0) pos)
-		   (>= (match-end 0) pos))
-	      (throw 'exit t)))
-	nil))))
+(define-obsolete-function-alias 'org-at-regexp-p 'org-in-regexp
+  "Org mode 8.3")
 
 (defun org-between-regexps-p (start-re end-re &optional lim-up lim-down)
   "Non-nil when point is between matches of START-RE and END-RE.
@@ -22201,7 +22186,7 @@ position before START-RE (resp. after END-RE)."
       (save-excursion
 	;; Point is on a block when on START-RE or if START-RE can be
 	;; found before it...
-	(and (or (org-at-regexp-p start-re)
+	(and (or (org-in-regexp start-re)
 		 (re-search-backward start-re limit-up t))
 	     (setq beg (match-beginning 0))
 	     ;; ... and END-RE after it...
@@ -22236,15 +22221,6 @@ block from point."
 		    (throw 'exit n))))
 	      names))
       nil)))
-
-(defun org-in-drawer-p ()
-  "Non-nil if point is within a drawer.
-If point is within a drawer, return it, as parsed data."
-  (let ((element (save-match-data (org-element-at-point))))
-    (while (and element (not (memq (org-element-type element)
-				   '(drawer property-drawer))))
-      (setq element (org-element-property :parent element)))
-    element))
 
 (defun org-occur-in-agenda-files (regexp &optional nlines)
   "Call `multi-occur' with buffers for all agenda files."
@@ -24099,6 +24075,26 @@ non-nil it will also look at invisible ones."
 Stop at the first and last subheadings of a superior heading."
   (interactive "p")
   (org-forward-heading-same-level (if arg (- arg) -1) invisible-ok))
+
+(defun org-next-visible-heading (arg)
+  "Move to the next visible heading.
+
+This function wraps `outline-next-visible-heading' with
+`org-with-limited-levels' in order to skip over inline tasks and
+respect customization of `org-odd-levels-only'."
+  (interactive "p")
+  (org-with-limited-levels
+   (outline-next-visible-heading arg)))
+
+(defun org-previous-visible-heading (arg)
+  "Move to the next visible heading.
+
+This function wraps `outline-previous-visible-heading' with
+`org-with-limited-levels' in order to skip over inline tasks and
+respect customization of `org-odd-levels-only'."
+  (interactive "p")
+  (org-with-limited-levels
+   (outline-previous-visible-heading arg)))
 
 (defun org-next-block (arg &optional backward block-regexp)
   "Jump to the next block.

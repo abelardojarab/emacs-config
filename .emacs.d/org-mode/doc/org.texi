@@ -10749,9 +10749,12 @@ Toggle inclusion of inlinetasks (@code{org-export-with-inlinetasks}).
 
 @item num:
 @vindex org-export-with-section-numbers
+@cindex property, UNNUMBERED
 Toggle section-numbers (@code{org-export-with-section-numbers}).  It can also
 be set to a number @samp{n}, so only headlines at that level or above will be
-numbered.
+numbered.  Finally, irrespective of the level of a specific headline, the
+numbering of it can be disabled by setting the @code{UNNUMBERED} property to
+non-nil.  This also affects subheadings.
 
 @item p:
 @vindex org-export-with-planning
@@ -10826,7 +10829,7 @@ settings that cannot be changed using specific keywords.
 @cindex property, EXPORT_FILE_NAME
 The name of the output file to be generated is taken from the file associated
 to the buffer, when possible, or asked to you otherwise.  For subtree export,
-you can also set @samp{EXPORT_FILE_NAME} property.  In all cases, only the
+you can also set @code{EXPORT_FILE_NAME} property.  In all cases, only the
 base name of the file is retained, and a back-end specific extension is
 added.
 
@@ -15570,14 +15573,24 @@ execution.
 @subsubsection @code{:session}
 @cindex @code{:session}, src header argument
 
-The @code{:session} header argument starts a session for an interpreted
-language where state is preserved.
-
+The @code{:session} header argument starts a (possibly named) session for an
+interpreted language where the interpreter’s state is preserved.  All code
+blocks sharing the same name are exectuted by the same interpreter process.
 By default, a session is not started.
 
-A string passed to the @code{:session} header argument will give the session
-a name.  This makes it possible to run concurrent sessions for each
-interpreted language.
+@itemize @bullet
+@item @code{none}
+The default.  Each block is evaluated in its own interpreter process, which
+is terminated after the evaluation.
+@item @code{other}
+Any other string passed to the @code{:session} header argument will give the
+session a name.  For example, @code{:session mysession}.  If @code{:session}
+is given but no name string is specified, the session is named according to
+the language used in the block.  All blocks with the same session name share
+the same session.  Using different session names enables concurrent sessions
+(even for the same interpreted language).
+
+@end itemize
 
 @node noweb
 @subsubsection @code{:noweb}

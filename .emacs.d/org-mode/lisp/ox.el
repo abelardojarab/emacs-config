@@ -1672,13 +1672,11 @@ Return updated plist."
   ;; Install the parse tree in the communication channel.
   (setq info (plist-put info :parse-tree data))
   ;; Get the list of elements and objects to ignore, and put it into
-  ;; `:ignore-list'.  Do not overwrite any user ignore that might have
-  ;; been done during parse tree filtering.
+  ;; `:ignore-list'.
   (setq info
 	(plist-put info
 		   :ignore-list
-		   (append (org-export--populate-ignore-list data info)
-			   (plist-get info :ignore-list))))
+		   (org-export--populate-ignore-list data info)))
   ;; Compute `:headline-offset' in order to be able to use
   ;; `org-export-get-relative-level'.
   (setq info
@@ -1934,12 +1932,6 @@ a tree with a select tag."
 ;; `org-export-data' or even use a temporary back-end by using
 ;; `org-export-data-with-backend'.
 ;;
-;; Internally, three functions handle the filtering of objects and
-;; elements during the export.  In particular,
-;; `org-export-ignore-element' marks an element or object so future
-;; parse tree traversals skip it and `org-export-expand' transforms
-;; the others back into their original shape.
-;;
 ;; `org-export-transcoder' is an accessor returning appropriate
 ;; translator function for a given element or object.
 
@@ -2163,13 +2155,6 @@ keywords before output."
 		 (org-element--interpret-affiliated-keywords blob))
 	    (funcall (intern (format "org-element-%s-interpreter" type))
 		     blob contents))))
-
-(defun org-export-ignore-element (element info)
-  "Add ELEMENT to `:ignore-list' in INFO.
-
-Any element in `:ignore-list' will be skipped when using
-`org-element-map'.  INFO is modified by side effects."
-  (plist-put info :ignore-list (cons element (plist-get info :ignore-list))))
 
 
 
@@ -5523,11 +5508,11 @@ them."
      ("zh-CN" :html "&#26410;&#30693;&#24341;&#29992;" :utf-8 "未知引用")))
   "Dictionary for export engine.
 
-Alist whose CAR is the string to translate and CDR is an alist
-whose CAR is the language string and CDR is a plist whose
+Alist whose car is the string to translate and cdr is an alist
+whose car is the language string and cdr is a plist whose
 properties are possible charsets and values translated terms.
 
-It is used as a database for `org-export-translate'. Since this
+It is used as a database for `org-export-translate'.  Since this
 function returns the string as-is if no translation was found,
 the variable only needs to record values different from the
 entry.")
@@ -5538,9 +5523,9 @@ entry.")
 ENCODING is a symbol among `:ascii', `:html', `:latex', `:latin1'
 and `:utf-8'.  INFO is a plist used as a communication channel.
 
-Translation depends on `:language' property. Return the
-translated string. If no translation is found, try to fall back
-to `:default' encoding. If it fails, return S."
+Translation depends on `:language' property.  Return the
+translated string.  If no translation is found, try to fall back
+to `:default' encoding.  If it fails, return S."
   (let* ((lang (plist-get info :language))
 	 (translations (cdr (assoc lang
 				   (cdr (assoc s org-export-dictionary))))))
