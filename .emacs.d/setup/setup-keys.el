@@ -98,7 +98,8 @@
 (global-set-key "\C-a" 'mark-whole-buffer)
 (global-set-key (kbd "<f7>") 'toggle-line-spacing)
 (global-set-key (kbd "<f8>") 'toggle-truncate-lines)
-(global-set-key (kbd "<f12>") 'ibuffer)
+(global-set-key (kbd "<f11>") 'ibuffer)
+(global-set-key (kbd "<f12>") 'magit-status)
 
 ;; Native file opening
 (cond
@@ -229,7 +230,7 @@
 (defun toggle-selective-display ()
   (interactive)
   (set-selective-display (if selective-display nil 1)))
-(global-set-key [f11] 'toggle-selective-display)
+(global-set-key [f10] 'toggle-selective-display)
 
 ;; Redo
 (require 'redo+)
@@ -322,7 +323,9 @@
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'ibuffer)
+(define-key my-keys-minor-mode-map (kbd "<f10>") 'toggle-selective-display)
+(define-key my-keys-minor-mode-map (kbd "<f11>") 'ibuffer)
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'magit-status)
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
 (define-key my-keys-minor-mode-map (kbd "C-S-<left>") 'popup-select-window)
 (define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
