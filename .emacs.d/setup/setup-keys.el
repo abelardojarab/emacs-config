@@ -98,7 +98,7 @@
 (global-set-key "\C-a" 'mark-whole-buffer)
 (global-set-key (kbd "<f7>") 'toggle-line-spacing)
 (global-set-key (kbd "<f8>") 'toggle-truncate-lines)
-(global-set-key (kbd "<f12>") 'ecb-redraw-layout)
+(global-set-key (kbd "<f12>") 'ibuffer)
 
 ;; Native file opening
 (cond
