@@ -63,6 +63,9 @@
 (setq org-use-speed-commands t)
 (setq org-completion-use-ido t)
 (setq org-indent-mode nil) ;; this causes problem in other modes
+(setq org-blank-before-new-entry ;; Insert blank line before new
+      '((heading . t)            ;; headings/list items.
+        (plain-list-item . t)))
 
 ;; Org Capture
 (defun org-capture-todo (note)
