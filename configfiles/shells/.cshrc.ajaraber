@@ -1,13 +1,15 @@
-    if ( -r $HOME/.aliases ) then
-    source $HOME/.aliases
-    endif
+    set filec
+    set autolist
+    set correct=cmd
+    set complete=enhance
     alias ls       'ls -l --color -sF'
     alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
 
     if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
-       setenv PATH ${HOME}/bin:${HOME}/bin/bin:${HOME}/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${PATH}
+       echo "Using upgraded SUSE 11..."
+       setenv PATH ${HOME}/bin:${HOME}/bin/bin:/usr/intel/bin:${HOME}/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${PATH}
     else
-       setenv PATH ${HOME}/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${PATH}:${HOME}/bin:${HOME}/bin/bin
+       setenv PATH $PATH:/usr/intel/bin:/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${HOME}/bin:${HOME}/bin/bin
     endif
 
     setenv EC_DISABLE_VAL 1
