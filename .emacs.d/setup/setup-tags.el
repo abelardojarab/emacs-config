@@ -100,5 +100,32 @@
   (eshell-command
    (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
+(defun djcb-gtags-create-or-update ()
+  "Create or update the GNU-Global tag file"
+  (interactive
+   (if (zerop (call-process "global" nil nil nil "-p"))
+       ;; case 1: tag file exists: update
+       (progn
+         (shell-command "global -u -q 2>/dev/null")
+         (message "Tagfile updated"))
+     ;; case 2: no tag file yet: create it
+     (when (yes-or-no-p "Create tagfile?")
+       (let ((olddir default-directory)
+             (default-directory
+               (read-directory-name
+                "gtags: top of source tree:" default-directory)))
+         (shell-command "gtags -i -q 2>/dev/null")
+         (message "Created tagfile"))))))
+
+(add-hook 'prog-mode-hook
+          (lambda ()
+            ;; ggtags
+            (when (require 'ggtags nil 'noerror) ;; enable gnu-global
+              (ggtags-mode t)
+              (local-set-key (kbd "C-c .") 'ggtags-grep)
+              (local-set-key (kbd "M-,")   'ggtags-find-reference)
+              (when (fboundp 'djcb-gtags-create-or-update)
+                (djcb-gtags-create-or-update))))) ;; auto-update tags
+
 (provide 'setup-tags)
 ;;; setup-tags.el ends here

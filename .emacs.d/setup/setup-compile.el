@@ -1,6 +1,6 @@
 ;;; setup-compile.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -52,10 +52,15 @@
   ;; Always return the anticipated result of compilation-exit-message-function
   (cons msg code))
 
-;; Specify my function (maybe I should have done a lambda function)
-(setq compilation-exit-message-function 'compilation-exit-autoclose)
-(setq compilation-scroll-output 1) ;; automatically scroll the compilation window
-(setq compilation-window-height 7) ;; Set the compilation window height...
+;; Compilation
+;; http://www.emacswiki.org/cgi-bin/wiki/ModeCompile
+(setq
+ compilation-exit-message-function 'compilation-exit-autoclose
+ compilation-scroll-output 'first-error      ;; scroll until first error
+ compilation-read-command nil                  ;; don't need enter
+ compilation-window-height 12                ;; keep it readable
+ compilation-auto-jump-to-first-error t      ;; jump to first error auto
+ compilation-auto-jump-to-next-error t)      ;; jump to next error
 
 ;; Make shell scrips executable on save. Good!
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
@@ -101,6 +106,12 @@
           ;; file and name the executable the same name as the file with the extension
           ;; stripped.
           )
+
+;; makefiles
+(add-hook 'makefile-mode-hook
+          (lambda()
+            (setq whitespace-style '(face trailing tabs))
+            (whitespace-mode)))
 
 (provide 'setup-compile)
 ;;; setup-compile.el ends here
