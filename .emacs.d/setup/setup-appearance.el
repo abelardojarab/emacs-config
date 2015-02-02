@@ -120,6 +120,7 @@ non-nil."
 (setq solarized-scale-org-headlines nil)
 
 (load-theme 'atom-dark t)
+(set-face-attribute 'region nil :background "#666")
 
 ;; Syntax coloring
 (require 'font-lock+)
