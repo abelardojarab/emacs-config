@@ -101,6 +101,7 @@
 (declare-function org-element-at-point "org-element" ())
 (declare-function org-element-property "org-element" (property element))
 (declare-function org-every "org" (pred seq))
+(declare-function org-macro-escape-arguments "org-macro" (&rest args))
 
 (defgroup org-babel nil
   "Code block evaluation and management in `org-mode' documents."
@@ -209,7 +210,7 @@ This string must include a \"%s\" which will be replaced by the results."
 (defvar org-babel-inline-src-block-regexp
   (concat
    ;; (1) replacement target (2) lang
-   "\\(?:^\\|[^-[:alnum:]]\\)\\(src_\\([^ \f\t\n\r\v[]+\\)"
+   "\\(?:^\\|[^-[:alnum:]]?\\)\\(src_\\([^ \f\t\n\r\v[]+\\)"
    ;; (3,4) (unused, headers)
    "\\(\\|\\[[ \t]*\\(.*?\\)\\]\\)"
    ;; (5) body
@@ -228,32 +229,21 @@ not match KEY should be returned."
 (defun org-babel-get-inline-src-block-matches ()
   "Set match data if within body of an inline source block.
 Returns non-nil if match-data set"
-  (let ((src-at-0-p (save-excursion
-		      (beginning-of-line 1)
-		      (org-looking-at-p "src")))
-	(first-line-p (= (line-beginning-position) (point-min)))
-	(orig (point)))
-    (let ((search-for (cond ((and src-at-0-p first-line-p  "src_"))
-			    (first-line-p "[[:punct:] \t]src_")
-			    (t "[[:punct:] \f\t\n\r\v]src_")))
-	  (lower-limit (if first-line-p
-			   nil
-			 (- (point-at-bol) 1))))
-      (save-excursion
-	(when (or (and src-at-0-p (bobp))
-		  (and (re-search-forward "}" (point-at-eol) t)
-		       (re-search-backward search-for lower-limit t)
-		       (> orig (point))))
-	  (when (looking-at org-babel-inline-src-block-regexp)
-	    t ))))))
+ (save-excursion
+    (let ((datum (org-element-context)))
+      (when (eq (org-element-type datum) 'inline-src-block)
+	(goto-char (org-element-property :begin datum))
+	(when (looking-at org-babel-inline-src-block-regexp)
+	  t )))))
 
 (defvar org-babel-inline-lob-one-liner-regexp)
 (defun org-babel-get-lob-one-liner-matches ()
   "Set match data if on line of an lob one liner.
 Returns non-nil if match-data set"
   (save-excursion
-    (unless (= (point) (point-at-bol)) ;; move before inline block
-      (re-search-backward "[ \f\t\n\r\v]" nil t))
+    (let ((datum (org-element-context)))
+      (when (eq (org-element-type datum) 'inline-babel-call)
+	(goto-char (org-element-property :begin datum))))
     (if (looking-at org-babel-inline-lob-one-liner-regexp)
 	t
       nil)))
@@ -2063,21 +2053,27 @@ If the path of the link is a file path it is expanded using
 (defun org-babel-insert-result
   (result &optional result-params info hash indent lang)
   "Insert RESULT into the current buffer.
-By default RESULT is inserted after the end of the
-current source block.  With optional argument RESULT-PARAMS
-controls insertion of results in the org-mode file.
-RESULT-PARAMS can take the following values:
+
+By default RESULT is inserted after the end of the current source
+block.  The RESULT of an inline source block usually will be
+wrapped inside a `results' macro and placed on the same line as
+the inline source block.  The macro is stripped upon export.
+Multiline and non-scalar RESULTS from inline source blocks are
+not allowed.  With optional argument RESULT-PARAMS controls
+insertion of results in the Org mode file.  RESULT-PARAMS can
+take the following values:
 
 replace - (default option) insert results after the source block
-          replacing any previously inserted results
+          or inline source block replacing any previously
+          inserted results.
 
 silent -- no results are inserted into the Org-mode buffer but
           the results are echoed to the minibuffer and are
           ingested by Emacs (a potentially time consuming
-          process)
+          process).
 
 file ---- the results are interpreted as a file path, and are
-          inserted into the buffer using the Org-mode file syntax
+          inserted into the buffer using the Org-mode file syntax.
 
 list ---- the results are interpreted as an Org-mode list.
 
@@ -2086,8 +2082,9 @@ raw ----- results are added directly to the Org-mode file.  This
           formatted text.
 
 drawer -- results are added directly to the Org-mode file as with
-          \"raw\", but are wrapped in a RESULTS drawer, allowing
-          them to later be replaced or removed automatically.
+          \"raw\", but are wrapped in a RESULTS drawer or results
+          macro, allowing them to later be replaced or removed
+          automatically.
 
 org ----- results are added inside of a \"src_org{}\" or \"#+BEGIN_SRC
           org\" block depending on whether the current source block is
@@ -2095,20 +2092,39 @@ org ----- results are added inside of a \"src_org{}\" or \"#+BEGIN_SRC
           but Org syntax here will be discarded when exporting the
           file.
 
-html ---- results are added inside of a #+BEGIN_HTML block.  This
-          is a good option if you code block will output html
-          formatted text.
+html ---- results are added inside of a #+BEGIN_HTML block or
+          html export snippet depending on whether the current
+          source block is inline or not.  This is a good option
+          if your code block will output html formatted text.
 
-latex --- results are added inside of a #+BEGIN_LATEX block.
-          This is a good option if you code block will output
-          latex formatted text.
+latex --- results are added inside of a #+BEGIN_LATEX block or
+          latex export snippet depending on whether the current
+          source block is inline or not.  This is a good option
+          if your code block will output latex formatted text.
 
 code ---- the results are extracted in the syntax of the source
           code of the language being evaluated and are added
           inside of a source block with the source-code language
           set appropriately.  Also, source block inlining is
           preserved in this case.  Note this relies on the
-          optional LANG argument."
+          optional LANG argument.
+
+list ---- the results are rendered as a list.  This option not
+          allowed for inline src blocks.
+
+table --- the results are rendered as a table.  This option not
+          allowed for inline src blocks.
+
+INFO may provide the values of these header arguments (in the
+`header-arguments-alist' see the docstring for
+`org-babel-get-src-block-info'):
+
+:file --- the name of the file to which output should be written.
+
+:wrap --- the effect is similar to `latex' in RESULT-PARAMS but
+          using the argument supplied to specify the export block
+          or snippet type."
+
   (if (stringp result)
       (progn
         (setq result (org-no-properties result))
@@ -2128,11 +2144,19 @@ code ---- the results are extracted in the syntax of the source
 		(when (or (org-babel-get-inline-src-block-matches)
 			  (org-babel-get-lob-one-liner-matches))
 		  (goto-char (match-end 0))
-		  (insert (if (listp result) "\n" " "))
+		  (org-babel-remove-inline-result)
+		  (insert " ")
 		  (point))))
-	     (existing-result (unless inlinep
-				(org-babel-where-is-src-block-result
-				 t info hash indent)))
+	     (existing-result
+	      (unless inlinep
+		(org-babel-where-is-src-block-result t info hash indent)))
+	     (bad-inline-p
+	      (when inlinep
+		(or
+		 (and (member "table" result-params) "`:results table'")
+		 (and (listp result) "list result")
+		 (and (org-string-match-p "\n." result) "multiline result")
+		 (and (member "list" result-params) "`:results list'"))))
 	     (results-switches
 	      (cdr (assoc :results_switches (nth 2 info))))
 	     (visible-beg (copy-marker (point-min)))
@@ -2169,7 +2193,12 @@ code ---- the results are extracted in the syntax of the source
 		 ((member "prepend" result-params)))) ; already there
 	      (setq results-switches
 		    (if results-switches (concat " " results-switches) ""))
-	      (let ((wrap (lambda (start finish &optional no-escape no-newlines)
+	      (let ((wrap (lambda (start finish &optional no-escape no-newlines
+					 inline-start inline-finish)
+			    (when inlinep
+			      (setq start inline-start)
+			      (setq finish inline-finish)
+			      (setq no-newlines t))
 			    (goto-char end)
 			    (insert (concat finish (unless no-newlines "\n")))
 			    (goto-char beg)
@@ -2182,8 +2211,11 @@ code ---- the results are extracted in the syntax of the source
 		    (proper-list-p (lambda (it) (and (listp it) (null (cdr (last it)))))))
 		;; insert results based on type
 		(cond
-		 ;; do nothing for an empty result
+		 ;; Do nothing for an empty result.
 		 ((null result))
+		 ;; Illegal inline result or params.
+		 (bad-inline-p
+		  (error "Inline error: %s cannot be used" bad-inline-p))
 		 ;; insert a list if preferred
 		 ((member "list" result-params)
 		  (insert
@@ -2208,44 +2240,59 @@ code ---- the results are extracted in the syntax of the source
 		 ((and (listp result) (not (funcall proper-list-p result)))
 		  (insert (format "%s\n" result)))
 		 ((member "file" result-params)
-		  (when inlinep (goto-char inlinep))
+		  (when inlinep
+		    (goto-char inlinep)
+		    (setq result (org-macro-escape-arguments result)))
 		  (insert result))
+		 ((and inlinep
+		       (not (member "raw" result-params)))
+		  (goto-char inlinep)
+		  (insert (org-macro-escape-arguments
+			   (org-babel-chomp result "\n"))))
 		 (t (goto-char beg) (insert result)))
 		(when (funcall proper-list-p result) (goto-char (org-table-end)))
 		(setq end (point-marker))
 		;; possibly wrap result
 		(cond
+		 (bad-inline-p) ; Do nothing.
 		 ((assoc :wrap (nth 2 info))
 		  (let ((name (or (cdr (assoc :wrap (nth 2 info))) "RESULTS")))
 		    (funcall wrap (concat "#+BEGIN_" name)
-			     (concat "#+END_" (car (org-split-string name))))))
+			     (concat "#+END_" (car (org-split-string name)))
+			     nil nil (concat "{{{results(@@" name ":") "@@)}}}")))
 		 ((member "html" result-params)
-		  (funcall wrap "#+BEGIN_HTML" "#+END_HTML"))
+		  (funcall wrap "#+BEGIN_HTML" "#+END_HTML" nil nil
+			   "{{{results(@@html:" "@@)}}}"))
 		 ((member "latex" result-params)
-		  (funcall wrap "#+BEGIN_LaTeX" "#+END_LaTeX"))
+		  (funcall wrap "#+BEGIN_LaTeX" "#+END_LaTeX" nil nil
+			   "{{{results(@@latex:" "@@)}}}"))
 		 ((member "org" result-params)
 		  (goto-char beg) (if (org-at-table-p) (org-cycle))
-		  (if inlinep
-		      (funcall wrap "src_org{" "}" nil t)
-		      (funcall wrap "#+BEGIN_SRC org" "#+END_SRC")))
+		  (funcall wrap "#+BEGIN_SRC org" "#+END_SRC" nil nil
+			   "{{{results(src_org{" "})}}}"))
 		 ((member "code" result-params)
 		  (let ((lang (or lang "none")))
-		    (if inlinep
-			(funcall wrap (format "src_%s[%s]{" lang results-switches)
-				 "}" nil t)
-			(funcall wrap (format "#+BEGIN_SRC %s%s" lang results-switches)
-				 "#+END_SRC"))))
+		    (funcall wrap (format "#+BEGIN_SRC %s%s" lang results-switches)
+			     "#+END_SRC" nil nil
+			     (format "{{{results(src_%s[%s]{" lang results-switches)
+			     "})}}}")))
 		 ((member "raw" result-params)
 		  (goto-char beg) (if (org-at-table-p) (org-cycle)))
 		 ((or (member "drawer" result-params)
 		      ;; Stay backward compatible with <7.9.2
 		      (member "wrap" result-params))
 		  (goto-char beg) (if (org-at-table-p) (org-cycle))
-		  (funcall wrap ":RESULTS:" ":END:" 'no-escape))
+		  (funcall wrap ":RESULTS:" ":END:" 'no-escape nil
+			   "{{{results(" ")}}}"))
+		 ((and inlinep (member "file" result-params))
+		  (funcall wrap nil nil nil nil "{{{results(" ")}}}"))
 		 ((and (not (funcall proper-list-p result))
 		       (not (member "file" result-params)))
-		  (org-babel-examplify-region beg end results-switches)
-		  (setq end (point)))))
+		  (let ((org-babel-inline-result-wrap
+			 ;; Hard code {{{results(...)}}} on top of customization.
+			 (format "{{{results(%s)}}}" org-babel-inline-result-wrap)))
+		    (org-babel-examplify-region beg end results-switches)
+		    (setq end (point))))))
 	      ;; possibly indent the results to match the #+results line
 	      (when (and (not inlinep) (numberp indent) indent (> indent 0)
 			 ;; in this case `table-align' does the work for us
@@ -2272,6 +2319,24 @@ code ---- the results are extracted in the syntax of the source
 	  (delete-region
 	   (if keep-keyword (1+ (match-end 0)) (1- (match-beginning 0)))
 	   (progn (forward-line 1) (org-babel-result-end))))))))
+
+(defun org-babel-remove-inline-result ()
+  "Remove the result of the current inline-src-block or babel call.
+The result must be wrapped in a `results' macro to be removed.
+Leading whitespace is trimmed."
+  (interactive)
+  (let* ((el (org-element-context))
+	 (post-blank (org-element-property :post-blank el)))
+    (when (memq (org-element-type el) '(inline-src-block inline-babel-call))
+      (org-with-wide-buffer
+        (goto-char (org-element-property :end el))
+        (let ((el (org-element-context)))
+	  (when (and (eq (org-element-type el) 'macro)
+		     (string= (org-element-property :key el) "results"))
+	    (delete-region ; And leading whitespace.
+	     (- (org-element-property :begin el) post-blank)
+	     (- (org-element-property :end el)
+		(org-element-property :post-blank el)))))))))
 
 (defun org-babel-remove-result-one-or-many (x)
   "Remove the result of the current source block.
@@ -2669,60 +2734,106 @@ block but are passed literally to the \"example-block\"."
       (funcall nb-add (buffer-substring index (point-max))))
     new-body))
 
+(defun org-babel--script-escape-inner (str)
+  (let (in-single in-double backslash out)
+    (mapc
+     (lambda (ch)
+       (setq
+	out
+	(if backslash
+	    (progn
+	      (setq backslash nil)
+	      (cond
+	       ((and in-single (eq ch ?'))
+		;; Escaped single quote inside single quoted string:
+		;; emit just a single quote, since we've changed the
+		;; outer quotes to double.
+		(cons ch out))
+	       ((eq ch ?\")
+		;; Escaped double quote
+		(if in-single
+		    ;; This should be interpreted as backslash+quote,
+		    ;; not an escape.  Emit a three backslashes
+		    ;; followed by a quote (because one layer of
+		    ;; quoting will be stripped by `org-babel-read').
+		    (append (list ch ?\\ ?\\ ?\\) out)
+		  ;; Otherwise we are in a double-quoted string.  Emit
+		  ;; a single escaped quote
+		  (append (list ch ?\\) out)))
+	       ((eq ch ?\\)
+		;; Escaped backslash: emit a single escaped backslash
+		(append (list ?\\ ?\\) out))
+	       ;; Other: emit a quoted backslash followed by whatever
+	       ;; the character was (because one layer of quoting will
+	       ;; be stripped by `org-babel-read').
+	       (t (append (list ch ?\\ ?\\) out))))
+	  (case ch
+	    (?\[ (if (or in-double in-single)
+		     (cons ?\[ out)
+		   (cons ?\( out)))
+	    (?\] (if (or in-double in-single)
+		     (cons ?\] out)
+		   (cons ?\) out)))
+	    (?\{ (if (or in-double in-single)
+		     (cons ?\{ out)
+		   (cons ?\( out)))
+	    (?\} (if (or in-double in-single)
+		     (cons ?\} out)
+		   (cons ?\) out)))
+	    (?, (if (or in-double in-single)
+		    (cons ?, out) (cons ?\s out)))
+	    (?\' (if in-double
+		     (cons ?\' out)
+		   (setq in-single (not in-single)) (cons ?\" out)))
+	    (?\" (if in-single
+		     (append (list ?\" ?\\) out)
+		   (setq in-double (not in-double)) (cons ?\" out)))
+	    (?\\ (unless (or in-single in-double)
+		   (error "Can't handle backslash outside string in `org-babel-script-escape'"))
+		 (setq backslash t)
+		 out)
+	    (t  (cons ch out))))))
+     (string-to-list str))
+    (when (or in-single in-double)
+      (error "Unterminated string in `org-babel-script-escape'"))
+    (apply #'string (reverse out))))
+
 (defun org-babel-script-escape (str &optional force)
   "Safely convert tables into elisp lists."
+  (unless (stringp str)
+    (error "`org-babel-script-escape' expects a string"))
   (let ((escaped
-          (if (or force
-                  (and (stringp str)
-                       (> (length str) 2)
-                       (or (and (string-equal "[" (substring str 0 1))
-                                (string-equal "]" (substring str -1)))
-                           (and (string-equal "{" (substring str 0 1))
-                                (string-equal "}" (substring str -1)))
-                           (and (string-equal "(" (substring str 0 1))
-                                (string-equal ")" (substring str -1))))))
-              (org-babel-read
-               (concat
-                "'"
-                (let (in-single in-double out)
-                  (mapc
-                   (lambda (ch)
-                     (setq
-                      out
-                      (case ch
-                        (91 (if (or in-double in-single) ; [
-                                (cons 91 out)
-                              (cons 40 out)))
-                        (93 (if (or in-double in-single) ; ]
-                                (cons 93 out)
-                              (cons 41 out)))
-                        (123 (if (or in-double in-single) ; {
-                                 (cons 123 out)
-                               (cons 40 out)))
-                        (125 (if (or in-double in-single) ; }
-                                 (cons 125 out)
-                               (cons 41 out)))
-                        (44 (if (or in-double in-single) ; ,
-                                (cons 44 out) (cons 32 out)))
-                        (39 (if in-double ; '
-                                (cons 39 out)
-                              (setq in-single (not in-single)) (cons 34 out)))
-                        (34 (if in-single ; "
-                                (append (list 34 32) out)
-                              (setq in-double (not in-double)) (cons 34 out)))
-                        (t  (cons ch out)))))
-                   (string-to-list str))
-                  (apply #'string (reverse out)))))
-            str)))
+	 (cond
+	  ((and (> (length str) 2)
+		(or (and (string-equal "[" (substring str 0 1))
+			 (string-equal "]" (substring str -1)))
+		    (and (string-equal "{" (substring str 0 1))
+			 (string-equal "}" (substring str -1)))
+		    (and (string-equal "(" (substring str 0 1))
+			 (string-equal ")" (substring str -1)))))
+
+	   (concat "'" (org-babel--script-escape-inner str)))
+	  ((or force
+	       (and (> (length str) 2)
+		    (or (and (string-equal "'" (substring str 0 1))
+			     (string-equal "'" (substring str -1)))
+			;; We need to pass double-quoted strings
+			;; through the backslash-twiddling bits, even
+			;; though we don't need to change their
+			;; delimiters.
+			(and (string-equal "\"" (substring str 0 1))
+			     (string-equal "\"" (substring str -1))))))
+	   (org-babel--script-escape-inner str))
+	  (t str))))
     (condition-case nil (org-babel-read escaped) (error escaped))))
 
 (defun org-babel-read (cell &optional inhibit-lisp-eval)
   "Convert the string value of CELL to a number if appropriate.
-Otherwise if cell looks like lisp (meaning it starts with a
-\"(\", \"'\", \"`\" or a \"[\") then read it as lisp,
-otherwise return it unmodified as a string.  Optional argument
-NO-LISP-EVAL inhibits lisp evaluation for situations in which is
-it not appropriate."
+Otherwise if CELL looks like lisp (meaning it starts with a
+\"(\", \"'\", \"`\" or a \"[\") then read and evaluate it as
+lisp, otherwise return it unmodified as a string.  Optional
+argument INHIBIT-LISP-EVAL inhibits lisp evaluation for
+situations in which is it not appropriate."
   (if (and (stringp cell) (not (equal cell "")))
       (or (org-babel-number-p cell)
           (if (and (not inhibit-lisp-eval)

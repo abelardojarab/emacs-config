@@ -2,7 +2,7 @@
 ;;
 ;;; Code:
 
-;;;### (autoloads nil "ob-core" "ob-core.el" (21698 45168 52 0))
+;;;### (autoloads nil "ob-core" "ob-core.el" (21711 61631 8777 0))
 ;;; Generated autoloads from ob-core.el
 
 (autoload 'org-babel-execute-safely-maybe "ob-core" "\
@@ -285,7 +285,7 @@ used to limit the exported source code blocks by language.
 
 ;;;***
 
-;;;### (autoloads nil "org-agenda" "org-agenda.el" (21689 37001 11234
+;;;### (autoloads nil "org-agenda" "org-agenda.el" (21711 61632 164
 ;;;;;;  0))
 ;;; Generated autoloads from org-agenda.el
 
@@ -637,8 +637,8 @@ Extract anniversaries from BBDB for display in the agenda.
 
 ;;;***
 
-;;;### (autoloads nil "org-capture" "org-capture.el" (21591 45285
-;;;;;;  875 0))
+;;;### (autoloads nil "org-capture" "org-capture.el" (21711 61632
+;;;;;;  244 0))
 ;;; Generated autoloads from org-capture.el
 
 (autoload 'org-capture-string "org-capture" "\
@@ -680,7 +680,7 @@ Set `org-capture-templates' to be similar to `org-remember-templates'.
 
 ;;;***
 
-;;;### (autoloads nil "org-clock" "org-clock.el" (21689 37001 11331
+;;;### (autoloads nil "org-clock" "org-clock.el" (21711 61632 302
 ;;;;;;  0))
 ;;; Generated autoloads from org-clock.el
 
@@ -899,8 +899,8 @@ tree can be found.
 
 ;;;***
 
-;;;### (autoloads nil "org-element" "org-element.el" (21698 45168
-;;;;;;  258 0))
+;;;### (autoloads nil "org-element" "org-element.el" (21711 61632
+;;;;;;  388 0))
 ;;; Generated autoloads from org-element.el
 
 (autoload 'org-element-update-syntax "org-element" "\
@@ -1205,7 +1205,7 @@ line directly before or after the table.
 
 ;;;***
 
-;;;### (autoloads nil "org-table" "org-table.el" (21698 45168 447
+;;;### (autoloads nil "org-table" "org-table.el" (21711 61632 617
 ;;;;;;  0))
 ;;; Generated autoloads from org-table.el
 
@@ -1923,8 +1923,8 @@ using three `C-u' prefix arguments.
 
 ;;;***
 
-;;;### (autoloads nil "org-version" "org-version.el" (21698 45236
-;;;;;;  14 0))
+;;;### (autoloads nil "org-version" "org-version.el" (21711 61642
+;;;;;;  925 0))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -1944,7 +1944,7 @@ The location of ODT styles.")
 
 ;;;***
 
-;;;### (autoloads nil "org" "org.el" (21698 45168 958 0))
+;;;### (autoloads nil "org" "org.el" (21711 61632 1128 0))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -2166,7 +2166,7 @@ Call the customize function with org as argument.
 
 ;;;***
 
-;;;### (autoloads nil "ox-ascii" "ox-ascii.el" (21689 37001 12350
+;;;### (autoloads nil "ox-ascii" "ox-ascii.el" (21711 61632 1221
 ;;;;;;  0))
 ;;; Generated autoloads from ox-ascii.el
 
@@ -2403,7 +2403,7 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-html" "ox-html.el" (21689 37002 55 0))
+;;;### (autoloads nil "ox-html" "ox-html.el" (21711 61632 1285 0))
 ;;; Generated autoloads from ox-html.el
 
 (put 'org-html-head-include-default-style 'safe-local-variable 'booleanp)
@@ -2819,7 +2819,7 @@ using `org-open-file'.
 
 ;;;***
 
-;;;### (autoloads nil "ox-org" "ox-org.el" (21556 3831 2320 0))
+;;;### (autoloads nil "ox-org" "ox-org.el" (21711 61632 1355 0))
 ;;; Generated autoloads from ox-org.el
 
 (autoload 'org-org-export-as-org "ox-org" "\
@@ -2966,7 +2966,7 @@ this command to convert it.
 
 ;;;***
 
-;;;### (autoloads nil "ox" "ox.el" (21698 45168 1072 0))
+;;;### (autoloads nil "ox" "ox.el" (21711 61632 1409 0))
 ;;; Generated autoloads from ox.el
 
 (autoload 'org-export-as "ox" "\

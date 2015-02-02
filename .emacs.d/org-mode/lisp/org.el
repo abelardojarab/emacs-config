@@ -235,8 +235,10 @@ file to byte-code before it is loaded."
     ;; tangle if the org-mode file is newer than the elisp file
     (unless (and (file-exists-p exported-file)
 		 (> (funcall age file) (funcall age exported-file)))
+      ;; Tangle-file traversal returns reversed list of tangled files
+      ;; and we want to evaluate the first target.
       (setq exported-file
-	    (car (org-babel-tangle-file file exported-file "emacs-lisp"))))
+	    (car (last (org-babel-tangle-file file exported-file "emacs-lisp")))))
     (message "%s %s"
 	     (if compile
 		 (progn (byte-compile-file exported-file 'load)
@@ -13563,13 +13565,7 @@ When optional argument CREATE is non-nil, the function creates
 a drawer to store notes, if necessary.  Returned position ignores
 narrowing."
   (org-with-wide-buffer
-   (org-back-to-heading t)
-   ;; Skip planning info and property drawer.
-   (forward-line)
-   (when (org-looking-at-p org-planning-line-re) (forward-line))
-   (when (looking-at org-property-drawer-re)
-     (goto-char (match-end 0))
-     (forward-line))
+   (org-end-of-meta-data)
    (let ((end (if (org-at-heading-p) (point)
 		(save-excursion (outline-next-heading) (point))))
 	 (drawer (org-log-into-drawer)))
@@ -15363,8 +15359,9 @@ a *different* entry, you cannot use these techniques."
 ;;; Properties API
 
 (defconst org-special-properties
-  '("ALLTAGS" "BLOCKED" "CLOCKSUM" "CLOCKSUM_T" "CLOSED" "DEADLINE" "FILE"
-    "ITEM" "PRIORITY" "SCHEDULED" "TAGS" "TIMESTAMP" "TIMESTAMP_IA" "TODO")
+  '("ALLTAGS" "BLOCKED" "CATEGORY" "CLOCKSUM" "CLOCKSUM_T" "CLOSED" "DEADLINE"
+    "FILE" "ITEM" "PRIORITY" "SCHEDULED" "TAGS" "TIMESTAMP" "TIMESTAMP_IA"
+    "TODO")
   "The special properties valid in Org mode.
 These are properties that are not defined in the property drawer,
 but in some other way.")
@@ -19014,7 +19011,7 @@ horizontal and vertical directions."
   (if (display-graphic-p)
       (round (/ (display-pixel-height)
 		(/ (display-mm-height) 25.4)))
-    (error "Attempt to calculate the dpi of a non-graphic display.")))
+    (error "Attempt to calculate the dpi of a non-graphic display")))
 
 ;; This function borrows from Ganesh Swami's latex2png.el
 (defun org-create-formula-image-with-dvipng (string tofile options buffer)
@@ -24018,24 +24015,28 @@ If there is no such heading, return nil."
     		(forward-char -1))))))
   (point))
 
-(defun org-end-of-meta-data-and-drawers ()
-  "Jump to the first text after meta data and drawers in the current entry.
-This will move over empty lines, lines with planning time stamps,
-clocking lines, and drawers."
+(defun org-end-of-meta-data (&optional full)
+  "Skip planning line and properties drawer in current entry.
+When optional argument FULL is non-nil, also skip empty lines,
+clocking lines and regular drawers at the beginning of the
+entry."
   (org-back-to-heading t)
-  (let ((end (save-excursion (outline-next-heading) (point)))
-	(re (concat "\\(" org-drawer-regexp "\\)"
-		    "\\|" "[ \t]*" org-keyword-time-regexp)))
-    (forward-line 1)
-    (while (re-search-forward re end t)
-      (if (not (match-end 1))
-	  ;; empty or planning line
-	  (forward-line 1)
-	;; a drawer, find the end
-	(re-search-forward "^[ \t]*:END:" end 'move)
-	(forward-line 1)))
-    (and (re-search-forward "[^\n]" nil t) (backward-char 1))
-    (point)))
+  (forward-line)
+  (when (org-looking-at-p org-planning-line-re) (forward-line))
+  (when (looking-at org-property-drawer-re)
+    (goto-char (match-end 0))
+    (forward-line))
+  (when (and full (not (org-at-heading-p)))
+    (catch 'exit
+      (let ((end (save-excursion (outline-next-heading) (point)))
+	    (re (concat "[ \t]*$" "\\|" org-clock-line-re)))
+	(while (not (eobp))
+	  (cond ((org-looking-at-p org-drawer-regexp)
+		 (if (re-search-forward "^[ \t]*:END:[ \t]*$" end t)
+		     (forward-line)
+		   (throw 'exit t)))
+		((org-looking-at-p re) (forward-line))
+		(t (throw 'exit t))))))))
 
 (defun org-forward-heading-same-level (arg &optional invisible-ok)
   "Move forward to the ARG'th subheading at same level as this one.

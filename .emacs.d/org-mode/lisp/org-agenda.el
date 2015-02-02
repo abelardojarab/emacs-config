@@ -1095,6 +1095,7 @@ Possible values for this option are:
 
 current-window    Show agenda in the current window, keeping all other windows.
 other-window      Use `switch-to-buffer-other-window' to display agenda.
+only-window       Show agenda, deleting all other windows.
 reorganize-frame  Show only two windows on the current frame, the current
                   window and the agenda.
 other-frame       Use `switch-to-buffer-other-frame' to display agenda.
@@ -1105,6 +1106,7 @@ See also the variable `org-agenda-restore-windows-after-quit'."
 	  (const current-window)
 	  (const other-frame)
 	  (const other-window)
+	  (const only-window)
 	  (const reorganize-frame)))
 
 (defcustom org-agenda-window-frame-fractions '(0.5 . 0.75)
@@ -3621,6 +3623,9 @@ FILTER-ALIST is an alist of filters we need to apply when
       (org-switch-to-buffer-other-window abuf))
      ((equal org-agenda-window-setup 'other-frame)
       (switch-to-buffer-other-frame abuf))
+     ((eq org-agenda-window-setup 'only-window)
+      (delete-other-windows)
+      (org-pop-to-buffer-same-window abuf))
      ((equal org-agenda-window-setup 'reorganize-frame)
       (delete-other-windows)
       (org-switch-to-buffer-other-window abuf)))
@@ -9483,32 +9488,31 @@ a timestamp can be added there."
   (widen)
   (goto-char (point-max))
   (or (bolp) (insert "\n"))
-  (insert "* " text "\n")
+  (org-insert-heading)
+  (insert text)
+  (org-end-of-meta-data)
+  (unless (bolp) (insert "\n"))
   (if org-adapt-indentation (org-indent-to-column 2)))
 
 (defun org-agenda-insert-diary-make-new-entry (text)
   "Make a new entry with TEXT as the first child of the current subtree.
-Position the point in the line right after the new heading so
-that a timestamp can be added there."
+Position the point in the heading's first body line so that
+a timestamp can be added there."
+  (outline-next-heading)
+  (org-back-over-empty-lines)
+  (unless (looking-at "[ \t]*$") (save-excursion (insert "\n")))
+  (org-insert-heading nil t)
+  (org-do-demote)
+  (let ((col (current-column)))
+    (insert text)
+    (org-end-of-meta-data)
+    (unless (bolp) (insert "\n"))
+    (when org-adapt-indentation (org-indent-to-column col)))
   (let ((org-show-following-heading t)
 	(org-show-siblings t)
 	(org-show-hierarchy-above t)
-	(org-show-entry-below t)
-	col)
-    (outline-next-heading)
-    (org-back-over-empty-lines)
-    (or (looking-at "[ \t]*$")
-	(progn (insert "\n") (backward-char 1)))
-    (org-insert-heading nil t)
-    (org-do-demote)
-    (setq col (current-column))
-    (insert text "\n")
-    (if org-adapt-indentation (org-indent-to-column col))
-    (let ((org-show-following-heading t)
-	  (org-show-siblings t)
-	  (org-show-hierarchy-above t)
-	  (org-show-entry-below t))
-      (org-show-context))))
+	(org-show-entry-below t))
+    (org-show-context)))
 
 (defun org-agenda-diary-entry ()
   "Make a diary entry, like the `i' command from the calendar.
