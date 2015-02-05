@@ -141,8 +141,8 @@ non-nil."
 (if (find-font (font-spec :name "Consolas"))
     (set-face-attribute 'default nil :font "Consolas-11"))
 
-(if (find-font (font-spec :name "Cambria"))
-    (set-face-attribute 'variable-pitch nil :font "Cambria-13" :weight 'normal))
+(if (find-font (font-spec :name "Calibri"))
+    (set-face-attribute 'variable-pitch nil :font "Calibri-13" :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
 
 (if (find-font (font-spec :name "Consolas"))
@@ -193,8 +193,8 @@ non-nil."
       (let (main-writing-font main-programming-font)
         (setq main-writing-font "Consolas")
         (setq main-programming-font "Consolas-11")
-        (if (find-font (font-spec :name "Cambria"))
-            (setq main-writing-font "Cambria"))
+        (if (find-font (font-spec :name "Calibri"))
+            (setq main-writing-font "Calibri"))
 
         (if window-system
             (progn
