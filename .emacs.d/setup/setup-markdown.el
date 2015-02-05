@@ -1,6 +1,6 @@
 ;;; setup-markdown.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -29,7 +29,10 @@
 (require 'markdown-mode)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-hook 'markdown-mode-hook 'flyspell-mode)
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (writegood-mode t)
+            (flyspell-mode t)))
 
 ;; Yaml mode
 (add-to-list 'load-path "~/.emacs.d/yaml-mode")

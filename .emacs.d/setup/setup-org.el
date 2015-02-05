@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+;; write good mode
+(add-to-list 'load-path "~/.emacs.d/writegood-mode")
+(require 'writegood-mode nil 'noerror)
+
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
 (add-to-list 'load-path "~/.emacs.d/org-mode/contrib/lisp")
@@ -50,7 +54,13 @@
   (when (file-readable-p todo)
     (setq org-default-notes-file "~/workspace/Documents/Org/notes.org")))
 
-(add-hook 'org-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (flyspell-mode)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (writegood-mode)))
+
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (setq org-startup-folded 'nofold)
 (setq org-startup-indented t)
@@ -238,11 +248,28 @@
          "DONE(d!)"
          "CANCELLED(c)")))
 (setq org-todo-keyword-faces
-      '(
-        ("IN PROGRESS" . 'warning)
+      '(("IN PROGRESS" . 'warning)
         ("HOLD" . 'font-lock-keyword-face)
         ("WAITING" . 'font-lock-builtin-face)
         ("CANCELLED" . 'font-lock-doc-face)))
+
+;; Abbrev mode
+(add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
+(define-skeleton skel-org-block-elisp
+  "Insert an emacs-lisp block"
+  ""
+  "#+begin_src emacs-lisp\n"
+  _ - \n
+  "#+end_src\n")
+(define-abbrev org-mode-abbrev-table "elsrc" "" 'skel-org-block-elisp)
+
+(define-skeleton skel-org-block-js
+  "Insert a JavaScript block"
+  ""
+  "#+begin_src js\n"
+  _ - \n
+  "#+end_src\n")
+(define-abbrev org-mode-abbrev-table "jssrc" "" 'skel-org-block-js)
 
 ;; PlantUML
 (require 'iimage)
@@ -250,8 +277,10 @@
 (autoload 'turn-on-iimage-mode "iimage" "Turn on Inline image minor mode." t)
 (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
 (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
-(add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
 (setq org-image-actual-width '(400))
+
+;; Rendering ditaa
+(setq org-ditaa-jar-path (expand-file-name "~/.emacs.d/jar/ditaa.jar"))
 
 ;; Rendering plantuml
 (setq org-plantuml-jar-path (expand-file-name "~/.emacs.d/jar/plantuml.jar"))
@@ -265,13 +294,13 @@
   (message (concat "PLANTUML Rendered:  " (buffer-name))))
 
 ;; Image reloading
-(defun reload-image-at-point ()
+(defun org-reload-image-at-point ()
   (interactive)
   (message "reloading image at point in the current buffer...")
   (image-refresh (get-text-property (point) 'display)))
 
 ;; Image resizing and reloading
-(defun resize-image-at-point ()
+(defun org-resize-image-at-point ()
   (interactive)
   (message "resizing image at point in the current buffer...")
   (let* ((image-spec (get-text-property (point) 'display))
@@ -280,14 +309,15 @@
     (shell-command (format "convert -resize %d %s %s "
                            (* (window-width (selected-window)) (frame-char-width))
                            file file))
-    (reload-image-at-point)))
+    (org-reload-image-at-point)))
 
 ;; Function to setup images for display on load
 (defun org-turn-on-iimage-in-org ()
   "display images in your org file"
   (interactive)
   (turn-on-iimage-mode)
-  (set-face-underline-p 'org-link nil))
+  (set-face-underline-p 'org-link t)) ;; start with hidden images
+(add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
 
 ;; Function to toggle images in a org buffer
 (defun org-toggle-iimage-in-org ()
@@ -340,7 +370,7 @@
 (defun org-dblock-write:image (params)
   (let ((file (plist-get params :file)))
     (clear-image-cache file)
-    (insert-image (create-image file) )))
+    (insert-image (create-image file))))
 
 ;; Insert screenshots into Org mode, very useful
 (defun org-insert-screenshot ()
@@ -387,19 +417,6 @@ a link to this file."
 ;; for Gnuplot
 (add-to-list 'load-path "~/.emacs.d/gnuplot")
 (require 'gnuplot)
-
-;; Make Yasnippet work here, but for Org
-(defun yas-org-very-safe-expand ()
-  (let ((yas-fallback-behavior 'return-nil))
-    (and (fboundp 'yas-expand) (yas-expand))))
-
-(add-hook 'org-mode-hook
-          (lambda ()
-            (add-to-list 'org-tab-first-hook
-                         'yas-org-very-safe-expand)))
-
-;; Configure org-mode so that when you edit source code in an indirect buffer (with C-c '), the buffer is opened in the current window. That way, your window organization isn't broken when switching.
-(setq org-src-window-setup 'current-window)
 
 ;; Tweaks for Latex exporting
 (require 'ox-latex)
@@ -535,8 +552,8 @@ a link to this file."
      ;; .txt files aren't in the list initially, but in case that changes
      ;; in a future version of org, use if to avoid errors
      (if (assoc "\\.txt\\'" org-file-apps)
-         (setcdr (assoc "\\.txt\\'" org-file-apps) "gedit %s")
-       (add-to-list 'org-file-apps '("\\.txt\\'" . "gedit %s") t))
+         (setcdr (assoc "\\.txt\\'" org-file-apps) "kate %s")
+       (add-to-list 'org-file-apps '("\\.txt\\'" . "kate %s") t))
      ;; Change .pdf association directly within the alist
      (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
 
@@ -548,6 +565,7 @@ a link to this file."
  'org-babel-load-languages
  '((emacs-lisp . t)
    (plantuml . t)
+   (ditaa . t)
    (dot . t)
    (gnuplot . t)
    (sh . t)
@@ -558,6 +576,13 @@ a link to this file."
    (js . t)
    (C . t)
    (haskell . t)))
+
+;; Don't ask for confirmation on every =C-c C-c= code-block compile.
+(setq org-confirm-babel-evaluate nil)
+
+;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R.
+(add-to-list 'org-src-lang-modes
+             '("r" . ess-mode))
 
 ;; add emacs lisp support for minted
 (setq org-latex-custom-lang-environments
@@ -573,13 +598,6 @@ a link to this file."
 ;; Add missing function
 (defun org-reverse-string (string)
   (apply 'string (reverse (string-to-list string))))
-
-;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R.
-(add-to-list 'org-src-lang-modes
-             '("r" . ess-mode))
-
-;; Don't ask for confirmation on every =C-c C-c= code-block compile.
-(setq org-confirm-babel-evaluate nil)
 
 ;; Nice bulleted lists
 (add-to-list 'load-path "~/.emacs.d/org-bullets")
@@ -638,9 +656,9 @@ a link to this file."
 
 ;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
 (defun iy-ac-tab-noconflict ()
-  (let ((command (key-binding [tab]))) ; remember command
-    (local-unset-key [tab]) ; unset from (kbd "<tab>")
-    (local-set-key (kbd "TAB") command))) ; bind to (kbd "TAB")
+  (let ((command (key-binding [tab]))) ;; remember command
+    (local-unset-key [tab]) ;; unset from (kbd "<tab>")
+    (local-set-key (kbd "TAB") command))) ;; bind to (kbd "TAB")
 (add-hook 'ruby-mode-hook 'iy-ac-tab-noconflict)
 (add-hook 'markdown-mode-hook 'iy-ac-tab-noconflict)
 (add-hook 'org-mode-hook 'iy-ac-tab-noconflict)
