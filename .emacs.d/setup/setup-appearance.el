@@ -142,7 +142,7 @@ non-nil."
     (set-face-attribute 'default nil :font "Consolas-11"))
 
 (if (find-font (font-spec :name "Calibri"))
-    (set-face-attribute 'variable-pitch nil :font "Calibri-13" :weight 'normal))
+    (set-face-attribute 'variable-pitch nil :font "Calibri-12" :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
 
 (if (find-font (font-spec :name "Consolas"))

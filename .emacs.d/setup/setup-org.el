@@ -56,10 +56,13 @@
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (flyspell-mode)))
+            (flyspell-mode t)))
 (add-hook 'org-mode-hook
           (lambda ()
-            (writegood-mode)))
+            (writegood-mode t)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (indent-guide -1)))
 
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (setq org-startup-folded 'nofold)
