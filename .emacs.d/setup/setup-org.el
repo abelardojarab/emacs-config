@@ -62,7 +62,7 @@
             (writegood-mode t)))
 (add-hook 'org-mode-hook
           (lambda ()
-            (indent-guide -1)))
+            (indent-guide-mode -1)))
 
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (setq org-startup-folded 'nofold)
