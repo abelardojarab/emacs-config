@@ -589,10 +589,9 @@ Defaults to `error'."
 ;; Better help
 (require 'help-fns+)
 
-;; Fix longlines in Latex/Org
+;; Fix longlines in Latex
 (require 'longlines nil t)
 (add-hook 'LaTeX-mode-hook #'longlines-mode)
-(add-hook 'org-mode-hook #'longlines-mode)
 
 (defun longlines-encode-region (beg end &optional _buffer)
   "Replace each soft newline between BEG and END with exactly one space.
