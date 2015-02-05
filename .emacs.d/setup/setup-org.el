@@ -63,9 +63,6 @@
 (add-hook 'org-mode-hook
           (lambda ()
             (indent-guide-mode -1)))
-(add-hook 'org-mode-hook
-          (lambda ()
-            (longlines-mode -1)))
 
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (setq org-startup-folded 'nofold)
