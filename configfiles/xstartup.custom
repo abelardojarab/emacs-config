@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# VNC Server (Virtual-Mode) start-up script compatible with Ubuntu 12.04
+
+unset SESSION_MANAGER
+unset XDG_RUNTIME_DIR
+unset DBUS_SESSION_BUS_ADDRESS
+
+# Fix to make GNOME work
+export XKL_XMODMAP_DISABLE=1
+
+startkde &
+
+[ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+xsetroot -solid grey &
+
