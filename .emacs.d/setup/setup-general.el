@@ -589,10 +589,9 @@ Defaults to `error'."
 ;; Better help
 (require 'help-fns+)
 
-;; Fix longlines in Latex
+;; Fix longlines in Org
 (require 'longlines nil t)
 (setq longlines-wrap-follows-window-size t)
-(add-hook 'LaTeX-mode-hook #'longlines-mode)
 (add-hook 'org-mode-hook #'longlines-mode)
 
 (defun longlines-encode-region (beg end &optional _buffer)
