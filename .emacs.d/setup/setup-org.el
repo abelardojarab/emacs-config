@@ -79,8 +79,10 @@
 (setq org-blank-before-new-entry ;; Insert blank line before new
       '((heading . t)            ;; headings/list items.
         (plain-list-item . t)))
-(setq org-agenda-start-on-weekday nil)
-(setq org-agenda-ndays 7)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(setq org-agenda-show-log t
+      org-agenda-todo-ignore-scheduled t
+      org-agenda-todo-ignore-deadlines t)
 
 ;; Org Capture
 (defun org-capture-todo (note)
@@ -561,7 +563,11 @@ a link to this file."
      (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
 
 ;; Automatically refresh inline images that are generated from Babel blocks
-(add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
+(add-hook 'org-babel-after-execute-hook (lambda ()
+                                          (condition-case nil
+                                              (org-display-inline-images)
+                                            (error nil)))
+          'append)
 
 ;; Enable multiple languages
 (org-babel-do-load-languages
