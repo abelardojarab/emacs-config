@@ -124,6 +124,7 @@ non-nil."
 
 ;; Syntax coloring
 (require 'font-lock+)
+(require 'jit-lock)
 (global-font-lock-mode t)
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size (* 1024 1024))
