@@ -1,44 +1,57 @@
-# EC Standard Login Environment -*- sh -*-
-# user customized .cshrc
-# $Source: /usr/cvs/cvsrep/ec_environ-1.0/release/user/cshrc.user,v $
-# $Revision: 1.34 $
+    # EC Standard Login Environment -*- sh -*-
+    # user customized .cshrc
+    # $Source: /usr/cvs/cvsrep/ec_environ-1.0/release/user/cshrc.user,v $
+    # $Revision: 1.34 $
 
-# use this logfile for debugging
-echo "I: (.cshrc.$USER) [entering] `/bin/date`" >> $ec_env_error_log
+    # use this logfile for debugging
+    echo "I: (.cshrc.$USER) [entering] `/bin/date`" >> $ec_env_error_log
 
-set filec
-set autolist
-set correct=cmd
-set complete=enhance
-alias ls       'ls -l --color -sF'
-alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
-alias emacs '/usr/intel/pkgs/emacs/24.4/bin/emacs '
-alias h       history
+    set filec
+    set autolist
+    set correct=cmd
+    set complete=enhance
+    alias ls       'ls -l --color -sF'
+    alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
+    alias emacs '/usr/intel/pkgs/emacs/24.4/bin/emacs '
 
-alias work      cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu
-alias 9  cd /nfs/ch/disks/ch_icf_fdk_rv_009/swapnapu
-alias rapid   cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu/RapidESD
-alias 16  cd /nfs/ch/disks/ch_icf_fdk_rv016/swapnapu
-alias l ls -lrt
-alias mwa  ln -s  /nfs/ch/disks/ch_icf_fdk_rv_003/Mahua/work
-alias 71 fdk71 -kits
-alias 73 fdk73 -kits
 
-if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
-echo "Using upgraded SUSE 11..."
-setenv PATH ${HOME}/bin:${HOME}/bin/bin:${PATH}:/usr/intel/bin:/p/advda/utils/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:/p/foundry/env/startup
-else
-setenv PATH ${PATH}:/usr/intel/bin:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${HOME}/bin:${HOME}/bin/bin
-endif
+    alias work      cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu
+    alias rapid   cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu/RapidESD
+    alias 9  cd /nfs/ch/disks/ch_icf_fdk_rv_009/swapnapu
 
-setenv EC_DISABLE_VAL 1
-setenv NODE_PATH  ${HOME}/workspace/builds/nodejs/lib/node_modules
-setenv CAMDEXGT_CAD_ROOT ${HOME}/camdex/data
-setenv PYTHONPATH ${HOME}/pythonlibs/lib/python2.7/site-packages
-setenv _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
-setenv http_proxy http://proxy-chain.intel.com:911
-setenv https_proxy http://proxy-chain.intel.com:911
-setenv socks_proxy http://proxy-socks.fm.intel.com:1080
-setenv no_proxy intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,127.0.0.0/8,134.134.0.0/16
-setenv GIT_PROXY_COMMAND /nfs/pdx/home/ajaraber/bin/gitproxy
-setenv GDK_NATIVE_WINDOWS 1
+    alias 16  cd /nfs/ch/disks/ch_icf_fdk_rv016/swapnapu
+    alias mwa  ln -s  /nfs/ch/disks/ch_icf_fdk_rv_003/Mahua/work
+    alias 71 fdk71 -kits
+    alias 73 fdk73 -kits
+
+    setenv CDS_INST_DIR /p/adx/x74a/cad_root/cadence/6.15.513
+    setenv CDS_LOG_PATH /tmp/wrk
+    setenv KEEP_CDS_LIB_MGR 1
+    setenv CDS_LOG_VERSION pid
+    setenv CDS_PROMPT_CKOUT none
+    setenv CDS_AUTO_CKOUT all
+    setenv CDS_PROMPT_CKIN none
+    setenv CDS_AUTO_CKIN none
+    setenv CDS_LOAD_ENV CWD
+    setenv CLS_CDSD_COMPATIBILITY_LOCKING NO
+    setenv CDS_Netlisting_Mode Analog
+    setenv CDS_AUTO_64BIT all
+
+    if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
+    echo "Using upgraded SUSE 11..."
+    setenv PATH ${HOME}/bin:${HOME}/bin/bin:${PATH}:/usr/intel/bin:/p/advda/utils/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:/p/foundry/env/startup
+    else
+    setenv PATH ${PATH}:/usr/intel/bin:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${HOME}/bin:${HOME}/bin/bin
+    endif
+
+    setenv EC_DISABLE_VAL 1
+    setenv NODE_PATH  ${HOME}/workspace/builds/nodejs/lib/node_modules
+    setenv CAMDEXGT_CAD_ROOT ${HOME}/camdex/data
+    setenv PYTHONPATH ${HOME}/pythonlibs/lib/python2.7/site-packages
+    setenv _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
+    setenv http_proxy http://proxy-chain.intel.com:911
+    setenv https_proxy http://proxy-chain.intel.com:911
+    setenv socks_proxy http://proxy-socks.fm.intel.com:1080
+    setenv no_proxy intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,127.0.0.0/8,134.134.0.0/16
+    setenv GIT_PROXY_COMMAND /nfs/pdx/home/ajaraber/bin/gitproxy
+    setenv GDK_NATIVE_WINDOWS 1
