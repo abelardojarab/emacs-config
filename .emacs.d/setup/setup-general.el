@@ -662,6 +662,13 @@ not need to be wrapped, move point to the next line and return t."
         (forward-line 1)
         t))))
 
+;; Aggresive indent mode
+(add-to-list 'load-path "~/.emacs.d/names")
+(add-to-list 'load-path "~/.emacs.d/aggresive-indent-mode")
+(when (require 'aggressive-indent nil 'noerror)
+  (global-aggressive-indent-mode 1)
+  (add-to-list 'aggressive-indent-excluded-modes 'html-mode))
+
 ;; Improved buffer menu
 (load "~/.emacs.d/elisp/buff-menu.el")
 (require 'buff-menu+)
