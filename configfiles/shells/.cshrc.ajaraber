@@ -24,6 +24,13 @@
     alias 71 fdk71 -kits
     alias 73 fdk73 -kits
 
+    setenv LM_LICENSE_FILE 5280@plxs0419.pdx.intel.com:5280@ilic2003.iil.intel.com:5280@fmylic37c.fm.intel.com:5280@scylic14.sc.intel.com
+    setenv SNPSLMD_LICENSE_FILE 26586@scylic13.sc.intel.com:26586@fmylic36a.fm.intel.com:26586@ilic2004.iil.intel.com:26586@ilic2005.iil.intel.com:26586@fmylic38b.fm.intel.com:26586@plxs0412.pdx.intel.com:26586@plxs0413.pdx.intel.com:26586@plxs0406.pdx.intel.com:26586@plxs0402.pdx.intel.com:26586@scylic13.sc.intel.com:26586@ilic2004.iil.intel.com
+    setenv MGLS_LICENSE_FILE 1717@plxs0409.pdx.intel.com:1717@irsumglic001.ir.intel.com:1717@ilic2003.iil.intel.com
+    setenv NOVAS_LICENSE_FILE 5219@plxs0305.pdx.intel.com
+    setenv APACHEDA_LICENSE_FILE 1881@scylic17.sc.intel.com:1881@scylic16.sc.intel.com:1881@fmylic38c.fm.intel.com
+
+    setenv CDS_LIC_FILE 5280@plxs0419.pdx.intel.com:5280@ilic2003.iil.intel.com:5280@fmylic37c.fm.intel.com:5280@scylic14.sc.intel.com
     setenv CDS_INST_DIR /p/adx/x74a/cad_root/cadence/6.15.513
     setenv CDS_LOG_PATH /tmp/wrk
     setenv KEEP_CDS_LIB_MGR 1
