@@ -10,19 +10,15 @@
     set autolist
     set correct=cmd
     set complete=enhance
-    alias ls       'ls -l --color -sF'
+    alias ls 'ls -l --color -sF'
     alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
-    alias emacs '/usr/intel/pkgs/emacs/24.4/bin/emacs '
 
-
-    alias work      cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu
-    alias rapid   cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu/RapidESD
-    alias 9  cd /nfs/ch/disks/ch_icf_fdk_rv_009/swapnapu
-
-    alias 16  cd /nfs/ch/disks/ch_icf_fdk_rv016/swapnapu
-    alias mwa  ln -s  /nfs/ch/disks/ch_icf_fdk_rv_003/Mahua/work
-    alias 71 fdk71 -kits
-    alias 73 fdk73 -kits
+    alias work 'cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu'
+    alias rapid 'cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu/RapidESD'
+    alias 9  'cd /nfs/ch/disks/ch_icf_fdk_rv_009/swapnapu'
+    alias 16 'cd /nfs/ch/disks/ch_icf_fdk_rv016/swapnapu'
+    alias 71 'fdk71 -kits'
+    alias 73 'fdk73 -kits'
 
     setenv LM_LICENSE_FILE 5280@plxs0419.pdx.intel.com:5280@ilic2003.iil.intel.com:5280@fmylic37c.fm.intel.com:5280@scylic14.sc.intel.com
     setenv SNPSLMD_LICENSE_FILE 26586@scylic13.sc.intel.com:26586@fmylic36a.fm.intel.com:26586@ilic2004.iil.intel.com:26586@ilic2005.iil.intel.com:26586@fmylic38b.fm.intel.com:26586@plxs0412.pdx.intel.com:26586@plxs0413.pdx.intel.com:26586@plxs0406.pdx.intel.com:26586@plxs0402.pdx.intel.com:26586@scylic13.sc.intel.com:26586@ilic2004.iil.intel.com
@@ -44,11 +40,14 @@
     setenv CDS_Netlisting_Mode Analog
     setenv CDS_AUTO_64BIT all
 
+    # Do not source this file
+    # source ${HOME}/bin/envrc.tcsh
+
     if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
-    echo "Using upgraded SUSE 11..."
-    setenv PATH ${HOME}/bin:${HOME}/bin/bin:${PATH}:/usr/intel/bin:/p/advda/utils/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:/p/foundry/env/startup
+        echo "Using upgraded SUSE 11..."
+        setenv PATH ${HOME}/bin:${HOME}/bin/bin:${PATH}:/p/advda/utils/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin
     else
-    setenv PATH ${PATH}:/usr/intel/bin:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${HOME}/bin:${HOME}/bin/bin
+        setenv PATH ${PATH}:/p/advda/utils/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${HOME}/bin:${HOME}/bin/bin
     endif
 
     setenv EC_DISABLE_VAL 1
@@ -56,6 +55,7 @@
     setenv CAMDEXGT_CAD_ROOT ${HOME}/camdex/data
     setenv PYTHONPATH ${HOME}/pythonlibs/lib/python2.7/site-packages
     setenv _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
+    setenv SSH_SOCKS_SERVER socks://proxy-socks.fm.intel.com:1080
     setenv http_proxy http://proxy-chain.intel.com:911
     setenv https_proxy http://proxy-chain.intel.com:911
     setenv socks_proxy http://proxy-socks.fm.intel.com:1080
