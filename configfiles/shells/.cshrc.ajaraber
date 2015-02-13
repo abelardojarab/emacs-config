@@ -12,6 +12,7 @@
     set complete=enhance
     alias ls 'ls -l --color -sF'
     alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
+    alias emacs '/usr/intel/pkgs/emacs/24.4/bin/emacs'
 
     alias work 'cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu'
     alias rapid 'cd /nfs/ch/disks/ch_icf_fdk_rv_004/swapnapu/RapidESD'

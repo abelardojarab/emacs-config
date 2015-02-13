@@ -2,18 +2,6 @@ Python-mode commands
 
 ====================
 
-;;; Commentary:
----------------
-
-
-;;; Code
---------
-
-
-;;; Customization
------------------
-
-
 py-smart-operator-check
 -----------------------
 Check, if smart-operator-mode is loaded resp. available.
@@ -26,143 +14,29 @@ Check, if autopair-mode is available.
 
 Give some hints, if not.
 
-(defun p
---------
-
-
-;;; Constants
--------------
-
-
-;;; Macro definitions
----------------------
-
-
-;;; Toggle
-----------
-
-
-toggle-py-nil-docstring-style
------------------------------
-If nil docstring-style should be on or off.
-
-  Returns value of `py-docstring-style' switched to.
-To set permanently,  customize this variable 
-
-py-nil-docstring-style-on
--------------------------
-Make sure, nil docstring-style' is on.
-
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-py-nil-docstring-style-off
+py-set-nil-docstring-style
 --------------------------
-Make sure, nil docstring-style is off.
+Set py-docstring-style to 'nil
 
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-toggle-py-onetwo-docstring-style
---------------------------------
-If onetwo docstring-style should be on or off.
-
-  Returns value of `py-docstring-style' switched to.
-To set permanently,  customize this variable 
-
-py-onetwo-docstring-style-on
-----------------------------
-Make sure, onetwo docstring-style' is on.
-
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-py-onetwo-docstring-style-off
------------------------------
-Make sure, onetwo docstring-style is off.
-
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-toggle-py-pep-257-docstring-style
+py-set-pep-257-nn-docstring-style
 ---------------------------------
-If pep-257 docstring-style should be on or off.
+Set py-docstring-style to 'pep-257-nn
 
-  Returns value of `py-pep-257-docstring-style' switched to. 
-
-py-pep-257-docstring-style-on
------------------------------
-Make sure, pep-257 docstring-style' is on.
-
-Returns value of `py-pep-257-docstring-style'. 
-
-py-pep-257-docstring-style-off
+py-set-pep-257-docstring-style
 ------------------------------
-Make sure, pep-257 docstring-style is off.
+Set py-docstring-style to 'pep-257
 
-Returns value of `py-pep-257-docstring-style'. 
-
-toggle-py-pep-257-nn-docstring-style
-------------------------------------
-If pep-257-nn docstring-style should be on or off.
-
-  Returns value of `py-pep-257-nn-docstring-style' switched to. 
-
-py-pep-257-nn-docstring-style-on
---------------------------------
-Make sure, pep-257-nn docstring-style' is on.
-
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-py-pep-257-nn-docstring-style-off
----------------------------------
-Make sure, pep-257-nn docstring-style is off.
-
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-toggle-py-symmetric-docstring-style
------------------------------------
-If symmetric docstring-style should be on or off.
-
-  Returns value of `py-docstring-style' switched to.
-To set permanently,  customize this variable 
-
-py-symmetric-docstring-style-on
--------------------------------
-Make sure, symmetric docstring-style' is on.
-
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-py-symmetric-docstring-style-off
---------------------------------
-Make sure, symmetric docstring-style is off.
-
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-toggle-py-django-docstring-style
---------------------------------
-If django docstring-style should be on or off.
-
-  Returns value of `py-docstring-style' switched to.
-To set permanently,  customize this variable 
-
-py-django-docstring-style-on
-----------------------------
-Make sure, django docstring-style' is on.
-
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
-
-py-django-docstring-style-off
+py-set-django-docstring-style
 -----------------------------
-Make sure, django docstring-style is off.
+Set py-docstring-style to 'django
 
-  Returns value of `py-docstring-style'.
-To set permanently,  customize this variable 
+py-set-symmetric-docstring-style
+--------------------------------
+Set py-docstring-style to 'symmetric
+
+py-set-onetwo-docstring-style
+-----------------------------
+Set py-docstring-style to 'onetwo
 
 toggle-py-underscore-word-syntax-p
 ----------------------------------
@@ -212,8 +86,7 @@ When on, kind of an option 'follow', local shell sets `py-shell-name', enforces 
 
 See also commands
 `py-force-local-shell-on'
-`py-force-local-shell-off'
- 
+`py-force-local-shell-off' 
 
 py-force-local-shell-on
 -----------------------
@@ -240,7 +113,6 @@ force-py-shell-name-p-off
 
 Caveat: Completion might not work that way.
 
-
 force-py-shell-name-p-on
 ------------------------
 Switches `py-force-py-shell-name-p' on.
@@ -249,7 +121,6 @@ Customized default `py-shell-name' will be enforced upon execution.
 Returns value of `py-force-py-shell-name-p'.
 
 Caveat: Completion might not work that way.
-
 
 force-py-shell-name-p-off
 -------------------------
@@ -270,7 +141,7 @@ Switch `indent-tabs-mode' on.
 
 py-indent-tabs-mode-off
 -----------------------
-Switch `indent-tabs-mode' on. 
+Switch `indent-tabs-mode' off. 
 
 toggle-py-jump-on-exception
 ---------------------------
@@ -328,21 +199,21 @@ Returns value of `py-switch-buffers-on-execute-p'.
 
 py-toggle-split-windows-on-execute
 ----------------------------------
-If `py-split-windows-on-execute-p' should be on or off.
+If `py-split-window-on-execute' should be on or off.
 
-  Returns value of `py-split-windows-on-execute-p' switched to. 
+  Returns value of `py-split-window-on-execute' switched to. 
 
 py-split-windows-on-execute-on
 ------------------------------
-Make sure, `py-split-windows-on-execute-p' is on.
+Make sure, `py-split-window-on-execute' is on.
 
-Returns value of `py-split-windows-on-execute-p'. 
+Returns value of `py-split-window-on-execute'. 
 
 py-split-windows-on-execute-off
 -------------------------------
-Make sure, `py-split-windows-on-execute-p' is off.
+Make sure, `py-split-window-on-execute' is off.
 
-Returns value of `py-split-windows-on-execute-p'. 
+Returns value of `py-split-window-on-execute'. 
 
 py-toggle-highlight-indentation
 -------------------------------
@@ -446,23 +317,23 @@ Make sure, `py-switch-buffers-on-execute-p' is off.
 
 Returns value of `py-switch-buffers-on-execute-p'. 
 
-toggle-py-split-windows-on-execute-p
-------------------------------------
-If `py-split-windows-on-execute-p' should be on or off.
-
-  Returns value of `py-split-windows-on-execute-p' switched to. 
-
-py-split-windows-on-execute-p-on
---------------------------------
-Make sure, `py-py-split-windows-on-execute-p' is on.
-
-Returns value of `py-split-windows-on-execute-p'. 
-
-py-split-windows-on-execute-p-off
+toggle-py-split-window-on-execute
 ---------------------------------
-Make sure, `py-split-windows-on-execute-p' is off.
+If `py-split-window-on-execute' should be on or off.
 
-Returns value of `py-split-windows-on-execute-p'. 
+  Returns value of `py-split-window-on-execute' switched to. 
+
+py-split-window-on-execute-on
+-----------------------------
+Make sure, `py-py-split-window-on-execute' is on.
+
+Returns value of `py-split-window-on-execute'. 
+
+py-split-window-on-execute-off
+------------------------------
+Make sure, `py-split-window-on-execute' is off.
+
+Returns value of `py-split-window-on-execute'. 
 
 py-toggle-sexp-function
 -----------------------
@@ -474,7 +345,7 @@ Get appropriate Python process for current buffer and return it.
 
 py-shell-send-string
 --------------------
-Send STRING to inferior Python PROCESS.
+Send STRING to Python PROCESS.
 When `py-verbose-p' and MSG is non-nil messages the first line of STRING.
 
 py-shell-send-file
@@ -486,25 +357,11 @@ FILE-NAME.
 
 py-switch-to-shell
 ------------------
-Switch to inferior Python process buffer.
-
-python-shell-completion-complete-or-indent
-------------------------------------------
-Complete or indent depending on the context.
-If content before pointer is all whitespace indent.  If not try
-to complete.
-
-;;; Helper commands
--------------------
-
+Switch to Python process buffer.
 
 py-guess-pdb-path
 -----------------
 If py-pdb-path isn't set, find location of pdb.py. 
-
-(defun s
---------
-
 
 py-forward-line
 ---------------
@@ -538,19 +395,9 @@ Count lines in accessible part until current line.
 
 See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=7115
 
-py-send-region
---------------
-Send the region to the inferior Python process.
-
-py-send-region-and-go
----------------------
-Send the region to the inferior Python process.
-
-Then switch to the process buffer.
-
 python-send-string
 ------------------
-Evaluate STRING in inferior Python process.
+Evaluate STRING in Python process.
 
 py-switch-to-python
 -------------------
@@ -624,13 +471,16 @@ Similar to `toggle-py-smart-indentation' resp. `py-smart-indentation-off' follow
 
 This function is normally used by `indent-line-function' resp.
 TAB.
-Returns current indentation
+
+When bound to TAB, C-q TAB inserts a TAB.
 
 When `py-tab-shifts-region-p' is `t', not just the current line,
 but the region is shiftet that way.
 
 If `py-tab-indents-region-p' is `t' and first TAB doesn't shift
---as indent is at outmost reasonable--, indent-region is called. 
+--as indent is at outmost reasonable--, indent-region is called.
+
+C-q TAB inserts a literal TAB-character.
 
 py-newline-and-indent
 ---------------------
@@ -649,10 +499,6 @@ With positive ARG switch `indent-tabs-mode' on.
 With negative ARG switch `indent-tabs-mode' off.
 Returns value of `indent-tabs-mode' switched to. 
 
-py-guess-indent-forward
------------------------
-Called when moving to end of a form and `py-smart-indentation' is on. 
-
 py-guess-indent-offset
 ----------------------
 Guess `py-indent-offset'.
@@ -662,16 +508,11 @@ Set local value of `py-indent-offset', return it
 Might change local value of `py-indent-offset' only when called
 downwards from beginning of block followed by a statement. Otherwise default-value is returned.
 
-
 py-narrow-to-defun
 ------------------
 Make text outside current def or class invisible.
 
 The defun visible is the one that contains point or follows point. 
-
-;;; Shifting
-------------
-
 
 py-shift-left
 -------------
@@ -722,6 +563,26 @@ COUNT defaults to `py-indent-offset',
 use [universal-argument] to specify a different value.
 
 Returns outmost indentation reached. 
+
+py-shift-minor-block-left
+-------------------------
+Dedent minor-block by COUNT spaces.
+
+COUNT defaults to `py-indent-offset',
+use [universal-argument] to specify a different value.
+
+Returns outmost indentation reached.
+A minor block is started by a `for', `if', `try' or `with'. 
+
+py-shift-minor-block-right
+--------------------------
+Indent minor-block by COUNT spaces.
+
+COUNT defaults to `py-indent-offset',
+use [universal-argument] to specify a different value.
+
+Returns outmost indentation reached.
+A minor block is started by a `for', `if', `try' or `with'. 
 
 py-shift-clause-right
 ---------------------
@@ -862,117 +723,117 @@ With optional INDENT-OFFSET specify a different value than `py-indent-offset' at
 Guesses the outmost reasonable indent
 Returns and keeps relative position 
 
-;;; Positions
--------------
-
-
-py-def-or-class-beginning-position
-----------------------------------
-Returns beginning position of function or class definition. 
-
-py-def-or-class-end-position
-----------------------------
-Returns end position of function or class definition. 
-
-py-statement-beginning-position
--------------------------------
-Returns beginning position of statement. 
-
-py-statement-end-position
--------------------------
-Returns end position of statement. 
-
-py-current-indentation
-----------------------
-Returns beginning position of code in line. 
-
-py-beginning-of-paragraph-position
-----------------------------------
+py--beginning-of-paragraph-position
+-----------------------------------
 Returns beginning of paragraph position. 
 
-py-end-of-paragraph-position
-----------------------------
+py--end-of-paragraph-position
+-----------------------------
 Returns end of paragraph position. 
 
-py-beginning-of-block-position
-------------------------------
+py--beginning-of-block-position
+-------------------------------
 Returns beginning of block position. 
 
-py-end-of-block-position
-------------------------
+py--end-of-block-position
+-------------------------
 Returns end of block position. 
 
-py-beginning-of-clause-position
--------------------------------
+py-beginning-of-minor-block-position
+------------------------------------
+Returns beginning of minor-block position. 
+
+py-end-of-minor-block-position
+------------------------------
+Returns end of minor-block position. 
+
+py--beginning-of-clause-position
+--------------------------------
 Returns beginning of clause position. 
 
-py-end-of-clause-position
--------------------------
+py--end-of-clause-position
+--------------------------
 Returns end of clause position. 
 
-py-beginning-of-block-or-clause-position
-----------------------------------------
+py--beginning-of-block-or-clause-position
+-----------------------------------------
 Returns beginning of block-or-clause position. 
 
-py-end-of-block-or-clause-position
-----------------------------------
+py--end-of-block-or-clause-position
+-----------------------------------
 Returns end of block-or-clause position. 
 
-py-beginning-of-def-position
-----------------------------
+py--beginning-of-def-position
+-----------------------------
 Returns beginning of def position. 
 
-py-end-of-def-position
-----------------------
+py--end-of-def-position
+-----------------------
 Returns end of def position. 
 
-py-beginning-of-class-position
-------------------------------
+py--beginning-of-class-position
+-------------------------------
 Returns beginning of class position. 
 
-py-end-of-class-position
-------------------------
+py--end-of-class-position
+-------------------------
 Returns end of class position. 
 
-py-beginning-of-def-or-class-position
--------------------------------------
+py--beginning-of-def-or-class-position
+--------------------------------------
 Returns beginning of def-or-class position. 
 
-py-end-of-def-or-class-position
--------------------------------
+py--end-of-def-or-class-position
+--------------------------------
 Returns end of def-or-class position. 
 
-py-beginning-of-line-position
------------------------------
+py--beginning-of-line-position
+------------------------------
 Returns beginning of line position. 
 
-py-end-of-line-position
------------------------
+py--end-of-line-position
+------------------------
 Returns end of line position. 
 
-py-beginning-of-statement-position
-----------------------------------
+py--beginning-of-statement-position
+-----------------------------------
 Returns beginning of statement position. 
 
-py-end-of-statement-position
-----------------------------
+py--end-of-statement-position
+-----------------------------
 Returns end of statement position. 
 
-py-beginning-of-expression-position
------------------------------------
-Returns beginning of expression position. 
+py-beginning-of-comment-position
+--------------------------------
+Returns beginning of comment position. 
 
-py-end-of-expression-position
------------------------------
-Returns end of expression position. 
+py-end-of-comment-position
+--------------------------
+Returns end of comment position. 
 
-py-beginning-of-partial-expression-position
--------------------------------------------
+py-beginning-of-top-level-position
+----------------------------------
+Returns beginning of top-level position. 
+
+py-end-of-top-level-position
+----------------------------
+Returns end of top-level position. 
+
+py--beginning-of-partial-expression-position
+--------------------------------------------
 Returns beginning of partial-expression position. 
 
-py-end-of-partial-expression-position
--------------------------------------
+py--end-of-partial-expression-position
+--------------------------------------
 Returns end of partial-expression position. 
+
+py--beginning-of-expression-position
+------------------------------------
+Returns beginning of expression position. 
+
+py--end-of-expression-position
+------------------------------
+Returns end of expression position. 
 
 py-list-beginning-position
 --------------------------
@@ -1000,11 +861,6 @@ Returns list of beginning and end-position if inside.
 
 Result is useful for booleans too: (when (py-in-statement-p)...)
 will work.
-
-
-;;; Bounds
-----------
-
 
 py-bounds-of-statement
 ----------------------
@@ -1090,10 +946,6 @@ Typically declarations resp. initialisations of variables following
 a class or function definition.
 See also py-bounds-of-statements 
 
-;;; Comments, Filling
----------------------
-
-
 py-beginning-of-comment
 -----------------------
 Go to the beginning of current line's comment, if any.
@@ -1106,10 +958,6 @@ Go to the end of comment at point.
 
 Returns position, nil if not in comment.
 
-;;; Comment forms
------------------
-
-
 py-comment-region
 -----------------
 Like `comment-region' but uses double hash (`#') comment starter.
@@ -1117,6 +965,20 @@ Like `comment-region' but uses double hash (`#') comment starter.
 py-comment-block
 ----------------
 Comments block at point.
+
+Uses double hash (`#') comment starter when `py-block-comment-prefix-p' is  `t',
+the default
+
+py-comment-minor-block
+----------------------
+Comments minor-block at point.
+
+Uses double hash (`#') comment starter when `py-block-comment-prefix-p' is  `t',
+the default
+
+py-comment-top-level
+--------------------
+Comments top-level form at point.
 
 Uses double hash (`#') comment starter when `py-block-comment-prefix-p' is  `t',
 the default
@@ -1191,35 +1053,24 @@ Fill the comment paragraph at point
 
 py-end-of-string
 ----------------
-Go to end of string at point, return position.
+Go to end of string at point if any, if successful return position. 
 
-Takes the result of (syntax-ppss)
-
-py-fill-this-paragraph
-----------------------
-Fill just the paragraph at point. 
-
-py-fill-paragraph
------------------
-`fill-paragraph-function'
-
-If `py-paragraph-fill-docstring-p' and inside a docstring, the whole docstring is formatted.
-See also `py-fill-string' 
-
-py-fill-labelled-string
------------------------
-Fill string or paragraph containing lines starting with label
-
-See lp:1066489 
+py--string-fence-delete-spaces
+------------------------------
+Delete spaces following or preceding delimiters of string at point. 
 
 py-fill-string
 --------------
 String fill function for `py-fill-paragraph'.
 JUSTIFY should be used (if applicable) as in `fill-paragraph'.
 
-DOCSTRING is either a boolean or 'no
-If `py-paragraph-fill-docstring-p' is `t', `M-q` fills the
-complete docstring according to setting of `py-docstring-style' 
+Fill according to `py-docstring-style' 
+
+py-fill-labelled-string
+-----------------------
+Fill string or paragraph containing lines starting with label
+
+See lp:1066489 
 
 py-fill-string-django
 ---------------------
@@ -1298,36 +1149,9 @@ Symmetric style.
 See available styles at `py-fill-paragraph' or var `py-docstring-style'
 
 
-;;; Opens-p
------------
-
-
-py-statement-opens-block-p
---------------------------
-Return position if the current statement opens a block
-in stricter or wider sense.
-
-For stricter sense specify regexp. 
-
-py-statement-opens-clause-p
+py-beginning-of-top-level-p
 ---------------------------
-Return position if the current statement opens block or clause. 
-
-py-statement-opens-block-or-clause-p
-------------------------------------
-Return position if the current statement opens block or clause. 
-
-py-statement-opens-class-p
---------------------------
-Return `t' if the statement opens a functions or class definition, nil otherwise. 
-
-py-statement-opens-def-p
-------------------------
-Return `t' if the statement opens a functions or class definition, nil otherwise. 
-
-py-statement-opens-def-or-class-p
----------------------------------
-Return `t' if the statement opens a functions or class definition, nil otherwise. 
+Returns position, if cursor is at the beginning of a top-level, nil otherwise. 
 
 py-look-downward-for-clause
 ---------------------------
@@ -1363,10 +1187,6 @@ py-which-function
 -----------------
 Return the name of the function or class, if curser is in, return nil otherwise. 
 
-;;; Beginning/End
------------------
-
-
 py-beginning-of-statements
 --------------------------
 Got to the beginning of statements in current level which don't open blocks. 
@@ -1388,7 +1208,6 @@ If already at the beginning or before a expression, go to next expression in buf
 Expression here is conceived as the syntactical component of a statement in Python. See http://docs.python.org/reference
 Operators however are left aside resp. limit py-expression designed for edit-purposes.
 
-
 py-end-of-expression
 --------------------
 Go to the end of a compound python expression.
@@ -1400,14 +1219,6 @@ A a compound python expression might be concatenated by "." operator, thus compo
 Expression here is conceived as the syntactical component of a statement in Python. See http://docs.python.org/reference
 
 Operators however are left aside resp. limit py-expression designed for edit-purposes. 
-
-py-beginning-of-partial-expression
-----------------------------------
-
-
-py-end-of-partial-expression
-----------------------------
-
 
 py-beginning-of-line
 --------------------
@@ -1431,40 +1242,13 @@ For beginning of clause py-beginning-of-clause.
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-
 py-beginning-of-declarations
 ----------------------------
-Got to the beginning of assigments resp. statements in current level which don't open blocks.
-
+Got to the beginning of assigments resp. statements in current level which don't open blocks. 
 
 py-end-of-declarations
 ----------------------
 Got to the end of assigments resp. statements in current level which don't open blocks. 
-
-py-beginning-of-top-level
--------------------------
-Go to beginning of block until level of indentation is null.
-
-Returns beginning of block if successful, nil otherwise
-
-Referring python program structures see for example:
-http://docs.python.org/reference/compound_stmts.html
-
-;;; Beginning of forms
-----------------------
-
-
-py-beginning-of-form-intern
----------------------------
-Go to beginning of FORM.
-
-With INDENT, go to beginning one level above.
-Whit IACT, print result in message buffer.
-
-Returns beginning of FORM if successful, nil otherwise
-
-Referring python program structures see for example:
-http://docs.python.org/reference/compound_stmts.html
 
 py-beginning-of-block
 ---------------------
@@ -1521,10 +1305,7 @@ Go to beginning def-or-class, skip whitespace at BOL.
 
 Returns beginning of def-or-class if successful, nil otherwise
 
-When `py-mark-decorators' is non-nil, decorators are considered too.
-
-Referring python program structures see for example:
-http://docs.python.org/reference/compound_stmts.html
+When `py-mark-decorators' is non-nil, decorators are considered too. 
 
 py-beginning-of-if-block
 ------------------------
@@ -1549,40 +1330,38 @@ py-beginning-of-minor-block
 Go to beginning minor-block, skip whitespace at BOL.
 
 Returns beginning of minor-block if successful, nil otherwise
+A minor block is started by a `for', `if', `try' or `with'.
 
-Referring python program structures see for example:
-http://docs.python.org/reference/compound_stmts.html
-
-py-beginning-of-block-lc
-------------------------
-Go to beginning block, go to BOL.
+py-beginning-of-block-bol
+-------------------------
+Go to beginning block, go to beginning-of-line.
 
 Returns beginning of block if successful, nil otherwise
 
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-py-beginning-of-clause-lc
--------------------------
-Go to beginning clause, go to BOL.
+py-beginning-of-clause-bol
+--------------------------
+Go to beginning clause, go to beginning-of-line.
 
 Returns beginning of clause if successful, nil otherwise
 
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-py-beginning-of-block-or-clause-lc
-----------------------------------
-Go to beginning block-or-clause, go to BOL.
+py-beginning-of-block-or-clause-bol
+-----------------------------------
+Go to beginning block-or-clause, go to beginning-of-line.
 
 Returns beginning of block-or-clause if successful, nil otherwise
 
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-py-beginning-of-def-lc
-----------------------
-Go to beginning def, go to BOL.
+py-beginning-of-def-bol
+-----------------------
+Go to beginning def, go to beginning-of-line.
 
 Returns beginning of def if successful, nil otherwise
 
@@ -1591,9 +1370,9 @@ When `py-mark-decorators' is non-nil, decorators are considered too.
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-py-beginning-of-class-lc
-------------------------
-Go to beginning class, go to BOL.
+py-beginning-of-class-bol
+-------------------------
+Go to beginning class, go to beginning-of-line.
 
 Returns beginning of class if successful, nil otherwise
 
@@ -1602,9 +1381,9 @@ When `py-mark-decorators' is non-nil, decorators are considered too.
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-py-beginning-of-def-or-class-lc
--------------------------------
-Go to beginning def-or-class, go to BOL.
+py-beginning-of-def-or-class-bol
+--------------------------------
+Go to beginning def-or-class, go to beginning-of-line.
 
 Returns beginning of def-or-class if successful, nil otherwise
 
@@ -1613,29 +1392,44 @@ When `py-mark-decorators' is non-nil, decorators are considered too.
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-py-beginning-of-if-block-lc
----------------------------
-Go to beginning if-block, go to BOL.
+py-beginning-of-if-block-bol
+----------------------------
+Go to beginning if-block, go to beginning-of-line.
 
 Returns beginning of if-block if successful, nil otherwise
 
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-py-beginning-of-try-block-lc
-----------------------------
-Go to beginning try-block, go to BOL.
+py-beginning-of-try-block-bol
+-----------------------------
+Go to beginning try-block, go to beginning-of-line.
 
 Returns beginning of try-block if successful, nil otherwise
 
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
 
-py-beginning-of-minor-block-lc
-------------------------------
-Go to beginning minor-block, go to BOL.
+py-beginning-of-minor-block-bol
+-------------------------------
+Go to beginning minor-block, go to beginning-of-line.
 
 Returns beginning of minor-block if successful, nil otherwise
+
+Referring python program structures see for example:
+http://docs.python.org/reference/compound_stmts.html
+
+py-beginning-of-top-level
+-------------------------
+Go up to beginning of statments until level of indentation is null.
+
+Returns position if successful, nil otherwise 
+
+py-end-of-top-level
+-------------------
+Go to end of top-level form at point.
+
+Returns position if successful, nil otherwise
 
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
@@ -1660,8 +1454,8 @@ py-up
 -----
 Go up or to beginning of form if inside.
 
-If inside a delimited form --string or list-- go to it's beginning.
-If not at beginning of a statement or block, go to it's beginning.
+If inside a delimited form --string or list-- go to its beginning.
+If not at beginning of a statement or block, go to its beginning.
 If at beginning of a statement or block, go to beginning one level above of compound statement or definition at point.
 
 Referring python program structures see for example:
@@ -1671,9 +1465,21 @@ py-down
 -------
 Go to beginning one level below of compound statement or definition at point.
 
-If no statement or block below, but a delimited form --string or list-- go to it's beginning. Repeated call from there will behave like down-list.
+If no statement or block below, but a delimited form --string or list-- go to its beginning. Repeated call from there will behave like down-list.
 
 Returns position if successful, nil otherwise
+
+Referring python program structures see for example:
+http://docs.python.org/reference/compound_stmts.html
+
+py-backward-same-level
+----------------------
+Go form backward keeping indent level if possible.
+
+If inside a delimited form --string or list-- go to its beginning.
+If not at beginning of a statement or block, go to its beginning.
+If at beginning of a statement or block, go to previous beginning of compound statement or definition at point.
+If no further element at same level, go one level up.
 
 Referring python program structures see for example:
 http://docs.python.org/reference/compound_stmts.html
@@ -1733,10 +1539,7 @@ Go to end of def-or-class.
 
 Returns end of def-or-class if successful, nil otherwise
 
-With M-x universal argument or `py-mark-decorators' set to `t', decorators are marked too.
-
-Referring python program structures see for example:
-http://docs.python.org/reference/compound_stmts.html
+With M-x universal argument or `py-mark-decorators' set to `t', decorators are marked too. 
 
 py-end-of-if-block
 ------------------
@@ -1762,12 +1565,7 @@ Go to end of minor-block.
 
 Returns end of minor-block if successful, nil otherwise
 
-Referring python program structures see for example:
-http://docs.python.org/reference/compound_stmts.html
-
-;;; Forms
----------
-
+A minor block is started by a `for', `if', `try' or `with'.
 
 py-declarations
 ---------------
@@ -1785,7 +1583,9 @@ py-end-of-statement
 -------------------
 Go to the last char of current statement.
 
-To go just beyond the final line of the current statement, use `py-down-statement-bol'. 
+To go just beyond the final line of the current statement, use `py-down-statement-bol'.
+
+Optional argument REPEAT, the number of loops done already, is checked for py-max-specpdl-size error. Avoid eternal loops due to missing string delimters etc. 
 
 py-goto-statement-below
 -----------------------
@@ -1803,9 +1603,71 @@ Go to the end of a decorator.
 
 Returns position if succesful 
 
-;;; Mark
---------
+py-statement
+------------
+Statement at point.
 
+Return code of `py-statement' at point, a string. 
+
+py-top-level
+------------
+Top-Level at point.
+
+Return code of `py-top-level' at point, a string. 
+
+py-block
+--------
+Block at point.
+
+Return code of `py-block' at point, a string. 
+
+py-clause
+---------
+Clause at point.
+
+Return code of `py-clause' at point, a string. 
+
+py-block-or-clause
+------------------
+Block-Or-Clause at point.
+
+Return code of `py-block-or-clause' at point, a string. 
+
+py-def
+------
+Def at point.
+
+Return code of `py-def' at point, a string. 
+
+py-class
+--------
+Class at point.
+
+Return code of `py-class' at point, a string. 
+
+py-def-or-class
+---------------
+Def-Or-Class at point.
+
+Return code of `py-def-or-class' at point, a string. 
+
+py-expression
+-------------
+Expression at point.
+
+Return code of `py-expression' at point, a string. 
+
+py-partial-expression
+---------------------
+Partial-Expression at point.
+
+Return code of `py-partial-expression' at point, a string. 
+
+py-minor-block
+--------------
+Minor-Block at point.
+
+Return code of `py-minor-block' at point, a string. 
 
 py-mark-paragraph
 -----------------
@@ -1816,6 +1678,12 @@ Returns beginning and end positions of marked area, a cons.
 py-mark-block
 -------------
 Mark block at point.
+
+Returns beginning and end positions of marked area, a cons. 
+
+py-mark-minor-block
+-------------------
+Mark minor-block at point.
 
 Returns beginning and end positions of marked area, a cons. 
 
@@ -1864,6 +1732,12 @@ Mark statement at point.
 
 Returns beginning and end positions of marked area, a cons. 
 
+py-mark-top-level
+-----------------
+Mark top-level form at point.
+
+Returns beginning and end positions of marked area, a cons. 
+
 py-mark-expression
 ------------------
 Mark expression at point.
@@ -1876,104 +1750,256 @@ Mark partial-expression at point.
 
 Returns beginning and end positions of marked area, a cons. 
 
-;;; Copyin
-----------
-
-
-py-copy-expression
-------------------
-Mark expression at point.
-
-Returns beginning and end positions of marked area, a cons. 
-
-py-copy-partial-expression
---------------------------
-Mark partial-expression at point.
-
-Returns beginning and end positions of marked area, a cons.
-
-"." operators delimit a partial-expression expression on it's level, that's the difference to compound expressions.
-
-Given the function below, `py-partial-expression'
-called at pipe symbol would copy and return:
-
-def usage():
-    print """Usage: %s
-    ....""" % (
-        os.path.basename(sys.argv[0]))
-------------|-------------------------
-==> path
-
-        os.path.basename(sys.argv[0]))
-------------------|-------------------
-==> basename(sys.argv[0]))
-
-        os.path.basename(sys.argv[0]))
---------------------------|-----------
-==> sys
-
-        os.path.basename(sys.argv[0]))
-------------------------------|-------
-==> argv[0]
-
-while `py-expression' would copy and return
-
-(
-        os.path.basename(sys.argv[0]))
-
-;;
-
-Also for existing commands a shorthand is defined:
-
-(defalias 'py-statement 'py-copy-statement)
-
 py-copy-statement
 -----------------
-Mark statement at point.
+Copy statement at point.
 
-Returns beginning and end positions of marked area, a cons. 
+Store data in kill ring, so it might yanked back. 
+
+py-copy-top-level
+-----------------
+Copy top-level at point.
+
+Store data in kill ring, so it might yanked back. 
 
 py-copy-block
 -------------
-Mark block at point.
+Copy block at point.
 
-Returns beginning and end positions of marked area, a cons. 
-
-py-copy-block-or-clause
------------------------
-Mark block-or-clause at point.
-
-Returns beginning and end positions of marked area, a cons. 
-
-py-copy-def
------------
-Mark def at point.
-
-With universal argument or `py-mark-decorators' set to `t' decorators are copied too.
-Returns beginning and end positions of marked area, a cons.
-
-py-copy-def-or-class
---------------------
-Mark def-or-class at point.
-
-With universal argument or `py-mark-decorators' set to `t' decorators are copied too.
-Returns beginning and end positions of marked area, a cons.
-
-py-copy-class
--------------
-Mark class at point.
-
-With universal argument or `py-mark-decorators' set to `t' decorators are copied too.
-Returns beginning and end positions of marked area, a cons.
+Store data in kill ring, so it might yanked back. 
 
 py-copy-clause
 --------------
-Mark clause at point.
-  Returns beginning and end positions of marked area, a cons. 
+Copy clause at point.
 
-;;; Deleting
+Store data in kill ring, so it might yanked back. 
+
+py-copy-block-or-clause
+-----------------------
+Copy block-or-clause at point.
+
+Store data in kill ring, so it might yanked back. 
+
+py-copy-def
+-----------
+Copy def at point.
+
+Store data in kill ring, so it might yanked back. 
+
+py-copy-class
+-------------
+Copy class at point.
+
+Store data in kill ring, so it might yanked back. 
+
+py-copy-def-or-class
+--------------------
+Copy def-or-class at point.
+
+Store data in kill ring, so it might yanked back. 
+
+py-copy-expression
+------------------
+Copy expression at point.
+
+Store data in kill ring, so it might yanked back. 
+
+py-copy-partial-expression
+--------------------------
+Copy partial-expression at point.
+
+Store data in kill ring, so it might yanked back. 
+
+py-copy-minor-block
+-------------------
+Copy minor-block at point.
+
+Store data in kill ring, so it might yanked back. 
+
+py-hide-show
 ------------
+Toggle visibility of existing forms at point. 
 
+py-hide-region
+--------------
+Hide active region. 
+
+py-show-region
+--------------
+Un-hide active region. 
+
+py-hide-statement
+-----------------
+Hide statement at point. 
+
+py-show-statement
+-----------------
+Show statement at point. 
+
+py-hide-block
+-------------
+Hide block at point. 
+
+py-show-block
+-------------
+Show block at point. 
+
+py-hide-clause
+--------------
+Hide clause at point. 
+
+py-show-clause
+--------------
+Show clause at point. 
+
+py-hide-block-or-clause
+-----------------------
+Hide block-or-clause at point. 
+
+py-show-block-or-clause
+-----------------------
+Show block-or-clause at point. 
+
+py-hide-def
+-----------
+Hide def at point. 
+
+py-show-def
+-----------
+Show def at point. 
+
+py-hide-class
+-------------
+Hide class at point. 
+
+py-show-class
+-------------
+Show class at point. 
+
+py-hide-expression
+------------------
+Hide expression at point. 
+
+py-show-expression
+------------------
+Show expression at point. 
+
+py-hide-partial-expression
+--------------------------
+Hide partial-expression at point. 
+
+py-show-partial-expression
+--------------------------
+Show partial-expression at point. 
+
+py-hide-line
+------------
+Hide line at point. 
+
+py-show-line
+------------
+Show line at point. 
+
+py-hide-top-level
+-----------------
+Hide top-level at point. 
+
+py-show-top-level
+-----------------
+Show top-level at point. 
+
+py-mark-minor-block-bol
+-----------------------
+Mark minor block, take beginning of line positions.
+
+Returns beginning and end positions of region, a cons.
+
+See `py-minor-block-re'
+
+py-copy-minor-block-bol
+-----------------------
+Delete minor block, use position from beginning-of-line.
+
+Stores data in kill ring. Might be yanked back using `C-y'.
+
+See `py-minor-block-re'
+
+py-kill-minor-block-bol
+-----------------------
+Delete minor block, use position from beginning-of-line.
+
+Stores data in kill ring. Might be yanked back using `C-y'.
+
+See `py-minor-block-re'
+
+py-delete-minor-block-bol
+-------------------------
+Delete minor block, use position from beginning-of-line.
+
+Don't store data in kill ring.
+
+See `py-minor-block-re'
+
+py-delete-statement
+-------------------
+Delete STATEMENT at point.
+
+Don't store data in kill ring. 
+
+py-delete-top-level
+-------------------
+Delete TOP-LEVEL at point.
+
+Don't store data in kill ring. 
+
+py-delete-block
+---------------
+Delete BLOCK at point.
+
+Don't store data in kill ring. 
+
+py-delete-block-or-clause
+-------------------------
+Delete BLOCK-OR-CLAUSE at point.
+
+Don't store data in kill ring. 
+
+py-delete-def
+-------------
+Delete DEF at point.
+
+Don't store data in kill ring. 
+
+py-delete-class
+---------------
+Delete CLASS at point.
+
+Don't store data in kill ring. 
+
+py-delete-def-or-class
+----------------------
+Delete DEF-OR-CLASS at point.
+
+Don't store data in kill ring. 
+
+py-delete-expression
+--------------------
+Delete EXPRESSION at point.
+
+Don't store data in kill ring. 
+
+py-delete-partial-expression
+----------------------------
+Delete PARTIAL-EXPRESSION at point.
+
+Don't store data in kill ring. 
+
+py-delete-minor-block
+---------------------
+Delete minor-BLOCK at point.
+
+Don't store data in kill ring.
+A minor minor block is started by a `for', `if', `try' or `with'.
 
 py-kill-statements
 ------------------
@@ -2005,9 +2031,21 @@ Delete statement at point.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
+py-kill-top-level
+-----------------
+Delete top-level form at point.
+
+Stores data in kill ring. Might be yanked back using `C-y'. 
+
 py-kill-block
 -------------
 Delete block at point.
+
+Stores data in kill ring. Might be yanked back using `C-y'. 
+
+py-kill-minor-block
+-------------------
+Delete minor-block at point.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
@@ -2041,10 +2079,6 @@ Delete clause at point.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
-;;; Beginning of line forms
----------------------------
-
-
 py-beginning-of-block-bol-p
 ---------------------------
 Returns position, if cursor is at the beginning of block, at beginning of line, nil otherwise. 
@@ -2064,19 +2098,19 @@ Returns beginning and end positions of region, a cons.
 
 py-copy-block-bol
 -----------------
-Delete block bol at point.
+Delete block, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-kill-block-bol
 -----------------
-Delete block bol at point.
+Delete block, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-delete-block-bol
 -------------------
-Delete block bol at point.
+Delete block, use position from beginning-of-line.
 
 Don't store data in kill ring. 
 
@@ -2099,19 +2133,19 @@ Returns beginning and end positions of region, a cons.
 
 py-copy-clause-bol
 ------------------
-Delete clause bol at point.
+Delete clause, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-kill-clause-bol
 ------------------
-Delete clause bol at point.
+Delete clause, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-delete-clause-bol
 --------------------
-Delete clause bol at point.
+Delete clause, use position from beginning-of-line.
 
 Don't store data in kill ring. 
 
@@ -2134,19 +2168,19 @@ Returns beginning and end positions of region, a cons.
 
 py-copy-block-or-clause-bol
 ---------------------------
-Delete block-or-clause bol at point.
+Delete block-or-clause, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-kill-block-or-clause-bol
 ---------------------------
-Delete block-or-clause bol at point.
+Delete block-or-clause, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-delete-block-or-clause-bol
 -----------------------------
-Delete block-or-clause bol at point.
+Delete block-or-clause, use position from beginning-of-line.
 
 Don't store data in kill ring. 
 
@@ -2170,19 +2204,19 @@ Returns beginning and end positions of region, a cons.
 
 py-copy-def-bol
 ---------------
-Delete def bol at point.
+Delete def, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-kill-def-bol
 ---------------
-Delete def bol at point.
+Delete def, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-delete-def-bol
 -----------------
-Delete def bol at point.
+Delete def, use position from beginning-of-line.
 
 Don't store data in kill ring. 
 
@@ -2206,19 +2240,19 @@ Returns beginning and end positions of region, a cons.
 
 py-copy-class-bol
 -----------------
-Delete class bol at point.
+Delete class, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-kill-class-bol
 -----------------
-Delete class bol at point.
+Delete class, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-delete-class-bol
 -------------------
-Delete class bol at point.
+Delete class, use position from beginning-of-line.
 
 Don't store data in kill ring. 
 
@@ -2242,19 +2276,19 @@ Returns beginning and end positions of region, a cons.
 
 py-copy-def-or-class-bol
 ------------------------
-Delete def-or-class bol at point.
+Delete def-or-class, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-kill-def-or-class-bol
 ------------------------
-Delete def-or-class bol at point.
+Delete def-or-class, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-delete-def-or-class-bol
 --------------------------
-Delete def-or-class bol at point.
+Delete def-or-class, use position from beginning-of-line.
 
 Don't store data in kill ring. 
 
@@ -2284,25 +2318,21 @@ Returns beginning and end positions of region, a cons.
 
 py-copy-statement-bol
 ---------------------
-Delete statement bol at point.
+Delete statement, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-kill-statement-bol
 ---------------------
-Delete statement bol at point.
+Delete statement, use position from beginning-of-line.
 
 Stores data in kill ring. Might be yanked back using `C-y'. 
 
 py-delete-statement-bol
 -----------------------
-Delete statement bol at point.
+Delete statement, use position from beginning-of-line.
 
 Don't store data in kill ring. 
-
-;;; Up/Down
------------
-
 
 py-up-statement
 ---------------
@@ -2522,283 +2552,191 @@ Go to the matching brace, bracket or parenthesis if on its counterpart.
 Otherwise insert the character, the key is assigned to, here `%'.
 With universal arg  insert a `%'. 
 
-;;; Python named shells
------------------------
+py-beginning-of-block-current-column
+------------------------------------
+Reach next beginning of block upwards which starts at current column.
 
+Return position
 
 python
 ------
 Start an Python interpreter.
 
-Optional C-u prompts for options to pass to the Python interpreter. See `py-python-command-args'. 
+Optional C-u prompts for path to the interpreter. 
 
 ipython
 -------
 Start an IPython interpreter.
 
-Optional C-u prompts for options to pass to the IPython interpreter. See `py-python-command-args'. 
-
-python3
--------
-Start an Python3 interpreter.
-
-Optional C-u prompts for options to pass to the Python3 interpreter. See `py-python-command-args'. 
+Optional C-u prompts for path to the interpreter. 
 
 python2
 -------
 Start an Python2 interpreter.
 
-Optional C-u prompts for options to pass to the Python2 interpreter. See `py-python-command-args'. 
-
-python2\.7
-----------
-Start an Python2.7 interpreter.
-
-Optional C-u prompts for options to pass to the Python2.7 interpreter. See `py-python-command-args'. 
+Optional C-u prompts for path to the interpreter. 
 
 jython
 ------
 Start an Jython interpreter.
 
-Optional C-u prompts for options to pass to the Jython interpreter. See `py-python-command-args'. 
+Optional C-u prompts for path to the interpreter. 
 
-python3\.2
-----------
-Start an Python3.2 interpreter.
+python3
+-------
+Start an Python3 interpreter.
 
-Optional C-u prompts for options to pass to the Python3.2 interpreter. See `py-python-command-args'. 
-
-python3\.3
-----------
-Start an Python3.3 interpreter.
-
-Optional C-u prompts for options to pass to the Python3.3 interpreter. See `py-python-command-args'. 
+Optional C-u prompts for path to the interpreter. 
 
 bpython
 -------
 Start an Bpython interpreter.
 
-Optional C-u prompts for options to pass to the Bpython interpreter. See `py-python-command-args'. 
+Optional C-u prompts for path to the interpreter. 
 
 python-dedicated
 ----------------
 Start an unique Python interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 ipython-dedicated
 -----------------
 Start an unique IPython interpreter in another window.
 
-Optional C-u prompts for options to pass to the IPython interpreter. See `py-python-command-args'.
-
-python3-dedicated
------------------
-Start an unique Python3 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python3 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 python2-dedicated
 -----------------
 Start an unique Python2 interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python2 interpreter. See `py-python-command-args'.
-
-python2\.7-dedicated
---------------------
-Start an unique Python2.7 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python2.7 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 jython-dedicated
 ----------------
 Start an unique Jython interpreter in another window.
 
-Optional C-u prompts for options to pass to the Jython interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
-python3\.2-dedicated
---------------------
-Start an unique Python3.2 interpreter in another window.
+python3-dedicated
+-----------------
+Start an unique Python3 interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python3.2 interpreter. See `py-python-command-args'.
-
-python3\.3-dedicated
---------------------
-Start an unique Python3.3 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python3.3 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 bpython-dedicated
 -----------------
 Start an unique Bpython interpreter in another window.
 
-Optional C-u prompts for options to pass to the Bpython interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 python-switch
 -------------
 Switch to Python interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 ipython-switch
 --------------
 Switch to IPython interpreter in another window.
 
-Optional C-u prompts for options to pass to the IPython interpreter. See `py-python-command-args'.
-
-python3-switch
---------------
-Switch to Python3 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python3 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 python2-switch
 --------------
 Switch to Python2 interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python2 interpreter. See `py-python-command-args'.
-
-python2\.7-switch
------------------
-Switch to Python2.7 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python2.7 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 jython-switch
 -------------
 Switch to Jython interpreter in another window.
 
-Optional C-u prompts for options to pass to the Jython interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
-python3\.2-switch
------------------
-Switch to Python3.2 interpreter in another window.
+python3-switch
+--------------
+Switch to Python3 interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python3.2 interpreter. See `py-python-command-args'.
-
-python3\.3-switch
------------------
-Switch to Python3.3 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python3.3 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 bpython-switch
 --------------
 Switch to Bpython interpreter in another window.
 
-Optional C-u prompts for options to pass to the Bpython interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 python-no-switch
 ----------------
 Open an Python interpreter in another window, but do not switch to it.
 
-Optional C-u prompts for options to pass to the Python interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 ipython-no-switch
 -----------------
 Open an IPython interpreter in another window, but do not switch to it.
 
-Optional C-u prompts for options to pass to the IPython interpreter. See `py-python-command-args'.
-
-python3-no-switch
------------------
-Open an Python3 interpreter in another window, but do not switch to it.
-
-Optional C-u prompts for options to pass to the Python3 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 python2-no-switch
 -----------------
 Open an Python2 interpreter in another window, but do not switch to it.
 
-Optional C-u prompts for options to pass to the Python2 interpreter. See `py-python-command-args'.
-
-python2\.7-no-switch
---------------------
-Open an Python2.7 interpreter in another window, but do not switch to it.
-
-Optional C-u prompts for options to pass to the Python2.7 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 jython-no-switch
 ----------------
 Open an Jython interpreter in another window, but do not switch to it.
 
-Optional C-u prompts for options to pass to the Jython interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
-python3\.2-no-switch
---------------------
-Open an Python3.2 interpreter in another window, but do not switch to it.
+python3-no-switch
+-----------------
+Open an Python3 interpreter in another window, but do not switch to it.
 
-Optional C-u prompts for options to pass to the Python3.2 interpreter. See `py-python-command-args'.
-
-python3\.3-no-switch
---------------------
-Open an Python3.3 interpreter in another window, but do not switch to it.
-
-Optional C-u prompts for options to pass to the Python3.3 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 bpython-no-switch
 -----------------
 Open an Bpython interpreter in another window, but do not switch to it.
 
-Optional C-u prompts for options to pass to the Bpython interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 python-switch-dedicated
 -----------------------
 Switch to an unique Python interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 ipython-switch-dedicated
 ------------------------
 Switch to an unique IPython interpreter in another window.
 
-Optional C-u prompts for options to pass to the IPython interpreter. See `py-python-command-args'.
-
-python3-switch-dedicated
-------------------------
-Switch to an unique Python3 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python3 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 python2-switch-dedicated
 ------------------------
 Switch to an unique Python2 interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python2 interpreter. See `py-python-command-args'.
-
-python2\.7-switch-dedicated
----------------------------
-Switch to an unique Python2.7 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python2.7 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 jython-switch-dedicated
 -----------------------
 Switch to an unique Jython interpreter in another window.
 
-Optional C-u prompts for options to pass to the Jython interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
-python3\.2-switch-dedicated
----------------------------
-Switch to an unique Python3.2 interpreter in another window.
+python3-switch-dedicated
+------------------------
+Switch to an unique Python3 interpreter in another window.
 
-Optional C-u prompts for options to pass to the Python3.2 interpreter. See `py-python-command-args'.
-
-python3\.3-switch-dedicated
----------------------------
-Switch to an unique Python3.3 interpreter in another window.
-
-Optional C-u prompts for options to pass to the Python3.3 interpreter. See `py-python-command-args'.
+Optional C-u prompts for path to the interpreter. 
 
 bpython-switch-dedicated
 ------------------------
 Switch to an unique Bpython interpreter in another window.
 
-Optional C-u prompts for options to pass to the Bpython interpreter. See `py-python-command-args'.
-
-;;; Code execution
-------------------
-
+Optional C-u prompts for path to the interpreter. 
 
 py-which-execute-file-command
 -----------------------------
@@ -2811,7 +2749,6 @@ py-execute-region-no-switch
 Send the region to a Python interpreter.
 
 Ignores setting of `py-switch-buffers-on-execute-p', buffer with region stays current.
- 
 
 py-execute-region-switch
 ------------------------
@@ -2819,18 +2756,22 @@ Send the region to a Python interpreter.
 
 Ignores setting of `py-switch-buffers-on-execute-p', output-buffer will being switched to.
 
-
 py-execute-region
 -----------------
 Send the region to a Python interpreter.
 
-When called with C-u, execution through `default-value' of `py-shell-name' is forced.
-When called with C-u followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
+When called with C-u, execution through
+`default-value' of `py-shell-name' is forced.
 
-When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument.
+When called with C-u followed by a number
+different from 4 and 1, user is prompted to specify a shell. This
+might be the name of a system-wide shell or include the path to a
+virtual environment.
 
-Optional DEDICATED (boolean)
+When called from a programm, it accepts a string specifying a
+shell which will be forced upon execute as argument.
 
+Optional DEDICATED 
 
 py-execute-region-default
 -------------------------
@@ -2838,20 +2779,11 @@ Send the region to the systems default Python interpreter.
 
 py-execute-region-dedicated
 ---------------------------
-Get the region processed by an unique Python interpreter.
-
-When called with C-u, execution through `default-value' of `py-shell-name' is forced.
-When called with C-u followed by a number different from 4 and 1, user is prompted to specify a shell. This might be the name of a system-wide shell or include the path to a virtual environment.
-
-When called from a programm, it accepts a string specifying a shell which will be forced upon execute as argument. 
+Send region to unique interpreter. 
 
 py-execute-region-default-dedicated
 -----------------------------------
 Send the region to an unique shell of systems default Python. 
-
-py-execute-python-mode-v5
--------------------------
-
 
 py-execute-string
 -----------------
@@ -2899,7 +2831,7 @@ This may be preferable to `M-x py-execute-buffer' because:
 
 py-execute-buffer-dedicated
 ---------------------------
-Send the contents of the buffer to a unique Python interpreter. 
+Send buffer to unique interpreter. 
 
 py-execute-buffer-switch
 ------------------------
@@ -2921,7 +2853,7 @@ Send the contents of the buffer to a Python interpreter but don't switch to outp
 
 py-execute-defun
 ----------------
-Send the current defun (class or method) to the inferior Python process.
+Send the current defun (class or method) to the Python process.
 
 py-process-file
 ---------------
@@ -2941,25 +2873,9 @@ py-execute-file
 ---------------
 When called interactively, user is prompted for filename. 
 
-;;; Pdb
--------
-
-
 py-pdbtrack-toggle-stack-tracking
 ---------------------------------
 Set variable `py-pdbtrack-do-tracking-p'. 
-
-turn-on-pdbtrack
-----------------
-
-
-turn-off-pdbtrack
------------------
-
-
-;;; Documentation
------------------
-
 
 py-documentation
 ----------------
@@ -2977,12 +2893,8 @@ Find top-level imports.
 
 Returns imports 
 
-py-eldoc-function
------------------
-Print help on symbol at point. 
-
-py-describe-symbol
-------------------
+py-help-at-point
+----------------
 Print help on symbol at point.
 
 If symbol is defined in current buffer, jump to it's definition
@@ -2992,9 +2904,21 @@ py-describe-mode
 ----------------
 Dump long form of `python-mode' docs.
 
+variables-state
+---------------
+Diplays state of python-mode variables in an org-mode buffer.
+
+Reads variables from python-mode.el as current buffer.
+
+Variables which would produce a large output are left out:
+- syntax-tables
+- python-mode-map
+
+Maybe call M-x describe-variable RET to query its value. 
+
 py-load-file
 ------------
-Load a Python file FILE-NAME into the inferior Python process.
+Load a Python file FILE-NAME into the Python process.
 
 If the file has extension `.py' import or reload it as a module.
 Treating it as a module keeps the global namespace clean, provides
@@ -3006,10 +2930,6 @@ py-find-definition
 Find source of definition of SYMBOL.
 
 Interactively, prompt for SYMBOL.
-
-;;; Miscellanus
----------------
-
 
 py-insert-super
 ---------------
@@ -3031,6 +2951,10 @@ Accepts the output of `parse-partial-sexp'.
 py-beginning-of-commented-section
 ---------------------------------
 Leave upwards comments and/or empty lines. 
+
+py-symbol-at-point
+------------------
+Return the current Python symbol.
 
 py-continuation-offset
 ----------------------
@@ -3058,6 +2982,10 @@ py-set-ipython-completion-command-string
 ----------------------------------------
 Set and return `ipython-completion-command-string'. 
 
+py-ipython--module-completion-import
+------------------------------------
+Import module-completion 
+
 py-shell-dedicated
 ------------------
 Start an interactive Python interpreter in another window.
@@ -3066,23 +2994,57 @@ With optional C-u user is prompted by
 `py-choose-shell' for command and options to pass to the Python
 interpreter.
 
+py-toggle-split-window-function
+-------------------------------
+If window is splitted vertically or horizontally.
+
+When code is executed and `py-split-window-on-execute' is `t', the result is displays in an output-buffer, "*Python*" by default.
+
+Customizable variable `py-split-windows-on-execute-function' tells how to split the screen.
+
+py--manage-windows-split
+------------------------
+If one window, split according to `py-split-windows-on-execute-function. 
+
+py-kill-buffer-unconditional
+----------------------------
+Kill buffer unconditional, kill buffer-process if existing. 
+
+py-kill-shell-unconditional
+---------------------------
+With optional argument SHELL.
+
+Otherwise kill default (I)Python shell.
+Kill buffer and its process.
+Receives a buffer-name as argument
+
+py-kill-default-shell-unconditional
+-----------------------------------
+Kill buffer "*Python*" and its process. 
+
+py--unfontify-banner
+--------------------
+Unfontify the shell banner-text.
+
+Cancels `py--timer'
+Expects being called by `py--run-unfontify-timer' 
 
 py-shell
 --------
 :around advice: `ad-Advice-py-shell'
 
 Start an interactive Python interpreter in another window.
-Interactively, C-u 4 prompts for a buffer.
-C-u 2 prompts for `py-python-command-args'.
-If `default-directory' is a remote file name, it is also prompted
-to change if called with a prefix arg.
+  Interactively, C-u prompts for a new buffer-name.
+  C-u 2 prompts for `py-python-command-args'.
+  If `default-directory' is a remote file name, it is also prompted
+  to change if called with a prefix arg.
 
-Returns py-shell's buffer-name.
-Optional string PYSHELLNAME overrides default `py-shell-name'.
-BUFFER allows specifying a name, the Python process is connected to
-When DONE is `t', `py-shell-manage-windows' is omitted
+  Returns py-shell's buffer-name.
+  Optional string PYSHELLNAME overrides default `py-shell-name'.
+  BUFFER allows specifying a name, the Python process is connected to
+  
 
-(fn &optional ARGPROMPT DEDICATED SHELL BUFFER-NAME DONE)
+(fn &optional ARGPROMPT DEDICATED SHELL BUFFER-NAME FAST-PROCESS PY-EXCEPTION-BUFFER)
 
 py-indent-forward-line
 ----------------------
@@ -3092,7 +3054,6 @@ Returns column of line reached.
 If `py-kill-empty-line' is non-nil, delete an empty line.
 When closing a form, use py-close-block et al, which will move and indent likewise.
 With M-x universal argument just indent.
-
 
 py-dedent-forward-line
 ----------------------
@@ -3174,17 +3135,9 @@ py-line-to-printform-python2
 ----------------------------
 Transforms the item on current in a print statement. 
 
-;;; Imenu
----------
-
-
 py-switch-imenu-index-function
 ------------------------------
-Switch between series 5. index machine `py-imenu-create-index' and `py-imenu-create-index-new', which also lists modules variables 
-
-py-toggle-local-default-use
----------------------------
-
+Switch between series 5. index machine `py--imenu-create-index' and `py--imenu-create-index-new', which also lists modules variables 
 
 py-choose-shell-by-path
 -----------------------
@@ -3221,7 +3174,6 @@ Should you need more shells to select, extend this command by adding inside the 
                     ((eq NUMBER (prefix-numeric-value arg))
                      "MY-PATH-TO-SHELL")
 
-
 py-choose-shell
 ---------------
 Return an appropriate executable as a string.
@@ -3230,14 +3182,13 @@ Returns nil, if no executable found.
 
 This does the following:
  - look for an interpreter with `py-choose-shell-by-shebang'
- - examine imports using `py-choose-shell-by-import'
+ - examine imports using `py--choose-shell-by-import'
  - look if Path/To/File indicates a Python version
  - if not successful, return default value of `py-shell-name'
 
 When interactivly called, messages the shell name, Emacs would in the given circtumstances.
 
 With C-u 4 is called `py-switch-shell' see docu there.
-
 
 py-install-directory-check
 --------------------------
@@ -3256,9 +3207,13 @@ py-set-load-path
 ----------------
 Include needed subdirs of python-mode directory. 
 
-;;; Abbrevs
------------
+py-report-comint-variable-setting
+---------------------------------
+Display some comint-mode variables of interest for debugging.
 
+Some vars like comint-mode maps and tables are not displayed here because of its amount.
+
+Typing `q' will close the buffer displayed
 
 py-edit-abbrevs
 ---------------
@@ -3295,10 +3250,6 @@ py-version
 ----------
 Echo the current version of `python-mode' in the minibuffer.
 
-py-install-search-local
------------------------
-
-
 py-install-local-shells
 -----------------------
 Builds Python-shell commands from executable found in LOCAL.
@@ -3306,42 +3257,22 @@ Builds Python-shell commands from executable found in LOCAL.
 If LOCAL is empty, shell-command `find' searches beneath current directory.
 Eval resulting buffer to install it, see customizable `py-extensions'. 
 
-;;; Completion
---------------
-
-
-py-completion-at-point
-----------------------
-An alternative completion, similar the way python.el does it. 
-
-py-python-script-complete
--------------------------
-Complete word before point, if any.
-
-When `py-no-completion-calls-dabbrev-expand-p' is non-nil, try dabbrev-expand. Otherwise, when `py-indent-no-completion-p' is non-nil, call `tab-to-tab-stop'. 
-
-py-python2-shell-complete
--------------------------
-
-
-py-python3-shell-complete
--------------------------
-Complete word before point, if any. Otherwise insert TAB. 
-
 py-shell-complete
 -----------------
-Complete word before point, if any. Otherwise insert TAB. 
+Complete word before point, if any. 
 
-ipython-complete
-----------------
-Complete the python symbol before point.
+py-indent-or-complete
+---------------------
+Complete or indent depending on the context.
 
-If no completion available, insert a TAB.
-Returns the completed symbol, a string, if successful, nil otherwise. 
+If cursor is at end of line, try to complete
+Otherwise call `py-indent-line'
 
-;;; Checker
------------
+If `(region-active-p)' returns `t', indent region.
+Use `C-q TAB' to insert a literally TAB-character
 
+In python-mode `py-complete-function' is called,
+in py-shell-mode `py-shell-complete'
 
 pylint-flymake-mode
 -------------------
@@ -3364,15 +3295,11 @@ pyflakespep8-flymake-mode
 Toggle `pyflakespep8' `flymake-mode'.
 
 Joint call to pyflakes and pep8 as proposed by
-
 Keegan Carruthers-Smith
-
-
 
 py-pep8-run
 -----------
-Run pep8, check formatting (default on the file currently visited).
-
+*Run pep8, check formatting - default on the file currently visited.
 
 py-pep8-help
 ------------
@@ -3380,7 +3307,7 @@ Display pep8 command line help messages.
 
 py-pylint-run
 -------------
-Run pylint (default on the file currently visited).
+*Run pylint (default on the file currently visited).
 
 For help see M-x pylint-help resp. M-x pylint-long-help.
 Home-page: http://www.logilab.org/project/pylint 
@@ -3412,41 +3339,38 @@ Let's have this until more Emacs-like help is prepared
 
 py-pyflakespep8-run
 -------------------
-Run pyflakespep8, check formatting (default on the file currently visited).
-
+Run pyflakespep8, check formatting - default on the file currently visited. 
 
 py-pyflakespep8-help
 --------------------
 Display pyflakespep8 command line help messages. 
 
-py-flakes8-run
+py-flake8-run
+-------------
+Flake8 is a wrapper around these tools:
+        - PyFlakes
+        - pep8
+        - Ned Batchelder's McCabe script
+
+        It also adds features:
+        - files that contain this line are skipped::
+            # flake8: noqa
+        - lines that contain a ``# noqa`` comment at the end will not issue warnings.
+        - a Git and a Mercurial hook.
+        - a McCabe complexity checker.
+        - extendable through ``flake8.extension`` entry points. 
+
+py-flake8-help
 --------------
-Run flakes8, check formatting (default on the file currently visited).
-
-
-py-flakes8-help
----------------
-Display flakes8 command line help messages. 
+Display flake8 command line help messages. 
 
 py-pychecker-run
 ----------------
 Run pychecker (default on the file currently visited).
 
-;;; Skeletons
--------------
-
-
 py-load-skeletons
 -----------------
 These skeletons are loaded by python-mode, if `py-load-skeletons-p' is non-nil. 
-
-;;; Virtualenv
---------------
-
-
-(defun v
---------
-
 
 virtualenv-current
 ------------------
@@ -3463,10 +3387,6 @@ Deactivate the current virtual enviroment
 virtualenv-workon
 -----------------
 Issue a virtualenvwrapper-like virtualenv-workon command
-
-;;; Execute forms at point
---------------------------
-
 
 py-execute-statement
 --------------------
@@ -3500,13 +3420,104 @@ py-execute-partial-expression
 -----------------------------
 Send partial-expression at point to a Python interpreter. 
 
-;;; Execute line
-----------------
+py-execute-top-level
+--------------------
+Send top-level at point to a Python interpreter. 
 
+py-execute-clause
+-----------------
+Send clause at point to a Python interpreter. 
 
-;;; Execute file commands
+py-fast-process
+---------------
+Connect am (I)Python process suitable for large output.
+
+Output buffer displays "Fast" in name by default
+It is not in interactive, i.e. comint-mode, as its bookkeepings seem linked to the freeze reported by lp:1253907
+
+Return the process
+
+py-fast-send-string
+-------------------
+Evaluate STRING in Python process which is not in comint-mode.
+
+From a programm use `py--fast-send-string'
+
+py-execute-statement-fast
 -------------------------
+Process statement at point by a Python interpreter.
 
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-block-fast
+---------------------
+Process block at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-block-or-clause-fast
+-------------------------------
+Process block-or-clause at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-def-fast
+-------------------
+Process def at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-class-fast
+---------------------
+Process class at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-def-or-class-fast
+----------------------------
+Process def-or-class at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-expression-fast
+--------------------------
+Process expression at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-partial-expression-fast
+----------------------------------
+Process partial-expression at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-top-level-fast
+-------------------------
+Process top-level at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-execute-clause-fast
+----------------------
+Process clause at point by a Python interpreter.
+
+Suitable for large output, doesn't mess up interactive shell.
+Output-buffer is not in comint-mode 
+
+py-fast-complete
+----------------
+Complete word before point, if any.
+
+Use `py-fast-process' 
 
 py-execute-file-python
 ----------------------
@@ -3751,33 +3762,43 @@ Send file to a Bpython interpreter.
 Uses a dedicated shell.
 Ignores default of `py-switch-buffers-on-execute-p', uses it with value "non-nil"
 
-;;; Extended executes
----------------------
-
+py-execute-statement-dedicated
+------------------------------
+Send statement to unique interpreter. 
 
 py-execute-statement-python
 ---------------------------
-Send statement at point to Python interpreter. 
+Send statement at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-statement-python-switch
 ----------------------------------
-Send statement at point to Python interpreter.
+Send statement at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-statement-python-no-switch
 -------------------------------------
-Send statement at point to Python interpreter.
+Send statement at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-statement-python-dedicated
 -------------------------------------
-Send statement at point to Python unique interpreter. 
+Send statement at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-statement-python-dedicated-switch
 --------------------------------------------
-Send statement at point to Python unique interpreter and switch to result. 
+Send statement at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-statement-ipython
 ----------------------------
@@ -3803,30 +3824,6 @@ py-execute-statement-ipython-dedicated-switch
 ---------------------------------------------
 Send statement at point to IPython unique interpreter and switch to result. 
 
-py-execute-statement-python3
-----------------------------
-Send statement at point to Python3 interpreter. 
-
-py-execute-statement-python3-switch
------------------------------------
-Send statement at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-statement-python3-no-switch
---------------------------------------
-Send statement at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-statement-python3-dedicated
---------------------------------------
-Send statement at point to Python3 unique interpreter. 
-
-py-execute-statement-python3-dedicated-switch
----------------------------------------------
-Send statement at point to Python3 unique interpreter and switch to result. 
-
 py-execute-statement-python2
 ----------------------------
 Send statement at point to Python2 interpreter. 
@@ -3850,30 +3847,6 @@ Send statement at point to Python2 unique interpreter.
 py-execute-statement-python2-dedicated-switch
 ---------------------------------------------
 Send statement at point to Python2 unique interpreter and switch to result. 
-
-py-execute-statement-python2\.7
--------------------------------
-Send statement at point to Python2.7 interpreter. 
-
-py-execute-statement-python2\.7-switch
---------------------------------------
-Send statement at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-statement-python2\.7-no-switch
------------------------------------------
-Send statement at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-statement-python2\.7-dedicated
------------------------------------------
-Send statement at point to Python2.7 unique interpreter. 
-
-py-execute-statement-python2\.7-dedicated-switch
-------------------------------------------------
-Send statement at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-statement-jython
 ---------------------------
@@ -3899,53 +3872,29 @@ py-execute-statement-jython-dedicated-switch
 --------------------------------------------
 Send statement at point to Jython unique interpreter and switch to result. 
 
-py-execute-statement-python3\.2
--------------------------------
-Send statement at point to Python3.2 interpreter. 
+py-execute-statement-python3
+----------------------------
+Send statement at point to Python3 interpreter. 
 
-py-execute-statement-python3\.2-switch
---------------------------------------
-Send statement at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-statement-python3\.2-no-switch
------------------------------------------
-Send statement at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-statement-python3\.2-dedicated
------------------------------------------
-Send statement at point to Python3.2 unique interpreter. 
-
-py-execute-statement-python3\.2-dedicated-switch
-------------------------------------------------
-Send statement at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-statement-python3\.3
--------------------------------
-Send statement at point to Python3.3 interpreter. 
-
-py-execute-statement-python3\.3-switch
---------------------------------------
-Send statement at point to Python3.3 interpreter.
+py-execute-statement-python3-switch
+-----------------------------------
+Send statement at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-statement-python3\.3-no-switch
------------------------------------------
-Send statement at point to Python3.3 interpreter.
+py-execute-statement-python3-no-switch
+--------------------------------------
+Send statement at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-statement-python3\.3-dedicated
------------------------------------------
-Send statement at point to Python3.3 unique interpreter. 
+py-execute-statement-python3-dedicated
+--------------------------------------
+Send statement at point to Python3 unique interpreter. 
 
-py-execute-statement-python3\.3-dedicated-switch
-------------------------------------------------
-Send statement at point to Python3.3 unique interpreter and switch to result. 
+py-execute-statement-python3-dedicated-switch
+---------------------------------------------
+Send statement at point to Python3 unique interpreter and switch to result. 
 
 py-execute-statement-bpython
 ----------------------------
@@ -3971,29 +3920,43 @@ py-execute-statement-bpython-dedicated-switch
 ---------------------------------------------
 Send statement at point to Bpython unique interpreter and switch to result. 
 
+py-execute-block-dedicated
+--------------------------
+Send block to unique interpreter. 
+
 py-execute-block-python
 -----------------------
-Send block at point to Python interpreter. 
+Send block at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-python-switch
 ------------------------------
-Send block at point to Python interpreter.
+Send block at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-python-no-switch
 ---------------------------------
-Send block at point to Python interpreter.
+Send block at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-python-dedicated
 ---------------------------------
-Send block at point to Python unique interpreter. 
+Send block at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-python-dedicated-switch
 ----------------------------------------
-Send block at point to Python unique interpreter and switch to result. 
+Send block at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-ipython
 ------------------------
@@ -4019,30 +3982,6 @@ py-execute-block-ipython-dedicated-switch
 -----------------------------------------
 Send block at point to IPython unique interpreter and switch to result. 
 
-py-execute-block-python3
-------------------------
-Send block at point to Python3 interpreter. 
-
-py-execute-block-python3-switch
--------------------------------
-Send block at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-block-python3-no-switch
-----------------------------------
-Send block at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-block-python3-dedicated
-----------------------------------
-Send block at point to Python3 unique interpreter. 
-
-py-execute-block-python3-dedicated-switch
------------------------------------------
-Send block at point to Python3 unique interpreter and switch to result. 
-
 py-execute-block-python2
 ------------------------
 Send block at point to Python2 interpreter. 
@@ -4066,30 +4005,6 @@ Send block at point to Python2 unique interpreter.
 py-execute-block-python2-dedicated-switch
 -----------------------------------------
 Send block at point to Python2 unique interpreter and switch to result. 
-
-py-execute-block-python2\.7
----------------------------
-Send block at point to Python2.7 interpreter. 
-
-py-execute-block-python2\.7-switch
-----------------------------------
-Send block at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-block-python2\.7-no-switch
--------------------------------------
-Send block at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-block-python2\.7-dedicated
--------------------------------------
-Send block at point to Python2.7 unique interpreter. 
-
-py-execute-block-python2\.7-dedicated-switch
---------------------------------------------
-Send block at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-block-jython
 -----------------------
@@ -4115,53 +4030,29 @@ py-execute-block-jython-dedicated-switch
 ----------------------------------------
 Send block at point to Jython unique interpreter and switch to result. 
 
-py-execute-block-python3\.2
----------------------------
-Send block at point to Python3.2 interpreter. 
+py-execute-block-python3
+------------------------
+Send block at point to Python3 interpreter. 
 
-py-execute-block-python3\.2-switch
-----------------------------------
-Send block at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-block-python3\.2-no-switch
--------------------------------------
-Send block at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-block-python3\.2-dedicated
--------------------------------------
-Send block at point to Python3.2 unique interpreter. 
-
-py-execute-block-python3\.2-dedicated-switch
---------------------------------------------
-Send block at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-block-python3\.3
----------------------------
-Send block at point to Python3.3 interpreter. 
-
-py-execute-block-python3\.3-switch
-----------------------------------
-Send block at point to Python3.3 interpreter.
+py-execute-block-python3-switch
+-------------------------------
+Send block at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-block-python3\.3-no-switch
--------------------------------------
-Send block at point to Python3.3 interpreter.
+py-execute-block-python3-no-switch
+----------------------------------
+Send block at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-block-python3\.3-dedicated
--------------------------------------
-Send block at point to Python3.3 unique interpreter. 
+py-execute-block-python3-dedicated
+----------------------------------
+Send block at point to Python3 unique interpreter. 
 
-py-execute-block-python3\.3-dedicated-switch
---------------------------------------------
-Send block at point to Python3.3 unique interpreter and switch to result. 
+py-execute-block-python3-dedicated-switch
+-----------------------------------------
+Send block at point to Python3 unique interpreter and switch to result. 
 
 py-execute-block-bpython
 ------------------------
@@ -4187,29 +4078,43 @@ py-execute-block-bpython-dedicated-switch
 -----------------------------------------
 Send block at point to Bpython unique interpreter and switch to result. 
 
+py-execute-clause-dedicated
+---------------------------
+Send clause to unique interpreter. 
+
 py-execute-clause-python
 ------------------------
-Send clause at point to Python interpreter. 
+Send clause at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-clause-python-switch
 -------------------------------
-Send clause at point to Python interpreter.
+Send clause at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-clause-python-no-switch
 ----------------------------------
-Send clause at point to Python interpreter.
+Send clause at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-clause-python-dedicated
 ----------------------------------
-Send clause at point to Python unique interpreter. 
+Send clause at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-clause-python-dedicated-switch
 -----------------------------------------
-Send clause at point to Python unique interpreter and switch to result. 
+Send clause at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-clause-ipython
 -------------------------
@@ -4235,30 +4140,6 @@ py-execute-clause-ipython-dedicated-switch
 ------------------------------------------
 Send clause at point to IPython unique interpreter and switch to result. 
 
-py-execute-clause-python3
--------------------------
-Send clause at point to Python3 interpreter. 
-
-py-execute-clause-python3-switch
---------------------------------
-Send clause at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-clause-python3-no-switch
------------------------------------
-Send clause at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-clause-python3-dedicated
------------------------------------
-Send clause at point to Python3 unique interpreter. 
-
-py-execute-clause-python3-dedicated-switch
-------------------------------------------
-Send clause at point to Python3 unique interpreter and switch to result. 
-
 py-execute-clause-python2
 -------------------------
 Send clause at point to Python2 interpreter. 
@@ -4282,30 +4163,6 @@ Send clause at point to Python2 unique interpreter.
 py-execute-clause-python2-dedicated-switch
 ------------------------------------------
 Send clause at point to Python2 unique interpreter and switch to result. 
-
-py-execute-clause-python2\.7
-----------------------------
-Send clause at point to Python2.7 interpreter. 
-
-py-execute-clause-python2\.7-switch
------------------------------------
-Send clause at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-clause-python2\.7-no-switch
---------------------------------------
-Send clause at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-clause-python2\.7-dedicated
---------------------------------------
-Send clause at point to Python2.7 unique interpreter. 
-
-py-execute-clause-python2\.7-dedicated-switch
----------------------------------------------
-Send clause at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-clause-jython
 ------------------------
@@ -4331,53 +4188,29 @@ py-execute-clause-jython-dedicated-switch
 -----------------------------------------
 Send clause at point to Jython unique interpreter and switch to result. 
 
-py-execute-clause-python3\.2
-----------------------------
-Send clause at point to Python3.2 interpreter. 
+py-execute-clause-python3
+-------------------------
+Send clause at point to Python3 interpreter. 
 
-py-execute-clause-python3\.2-switch
------------------------------------
-Send clause at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-clause-python3\.2-no-switch
---------------------------------------
-Send clause at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-clause-python3\.2-dedicated
---------------------------------------
-Send clause at point to Python3.2 unique interpreter. 
-
-py-execute-clause-python3\.2-dedicated-switch
----------------------------------------------
-Send clause at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-clause-python3\.3
-----------------------------
-Send clause at point to Python3.3 interpreter. 
-
-py-execute-clause-python3\.3-switch
------------------------------------
-Send clause at point to Python3.3 interpreter.
+py-execute-clause-python3-switch
+--------------------------------
+Send clause at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-clause-python3\.3-no-switch
---------------------------------------
-Send clause at point to Python3.3 interpreter.
+py-execute-clause-python3-no-switch
+-----------------------------------
+Send clause at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-clause-python3\.3-dedicated
---------------------------------------
-Send clause at point to Python3.3 unique interpreter. 
+py-execute-clause-python3-dedicated
+-----------------------------------
+Send clause at point to Python3 unique interpreter. 
 
-py-execute-clause-python3\.3-dedicated-switch
----------------------------------------------
-Send clause at point to Python3.3 unique interpreter and switch to result. 
+py-execute-clause-python3-dedicated-switch
+------------------------------------------
+Send clause at point to Python3 unique interpreter and switch to result. 
 
 py-execute-clause-bpython
 -------------------------
@@ -4403,29 +4236,43 @@ py-execute-clause-bpython-dedicated-switch
 ------------------------------------------
 Send clause at point to Bpython unique interpreter and switch to result. 
 
+py-execute-block-or-clause-dedicated
+------------------------------------
+Send block-or-clause to unique interpreter. 
+
 py-execute-block-or-clause-python
 ---------------------------------
-Send block-or-clause at point to Python interpreter. 
+Send block-or-clause at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-or-clause-python-switch
 ----------------------------------------
-Send block-or-clause at point to Python interpreter.
+Send block-or-clause at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-or-clause-python-no-switch
 -------------------------------------------
-Send block-or-clause at point to Python interpreter.
+Send block-or-clause at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-or-clause-python-dedicated
 -------------------------------------------
-Send block-or-clause at point to Python unique interpreter. 
+Send block-or-clause at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-or-clause-python-dedicated-switch
 --------------------------------------------------
-Send block-or-clause at point to Python unique interpreter and switch to result. 
+Send block-or-clause at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-block-or-clause-ipython
 ----------------------------------
@@ -4451,30 +4298,6 @@ py-execute-block-or-clause-ipython-dedicated-switch
 ---------------------------------------------------
 Send block-or-clause at point to IPython unique interpreter and switch to result. 
 
-py-execute-block-or-clause-python3
-----------------------------------
-Send block-or-clause at point to Python3 interpreter. 
-
-py-execute-block-or-clause-python3-switch
------------------------------------------
-Send block-or-clause at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-block-or-clause-python3-no-switch
---------------------------------------------
-Send block-or-clause at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-block-or-clause-python3-dedicated
---------------------------------------------
-Send block-or-clause at point to Python3 unique interpreter. 
-
-py-execute-block-or-clause-python3-dedicated-switch
----------------------------------------------------
-Send block-or-clause at point to Python3 unique interpreter and switch to result. 
-
 py-execute-block-or-clause-python2
 ----------------------------------
 Send block-or-clause at point to Python2 interpreter. 
@@ -4498,30 +4321,6 @@ Send block-or-clause at point to Python2 unique interpreter.
 py-execute-block-or-clause-python2-dedicated-switch
 ---------------------------------------------------
 Send block-or-clause at point to Python2 unique interpreter and switch to result. 
-
-py-execute-block-or-clause-python2\.7
--------------------------------------
-Send block-or-clause at point to Python2.7 interpreter. 
-
-py-execute-block-or-clause-python2\.7-switch
---------------------------------------------
-Send block-or-clause at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-block-or-clause-python2\.7-no-switch
------------------------------------------------
-Send block-or-clause at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-block-or-clause-python2\.7-dedicated
------------------------------------------------
-Send block-or-clause at point to Python2.7 unique interpreter. 
-
-py-execute-block-or-clause-python2\.7-dedicated-switch
-------------------------------------------------------
-Send block-or-clause at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-block-or-clause-jython
 ---------------------------------
@@ -4547,53 +4346,29 @@ py-execute-block-or-clause-jython-dedicated-switch
 --------------------------------------------------
 Send block-or-clause at point to Jython unique interpreter and switch to result. 
 
-py-execute-block-or-clause-python3\.2
--------------------------------------
-Send block-or-clause at point to Python3.2 interpreter. 
+py-execute-block-or-clause-python3
+----------------------------------
+Send block-or-clause at point to Python3 interpreter. 
 
-py-execute-block-or-clause-python3\.2-switch
---------------------------------------------
-Send block-or-clause at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-block-or-clause-python3\.2-no-switch
------------------------------------------------
-Send block-or-clause at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-block-or-clause-python3\.2-dedicated
------------------------------------------------
-Send block-or-clause at point to Python3.2 unique interpreter. 
-
-py-execute-block-or-clause-python3\.2-dedicated-switch
-------------------------------------------------------
-Send block-or-clause at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-block-or-clause-python3\.3
--------------------------------------
-Send block-or-clause at point to Python3.3 interpreter. 
-
-py-execute-block-or-clause-python3\.3-switch
---------------------------------------------
-Send block-or-clause at point to Python3.3 interpreter.
+py-execute-block-or-clause-python3-switch
+-----------------------------------------
+Send block-or-clause at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-block-or-clause-python3\.3-no-switch
------------------------------------------------
-Send block-or-clause at point to Python3.3 interpreter.
+py-execute-block-or-clause-python3-no-switch
+--------------------------------------------
+Send block-or-clause at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-block-or-clause-python3\.3-dedicated
------------------------------------------------
-Send block-or-clause at point to Python3.3 unique interpreter. 
+py-execute-block-or-clause-python3-dedicated
+--------------------------------------------
+Send block-or-clause at point to Python3 unique interpreter. 
 
-py-execute-block-or-clause-python3\.3-dedicated-switch
-------------------------------------------------------
-Send block-or-clause at point to Python3.3 unique interpreter and switch to result. 
+py-execute-block-or-clause-python3-dedicated-switch
+---------------------------------------------------
+Send block-or-clause at point to Python3 unique interpreter and switch to result. 
 
 py-execute-block-or-clause-bpython
 ----------------------------------
@@ -4619,29 +4394,43 @@ py-execute-block-or-clause-bpython-dedicated-switch
 ---------------------------------------------------
 Send block-or-clause at point to Bpython unique interpreter and switch to result. 
 
+py-execute-def-dedicated
+------------------------
+Send def to unique interpreter. 
+
 py-execute-def-python
 ---------------------
-Send def at point to Python interpreter. 
+Send def at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-def-python-switch
 ----------------------------
-Send def at point to Python interpreter.
+Send def at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-def-python-no-switch
 -------------------------------
-Send def at point to Python interpreter.
+Send def at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-def-python-dedicated
 -------------------------------
-Send def at point to Python unique interpreter. 
+Send def at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-def-python-dedicated-switch
 --------------------------------------
-Send def at point to Python unique interpreter and switch to result. 
+Send def at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-def-ipython
 ----------------------
@@ -4667,30 +4456,6 @@ py-execute-def-ipython-dedicated-switch
 ---------------------------------------
 Send def at point to IPython unique interpreter and switch to result. 
 
-py-execute-def-python3
-----------------------
-Send def at point to Python3 interpreter. 
-
-py-execute-def-python3-switch
------------------------------
-Send def at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-def-python3-no-switch
---------------------------------
-Send def at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-def-python3-dedicated
---------------------------------
-Send def at point to Python3 unique interpreter. 
-
-py-execute-def-python3-dedicated-switch
----------------------------------------
-Send def at point to Python3 unique interpreter and switch to result. 
-
 py-execute-def-python2
 ----------------------
 Send def at point to Python2 interpreter. 
@@ -4714,30 +4479,6 @@ Send def at point to Python2 unique interpreter.
 py-execute-def-python2-dedicated-switch
 ---------------------------------------
 Send def at point to Python2 unique interpreter and switch to result. 
-
-py-execute-def-python2\.7
--------------------------
-Send def at point to Python2.7 interpreter. 
-
-py-execute-def-python2\.7-switch
---------------------------------
-Send def at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-def-python2\.7-no-switch
------------------------------------
-Send def at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-def-python2\.7-dedicated
------------------------------------
-Send def at point to Python2.7 unique interpreter. 
-
-py-execute-def-python2\.7-dedicated-switch
-------------------------------------------
-Send def at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-def-jython
 ---------------------
@@ -4763,53 +4504,29 @@ py-execute-def-jython-dedicated-switch
 --------------------------------------
 Send def at point to Jython unique interpreter and switch to result. 
 
-py-execute-def-python3\.2
--------------------------
-Send def at point to Python3.2 interpreter. 
+py-execute-def-python3
+----------------------
+Send def at point to Python3 interpreter. 
 
-py-execute-def-python3\.2-switch
---------------------------------
-Send def at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-def-python3\.2-no-switch
------------------------------------
-Send def at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-def-python3\.2-dedicated
------------------------------------
-Send def at point to Python3.2 unique interpreter. 
-
-py-execute-def-python3\.2-dedicated-switch
-------------------------------------------
-Send def at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-def-python3\.3
--------------------------
-Send def at point to Python3.3 interpreter. 
-
-py-execute-def-python3\.3-switch
---------------------------------
-Send def at point to Python3.3 interpreter.
+py-execute-def-python3-switch
+-----------------------------
+Send def at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-def-python3\.3-no-switch
------------------------------------
-Send def at point to Python3.3 interpreter.
+py-execute-def-python3-no-switch
+--------------------------------
+Send def at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-def-python3\.3-dedicated
------------------------------------
-Send def at point to Python3.3 unique interpreter. 
+py-execute-def-python3-dedicated
+--------------------------------
+Send def at point to Python3 unique interpreter. 
 
-py-execute-def-python3\.3-dedicated-switch
-------------------------------------------
-Send def at point to Python3.3 unique interpreter and switch to result. 
+py-execute-def-python3-dedicated-switch
+---------------------------------------
+Send def at point to Python3 unique interpreter and switch to result. 
 
 py-execute-def-bpython
 ----------------------
@@ -4835,29 +4552,43 @@ py-execute-def-bpython-dedicated-switch
 ---------------------------------------
 Send def at point to Bpython unique interpreter and switch to result. 
 
+py-execute-class-dedicated
+--------------------------
+Send class to unique interpreter. 
+
 py-execute-class-python
 -----------------------
-Send class at point to Python interpreter. 
+Send class at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-class-python-switch
 ------------------------------
-Send class at point to Python interpreter.
+Send class at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-class-python-no-switch
 ---------------------------------
-Send class at point to Python interpreter.
+Send class at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-class-python-dedicated
 ---------------------------------
-Send class at point to Python unique interpreter. 
+Send class at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-class-python-dedicated-switch
 ----------------------------------------
-Send class at point to Python unique interpreter and switch to result. 
+Send class at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-class-ipython
 ------------------------
@@ -4883,30 +4614,6 @@ py-execute-class-ipython-dedicated-switch
 -----------------------------------------
 Send class at point to IPython unique interpreter and switch to result. 
 
-py-execute-class-python3
-------------------------
-Send class at point to Python3 interpreter. 
-
-py-execute-class-python3-switch
--------------------------------
-Send class at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-class-python3-no-switch
-----------------------------------
-Send class at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-class-python3-dedicated
-----------------------------------
-Send class at point to Python3 unique interpreter. 
-
-py-execute-class-python3-dedicated-switch
------------------------------------------
-Send class at point to Python3 unique interpreter and switch to result. 
-
 py-execute-class-python2
 ------------------------
 Send class at point to Python2 interpreter. 
@@ -4930,30 +4637,6 @@ Send class at point to Python2 unique interpreter.
 py-execute-class-python2-dedicated-switch
 -----------------------------------------
 Send class at point to Python2 unique interpreter and switch to result. 
-
-py-execute-class-python2\.7
----------------------------
-Send class at point to Python2.7 interpreter. 
-
-py-execute-class-python2\.7-switch
-----------------------------------
-Send class at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-class-python2\.7-no-switch
--------------------------------------
-Send class at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-class-python2\.7-dedicated
--------------------------------------
-Send class at point to Python2.7 unique interpreter. 
-
-py-execute-class-python2\.7-dedicated-switch
---------------------------------------------
-Send class at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-class-jython
 -----------------------
@@ -4979,53 +4662,29 @@ py-execute-class-jython-dedicated-switch
 ----------------------------------------
 Send class at point to Jython unique interpreter and switch to result. 
 
-py-execute-class-python3\.2
----------------------------
-Send class at point to Python3.2 interpreter. 
+py-execute-class-python3
+------------------------
+Send class at point to Python3 interpreter. 
 
-py-execute-class-python3\.2-switch
-----------------------------------
-Send class at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-class-python3\.2-no-switch
--------------------------------------
-Send class at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-class-python3\.2-dedicated
--------------------------------------
-Send class at point to Python3.2 unique interpreter. 
-
-py-execute-class-python3\.2-dedicated-switch
---------------------------------------------
-Send class at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-class-python3\.3
----------------------------
-Send class at point to Python3.3 interpreter. 
-
-py-execute-class-python3\.3-switch
-----------------------------------
-Send class at point to Python3.3 interpreter.
+py-execute-class-python3-switch
+-------------------------------
+Send class at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-class-python3\.3-no-switch
--------------------------------------
-Send class at point to Python3.3 interpreter.
+py-execute-class-python3-no-switch
+----------------------------------
+Send class at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-class-python3\.3-dedicated
--------------------------------------
-Send class at point to Python3.3 unique interpreter. 
+py-execute-class-python3-dedicated
+----------------------------------
+Send class at point to Python3 unique interpreter. 
 
-py-execute-class-python3\.3-dedicated-switch
---------------------------------------------
-Send class at point to Python3.3 unique interpreter and switch to result. 
+py-execute-class-python3-dedicated-switch
+-----------------------------------------
+Send class at point to Python3 unique interpreter and switch to result. 
 
 py-execute-class-bpython
 ------------------------
@@ -5053,27 +4712,37 @@ Send class at point to Bpython unique interpreter and switch to result.
 
 py-execute-region-python
 ------------------------
-Send region at point to Python interpreter. 
+Send region at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-region-python-switch
 -------------------------------
-Send region at point to Python interpreter.
+Send region at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-region-python-no-switch
 ----------------------------------
-Send region at point to Python interpreter.
+Send region at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-region-python-dedicated
 ----------------------------------
-Send region at point to Python unique interpreter. 
+Send region at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-region-python-dedicated-switch
 -----------------------------------------
-Send region at point to Python unique interpreter and switch to result. 
+Send region at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-region-ipython
 -------------------------
@@ -5099,30 +4768,6 @@ py-execute-region-ipython-dedicated-switch
 ------------------------------------------
 Send region at point to IPython unique interpreter and switch to result. 
 
-py-execute-region-python3
--------------------------
-Send region at point to Python3 interpreter. 
-
-py-execute-region-python3-switch
---------------------------------
-Send region at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-region-python3-no-switch
------------------------------------
-Send region at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-region-python3-dedicated
------------------------------------
-Send region at point to Python3 unique interpreter. 
-
-py-execute-region-python3-dedicated-switch
-------------------------------------------
-Send region at point to Python3 unique interpreter and switch to result. 
-
 py-execute-region-python2
 -------------------------
 Send region at point to Python2 interpreter. 
@@ -5146,30 +4791,6 @@ Send region at point to Python2 unique interpreter.
 py-execute-region-python2-dedicated-switch
 ------------------------------------------
 Send region at point to Python2 unique interpreter and switch to result. 
-
-py-execute-region-python2\.7
-----------------------------
-Send region at point to Python2.7 interpreter. 
-
-py-execute-region-python2\.7-switch
------------------------------------
-Send region at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-region-python2\.7-no-switch
---------------------------------------
-Send region at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-region-python2\.7-dedicated
---------------------------------------
-Send region at point to Python2.7 unique interpreter. 
-
-py-execute-region-python2\.7-dedicated-switch
----------------------------------------------
-Send region at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-region-jython
 ------------------------
@@ -5195,53 +4816,29 @@ py-execute-region-jython-dedicated-switch
 -----------------------------------------
 Send region at point to Jython unique interpreter and switch to result. 
 
-py-execute-region-python3\.2
-----------------------------
-Send region at point to Python3.2 interpreter. 
+py-execute-region-python3
+-------------------------
+Send region at point to Python3 interpreter. 
 
-py-execute-region-python3\.2-switch
------------------------------------
-Send region at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-region-python3\.2-no-switch
---------------------------------------
-Send region at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-region-python3\.2-dedicated
---------------------------------------
-Send region at point to Python3.2 unique interpreter. 
-
-py-execute-region-python3\.2-dedicated-switch
----------------------------------------------
-Send region at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-region-python3\.3
-----------------------------
-Send region at point to Python3.3 interpreter. 
-
-py-execute-region-python3\.3-switch
------------------------------------
-Send region at point to Python3.3 interpreter.
+py-execute-region-python3-switch
+--------------------------------
+Send region at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-region-python3\.3-no-switch
---------------------------------------
-Send region at point to Python3.3 interpreter.
+py-execute-region-python3-no-switch
+-----------------------------------
+Send region at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-region-python3\.3-dedicated
---------------------------------------
-Send region at point to Python3.3 unique interpreter. 
+py-execute-region-python3-dedicated
+-----------------------------------
+Send region at point to Python3 unique interpreter. 
 
-py-execute-region-python3\.3-dedicated-switch
----------------------------------------------
-Send region at point to Python3.3 unique interpreter and switch to result. 
+py-execute-region-python3-dedicated-switch
+------------------------------------------
+Send region at point to Python3 unique interpreter and switch to result. 
 
 py-execute-region-bpython
 -------------------------
@@ -5269,27 +4866,37 @@ Send region at point to Bpython unique interpreter and switch to result.
 
 py-execute-buffer-python
 ------------------------
-Send buffer at point to Python interpreter. 
+Send buffer at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-buffer-python-switch
 -------------------------------
-Send buffer at point to Python interpreter.
+Send buffer at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-buffer-python-no-switch
 ----------------------------------
-Send buffer at point to Python interpreter.
+Send buffer at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-buffer-python-dedicated
 ----------------------------------
-Send buffer at point to Python unique interpreter. 
+Send buffer at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-buffer-python-dedicated-switch
 -----------------------------------------
-Send buffer at point to Python unique interpreter and switch to result. 
+Send buffer at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-buffer-ipython
 -------------------------
@@ -5315,30 +4922,6 @@ py-execute-buffer-ipython-dedicated-switch
 ------------------------------------------
 Send buffer at point to IPython unique interpreter and switch to result. 
 
-py-execute-buffer-python3
--------------------------
-Send buffer at point to Python3 interpreter. 
-
-py-execute-buffer-python3-switch
---------------------------------
-Send buffer at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-buffer-python3-no-switch
------------------------------------
-Send buffer at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-buffer-python3-dedicated
------------------------------------
-Send buffer at point to Python3 unique interpreter. 
-
-py-execute-buffer-python3-dedicated-switch
-------------------------------------------
-Send buffer at point to Python3 unique interpreter and switch to result. 
-
 py-execute-buffer-python2
 -------------------------
 Send buffer at point to Python2 interpreter. 
@@ -5362,30 +4945,6 @@ Send buffer at point to Python2 unique interpreter.
 py-execute-buffer-python2-dedicated-switch
 ------------------------------------------
 Send buffer at point to Python2 unique interpreter and switch to result. 
-
-py-execute-buffer-python2\.7
-----------------------------
-Send buffer at point to Python2.7 interpreter. 
-
-py-execute-buffer-python2\.7-switch
------------------------------------
-Send buffer at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-buffer-python2\.7-no-switch
---------------------------------------
-Send buffer at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-buffer-python2\.7-dedicated
---------------------------------------
-Send buffer at point to Python2.7 unique interpreter. 
-
-py-execute-buffer-python2\.7-dedicated-switch
----------------------------------------------
-Send buffer at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-buffer-jython
 ------------------------
@@ -5411,53 +4970,29 @@ py-execute-buffer-jython-dedicated-switch
 -----------------------------------------
 Send buffer at point to Jython unique interpreter and switch to result. 
 
-py-execute-buffer-python3\.2
-----------------------------
-Send buffer at point to Python3.2 interpreter. 
+py-execute-buffer-python3
+-------------------------
+Send buffer at point to Python3 interpreter. 
 
-py-execute-buffer-python3\.2-switch
------------------------------------
-Send buffer at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-buffer-python3\.2-no-switch
---------------------------------------
-Send buffer at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-buffer-python3\.2-dedicated
---------------------------------------
-Send buffer at point to Python3.2 unique interpreter. 
-
-py-execute-buffer-python3\.2-dedicated-switch
----------------------------------------------
-Send buffer at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-buffer-python3\.3
-----------------------------
-Send buffer at point to Python3.3 interpreter. 
-
-py-execute-buffer-python3\.3-switch
------------------------------------
-Send buffer at point to Python3.3 interpreter.
+py-execute-buffer-python3-switch
+--------------------------------
+Send buffer at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-buffer-python3\.3-no-switch
---------------------------------------
-Send buffer at point to Python3.3 interpreter.
+py-execute-buffer-python3-no-switch
+-----------------------------------
+Send buffer at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-buffer-python3\.3-dedicated
---------------------------------------
-Send buffer at point to Python3.3 unique interpreter. 
+py-execute-buffer-python3-dedicated
+-----------------------------------
+Send buffer at point to Python3 unique interpreter. 
 
-py-execute-buffer-python3\.3-dedicated-switch
----------------------------------------------
-Send buffer at point to Python3.3 unique interpreter and switch to result. 
+py-execute-buffer-python3-dedicated-switch
+------------------------------------------
+Send buffer at point to Python3 unique interpreter and switch to result. 
 
 py-execute-buffer-bpython
 -------------------------
@@ -5483,29 +5018,43 @@ py-execute-buffer-bpython-dedicated-switch
 ------------------------------------------
 Send buffer at point to Bpython unique interpreter and switch to result. 
 
+py-execute-expression-dedicated
+-------------------------------
+Send expression to unique interpreter. 
+
 py-execute-expression-python
 ----------------------------
-Send expression at point to Python interpreter. 
+Send expression at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-expression-python-switch
 -----------------------------------
-Send expression at point to Python interpreter.
+Send expression at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-expression-python-no-switch
 --------------------------------------
-Send expression at point to Python interpreter.
+Send expression at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-expression-python-dedicated
 --------------------------------------
-Send expression at point to Python unique interpreter. 
+Send expression at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-expression-python-dedicated-switch
 ---------------------------------------------
-Send expression at point to Python unique interpreter and switch to result. 
+Send expression at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-expression-ipython
 -----------------------------
@@ -5531,30 +5080,6 @@ py-execute-expression-ipython-dedicated-switch
 ----------------------------------------------
 Send expression at point to IPython unique interpreter and switch to result. 
 
-py-execute-expression-python3
------------------------------
-Send expression at point to Python3 interpreter. 
-
-py-execute-expression-python3-switch
-------------------------------------
-Send expression at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-expression-python3-no-switch
----------------------------------------
-Send expression at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-expression-python3-dedicated
----------------------------------------
-Send expression at point to Python3 unique interpreter. 
-
-py-execute-expression-python3-dedicated-switch
-----------------------------------------------
-Send expression at point to Python3 unique interpreter and switch to result. 
-
 py-execute-expression-python2
 -----------------------------
 Send expression at point to Python2 interpreter. 
@@ -5578,30 +5103,6 @@ Send expression at point to Python2 unique interpreter.
 py-execute-expression-python2-dedicated-switch
 ----------------------------------------------
 Send expression at point to Python2 unique interpreter and switch to result. 
-
-py-execute-expression-python2\.7
---------------------------------
-Send expression at point to Python2.7 interpreter. 
-
-py-execute-expression-python2\.7-switch
----------------------------------------
-Send expression at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-expression-python2\.7-no-switch
-------------------------------------------
-Send expression at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-expression-python2\.7-dedicated
-------------------------------------------
-Send expression at point to Python2.7 unique interpreter. 
-
-py-execute-expression-python2\.7-dedicated-switch
--------------------------------------------------
-Send expression at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-expression-jython
 ----------------------------
@@ -5627,53 +5128,29 @@ py-execute-expression-jython-dedicated-switch
 ---------------------------------------------
 Send expression at point to Jython unique interpreter and switch to result. 
 
-py-execute-expression-python3\.2
---------------------------------
-Send expression at point to Python3.2 interpreter. 
+py-execute-expression-python3
+-----------------------------
+Send expression at point to Python3 interpreter. 
 
-py-execute-expression-python3\.2-switch
----------------------------------------
-Send expression at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-expression-python3\.2-no-switch
-------------------------------------------
-Send expression at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-expression-python3\.2-dedicated
-------------------------------------------
-Send expression at point to Python3.2 unique interpreter. 
-
-py-execute-expression-python3\.2-dedicated-switch
--------------------------------------------------
-Send expression at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-expression-python3\.3
---------------------------------
-Send expression at point to Python3.3 interpreter. 
-
-py-execute-expression-python3\.3-switch
----------------------------------------
-Send expression at point to Python3.3 interpreter.
+py-execute-expression-python3-switch
+------------------------------------
+Send expression at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-expression-python3\.3-no-switch
-------------------------------------------
-Send expression at point to Python3.3 interpreter.
+py-execute-expression-python3-no-switch
+---------------------------------------
+Send expression at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-expression-python3\.3-dedicated
-------------------------------------------
-Send expression at point to Python3.3 unique interpreter. 
+py-execute-expression-python3-dedicated
+---------------------------------------
+Send expression at point to Python3 unique interpreter. 
 
-py-execute-expression-python3\.3-dedicated-switch
--------------------------------------------------
-Send expression at point to Python3.3 unique interpreter and switch to result. 
+py-execute-expression-python3-dedicated-switch
+----------------------------------------------
+Send expression at point to Python3 unique interpreter and switch to result. 
 
 py-execute-expression-bpython
 -----------------------------
@@ -5699,29 +5176,43 @@ py-execute-expression-bpython-dedicated-switch
 ----------------------------------------------
 Send expression at point to Bpython unique interpreter and switch to result. 
 
+py-execute-partial-expression-dedicated
+---------------------------------------
+Send partial-expression to unique interpreter. 
+
 py-execute-partial-expression-python
 ------------------------------------
-Send partial-expression at point to Python interpreter. 
+Send partial-expression at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-partial-expression-python-switch
 -------------------------------------------
-Send partial-expression at point to Python interpreter.
+Send partial-expression at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-partial-expression-python-no-switch
 ----------------------------------------------
-Send partial-expression at point to Python interpreter.
+Send partial-expression at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-partial-expression-python-dedicated
 ----------------------------------------------
-Send partial-expression at point to Python unique interpreter. 
+Send partial-expression at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-partial-expression-python-dedicated-switch
 -----------------------------------------------------
-Send partial-expression at point to Python unique interpreter and switch to result. 
+Send partial-expression at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-partial-expression-ipython
 -------------------------------------
@@ -5747,30 +5238,6 @@ py-execute-partial-expression-ipython-dedicated-switch
 ------------------------------------------------------
 Send partial-expression at point to IPython unique interpreter and switch to result. 
 
-py-execute-partial-expression-python3
--------------------------------------
-Send partial-expression at point to Python3 interpreter. 
-
-py-execute-partial-expression-python3-switch
---------------------------------------------
-Send partial-expression at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-partial-expression-python3-no-switch
------------------------------------------------
-Send partial-expression at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-partial-expression-python3-dedicated
------------------------------------------------
-Send partial-expression at point to Python3 unique interpreter. 
-
-py-execute-partial-expression-python3-dedicated-switch
-------------------------------------------------------
-Send partial-expression at point to Python3 unique interpreter and switch to result. 
-
 py-execute-partial-expression-python2
 -------------------------------------
 Send partial-expression at point to Python2 interpreter. 
@@ -5794,30 +5261,6 @@ Send partial-expression at point to Python2 unique interpreter.
 py-execute-partial-expression-python2-dedicated-switch
 ------------------------------------------------------
 Send partial-expression at point to Python2 unique interpreter and switch to result. 
-
-py-execute-partial-expression-python2\.7
-----------------------------------------
-Send partial-expression at point to Python2.7 interpreter. 
-
-py-execute-partial-expression-python2\.7-switch
------------------------------------------------
-Send partial-expression at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-partial-expression-python2\.7-no-switch
---------------------------------------------------
-Send partial-expression at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-partial-expression-python2\.7-dedicated
---------------------------------------------------
-Send partial-expression at point to Python2.7 unique interpreter. 
-
-py-execute-partial-expression-python2\.7-dedicated-switch
----------------------------------------------------------
-Send partial-expression at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-partial-expression-jython
 ------------------------------------
@@ -5843,53 +5286,29 @@ py-execute-partial-expression-jython-dedicated-switch
 -----------------------------------------------------
 Send partial-expression at point to Jython unique interpreter and switch to result. 
 
-py-execute-partial-expression-python3\.2
-----------------------------------------
-Send partial-expression at point to Python3.2 interpreter. 
+py-execute-partial-expression-python3
+-------------------------------------
+Send partial-expression at point to Python3 interpreter. 
 
-py-execute-partial-expression-python3\.2-switch
------------------------------------------------
-Send partial-expression at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-partial-expression-python3\.2-no-switch
---------------------------------------------------
-Send partial-expression at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-partial-expression-python3\.2-dedicated
---------------------------------------------------
-Send partial-expression at point to Python3.2 unique interpreter. 
-
-py-execute-partial-expression-python3\.2-dedicated-switch
----------------------------------------------------------
-Send partial-expression at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-partial-expression-python3\.3
-----------------------------------------
-Send partial-expression at point to Python3.3 interpreter. 
-
-py-execute-partial-expression-python3\.3-switch
------------------------------------------------
-Send partial-expression at point to Python3.3 interpreter.
+py-execute-partial-expression-python3-switch
+--------------------------------------------
+Send partial-expression at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-partial-expression-python3\.3-no-switch
---------------------------------------------------
-Send partial-expression at point to Python3.3 interpreter.
+py-execute-partial-expression-python3-no-switch
+-----------------------------------------------
+Send partial-expression at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-partial-expression-python3\.3-dedicated
---------------------------------------------------
-Send partial-expression at point to Python3.3 unique interpreter. 
+py-execute-partial-expression-python3-dedicated
+-----------------------------------------------
+Send partial-expression at point to Python3 unique interpreter. 
 
-py-execute-partial-expression-python3\.3-dedicated-switch
----------------------------------------------------------
-Send partial-expression at point to Python3.3 unique interpreter and switch to result. 
+py-execute-partial-expression-python3-dedicated-switch
+------------------------------------------------------
+Send partial-expression at point to Python3 unique interpreter and switch to result. 
 
 py-execute-partial-expression-bpython
 -------------------------------------
@@ -5915,29 +5334,43 @@ py-execute-partial-expression-bpython-dedicated-switch
 ------------------------------------------------------
 Send partial-expression at point to Bpython unique interpreter and switch to result. 
 
+py-execute-line-dedicated
+-------------------------
+Send line to unique interpreter. 
+
 py-execute-line-python
 ----------------------
-Send line at point to Python interpreter. 
+Send line at point to default interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-line-python-switch
 -----------------------------
-Send line at point to Python interpreter.
+Send line at point to default interpreter.
 
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
 
 py-execute-line-python-no-switch
 --------------------------------
-Send line at point to Python interpreter.
+Send line at point to default interpreter.
 
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
 
 py-execute-line-python-dedicated
 --------------------------------
-Send line at point to Python unique interpreter. 
+Send line at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
 
 py-execute-line-python-dedicated-switch
 ---------------------------------------
-Send line at point to Python unique interpreter and switch to result. 
+Send line at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
 
 py-execute-line-ipython
 -----------------------
@@ -5963,30 +5396,6 @@ py-execute-line-ipython-dedicated-switch
 ----------------------------------------
 Send line at point to IPython unique interpreter and switch to result. 
 
-py-execute-line-python3
------------------------
-Send line at point to Python3 interpreter. 
-
-py-execute-line-python3-switch
-------------------------------
-Send line at point to Python3 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-line-python3-no-switch
----------------------------------
-Send line at point to Python3 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-line-python3-dedicated
----------------------------------
-Send line at point to Python3 unique interpreter. 
-
-py-execute-line-python3-dedicated-switch
-----------------------------------------
-Send line at point to Python3 unique interpreter and switch to result. 
-
 py-execute-line-python2
 -----------------------
 Send line at point to Python2 interpreter. 
@@ -6010,30 +5419,6 @@ Send line at point to Python2 unique interpreter.
 py-execute-line-python2-dedicated-switch
 ----------------------------------------
 Send line at point to Python2 unique interpreter and switch to result. 
-
-py-execute-line-python2\.7
---------------------------
-Send line at point to Python2.7 interpreter. 
-
-py-execute-line-python2\.7-switch
----------------------------------
-Send line at point to Python2.7 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-line-python2\.7-no-switch
-------------------------------------
-Send line at point to Python2.7 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-line-python2\.7-dedicated
-------------------------------------
-Send line at point to Python2.7 unique interpreter. 
-
-py-execute-line-python2\.7-dedicated-switch
--------------------------------------------
-Send line at point to Python2.7 unique interpreter and switch to result. 
 
 py-execute-line-jython
 ----------------------
@@ -6059,53 +5444,29 @@ py-execute-line-jython-dedicated-switch
 ---------------------------------------
 Send line at point to Jython unique interpreter and switch to result. 
 
-py-execute-line-python3\.2
---------------------------
-Send line at point to Python3.2 interpreter. 
+py-execute-line-python3
+-----------------------
+Send line at point to Python3 interpreter. 
 
-py-execute-line-python3\.2-switch
----------------------------------
-Send line at point to Python3.2 interpreter.
-
-Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
-
-py-execute-line-python3\.2-no-switch
-------------------------------------
-Send line at point to Python3.2 interpreter.
-
-Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
-
-py-execute-line-python3\.2-dedicated
-------------------------------------
-Send line at point to Python3.2 unique interpreter. 
-
-py-execute-line-python3\.2-dedicated-switch
--------------------------------------------
-Send line at point to Python3.2 unique interpreter and switch to result. 
-
-py-execute-line-python3\.3
---------------------------
-Send line at point to Python3.3 interpreter. 
-
-py-execute-line-python3\.3-switch
----------------------------------
-Send line at point to Python3.3 interpreter.
+py-execute-line-python3-switch
+------------------------------
+Send line at point to Python3 interpreter.
 
 Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
 
-py-execute-line-python3\.3-no-switch
-------------------------------------
-Send line at point to Python3.3 interpreter.
+py-execute-line-python3-no-switch
+---------------------------------
+Send line at point to Python3 interpreter.
 
 Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
 
-py-execute-line-python3\.3-dedicated
-------------------------------------
-Send line at point to Python3.3 unique interpreter. 
+py-execute-line-python3-dedicated
+---------------------------------
+Send line at point to Python3 unique interpreter. 
 
-py-execute-line-python3\.3-dedicated-switch
--------------------------------------------
-Send line at point to Python3.3 unique interpreter and switch to result. 
+py-execute-line-python3-dedicated-switch
+----------------------------------------
+Send line at point to Python3 unique interpreter and switch to result. 
 
 py-execute-line-bpython
 -----------------------
@@ -6131,9 +5492,163 @@ py-execute-line-bpython-dedicated-switch
 ----------------------------------------
 Send line at point to Bpython unique interpreter and switch to result. 
 
-;;; Subprocess utilities and filters
-------------------------------------
+py-execute-top-level-dedicated
+------------------------------
+Send top-level to unique interpreter. 
 
+py-execute-top-level-python
+---------------------------
+Send top-level at point to default interpreter.
+
+For `default' see value of `py-shell-name'
+
+py-execute-top-level-python-switch
+----------------------------------
+Send top-level at point to default interpreter.
+
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'.
+
+For `default' see value of `py-shell-name'
+
+py-execute-top-level-python-no-switch
+-------------------------------------
+Send top-level at point to default interpreter.
+
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p'
+
+For `default' see value of `py-shell-name'
+
+py-execute-top-level-python-dedicated
+-------------------------------------
+Send top-level at point to default unique interpreter.
+
+For `default' see value of `py-shell-name'
+
+py-execute-top-level-python-dedicated-switch
+--------------------------------------------
+Send top-level at point to default unique interpreter and switch to result.
+
+For `default' see value of `py-shell-name'
+
+py-execute-top-level-ipython
+----------------------------
+Send top-level at point to IPython interpreter. 
+
+py-execute-top-level-ipython-switch
+-----------------------------------
+Send top-level at point to IPython interpreter.
+
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+
+py-execute-top-level-ipython-no-switch
+--------------------------------------
+Send top-level at point to IPython interpreter.
+
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+
+py-execute-top-level-ipython-dedicated
+--------------------------------------
+Send top-level at point to IPython unique interpreter. 
+
+py-execute-top-level-ipython-dedicated-switch
+---------------------------------------------
+Send top-level at point to IPython unique interpreter and switch to result. 
+
+py-execute-top-level-python2
+----------------------------
+Send top-level at point to Python2 interpreter. 
+
+py-execute-top-level-python2-switch
+-----------------------------------
+Send top-level at point to Python2 interpreter.
+
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+
+py-execute-top-level-python2-no-switch
+--------------------------------------
+Send top-level at point to Python2 interpreter.
+
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+
+py-execute-top-level-python2-dedicated
+--------------------------------------
+Send top-level at point to Python2 unique interpreter. 
+
+py-execute-top-level-python2-dedicated-switch
+---------------------------------------------
+Send top-level at point to Python2 unique interpreter and switch to result. 
+
+py-execute-top-level-jython
+---------------------------
+Send top-level at point to Jython interpreter. 
+
+py-execute-top-level-jython-switch
+----------------------------------
+Send top-level at point to Jython interpreter.
+
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+
+py-execute-top-level-jython-no-switch
+-------------------------------------
+Send top-level at point to Jython interpreter.
+
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+
+py-execute-top-level-jython-dedicated
+-------------------------------------
+Send top-level at point to Jython unique interpreter. 
+
+py-execute-top-level-jython-dedicated-switch
+--------------------------------------------
+Send top-level at point to Jython unique interpreter and switch to result. 
+
+py-execute-top-level-python3
+----------------------------
+Send top-level at point to Python3 interpreter. 
+
+py-execute-top-level-python3-switch
+-----------------------------------
+Send top-level at point to Python3 interpreter.
+
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+
+py-execute-top-level-python3-no-switch
+--------------------------------------
+Send top-level at point to Python3 interpreter.
+
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+
+py-execute-top-level-python3-dedicated
+--------------------------------------
+Send top-level at point to Python3 unique interpreter. 
+
+py-execute-top-level-python3-dedicated-switch
+---------------------------------------------
+Send top-level at point to Python3 unique interpreter and switch to result. 
+
+py-execute-top-level-bpython
+----------------------------
+Send top-level at point to Bpython interpreter. 
+
+py-execute-top-level-bpython-switch
+-----------------------------------
+Send top-level at point to Bpython interpreter.
+
+Switch to output buffer. Ignores `py-switch-buffers-on-execute-p'. 
+
+py-execute-top-level-bpython-no-switch
+--------------------------------------
+Send top-level at point to Bpython interpreter.
+
+Keep current buffer. Ignores `py-switch-buffers-on-execute-p' 
+
+py-execute-top-level-bpython-dedicated
+--------------------------------------
+Send top-level at point to Bpython unique interpreter. 
+
+py-execute-top-level-bpython-dedicated-switch
+---------------------------------------------
+Send top-level at point to Bpython unique interpreter and switch to result. 
 
 py-remove-overlays-at-point
 ---------------------------
@@ -6169,12 +5684,19 @@ Clear output buffer from py-shell-input prompt etc.
 
 py-send-string
 --------------
-Evaluate STRING in inferior Python process.
+Evaluate STRING in Python process.
 
 py-send-file
 ------------
-Send FILE-NAME to inferior Python PROCESS.
+Send FILE-NAME to Python PROCESS.
 If TEMP-FILE-NAME is passed then that file is used for processing
 instead, while internally the shell will continue to use
 FILE-NAME.
+
+py-unload-python-el
+-------------------
+Unloads python-mode delivered by shipped python.el
+
+Removes python-skeleton forms from abbrevs.
+These would interfere when inserting forms heading a block
 

@@ -190,11 +190,33 @@ Return nil if DIR is not an existing directory."
             when printer
             collect printer))))
 
-;; Shut up byte compiler in emacs24*.
-(defun helm-switch-to-buffer (buffer-or-name)
-  "Same as `switch-to-buffer' whithout warnings at compile time."
-  (with-no-warnings
-    (switch-to-buffer buffer-or-name)))
+(defun helm-switch-to-buffers (buffer-or-name &optional other-window)
+  "Switch to buffer BUFFER-OR-NAME.
+If more than one buffer marked switch to these buffers in separate windows.
+If OTHER-WINDOW is specified keep current-buffer and switch to others buffers
+in separate windows."
+  (let* ((mkds (helm-marked-candidates))
+         (size (/ (window-height) (length mkds))))
+    (or (<= window-min-height size)
+        (error "Too many buffers to visit simultaneously."))
+    (helm-aif (cdr mkds)
+        (progn
+          (if other-window
+              (switch-to-buffer-other-window (car mkds))
+            (switch-to-buffer (car mkds)))
+          (save-selected-window
+            (cl-loop for b in it
+                  do (progn
+                       (select-window (split-window))
+                       (switch-to-buffer b)))))
+      (if other-window
+          (switch-to-buffer-other-window buffer-or-name)
+        (switch-to-buffer buffer-or-name)))))
+
+(defun helm-switch-to-buffers-other-window (buffer-or-name)
+  "switch to buffer BUFFER-OR-NAME in other window.
+See `helm-switch-to-buffers' for switching to marked buffers."
+  (helm-switch-to-buffers buffer-or-name t))
 
 (cl-defmacro helm-position (item seq &key (test 'eq) all)
   "A simple and faster replacement of CL `position'.
@@ -400,8 +422,11 @@ from its directory."
    (let* ((sel       (helm-get-selection))
           (grep-line (and (stringp sel)
                           (helm-grep-split-line sel)))
-          (bmk-name  (replace-regexp-in-string "\\`\\*" "" sel))
-          (bmk       (assoc bmk-name bookmark-alist)))
+          (bmk-name  (and (stringp sel)
+                          (replace-regexp-in-string "\\`\\*" "" sel)))
+          (bmk       (and bmk-name (assoc bmk-name bookmark-alist)))
+          (default-preselection (or (buffer-file-name helm-current-buffer)
+                                    default-directory)))
      (if (stringp sel)
          (helm-aif (get-buffer (or (get-text-property
                                     (1- (length sel)) 'buffer-name sel)
@@ -424,8 +449,8 @@ from its directory."
                  ((and grep-line (file-exists-p (car grep-line)))
                   (expand-file-name (car grep-line)))
                  ((and ffap-url-regexp (string-match ffap-url-regexp sel)) sel)
-                 (t default-directory)))
-       default-directory))))
+                 (t default-preselection)))
+       default-preselection))))
 
 ;; Same as `vc-directory-exclusion-list'.
 (defvar helm-walk-ignore-directories
@@ -672,8 +697,7 @@ Useful in dired buffers when there is inserted subdirs."
 
 (defmacro with-helm-display-marked-candidates (buffer-or-name candidates &rest body)
   (declare (indent 0) (debug t))
-  (let ((buffer (make-symbol "buffer"))
-        (window (make-symbol "window")))
+  (helm-with-gensyms (buffer window)
     `(let* ((,buffer (temp-buffer-window-setup ,buffer-or-name))
             ,window)
        (unwind-protect
@@ -814,14 +838,21 @@ directory, open this directory."
     (helm-highlight-current-line)))
 
 (defun helm-find-file-as-root (candidate)
-  (let ((buf (helm-basename candidate))
-        non-essential)
+  (let* ((buf (helm-basename candidate))
+         (host (file-remote-p candidate 'host))
+         (remote-path (format "/%s:%s:%s"
+                              helm-su-or-sudo
+                              (or host "")
+                              (expand-file-name
+                               (if host
+                                   (file-remote-p candidate 'localname)
+                                 candidate))))
+         non-essential)
     (if (buffer-live-p (get-buffer buf))
         (progn
           (set-buffer buf)
-          (find-alternate-file (concat "/" helm-su-or-sudo
-                                       "::" (expand-file-name candidate))))
-      (find-file (concat "/" helm-su-or-sudo "::" (expand-file-name candidate))))))
+          (find-alternate-file remote-path))
+      (find-file remote-path))))
 
 (defun helm-find-many-files (_ignore)
   (let ((helm--reading-passwd-or-string t))

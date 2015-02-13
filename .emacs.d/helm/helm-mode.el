@@ -91,6 +91,12 @@ when non--nil."
   :group 'helm-mode
   :type 'boolean)
 
+(defcustom helm-completion-in-region-fuzzy-match nil
+  "Whether `helm-completion-in-region' use fuzzy matching or not.
+Affect among others `completion-at-point', `completing-read-multiple'."
+  :group 'helm-mode
+  :type 'boolean)
+
 
 (defvar helm-comp-read-map
   (let ((map (make-sparse-keymap)))
@@ -204,7 +210,11 @@ If COLLECTION is an `obarray', a TEST should be needed. See `obarray'."
                       c)
               c)
         into lst
-        else collect c into lst
+        else collect (if (and (stringp c)
+                              (string-match "\n" c))
+                         (cons (replace-regexp-in-string "\n" "->" c) c)
+                         c)
+        into lst
         finally return (helm-fast-remove-dups lst :test 'equal)))
 
 ;;;###autoload
@@ -389,7 +399,6 @@ that use `helm-comp-read' See `helm-M-x' for example."
                                               ;; Input is added to history in completing-read's
                                               ;; and may be regexp-quoted, so unquote it.
                                               for cand = (replace-regexp-in-string "\\s\\" "" i)
-                                              do (set-text-properties 0 (length cand) nil cand)
                                               collect cand)))
                                  (and hist-fc-transformer (helm-mklist hist-fc-transformer)))
                          :persistent-action persistent-action
@@ -406,7 +415,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
                   :mode-line mode-line
                   :action action-fn))
            (src-1 (helm-build-in-buffer-source name
-                    :data `(lambda () (funcall ',get-candidates))
+                    :data get-candidates
                     :filtered-candidate-transformer fc-transformer
                     :requires-pattern requires-pattern
                     :persistent-action persistent-action
@@ -492,22 +501,12 @@ that use `helm-comp-read' See `helm-M-x' for example."
   (or
    (helm
     :sources (helm-build-in-buffer-source name
-               :init `(lambda ()
-                        (require 'helm-elisp)
-                        (with-current-buffer (helm-candidate-buffer 'global)
-                          (goto-char (point-min))
-                          (when (and ,default (stringp ,default)
-                                     ;; Some defaults args result as
-                                     ;; (symbol-name nil) == "nil".
-                                     ;; e.g debug-on-entry.
-                                     (not (string= ,default "nil"))
-                                     (not (string= ,default "")))
-                            (insert (concat ,default "\n")))
-                          (cl-loop for sym in (all-completions "" obarray ',test)
-                                   for s = (intern sym)
-                                   unless (or (and ,default (string= sym ,default))
-                                              (keywordp s))
-                                   do (insert (concat sym "\n")))))
+               :init (lambda ()
+                       (require 'helm-elisp)
+                       (helm-apropos-init (lambda (x)
+                                            (and (funcall test x)
+                                                 (not (keywordp x))))
+                                          default))
                :persistent-action 'helm-lisp-completion-persistent-action
                :persistent-help "Show brief doc in mode-line")
     :prompt prompt
@@ -754,50 +753,52 @@ Keys description:
           (replace-regexp-in-string "helm-maybe-exit-minibuffer"
                                     "helm-confirm-and-exit-minibuffer"
                                     helm-read-file-name-mode-line-string))
-         (src-list `(((name . ,(format "%s History" name))
-                      (header-name . (lambda (hname)
-                                       (concat hname
-                                               helm-find-files-doc-header)))
-                      (mode-line . ,mode-line)
-                      (candidates . ,hist)
-                      (persistent-action . ,persistent-action)
-                      (persistent-help . ,persistent-help)
-                      (action . ,action-fn))
-                     ((name . ,name)
-                      (header-name . (lambda (hname)
-                                       (concat hname
-                                               helm-find-files-doc-header)))
-                      (init . (lambda ()
-                                (setq helm-ff-auto-update-flag
-                                      helm-ff-auto-update-initial-value)
-                                (setq helm-ff-auto-update--state
-                                      helm-ff-auto-update-flag)
-                                (helm-set-local-variable 'helm-in-file-completion-p t)))
-                      (mode-line . ,mode-line)
-                      (candidates
-                       . (lambda ()
-                           (append (and (not (file-exists-p helm-pattern))
-                                        (list helm-pattern))
-                                   (if ',test
-                                       (cl-loop with hn = (helm-ff-tramp-hostnames)
-                                             for i in (helm-find-files-get-candidates
-                                                       ',must-match)
-                                             when (or (member i hn) ; A tramp host
-                                                      (funcall ',test i)) ; Test ok
-                                             collect i)
-                                     (helm-find-files-get-candidates ',must-match)))))
-                      (filtered-candidate-transformer . helm-ff-sort-candidates)
-                      (filter-one-by-one . helm-ff-filter-candidate-one-by-one)
-                      (persistent-action . ,persistent-action)
-                      (candidate-number-limit . 9999)
-                      (persistent-help . ,persistent-help)
-                      (volatile)
-                      (action . ,action-fn))))
+         (src-list
+          (list
+           ;; History source.
+           (helm-build-sync-source (format "%s History" name)
+             :header-name (lambda (hname)
+                            (concat hname helm-find-files-doc-header))
+             :mode-line mode-line
+             :candidates hist
+             :persistent-action persistent-action
+             :persistent-help persistent-help
+             :nomark nomark
+             :action action-fn)
+           ;; Other source.
+           (helm-build-sync-source name
+             :header-name (lambda (hname)
+                            (concat hname helm-find-files-doc-header))
+             :init (lambda ()
+                     (setq helm-ff-auto-update-flag
+                           helm-ff-auto-update-initial-value)
+                     (setq helm-ff--auto-update-state
+                           helm-ff-auto-update-flag)
+                     (helm-set-local-variable 'helm-in-file-completion-p t))
+             :mode-line mode-line
+             :candidates
+             (lambda ()
+               (append (and (not (file-exists-p helm-pattern))
+                            (list helm-pattern))
+                       (if test
+                           (cl-loop with hn = (helm-ff-tramp-hostnames)
+                                    for i in (helm-find-files-get-candidates
+                                              must-match)
+                                    when (or (member i hn) ; A tramp host
+                                             (funcall test i)) ; Test ok
+                                    collect i)
+                           (helm-find-files-get-candidates must-match))))
+             :filtered-candidate-transformer 'helm-ff-sort-candidates
+             :filter-one-by-one 'helm-ff-filter-candidate-one-by-one
+             :persistent-action persistent-action
+             :candidate-number-limit 9999
+             :persistent-help persistent-help
+             :volatile t
+             :nomark nomark
+             :action action-fn)))
+         ;; Helm result.
          (result (helm
-                  :sources (if nomark
-                               (cl-loop for src in src-list
-                                     collect (cons '(nomark) src))
-                             src-list)
+                  :sources src-list
                   :input initial-input
                   :prompt prompt
                   :keymap cmap
@@ -939,6 +940,7 @@ Can be used as value for `completion-in-region-function'."
                   ;; See Issue #407.
                   (afun (plist-get completion-extra-properties :annotation-function))
                   (data (all-completions input collection predicate))
+                  (init-space-suffix (unless helm-completion-in-region-fuzzy-match " "))
                   (file-comp-p (helm-mode--in-file-completion-p input (car data)))
                   ;; Completion-at-point and friends have no prompt.
                   (result (helm-comp-read
@@ -964,17 +966,19 @@ Can be used as value for `completion-in-region-function'."
                                            data)
                                    data))
                            :name str-command
+                           :fuzzy helm-completion-in-region-fuzzy-match
                            :nomark t
                            :initial-input
                            (cond ((and file-comp-p
                                        (not (string-match "/\\'" input)))
                                   (concat (helm-basename input)
-                                          (unless (string= input "") " ")))
+                                          (unless (string= input "")
+                                            init-space-suffix)))
                                  ((string-match "/\\'" input) nil)
                                  ((or (null require-match)
                                       (stringp require-match))
                                   input)
-                                 (t (concat input " ")))
+                                 (t (concat input init-space-suffix)))
                            :buffer buf-name
                            :fc-transformer (append (list 'helm-cr-default-transformer)
                                                    (list (lambda (candidates _source)
@@ -1004,8 +1008,10 @@ Can be used as value for `completion-in-region-function'."
 (defun helm-mode--in-file-completion-p (target candidate)
   (when (and candidate target)
     (or (string-match "/\\'" candidate)
-        (string-match "/\\'" target)
-        (if (string-match "~?/" target)
+        (string-match "\\`~?/.*/\\'" target)
+        (string-match "\\`[a-zA-Z]:/.*/\\'" target)
+        (if (or (string-match "\\`~?/" target)
+                (string-match "\\`[a-zA-Z]:/" target))
             (file-exists-p (expand-file-name candidate (helm-basedir target)))
           (file-exists-p (expand-file-name
                           candidate (with-helm-current-buffer

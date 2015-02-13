@@ -31,6 +31,7 @@
 (require 'cl-lib)
 (require 'eieio)
 
+
 (defgeneric helm--setup-source (source)
   "Prepare slots and handle slot errors before creating a helm source.")
 
@@ -101,7 +102,7 @@
     :initform nil
     :custom function
     :documentation
-    "  Function called with no parameters at end of reinitialization
+    "  Function called with no parameters at before \"init\" function
   when `helm-force-update' is called.")
 
    (cleanup
@@ -692,6 +693,8 @@ like `re-search-forward', see below documentation of :search slot.")
 (defclass helm-type-file (helm-source) ()
   "A class to define helm type file.")
 
+(defmethod helm--setup-source :primary ((_source helm-type-file)))
+
 (defmethod helm--setup-source :before ((source helm-type-file))
     (oset source :action
           (helm-make-actions
@@ -728,6 +731,8 @@ like `re-search-forward', see below documentation of :search slot.")
 (defclass helm-type-bookmark (helm-source) ()
   "A class to define type bookmarks.")
 
+(defmethod helm--setup-source :primary ((_source helm-type-bookmark)))
+
 (defmethod helm--setup-source :before ((source helm-type-bookmark))
   (oset source :action (helm-make-actions
                         "Jump to bookmark" 'helm-bookmark-jump
@@ -745,12 +750,15 @@ like `re-search-forward', see below documentation of :search slot.")
 (defclass helm-type-buffer (helm-source) ()
   "A class to define type buffer.")
 
+(defmethod helm--setup-source :primary ((_source helm-type-buffer)))
+
 (defmethod helm--setup-source :before ((source helm-type-buffer))
   (oset source :action (helm-make-actions
-                        "Switch to buffer" 'helm-switch-to-buffer
+                        "Switch to buffer(s)" 'helm-switch-to-buffers
                         (lambda () (and (locate-library "popwin") "Switch to buffer in popup window"))
                         'popwin:popup-buffer
-                        "Switch to buffer other window `C-c o'" 'switch-to-buffer-other-window
+                        "Switch to buffer(s) other window `C-c o'"
+                        'helm-switch-to-buffers-other-window
                         "Switch to buffer other frame `C-c C-o'" 'switch-to-buffer-other-frame
                         (lambda () (and (locate-library "elscreen") "Display buffer in Elscreen"))
                         'helm-find-buffer-on-elscreen
@@ -776,6 +784,8 @@ like `re-search-forward', see below documentation of :search slot.")
 (defclass helm-type-function (helm-source) ()
   "A class to define helm type function.")
 
+(defmethod helm--setup-source :primary ((_source helm-type-function)))
+
 (defmethod helm--setup-source :before ((source helm-type-function))
   (oset source :action (helm-make-actions
                          "Describe command" 'describe-function
@@ -793,6 +803,8 @@ like `re-search-forward', see below documentation of :search slot.")
 ;; Commands
 (defclass helm-type-command (helm-source) ()
   "A class to define helm type command.")
+
+(defmethod helm--setup-source :primary ((_source helm-type-command)))
 
 (defmethod helm--setup-source :before ((source helm-type-command))
   (oset source :action (append (helm-make-actions
@@ -813,11 +825,11 @@ like `re-search-forward', see below documentation of :search slot.")
 ;;; Internal Builder functions.
 ;;
 ;;
-(defun helm--create-source (object class)
-  "[INTERNAL] Build a helm source from a CLASS OBJECT."
+(defun helm--create-source (object)
+  "[INTERNAL] Build a helm source from OBJECT.
+Where OBJECT is an instance of an eieio class."
   (cl-loop for s in (object-slots object)
-           for slot = (class-slot-initarg class s)
-           for slot-val = (slot-value object slot)
+           for slot-val = (slot-value object s)
            when slot-val
            collect (cons s (unless (eq t slot-val) slot-val))))
 
@@ -832,13 +844,13 @@ Arguments ARGS are keyword value pairs as defined in CLASS."
     (oset source :name name)
     (helm--setup-source source)
     (helm-setup-user-source source)
-    (helm--create-source source (object-class source))))
+    (helm--create-source source)))
 
 (defun helm-make-type (class &rest args)
   (let ((source (apply #'make-instance class args)))
     (oset source :name nil)
     (helm--setup-source source)
-    (helm--create-source source (object-class source))))
+    (helm--create-source source)))
 
 (defun helm-source-mp-get-search-or-match-fns (source method)
   (require 'helm-match-plugin)
@@ -937,6 +949,8 @@ an eieio class."
              "")
            " (keeping session)")))
 
+(defmethod helm--setup-source :primary ((_source helm-source)))
+  
 (defmethod helm--setup-source :before ((source helm-source))
   (helm-aif (slot-value source :keymap)
       (and (symbolp it) (set-slot-value source :keymap (symbol-value it))))

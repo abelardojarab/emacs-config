@@ -32,6 +32,10 @@
 # Code:
 
 
+# if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
+#     hash -r 2>/dev/null
+# fi
+
 # needs being in `test' directory
 # PCOT=`pwd`
 PCOT=$PWD
@@ -186,20 +190,14 @@ PYCO="$PDIR/completion/pycomplete.el"
 TESTFILE="py-bug-numbered-tests.el"
 TESTFILE2="python-mode-test.el"
 TESTFILE3="python-extended-executes-test.el"
-TESTFILE4="python-executes-test.el"
+# TESTFILE4="python-executes-test.el"
 TESTFILE5="py-shell-completion-tests.el"
+TESTFILE6="py-split-window-on-execute-lp-1361531-test.el"
+TESTFILE7="py-multi-split-window-on-execute-lp-1361531-test.el"
+TESTFILE8="py-always-split-window-on-execute-lp-1361531-test.el"
 CEXEC="python-extended-executes.el"
-# PCOT="$TESTDIR"
 
-# export PYTHONPATH="$PDIR/completion/:~/tmp/"
-
-# python-mode file to load
-if [ -s "$PDIR/python-components-mode.el" ];
-then
-    PYTHONMODE="$PDIR/python-components-mode.el"
-else
-    PYTHONMODE="$PDIR/python-mode.el"
-fi
+UTILS="devel/python-mode-utils.el"
 
 echo "\$PYMACS: $PYMACS"
 echo "\$PYTHONMODE: $PYTHONMODE"
@@ -208,10 +206,27 @@ echo "\$PDIR/\$TESTFILE: $PDIR/$TESTFILE"
 
 # $EMACS -Q -batch -l $HOME/emacs_20130227/lisp/emacs-lisp/cl-lib.el -l $HOME/emacs_20130227/lisp/emacs-lisp/ert.el -l ${PCOT}/python-mode-ert-tests.el -f ert-run-tests-batch-and-exit
 # $EMACS -Q -batch -load ${EMACS_DIR}lisp/emacs-lisp/ert.el -load ${PCOT}/python-mode-ert-tests.el -f ert-run-tests-batch-and-exit
-$EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'python)(unload-feature 'python t))" --eval "(when (featurep 'python-mode)(unload-feature 'python-mode t))" --eval "(add-to-list 'load-path \"$PDIR/\")" --eval "(add-to-list 'load-path \"$TESTDIR/\")" --eval "(setq py-install-directory \"$PDIR\"))" --eval "(message \"py-install-directory: %s\" py-install-directory)" --eval "(setq py-load-pymacs-p nil)" -load $BYTECOMP -load $CC_CMDS -load $COMINT -load $ANSICOLOR -load $CLMACS -load $CUSTOM -load $SKELETON -load $SO -load $COLMK -load $HIGHL -load $PYTHONMODE  --eval "(message \"py-temp-directory: %s\" py-temp-directory)" -load $PCOT/$TESTFILE -load $PCOT/$TESTFILE2 -load $PCOT/$TESTFILE3 -load $PCOT/$TESTFILE4 -load $PCOT/$TESTFILE5 \
+$EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p t)" --eval "(when (featurep 'python)(unload-feature 'python t))" --eval "(when (featurep 'python-mode)(unload-feature 'python-mode t))" --eval "(add-to-list 'load-path \"$PDIR/\")" --eval "(add-to-list 'load-path \"$TESTDIR/\")" --eval "(setq py-install-directory \"$PDIR\"))" --eval "(message \"py-install-directory: %s\" py-install-directory)" --eval "(setq py-load-pymacs-p nil)" -load $BYTECOMP -load $CC_CMDS -load $COMINT -load $ANSICOLOR -load $CLMACS -load $CUSTOM -load $SKELETON -load $SO -load $COLMK -load $HIGHL -load $PYTHONMODE  --eval "(message \"py-temp-directory: %s\" py-temp-directory)" -load $PCOT/$TESTFILE -load $PCOT/$TESTFILE2 -load $PCOT/$TESTFILE3 -load $PCOT/$TESTFILE5 -load $PCOT/$TESTFILE6 -load $PCOT/$TESTFILE7 -load $PCOT/$TESTFILE8 -load $PDIR/$UTILS \
 --eval "(when (file-exists-p \"~/.abbrev_defs\") (quietly-read-abbrev-file (expand-file-name \"~/.abbrev_defs\")))" \
 \
--eval "(assert (functionp 'word-at-point) nil \"new completion bug, lp:1034656, word-at-point not known\")" \
+-eval "(assert (functionp 'word-at-point) nil \"new completion bug, lp-1034656, word-at-point not known\")" \
+-eval "(assert (functionp 'py--shell-simple-send) nil \"py-shell-simple-send not detected as function\")" \
+-eval "(assert (functionp 'py--shell-setup) nil \"py--shell-setup not detected as function\")" \
+-eval "(assert (functionp 'py--shell-send-setup-code) nil \"py-shell-send-setup-code not detected as function\")" \
+-eval "(assert (functionp 'py-beginning-of-top-level-p) nil \"py-beginning-of-top-level-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-line-p) nil \"py-beginning-of-line-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-buffer-p) nil \"py-beginning-of-buffer-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-paragraph-p) nil \"py-beginning-of-paragraph-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-statement-p) nil \"py-beginning-of-statement-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-expression-p) nil \"py-beginning-of-expression-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-partial-expression-p) nil \"py-beginning-of-partial-expression-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-block-p) nil \"py-beginning-of-block-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-clause-p) nil \"py-beginning-of-clause-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-block-or-clause-p) nil \"py-beginning-of-block-or-clause-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-def-p) nil \"py-beginning-of-def-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-class-p) nil \"py-beginning-of-class-p not detected as function\")" \
+-eval "(assert (functionp 'py--beginning-of-def-or-class-p) nil \"py-beginning-of-def-or-class-p not detected as function\")" \
+-eval "(assert (functionp 'py-beginning-of-minor-block-p) nil \"py-beginning-of-minor-block-p not detected as function\")" \
 \
 -eval "(assert (commandp 'pylint-flymake-mode) nil \"pylint-flymake-mode not detected as command\")" \
 -eval "(assert (commandp 'pyflakes-flymake-mode) nil \"pyflakes-flymake-mode not detected as command\")" \
@@ -258,28 +273,28 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-shift-statement-right) nil \"py-shift-statement-right not detected as command\")" \
 -eval "(assert (commandp 'py-shift-statement-left) nil \"py-shift-statement-left not detected as command\")" \
 -eval "(assert (commandp 'py-indent-region) nil \"py-indent-region not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-paragraph-position) nil \"py-beginning-of-paragraph-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-paragraph-position) nil \"py-end-of-paragraph-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-block-position) nil \"py-beginning-of-block-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-block-position) nil \"py-end-of-block-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-clause-position) nil \"py-beginning-of-clause-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-clause-position) nil \"py-end-of-clause-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-block-or-clause-position) nil \"py-beginning-of-block-or-clause-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-block-or-clause-position) nil \"py-end-of-block-or-clause-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-def-position) nil \"py-beginning-of-def-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-def-position) nil \"py-end-of-def-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-class-position) nil \"py-beginning-of-class-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-class-position) nil \"py-end-of-class-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-def-or-class-position) nil \"py-beginning-of-def-or-class-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-def-or-class-position) nil \"py-end-of-def-or-class-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-line-position) nil \"py-beginning-of-line-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-line-position) nil \"py-end-of-line-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-statement-position) nil \"py-beginning-of-statement-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-statement-position) nil \"py-end-of-statement-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-expression-position) nil \"py-beginning-of-expression-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-expression-position) nil \"py-end-of-expression-position not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-partial-expression-position) nil \"py-beginning-of-partial-expression-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-partial-expression-position) nil \"py-end-of-partial-expression-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-paragraph-position) nil \"py-beginning-of-paragraph-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-paragraph-position) nil \"py-end-of-paragraph-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-block-position) nil \"py-beginning-of-block-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-block-position) nil \"py-end-of-block-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-clause-position) nil \"py-beginning-of-clause-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-clause-position) nil \"py-end-of-clause-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-block-or-clause-position) nil \"py-beginning-of-block-or-clause-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-block-or-clause-position) nil \"py-end-of-block-or-clause-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-def-position) nil \"py-beginning-of-def-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-def-position) nil \"py-end-of-def-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-class-position) nil \"py-beginning-of-class-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-class-position) nil \"py-end-of-class-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-def-or-class-position) nil \"py-beginning-of-def-or-class-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-def-or-class-position) nil \"py-end-of-def-or-class-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-line-position) nil \"py-beginning-of-line-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-line-position) nil \"py-end-of-line-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-statement-position) nil \"py-beginning-of-statement-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-statement-position) nil \"py-end-of-statement-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-expression-position) nil \"py-beginning-of-expression-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-expression-position) nil \"py-end-of-expression-position not detected as command\")" \
+-eval "(assert (commandp 'py--beginning-of-partial-expression-position) nil \"py-beginning-of-partial-expression-position not detected as command\")" \
+-eval "(assert (commandp 'py--end-of-partial-expression-position) nil \"py-end-of-partial-expression-position not detected as command\")" \
 -eval "(assert (commandp 'py-bounds-of-statement) nil \"py-bounds-of-statement not detected as command\")" \
 -eval "(assert (commandp 'py-bounds-of-block) nil \"py-bounds-of-block not detected as command\")" \
 -eval "(assert (commandp 'py-bounds-of-clause) nil \"py-bounds-of-clause not detected as command\")" \
@@ -310,12 +325,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-in-triplequoted-string-p) nil \"py-in-triplequoted-string-p not detected as command\")" \
 -eval "(assert (commandp 'py-in-string-p) nil \"py-in-string-p not detected as command\")" \
 -eval "(assert (commandp 'py-in-statement-p) nil \"py-in-statement-p not detected as command\")" \
--eval "(assert (commandp 'py-statement-opens-block-p) nil \"py-statement-opens-block-p not detected as command\")" \
--eval "(assert (commandp 'py-statement-opens-clause-p) nil \"py-statement-opens-clause-p not detected as command\")" \
--eval "(assert (commandp 'py-statement-opens-block-or-clause-p) nil \"py-statement-opens-block-or-clause-p not detected as command\")" \
--eval "(assert (commandp 'py-statement-opens-class-p) nil \"py-statement-opens-class-p not detected as command\")" \
--eval "(assert (commandp 'py-statement-opens-def-p) nil \"py-statement-opens-def-p not detected as command\")" \
--eval "(assert (commandp 'py-statement-opens-def-or-class-p) nil \"py-statement-opens-def-or-class-p not detected as command\")" \
 -eval "(assert (commandp 'py-current-defun) nil \"py-current-defun not detected as command\")" \
 -eval "(assert (commandp 'py-sort-imports) nil \"py-sort-imports not detected as command\")" \
 -eval "(assert (commandp 'py-which-function) nil \"py-which-function not detected as command\")" \
@@ -395,32 +404,25 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'python) nil \"python not detected as command\")" \
 -eval "(assert (commandp 'ipython) nil \"ipython not detected as command\")" \
 -eval "(assert (commandp 'python3) nil \"python3 not detected as command\")" \
--eval "(assert (commandp 'python3.2) nil \"python3.2 not detected as command\")" \
--eval "(assert (commandp 'python3.3) nil \"python3.3 not detected as command\")" \
 -eval "(assert (commandp 'python2) nil \"python2 not detected as command\")" \
--eval "(assert (commandp 'python2.7) nil \"python2.7 not detected as command\")" \
 -eval "(assert (commandp 'python-dedicated) nil \"python-dedicated not detected as command\")" \
 -eval "(assert (commandp 'ipython-dedicated) nil \"ipython-dedicated not detected as command\")" \
 -eval "(assert (commandp 'python3-dedicated) nil \"python3-dedicated not detected as command\")" \
 -eval "(assert (commandp 'python2-dedicated) nil \"python2-dedicated not detected as command\")" \
--eval "(assert (commandp 'python2.7-dedicated) nil \"python2.7-dedicated not detected as command\")" \
 -eval "(assert (commandp 'python-switch) nil \"python-switch not detected as command\")" \
 -eval "(assert (commandp 'ipython-switch) nil \"ipython-switch not detected as command\")" \
 -eval "(assert (commandp 'python3-switch) nil \"python3-switch not detected as command\")" \
 -eval "(assert (commandp 'python2-switch) nil \"python2-switch not detected as command\")" \
--eval "(assert (commandp 'python2.7-switch) nil \"python2.7-switch not detected as command\")" \
 -eval "(assert (commandp 'jython-switch) nil \"jython-switch not detected as command\")" \
 -eval "(assert (commandp 'python-no-switch) nil \"python-no-switch not detected as command\")" \
 -eval "(assert (commandp 'ipython-no-switch) nil \"ipython-no-switch not detected as command\")" \
 -eval "(assert (commandp 'python3-no-switch) nil \"python3-no-switch not detected as command\")" \
 -eval "(assert (commandp 'python2-no-switch) nil \"python2-no-switch not detected as command\")" \
--eval "(assert (commandp 'python2.7-no-switch) nil \"python2.7-no-switch not detected as command\")" \
 -eval "(assert (commandp 'jython-no-switch) nil \"jython-no-switch not detected as command\")" \
 -eval "(assert (commandp 'python-switch-dedicated) nil \"python-switch-dedicated not detected as command\")" \
 -eval "(assert (commandp 'ipython-switch-dedicated) nil \"ipython-switch-dedicated not detected as command\")" \
 -eval "(assert (commandp 'python3-switch-dedicated) nil \"python3-switch-dedicated not detected as command\")" \
 -eval "(assert (commandp 'python2-switch-dedicated) nil \"python2-switch-dedicated not detected as command\")" \
--eval "(assert (commandp 'python2.7-switch-dedicated) nil \"python2.7-switch-dedicated not detected as command\")" \
 -eval "(assert (commandp 'jython-switch-dedicated) nil \"jython-switch-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-which-execute-file-command) nil \"py-which-execute-file-command not detected as command\")" \
 -eval "(assert (commandp 'py-execute-region-no-switch) nil \"py-execute-region-no-switch not detected as command\")" \
@@ -451,7 +453,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-down-exception) nil \"py-down-exception not detected as command\")" \
 -eval "(assert (commandp 'py-up-exception) nil \"py-up-exception not detected as command\")" \
 -eval "(assert (commandp 'py-output-buffer-filter) nil \"py-output-buffer-filter not detected as command\")" \
--eval "(assert (commandp 'py-send-string) nil \"py-send-string not detected as command\")" \
 -eval "(assert (commandp 'py-pdbtrack-toggle-stack-tracking) nil \"py-pdbtrack-toggle-stack-tracking not detected as command\")" \
 -eval "(assert (commandp 'turn-on-pdbtrack) nil \"turn-on-pdbtrack not detected as command\")" \
 -eval "(assert (commandp 'turn-off-pdbtrack) nil \"turn-off-pdbtrack not detected as command\")" \
@@ -474,7 +475,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-printform-insert) nil \"py-printform-insert not detected as command\")" \
 -eval "(assert (commandp 'py-line-to-printform-python2) nil \"py-line-to-printform-python2 not detected as command\")" \
 -eval "(assert (commandp 'py-switch-imenu-index-function) nil \"py-switch-imenu-index-function not detected as command\")" \
--eval "(assert (commandp 'py-completion-at-point) nil \"py-completion-at-point not detected as command\")" \
 -eval "(assert (commandp 'py-choose-shell-by-shebang) nil \"py-choose-shell-by-shebang not detected as command\")" \
 -eval "(assert (commandp 'py-which-python) nil \"py-which-python not detected as command\")" \
 -eval "(assert (commandp 'py-python-current-environment) nil \"py-python-current-environment not detected as command\")" \
@@ -492,19 +492,10 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-install-directory-check) nil \"py-install-directory-check not detected as command\")" \
 -eval "(assert (commandp 'py-guess-py-install-directory) nil \"py-guess-py-install-directory not detected as command\")" \
 -eval "(assert (commandp 'py-set-load-path) nil \"py-set-load-path not detected as command\")" \
--eval "(assert (commandp 'py-def-or-class-beginning-position) nil \"py-def-or-class-beginning-position not detected as command\")" \
--eval "(assert (commandp 'py-def-or-class-end-position) nil \"py-def-or-class-end-position not detected as command\")" \
--eval "(assert (commandp 'py-statement-beginning-position) nil \"py-statement-beginning-position not detected as command\")" \
--eval "(assert (commandp 'py-statement-end-position) nil \"py-statement-end-position not detected as command\")" \
--eval "(assert (commandp 'py-current-indentation) nil \"py-current-indentation not detected as command\")" \
 -eval "(assert (commandp 'py-version) nil \"py-version not detected as command\")" \
--eval "(assert (commandp 'run-python) nil \"run-python not detected as command\")" \
--eval "(assert (commandp 'py-send-region) nil \"py-send-region not detected as command\")" \
 -eval "(assert (commandp 'py-switch-to-python) nil \"py-switch-to-python not detected as command\")" \
--eval "(assert (commandp 'py-send-region-and-go) nil \"py-send-region-and-go not detected as command\")" \
 -eval "(assert (commandp 'py-load-file) nil \"py-load-file not detected as command\")" \
 -eval "(assert (commandp 'py-shell-complete) nil \"py-shell-complete not detected as command\")" \
--eval "(assert (commandp 'ipython-complete) nil \"ipython-complete not detected as command\")" \
 -eval "(assert (commandp 'py-pychecker-run) nil \"py-pychecker-run not detected as command\")" \
 -eval "(assert (commandp 'virtualenv-current) nil \"virtualenv-current not detected as command\")" \
 -eval "(assert (commandp 'virtualenv-activate) nil \"virtualenv-activate not detected as command\")" \
@@ -522,7 +513,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-statement-ipython-dedicated) nil \"py-execute-statement-ipython-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-ipython-dedicated-switch) nil \"py-execute-statement-ipython-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-python3) nil \"py-execute-statement-python3 not detected as command\")" \
--eval "(assert (commandp 'py-execute-statement-python3.2) nil \"py-execute-statement-python3 not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-python3-switch) nil \"py-execute-statement-python3-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-python3-no-switch) nil \"py-execute-statement-python3-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-python3-dedicated) nil \"py-execute-statement-python3-dedicated not detected as command\")" \
@@ -532,11 +522,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-statement-python2-no-switch) nil \"py-execute-statement-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-python2-dedicated) nil \"py-execute-statement-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-python2-dedicated-switch) nil \"py-execute-statement-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-statement-python2.7) nil \"py-execute-statement-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-statement-python2.7-switch) nil \"py-execute-statement-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-statement-python2.7-no-switch) nil \"py-execute-statement-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-statement-python2.7-dedicated) nil \"py-execute-statement-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-statement-python2.7-dedicated-switch) nil \"py-execute-statement-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-jython) nil \"py-execute-statement-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-jython-switch) nil \"py-execute-statement-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-statement-jython-no-switch) nil \"py-execute-statement-jython-no-switch not detected as command\")" \
@@ -562,11 +547,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-block-python2-no-switch) nil \"py-execute-block-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-python2-dedicated) nil \"py-execute-block-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-python2-dedicated-switch) nil \"py-execute-block-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-python2.7) nil \"py-execute-block-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-python2.7-switch) nil \"py-execute-block-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-python2.7-no-switch) nil \"py-execute-block-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-python2.7-dedicated) nil \"py-execute-block-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-python2.7-dedicated-switch) nil \"py-execute-block-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-jython) nil \"py-execute-block-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-jython-switch) nil \"py-execute-block-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-jython-no-switch) nil \"py-execute-block-jython-no-switch not detected as command\")" \
@@ -592,11 +572,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-block-or-clause-python2-no-switch) nil \"py-execute-block-or-clause-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-or-clause-python2-dedicated) nil \"py-execute-block-or-clause-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-or-clause-python2-dedicated-switch) nil \"py-execute-block-or-clause-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-or-clause-python2.7) nil \"py-execute-block-or-clause-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-or-clause-python2.7-switch) nil \"py-execute-block-or-clause-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-or-clause-python2.7-no-switch) nil \"py-execute-block-or-clause-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-or-clause-python2.7-dedicated) nil \"py-execute-block-or-clause-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-block-or-clause-python2.7-dedicated-switch) nil \"py-execute-block-or-clause-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-or-clause-jython) nil \"py-execute-block-or-clause-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-or-clause-jython-switch) nil \"py-execute-block-or-clause-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-block-or-clause-jython-no-switch) nil \"py-execute-block-or-clause-jython-no-switch not detected as command\")" \
@@ -622,11 +597,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-def-python2-no-switch) nil \"py-execute-def-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-def-python2-dedicated) nil \"py-execute-def-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-def-python2-dedicated-switch) nil \"py-execute-def-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-def-python2.7) nil \"py-execute-def-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-def-python2.7-switch) nil \"py-execute-def-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-def-python2.7-no-switch) nil \"py-execute-def-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-def-python2.7-dedicated) nil \"py-execute-def-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-def-python2.7-dedicated-switch) nil \"py-execute-def-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-def-jython) nil \"py-execute-def-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-def-jython-switch) nil \"py-execute-def-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-def-jython-no-switch) nil \"py-execute-def-jython-no-switch not detected as command\")" \
@@ -652,11 +622,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-class-python2-no-switch) nil \"py-execute-class-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-class-python2-dedicated) nil \"py-execute-class-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-class-python2-dedicated-switch) nil \"py-execute-class-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-class-python2.7) nil \"py-execute-class-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-class-python2.7-switch) nil \"py-execute-class-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-class-python2.7-no-switch) nil \"py-execute-class-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-class-python2.7-dedicated) nil \"py-execute-class-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-class-python2.7-dedicated-switch) nil \"py-execute-class-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-class-jython) nil \"py-execute-class-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-class-jython-switch) nil \"py-execute-class-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-class-jython-no-switch) nil \"py-execute-class-jython-no-switch not detected as command\")" \
@@ -682,11 +647,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-region-python2-no-switch) nil \"py-execute-region-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-region-python2-dedicated) nil \"py-execute-region-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-region-python2-dedicated-switch) nil \"py-execute-region-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-region-python2.7) nil \"py-execute-region-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-region-python2.7-switch) nil \"py-execute-region-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-region-python2.7-no-switch) nil \"py-execute-region-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-region-python2.7-dedicated) nil \"py-execute-region-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-region-python2.7-dedicated-switch) nil \"py-execute-region-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-region-jython) nil \"py-execute-region-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-region-jython-switch) nil \"py-execute-region-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-region-jython-no-switch) nil \"py-execute-region-jython-no-switch not detected as command\")" \
@@ -712,11 +672,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-buffer-python2-no-switch) nil \"py-execute-buffer-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-buffer-python2-dedicated) nil \"py-execute-buffer-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-buffer-python2-dedicated-switch) nil \"py-execute-buffer-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-buffer-python2.7) nil \"py-execute-buffer-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-buffer-python2.7-switch) nil \"py-execute-buffer-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-buffer-python2.7-no-switch) nil \"py-execute-buffer-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-buffer-python2.7-dedicated) nil \"py-execute-buffer-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-buffer-python2.7-dedicated-switch) nil \"py-execute-buffer-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-buffer-jython) nil \"py-execute-buffer-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-buffer-jython-switch) nil \"py-execute-buffer-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-buffer-jython-no-switch) nil \"py-execute-buffer-jython-no-switch not detected as command\")" \
@@ -742,20 +697,15 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-expression-python2-no-switch) nil \"py-execute-expression-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-expression-python2-dedicated) nil \"py-execute-expression-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-expression-python2-dedicated-switch) nil \"py-execute-expression-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-expression-python2.7) nil \"py-execute-expression-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-expression-python2.7-switch) nil \"py-execute-expression-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-expression-python2.7-no-switch) nil \"py-execute-expression-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-expression-python2.7-dedicated) nil \"py-execute-expression-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-expression-python2.7-dedicated-switch) nil \"py-execute-expression-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-expression-jython) nil \"py-execute-expression-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-expression-jython-switch) nil \"py-execute-expression-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-expression-jython-no-switch) nil \"py-execute-expression-jython-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-expression-jython-dedicated) nil \"py-execute-expression-jython-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-expression-jython-dedicated-switch) nil \"py-execute-expression-jython-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-mark-block-clause-misbehave-lp:949310-test) nil \"py-mark-block-clause-misbehave-lp:949310-test not detected as command\")" \
--eval "(assert (commandp 'broken-font-locking-lp:961231-test) nil \"broken-font-locking-lp:961231-test not detected as command\")" \
--eval "(assert (commandp 'py-mark-clause-misbehave-lp:949310-test) nil \"py-mark-clause-misbehave-lp:949310-test not detected as command\")" \
--eval "(assert (commandp 'py-mark-block-misbehave-lp:949310-test) nil \"py-mark-block-misbehave-lp:949310-test not detected as command\")" \
+-eval "(assert (commandp 'py-mark-block-clause-misbehave-lp-949310-test) nil \"py-mark-block-clause-misbehave-lp-949310-test not detected as command\")" \
+-eval "(assert (commandp 'broken-font-locking-lp-961231-test) nil \"broken-font-locking-lp-961231-test not detected as command\")" \
+-eval "(assert (commandp 'py-mark-clause-misbehave-lp-949310-test) nil \"py-mark-clause-misbehave-lp-949310-test not detected as command\")" \
+-eval "(assert (commandp 'py-mark-block-misbehave-lp-949310-test) nil \"py-mark-block-misbehave-lp-949310-test not detected as command\")" \
 -eval "(assert (commandp 'py-mark-partial-expression) nil \"py-mark-partial-expression not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-block-bol-p) nil \"py-beginning-of-block-bol-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-block-bol) nil \"py-beginning-of-block-bol not detected as command\")" \
@@ -846,31 +796,45 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (commandp 'py-execute-file-python2-no-switch) nil \"py-execute-file-python2-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-python2-dedicated) nil \"py-execute-file-python2-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-python2-dedicated-switch) nil \"py-execute-file-python2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python2.7) nil \"py-execute-file-python2.7 not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python2.7-switch) nil \"py-execute-file-python2.7-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python2.7-no-switch) nil \"py-execute-file-python2.7-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python2.7-dedicated) nil \"py-execute-file-python2.7-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python2.7-dedicated-switch) nil \"py-execute-file-python2.7-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-jython) nil \"py-execute-file-jython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-jython-switch) nil \"py-execute-file-jython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-jython-no-switch) nil \"py-execute-file-jython-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-jython-dedicated) nil \"py-execute-file-jython-dedicated not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-jython-dedicated-switch) nil \"py-execute-file-jython-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.2) nil \"py-execute-file-python3.2 not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.2-switch) nil \"py-execute-file-python3.2-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.2-no-switch) nil \"py-execute-file-python3.2-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.2-dedicated) nil \"py-execute-file-python3.2-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.2-dedicated-switch) nil \"py-execute-file-python3.2-dedicated-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.3) nil \"py-execute-file-python3.3 not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.3-switch) nil \"py-execute-file-python3.3-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.3-no-switch) nil \"py-execute-file-python3.3-no-switch not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.3-dedicated) nil \"py-execute-file-python3.3-dedicated not detected as command\")" \
--eval "(assert (commandp 'py-execute-file-python3.3-dedicated-switch) nil \"py-execute-file-python3.3-dedicated-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-bpython) nil \"py-execute-file-bpython not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-bpython-switch) nil \"py-execute-file-bpython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-bpython-no-switch) nil \"py-execute-file-bpython-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-bpython-dedicated) nil \"py-execute-file-bpython-dedicated not detected as command\")" \
--eval "(assert (functionp 'py-font-lock-syntactic-face-function) nil \"py-font-lock-syntactic-face-function not detected function\")" \
+-eval "(assert (functionp 'py--top-level-form-p) nil \"py-top-level-form-p not detected as function\")" \
+-eval "(assert (commandp 'py-beginning-of-top-level-position) nil \"py-beginning-of-top-level-position not detected as command\")" \
+-eval "(assert (commandp 'py-end-of-top-level-position) nil \"py-end-of-top-level-position not detected as command\")" \
+-eval "(assert (commandp 'py-comment-top-level) nil \"py-comment-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-beginning-of-top-level-p) nil \"py-beginning-of-top-level-p not detected as command\")" \
+-eval "(assert (commandp 'py-beginning-of-top-level) nil \"py-beginning-of-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-beginning-of-top-level) nil \"py-beginning-of-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-end-of-top-level) nil \"py-end-of-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-mark-top-level) nil \"py-mark-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-copy-top-level) nil \"py-copy-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-delete-top-level) nil \"py-delete-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-kill-top-level) nil \"py-kill-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-execute-top-level) nil \"py-execute-top-level not detected as command\")" \
+-eval "(assert (commandp 'py-beginning-of-minor-block-position) nil \"py-beginning-of-minor-block-position not detected as command\")" \
+-eval "(assert (commandp 'py-end-of-minor-block-position) nil \"py-end-of-minor-block-position not detected as command\")" \
+-eval "(assert (commandp 'py-beginning-of-minor-block) nil \"py-beginning-of-minor-block not detected as command\")" \
+-eval "(assert (commandp 'py-beginning-of-minor-block-lc) nil \"py-beginning-of-minor-block-lc not detected as command\")" \
+-eval "(assert (commandp 'py-end-of-minor-block) nil \"py-end-of-minor-block not detected as command\")" \
+-eval "(assert (commandp 'py-delete-minor-block) nil \"py-delete-minor-block not detected as command\")" \
+-eval "(assert (commandp 'py-up-minor-block) nil \"py-up-minor-block not detected as command\")" \
+-eval "(assert (commandp 'py-down-minor-block) nil \"py-down-minor-block not detected as command\")" \
+-eval "(assert (commandp 'py-up-minor-block-bol) nil \"py-up-minor-block-bol not detected as command\")" \
+-eval "(assert (commandp 'py-set-nil-docstring-style) nil \"py-set-nil-docstring-style not detected as command\")" \
+-eval "(assert (commandp 'py-set-pep-257-nn-docstring-style) nil \"py-set-pep-257-nn-docstring-style not detected as command\")" \
+-eval "(assert (commandp 'py-set-pep-257-docstring-style) nil \"py-set-pep-257-docstring-style not detected as command\")" \
+-eval "(assert (commandp 'py-set-django-docstring-style) nil \"py-set-django-docstring-style not detected as command\")" \
+-eval "(assert (commandp 'py-set-symmetric-docstring-style) nil \"py-set-symmetric-docstring-style not detected as command\")" \
+-eval "(assert (commandp 'py-set-onetwo-docstring-style) nil \"py-set-onetwo-docstring-style not detected as command\")" \
+-eval "(assert (commandp 'py-down-minor-block-bol) nil \"py-down-minor-block-bol not detected as command\")" \
+-eval "(assert (functionp 'py--font-lock-syntactic-face-function) nil \"py-font-lock-syntactic-face-function not detected function\")" \
 -eval "(setq enable-local-variables :all)" \
 -eval "(assert (boundp 'py-version) nil \"py-version not a variable\")" \
 -eval "(assert (boundp 'python-mode-modeline-display) nil \"python-mode-modeline-display not a variable\")" \
@@ -889,14 +853,12 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'py-install-directory) nil \"py-install-directory not a variable\")" \
 -eval "(assert (boundp 'py-guess-py-install-directory-p) nil \"py-guess-py-install-directory-p not a variable\")" \
 -eval "(assert (boundp 'py-extensions) nil \"py-extensions not a variable\")" \
+-eval "(assert (boundp 'py-error) nil \"py-error not a variable\")" \
 -eval "(assert (boundp 'py-hide-show-minor-mode-p) nil \"py-hide-show-minor-mode-p not a variable\")" \
 -eval "(assert (boundp 'empty-comment-line-separates-paragraph-p) nil \"empty-comment-line-separates-paragraph-p not a variable\")" \
 -eval "(assert (boundp 'py-org-cycle-p) nil \"py-org-cycle-p not a variable\")" \
--eval "(assert (boundp 'ipython-complete-use-separate-shell-p) nil \"ipython-complete-use-separate-shell-p not a variable\")" \
 -eval "(assert (boundp 'py-outline-minor-mode-p) nil \"py-outline-minor-mode-p not a variable\")" \
 -eval "(assert (boundp 'py-outline-mode-keywords) nil \"py-outline-mode-keywords not a variable\")" \
--eval "(assert (boundp 'py-start-run-py-shell) nil \"py-start-run-py-shell not a variable\")" \
--eval "(assert (boundp 'py-start-run-ipython-shell) nil \"py-start-run-ipython-shell not a variable\")" \
 -eval "(assert (boundp 'py-close-provides-newline) nil \"py-close-provides-newline not a variable\")" \
 -eval "(assert (boundp 'py-dedent-keep-relative-column) nil \"py-dedent-keep-relative-column not a variable\")" \
 -eval "(assert (boundp 'py-indent-honors-inline-comment) nil \"py-indent-honors-inline-comment not a variable\")" \
@@ -913,7 +875,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'py-shebang-startstring) nil \"py-shebang-startstring not a variable\")" \
 -eval "(assert (boundp 'py-python-command-args) nil \"py-python-command-args not a variable\")" \
 -eval "(assert (boundp 'py-jython-command-args) nil \"py-jython-command-args not a variable\")" \
--eval "(assert (boundp 'py-cleanup-temporary) nil \"py-cleanup-temporary not a variable\")" \
 -eval "(assert (boundp 'py-lhs-inbound-indent) nil \"py-lhs-inbound-indent not a variable\")" \
 -eval "(assert (boundp 'py-continuation-offset) nil \"py-continuation-offset not a variable\")" \
 -eval "(assert (boundp 'py-indent-tabs-mode) nil \"py-indent-tabs-mode not a variable\")" \
@@ -952,14 +913,12 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'py-shell-input-prompt-2-regexp) nil \"py-shell-input-prompt-2-regexp not a variable\")" \
 -eval "(assert (boundp 'py-shell-prompt-read-only) nil \"py-shell-prompt-read-only not a variable\")" \
 -eval "(assert (boundp 'py-switch-buffers-on-execute-p) nil \"py-switch-buffers-on-execute-p not a variable\")" \
--eval "(assert (boundp 'py-split-windows-on-execute-p) nil \"py-split-windows-on-execute-p not a variable\")" \
--eval "(assert (boundp 'py-max-split-windows) nil \"py-max-split-windows not a variable\")" \
+-eval "(assert (boundp 'py-split-window-on-execute) nil \"py-split-window-on-execute not a variable\")" \
 -eval "(assert (boundp 'py-split-windows-on-execute-function) nil \"py-split-windows-on-execute-function not a variable\")" \
 -eval "(assert (boundp 'py-hide-show-keywords) nil \"py-hide-show-keywords not a variable\")" \
 -eval "(assert (boundp 'py-hide-show-hide-docstrings) nil \"py-hide-show-hide-docstrings not a variable\")" \
 -eval "(assert (boundp 'python-mode-hook) nil \"python-mode-hook not a variable\")" \
--eval "(assert (boundp 'py-imenu-create-index-p) nil \"py-imenu-create-index-p not a variable\")" \
--eval "(assert (boundp 'py-imenu-create-index-function) nil \"py-imenu-create-index-function not a variable\")" \
+-eval "(assert (boundp 'py--imenu-create-index-p) nil \"py-imenu-create-index-p not a variable\")" \
 -eval "(assert (boundp 'py-shell-name) nil \"py-shell-name not a variable\")" \
 -eval "(assert (boundp 'py-shell-toggle-1) nil \"py-shell-toggle-1 not a variable\")" \
 -eval "(assert (boundp 'py-shell-toggle-2) nil \"py-shell-toggle-2 not a variable\")" \
@@ -975,7 +934,7 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'py-force-py-shell-name-p) nil \"py-force-py-shell-name-p not a variable\")" \
 -eval "(assert (boundp 'python-mode-v5-behavior-p) nil \"python-mode-v5-behavior-p not a variable\")" \
 -eval "(assert (boundp 'py-trailing-whitespace-smart-delete-p) nil \"py-trailing-whitespace-smart-delete-p not a variable\")" \
--eval "(assert (boundp 'py-warn-tmp-files-left-p) nil \"py-warn-tmp-files-left-p not a variable\")" \
+-eval "(assert (boundp 'py--warn-tmp-files-left-p) nil \"py-warn-tmp-files-left-p not a variable\")" \
 -eval "(assert (boundp 'py-ipython-execute-delay) nil \"py-ipython-execute-delay not a variable\")" \
 -eval "(assert (boundp 'strip-chars-before) nil \"strip-chars-before not a variable\")" \
 -eval "(assert (boundp 'strip-chars-after) nil \"strip-chars-after not a variable\")" \
@@ -999,7 +958,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'py-separator-char) nil \"py-separator-char not a variable\")" \
 -eval "(assert (boundp 'py-temp-directory) nil \"py-temp-directory not a variable\")" \
 -eval "(assert (boundp 'py-exec-command) nil \"py-exec-command not a variable\")" \
--eval "(assert (boundp 'py-exec-string-command) nil \"py-exec-string-command not a variable\")" \
 -eval "(assert (boundp 'py-which-bufname) nil \"py-which-bufname not a variable\")" \
 -eval "(assert (boundp 'py-pychecker-history) nil \"py-pychecker-history not a variable\")" \
 -eval "(assert (boundp 'py-pep8-history) nil \"py-pep8-history not a variable\")" \
@@ -1015,7 +973,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'eldoc-documentation-function) nil \"eldoc-documentation-function not a variable\")" \
 -eval "(assert (boundp 'py-completion-last-window-configuration) nil \"py-completion-last-window-configuration not a variable\")" \
 -eval "(assert (boundp 'py-shell-template) nil \"py-shell-template not a variable\")" \
--eval "(assert (boundp 'py-imports) nil \"py-imports not a variable\")" \
 -eval "(assert (boundp 'py-execute-directory) nil \"py-execute-directory not a variable\")" \
 -eval "(assert (boundp 'py-use-current-dir-when-execute-p) nil \"py-use-current-dir-when-execute-p not a variable\")" \
 -eval "(assert (boundp 'py-exception-buffer) nil \"py-exception-buffer not a variable\")" \
@@ -1030,12 +987,9 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'py-not-expression-chars) nil \"py-not-expression-chars not a variable\")" \
 -eval "(assert (boundp 'py-partial-expression-forward-chars) nil \"py-partial-expression-forward-chars not a variable\")" \
 -eval "(assert (boundp 'py-partial-expression-backward-chars) nil \"py-partial-expression-backward-chars not a variable\")" \
--eval "(assert (boundp 'py-partial-expression-regexp) nil \"py-partial-expression-regexp not a variable\")" \
--eval "(assert (boundp 'py-not-partial-expression-regexp) nil \"py-not-partial-expression-regexp not a variable\")" \
 -eval "(assert (boundp 'py-operator-regexp) nil \"py-operator-regexp not a variable\")" \
 -eval "(assert (boundp 'py-assignment-regexp) nil \"py-assignment-regexp not a variable\")" \
 -eval "(assert (boundp 'py-delimiter-regexp) nil \"py-delimiter-regexp not a variable\")" \
--eval "(assert (boundp 'py-delimiter-chars) nil \"py-delimiter-chars not a variable\")" \
 -eval "(assert (boundp 'py-line-number-offset) nil \"py-line-number-offset not a variable\")" \
 -eval "(assert (boundp 'match-paren-no-use-syntax-pps) nil \"match-paren-no-use-syntax-pps not a variable\")" \
 -eval "(assert (boundp 'py-traceback-line-re) nil \"py-traceback-line-re not a variable\")" \
@@ -1045,8 +999,10 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'py-pdbtrack-input-prompt) nil \"py-pdbtrack-input-prompt not a variable\")" \
 -eval "(assert (boundp 'py-pydbtrack-input-prompt) nil \"py-pydbtrack-input-prompt not a variable\")" \
 -eval "(assert (boundp 'py-pdbtrack-is-tracking-p) nil \"py-pdbtrack-is-tracking-p not a variable\")" \
+-eval "(assert (boundp 'py-shell-mode-map) nil \"py-shell-mode-map not a variable\")" \
 -eval "(assert (boundp 'py-shell-map) nil \"py-shell-map not a variable\")" \
--eval "(assert (boundp 'py-font-lock-keywords) nil \"py-font-lock-keywords not a variable\")" \
+-eval "(assert (boundp 'py-mode-map) nil \"py-mode-map not a variable\")" \
+-eval "(assert (boundp 'python-font-lock-keywords) nil \"python-font-lock-keywords not a variable\")" \
 -eval "(assert (boundp 'py-dotted-expression-syntax-table) nil \"py-dotted-expression-syntax-table not a variable\")" \
 -eval "(assert (boundp 'jython-mode-hook) nil \"jython-mode-hook not a variable\")" \
 -eval "(assert (boundp 'py-shell-hook) nil \"py-shell-hook not a variable\")" \
@@ -1070,7 +1026,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'virtualenv-name) nil \"virtualenv-name not a variable\")" \
 -eval "(assert (boundp 'python-mode-syntax-table) nil \"python-mode-syntax-table not a variable\")" \
 -eval "(assert (boundp 'py-shell-template) nil \"py-shell-template not a variable\")" \
--eval "(assert (boundp 'py-blank-or-comment-re) nil \"py-blank-or-comment-re not a variable\")" \
 -eval "(assert (boundp 'py-block-closing-keywords-re) nil \"py-block-closing-keywords-re not a variable\")" \
 -eval "(assert (boundp 'py-finally-re) nil \"py-finally-re not a variable\")" \
 -eval "(assert (boundp 'py-except-re) nil \"py-except-re not a variable\")" \
@@ -1096,11 +1051,110 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 -eval "(assert (boundp 'py-pdbtrack-marker-regexp-line-group) nil \"py-pdbtrack-marker-regexp-line-group not a variable\")" \
 -eval "(assert (boundp 'py-pdbtrack-marker-regexp-funcname-group) nil \"py-pdbtrack-marker-regexp-funcname-group not a variable\")" \
 -eval "(assert (boundp 'py-pdbtrack-track-range) nil \"py-pdbtrack-track-range not a variable\")" \
--eval "(assert (boundp 'python-compilation-regexp-alist) nil \"python-compilation-regexp-alist not a variable\")" \
--eval "(assert (boundp 'py-font-lock-syntactic-keywords) nil \"py-font-lock-syntactic-keywords not a variable\")" \
--eval "(assert (boundp 'py-font-lock-keywords) nil \"py-font-lock-keywords not a variable\")" \
+-eval "(assert (boundp 'py-compilation-regexp-alist) nil \"py-compilation-regexp-alist not a variable\")" \
 -eval "(assert (boundp 'py-font-lock-syntactic-keywords) nil \"py-font-lock-syntactic-keywords not a variable\")" \
 -eval "(assert (boundp 'virtualenv-name) nil \"virtualenv-name not a variable\")" \
+--funcall comment-inside-curly-braces-lp-1395076-test \
+--funcall py-execute-region-python3-no-switch-test \
+--funcall script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test \
+--funcall completion-fails-in-python-script-r989-lp-1004613-test \
+--funcall augmented-assigment-test \
+--funcall py-fill-string-django-test \
+--funcall py-fill-string-onetwo-test \
+--funcall py-fill-string-pep-257-test \
+--funcall py-fill-string-pep-257-nn-test \
+--funcall py-fill-string-symmetric-test \
+--funcall forward-sexp-test \
+--funcall fill-paragraph-in-docstring-lp-1161232-test \
+--funcall ipython-shell-complete-test \
+--funcall inconvenient-window-splitting-behavior-ipython-lp-1018996-test \
+--funcall does-not-dedent-regions-lp-1072869-test \
+--funcall py-execute-buffer-ipython-lp-1252643-test \
+--funcall py-ipython-complete-lp-927136-test \
+--funcall temporary-files-remain-when-python-raises-exception-lp-1083973-n1-test \
+--funcall temporary-files-remain-when-python-raises-exception-lp-1083973-n2-test \
+--funcall temporary-files-remain-when-python-raises-exception-lp-1083973-n3-test \
+--funcall temporary-files-remain-when-python-raises-exception-lp-1083973-n4-test \
+--funcall py-electric-comment-add-space-lp-828398-test \
+--funcall py-electric-comment-add-space-t-lp-828398-test \
+--funcall switch-windows-on-execute-p-test \
+--funcall C-c-C-c-lp-1221310-and-store-result-test \
+--funcall execute-region-lp-1294796-test \
+--funcall more-docstring-filling-woes-lp-1102296-pep-257-test \
+--funcall more-docstring-filling-woes-lp-1102296-pep-257-nn-test \
+--funcall py-docstring-style-pep-257-nn-closing-quotes-lp-1241147-test \
+--funcall py-execute-block-or-clause-python-test \
+--funcall goto-beginning-of-tqs-lp-735328-test \
+--funcall previous-statement-lp-637955-test \
+--funcall py-shell-name-no-op-lp-1349549-test \
+--funcall stop-before-prompt-lp-1331953-test \
+--funcall py-describe-symbol-fails-on-modules-lp-919719-test \
+--funcall py-execute-buffer-python3-looks-broken-lp-1085386-test \
+--funcall UnicodeEncodeError-python3-test \
+--funcall execute-buffer-lp-1338134-test \
+--funcall py-execute-block-or-clause-python2-test \
+--funcall py-split-window-on-execute-lp-1361531-ipython-test \
+--funcall py-split-window-on-execute-lp-1361531-bpython-test \
+--funcall key-binding-tests \
+--funcall automatic-indentation-is-broken-lp-889643-test \
+--funcall execute-indented-code-lp-828314-test \
+--funcall py-nested-block-or-clause-test \
+--funcall py-split-window-on-execute-lp-1361531-python-test \
+--funcall py-split-window-on-execute-lp-1361531-python2-test \
+--funcall py-split-window-on-execute-lp-1361531-jython-test \
+--funcall py-split-window-on-execute-lp-1361531-python3-test \
+--funcall py-store-result-test \
+--funcall Bogus-whitespace-left-in-docstring-after-wrapping-lp-1178455-test \
+--funcall py-shell-invoking-python-lp-835151-test \
+--funcall missing-py-variable-name-face-lp-1215791-test \
+--funcall inconvenient-window-splitting-behavior-python-lp-1018996-test \
+--funcall IndentationError-expected-an-indented-block-when-execute-lp-1055569-test \
+--funcall py-electric-delete-test \
+--funcall py-execute-buffer-python3-switch-test \
+--funcall fails-to-indent-abs-wrong-type-argument-lp-1075673-test \
+--funcall python2.7-shell-complete-test \
+--funcall python3-shell-complete-test \
+--funcall py-execute-buffer-python-switch-test \
+--funcall py-execute-buffer-python2-switch-test \
+--funcall indent-triplequoted-to-itself-lp-752252-test \
+--funcall not-that-useful-completion-lp-1003580-test \
+--funcall py-shell-in-a-shell-buffer-doesnt-work-lp-1182696-test \
+--funcall completion-at-gentoo-lp-1008842-test \
+--funcall wrong-type-argument-inserted-chars-lp-1293172-test \
+--funcall py-execute-block-or-clause-python3-test \
+--funcall py-object-reference-face-should-inherit-from-lp-1340455-test \
+--funcall python-shell-complete-test \
+--funcall impossible-to-execute-a-buffer-with-from-future-imports-lp-1063884-test \
+--funcall complaint-about-non-ASCII-character-lp-1042949-test \
+--funcall interpreter-mode-alist-lp-1355458-test-1 \
+--funcall interpreter-mode-alist-lp-1355458-test-2 \
+--funcall interpreter-mode-alist-lp-1355458-test-3 \
+--funcall interpreter-mode-alist-lp-1355458-test-4 \
+--funcall interpreter-mode-alist-lp-1355458-test-5 \
+--funcall auto-indent-lp-134258-test \
+--funcall dont-complete-empty-line-lp-1340824-test \
+--funcall vertical-alignment-lp-1332245-test \
+--funcall specify-default-interpreter-lp-1332652-test \
+--funcall py-beginning-of-statement-test-1 \
+--funcall docstring-style-switches-test \
+--funcall complaint-about-non-ASCII-character-lp-1042949-test \
+--funcall UnicodeEncodeError-lp-550661-test \
+--funcall filename-completion-fails-in-ipython-lp-1027265-n1-test \
+--funcall filename-completion-fails-in-ipython-lp-1027265-n2-test \
+--funcall master-file-not-honored-lp-794850-test \
+--funcall tab-results-in-never-ending-process-lp-1163423-test \
+--funcall incorrect-use-of-region-in-py-shift-left-lp-875951-test \
+--funcall py-end-of-block-test \
+--funcall several-new-bugs-with-paragraph-filling-lp-1066489-test \
+--funcall py-shell-invoking-python3-lp-835151-test \
+--funcall py-shell-invoking-python2-lp-835151-test \
+--funcall py-execute-line-python-test \
+--funcall py-execute-line-python3-test \
+--funcall py-execute-line-python2-test \
+--funcall py-execute-expression-python-test \
+--funcall abbrevs-changed-t-when-starting-lp-1270631-test \
+--funcall py-empty-line-closes-p-lp-1235324-test \
+--funcall infinite-loop-after-tqs-lp-826044-test \
 --funcall beginning-of-block-fails-from-wrong-indent-test \
 --funcall cascading-indent-lp-1101962-test \
 --funcall Bogus-dedent-when-typing-colon-in-dictionary-literal-lp-1197171-test \
@@ -1113,8 +1167,8 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 --funcall py-end-of-statement-test-2 \
 --funcall nested-if-test-1 \
 --funcall incorrect-indentation-of-comments-in-a-multiline-list-lp-1077063-test \
---funcall indentation-wrong-after-multi-line-parameter-list-lp:871698-test \
---funcall indent-after-inline-comment-lp:873372-test \
+--funcall indentation-wrong-after-multi-line-parameter-list-lp-871698-test \
+--funcall indent-after-inline-comment-lp-873372-test \
 --funcall honor-comments-indent-test \
 --funcall TAB-leaves-point-in-the-wrong-lp-1178453-test \
 --funcall loops-on-if-else-lp-328777-test \
@@ -1137,104 +1191,96 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 --funcall pyindex-mishandles-class-definitions-lp-1018164-test \
 --funcall py-guess-indent-offset-test \
 --funcall py-end-of-block-or-clause-test \
---funcall mark-decorators-lp:328851-test \
+--funcall mark-decorators-lp-328851-test \
 --funcall py-expression-index-test \
---funcall py-execute-buffer-python3-switch-test \
---funcall py-execute-buffer-python2-switch-test \
 --funcall py-guess-indent-offset-dont-detect-indent-of-2-lp-1027389-test \
---funcall split-windows-on-execute-p-test \
---funcall key-binding-tests \
 --funcall py-narrow-to-defun-lp-1020531-test \
---funcall return-statement-indented-incorrectly-lp-1019601.py-test \
---funcall converts-tabs-to-spaces-in-indent-tabs-mode-t-lp-1019128.py-test \
---funcall empty-triple-quote-lp:1009318-test \
+--funcall return-statement-indented-incorrectly-lp-1019601-test \
+--funcall converts-tabs-to-spaces-in-indent-tabs-mode-t-lp-1019128-test \
+--funcall empty-triple-quote-lp-1009318-test \
 --funcall spurious-trailing-whitespace-lp-1008679-test \
---funcall shebang-interpreter-not-detected-lp:1001327-test \
---funcall new-problem-with-py-temp-directory-lp:965762-test \
---funcall new-problem-with-py-temp-directory-lp:965762-test \
---funcall dq-in-tqs-string-lp:328813-test \
---funcall py-current-defun-lp:328846-test \
---funcall flexible-indentation-lp:328842-test \
---funcall hungry-delete-backwards-lp:328853-test \
---funcall hungry-delete-forward-lp:328853-test \
---funcall bullet-lists-in-comments-lp:328782-test \
---funcall imenu-newline-arglist-lp:328783-test \
---funcall nested-indents-lp:328775-test \
---funcall imenu-matches-in-docstring-lp:436285-test \
---funcall exceptions-not-highlighted-lp:473525-test \
---funcall inbound-indentation-multiline-assignment-lp:629916-test \
---funcall indentation-of-continuation-lines-lp:691185-test \
---funcall class-treated-as-keyword-lp:709478-test \
---funcall backslashed-continuation-line-indent-lp:742993-test \
---funcall py-decorators-face-lp:744335-test \
---funcall indent-after-return-lp:745208-test \
---funcall keep-assignments-column-lp:748198-test \
---funcall multiline-listings-indent-lp:761946-test \
---funcall new-page-char-causes-loop-lp:762498-test \
---funcall nested-dicts-indent-lp:763756-test \
---funcall bad-indent-after-except-lp:771289-test \
---funcall indent-open-paren-not-last-lp:771291-test \
---funcall wrong-indent-after-else-lp:772610-test \
---funcall except-indents-wrong-lp:784432-test \
---funcall indent-explicitly-set-in-multiline-tqs-lp:784225-test \
---funcall unbalanced-parentheses-lp:784645-test \
---funcall explicitly-indent-in-list-lp:785018-test \
---funcall explicit-backslashed-continuation-line-indent-lp:785091-test \
---funcall indentation-error-lp:795773-test \
---funcall class-highlighted-as-keywords-lp:798287-test \
---funcall indent-function-arglist-lp:800088-test \
---funcall python-mode-hangs-lp:801780-test \
---funcall stops-backslashed-line-lp:802504-test \
---funcall stops-backslashed-line-lp:802504-test2 \
---funcall py-variable-name-face-lp:798538-test \
---funcall colon-causes-error-lp:818665-test \
---funcall if-indentation-lp:818720-test \
---funcall closing-parentesis-indent-lp:821820-test \
---funcall py-indent-line-lp:822532-test \
---funcall indent-honor-arglist-whitespaces-lp:822540-test \
---funcall comments-indent-honor-setting-lp:824427-test \
---funcall closing-list-lp:826144-test \
---funcall wrong-indentation-of-function-arguments-lp:840891-test \
---funcall wrong-guess-for-py-indent-offset-lp:852052-test \
---funcall indent-match-import-pkg-lp:852500-test \
---funcall py-hungry-delete-backwards-needs-cc-lp:850595-test \
---funcall py-shift-line-when-no-region-lp:855565-test \
---funcall indentation-of-from-import-continuation-lines-lp:858041-test \
---funcall indentation-after-one-line-suites-lp:858044-test \
---funcall py-compute-indentation-wrong-at-eol-lp:858043-test \
---funcall comment-indentation-level-lp:869854-test \
---funcall no-indent-after-continue-lp:872676-test \
---funcall else-clause-indentation-lp:874470-test \
---funcall indent-after-multiple-except-statements-lp:883815-test \
---funcall wrongly-highlighted-as-keywords-lp:885144-test \
---funcall glitch-when-indenting-lists-lp:886473-test \
---funcall another-indentation-bug-inside-docstrings-lp:900684-test \
---funcall incorrect-use-of-region-in-py-shift-left-lp:875951-test \
---funcall indentation-keyword-lp:885143-test \
---funcall fore-00007F-breaks-indentation-lp:328788-test \
---funcall indent-offset-not-guessed-when-loading-lp:902890-test \
---funcall from-__future__-import-absolute_import-mishighlighted-lp:907084-test \
---funcall automatic-indentation-is-broken-lp:889643-test \
---funcall chars-uU-preceding-triple-quoted-get-string-face-lp:909517-test \
---funcall py-pychecker-run-missing-lp:910783-test \
---funcall py-forward-into-nomenclature-lp:916818-test \
---funcall py-forward-into-nomenclature-jumps-over-CamelCased-words-lp:919540-test \
---funcall py-backward-into-nomenclature-caps-names-lp:919541-test \
---funcall fourth-level-blocks-indent-incorrectly-lp:939577-test \
---funcall py-mark-expression-marks-too-much-lp:941140-test \
---funcall py-indent-comments-nil-ignored-lp:958721-test \
---funcall tuple-unpacking-highlighted-incorrectly-lp:961496-test \
+--funcall shebang-interpreter-not-detected-lp-1001327-test \
+--funcall new-problem-with-py-temp-directory-lp-965762-test \
+--funcall new-problem-with-py-temp-directory-lp-965762-test \
+--funcall dq-in-tqs-string-lp-328813-test \
+--funcall py-current-defun-lp-328846-test \
+--funcall flexible-indentation-lp-328842-test \
+--funcall hungry-delete-backwards-lp-328853-test \
+--funcall hungry-delete-forward-lp-328853-test \
+--funcall bullet-lists-in-comments-lp-328782-test \
+--funcall imenu-newline-arglist-lp-328783-test \
+--funcall nested-indents-lp-328775-test \
+--funcall imenu-matches-in-docstring-lp-436285-test \
+--funcall exceptions-not-highlighted-lp-473525-test \
+--funcall inbound-indentation-multiline-assignment-lp-629916-test \
+--funcall indentation-of-continuation-lines-lp-691185-test \
+--funcall class-treated-as-keyword-lp-709478-test \
+--funcall backslashed-continuation-line-indent-lp-742993-test \
+--funcall py-decorators-face-lp-744335-test \
+--funcall indent-after-return-lp-745208-test \
+--funcall keep-assignments-column-lp-748198-test \
+--funcall multiline-listings-indent-lp-761946-test \
+--funcall new-page-char-causes-loop-lp-762498-test \
+--funcall nested-dicts-indent-lp-763756-test \
+--funcall bad-indent-after-except-lp-771289-test \
+--funcall indent-open-paren-not-last-lp-771291-test \
+--funcall wrong-indent-after-else-lp-772610-test \
+--funcall except-indents-wrong-lp-784432-test \
+--funcall indent-explicitly-set-in-multiline-tqs-lp-784225-test \
+--funcall unbalanced-parentheses-lp-784645-test \
+--funcall explicitly-indent-in-list-lp-785018-test \
+--funcall explicit-backslashed-continuation-line-indent-lp-785091-test \
+--funcall indentation-error-lp-795773-test \
+--funcall class-highlighted-as-keywords-lp-798287-test \
+--funcall indent-function-arglist-lp-800088-test \
+--funcall python-mode-hangs-lp-801780-test \
+--funcall stops-backslashed-line-lp-802504-test \
+--funcall stops-backslashed-line-lp-802504-test2 \
+--funcall py-variable-name-face-lp-798538-test \
+--funcall colon-causes-error-lp-818665-test \
+--funcall if-indentation-lp-818720-test \
+--funcall closing-parenthesis-indent-lp-821820-test \
+--funcall py-indent-line-lp-822532-test \
+--funcall indent-honor-arglist-whitespaces-lp-822540-test \
+--funcall comments-indent-honor-setting-lp-824427-test \
+--funcall closing-list-lp-826144-test \
+--funcall wrong-indentation-of-function-arguments-lp-840891-test \
+--funcall wrong-guess-for-py-indent-offset-lp-852052-test \
+--funcall indent-match-import-pkg-lp-852500-test \
+--funcall py-hungry-delete-backwards-needs-cc-lp-850595-test \
+--funcall py-shift-line-when-no-region-lp-855565-test \
+--funcall indentation-of-from-import-continuation-lines-lp-858041-test \
+--funcall indentation-after-one-line-suites-lp-858044-test \
+--funcall py-compute-indentation-wrong-at-eol-lp-858043-test \
+--funcall comment-indentation-level-lp-869854-test \
+--funcall no-indent-after-continue-lp-872676-test \
+--funcall else-clause-indentation-lp-874470-test \
+--funcall indent-after-multiple-except-statements-lp-883815-test \
+--funcall wrongly-highlighted-as-keywords-lp-885144-test \
+--funcall glitch-when-indenting-lists-lp-886473-test \
+--funcall another-indentation-bug-inside-docstrings-lp-900684-test \
+--funcall indentation-keyword-lp-885143-test \
+--funcall fore-00007F-breaks-indentation-lp-328788-test \
+--funcall indent-offset-not-guessed-when-loading-lp-902890-test \
+--funcall from-__future__-import-absolute_import-mishighlighted-lp-907084-test \
+--funcall chars-uU-preceding-triple-quoted-get-string-face-lp-909517-test \
+--funcall py-pychecker-run-missing-lp-910783-test \
+--funcall py-forward-into-nomenclature-lp-916818-test \
+--funcall py-forward-into-nomenclature-jumps-over-CamelCased-words-lp-919540-test \
+--funcall py-backward-into-nomenclature-caps-names-lp-919541-test \
+--funcall fourth-level-blocks-indent-incorrectly-lp-939577-test \
+--funcall py-mark-expression-marks-too-much-lp-941140-test \
+--funcall py-indent-comments-nil-ignored-lp-958721-test \
+--funcall tuple-unpacking-highlighted-incorrectly-lp-961496-test \
 \
 --funcall py-compute-indentation-test \
 --funcall py-end-of-def-inline-comment-test \
 --funcall before-inline-comment-test \
 --funcall toggle-force-py-shell-name-p-test \
 --funcall multiline-list-indent-test \
---funcall py-end-of-block-test \
 --funcall py-beginning-of-block-or-clause-test \
 --funcall py-beginning-of-def-test \
 --funcall py-beginning-of-def-or-class-test \
---funcall py-electric-delete-test \
 --funcall near-bob-beginning-of-statement-test \
 --funcall first-line-offset-test \
 --funcall assignment-indent-test \
@@ -1258,178 +1304,42 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(when (featurep 'py
 --funcall py-insert-super-python2-test \
 --funcall nested-try-finally-test \
 --funcall py-separator-char-test \
---funcall switch-windows-on-execute-p-test \
 --funcall python-dedicated-test \
-\
---funcall py-execute-statement-test \
---funcall py-execute-block-test \
---funcall py-execute-block-or-clause-test \
---funcall py-execute-def-test \
---funcall py-execute-class-test \
---funcall py-execute-region-test \
---funcall py-execute-buffer-test \
---funcall py-execute-expression-test \
---funcall py-execute-line-test \
-\
---funcall py-execute-statement-python-test \
---funcall py-execute-statement-python3-test \
---funcall py-execute-statement-python2-test \
---funcall py-execute-statement-python2.7-switch-test \
---funcall py-execute-statement-python2.7-no-switch-test \
---funcall py-execute-statement-python2.7-dedicated-test \
---funcall py-execute-statement-python2.7-dedicated-switch-test \
-\
---funcall py-shell-complete-test \
---funcall py-execute-def-python-test \
---funcall py-execute-def-python3-test \
---funcall py-execute-def-python2-test \
---funcall py-execute-def-python2.7-test \
---funcall py-execute-class-python-test \
---funcall py-execute-class-python3-test \
---funcall py-execute-class-python2-test \
---funcall py-execute-class-python2.7-test \
---funcall py-execute-region-python-test \
---funcall py-execute-region-python3-test \
---funcall py-execute-region-python2-switch-test \
---funcall py-execute-expression-python3-test \
---funcall py-execute-expression-python2-test \
---funcall py-execute-expression-python2.7-test \
---funcall py-execute-block-python3-test \
---funcall py-execute-block-python2-test \
---funcall py-execute-block-python2.7-test \
-\
---funcall py-shell-invoking-python3-lp:835151-test \
---funcall py-shell-invoking-python2-lp:835151-test \
---funcall py-shell-invoking-python2.7-lp:835151-test \
---funcall py-shell-invoking-jython-lp:835151-test \
 \
 --funcall py-electric-backspace-test \
 --funcall py-insert-super-python3-test \
 \
 --funcall dict-error-test \
 --funcall py-install-directory-path-test \
---funcall py-execute-region-python3-no-switch-test \
 --funcall py-end-of-print-statement-test \
---funcall py-describe-symbol-fails-on-modules-lp:919719-test \
 --funcall py-find-imports-lp-1023236-test \
---funcall execute-indented-code-lp:828314-test \
---funcall py-execute-region-python2.7-switch-test \
---funcall py-execute-buffer-python-switch-test \
 --funcall py-beginning-of-expression-test \
 --funcall py-end-of-expression-test \
 --funcall py-partial-expression-test \
 --funcall bob-beginning-of-statement-test \
---funcall completion-at-gentoo-lp-1008842-test \
---funcall indent-triplequoted-to-itself-lp:752252-test \
---funcall complaint-about-non-ASCII-character-lp-1042949-test \
 --funcall py-beginning-of-block-test \
 --funcall stalls-emacs-probably-due-to-syntax-highlighting-lp-1058261-test \
---funcall tqs-lp:302834-lp:1018994-test \
+--funcall tqs-lp-302834-lp-1018994-test \
 --funcall py-end-of-def-test \
 --funcall py-end-of-def-or-class-test \
---funcall python-mode-slow-lp:803275-test \
---funcall beg-end-of-defun-lp:303622-test \
---funcall py-nested-block-or-clause-test \
---funcall indent-region-lp:997958-test \
---funcall wrong-type-argument-lp:901541-test \
---funcall indentation-bug-inside-docstrings-lp:899455-test \
---funcall impossible-to-execute-a-buffer-with-from-future-imports-lp-1063884-test \
---funcall more-docstring-filling-woes-lp-1102296-nil-test \
---funcall more-docstring-filling-woes-lp-1102296-onetwo-test \
---funcall more-docstring-filling-woes-lp-1102296-django-test \
---funcall more-docstring-filling-woes-lp-1102296-symmetric-test \
---funcall UnicodeEncodeError-python3-test \
---funcall UnicodeEncodeError-lp:550661-test \
---funcall ipython-complete-lp-1102226-test \
---funcall filename-completion-fails-in-ipython-lp-1027265-n1-test \
---funcall filename-completion-fails-in-ipython-lp-1027265-n2-test \
---funcall py-shell-invoking-python-lp:835151-test \
---funcall usr-bin-python2.7-shell-complete-test \
---funcall usr-bin-python-shell-complete-test \
---funcall py-run-shell-complete-tests \
---funcall py-execute-statement-ipython-test \
---funcall py-execute-buffer-ipython-switch-test \
---funcall py-execute-region-ipython-test \
---funcall py-execute-def-ipython-test \
---funcall py-execute-class-ipython-test \
---funcall py-execute-expression-ipython-test \
---funcall execute-buffer-ipython-fails-lp:928087-test \
---funcall py-shell-invoking-ipython-lp:835151-test \
---funcall py-execute-block-ipython-test \
---funcall py-execute-block-or-clause-ipython-test \
---funcall py-execute-line-ipython-test \
---funcall script-buffer-appears-instead-of-python-shell-buffer-lp:957561-test \
---funcall completion-fails-in-python-script-r989-lp:1004613-test \
---funcall augmented-assigment-test \
---funcall py-fill-string-django-test \
---funcall py-fill-string-onetwo-test \
---funcall py-fill-string-pep-257-test \
---funcall py-fill-string-pep-257-nn-test \
---funcall py-fill-string-symmetric-test \
---funcall forward-sexp-test \
+--funcall python-mode-slow-lp-803275-test \
+--funcall beg-end-of-defun-lp-303622-test \
+--funcall indent-region-lp-997958-test \
+--funcall wrong-type-argument-lp-901541-test \
+--funcall indentation-bug-inside-docstrings-lp-899455-test \
 --funcall comments-start-a-new-line-lp-1092847-n1-test \
---funcall py-execute-block-python-test \
---funcall py-execute-block-or-clause-python-test \
---funcall master-file-not-honored-lp:794850-test \
---funcall inconvenient-window-splitting-behavior-python-lp-1018996-test \
---funcall fill-paragraph-in-docstring-lp-1161232-test \
---funcall no-completion-at-all-lp:1001328-test \
---funcall tab-results-in-never-ending-process-lp-1163423-test \
---funcall nested-dictionaries-indent-lp:328791-test \
---funcall infinite-loop-after-tqs-lp:826044-test\
---funcall ipython-shell-complete-test \
---funcall usr-bin-ipython-shell-complete-test \
---funcall inconvenient-window-splitting-behavior-ipython-lp-1018996-test \
---funcall python-shell-complete-test \
---funcall not-that-useful-completion-lp:1003580-test \
+--funcall nested-dictionaries-indent-lp-328791-test \
 --funcall tqs-list-error-test \
---funcall does-not-dedent-regions-lp-1072869-test \
---funcall py-ipython-complete-lp:927136-test \
 --funcall py-smart-operator-test \
---funcall py-down-statement-test \
---funcall previous-statement-lp:637955-test \
---funcall goto-beginning-of-tqs-lp:735328-test \
---funcall temporary-files-remain-when-python-raises-exception-lp-1083973-n1-test 2 \
---funcall temporary-files-remain-when-python-raises-exception-lp-1083973-n2-test 2 \
---funcall temporary-files-remain-when-python-raises-exception-lp-1083973-n3-test 2 \
---funcall temporary-files-remain-when-python-raises-exception-lp-1083973-n4-test 2 \
---funcall py-electric-comment-add-space-lp:828398-test \
---funcall py-electric-comment-add-space-t-lp:828398-test \
---funcall py-execute-block-or-clause-python3-test \
---funcall py-execute-block-or-clause-python2-test \
---funcall py-execute-block-or-clause-python2.7-test \
---funcall py-execute-block-or-clause-python2.7-switch-test \
---funcall py-execute-block-or-clause-python2.7-no-switch-test \
---funcall py-execute-block-or-clause-python2.7-dedicated-test \
---funcall py-execute-block-or-clause-python2.7-dedicated-switch-test \
---funcall py-execute-line-python-test \
---funcall py-execute-line-python3-test \
---funcall py-execute-line-python2-test \
---funcall py-execute-line-python2.7-test \
---funcall py-execute-line-python2.7-switch-test \
---funcall py-execute-line-python2.7-no-switch-test \
---funcall py-execute-line-python2.7-dedicated-test \
---funcall py-execute-line-python2.7-dedicated-switch-test \
---funcall py-execute-expression-python-test \
 --funcall python-mode-very-slow-lp-1107037-test \
 --funcall module-docstring-when-following-comment-lp-1102011-test \
---funcall docstring-style-switches-test \
 --funcall py-newline-and-indent-leaves-eol-whitespace-lp-1100892-test \
 --funcall enter-key-does-not-indent-properly-after-return-statement-lp-1098793-test \
 --funcall comments-start-a-new-line-lp-1092847-n2-test \
 --funcall py-bol-moves-test \
---funcall py-execute-buffer-python3-looks-broken-lp-1085386-test \
---funcall fails-to-indent-abs-wrong-type-argument-lp-1075673-test \
---funcall several-new-bugs-with-paragraph-filling-lp-1066489-test \
---funcall more-docstring-filling-woes-lp-1102296-pep-257-test \
---funcall more-docstring-filling-woes-lp-1102296-pep-257-nn-test \
 --funcall from-within-py-shell-call-another-instance-lp-1169687-test \
+--funcall indent-after-expect-lp-1387329-test \
+--funcall py-indent-line-lp-1382799-test \
+--funcall split-windows-on-execute-p-test \
+--funcall py-shell-complete-test \
 --funcall py-if-name-main-permission-lp-326620-test \
---funcall Bogus-whitespace-left-in-docstring-after-wrapping-lp-1178455-test \
---funcall py-shell-in-a-shell-buffer-doesnt-work-lp:1182696-test \
---funcall another-broken-font-locking-lp:961231-test \
---funcall IndentationError-expected-an-indented-block-when-execute-lp-1055569-test \
---funcall missing-py-variable-name-face-lp-1215791-test \
---funcall cls-pseudo-keyword-lp:328849-test \
---funcall py-execute-region-error-test \
---funcall py-execute-statement-error-test \

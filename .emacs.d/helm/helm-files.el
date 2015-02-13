@@ -227,12 +227,6 @@ I.e use the -path/ipath arguments of find instead of -name/iname."
   :group 'helm-files
   :type 'hook)
 
-(defcustom helm-find-files-sort-directories nil
-  "When nil allow sorting directories when input is a matched directory.
-Note that this will be much slower."
-  :group 'helm-files
-  :type 'boolean)
-
 
 ;;; Faces
 ;;
@@ -255,6 +249,11 @@ Note that this will be much slower."
 
 (defface helm-ff-directory
     '((t (:foreground "DarkRed" :background "LightGray")))
+  "Face used for directories in `helm-find-files'."
+  :group 'helm-files-faces)
+
+(defface helm-ff-dotted-directory
+    '((t (:foreground "black" :background "DimGray")))
   "Face used for directories in `helm-find-files'."
   :group 'helm-files-faces)
 
@@ -433,7 +432,9 @@ Should not be used among other sources.")
      'helm-elscreen-find-file
      "View file" 'view-file
      "Checksum File" 'helm-ff-checksum
-     "Query replace on marked" 'helm-ff-query-replace-on-marked
+     "Query replace fnames on marked" 'helm-ff-query-replace-on-marked
+     "Query replace contents on marked" 'helm-ff-query-replace
+     "Query replace regexp contents on marked" 'helm-ff-query-replace-regexp
      "Serial rename files" 'helm-ff-serial-rename
      "Serial rename by symlinking files" 'helm-ff-serial-rename-by-symlink
      "Serial rename by copying files" 'helm-ff-serial-rename-by-copying
@@ -728,7 +729,7 @@ See `helm-find-files-eshell-command-on-file-1' for more info."
                         (format "cd '%s'" helm-ff-default-directory))
                        (eshell-send-input))))
     (if (get-buffer "*eshell*")
-        (helm-switch-to-buffer "*eshell*")
+        (switch-to-buffer "*eshell*")
       (call-interactively 'eshell))
     (unless (get-buffer-process (current-buffer))
       (funcall cd-eshell))))
@@ -898,6 +899,24 @@ See `helm-ff-serial-rename-1'."
 (defun helm-ff-run-query-replace-on-marked ()
   (interactive)
   (helm-ff-query-replace-on-marked nil))
+
+(defun helm-ff-query-replace (_candidate)
+  (let ((bufs (cl-loop for f in (helm-marked-candidates)
+                       collect (buffer-name (find-file-noselect f)))))
+    (helm-run-after-quit #'helm-buffer-query-replace-1 nil bufs)))
+
+(defun helm-ff-query-replace-regexp (_candidate)
+  (let ((bufs (cl-loop for f in (helm-marked-candidates)
+                       collect (buffer-name (find-file-noselect f)))))
+    (helm-run-after-quit #'helm-buffer-query-replace-1 'regexp bufs)))
+
+(defun helm-ff-run-query-replace ()
+  (interactive)
+  (helm-ff-query-replace nil))
+
+(defun helm-ff-run-query-replace-regexp ()
+  (interactive)
+  (helm-ff-query-replace-regexp nil))
 
 (defun helm-ff-toggle-auto-update (_candidate)
   (setq helm-ff-auto-update-flag (not helm-ff-auto-update-flag))
@@ -1314,7 +1333,7 @@ or when `helm-pattern' is equal to \"~/\"."
                  (not history-p)) ; Don't try to auto complete in history.
         (with-helm-window
           (let ((cur-cand (prog2
-                              (unless completed-p
+                              (unless (or completed-p (file-exists-p pat))
                                 ;; Only one non--existing candidate
                                 ;; and one directory candidate, move to it.
                                 (helm-next-line))
@@ -1838,16 +1857,15 @@ return FNAME prefixed with [?]."
            (concat prefix-new " " fname)))))
 
 (defun helm-ff-score-candidate-for-pattern (str pattern)
-  (if (and (member str '("." ".."))
-           helm-find-files-sort-directories)
+  (if (member str '("." ".."))
       200
       (helm-score-candidate-for-pattern str pattern)))
 
 (defun helm-ff-sort-candidates (candidates _source)
   "Sort function for `helm-source-find-files'.
 Return candidates prefixed with basename of `helm-input' first."
-  (if (or (and (null helm-find-files-sort-directories)
-               (file-directory-p helm-input))
+  (if (or (and (file-directory-p helm-input)
+               (string-match "/\\'" helm-input))
           (null candidates))
       candidates
       (let* ((c1        (car candidates))
@@ -1911,6 +1929,11 @@ Return candidates prefixed with basename of `helm-input' first."
               ((stringp type)
                (cons (helm-ff-prefix-filename
                       (propertize disp 'face 'helm-ff-symlink) t)
+                     file))
+              ;; A dotted directory.
+              ((and (eq t type) (helm-ff-dot-file-p file))
+               (cons (helm-ff-prefix-filename
+                      (propertize disp 'face 'helm-ff-dotted-directory) t)
                      file))
               ;; A directory.
               ((eq t type)
@@ -2069,9 +2092,12 @@ If a prefix arg is given or `helm-follow-mode' is on open file."
           ((string-match (image-file-name-regexp) candidate)
            (when (buffer-live-p (get-buffer image-dired-display-image-buffer))
              (kill-buffer image-dired-display-image-buffer))
+           ;; Fix emacs bug never fixed upstream.
+           (unless (file-directory-p image-dired-dir)
+             (make-directory image-dired-dir))
            (image-dired-display-image candidate)
            (message nil)
-           (helm-switch-to-buffer image-dired-display-image-buffer)
+           (switch-to-buffer image-dired-display-image-buffer)
            (with-current-buffer image-dired-display-image-buffer
              (let ((exif-data (helm-ff-exif-data candidate)))
                (setq default-directory helm-ff-default-directory)
@@ -2400,7 +2426,8 @@ Ask to kill buffers associated with that file, too."
         (message "%s File(s) deleted" len)))))
 
 (defun helm-find-file-or-marked (candidate)
-  "Open file CANDIDATE or open helm marked files in background."
+  "Open file CANDIDATE or open helm marked files in separate windows.
+Called with a prefix arg open files in background without selecting them."
   (let ((marked (helm-marked-candidates :with-wildcard t))
         (url-p (and ffap-url-regexp ; we should have only one candidate.
                     (string-match ffap-url-regexp candidate)))
@@ -2424,12 +2451,8 @@ Ask to kill buffers associated with that file, too."
                  (push helm-ff-default-directory helm-ff-history))
                (or (and helm-ff (helm-find-files-1 dir)) t))))
         (helm--reading-passwd-or-string t))
-    (if (> (length marked) 1)
-        ;; Open all marked files in background and display
-        ;; the first one.
-        (progn
-          (mapc 'find-file-noselect (cdr marked))
-          (find-file (car marked)))
+    (if (cdr marked)
+        (dired-simultaneous-find-file marked helm-current-prefix-arg)
       (if (and (not (file-exists-p candidate))
                (not url-p)
                (string-match "/$" candidate))
@@ -2737,10 +2760,12 @@ Need dependencies for VCS:
 and
 <https://github.com/emacs-helm/helm-mercurial-queue/blob/master/helm-ls-hg.el>."
   (interactive "P")
-  (cond ((and (fboundp 'helm-ls-git-root-dir)
+  (cond ((and (require 'helm-ls-git nil t)
+              (fboundp 'helm-ls-git-root-dir)
               (helm-ls-git-root-dir))
          (helm-ls-git-ls))
-        ((and (fboundp 'helm-hg-root)
+        ((and (require 'helm-ls-hg nil t)
+              (fboundp 'helm-hg-root)
               (helm-hg-root))
          (helm-hg-find-files-in-project))
         (t (let ((cur-dir (helm-current-directory)))
@@ -2923,37 +2948,45 @@ utility mdfind.")
                       (t (cons (propertize disp 'face 'helm-ff-file) abs)))))
 
 (defun helm-find-shell-command-fn ()
-  "Asynchronously fetch candidates for `helm-find'."
+  "Asynchronously fetch candidates for `helm-find'.
+Additional find options can be sepcified after a \"*\"
+separator."
   (require 'find-cmd)
-  (let ((case-fold-search (helm-set-case-fold-search helm-pattern)))
-    (with-helm-default-directory (helm-default-directory)
-        (let* (process-connection-type
-               (pattern (mapconcat 'identity (split-string helm-pattern) "*"))
-               (ignored-dirs ())
-               (ignored-files (when helm-findutils-skip-boring-files
-                                (cl-loop for f in completion-ignored-extensions
-                                         if (string-match "/$" f)
-                                         do (push (replace-match "" nil t f)
-                                                  ignored-dirs)
-                                         else collect (concat "*" f))))
-               (path-or-name (if helm-findutils-search-full-path
-                                 '(ipath path) '(iname name)))
-               (name-or-iname (if case-fold-search
-                                  (car path-or-name) (cadr path-or-name)))
-               (cmd (find-cmd (and ignored-dirs
-                                   `(prune (name ,@ignored-dirs)))
-                              (and ignored-files
-                                   `(not (name ,@ignored-files)))
-                              `(and (,name-or-iname ,(concat "*" pattern "*"))
-                                    (type "d" "f"))))
-               (proc (start-file-process-shell-command "hfind" helm-buffer cmd)))
-          (helm-log "Find command:\n%s" cmd)
-          (prog1 proc
-            (set-process-sentinel
-             proc
-             #'(lambda (process event)
-                 (helm-process-deferred-sentinel-hook
-                  process event (helm-default-directory)))))))))
+  (with-helm-default-directory (helm-default-directory)
+      (let* (process-connection-type
+             (patterns+options (split-string helm-pattern "\\(\\`\\| +\\)\\* +"))
+             (fold-case (helm-set-case-fold-search (car patterns+options)))
+             (patterns (split-string (car patterns+options)))
+             (additional-options (and (cdr patterns+options)
+                                      (list (concat (cadr patterns+options) " "))))
+             (ignored-dirs ())
+             (ignored-files (when helm-findutils-skip-boring-files
+                              (cl-loop for f in completion-ignored-extensions
+                                       if (string-match "/$" f)
+                                       do (push (replace-match "" nil t f)
+                                                ignored-dirs)
+                                       else collect (concat "*" f))))
+             (path-or-name (if helm-findutils-search-full-path
+                               '(ipath path) '(iname name)))
+             (name-or-iname (if fold-case
+                                (car path-or-name) (cadr path-or-name)))
+             (cmd (find-cmd (and ignored-dirs
+                                 `(prune (name ,@ignored-dirs)))
+                            (and ignored-files
+                                 `(not (name ,@ignored-files)))
+                            `(and ,@(mapcar
+                                     (lambda (pattern)
+                                       `(,name-or-iname ,(concat "*" pattern "*")))
+                                     patterns)
+                                  ,@additional-options)))
+             (proc (start-file-process-shell-command "hfind" helm-buffer cmd)))
+        (helm-log "Find command:\n%s" cmd)
+        (prog1 proc
+          (set-process-sentinel
+           proc
+           #'(lambda (process event)
+               (helm-process-deferred-sentinel-hook
+                process event (helm-default-directory))))))))
 
 (defun helm-find-1 (dir)
   (helm :sources 'helm-source-findutils

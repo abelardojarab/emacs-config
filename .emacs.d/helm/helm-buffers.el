@@ -110,7 +110,7 @@ Only buffer names are fuzzy matched when this is enabled,
   :group 'helm-buffers-faces)
 
 (defface helm-buffer-file
-    '((t :inherit font-lock-type-face))
+    '((t :inherit font-lock-builtin-face))
   "Face for buffer file names in `helm-buffers-list'."
   :group 'helm-buffers-faces)
 
@@ -203,7 +203,7 @@ Only buffer names are fuzzy matched when this is enabled,
                (if mjm
                    (with-current-buffer buffer (funcall mjm))
                    (set-buffer-major-mode buffer))
-               (helm-switch-to-buffer buffer))))))
+               (switch-to-buffer buffer))))))
 
 (defvar ido-temp-list)
 (defvar ido-ignored-list)
@@ -521,12 +521,12 @@ with name matching pattern."
               (t (helm-buffer--match-pattern i candidate)))))
 
 
-(defun helm-buffer-query-replace-1 (&optional regexp-flag)
+(defun helm-buffer-query-replace-1 (&optional regexp-flag buffers)
   "Query replace in marked buffers.
 If REGEXP-FLAG is given use `query-replace-regexp'."
   (let ((fn     (if regexp-flag 'query-replace-regexp 'query-replace))
         (prompt (if regexp-flag "Query replace regexp" "Query replace"))
-        (bufs   (helm-marked-candidates))
+        (bufs   (or buffers (helm-marked-candidates)))
         (helm--reading-passwd-or-string t))
     (cl-loop with replace = (query-replace-read-from prompt regexp-flag)
           with tostring = (unless (consp replace)
@@ -535,7 +535,7 @@ If REGEXP-FLAG is given use `query-replace-regexp'."
           for buf in bufs
           do
           (save-window-excursion
-            (helm-switch-to-buffer buf)
+            (switch-to-buffer buf)
             (save-excursion
               (let ((case-fold-search t))
                 (goto-char (point-min))
@@ -574,10 +574,11 @@ If REGEXP-FLAG is given use `query-replace-regexp'."
 
 (defun helm-buffer-revert-and-update (_candidate)
   (let ((marked (helm-marked-candidates))
-        (preselect (helm-get-selection nil t)))
+        (preselect (helm-buffers--quote-truncated-buffer
+                    (helm-get-selection))))
     (cl-loop for buf in marked do (helm-revert-buffer buf))
     (when (> (length marked) 1) (helm-unmark-all))
-    (helm-force-update (regexp-quote preselect))))
+    (helm-force-update preselect)))
 
 (defun helm-buffer-revert-persistent ()
   "Revert buffer without quitting helm."
@@ -647,7 +648,7 @@ If REGEXP-FLAG is given use `query-replace-regexp'."
   "Run switch to other window action from `helm-source-buffers-list'."
   (interactive)
   (with-helm-alive-p
-    (helm-quit-and-execute-action 'switch-to-buffer-other-window)))
+    (helm-quit-and-execute-action 'helm-switch-to-buffers-other-window)))
 
 (defun helm-buffer-switch-other-frame ()
   "Run switch to other frame action from `helm-source-buffers-list'."
@@ -673,7 +674,7 @@ If REGEXP-FLAG is given use `query-replace-regexp'."
   (with-helm-alive-p
     (helm-quit-and-execute-action 'helm-ediff-marked-buffers-merge)))
 
-(defun helm-buffers-persistent-kill (buffer)
+(defun helm-buffers-persistent-kill-1 (buffer)
   "Persistent action to kill buffer."
   (with-current-buffer (get-buffer buffer)
     (if (and (buffer-modified-p)
@@ -683,14 +684,37 @@ If REGEXP-FLAG is given use `query-replace-regexp'."
           (kill-buffer buffer))
       (kill-buffer buffer)))
   (helm-delete-current-selection)
-  (when (helm-empty-source-p) (helm-next-source))
   (with-helm-temp-hook 'helm-after-persistent-action-hook
     (helm-force-update (regexp-quote (helm-get-selection nil t)))))
+
+(defun helm-buffers--quote-truncated-buffer (bufname)
+  (regexp-quote
+   (if helm-buffer-max-length
+       (helm-substring-by-width
+        bufname helm-buffer-max-length
+        "")
+     bufname)))
+
+(defun helm-buffers-persistent-kill (_buffer)
+  (let ((marked (helm-marked-candidates)))
+    (unwind-protect
+         (cl-loop for b in marked
+               do (progn (helm-preselect
+                          (format "^%s"
+                                  (helm-buffers--quote-truncated-buffer b)))
+                         (when (y-or-n-p (format "kill buffer (%s)? " b))
+                           (helm-buffers-persistent-kill-1 b))
+                         (message nil)))
+      (with-helm-buffer
+        (setq helm-marked-candidates nil
+              helm-visible-mark-overlays nil))
+      (helm-force-update (helm-buffers--quote-truncated-buffer
+                          (helm-get-selection))))))
 
 (defun helm-buffers-list-persistent-action (candidate)
   (if current-prefix-arg
       (helm-buffers-persistent-kill candidate)
-    (helm-switch-to-buffer candidate)))
+    (switch-to-buffer candidate)))
 
 (defun helm-ediff-marked-buffers (_candidate &optional merge)
   "Ediff 2 marked buffers or CANDIDATE and `helm-current-buffer'.
@@ -770,7 +794,7 @@ displayed with the `file-name-shadow' face if available."
 (define-helm-type-attribute 'buffer
   `((action
      . ,(helm-make-actions
-         "Switch to buffer" 'helm-switch-to-buffer
+         "Switch to buffer" 'switch-to-buffer
          (lambda () (and (locate-library "popwin") "Switch to buffer in popup window"))
          'popwin:popup-buffer
          "Switch to buffer other window `C-c o'" 'switch-to-buffer-other-window

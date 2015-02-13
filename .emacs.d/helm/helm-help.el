@@ -168,19 +168,29 @@ text to be displayed in BUFNAME."
       (setq helm-suspend-update-flag nil)
       (set-frame-configuration winconf))))
 
+(defun helm-help-scroll-up (amount)
+  (condition-case _err
+      (scroll-up-command amount)
+    (beginning-of-buffer nil)
+    (end-of-buffer nil)))
+
+(defun helm-help-scroll-down (amount)
+  (condition-case _err
+      (scroll-down-command amount)
+    (beginning-of-buffer nil)
+    (end-of-buffer nil)))
+
 (defun helm-help-event-loop ()
   (let ((prompt (propertize
-                 "[SPC,C-v,down:NextPage  b,M-v,up:PrevPage]"
+                 "[SPC,C-v,down,next:NextPage  b,M-v,up,prior:PrevPage q:Quit]"
                  'face 'helm-helper))
-        (scroll-error-top-bottom t))
-    (condition-case _err
-        (cl-loop for event = (read-key prompt) do
-              (cl-case event
-                ((?\C-v ? down) (scroll-up-command helm-scroll-amount))
-                ((?\M-v ?b up)  (scroll-down-command helm-scroll-amount))
-                (t (cl-return))))
-      (beginning-of-buffer (message "Beginning of buffer"))
-      (end-of-buffer       (message "End of Buffer")))))
+        scroll-error-top-bottom)
+    (cl-loop for event = (read-key prompt) do
+             (cl-case event
+               ((?\C-v ? down next) (helm-help-scroll-up helm-scroll-amount))
+               ((?\M-v ?b up prior) (helm-help-scroll-down helm-scroll-amount))
+               (?q (cl-return))
+               (t (ignore))))))
 
 ;;;###autoload
 (defun helm-help ()
@@ -526,6 +536,20 @@ support the -b flag for compatibility with locate when they are used with it.
 When your directory is not under version control,
 don't forget to refresh your cache when files have been added/removed in your directory.
 
+*** Find command
+
+Recursively search files using \"find\" shell command.
+
+Candidates are all filenames that match all given globbing patterns.
+This respects the options `helm-case-fold-search' and
+`helm-findutils-search-full-path'.
+
+You can pass arbitrary options directly to find after a \"*\" separator.
+For example, this would find all files matching \"book\" that are larger
+than 1 megabyte:
+
+book * -size +1M
+
 \n** Specific commands for helm locate and others files sources:
 
 \\<helm-generic-files-map>
@@ -830,24 +854,22 @@ Multiple regexp matching is allowed, just enter a space to separate your regexps
   "\n* Helm elisp package\n
 \n** Helm elisp package tips:
 *** Upgrade elisp packages
-Upgrading is not yet implemented, but you can easily achieve this task like this:
 
-1) Show only installed packages
-   You should see two versions of package(s) if a new version
-   is available.
-2) Delete the installed package(s) version (Mark them and delete).
-3) Run `helm-resume' [1]
-4) Install the new package(s) version not already installed (Mark them and install).
+To see upgradables packages hit <M-U>.
 
-So if for example you have bound helm-resume to `f1', you can do:
+Then you can install all upgradables packages with the upgrade all action,
+or upgrade only the specific packages by marking them (the new ones) and running
+the upgrade action (visible only when there is upgradables packages).
+Of course you can upgrade a single package by just running the upgrade action
+without marking it.
 
-1) Mark the installed package(s) version and hit `f3'.
-2) Hit `f1'.[1]
-3) Mark the new package(s) version not already installed and hit `f2'.
+*** Meaning of flags prefixing packages (Emacs-25)
 
-**** NOTE [1]: If you restart `helm-list-elisp-packages' instead of using `helm-resume'
-you will NOT see anymore the packages to install and you will have to retrieve them
-manually, which can be a pain if you have many.
+- The flag \"S\" that prefix package names mean that this package is one of `package-selected-packages'.
+This feature is only available with emacs-25.
+
+- The flag \"U\" that prefix package names mean that this package is no more needed.
+This feature is only available with emacs-25.
 
 \n** Specific commands for Helm elisp package:\n
 \\<helm-el-package-map>
@@ -948,6 +970,33 @@ the amount of prefix args entered.
 (defun helm-semantic-help ()
   (interactive)
   (let ((helm-help-message helm-semantic-help-message))
+    (helm-help)))
+
+;;; helm kmacro
+;;
+;;
+(defvar helm-kmacro-help-message
+  "\n* Helm kmacro\n
+\n** Helm kmacro tips:
+- Start recording some keys with `f3'
+- Record new kmacro with `f4'
+- Start `helm-execute-kmacro' to list all your macros.
+
+Use persistent action to run your kmacro as many time as needed,
+you can change of kmacro with `helm-next-line' `helm-previous-line'.
+
+NOTE: You can't record keys running helm commands.
+
+\n** Specific commands for Helm kmacro:\n
+\\<helm-kmacro-map>
+\\[helm-kmacro-help]\t->Show this help.
+\n** Helm Map\n
+\\{helm-map}")
+
+;;;###autoload
+(defun helm-kmacro-help ()
+  (interactive)
+  (let ((helm-help-message helm-kmacro-help-message))
     (helm-help)))
 
 
@@ -1476,7 +1525,7 @@ HELM-ATTRIBUTE should be a symbol."
 
 (helm-document-attribute 'update "optional"
   (substitute-command-keys
-   "  Function called with no parameters at end of reinitialization when \
+   "  Function called with no parameters at before \"init\" function when \
 \\<helm-map>\\[helm-force-update] is pressed."))
 
 (helm-document-attribute 'mode-line "optional"
