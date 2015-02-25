@@ -119,8 +119,8 @@ second call within 0.5s run `helm-swap-windows'."
   '(helm-toggle-resplit-window helm-swap-windows) 1)
 
 ;;;###autoload
-(defmacro helm-define-key-with-subkeys (map key subkey command
-                                        &optional other-subkeys menu exit-fn)
+(defun helm-define-key-with-subkeys (map key subkey command
+                                         &optional other-subkeys menu exit-fn)
   "Allow defining in MAP a KEY and SUBKEY to COMMAND.
 
 This allow typing KEY to call COMMAND the first time and
@@ -129,12 +129,12 @@ type only SUBKEY on subsequent calls.
 Arg MAP is the keymap to use, SUBKEY is the initial short keybinding to
 call COMMAND.
 
-Arg OTHER-SUBKEYS is an unquoted alist specifying other short keybindings
+Arg OTHER-SUBKEYS is an alist specifying other short keybindings
 to use once started.
 e.g:
 
 \(helm-define-key-with-subkeys global-map
-   \(kbd \"C-x v n\") ?n 'git-gutter:next-hunk ((?p . git-gutter:previous-hunk))\)
+   \(kbd \"C-x v n\") ?n 'git-gutter:next-hunk '((?p . git-gutter:previous-hunk))\)
 
 
 In this example, `C-x v n' will run `git-gutter:next-hunk'
@@ -152,30 +152,31 @@ NOTE: SUBKEY and OTHER-SUBKEYS bindings support
 only char syntax actually (e.g ?n)
 so don't use strings, vectors or whatever to define them."
   (declare (indent 1))
-  (let ((other-keys (and other-subkeys
-                         (cl-loop for (x . y) in other-subkeys
-                               collect (list x `(call-interactively ',y) t)))))
-    `(define-key ,map ,key
-       (lambda ()
-         (interactive)
-         (unwind-protect
-              (progn
-                (call-interactively ,command)
-                (while (let ((input (read-key ,menu)) kb com)
-                         (setq last-command-event input)
-                         (cl-case input 
-                           (,subkey (call-interactively ,command) t)
-                           ,@other-keys
-                           (t
-                            (setq kb (vector last-command-event))
-                            (setq com (lookup-key ,map kb))
-                            (if (commandp com)
-                                (call-interactively com)
-                              (setq unread-command-events
-                                    (nconc (mapcar 'identity kb)
-                                           unread-command-events)))
-                            nil)))))
-           (and ,exit-fn (funcall ,exit-fn)))))))
+  (define-key map key
+    (lambda ()
+      (interactive)
+      (unwind-protect
+          (progn
+            (call-interactively command)
+            (while (let ((input (read-key menu)) other kb com)
+                     (setq last-command-event input)
+                     (cond
+                      ((eq input subkey)
+                       (call-interactively command)
+                       t)
+                      ((setq other (assoc input other-subkeys))
+                       (call-interactively (cdr other))
+                       t)
+                      (t
+                       (setq kb (vector last-command-event))
+                       (setq com (lookup-key map kb))
+                       (if (commandp com)
+                           (call-interactively com)
+                         (setq unread-command-events
+                               (nconc (mapcar 'identity kb)
+                                      unread-command-events)))
+                       nil)))))
+        (and exit-fn (funcall exit-fn))))))
 
 
 ;;; Keymap
@@ -1267,15 +1268,21 @@ Shift+A shows all results:
 
 The -my- part is added to avoid collisions with
 existing Helm function names."
-  (unless (and (listp sources)
-               (cl-loop for name in sources always (stringp name)))
-    (error "Invalid data in `helm-set-source-filter': %S" sources))
   (let ((cur-disp-sel (with-current-buffer helm-buffer
                         (helm-get-selection nil t))))
-    (setq helm-source-filter sources)
+    (setq helm-source-filter (helm--normalize-filter-sources sources))
     (helm-log "helm-source-filter = %S" helm-source-filter)
     ;; Use force-update to run init/update functions.
-    (helm-force-update (regexp-quote cur-disp-sel))))
+    (helm-force-update (and (stringp cur-disp-sel)
+                            (regexp-quote cur-disp-sel)))))
+
+(defun helm--normalize-filter-sources (sources)
+  (cl-loop for s in sources collect
+           (cond ((symbolp s)
+                  (assoc-default 'name (symbol-value s)))
+                 ((listp s)
+                  (assoc-default 'name s))
+                 ((stringp s) s))))
 
 (defun helm-set-sources (sources &optional no-init no-update)
   "Set SOURCES during `helm' invocation.
@@ -1580,12 +1587,14 @@ in the source where point is."
 (defmacro with-helm-quittable (&rest body)
   "If an error occur in execution of BODY, quit helm safely."
   (declare (indent 0) (debug t))
-  `(let (inhibit-quit)
-     (condition-case _v
-         (progn ,@body)
-       (quit (setq helm-quit t)
-             (exit-minibuffer)
-             (keyboard-quit)))))
+  `(condition-case _v
+       (let (inhibit-quit)
+         ,@body)
+     (quit (setq quit-flag t)
+           (setq helm-quit t)
+           (exit-minibuffer)
+           (keyboard-quit)
+           (eval '(ignore nil)))))
 
 (defun helm-compose (arg-lst func-lst)
   "Apply arguments specified in ARG-LST with each function of FUNC-LST.
@@ -1813,73 +1822,72 @@ ANY-KEYMAP ANY-DEFAULT ANY-HISTORY See `helm'."
       (progn
         (advice-add 'tramp-read-passwd :around #'helm--advice-tramp-read-passwd)
         (advice-add 'ange-ftp-get-passwd :around #'helm--advice-ange-ftp-get-passwd))
-    (ad-activate 'tramp-read-passwd)
-    (ad-activate 'ange-ftp-get-passwd))
-  (catch 'exit ; `exit-minibuffer' use this tag on exit.
-    (helm-log (concat "[Start session] " (make-string 41 ?+)))
-    (helm-log "any-prompt = %S" any-prompt)
-    (helm-log "any-preselect = %S" any-preselect)
-    (helm-log "any-buffer = %S" any-buffer)
-    (helm-log "any-keymap = %S" any-keymap)
-    (helm-log "any-default = %S" any-default)
-    (helm-log "any-history = %S" any-history)
-    (let ((non-essential t)
-          (input-method-verbose-flag helm-input-method-verbose-flag)
-          (old--cua cua-mode)
-          (helm-maybe-use-default-as-input
-           (or helm-maybe-use-default-as-input ; it is let-bounded so use it.
-               (cl-loop for s in (helm-normalize-sources any-sources)
-                     thereis (memq s helm-sources-using-default-as-input)))))
-      ;; cua-mode overhide local helm bindings.
-      ;; disable this stupid thing if enabled.
-      (and cua-mode (cua-mode -1))
-      (unwind-protect
-           (condition-case _v
-               (let (;; `helm-source-name' is non-nil
-                     ;; when `helm' is invoked by action, reset it.
-                     helm-source-name
-                     helm-current-source
-                     helm-in-persistent-action
-                     helm-quit
-                     (helm-buffer (or any-buffer helm-buffer)))
-                 (with-helm-restore-variables
-                   (helm-initialize
-                    any-resume any-input any-default any-sources)
-                   (helm-display-buffer helm-buffer)
-                   (when helm-prevent-escaping-from-minibuffer
-                     (helm--remap-mouse-mode 1)) ; Disable mouse bindings.
-                   (add-hook 'post-command-hook 'helm--maybe-update-keymap)
-                   (helm-log "show prompt")
-                   (unwind-protect
-                        (helm-read-pattern-maybe
-                         any-prompt any-input any-preselect
-                         any-resume any-keymap any-default any-history)
-                     (helm-cleanup)))
-                 (prog1
-                     (unless helm-quit (helm-execute-selection-action))
-                   (helm-log (concat "[End session] " (make-string 41 ?-)))))
-             (quit
-              (helm-restore-position-on-quit)
-              (helm-log (concat "[End session (quit)] " (make-string 34 ?-)))
-              nil))
-        (remove-hook 'post-command-hook 'helm--maybe-update-keymap)
-        (if (fboundp 'advice-add)
-            (progn
-              (advice-remove 'tramp-read-passwd
-                             #'helm--advice-tramp-read-passwd)
-              (advice-remove 'ange-ftp-get-passwd
-                             #'helm--advice-ange-ftp-get-passwd))
+      (ad-activate 'tramp-read-passwd)
+      (ad-activate 'ange-ftp-get-passwd))
+  (helm-log (concat "[Start session] " (make-string 41 ?+)))
+  (helm-log "any-prompt = %S" any-prompt)
+  (helm-log "any-preselect = %S" any-preselect)
+  (helm-log "any-buffer = %S" any-buffer)
+  (helm-log "any-keymap = %S" any-keymap)
+  (helm-log "any-default = %S" any-default)
+  (helm-log "any-history = %S" any-history)
+  (let ((non-essential t)
+        (input-method-verbose-flag helm-input-method-verbose-flag)
+        (old--cua cua-mode)
+        (helm-maybe-use-default-as-input
+         (or helm-maybe-use-default-as-input ; it is let-bounded so use it.
+             (cl-loop for s in (helm-normalize-sources any-sources)
+                      thereis (memq s helm-sources-using-default-as-input)))))
+    ;; cua-mode overhide local helm bindings.
+    ;; disable this stupid thing if enabled.
+    (and cua-mode (cua-mode -1))
+    (unwind-protect
+         (condition-case-unless-debug _v
+             (let ( ;; `helm-source-name' is non-nil
+                   ;; when `helm' is invoked by action, reset it.
+                   helm-source-name
+                   helm-current-source
+                   helm-in-persistent-action
+                   helm-quit
+                   (helm-buffer (or any-buffer helm-buffer)))
+               (with-helm-restore-variables
+                 (helm-initialize
+                  any-resume any-input any-default any-sources)
+                 (helm-display-buffer helm-buffer)
+                 (when helm-prevent-escaping-from-minibuffer
+                   (helm--remap-mouse-mode 1)) ; Disable mouse bindings.
+                 (add-hook 'post-command-hook 'helm--maybe-update-keymap)
+                 (helm-log "show prompt")
+                 (unwind-protect
+                      (helm-read-pattern-maybe
+                       any-prompt any-input any-preselect
+                       any-resume any-keymap any-default any-history)
+                   (helm-cleanup)))
+               (prog1
+                   (unless helm-quit (helm-execute-selection-action))
+                 (helm-log (concat "[End session] " (make-string 41 ?-)))))
+           (quit
+            (helm-restore-position-on-quit)
+            (helm-log (concat "[End session (quit)] " (make-string 34 ?-)))
+            nil))
+      (remove-hook 'post-command-hook 'helm--maybe-update-keymap)
+      (if (fboundp 'advice-add)
+          (progn
+            (advice-remove 'tramp-read-passwd
+                           #'helm--advice-tramp-read-passwd)
+            (advice-remove 'ange-ftp-get-passwd
+                           #'helm--advice-ange-ftp-get-passwd))
           (ad-deactivate 'tramp-read-passwd)
           (ad-deactivate 'ange-ftp-get-passwd))
-        (helm-log "helm-alive-p = %S" (setq helm-alive-p nil))
-        (helm--remap-mouse-mode -1) ; Reenable mouse bindings.
-        (setq helm-alive-p nil)
-        ;; Reset helm-pattern so that lambda's using it
-        ;; before running helm will not start with its old value.
-        (setq helm-pattern "")
-        (setq helm-in-file-completion-p nil)
-        (and old--cua (cua-mode 1))
-        (helm-log-save-maybe)))))
+      (helm-log "helm-alive-p = %S" (setq helm-alive-p nil))
+      (helm--remap-mouse-mode -1)       ; Reenable mouse bindings.
+      (setq helm-alive-p nil)
+      ;; Reset helm-pattern so that lambda's using it
+      ;; before running helm will not start with its old value.
+      (setq helm-pattern "")
+      (setq helm-in-file-completion-p nil)
+      (and old--cua (cua-mode 1))
+      (helm-log-save-maybe))))
 
 
 ;;; Helm resume
@@ -2601,7 +2609,7 @@ Helm plug-ins are realized by this function."
                        (error
                         "`%s' must either be a function, a variable or a list"
                         (or candidate-fn candidate-proc))))
-         (candidates (condition-case err
+         (candidates (condition-case-unless-debug err
                          ;; Process candidates-(process) function
                          ;; It may return a process or a list of candidates.
                          (if candidate-proc
@@ -3340,7 +3348,8 @@ after the source name by overlay."
 ;;
 (defun helm-output-filter (process output-string)
   "The `process-filter' function for helm async sources."
-  (helm-output-filter-1 (assoc process helm-async-processes) output-string))
+  (with-helm-quittable
+    (helm-output-filter-1 (assoc process helm-async-processes) output-string)))
 
 (defun helm-output-filter-1 (process-assoc output-string)
   (helm-log "output-string = %S" output-string)
@@ -4040,10 +4049,12 @@ to a list of forms.\n\n")
 
 ;; Core: misc
 (defun helm-kill-buffer-hook ()
-  "Remove tick entry from `helm-tick-hash' when killing a buffer."
+  "Remove tick entry from `helm-tick-hash' and remove buffer from
+`helm-buffers' when killing a buffer."
   (cl-loop for key being the hash-keys in helm-tick-hash
         if (string-match (format "^%s/" (regexp-quote (buffer-name))) key)
-        do (remhash key helm-tick-hash)))
+        do (remhash key helm-tick-hash))
+  (setq helm-buffers (remove (buffer-name) helm-buffers)))
 (add-hook 'kill-buffer-hook 'helm-kill-buffer-hook)
 
 (defun helm-preselect (candidate-or-regexp &optional source)
@@ -4907,7 +4918,8 @@ When key WITH-WILDCARD is specified try to expand a wilcard if some."
           for (source . real) in
           (or (reverse helm-marked-candidates)
               (list (cons current-src (helm-get-selection))))
-          when (equal current-src source)
+          when (equal (assoc 'name current-src)
+                      (assoc 'name source))
           ;; When real is a normal filename without wildcard
           ;; file-expand-wildcards returns a list of one file.
           ;; When real is a non--existent file it return nil.

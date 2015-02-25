@@ -217,6 +217,11 @@ If COLLECTION is an `obarray', a TEST should be needed. See `obarray'."
         into lst
         finally return (helm-fast-remove-dups lst :test 'equal)))
 
+(defun helm-comp-read--move-to-first-real-candidate ()
+  (helm-aif (helm-get-selection nil 'withprop)
+      (when (string= (get-text-property 0 'display it) "[?]")
+        (helm-next-line))))
+
 ;;;###autoload
 (cl-defun helm-comp-read (prompt collection
                           &key
@@ -436,17 +441,20 @@ that use `helm-comp-read' See `helm-M-x' for example."
         (setq src-list (cl-loop for src in src-list
                              collect (cons '(nomark) src))))
       (when reverse-history (setq src-list (nreverse src-list)))
-      (setq result (helm
-                    :sources src-list
-                    :input initial-input
-                    :default default
-                    :preselect preselect
-                    :prompt prompt
-                    :resume 'noresume
-                    :case-fold-search case-fold
-                    :keymap loc-map
-                    :history (and (symbolp input-history) input-history)
-                    :buffer buffer))
+      (add-hook 'helm-after-update-hook 'helm-comp-read--move-to-first-real-candidate)
+      (unwind-protect
+           (setq result (helm
+                         :sources src-list
+                         :input initial-input
+                         :default default
+                         :preselect preselect
+                         :prompt prompt
+                         :resume 'noresume
+                         :case-fold-search case-fold
+                         :keymap loc-map
+                         :history (and (symbolp input-history) input-history)
+                         :buffer buffer))
+        (remove-hook 'helm-after-update-hook 'helm-comp-read--move-to-first-real-candidate))
       ;; Avoid adding an incomplete input to history.
       (when (and result history del-input)
         (cond ((and (symbolp history) ; History is a symbol.
@@ -941,58 +949,60 @@ Can be used as value for `completion-in-region-function'."
                   (afun (plist-get completion-extra-properties :annotation-function))
                   (data (all-completions input collection predicate))
                   (init-space-suffix (unless helm-completion-in-region-fuzzy-match " "))
-                  (file-comp-p (helm-mode--in-file-completion-p input (car data)))
+                  (file-comp-p (helm-mode--in-file-completion-p input (car-safe data)))
                   ;; Completion-at-point and friends have no prompt.
-                  (result (helm-comp-read
-                           (or (and (boundp 'prompt) prompt) "Pattern: ")
-                           (if file-comp-p
-                               (cl-loop for f in data unless
-                                        (string-match "\\`\\.\\{1,2\\}/\\'" f)
-                                        collect f)
-                               (if afun
-                                   (mapcar (lambda (s)
-                                             (let ((ann (funcall afun s)))
-                                               (if ann
-                                                   (cons
-                                                    (concat
-                                                     s
-                                                     (propertize
-                                                      " " 'display
-                                                      (propertize
-                                                       ann
-                                                       'face 'completions-annotations)))
-                                                    s)
-                                                   s)))
-                                           data)
-                                   data))
-                           :name str-command
-                           :fuzzy helm-completion-in-region-fuzzy-match
-                           :nomark t
-                           :initial-input
-                           (cond ((and file-comp-p
-                                       (not (string-match "/\\'" input)))
-                                  (concat (helm-basename input)
-                                          (unless (string= input "")
-                                            init-space-suffix)))
-                                 ((string-match "/\\'" input) nil)
-                                 ((or (null require-match)
-                                      (stringp require-match))
-                                  input)
-                                 (t (concat input init-space-suffix)))
-                           :buffer buf-name
-                           :fc-transformer (append (list 'helm-cr-default-transformer)
-                                                   (list (lambda (candidates _source)
-                                                           (sort candidates 'helm-generic-sort-fn))))
-                           :exec-when-only-one t
-                           :quit-when-no-cand
-                           #'(lambda ()
-                               ;; Delay message to overwrite "Quit".
-                               (run-with-timer
-                                0.01 nil
-                                #'(lambda ()
-                                    (message "[No matches]")))
-                               t)       ; exit minibuffer immediately.
-                           :must-match require-match)))
+                  (result (if (stringp data)
+                              data
+                              (helm-comp-read
+                               (or (and (boundp 'prompt) prompt) "Pattern: ")
+                               (if file-comp-p
+                                   (cl-loop for f in data unless
+                                            (string-match "\\`\\.\\{1,2\\}/\\'" f)
+                                            collect f)
+                                   (if afun
+                                       (mapcar (lambda (s)
+                                                 (let ((ann (funcall afun s)))
+                                                   (if ann
+                                                       (cons
+                                                        (concat
+                                                         s
+                                                         (propertize
+                                                          " " 'display
+                                                          (propertize
+                                                           ann
+                                                           'face 'completions-annotations)))
+                                                        s)
+                                                       s)))
+                                               data)
+                                       data))
+                               :name str-command
+                               :fuzzy helm-completion-in-region-fuzzy-match
+                               :nomark t
+                               :initial-input
+                               (cond ((and file-comp-p
+                                           (not (string-match "/\\'" input)))
+                                      (concat (helm-basename input)
+                                              (unless (string= input "")
+                                                init-space-suffix)))
+                                     ((string-match "/\\'" input) nil)
+                                     ((or (null require-match)
+                                          (stringp require-match))
+                                      input)
+                                     (t (concat input init-space-suffix)))
+                               :buffer buf-name
+                               :fc-transformer (append (list 'helm-cr-default-transformer)
+                                                       (list (lambda (candidates _source)
+                                                               (sort candidates 'helm-generic-sort-fn))))
+                               :exec-when-only-one t
+                               :quit-when-no-cand
+                               #'(lambda ()
+                                   ;; Delay message to overwrite "Quit".
+                                   (run-with-timer
+                                    0.01 nil
+                                    #'(lambda ()
+                                        (message "[No matches]")))
+                                   t)   ; exit minibuffer immediately.
+                               :must-match require-match))))
              (when result
                (delete-region (if (and file-comp-p
                                        (save-excursion

@@ -69,11 +69,22 @@ You can ommit the %e spec if you don't want to be prompted for types.
 
 NOTE: Helm for ack-grep support ANSI sequences, so you can remove
 the \"--no-color\" option safely (recommended).
+
 To enable ANSI in grep it is a little more difficult:
     1) Modify env var
       \(setenv \"GREP_COLORS\" \"ms=01;31:mc=01;31:sl=01;37:cx=:fn=35:ln=32:bn=32:se=36\")
     2) Add the option \"--color=always\".
- 
+
+To enable ANSI color in git-grep just add \"--color=always\".
+To customize the ANSI color in git-grep, GREP_COLORS have no effect,
+you will have to setup this in your .gitconfig:
+
+    [color \"grep\"]
+	match = black yellow
+
+where \"black\" is the foreground and \"yellow\" the background.
+See the git documentation for more infos.
+
 `helm-grep-default-command' and `helm-grep-default-recurse-command'are
 independents, so you can enable `helm-grep-default-command' with ack-grep
 and `helm-grep-default-recurse-command' with grep if you want to be faster
@@ -95,13 +106,18 @@ See `helm-grep-default-command' for format specs and infos about ack-grep."
 (defcustom helm-default-zgrep-command
   "zgrep -a -n%cH -e %p %f"
   "Default command for Zgrep.
-See `helm-grep-default-command' for infos on format specs."
+See `helm-grep-default-command' for infos on format specs.
+Option --color=always is supported and can be used safely
+to replace the helm internal match highlighting,
+see `helm-grep-default-command' for more infos."
   :group 'helm-grep
   :type  'string)
 
 (defcustom helm-pdfgrep-default-command
   "pdfgrep --color never -niH %s %s"
-  "Default command for pdfgrep."
+  "Default command for pdfgrep.
+Option --color always is not supported, expect
+errors when executing actions."
   :group 'helm-grep
   :type  'string)
 
@@ -886,7 +902,6 @@ in recurse, search being made on `helm-zgrep-file-extension-regexp'."
             :candidates-process 'helm-grep-collect-candidates
             :filter-one-by-one 'helm-grep-filter-one-by-one
             :candidate-number-limit 9999
-            :nohighlight t
             :mode-line helm-grep-mode-line-string
             :history 'helm-grep-history
             :action (helm-make-actions
