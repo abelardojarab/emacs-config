@@ -57,6 +57,9 @@
 
 (autoload 'coq-mode "coq")
 
+;; Load ESS for R-mode (its autoloads are broken)
+(require 'ess-site nil 'noerror)
+
 
 ;;; Directories
 
@@ -331,15 +334,49 @@ and extension, as in `file-name-base'."
       (should (flycheck-get-checker-for-buffer))
       (should-not (flycheck-may-enable-mode)))))
 
-(ert-deftest flycheck-may-enable-mode/not-if-no-checker-is-found ()
+(ert-deftest flycheck-may-enable-mode/not-in-special-mode ()
   :tags '(global-mode)
   (flycheck-ert-with-temp-buffer
     (setq buffer-file-name "foo")
     (rename-buffer "foo")
-    (text-mode)
-    (should-not (string-prefix-p " " (buffer-name)))
-    (should-not (flycheck-get-checker-for-buffer))
+    (special-mode)
     (should-not (flycheck-may-enable-mode))))
+
+(ert-deftest flycheck-may-enable-mode/not-in-compilation-mode ()
+  :tags '(global-mode)
+  (flycheck-ert-with-temp-buffer
+    (setq buffer-file-name "foo")
+    (rename-buffer "foo")
+    (compilation-mode)
+    (should-not (flycheck-may-enable-mode))))
+
+(ert-deftest flycheck-may-enable-mode/all-modes-disabled ()
+  :tags '(global-mode)
+  (let ((flycheck-global-modes nil))
+    (flycheck-ert-with-temp-buffer
+      (setq buffer-file-name "foo")
+      (rename-buffer "foo")
+      (emacs-lisp-mode)
+      (should-not (flycheck-may-enable-mode)))))
+
+
+(ert-deftest flycheck-may-enable-mode/some-modes-disabled ()
+  :tags '(global-mode)
+  (let ((flycheck-global-modes '(not emacs-lisp-mode)))
+    (flycheck-ert-with-temp-buffer
+      (setq buffer-file-name "foo")
+      (rename-buffer "foo")
+      (emacs-lisp-mode)
+      (should-not (flycheck-may-enable-mode)))))
+
+(ert-deftest flycheck-may-enable-mode/some-modes-enabled ()
+  :tags '(global-mode)
+  (let ((flycheck-global-modes '(emacs-lisp-mode)))
+    (flycheck-ert-with-temp-buffer
+      (setq buffer-file-name "foo")
+      (rename-buffer "foo")
+      (emacs-lisp-mode)
+      (should (flycheck-may-enable-mode)))))
 
 (ert-deftest flycheck-may-enable-mode/checker-found ()
   :tags '(global-mode)
@@ -371,12 +408,11 @@ and extension, as in `file-name-base'."
         (emacs-lisp-mode)
         (should-not flycheck-mode)))))
 
-(ert-deftest global-flycheck-mode/does-not-enable-if-no-checker-is-found ()
+(ert-deftest global-flycheck-mode/does-not-enable-in-special-mode ()
   :tags '(global-mode)
   (flycheck-ert-with-global-mode
     (flycheck-ert-with-temp-buffer
-      (rename-buffer "foo")
-      (text-mode)
+      (special-mode)
       (should-not flycheck-mode))))
 
 (ert-deftest global-flycheck-mode/checker-found ()
@@ -1714,6 +1750,23 @@ and extension, as in `file-name-base'."
       (flycheck-ert-should-errors
        '(12 nil warning "First sentence should end with punctuation"
             :checker emacs-lisp-checkdoc)))))
+
+(ert-deftest flycheck-disable-checker/disables-checker ()
+  :tags '(selection)
+  (flycheck-ert-with-temp-buffer
+    (flycheck-disable-checker 'emacs-lisp)
+    (should (equal '(emacs-lisp) flycheck-disabled-checkers))
+    (should-not (default-value 'flycheck-disabled-checkers))
+    ;; Disabling a disabled checker should be a no-op
+    (flycheck-disable-checker 'emacs-lisp)
+    (should (equal '(emacs-lisp) flycheck-disabled-checkers))))
+
+(ert-deftest flycheck-disable-checker/enables-checker ()
+  :tags '(selection)
+  (flycheck-ert-with-temp-buffer
+    (setq flycheck-disabled-checkers '(emacs-lisp python-pylint))
+    (flycheck-disable-checker 'emacs-lisp 'enable)
+    (should (equal '(python-pylint) flycheck-disabled-checkers))))
 
 
 ;;; Documentation
@@ -4145,7 +4198,7 @@ The term \"1\" has type \"nat\" while it is expected to have type
 
 (flycheck-ert-def-checker-test go-build go missing-package
   (let* ((go-root (or (getenv "GOROOT") "/usr/local/go"))
-         (go-root-pkg (concat go-root "/src/pkg")))
+         (go-root-pkg (concat go-root "/src")))
     (flycheck-ert-with-env '(("GOPATH" . nil))
       (flycheck-ert-should-syntax-check
        "checkers/go/src/b1/main.go" 'go-mode
@@ -4369,18 +4422,6 @@ Why not:
    "checkers/lua-syntax-error.lua" 'lua-mode
    '(5 nil error "unfinished string near '\"oh no'"
        :checker lua)))
-
-(flycheck-ert-def-checker-test make make nil
-  (flycheck-ert-should-syntax-check
-   "checkers/make.mk" '(makefile-mode makefile-gmake-mode)
-   '(2 nil error "*** missing separator.  Stop." :checker make)))
-
-(flycheck-ert-def-checker-test make make pmake
-  (let ((flycheck-make-executable "pmake"))
-    (skip-unless (executable-find (flycheck-checker-executable 'make)))
-    (flycheck-ert-should-syntax-check
-     "checkers/make.mk" 'makefile-bsdmake-mode
-     '(2 nil error "Need an operator" :checker make))))
 
 (flycheck-ert-def-checker-test perl perl nil
   (flycheck-ert-should-syntax-check
@@ -4660,6 +4701,28 @@ Why not:
     (flycheck-ert-should-syntax-check
      "checkers/python/test.py" 'python-mode)))
 
+(flycheck-ert-def-checker-test r-lintr r nil
+  ;; Disable caching in lintr tests to make sure that the file is re-checked
+  ;; every time
+  (let ((flycheck-lintr-caching nil))
+    (flycheck-ert-should-syntax-check
+     "checkers/r-lintr.R" 'R-mode
+     '(1 28 info "Opening curly braces should never go on their own line and should always be followed by a new line."
+         :checker r-lintr)
+     '(4 6 warning "Do not use absolute paths." :checker r-lintr)
+     '(7 5 error "unexpected end of input" :checker r-lintr))))
+
+(flycheck-ert-def-checker-test r-lintr r line-length
+  (let ((flycheck-lintr-linters "with_defaults(line_length_linter(40))")
+        (flycheck-lintr-caching nil))
+    (flycheck-ert-should-syntax-check
+     "checkers/r-lintr.R" 'R-mode
+     '(1 1 info "lines should not be more than 40 characters." :checker r-lintr)
+     '(1 28 info "Opening curly braces should never go on their own line and should always be followed by a new line."
+         :checker r-lintr)
+     '(4 6 warning "Do not use absolute paths." :checker r-lintr)
+     '(7 5 error "unexpected end of input" :checker r-lintr))))
+
 (flycheck-ert-def-checker-test racket racket nil
   (flycheck-ert-should-syntax-check
    "checkers/racket-syntax-error.rkt" 'racket-mode
@@ -4862,7 +4925,7 @@ Why not:
    "checkers/rust-help.rs" 'rust-mode
    '(3 1 error "not all control paths return a value"
        :checker rust)
-   '(4 8 info "consider removing this semicolon:"
+   '(4 11 info "consider removing this semicolon:"
        :checker rust)))
 
 (flycheck-ert-def-checker-test rust rust test-crate-type-bin

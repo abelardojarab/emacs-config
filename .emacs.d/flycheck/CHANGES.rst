@@ -3,9 +3,34 @@
 master (in development)
 -----------------------
 
+- **Breaking changes**:
+
+  - Remove `make` syntax checker due to various issues [GH-572] [GH-573]
+
+- New syntax checkers:
+
+  - R with `lintr` [GH-512]
+
+- New features:
+
+  - Add `flycheck-disable-checker` to disable a syntax checker in the current
+    buffer
+  - Add `flycheck-global-modes` to control in which modes `global-flycheck-mode`
+    turns on `flycheck-mode`
+
 - Improvements:
 
   - `chef-foodcritic` handles relative paths correctly now [GH-556]
+  - Global Flycheck Mode enables Flycheck Mode even if there is no syntax
+    checker for the buffer yet [GH-568]
+
+- Bug fixes:
+
+  - Cache last used syntax checker only when actually checking the buffer
+    [GH-559]
+  - Fix void variable error when trying to use `flycheck-compile` with a
+    non-command checker [GH-563]
+  - Fix faulty mode line reporting [GH-564]
 
 0.22 (Dec 23, 2014)
 -------------------
