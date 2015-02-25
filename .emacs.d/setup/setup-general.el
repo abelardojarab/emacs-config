@@ -340,8 +340,36 @@ Defaults to `error'."
 (setq search-highlight t)
 (setq query-replace-highlight t)
 
-;; show-paren-mode: subtle blinking of matching paren (defaults are ugly)
-(show-paren-mode t)
+;; Show-paren-mode: subtle blinking of matching paren (defaults are ugly)
+(show-paren-mode 1)
+
+;; Show paren-mode when off-screen
+(defadvice show-paren-function
+    (after show-matching-paren-offscreen activate)
+  "If the matching paren is offscreen, show the matching line in the
+        echo area. Has no effect if the character before point is not of
+        the syntax class ')'."
+  (interactive)
+  (let* ((cb (char-before (point)))
+         (matching-text (and cb
+                           (char-equal (char-syntax cb) ?\) )
+                           (blink-matching-open))))
+    (when matching-text (message matching-text))))
+
+;; Opening bracket to be highlighted when the point is on the closing bracket
+(defadvice show-paren-function
+    (around show-paren-closing-before
+            activate compile)
+  (if (eq (syntax-class (syntax-after (point))) 5)
+      (save-excursion
+        (forward-char)
+        ad-do-it)
+    ad-do-it))
+
+;; Smartparens
+(add-to-list 'load-path "~/.emacs.d/smartparens")
+(require 'smartparens-config)
+(show-smartparens-global-mode 1)
 
 ;; Disable tooltips
 (tooltip-mode nil)
