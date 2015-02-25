@@ -22,6 +22,11 @@ int simple1(int a) {
 
 }
 
+enum typedenum : unsigned {
+  FIRST = 0UL,
+  SECOND = ~0UL
+};
+
 struct foo1 {
   int test;
 };
@@ -159,6 +164,18 @@ void *class3::method4_for_class3( int a, int b) reentrant
  */
 void *class3::method5_for_class3( int a, int b) const
 {
+}
+
+void *class3::method6_for_class3( int a, int b) override
+{
+  int q = a;
+  return "Moose";
+}
+
+void *class3::method7_for_class3( int a, int b) final
+{
+  int q = a;
+  return "Moose";
 }
 
 /*

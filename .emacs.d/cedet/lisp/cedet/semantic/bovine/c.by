@@ -114,7 +114,7 @@
 %token UNION "union"
 %put UNION summary "Union Type Declaration: union [name] { ... };"
 %token ENUM "enum"
-%put ENUM summary "Enumeration Type Declaration: enum [name] { ... };"
+%put ENUM summary "Enumeration Type Declaration: enum [name] [: type] { ... };"
 %token TYPEDEF "typedef"
 %put TYPEDEF summary "Arbitrary Type Declaration: typedef <typedeclaration> <name>;"
 %token CLASS "class"
@@ -140,6 +140,10 @@
 %put THROW summary "<type> <methoddef> (<method args>) throw (<exception>) ..."
 %token REENTRANT "reentrant"
 %put REENTRANT summary "<type> <methoddef> (<method args>) reentrant ..."
+%token OVERRIDE "override"
+%put OVERRIDE summary "<type> <methoddef> (<method args>) override ..."
+%token FINAL "final"
+%put FINAL summary "<type> <methoddef> (<method args>) final ..."
 %token TRY "try"
 %token CATCH "catch"
 %put { TRY CATCH } summary "try { <body> } catch { <catch code> }"
@@ -412,6 +416,12 @@ opt-name
     ( "" )
   ;
 
+opt-enum-type
+  : COLON typeformbase
+    ( ,$2 )
+  | ;; EMPTY
+  ;
+
 typesimple
   : struct-or-class opt-class opt-name opt-template-specifier
     opt-class-parents semantic-list
@@ -430,9 +440,10 @@ typesimple
   | UNION opt-class opt-name unionparts
     (TYPE-TAG (car $3) $1 $4 nil
               :parent (car ,$2))
-  | ENUM opt-class opt-name enumparts
-    (TYPE-TAG (car $3) $1 $4 nil
-              :parent (car ,$2))
+  | ENUM opt-class opt-name opt-enum-type enumparts
+    (TYPE-TAG (car $3) $1 $5 nil
+              :parent (car ,$2)
+              :enum-type (car ,$4))
  ;; Klaus Berndl: a typedef can be a typeformbase with all this
  ;; declmods stuff.
   | TYPEDEF declmods typeformbase cv-declmods typedef-symbol-list
@@ -451,8 +462,8 @@ typedef-symbol-list
 ;; TODO: Klaus Berndl: symbol -> namespace-symbol?!  Answer: Probably
 ;; symbol is correct here!
 typedefname
-  : opt-stars symbol opt-bits opt-array
-    ( $1 $2 )
+  : opt-stars opt-ref symbol opt-bits opt-array
+    ( $1 $2 $3 )
   ;
 
 struct-or-class
@@ -844,6 +855,8 @@ opt-post-fcn-modifiers
 post-fcn-modifiers
   : REENTRANT
   | CONST
+  | OVERRIDE
+  | FINAL
   ;
 
 opt-throw

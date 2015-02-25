@@ -33,15 +33,10 @@
 
 (require 'ede/auto) ;; Autoload settings.
 
-(when (or (<= emacs-major-version 23)
-	  ;; predicate as name added in Emacs 24.2
-	  (and (= emacs-major-version 24)
-	       (< emacs-minor-version 2)))
-  (message "Loading CEDET fallback autoload library.")
-  (require 'cedet/dominate
-	   (expand-file-name "../../../etc/fallback-libraries/dominate.el"
-			     (file-name-directory load-file-name))))
-
+;; `locate-dominating-file' is wrapped for older Emacsen, which miss
+;; the predicate feature.
+(unless (fboundp 'cedet-locate-dominating-file)
+  (defalias 'cedet-locate-dominating-file 'locate-dominating-file))
 
 ;;; BASIC PROJECT SCAN
 ;;
@@ -81,8 +76,8 @@ Return a cons cell:
   (let* ((ede--detect-found-project nil)
 	 (root 
 	  (catch 'stopscan
-	    (locate-dominating-file directory
-				    'ede--detect-ldf-predicate))))
+	    (cedet-locate-dominating-file directory
+					  'ede--detect-ldf-predicate))))
     (when root
       (cons root ede--detect-found-project))))
 
@@ -117,8 +112,8 @@ Return a cons cell:
   (let* ((ede--detect-found-project nil)
 	 (root 
 	  (catch 'stopscan
-	    (locate-dominating-file directory
-				    'ede--detect-ldf-rootonly-predicate))))
+	    (cedet-locate-dominating-file directory
+					  'ede--detect-ldf-rootonly-predicate))))
     (when root
       (cons root ede--detect-found-project))))
 
@@ -149,8 +144,8 @@ Some projects have their dominating file in all their directories, such
 as Project.ede.  In that case we will detect quickly, but then need
 to scan upward to find the topmost occurance of that file."
   (let* ((ede--detect-nomatch-auto auto)
-	 (root (locate-dominating-file directory
-				       'ede--detect-ldf-root-predicate)))
+	 (root (cedet-locate-dominating-file directory
+					     'ede--detect-ldf-root-predicate)))
     root))
 
 ;;; TOP LEVEL SCAN

@@ -1,6 +1,6 @@
 ;;; cedet-utests.el --- Run all unit tests in the CEDET suite.
 
-;; Copyright (C) 2008, 2009, 2010, 2012, 2013, 2014 Eric M. Ludlam
+;; Copyright (C) 2008, 2009, 2010, 2012, 2013, 2014, 2015 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -36,6 +36,7 @@
 (require 'cedet/semantic/lex-utest)
 (require 'cedet/semantic/lex-spp-utest)
 (require 'cedet/semantic/utest-parse)
+(require 'cedet/semantic/ert/test-c-parser)
 (require 'cedet/semantic/utest-c)
 (require 'cedet/semantic/ia-utest)
 (require 'cedet/semantic/utest-fw)
@@ -80,21 +81,10 @@
     ("cedet file conversion" . cedet-files-utest)
 
     ;;
-    ;; EIEIO
-    ;;
-    ("eieio" . cedet-utest-eieio-classloader)
-    ("eieio: browser" . eieio-browse)
-    ("eieio: custom" . (lambda ()
-			 (require 'eieio-custom)
-			 (customize-variable 'eieio-widget-test)))
-    ("eieio: chart" . (lambda ()
-			(if (cedet-utest-noninteractive)
-			    (message " ** Skipping test in noninteractive mode.")
-			  (chart-test-it-all))))
-    ;;
     ;; EDE
     ;;
     ("ede: project detection tests" . ede-detect-utest) ;; NOTE: must be before other EDE tests.
+    ("ede: project detect linux extra" . ede-detect-linux-utest)
     ("ede: security tests" . ede-security-utest)
 
     ;;
@@ -102,6 +92,7 @@
     ;;
     ("semantic: lex spp table write" . semantic-lex-spp-write-utest)
     ("semantic: multi-lang parsing" . semantic-utest-main)
+    ("semantic: C parser (ERT)" . semantic-c-parser-test-ert)
     ("semantic: C preprocessor" . semantic-utest-c)
     ("semantic: format tests" . semantic-fmt-utest)
     ("semantic: analyzer tests" . semantic-ia-utest)
@@ -219,32 +210,6 @@ of just logging the error."
     (error
      (error "Error in unit test harness:\n  %S" err))
     )
-  )
-
-;;; HELPER FUNCTIONS FOR SOME TESTS
-(defun cedet-utest-eieio-classloader ()
-  "Try out the EIEIO tests, which just requires loading the test file."
-  (let ((lib (locate-library "eieio-tests.el" t)))
-    (unless lib
-      (error "Could not locate 'eieio-tests.el'"))
-    (message "EIEIO Base tests loading from: %S" lib)
-    (load-file lib)
-    )
-  
-  (let ((lib (locate-library "eieio-test-methodinvoke.el" t)))
-    (unless lib
-      (error "Could not locate 'eieio-test-methodinvoke.el'"))
-    (message "EIEIO MethodInvoke tests loading from: %S" lib)
-    (load-file lib)
-    )
-
-  (let ((lib (locate-library "eieio-test-persist.el" t)))
-    (unless lib
-      (error "Could not locate 'eieio-test-persist.el'"))
-    (message "EIEIO Persistence tests loading from: %S" lib)
-    (load-file lib)
-    )
-
   )
 
 (provide 'cedet-utests)

@@ -20,7 +20,7 @@
     :name "srecode"
     :path ""
     :source '("mode.el" "compile.el" "insert.el" "semantic.el" "template.el" "dictionary.el" "args.el" "table.el" "filters.el" "find.el" "ctxt.el" "getset.el" "cpp.el" "expandproto.el" "el.el" "srt.el" "texi.el" "map.el" "extract.el" "java.el" "fields.el" "android.el" "document.el" "m3.el" "srt-mode.el")
-    :aux-packages '("cedet-compat" "cedet" "eieio")
+    :aux-packages '("cedet-compat" "cedet")
     :pre-load-packages '("cedet-compat")
     )
    )

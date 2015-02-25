@@ -33,7 +33,7 @@
 ;;; Code:
 
 ;(require 'ede-pmake "../ede/ede-pmake.el" t)
-(require 'ede/gnustep)
+(require 'ede-gnustep)
 
 (defvar cedet-integ-target-gnustep
   (expand-file-name "edeproj_ede_GSMake" cedet-integ-base)

@@ -391,12 +391,11 @@ to pass to `throw'.  It is recommended to use the name of the function
 calling this one."
   `(when (and semantic-current-input-throw-symbol
               (or (input-pending-p)
-                  (save-excursion
-                    ;; Timers might run during accept-process-output.
-                    ;; If they redisplay, point must be where the user
-                    ;; expects. (Bug#15045)
-                    (set-buffer (marker-buffer
-                                 semantic--on-input-start-marker))
+		  ;; Timers might run during accept-process-output.
+		  ;; If they redisplay, point must be where the user
+		  ;; expects. (Bug#15045)
+		  (with-current-buffer (marker-buffer
+					semantic--on-input-start-marker)
                     (goto-char (marker-position
                                 semantic--on-input-start-marker))
                     (accept-process-output))))

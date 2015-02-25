@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 1999-2012, 2014 Free Software Foundation, Inc.
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxcr1012.pdx.intel.com>
-;; Created: 2015-02-25 10:54:54-0800
+;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Created: 2015-01-05 12:49:06-0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -69,8 +69,6 @@
      ("template" . TEMPLATE)
      ("throw" . THROW)
      ("reentrant" . REENTRANT)
-     ("override" . OVERRIDE)
-     ("final" . FINAL)
      ("try" . TRY)
      ("catch" . CATCH)
      ("operator" . OPERATOR)
@@ -127,8 +125,6 @@
      ("friend" summary "friend class <CLASSNAME>")
      ("catch" summary "try { <body> } catch { <catch code> }")
      ("try" summary "try { <body> } catch { <catch code> }")
-     ("final" summary "<type> <methoddef> (<method args>) final ...")
-     ("override" summary "<type> <methoddef> (<method args>) override ...")
      ("reentrant" summary "<type> <methoddef> (<method args>) reentrant ...")
      ("throw" summary "<type> <methoddef> (<method args>) throw (<exception>) ...")
      ("template" summary "template <class TYPE ...> TYPE_OR_FUNCTION")
@@ -139,7 +135,7 @@
      ("typename" summary "typename is used to handle a qualified name as a typename;")
      ("class" summary "Class Declaration: class <name>[:parents] { ... };")
      ("typedef" summary "Arbitrary Type Declaration: typedef <typedeclaration> <name>;")
-     ("enum" summary "Enumeration Type Declaration: enum [name] [: type] { ... };")
+     ("enum" summary "Enumeration Type Declaration: enum [name] { ... };")
      ("union" summary "Union Type Declaration: union [name] { ... };")
      ("struct" summary "Structure Type Declaration: struct [name] { ... };")
      ("explicit" summary "Forbids implicit type conversion: explicit <constructor>")
@@ -578,17 +574,6 @@
       )
      ) ;; end opt-name
 
-    (opt-enum-type
-     (punctuation
-      "\\`[:]\\'"
-      typeformbase
-      ,(semantic-lambda
-	(nth 1 vals))
-      )
-     ( ;;EMPTY
-      )
-     ) ;; end opt-enum-type
-
     (typesimple
      (struct-or-class
       opt-class
@@ -654,18 +639,15 @@
      (ENUM
       opt-class
       opt-name
-      opt-enum-type
       enumparts
       ,(semantic-lambda
 	(semantic-tag-new-type
 	 (car
 	  (nth 2 vals))
 	 (nth 0 vals)
-	 (nth 4 vals) nil :parent
+	 (nth 3 vals) nil :parent
 	 (car
-	  (nth 1 vals)) :enum-type
-	 (car
-	  (nth 3 vals))))
+	  (nth 1 vals))))
       )
      (TYPEDEF
       declmods
@@ -700,15 +682,13 @@
 
     (typedefname
      (opt-stars
-      opt-ref
       symbol
       opt-bits
       opt-array
       ,(semantic-lambda
 	(list
 	 (nth 0 vals)
-	 (nth 1 vals)
-	 (nth 2 vals)))
+	 (nth 1 vals)))
       )
      ) ;; end typedefname
 
@@ -1386,8 +1366,6 @@
     (post-fcn-modifiers
      (REENTRANT)
      (CONST)
-     (OVERRIDE)
-     (FINAL)
      ) ;; end post-fcn-modifiers
 
     (opt-throw

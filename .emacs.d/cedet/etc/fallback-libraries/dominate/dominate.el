@@ -30,16 +30,13 @@
 ;; This uses locate-dominating-stop-dir-regexp which is also defined in
 ;; emacs 23.
 
-(defun locate-dominating-file (file name)
+(defun cedet-locate-dominating-file (file name)
   "Look up the directory hierarchy from FILE for a directory containing NAME.
 Stop at the first parent directory containing a file NAME,
 and return the directory.  Return nil if not found.
 Instead of a string, NAME can also be a predicate taking one argument
 \(a directory) and returning a non-nil value if that directory is the one for
-which we're looking.
-
-NOTE: The version of this function you are using is from Emacs 24.3.1,
-backported for use in CEDET."
+which we're looking."
   ;; We used to use the above locate-dominating-files code, but the
   ;; directory-files call is very costly, so we're much better off doing
   ;; multiple calls using the code in here.

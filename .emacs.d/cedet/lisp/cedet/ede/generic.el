@@ -1,6 +1,6 @@
 ;;; ede/generic.el --- Base Support for generic build systems
 
-;; Copyright (C) 2010-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -284,29 +284,29 @@ the class `ede-generic-project' project."
 (defun ede-enable-generic-projects ()
   "Enable generic project loaders."
   (interactive)
-  (ede-generic-new-autoloader "generic-makefile" "Make"
+  (ede-generic-new-autoloader "generic-makefile" "Generic Make"
 			      "Makefile" 'ede-generic-makefile-project)
-  (ede-generic-new-autoloader "generic-scons" "SCons"
+  (ede-generic-new-autoloader "generic-scons" "Generic SCons"
 			      "SConstruct" 'ede-generic-scons-project)
-  (ede-generic-new-autoloader "generic-cmake" "CMake"
+  (ede-generic-new-autoloader "generic-cmake" "Generic CMake"
 			      "CMakeLists" 'ede-generic-cmake-project)
 
   ;; Super Generic found via revision control tags.
-  (ede-generic-new-autoloader "generic-git" "Git"
+  (ede-generic-new-autoloader "generic-git" "Generic Git"
 			      ".git" 'ede-generic-vc-project)
-  (ede-generic-new-autoloader "generic-bzr" "Bazaar"
+  (ede-generic-new-autoloader "generic-bzr" "Generic Bazaar"
 			      ".bzr" 'ede-generic-vc-project)
-  (ede-generic-new-autoloader "generic-hg" "Mercurial"
+  (ede-generic-new-autoloader "generic-hg" "Generic Mercurial"
 			      ".hg" 'ede-generic-vc-project)
-  (ede-generic-new-autoloader "generic-svn" "Subversions"
+  (ede-generic-new-autoloader "generic-svn" "Generic Subversions"
 			      ".svn" 'ede-generic-vc-project)
-  (ede-generic-new-autoloader "generic-cvs" "CVS"
+  (ede-generic-new-autoloader "generic-cvs" "Generic CVS"
 			      "CVS" 'ede-generic-vc-project)
 
   ;; Take advantage of existing 'projectile' based projects.
   ;; @TODO - if projectile supports compile commands etc, can we
   ;; read that out?  Howto if projectile is not part of core emacs.
-  (ede-generic-new-autoloader "generic-projectile" ".projectile"
+  (ede-generic-new-autoloader "generic-projectile" "Generic .projectile"
 			      ".projectile" 'ede-generic-vc-project)
 
   )

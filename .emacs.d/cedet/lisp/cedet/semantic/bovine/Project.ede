@@ -13,14 +13,14 @@
     :name "bovinator"
     :path ""
     :source '("grammar.el" "debug.el" "grammar-macros.el")
-    :aux-packages '("cedet-compat" "cedet" "eieio")
+    :aux-packages '("cedet-compat" "cedet")
     :pre-load-packages '("cedet-compat")
     )
    (ede-proj-target-elisp "languages"
     :name "languages"
     :path ""
     :source '("c.el" "el.el" "make.el" "scm.el" "erlang.el" "gcc.el" "f90.el" "clang.el")
-    :aux-packages '("cedet-compat" "cedet" "eieio")
+    :aux-packages '("cedet-compat" "cedet")
     :pre-load-packages '("cedet-compat")
     )
    )

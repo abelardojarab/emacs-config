@@ -44,8 +44,8 @@
 		       (semantic-ede-grammar-compiler-wisent
 			semantic-ede-grammar-compiler-bovine
 			))
-   (aux-packages :initform '("cedet-devel-load" "semantic" "cedet-compat"))
-   (pre-load-packages :initform '("cedet-devel-load" "cedet-compat" "semantic/grammar" "semantic/bovine/grammar" "semantic/wisent/grammar"))
+   (aux-packages :initform '("cedet-devel-load" "semantic"))
+   (pre-load-packages :initform '("cedet-devel-load" "semantic/grammar" "semantic/bovine/grammar" "semantic/wisent/grammar"))
    )
   "This target consists of a group of grammar files.
 A grammar target consists of grammar files that build Emacs Lisp programs for
@@ -178,7 +178,7 @@ Lays claim to all -by.el, and -wy.el files."
   "Insert variables needed by target THIS."
   (ede-proj-makefile-insert-loadpath-items
    (ede-proj-elisp-packages-to-loadpath
-    (list "eieio" "semantic" "inversion" "ede")))
+    (list "semantic" "inversion" "ede")))
   ;; eieio for object system needed in ede
   ;; semantic because it is
   ;; Inversion for versioning system.

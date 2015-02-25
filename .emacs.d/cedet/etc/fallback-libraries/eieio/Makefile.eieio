@@ -1,0 +1,9 @@
+EMACS=@echo "    > $@";emacs
+
+all: eieio.elc eieio-base.elc eieio-core.elc
+
+%.elc: %.el
+	$(EMACS) -L . --batch -f batch-byte-compile $^
+
+clean:
+	rm -f eieio.elc eieio-base.elc eieio-core.elc

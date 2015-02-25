@@ -1,6 +1,6 @@
 ;;; semantic/adebug.el --- Semantic Application Debugger
 
-;; Copyright (C) 2007, 2008, 2009, 2012 Eric M. Ludlam
+;; Copyright (C) 2007, 2008, 2009, 2012, 2015 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -132,11 +132,7 @@ Add text properties needed to allow tag expansion later."
 Optional argument PARENT specifies the part of TAGLIST."
   (condition-case nil
       (while taglist
-	(cond ((and (consp taglist) (semantic-tag-p (car taglist)))
-	       (data-debug-insert-tag (car taglist) prefix "" parent))
-	      ((consp taglist)
-	       (data-debug-insert-thing (car taglist) prefix "" parent))
-	      (t (data-debug-insert-thing taglist prefix "" parent)))
+	(data-debug-insert-thing (car taglist) prefix "" parent)
 	(setq taglist (cdr taglist)))
     (error nil)))
 

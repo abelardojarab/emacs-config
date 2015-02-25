@@ -56,11 +56,10 @@
   "Build CEDET in this version of Emacs.
 This only works if EIEIO does not need to be compiled."
   (interactive)
-  (let ((src "eieio/eieio.el") (dst "eieio/eieio.elc"))
-    (if (file-newer-than-file-p src dst)
-	(when (y-or-n-p "EIEIO needs to be recompiled.  Use subprocess? ")
-	  (cedet-build-in-default-emacs))
-      (cedet-build t))))
+  (if (and (version< emacs-version "24.4")
+	   (y-or-n-p "EIEIO needs to be recompiled.  Use subprocess? "))
+      (cedet-build-in-default-emacs)
+    (cedet-build t)))
 
 (defun cedet-build-msg (fmt &rest args)
   "Show a build message."
@@ -108,34 +107,31 @@ OVERRIDE-CHECK to override cedet short-cicuit."
   (cedet-build-msg "CEDET BYTE COMPILATION STATUS:\n\n")
   (cedet-build-msg "Step 1: Byte compile EIEIO...")
 
-  ;; Get EIEIO built first.
-  (save-excursion
-    (let ((src "lisp/eieio/eieio.el") (dst "lisp/eieio/eieio.elc")
-	  (core "lisp/eieio/eieio-core.el") (coredst "lisp/eieio/eieio-core.elc"))
-      (if (file-newer-than-file-p core coredst)
-	  (progn
-	    (when (featurep 'eieio-core)
-	      (error "You should not recompile EIEIO after it has been loaded"))
-	    (byte-compile-file core)
-	    (load-file coredst)
-	    (cedet-build-msg "(core) done ..."))
-	(cedet-build-msg "(core) not needed...")
-	(load-file coredst))
-
-      (if (file-newer-than-file-p src dst)
-	  (progn
-	    (when (featurep 'eieio)
-	      (error "You should not recompile EIEIO after it has been loaded"))
-	    (byte-compile-file src)
-	    (cedet-build-msg "(eieio) done\n"))
-	(cedet-build-msg "(eieio) not needed\n"))
-      ))
-
-  ;; Get eieio loaddefs
-  (cedet-build-msg "Step 2: Creating autoloads ...\n")
-  (cedet-build-msg "Step 2.1: EIEIO Autoloads...")
-  (cedet-build-autoloads-for-dir "lisp/eieio/" ".")
-  (cedet-build-msg "done.\n")
+  ;; Get EIEIO built first for older Emacsen
+  (when (version< emacs-version "24.3")
+    (save-excursion
+      (let ((src "etc/fallback-libraries/eieio/eieio.el")
+	    (dst "etc/fallback-libraries/eieio/eieio.elc")
+	    (core "etc/fallback-libraries/eieio/eieio-core.el")
+	    (coredst "etc/fallback-libraries/eieio/eieio-core.elc")
+	    (base "etc/fallback-libraries/eieio/eieio-base.el")
+	    (basedst "etc/fallback-libraries/eieio/eieio-base.elc"))
+	(if (file-newer-than-file-p core coredst)
+	    (progn
+	      (byte-compile-file core)
+	      (cedet-build-msg "(eieio-core) done ..."))
+	  (cedet-build-msg "(eieio-core) not needed..."))
+	(load-file coredst)
+	(if (file-newer-than-file-p src dst)
+	    (progn
+	      (byte-compile-file src)
+	      (cedet-build-msg "(eieio) done\n"))
+	  (cedet-build-msg "(eieio) not needed\n"))
+	(if (file-newer-than-file-p base basedst)
+	    (progn
+	      (byte-compile-file base)
+	      (cedet-build-msg "(eieio-base) done\n"))
+	  (cedet-build-msg "(eieio-base) not needed\n")))))
 
   ;; Get core CEDET autoloads built...
   (cedet-build-msg "Step 2.2: CEDET Autoloads...")

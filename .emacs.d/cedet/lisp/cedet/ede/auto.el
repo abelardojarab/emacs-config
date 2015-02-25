@@ -233,8 +233,8 @@ added.  Possible values are:
             front of the list so more generic projects don't get priority."
   ;; First, can we identify PROJAUTO as already in the list?  If so, replace.
   (let ((projlist ede-project-class-files)
-	(projname (eieio-object-name-string projauto)))
-    (while (and projlist (not (string= (eieio-object-name-string (car projlist)) projname)))
+	(projname (oref projauto :name)))
+    (while (and projlist (not (string= (oref (car projlist) :name) projname)))
       (setq projlist (cdr projlist)))
 
     (if projlist

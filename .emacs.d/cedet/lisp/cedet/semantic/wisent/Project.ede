@@ -18,14 +18,14 @@
     :name "wisent"
     :path ""
     :source '("wisent.el" "comp.el" "expr.el" "grammar.el" "debug.el" "grammar-macros.el")
-    :aux-packages '("cedet-compat" "cedet" "eieio")
+    :aux-packages '("cedet-compat" "cedet")
     :pre-load-packages '("cedet-compat")
     )
    (ede-proj-target-elisp "languages"
     :name "languages"
     :path ""
     :source '("calc.el" "java.el" "java-tags.el" "python.el" "javascript.el")
-    :aux-packages '("cedet-compat" "cedet" "eieio")
+    :aux-packages '("cedet-compat" "cedet")
     :pre-load-packages '("cedet-compat")
     )
    )

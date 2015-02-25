@@ -24,10 +24,5 @@
     :path ""
     :source '("srecode.texi")
     )
-   (ede-proj-target-makefile-info "eieio-doc"
-    :name "eieio-doc"
-    :path ""
-    :source '("eieio.texi")
-    )
    )
   )

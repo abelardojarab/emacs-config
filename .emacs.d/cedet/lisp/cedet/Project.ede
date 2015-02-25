@@ -18,14 +18,14 @@
 	      "cedet-files.el" "cedet-global.el" "cedet-graphviz.el" "cedet-idutils.el" "cedet-java.el"
 	      "cedet-m3.el" "cedet.el" "data-debug.el" "fame.el" "inversion.el"
 	      "mode-local.el" "pprint.el" "pulse.el" "working.el")
-    :aux-packages '("cedet-compat" "cedet" "eieio")
+    :aux-packages '("cedet-compat" "cedet")
     :pre-load-packages '("cedet-compat")
     )
    (ede-proj-target-elisp "subproj-top"
     :name "init"
     :path ""
     :source '("semantic.el" "srecode.el" "ede.el" "cogre.el")
-    :aux-packages '("cedet-compat" "cedet" "eieio")
+    :aux-packages '("cedet-compat" "cedet")
     :pre-load-packages '("cedet-compat")
     )
    )

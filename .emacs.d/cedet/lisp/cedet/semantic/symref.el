@@ -1,6 +1,6 @@
 ;;; semantic/symref.el --- Symbol Reference API
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -65,6 +65,7 @@
 ;; Your tool should then create an instance of `semantic-symref-result'.
 
 (require 'semantic)
+(require 'semantic/find)
 
 (defvar ede-minor-mode)
 (declare-function data-debug-new-buffer "data-debug")

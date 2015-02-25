@@ -36,6 +36,45 @@
 
 ;;; Code:
 
+;;; EIEIO
+
+(when (version< emacs-version "24.3")
+
+  (require 'eieio-base)
+
+  (let ((default-directory
+	  (expand-file-name "../../etc/fallback-libraries/eieio"
+			    (file-name-directory load-file-name)))
+	(load-path (append '(".") load-path)))
+    (dolist (cur '("eieio-core" "eieio" "eieio-base"))
+      (load cur nil t))))
+
+(when (and (= emacs-major-version 24)
+	   (= emacs-minor-version 3))
+  (require 'eieio-base)
+  (defalias 'eieio-object-name-string 'object-name-string)
+  (defalias 'eieio-object-name 'object-name)
+  (defalias 'eieio-object-class 'object-class)
+  (defalias 'eieio--object-class 'object-class-fast)
+  (defalias 'eieio-object-class-name 'object-class-name)
+  (defalias 'eieio-object-name-string 'object-name-string)
+  (defalias 'eieio--object-num-slots 'object-num-slots)
+  (defalias 'eieio-object-set-name-string 'object-set-name-string)
+  (defalias 'eieio-class-name 'class-name)
+  (defalias 'eieio-class-parent 'class-parent)
+  (defalias 'eieio-class-parents 'class-parents)
+  (defalias 'eieio-class-parents-fast 'class-parents-fast)
+  (defalias 'eieio-class-children 'class-children)
+  (defalias 'eieio--class-num-slots 'class-num-slots)
+  (defalias 'eieio-class-precedence-list 'class-precedence-list)
+  (defalias 'eieio-class-children 'class-direct-subclasses)
+  (defalias 'eieio-class-parents 'class-direct-superclasses))
+
+;;; locate-dominating-file
+;;; Older Emacsen are missing the predicate feature.
+(when (version< emacs-version "24.3")
+  (load "../../etc/fallback-libraries/dominate/dominate.el"))
+
 (when (not (fboundp 'compare-strings))
 
 ;; XEmacs does not have the `compare-strings' function.  Here is an
@@ -176,13 +215,6 @@ Return a coding system between BEGIN and END."
 	   (mapcar #'coding-system-name (coding-system-list)))
 	  :test #'eq :from-end t)))))
   )
-
-(when (and (= emacs-major-version 23)
-	   (= emacs-minor-version 1))
-  (message "Loading CEDET fallback autoload library.")
-  (require 'autoload
-	   (expand-file-name "../../etc/fallback-libraries/autoload.el"
-			     (file-name-directory load-file-name))))
 
 (provide 'cedet-compat)
 

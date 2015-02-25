@@ -17,32 +17,48 @@
 # Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-PROJECTS=lisp/cedet lisp/eieio lisp/speedbar lisp/cedet/cogre lisp/cedet/semantic \
+PROJECTS=lisp/cedet lisp/speedbar lisp/cedet/cogre lisp/cedet/semantic \
 lisp/cedet/ede lisp/cedet/srecode lisp/cedet/semantic/bovine lisp/cedet/semantic/wisent \
 lisp/cedet/semantic/analyze lisp/cedet/semantic/decorate lisp/cedet/semantic/ectags \
 lisp/cedet/semantic/symref doc/texi doc/texi/semantic
 
-PROJECTS_AUTOLOADS=lisp/cedet lisp/eieio lisp/speedbar lisp/cedet/cogre lisp/cedet/semantic \
+PROJECTS_AUTOLOADS=lisp/cedet lisp/speedbar lisp/cedet/cogre lisp/cedet/semantic \
 lisp/cedet/ede lisp/cedet/srecode
 
 EMACS=emacs
 EMACSFLAGS=-batch --no-site-file -l cedet-remove-builtin.el
 LOADDEFS=loaddefs.el
 BOOTSTRAP=(progn (global-ede-mode) (find-file "$(CURDIR)/lisp/Project.ede") (ede-proj-regenerate) (find-file "$(CURDIR)/doc/texi/Project.ede") (ede-proj-regenerate))
-UTEST=(progn (add-to-list (quote load-path) "$(CURDIR)/tests") (add-to-list (quote load-path) "$(CURDIR)/tests/eieio") (require (quote cedet-utests)) (semantic-mode))
-SHOWVERSION=(message "Emacs version: %s %s on %s " emacs-version (bound-and-true-p emacs-bzr-version) (symbol-name system-type))
+UTEST=(progn (add-to-list (quote load-path) "$(CURDIR)/tests") (require (quote cedet-utests)) (semantic-mode))
+GETVERSION=(princ (format "%s %s %s" emacs-major-version emacs-minor-version (bound-and-true-p emacs-repository-version)))
 RM=rm
 FIND=find
 INSTALL-INFO=install-info
 INFO_FILES=$(shell $(FIND) $(CURDIR)/doc/texi -type f -name '*.info')
 INFODIR=$(CURDIR)/doc/info
+EMACS_VERSION=$(shell $(EMACS) -Q --batch --eval '$(GETVERSION)')
+EMACS_MAJOR=$(firstword $(EMACS_VERSION))
+EMACS_MINOR=$(word 2,$(EMACS_VERSION))
 
-all: showversion clean-autoloads autoloads touch-makefiles compile info install-info
+ifeq ($(EMACS_MAJOR),23)
+    $(error Aborting: CEDET needs Emacs 24.x)
+endif
+
+ifneq (,$(filter $(EMACS_MINOR),1 2))
+    FALLBACK_EIEIO=1
+endif
+
+$(info Emacs version: $(EMACS_VERSION))
+
+all: touch-makefiles clean-autoloads autoloads compile info install-info
 
 ebuild:
 	$(EMACS) -Q --batch -l cedet-build.el -f cedet-build
 
 compile:
+ifdef FALLBACK_EIEIO
+	$(MAKE) -C etc/fallback-libraries/eieio -f Makefile.eieio
+endif
 	$(MAKE) -C lisp
 
 makefiles: $(addsuffix /Makefile,$(PROJECTS))
@@ -56,7 +72,7 @@ makefiles-bootstrap:
 
 touch-makefiles:
 	@echo Updating timestamps on all Makefiles.
-	$(FIND) . -name "Makefile" -exec touch '{}' \;
+	$(FIND) lisp -name "Makefile" -exec touch '{}' \;
 
 autoloads:
 	@echo "Generating autoloads."
@@ -77,6 +93,10 @@ clean-autoloads:
 clean-all: clean-autoloads
 	@echo Calling \"$(MAKE) clean\" in all projects.
 	@$(foreach proj,$(PROJECTS),echo "  > $(proj)";cd $(CURDIR)/$(proj) && $(MAKE) clean;)
+ifdef FALLBACK_EIEIO
+	$(MAKE) -C etc/fallback-libraries/eieio -f Makefile.eieio clean
+endif
+
 
 utest: 
 	$(EMACS) -Q -l cedet-devel-load.el --eval '$(UTEST)' -f cedet-utest
@@ -133,5 +153,3 @@ itest-globalref-batch:
 itest-stl-batch:
 	$(EMACS) $(EMACSFLAGS) -l cedet-devel-load.el -l $(CURDIR)/tests/cedet/semantic/stltest.el
 
-showversion:
-	@$(EMACS) -Q --batch --eval '$(SHOWVERSION)'

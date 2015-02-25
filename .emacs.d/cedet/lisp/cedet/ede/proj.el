@@ -1,6 +1,6 @@
 ;;; ede/proj.el --- EDE Generic Project file driver
 
-;; Copyright (C) 1998-2003, 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2003, 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: project, make
@@ -184,7 +184,7 @@ Target variables are always renamed such as foo_CFLAGS, then included into
 commands where the variable would usually appear.")
    (rules :initarg :rules
 	  :initform nil
-	  :type list
+	  :type ede-makefile-rule-list
 	  :custom (repeat (object :objecttype ede-makefile-rule))
 	  :label "Additional Rules"
 	  :group (make)
@@ -251,6 +251,7 @@ in targets.")
 These variables are used in the makefile when a configuration becomes active.")
    (inference-rules :initarg :inference-rules
 		    :initform nil
+		    :type ede-makefile-rule-list
 		    :custom (repeat
 			     (object :objecttype ede-makefile-rule))
 		    :documentation "Inference rules to add to the makefile.")

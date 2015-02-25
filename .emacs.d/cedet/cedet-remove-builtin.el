@@ -22,7 +22,7 @@
 ;;; Code:
 
 (defvar cedet-remove-builtin-package-list
-  '(eieio semantic srecode ede data-debug)
+  '(semantic srecode ede data-debug)
   "CEDET packages part of Emacs proper that should be removed.
   The 'cedet' package itself is implicitly included.")
 

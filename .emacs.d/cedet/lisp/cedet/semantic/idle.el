@@ -836,8 +836,11 @@ turned on in every Semantic-supported buffer."
   :group 'semantic-faces)
 (defvar semantic-idle-symbol-highlight-face 'semantic-idle-symbol-highlight
   "Face used for highlighting local symbols.")
-(make-obsolete-variable 'semantic-idle-symbol-highlight-face
-    "customize the face `semantic-idle-symbol-highlight' instead" "24.4" 'set)
+(if (version< emacs-version "24.2")
+    (make-obsolete-variable 'semantic-idle-symbol-highlight-face
+			    "customize the face `semantic-idle-symbol-highlight' instead" "24.4")
+  (make-obsolete-variable 'semantic-idle-symbol-highlight-face
+			  "customize the face `semantic-idle-symbol-highlight' instead" "24.4" 'set))
 
 (defun semantic-idle-symbol-maybe-highlight (tag)
   "Perhaps add highlighting to the symbol represented by TAG.

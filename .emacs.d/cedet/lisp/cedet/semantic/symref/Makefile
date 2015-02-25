@@ -15,7 +15,7 @@ top=../../../
 ede_FILES=Project.ede Makefile
 
 symref_LISP=global.el grep.el list.el idutils.el cscope.el filter.el
-LOADPATH= ../../../eieio/ ../../ ../../
+LOADPATH= ../../ ../../
 VERSION=1.1beta
 DISTDIR=$(top)cedet-topdir-$(VERSION)/cedet/semantic/symref
 

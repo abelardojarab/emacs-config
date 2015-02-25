@@ -15,15 +15,11 @@ DISTDIR=$(top)cedet-topdir-$(VERSION)
 
 
 
-all: speedbar eieio cedet
+all: speedbar cedet
 
 .PHONY:speedbar
 speedbar:
 	$(MAKE) -C speedbar
-
-.PHONY:eieio
-eieio:
-	$(MAKE) -C eieio
 
 .PHONY:cedet
 cedet:
@@ -31,7 +27,6 @@ cedet:
 
 tags: 
 	$(MAKE) -C speedbar/ $(MFLAGS) $@
-	$(MAKE) -C eieio/ $(MFLAGS) $@
 	$(MAKE) -C cedet/ $(MFLAGS) $@
 
 .PHONY: dist
@@ -41,7 +36,6 @@ dist:
 	mkdir $(DISTDIR)
 	cp $(ede_FILES) $(DISTDIR)
 	$(MAKE) -C speedbar $(MFLAGS) DISTDIR=$(DISTDIR)/speedbar dist
-	$(MAKE) -C eieio $(MFLAGS) DISTDIR=$(DISTDIR)/eieio dist
 	$(MAKE) -C cedet $(MFLAGS) DISTDIR=$(DISTDIR)/cedet dist
 	tar -cvzf $(DISTDIR).tar.gz $(DISTDIR)
 	rm -rf $(DISTDIR)

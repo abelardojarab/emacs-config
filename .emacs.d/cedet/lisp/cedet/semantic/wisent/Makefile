@@ -16,8 +16,7 @@ top=../../../
 ede_FILES=Project.ede Makefile
 
 wy_SEMANTIC_GRAMMAR=java-tags.wy calc.wy java.wy python.wy javascript.wy
-LOADPATH= ../../ ../../ ../../../../  ../../../eieio/\
-   
+LOADPATH= ../../ ../../ ../../../../ 
 wy_SEMANTIC_GRAMMAR_EL=java-tags-wy.el calc-wy.el java-wy.el python-wy.el javascript-wy.el
 tools_LISP=bison-wisent.el
 languages_LISP=calc.el java.el java-tags.el python.el javascript.el
@@ -33,7 +32,7 @@ all: wy tools wisent languages
 
 .PHONY: wy
 wy: $(addsuffix -wy.elc, $(basename $(wy_SEMANTIC_GRAMMAR)))
-wy: PRELOADS=cedet-devel-load cedet-compat semantic/grammar semantic/bovine/grammar semantic/wisent/grammar
+wy: PRELOADS=cedet-compat cedet-devel-load semantic/grammar semantic/bovine/grammar semantic/wisent/grammar
 
 wy: EMACSFLAGS+= --eval '(setq max-specpdl-size 1500 max-lisp-eval-depth 700 cedet-minimum-setup t)'
 %.elc: %.el

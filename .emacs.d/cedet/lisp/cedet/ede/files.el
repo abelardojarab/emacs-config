@@ -1,6 +1,6 @@
 ;;; ede/files.el --- Associate projects with files and directories.
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -66,6 +66,22 @@ the current EDE project."
   (let* ((loc (ede-get-locator-object (ede-current-project))))
     (when loc
       (ede-locate-flush-hash loc))))
+
+(defun ede-global-list-sanity-check ()
+  "Perform a sanity check to make sure there are no duplicate projects."
+  (interactive)
+  (let ((scanned nil))
+    (dolist (P ede-projects)
+      (if (member (oref P :directory) scanned)
+	  (error "Duplicate project (by dir) found in %s!" (oref P :directory))
+	(push (oref P :directory) scanned)))
+    (unless ede--disable-inode
+      (setq scanned nil)
+      (dolist (P ede-projects)
+	(if (member (ede--project-inode P) scanned)
+	  (error "Duplicate project (by inode) found in %s!" (ede--project-inode P))
+	  (push (ede--project-inode P) scanned))))
+    (message "EDE by directory %sis still sane." (if ede--disable-inode "" "& inode "))))
 
 ;;; Placeholders for ROOT directory scanning on base objects
 ;;

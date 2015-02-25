@@ -28,6 +28,9 @@
 (when (featurep 'cedet-devel-load)
   (error "CEDET Version %s already loaded." cedet-version))
 
+;; Load EIEIO that is provided by Emacs  
+(require 'eieio)
+
 ;; This file must be in "<INSTALL-DIR>" where 'cedet.el' that
 ;; comes with the associated repository is in: "<INSTALL-DIR>/lisp/cedet/cedet.el".
 (let ((CEDETDIR (file-name-directory
@@ -40,16 +43,16 @@
   ;; SETUP LOAD PATHS
   (add-to-list 'load-path CEDETDIR)
   (add-to-list 'load-path (expand-file-name "lisp/cedet" CEDETDIR))
-  (add-to-list 'load-path (expand-file-name "lisp/eieio" CEDETDIR))
   (add-to-list 'load-path (expand-file-name "lisp/speedbar" CEDETDIR))
 
-  (require 'eieio)
+  ;; Load compatibility code for older Emacsen
+  (require 'cedet-compat)
+  ;; Load EDE
   (require 'ede)
 
   ;; Load in all the loaddefs unless we're bootstrapping the system
   (unless (boundp 'cedet-bootstrap-in-progress)
     (message "Loading autoloads from CEDET development.")
-    (load (expand-file-name "lisp/eieio/loaddefs.el" CEDETDIR) nil t t)
     (load (expand-file-name "lisp/speedbar/loaddefs.el" CEDETDIR) nil t t)
     (load (expand-file-name "lisp/cedet/loaddefs.el" CEDETDIR) nil t t)
     (load (expand-file-name "lisp/cedet/ede/loaddefs.el" CEDETDIR) nil t t)
@@ -58,12 +61,7 @@
     (load (expand-file-name "lisp/cedet/semantic/loaddefs.el" CEDETDIR) nil t t)
     (setq Info-directory-list
 	  (cons (expand-file-name "doc/info" CEDETDIR)
-		Info-default-directory-list)))
-
-  ;; Load in COMPAT code - This is because NEW CEDET code may use this
-  ;; for compatibility reasons, but Emacs integrated code removes it.
-  (require 'cedet-compat)
-  )
+		Info-default-directory-list))))
 
 ;; Skip the rest if we just want to absolute minimum (during compilation).
 (unless (bound-and-true-p cedet-minimum-setup)
@@ -91,34 +89,7 @@
     ;; Add in the devel data directory.
     (add-to-list 'srecode-map-load-path (expand-file-name "etc/srecode" CEDETDIR))
     ;; Remove the system level data directory.
-    (setq srecode-map-load-path (remove REMOVEME srecode-map-load-path)))
-
-  ;; Currently, Emacs proper doesn't track EIEIO methods.  Until it
-  ;; does, we have to advice `describe-variable' and `describe-function'
-  ;; for EIEIO methods to get better help buffers.
-
-  (require 'advice)
-  (require 'eieio-opt)
-
-  (defadvice describe-variable (around eieio-describe activate)
-    "Display the full documentation of FUNCTION (a symbol).
-Returns the documentation as a string, also."
-    (if (class-p (ad-get-arg 0))
-	(eieio-describe-class (ad-get-arg 0))
-      ad-do-it))
-
-  (defadvice describe-function (around eieio-describe activate)
-    "Display the full documentation of VARIABLE (a symbol).
-Returns the documentation as a string, also."
-    (if (generic-p (ad-get-arg 0))
-	(eieio-describe-generic (ad-get-arg 0))
-      (if (class-p (ad-get-arg 0))
-	  (eieio-describe-constructor (ad-get-arg 0))
-	ad-do-it)))
-
-  ;; This adds further formatting and hyperlinks.
-  (add-hook 'temp-buffer-show-hook 'eieio-help-mode-augmentation-maybee t)
-)
+    (setq srecode-map-load-path (remove REMOVEME srecode-map-load-path))))
 
 (provide 'cedet-devel-load)
 

@@ -1024,6 +1024,15 @@ now.
       (setq return-list (car tag))
       (setq tag (cdr tag)))
 
+    ;; Check if we have a typed enum, and if so, apply its type to all
+    ;; members.
+    (when (and (semantic-tag-of-type-p tag "enum")
+	       (semantic-tag-get-attribute tag :enum-type))
+      (let ((enumtype (semantic-tag-get-attribute tag :enum-type))
+	    (members (semantic-tag-get-attribute tag :members)))
+	(dolist (cur members)
+	  (semantic-tag-put-attribute cur :type enumtype))))
+
     ;; Name of the tag is a list, so expand it.  Tag lists occur
     ;; for variables like this: int var1, var2, var3;
     ;;
@@ -1180,13 +1189,16 @@ is its own toplevel tag.  This function will return (cons A B)."
 	   (while names
 
 	     (setq vl (cons (semantic-tag-new-type
-			     (nth 1 (car names)) ; name
+			     (nth 2 (car names)) ; name
 			     "typedef"
 			     (semantic-tag-type-members tag)
 			     nil
 			     :pointer
 			     (let ((stars (car (car (car names)))))
 			       (if (= stars 0) nil stars))
+			     :reference
+			     (let ((refs (car (nth 1 (car names)))))
+			       (when (> refs 0) refs))
 			     ;; This specifies what the typedef
 			     ;; is expanded out as.  Just the
 			     ;; name shows up as a parent of this
@@ -1350,8 +1362,10 @@ Optional argument STAR and REF indicate the number of * and & in the typedef."
 	    ;; `throws' as a common name for things that toss
 	    ;; exceptions about.
 	    :throws (nth 5 tokenpart)
-	    ;; Reentrant is a C++ thingy.  Add it here
+	    ;; Reentrant, override, final are a C++ things.  Add it here.
 	    :reentrant-flag (if (member "reentrant" (nth 6 tokenpart)) t)
+	    :override-flag (if (member "override" (nth 6 tokenpart)) t)
+	    :final-flag (if (member "final" (nth 6 tokenpart)) t)
 	    ;; A function post-const is funky.  Try stuff
 	    :methodconst-flag (if (member "const" (nth 6 tokenpart)) t)
 	    ;; prototypes are functions w/ no body
@@ -2054,10 +2068,12 @@ have to be wrapped in that namespace."
 	    (setq sv (cdr sv)))
 
 	  ;; This is optional, and potentially fraught w/ errors.
-	  (condition-case nil
-	      (dolist (lt sv)
-		(setq txt (concat txt " " (semantic-lex-token-text lt))))
-	    (error (setq txt (concat txt "  #error in summary fcn"))))
+	  (if (stringp sv)
+	      (setq txt (concat txt " " sv))
+	    (condition-case nil
+		(dolist (lt sv)
+		  (setq txt (concat txt " " (semantic-lex-token-text lt))))
+	      (error (setq txt (concat txt "  #error in summary fcn")))))
 
 	  txt)
       (semantic-idle-summary-current-symbol-info-default))))

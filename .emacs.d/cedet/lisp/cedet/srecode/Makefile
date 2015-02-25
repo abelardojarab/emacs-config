@@ -6,8 +6,7 @@
 # EDE is the Emacs Development Environment.
 # http://cedet.sourceforge.net/ede.shtml
 #
-LOADPATH= ../ ../ ../../../  ../../eieio/\
-   
+LOADPATH= ../ ../ ../../../ 
 require=$(foreach r,$(1),(require (quote $(r))))
 EMACSFLAGS=-batch --no-site-file --eval '(setq debug-on-error t)' -l "../../../cedet-remove-builtin.el"
 EMACS=@echo "    > $@";emacs
@@ -42,7 +41,7 @@ autoloads:
 
 .PHONY: lang
 lang: $(addsuffix -wy.elc, $(basename $(lang_SEMANTIC_GRAMMAR)))
-lang: PRELOADS=cedet-devel-load cedet-compat semantic/grammar semantic/bovine/grammar semantic/wisent/grammar
+lang: PRELOADS=cedet-compat cedet-devel-load semantic/grammar semantic/bovine/grammar semantic/wisent/grammar
 
 lang: EMACSFLAGS+= --eval '(setq max-specpdl-size 1500 max-lisp-eval-depth 700 cedet-minimum-setup t)'
 %.elc: %.el

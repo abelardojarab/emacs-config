@@ -8,7 +8,7 @@
     :name "symref"
     :path ""
     :source '("global.el" "grep.el" "list.el" "idutils.el" "cscope.el" "filter.el")
-    :aux-packages '("cedet-compat" "cedet" "eieio")
+    :aux-packages '("cedet-compat" "cedet")
     :pre-load-packages '("cedet-compat")
     )
    )
