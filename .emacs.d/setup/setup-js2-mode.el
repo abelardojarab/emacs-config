@@ -17,7 +17,7 @@
 (add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (add-to-list 'load-path "~/.emacs.d/js2-mode")
 (add-to-list 'load-path "~/.emacs.d/js2-refactor")
-(add-to-list 'load-path "~/.emacs.d/emacs-web-server")
+(add-to-list 'load-path "~/.emacs.d/web-server")
 (add-to-list 'load-path "~/.emacs.d/skewer-mode")
 (add-to-list 'load-path "~/.emacs.d/ac-js2")
 (add-to-list 'load-path "~/.emacs.d/node-ac")
