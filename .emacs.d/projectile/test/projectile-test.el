@@ -111,6 +111,19 @@
         (should (equal (projectile-project-ignored) files))))))
 
 
+(ert-deftest projectile-remove-ignored-suffixes ()
+  (noflet ((projectile-project-root () "/path/to/project")
+           (projectile-project-name () "project")
+           (projectile-ignored-files-rel () ())
+           (projectile-ignored-directories-rel () ()))
+          (let* ((file-names '("foo.c" "foo.o" "foo.so" "foo.o.gz"))
+                 (files (mapcar 'projectile-expand-root file-names)))
+            (let ((projectile-globally-ignored-file-suffixes '(".o" ".so")))
+              (should (equal (projectile-remove-ignored files)
+                             (mapcar 'projectile-expand-root
+                                     '("foo.c" "foo.o.gz"))))))))
+
+
 (ert-deftest projectile-test-parse-dirconfig-file ()
   (noflet ((file-exists-p (filename) t)
            (file-truename (filename) filename)
@@ -197,7 +210,7 @@
 (ert-deftest projectile-test-tags-exclude-items ()
   (noflet ((projectile-ignored-directories-rel () (list ".git/" ".hg/")))
     (should (equal (projectile-tags-exclude-patterns)
-                   "--exclude=.git --exclude=.hg"))))
+                   "--exclude=\".git\" --exclude=\".hg\""))))
 
 (ert-deftest projectile-test-maybe-invalidate ()
   (noflet ((projectile-invalidate-cache (arg) t))
@@ -518,9 +531,13 @@
                        "src/Makefile"
                        "src/test.vert"
                        "src/test.frag"
+                       "src/same_name.c"
+                       "src/some_module/same_name.c"
+                       "include1/same_name.h"
                        "include1/test1.h"
                        "include1/test2.h"
                        "include1/test1.hpp"
+                       "include2/some_module/same_name.h"
                        "include2/test1.h"
                        "include2/test2.h"
                        "include2/test2.hpp")))
@@ -540,6 +557,8 @@
                    (projectile-get-other-files "include1/test1.h" source-tree t)))
     (should (equal '("src/Makefile")
                    (projectile-get-other-files "Makefile.lock" source-tree)))
+    (should (equal '("src/some_module/same_name.c" "src/same_name.c")
+                   (projectile-get-other-files "include2/some_module/same_name.h" source-tree)))
     ))
 
 

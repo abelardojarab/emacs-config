@@ -170,7 +170,7 @@ Otherwise consider the current directory the project root."
   :group 'projectile
   :type 'string)
 
-(defcustom projectile-tags-command "ctags -Re -f %s %s"
+(defcustom projectile-tags-command "ctags -Re -f \"%s\" %s"
   "The command Projectile's going to use to generate a TAGS file."
   :group 'projectile
   :type 'string)
@@ -255,6 +255,12 @@ pattern that would have found a project root in a subdirectory."
 (defcustom projectile-globally-ignored-files
   (list projectile-tags-file-name)
   "A list of files globally ignored by projectile."
+  :group 'projectile
+  :type '(repeat string))
+
+(defcustom projectile-globally-ignored-file-suffixes
+  nil
+  "A list of file suffixes globally ignored by projectile."
   :group 'projectile
   :type '(repeat string))
 
@@ -852,8 +858,10 @@ Operates on filenames relative to the project root."
   (let ((ignored (append (projectile-ignored-files-rel)
                          (projectile-ignored-directories-rel))))
     (-remove (lambda (file)
-               (--any-p (string-prefix-p it file) ignored))
+               (or (--any-p (string-prefix-p it file) ignored)
+                   (--any-p (string-suffix-p it file) projectile-globally-ignored-file-suffixes)))
              files)))
+
 
 (defun projectile-buffers-with-file (buffers)
   "Return only those BUFFERS backed by files."
@@ -1194,6 +1202,9 @@ Returns a list of possible files for users to choose.
 
 With FLEX-MATCHING, match any file that contains the base name of current file"
   (let* ((file-ext-list (cdr (assoc (file-name-extension current-file) projectile-other-file-alist)))
+         (fulldirname  (if (file-name-directory current-file)
+                           (file-name-directory current-file) "./"))
+         (dirname  (file-name-nondirectory (directory-file-name fulldirname)))
          (filename (file-name-base current-file))
          (file-list (mapcar (lambda (ext)
                               (if flex-matching
@@ -1215,7 +1226,13 @@ With FLEX-MATCHING, match any file that contains the base name of current file"
                                                         (unless (equal (file-name-extension project-file) nil)
                                                           (concat  "\." (file-name-extension project-file))))))
                                 candidates))
-                     file-list))))
+                     file-list)))
+         (candidates
+          (-sort (lambda (file _)
+                   (let ((candidate-dirname (file-name-nondirectory (directory-file-name (file-name-directory file)))))
+                     (unless (equal fulldirname (file-name-directory file))
+                     (equal dirname candidate-dirname))))
+                 candidates)))
     candidates))
 
 (defun projectile-select-files (project-files &optional arg)
@@ -1717,7 +1734,7 @@ regular expression."
 
 (defun projectile-tags-exclude-patterns ()
   "Return a string with exclude patterns for ctags."
-  (mapconcat (lambda (pattern) (format "--exclude=%s"
+  (mapconcat (lambda (pattern) (format "--exclude=\"%s\""
                                        (directory-file-name pattern)))
              (projectile-ignored-directories-rel) " "))
 
@@ -2529,7 +2546,7 @@ is chosen."
 ;;;###autoload
 (defcustom projectile-mode-line
   '(:eval (format " Projectile[%s]" (projectile-project-name)))
-  "Mode line ligher for Projectile.
+  "Mode line lighter for Projectile.
 
 The value of this variable is a mode line template as in
 `mode-line-format'.  See Info Node `(elisp)Mode Line Format' for

@@ -714,5 +714,14 @@ not need to be wrapped, move point to the next line and return t."
 (require 'benchmark-init)
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
 
+;; pcache
+(add-to-list 'load-path "~/.emacs.d/pcache")
+(add-to-list 'load-path "~/.emacs.d/list-utils")
+(add-to-list 'load-path "~/.emacs.d/persistent-soft")
+(require 'pcache)
+(require 'list-utils)
+(require 'persistent-soft)
+(setq pcache-directory (expand-file-name "~/.emacs.cache"))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
