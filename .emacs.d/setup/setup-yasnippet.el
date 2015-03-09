@@ -1,6 +1,6 @@
 ;;; setup-yasnippet.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -151,6 +151,10 @@
   (when yas/recursive-edit-flag
     (throw 'exit nil)))
 (add-hook 'yas-after-exit-snippet-hook 'yas/after-exit-snippet-hook--recursive-edit)
+
+;; Yatemplate
+(add-to-list 'load-path "~/.emacs.d/yatemplate")
+(require 'yatemplate)
 
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet.el ends here
