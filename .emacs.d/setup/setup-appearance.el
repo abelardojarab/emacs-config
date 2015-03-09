@@ -239,15 +239,6 @@ non-nil."
     ;; hook for setting up UI when not running in daemon mode
     (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil)))))
 
-;; Unicode font support
-(add-to-list 'load-path "~/.emacs.d/unicode-fonts")
-(add-to-list 'load-path "~/.emacs.d/font-utils")
-(add-to-list 'load-path "~/.emacs.d/ucs-utils")
-(require 'font-utils)
-(require 'ucs-utils)
-(require 'unicode-fonts)
-(unicode-fonts-setup)
-
 ;; Pretty lambdas
 (defun pretty-lambdas ()
   (font-lock-add-keywords
