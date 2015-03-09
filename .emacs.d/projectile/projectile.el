@@ -38,7 +38,6 @@
 
 (require 'thingatpt)
 (require 'dash)
-(require 'grep)           ; For `rgrep'
 (require 'ibuffer)
 (require 'ibuf-ext)
 
@@ -1686,6 +1685,7 @@ With a prefix ARG asks for files (globbing-aware) which to grep in.
 With prefix ARG of `-' (such as `M--'), default the files (without prompt),
 to `projectile-grep-default-files'."
   (interactive "P")
+  (require 'grep) ;; for `rgrep'
   (let* ((roots (projectile-get-project-directories))
          (search-regexp (if (and transient-mark-mode mark-active)
                             (buffer-substring (region-beginning) (region-end))
@@ -1696,7 +1696,7 @@ to `projectile-grep-default-files'."
                              (read-string (projectile-prepend-project-name "Grep in: ")
                                           (projectile-grep-default-files))))))
     (dolist (root-dir roots)
-      (require 'grep)
+      (require 'vc-git) ;; for `vc-git-grep'
       ;; in git projects users have the option to use `vc-git-grep' instead of `rgrep'
       (if (and (eq (projectile-project-vcs) 'git)
                projectile-use-git-grep
@@ -1837,13 +1837,12 @@ regular expression."
   "Use a grep-like CMD to search for files within DIRECTORY.
 
 CMD should include the necessary search params and should output
-equivalently to grep -H (colon-deliminated, with the relative
-filename as the first column).  Returns a list of expanded
-filenames."
+equivalently to grep -HLI (only unique matching filenames).
+Returns a list of expanded filenames."
   (let ((default-directory directory))
     (--map (concat directory
                    (if (string-prefix-p "./" it) (substring it 2) it))
-           (-> (shell-command-to-string (concat cmd " | cut -d: -f1 | uniq"))
+           (-> (shell-command-to-string cmd)
                projectile-trim-string
                (split-string "\n+" t)))))
 
@@ -1856,17 +1855,17 @@ files in the project."
   (if (projectile-unixy-system-p)
       (let* ((search-term (shell-quote-argument string))
              (cmd (cond ((executable-find "ag")
-                         (concat "ag --literal --nocolor --noheading -- "
+                         (concat "ag --literal --nocolor --noheading -l -- "
                                  search-term))
                         ((executable-find "ack")
-                         (concat "ack --noheading --nocolor -- "
+                         (concat "ack --noheading --nocolor -l -- "
                                  search-term))
                         ((and (executable-find "git")
                               (eq (projectile-project-vcs) 'git))
-                         (concat "git grep -H "
+                         (concat "git grep -HLI "
                                  search-term))
                         (t
-                         (concat "grep -rH "
+                         (concat "grep -rHLI "
                                  search-term
                                  " .")))))
         (projectile-files-from-cmd cmd directory))

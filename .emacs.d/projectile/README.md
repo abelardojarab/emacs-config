@@ -6,6 +6,8 @@
 
 ## Synopsis
 
+[![Join the chat at https://gitter.im/bbatsov/projectile](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bbatsov/projectile?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **Projectile** is a project interaction library for Emacs. Its goal is to
 provide a nice set of features operating on a project level without
 introducing external dependencies(when feasible). For instance -
@@ -31,7 +33,7 @@ it. Some of Projectile's features:
 * jump to a file in a directory
 * jump to a project buffer
 * jump to a test in project
-* toggle between files with same names but different extensions (i.e. .h <-> .c/.cpp, Gemfile <-> Gemfile.lock...)
+* toggle between files with same names but different extensions (e.g. `.h` <-> `.c/.cpp`, `Gemfile` <-> `Gemfile.lock`)
 * toggle between code and its test
 * jump to recently visited files in the project
 * switch between projects you have worked on
@@ -641,7 +643,7 @@ Obviously you need to have Helm installed for this to work :-)
 
 [Perspective](https://github.com/nex3/perspective-el) is a minor mode
 that provides the ability to manage different workspaces. If you need
-to open many projects at the same time, prerspective can help you keep
+to open many projects at the same time, perspective can help you keep
 each project related buffers and windows setting separate from other
 projects, similar to multiple spaces on MacOS, which allows you to
 focus on the files of the current active project.
