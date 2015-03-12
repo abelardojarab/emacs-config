@@ -352,8 +352,8 @@ Defaults to `error'."
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                           (char-equal (char-syntax cb) ?\) )
-                           (blink-matching-open))))
+                             (char-equal (char-syntax cb) ?\) )
+                             (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;; Opening bracket to be highlighted when the point is on the closing bracket
@@ -722,6 +722,12 @@ not need to be wrapped, move point to the next line and return t."
 (require 'list-utils)
 (require 'persistent-soft)
 (setq pcache-directory (expand-file-name "~/.emacs.cache"))
+
+;; better windows handling
+(add-to-list 'load-path "~/.emacs.d/imenu-list")
+(add-to-list 'load-path "~/.emacs.d/purpose")
+(require 'purpose)
+(require 'imenu-list)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
