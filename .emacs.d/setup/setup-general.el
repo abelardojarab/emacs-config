@@ -348,7 +348,7 @@ Defaults to `error'."
 
 ;; Show paren-mode when off-screen
 (defadvice show-paren-function
-  (after show-matching-paren-offscreen activate)
+    (after show-matching-paren-offscreen activate)
   "If the matching paren is offscreen, show the matching line in the
         echo area. Has no effect if the character before point is not of
         the syntax class ')'."
@@ -361,8 +361,8 @@ Defaults to `error'."
 
 ;; Opening bracket to be highlighted when the point is on the closing bracket
 (defadvice show-paren-function
-  (around show-paren-closing-before
-          activate compile)
+    (around show-paren-closing-before
+            activate compile)
   (if (eq (syntax-class (syntax-after (point))) 5)
       (save-excursion
         (forward-char)
@@ -731,6 +731,10 @@ not need to be wrapped, move point to the next line and return t."
 (add-to-list 'load-path "~/.emacs.d/purpose")
 (require 'purpose)
 (require 'imenu-list)
+
+;; better windows handling
+(add-to-list 'load-path "~/.emacs.d/browse-kill-ring")
+(require 'browse-kill-ring)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
