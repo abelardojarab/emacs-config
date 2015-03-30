@@ -6,7 +6,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq debug-on-error t)
-
+(defconst debian-emacs-flavor 'emacs24
+   "A symbol representing the particular debian flavor of emacs running.
+ Something like 'emacs20, 'xemacs20, etc.")
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/setup")
 (add-to-list 'load-path "~/.emacs.d/elp")
@@ -125,9 +127,6 @@
 
 ;; Setup Javascript mode
 (require 'setup-js2-mode)
-
-;; Setup C# mode
-(require 'setup-csharp)
 
 ;; Setup Lisp mode
 (require 'setup-lisp)
