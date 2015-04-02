@@ -43,9 +43,6 @@
                        imenu-create-index-function 'python-imenu-create-index))
   (setq imenu-create-index-function 'python-imenu-create-index))
 
-;; In case of using IPython
-(setq py-force-py-shell-name-p t)
-
 ;; switch to the interpreter after executing code
 (setq py-shell-switch-buffers-on-execute-p t)
 (setq py-switch-buffers-on-execute-p t)
