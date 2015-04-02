@@ -1,6 +1,6 @@
 ;;; setup-python.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -25,23 +25,36 @@
 ;;; Code:
 
 ;; Python tweaks
+(when (featurep 'python) (unload-feature 'python t))
 
+;; Load python-mode
+(add-to-list 'load-path "~/.emacs.d/python-mode")
+(require 'python-mode)
+(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
+(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+(add-hook 'python-mode-hook 'autopair-mode)
+(add-hook 'python-mode-hook 'auto-complete-mode)
+
+;; Update imenu
 (defun python-reset-imenu ()
   (interactive)
   (if (fboundp 'setq-mode-local)
       (setq-mode-local python-mode
                        imenu-create-index-function 'python-imenu-create-index))
   (setq imenu-create-index-function 'python-imenu-create-index))
-(when (featurep 'python) (unload-feature 'python t))
 
-(add-to-list 'load-path "~/.emacs.d/python-mode")
-(require 'python-mode)
+;; In case of using IPython
+(setq py-force-py-shell-name-p t)
+
+;; switch to the interpreter after executing code
+(setq py-shell-switch-buffers-on-execute-p t)
+(setq py-switch-buffers-on-execute-p t)
+
+;; don't split windows
 (setq py-split-windows-on-execute-p nil)
-(setq py-electric-colon-active t)
-(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
-(add-hook 'python-mode-hook 'autopair-mode)
-(add-hook 'python-mode-hook 'auto-complete-mode)
+
+;; try to automagically figure out indentation
+(setq py-smart-indentation t)
 
 ;; Restore semantic
 (add-hook 'python-mode-hook 'wisent-python-default-setup)
@@ -50,9 +63,8 @@
 (add-hook 'python-mode-hook
           (function (lambda ()
                       (setq indent-tabs-mode nil
+                            python-indent 4
                             tab-width 4))))
-(add-hook 'python-mode-hook '(lambda ()
-                               (setq python-indent 4)))
 
 ;; Jedi settings
 (add-to-list 'load-path "~/.emacs.d/ctable")

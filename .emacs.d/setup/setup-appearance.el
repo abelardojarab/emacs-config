@@ -126,6 +126,7 @@ non-nil."
 (require 'font-lock+)
 (require 'jit-lock)
 (global-font-lock-mode t)
+(global-hi-lock-mode nil)
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size (* 1024 1024))
 (setq font-lock-support-mode 'jit-lock-mode ;; lazy-lock-mode
@@ -135,8 +136,14 @@ non-nil."
       jit-lock-stealth-load 100
       jit-lock-chunk-size 1000
       jit-lock-defer-time 0.01
-      jit-lock-stealth-nice 0.5)
+      jit-lock-stealth-nice 0.5
+      jit-lock-contextually t
+      jit-lock-stealth-verbose t)
 (setq-default font-lock-multiline t)
+
+;; if there is size information associated with text, change the text
+;; size to reflect it
+(size-indication-mode t)
 
 ;; Use 10-pt Consolas as default font
 (if (find-font (font-spec :name "Consolas"))
@@ -243,9 +250,9 @@ non-nil."
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 
