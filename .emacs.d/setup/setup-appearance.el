@@ -119,6 +119,7 @@ non-nil."
 (require 'solarized)
 (setq solarized-scale-org-headlines nil)
 
+;; Load Atom dark theme
 (load-theme 'atom-dark t)
 (set-face-attribute 'region nil :background "#666")
 
@@ -132,14 +133,49 @@ non-nil."
 (setq font-lock-support-mode 'jit-lock-mode ;; lazy-lock-mode
       fast-lock-cache-directories '("~/.emacs.cache"))
 (setq font-lock-support-mode 'jit-lock-mode)
-(setq jit-lock-stealth-time 1
-      jit-lock-stealth-load 100
-      jit-lock-chunk-size 1000
-      jit-lock-defer-time 0.01
+(setq jit-lock-stealth-time 20.0
+      jit-lock-stealth-load 300
+      jit-lock-chunk-size 20
+      jit-lock-defer-time 1.0
       jit-lock-stealth-nice 0.5
       jit-lock-contextually t
-      jit-lock-stealth-verbose t)
-(setq-default font-lock-multiline t)
+      jit-lock-stealth-verbose nil)
+
+;; hl-line overrides the background of hi-lock’ed text, this will provide a fix
+(defadvice hi-lock-set-pattern (around use-overlays activate)
+  (let ((font-lock-fontified nil))
+    ad-do-it))
+
+;; snippet to analyze complex log files
+(defun hi-lock-show-all ()
+  "Show all lines in the current buffer containing a overlay of hi-lock."
+  (interactive)
+  (let ((newbuf (format "*hi-lock:%s*" (buffer-name)))
+        (hide-start (point-min)))
+    (when (get-buffer newbuf) (kill-buffer newbuf))
+    (clone-indirect-buffer-other-window newbuf t)
+    (with-current-buffer newbuf
+      (goto-char (point-min))
+      (dolist (bol (save-excursion
+                     (sort
+                      (mapcar (lambda (ov)
+                                (goto-char (overlay-start ov))
+                                (point-at-bol))
+                              (ee-flatten (overlay-lists))) '<)))
+        (goto-char bol)
+        (outline-flag-region hide-start bol t)
+        (forward-line 1)
+        (setq hide-start (point))))
+    (outline-flag-region hide-start (point-max) t)
+    (goto-char (point-min))
+    (view-mode 1)))
+
+(defun hi-lock-overlay-p (overlay)
+  "Return the overlay if overlay is a hi-lock overlay."
+  (if (and (overlayp overlay)
+         (eq (overlay-get overlay 'hi-lock-overlay) t))
+      overlay
+    nil))
 
 ;; if there is size information associated with text, change the text
 ;; size to reflect it
