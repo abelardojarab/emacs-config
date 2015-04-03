@@ -727,12 +727,12 @@ not need to be wrapped, move point to the next line and return t."
 (setq pcache-directory (expand-file-name "~/.emacs.cache"))
 
 ;; better windows handling
-(add-to-list 'load-path "~/.emacs.d/imenu-list")
 (add-to-list 'load-path "~/.emacs.d/window-purpose")
-;; (require 'window-purpose)
+(add-to-list 'load-path "~/.emacs.d/imenu-list")
+(require 'window-purpose)
 (require 'imenu-list)
 
-;; better windows handling
+;; Browse kill ring
 (add-to-list 'load-path "~/.emacs.d/browse-kill-ring")
 (require 'browse-kill-ring)
 
