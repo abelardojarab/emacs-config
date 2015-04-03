@@ -87,12 +87,10 @@
 (autoload 'imenus-mode-buffers "imenus" nil t)
 
 ;; Enable which-function-mode for selected major modes
-(setq which-func-modes '(ecmascript-mode python-mode emacs-lisp-mode lisp-mode
+(setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode
                                          c-mode c++-mode makefile-mode sh-mode))
 (which-function-mode t)
 (add-hook 'js2-mode-hook
-          (lambda () (which-function-mode t)))
-(add-hook 'python-mode-hook
           (lambda () (which-function-mode t)))
 (add-hook 'c-mode-common-hook
           (lambda () (which-function-mode t)))

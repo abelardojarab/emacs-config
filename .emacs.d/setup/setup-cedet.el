@@ -70,12 +70,6 @@
       (setq semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
 (setq ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
 
-;; which function
-(if (fboundp #'which-func-mode)
-    (add-hook 'semantic-init-hooks
-              (lambda ()
-                (which-func-mode 1))))
-
 ;; ctags
 (defun my-semantic-hook ()
   (imenu-add-to-menubar "TAGS"))
