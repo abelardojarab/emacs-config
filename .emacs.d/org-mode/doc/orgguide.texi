@@ -345,7 +345,10 @@ of @kbd{C-a} and @kbd{C-e} in headlines.}.  For example:
 * Another top level headline
 @end smallexample
 
-@noindent 
+@noindent Note that a headline named after @code{org-footnote-section},
+which defaults to @samp{Footnotes}, is considered as special.  A subtree with
+this headline will be silently ignored by exporting functions.
+
 Some people find the many stars too noisy and would prefer an
 outline that has whitespace followed by a single star as headline
 starters.  @ref{Clean view}, describes a setup to realize this.
@@ -447,10 +450,9 @@ An important feature of Org mode is the ability to construct @emph{sparse
 trees} for selected information in an outline tree, so that the entire
 document is folded as much as possible, but the selected information is made
 visible along with the headline structure above it@footnote{See also the
-variables @code{org-show-hierarchy-above}, @code{org-show-following-heading},
-@code{org-show-siblings}, and @code{org-show-entry-below} for detailed
-control on how much context is shown around each match.}.  Just try it out
-and you will see immediately how it works.
+variable @code{org-show-context-detail} to decide how much context is shown
+around each match.}.  Just try it out and you will see immediately how it
+works.
 
 Org mode contains several commands creating such trees, all these
 commands can be accessed through a dispatcher:
@@ -2348,8 +2350,6 @@ Insert template with export options, see example below.
 #+AUTHOR:      the author (default taken from @code{user-full-name})
 #+DATE:        a date, fixed, or an Org timestamp
 #+EMAIL:       his/her email address (default from @code{user-mail-address})
-#+DESCRIPTION: the page description, e.g.@: for the XHTML meta tag
-#+KEYWORDS:    the page keywords, e.g.@: for the XHTML meta tag
 #+LANGUAGE:    language, e.g.@: @samp{en} (@code{org-export-default-language})
 #+OPTIONS:     H:2 num:t toc:t \n:nil ::t |:t ^:t f:t tex:t ...
 @end smallexample

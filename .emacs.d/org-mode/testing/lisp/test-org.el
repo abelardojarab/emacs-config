@@ -578,16 +578,21 @@
 
 (ert-deftest test-org/indent-line ()
   "Test `org-indent-line' specifications."
-  ;; Do not indent footnote definitions or headlines.
+  ;; Do not indent diary sexps, footnote definitions or headlines.
   (should
    (zerop
-    (org-test-with-temp-text "* H"
+    (org-test-with-temp-text "%%(org-calendar-holiday)"
       (org-indent-line)
       (org-get-indentation))))
   (should
    (zerop
     (org-test-with-temp-text "[fn:1] fn"
       (let ((org-adapt-indentation t)) (org-indent-line))
+      (org-get-indentation))))
+  (should
+   (zerop
+    (org-test-with-temp-text "* H"
+      (org-indent-line)
       (org-get-indentation))))
   ;; Do not indent before first headline.
   (should
@@ -861,6 +866,11 @@
 	  (org-test-with-temp-text "- A <point>B"
 	    (org-return t)
 	    (buffer-string))))
+  (should
+   (equal "- A\n\n- B"
+	  (org-test-with-temp-text "- A\n<point>- B"
+	    (org-return t)
+	    (buffer-string))))
   ;; Special case: on tags part of a headline, add a newline below it
   ;; instead of breaking it.
   (should
@@ -900,8 +910,6 @@
 
 (ert-deftest test-org/insert-heading ()
   "Test `org-insert-heading' specifications."
-  ;; FIXME: Test coverage is incomplete yet.
-  ;;
   ;; In an empty buffer, insert a new headline.
   (should
    (equal "* "
@@ -957,6 +965,18 @@
 	  (org-test-with-temp-text "* H1\n** H3\n- item<point>\n** H2"
 	    (let ((org-insert-heading-respect-content nil))
 	      (org-insert-heading '(16)))
+	    (buffer-string))))
+  ;; When optional TOP-LEVEL argument is non-nil, always insert
+  ;; a level 1 heading.
+  (should
+   (equal "* H1\n** H2\n* "
+	  (org-test-with-temp-text "* H1\n** H2<point>"
+	    (org-insert-heading nil nil t)
+	    (buffer-string))))
+  (should
+   (equal "* H1\n- item\n* "
+	  (org-test-with-temp-text "* H1\n- item<point>"
+	    (org-insert-heading nil nil t)
 	    (buffer-string))))
   ;; Corner case: correctly insert a headline after an empty one.
   (should
@@ -1145,6 +1165,16 @@
 	  (org-test-with-temp-text "#+TAGS: { A : B C }"
 	    (org-mode-restart)
 	    org-tag-groups-alist)))
+  (should
+   (equal '((:startgrouptag) ("A") (:grouptags) ("B") ("C") (:endgrouptag))
+	  (org-test-with-temp-text "#+TAGS: [ A : B C ]"
+	    (org-mode-restart)
+	    org-tag-alist)))
+  (should
+   (equal '(("A" "B" "C"))
+	  (org-test-with-temp-text "#+TAGS: [ A : B C ]"
+	    (org-mode-restart)
+	    org-tag-groups-alist)))
   ;; FILETAGS keyword.
   (should
    (equal '("A" "B" "C")
@@ -1298,6 +1328,13 @@
        "* H1\n:PROPERTIES:\n:CUSTOM_ID: custom\n:END:\n* H2\n[[#custom]]"
      (goto-char (point-max))
      (org-open-at-point)
+     (org-looking-at-p "\\* H1")))
+  ;; Ignore false positives.
+  (should-not
+   (org-test-with-temp-text
+       "* H1\n:DRAWER:\n:CUSTOM_ID: custom\n:END:\n* H2\n[[#custom]]<point>"
+     (goto-char (point-max))
+     (let (org-link-search-must-match-exact-headline) (org-open-at-point))
      (org-looking-at-p "\\* H1"))))
 
 ;;;; Fuzzy Links
@@ -1331,6 +1368,37 @@
      (goto-line 3)
      (org-open-at-point)
      (looking-at "\\* Test")))
+  ;; With a leading star in link, enforce exact heading match, even
+  ;; with `org-link-search-must-match-exact-headline' set to nil.
+  (should-error
+   (org-test-with-temp-text "* Test 1\nFoo Bar\n<point>[[*Test]]"
+     (let ((org-link-search-must-match-exact-headline nil))
+       (org-open-at-point))))
+  ;; Heading match should not care about spaces, cookies, todo
+  ;; keywords, priorities, and tags.
+  (should
+   (let ((first-line
+	  "** TODO [#A] [/]  Test [1/2] [33%] 1 \t  2 [%] :work:urgent: "))
+     (org-test-with-temp-text
+	 (concat first-line "\nFoo Bar\n<point>[[*Test 1 2]]")
+       (let ((org-link-search-must-match-exact-headline nil)
+	     (org-todo-regexp "TODO"))
+	 (org-open-at-point))
+       (looking-at (regexp-quote first-line)))))
+  ;; Heading match should still be exact.
+  (should-error
+   (let ((first-line
+	  "** TODO [#A] [/]  Test [1/2] [33%] 1 \t  2 [%] :work:urgent: "))
+     (org-test-with-temp-text
+	 (concat first-line "\nFoo Bar\n<point>[[*Test 1]]")
+       (let ((org-link-search-must-match-exact-headline nil)
+	     (org-todo-regexp "TODO"))
+	 (org-open-at-point)))))
+  ;; Heading match ignores COMMENT keyword.
+  (should
+   (org-test-with-temp-text "[[*Test]]\n* COMMENT Test"
+     (org-open-at-point)
+     (looking-at "\\* COMMENT Test")))
   ;; Correctly un-hexify fuzzy links.
   (should
    (org-test-with-temp-text "* With space\n[[*With%20space][With space]]"
@@ -1680,6 +1748,65 @@ drops support for Emacs 24.1 and 24.2."
        (org-hide-block-toggle)
        (org-end-of-line)
        (eobp)))))
+
+(ert-deftest test-org/forward-sentence ()
+  "Test `org-forward-sentence' specifications."
+  ;; At the end of a table cell, move to the end of the next one.
+  (should
+   (org-test-with-temp-text "| a<point> | b |"
+     (org-forward-sentence)
+     (looking-at " |$")))
+  ;; Elsewhere in a cell, move to its end.
+  (should
+   (org-test-with-temp-text "| a<point>c | b |"
+     (org-forward-sentence)
+     (looking-at " | b |$")))
+  ;; Otherwise, simply call `forward-sentence'.
+  (should
+   (org-test-with-temp-text "Sentence<point> 1.  Sentence 2."
+     (org-forward-sentence)
+     (looking-at "  Sentence 2.")))
+  (should
+   (org-test-with-temp-text "Sentence<point> 1.  Sentence 2."
+     (org-forward-sentence)
+     (org-forward-sentence)
+     (eobp)))
+  ;; At the end of an element, jump to the next one, without stopping
+  ;; on blank lines in-between.
+  (should
+   (org-test-with-temp-text "Paragraph 1.<point>\n\nParagraph 2."
+     (org-forward-sentence)
+     (eobp))))
+
+(ert-deftest test-org/backward-sentence ()
+  "Test `org-backward-sentence' specifications."
+  ;; At the beginning of a table cell, move to the beginning of the
+  ;; previous one.
+  (should
+   (org-test-with-temp-text "| a | <point>b |"
+     (org-backward-sentence)
+     (looking-at "a | b |$")))
+  ;; Elsewhere in a cell, move to its beginning.
+  (should
+   (org-test-with-temp-text "| a | b<point>c |"
+     (org-backward-sentence)
+     (looking-at "bc |$")))
+  ;; Otherwise, simply call `backward-sentence'.
+  (should
+   (org-test-with-temp-text "Sentence 1.  Sentence<point> 2."
+     (org-backward-sentence)
+     (looking-at "Sentence 2.")))
+  (should
+   (org-test-with-temp-text "Sentence 1.  Sentence<point> 2."
+     (org-backward-sentence)
+     (org-backward-sentence)
+     (bobp)))
+  ;; Make sure to hit the beginning of a sentence on the same line as
+  ;; an item.
+  (should
+   (org-test-with-temp-text "- Line 1\n  line <point>2."
+     (org-backward-sentence)
+     (looking-at "Line 1"))))
 
 (ert-deftest test-org/forward-paragraph ()
   "Test `org-forward-paragraph' specifications."
@@ -2601,6 +2728,48 @@ Text.
 	  (org-test-with-temp-text "* H\n:PROPERTIES:\n:A: 1\n:A+: 2\n:END:"
 	    (org-property-values "A")))))
 
+(ert-deftest test-org/find-property ()
+  "Test `org-find-property' specifications."
+  ;; Regular test.
+  (should
+   (= 1
+      (org-test-with-temp-text "* H\n:PROPERTIES:\n:PROP: value\n:END:"
+	(org-find-property "prop"))))
+  ;; Ignore false positives.
+  (should
+   (= 27
+      (org-test-with-temp-text
+	  "* H1\n:DRAWER:\n:A: 1\n:END:\n* H2\n:PROPERTIES:\n:A: 1\n:END:"
+	(org-find-property "A"))))
+  ;; Return first entry found in buffer.
+  (should
+   (= 1
+      (org-test-with-temp-text
+	  "* H1\n:PROPERTIES:\n:A: 1\n:END:\n* H2\n:PROPERTIES:\n:<point>A: 1\n:END:"
+	(org-find-property "A"))))
+  ;; Only search visible part of the buffer.
+  (should
+   (= 31
+      (org-test-with-temp-text
+	  "* H1\n:PROPERTIES:\n:A: 1\n:END:\n* H2\n:PROPERTIES:\n:<point>A: 1\n:END:"
+	(org-narrow-to-subtree)
+	(org-find-property "A"))))
+  ;; With optional argument, only find entries with a specific value.
+  (should-not
+   (org-test-with-temp-text "* H\n:PROPERTIES:\n:A: 1\n:END:"
+     (org-find-property "A" "2")))
+  (should
+   (= 31
+      (org-test-with-temp-text
+	  "* H1\n:PROPERTIES:\n:A: 1\n:END:\n* H2\n:PROPERTIES:\n:A: 2\n:END:"
+	(org-find-property "A" "2"))))
+  ;; Use "nil" for explicit nil values.
+  (should
+   (= 31
+      (org-test-with-temp-text
+	  "* H1\n:PROPERTIES:\n:A: 1\n:END:\n* H2\n:PROPERTIES:\n:A: nil\n:END:"
+	(org-find-property "A" "nil")))))
+
 (ert-deftest test-org/entry-delete ()
   "Test `org-entry-delete' specifications."
   ;; Regular test.
@@ -2610,13 +2779,27 @@ Text.
     (org-test-with-temp-text "* H\n:PROPERTIES:\n:A: 1\n:B: 2\n:END:"
       (org-entry-delete (point) "A")
       (buffer-string))))
+  ;; Also remove accumulated properties.
+  (should-not
+   (string-match
+    ":A"
+    (org-test-with-temp-text "* H\n:PROPERTIES:\n:A: 1\n:A+: 2\n:B: 3\n:END:"
+      (org-entry-delete (point) "A")
+      (buffer-string))))
   ;; When last property is removed, remove the property drawer.
   (should-not
    (string-match
     ":PROPERTIES:"
     (org-test-with-temp-text "* H\n:PROPERTIES:\n:A: 1\n:END:\nParagraph"
       (org-entry-delete (point) "A")
-      (buffer-string)))))
+      (buffer-string))))
+  ;; Return a non-nil value when some property was removed.
+  (should
+   (org-test-with-temp-text "* H\n:PROPERTIES:\n:A: 1\n:B: 2\n:END:"
+     (org-entry-delete (point) "A")))
+  (should-not
+   (org-test-with-temp-text "* H\n:PROPERTIES:\n:A: 1\n:B: 2\n:END:"
+     (org-entry-delete (point) "C"))))
 
 (ert-deftest test-org/entry-get ()
   "Test `org-entry-get' specifications."
@@ -2910,6 +3093,12 @@ Text.
 		 (org-test-with-temp-text "* H\nDEADLINE: <2014-03-04 tue.>"
 		   (org-entry-put (point) "DEADLINE" "later")
 		   (buffer-string))))
+  ;; Set "CATEGORY" property
+  (should
+   (string-match "^ *:CATEGORY: cat"
+		 (org-test-with-temp-text "* H"
+		   (org-entry-put (point) "CATEGORY" "cat")
+		   (buffer-string))))
   ;; Regular properties, with or without pre-existing drawer.
   (should
    (string-match "^ *:A: +2$"
@@ -2924,9 +3113,9 @@ Text.
   ;; Special case: two consecutive headlines.
   (should
    (string-match "\\* A\n *:PROPERTIES:"
-    (org-test-with-temp-text "* A\n** B"
-      (org-entry-put (point) "A" "1")
-      (buffer-string)))))
+		 (org-test-with-temp-text "* A\n** B"
+		   (org-entry-put (point) "A" "1")
+		   (buffer-string)))))
 
 
 ;;; Radio Targets
@@ -3035,6 +3224,42 @@ Text.
      (org-match-sparse-tree nil "work")
      (search-forward "H2")
      (org-invisible-p2)))
+  ;; Match group tags with hard brackets.
+  (should-not
+   (org-test-with-temp-text
+       "#+TAGS: [ work : lab ]\n* H\n** H1 :work:\n** H2 :lab:"
+     (org-match-sparse-tree nil "work")
+     (search-forward "H1")
+     (org-invisible-p2)))
+  (should-not
+   (org-test-with-temp-text
+       "#+TAGS: [ work : lab ]\n* H\n** H1 :work:\n** H2 :lab:"
+     (org-match-sparse-tree nil "work")
+     (search-forward "H2")
+     (org-invisible-p2)))
+  ;; Match tags in hierarchies
+  (should-not
+   (org-test-with-temp-text
+       "#+TAGS: [ Lev_1 : Lev_2 ]\n
+#+TAGS: [ Lev_2 : Lev_3 ]\n
+#+TAGS: { Lev_3 : Lev_4 }\n
+* H\n** H1 :Lev_1:\n** H2 :Lev_2:\n** H3 :Lev_3:\n** H4 :Lev_4:"
+     (org-match-sparse-tree nil "Lev_1")
+     (search-forward "H4")
+     (org-invisible-p2)))
+  ;; Match regular expressions in tags
+  (should-not
+   (org-test-with-temp-text
+       "#+TAGS: [ Lev : {Lev_[0-9]} ]\n* H\n** H1 :Lev_1:"
+     (org-match-sparse-tree nil "Lev")
+     (search-forward "H1")
+     (org-invisible-p2)))
+  (should
+   (org-test-with-temp-text
+       "#+TAGS: [ Lev : {Lev_[0-9]} ]\n* H\n** H1 :Lev_n:"
+     (org-match-sparse-tree nil "Lev")
+     (search-forward "H1")
+     (org-invisible-p2)))
   ;; Match properties.
   (should
    (org-test-with-temp-text
@@ -3110,6 +3335,91 @@ Text.
 
 ;;; Timestamps API
 
+(ert-deftest test-org/time-stamp ()
+  "Test `org-time-stamp' specifications."
+  ;; Insert chosen time stamp at point.
+  (should
+   (string-match
+    "Te<2014-03-04 .*?>xt"
+    (org-test-with-temp-text "Te<point>xt"
+      (flet ((org-read-date
+	      (&rest args)
+	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+	(org-time-stamp nil)
+	(buffer-string)))))
+  ;; With a prefix argument, also insert time.
+  (should
+   (string-match
+    "Te<2014-03-04 .*? 00:41>xt"
+    (org-test-with-temp-text "Te<point>xt"
+      (flet ((org-read-date
+	      (&rest args)
+	      (apply #'encode-time (org-parse-time-string "2014-03-04 00:41"))))
+	(org-time-stamp '(4))
+	(buffer-string)))))
+  ;; With two universal prefix arguments, insert an active timestamp
+  ;; with the current time without prompting the user.
+  (should
+   (string-match
+    "Te<2014-03-04 .*? 00:41>xt"
+    (org-test-with-temp-text "Te<point>xt"
+      (flet ((current-time
+	      ()
+	      (apply #'encode-time (org-parse-time-string "2014-03-04 00:41"))))
+	(org-time-stamp '(16))
+	(buffer-string)))))
+  ;; When optional argument is non-nil, insert an inactive timestamp.
+  (should
+   (string-match
+    "Te\\[2014-03-04 .*?\\]xt"
+    (org-test-with-temp-text "Te<point>xt"
+      (flet ((org-read-date
+	      (&rest args)
+	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+	(org-time-stamp nil t)
+	(buffer-string)))))
+  ;; When called from a timestamp, replace existing one.
+  (should
+   (string-match
+    "<2014-03-04 .*?>"
+    (org-test-with-temp-text "<2012-03-29<point> thu.>"
+      (flet ((org-read-date
+	      (&rest args)
+	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+	(org-time-stamp nil)
+	(buffer-string)))))
+  (should
+   (string-match
+    "<2014-03-04 .*?>--<2014-03-04 .*?>"
+    (org-test-with-temp-text "<2012-03-29<point> thu.>--<2014-03-04 tue.>"
+      (flet ((org-read-date
+	      (&rest args)
+	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+	(org-time-stamp nil)
+	(buffer-string)))))
+  ;; When replacing a timestamp, preserve repeater, if any.
+  (should
+   (string-match
+    "<2014-03-04 .*? \\+2y>"
+    (org-test-with-temp-text "<2012-03-29<point> thu. +2y>"
+      (flet ((org-read-date
+	      (&rest args)
+	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+	(org-time-stamp nil)
+	(buffer-string)))))
+  ;; When called twice in a raw, build a date range.
+  (should
+   (string-match
+    "<2012-03-29 .*?>--<2014-03-04 .*?>"
+    (org-test-with-temp-text "<2012-03-29 thu.><point>"
+      (flet ((org-read-date
+	      (&rest args)
+	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+	(let ((last-command 'org-time-stamp)
+	      (this-command 'org-time-stamp))
+	  (org-time-stamp nil))
+	(buffer-string))))))
+
 (ert-deftest test-org/timestamp-has-time-p ()
   "Test `org-timestamp-has-time-p' specifications."
   ;; With time.
@@ -3178,14 +3488,7 @@ Text.
    (org-test-with-temp-text "<%%(org-float t 4 2)>"
      (let* ((ts-orig (org-element-context))
 	    (ts-copy (org-timestamp-split-range ts-orig)))
-       (eq ts-orig ts-copy))))
-  ;; Check that parent is the same when a range was split.
-  (should
-   (org-test-with-temp-text "[2012-03-29 Thu]--[2012-03-30 Fri]"
-     (let* ((ts-orig (org-element-context))
-	    (ts-copy (org-timestamp-split-range ts-orig)))
-       (eq (org-element-property :parent ts-orig)
-	   (org-element-property :parent ts-copy))))))
+       (eq ts-orig ts-copy)))))
 
 (ert-deftest test-org/timestamp-translate ()
   "Test `org-timestamp-translate' specifications."
@@ -3346,6 +3649,57 @@ Text.
      (org-hide-block-toggle-maybe)))
   (should-not
    (org-test-with-temp-text "Paragraph" (org-hide-block-toggle-maybe))))
+
+(ert-deftest test-org/show-set-visibility ()
+  "Test `org-show-set-visibility' specifications."
+  ;; Do not throw an error before first heading.
+  (should
+   (org-test-with-temp-text "Preamble\n* Headline"
+     (org-show-set-visibility 'tree)
+     t))
+  ;; Test all visibility spans, both on headline and in entry.
+  (let ((list-visible-lines
+	 (lambda (state headerp)
+	   (org-test-with-temp-text "* Grandmother  (0)
+** Uncle              (1)
+*** Heir              (2)
+** Father             (3)
+   Ancestor text      (4)
+*** Sister            (5)
+    Sibling text      (6)
+*** Self              (7)
+    Match	      (8)
+**** First born	      (9)
+     Child text	      (10)
+**** The other child  (11)
+*** Brother	      (12)
+** Aunt               (13)
+"
+	     (org-cycle t)
+	     (search-forward (if headerp "Self" "Match"))
+	     (org-show-set-visibility state)
+	     (goto-char (point-min))
+	     (let (result (line 0))
+	       (while (not (eobp))
+		 (unless (org-invisible-p2) (push line result))
+		 (incf line)
+		 (forward-line))
+	       (nreverse result))))))
+    (should (equal '(0 7) (funcall list-visible-lines 'minimal t)))
+    (should (equal '(0 7 8) (funcall list-visible-lines 'minimal nil)))
+    (should (equal '(0 7 8 9) (funcall list-visible-lines 'local t)))
+    (should (equal '(0 7 8 9) (funcall list-visible-lines 'local nil)))
+    (should (equal '(0 3 7) (funcall list-visible-lines 'ancestors t)))
+    (should (equal '(0 3 7 8) (funcall list-visible-lines 'ancestors nil)))
+    (should (equal '(0 3 5 7 12) (funcall list-visible-lines 'lineage t)))
+    (should (equal '(0 3 5 7 8 9 12) (funcall list-visible-lines 'lineage nil)))
+    (should (equal '(0 1 3 5 7 12 13) (funcall list-visible-lines 'tree t)))
+    (should (equal '(0 1 3 5 7 8 9 11 12 13)
+		   (funcall list-visible-lines 'tree nil)))
+    (should (equal '(0 1 3 4 5 7 12 13)
+		   (funcall list-visible-lines 'canonical t)))
+    (should (equal '(0 1 3 4 5 7 8 9 11 12 13)
+		   (funcall list-visible-lines 'canonical nil)))))
 
 
 (provide 'test-org)

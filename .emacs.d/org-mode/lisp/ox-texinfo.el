@@ -1,6 +1,6 @@
 ;;; ox-texinfo.el --- Texinfo Back-End for Org Export Engine
 
-;; Copyright (C) 2012-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2012-2015 Free Software Foundation, Inc.
 ;; Author: Jonathan Leech-Pepin <jonathan.leechpepin at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
 
@@ -39,8 +39,6 @@
     (center-block . org-texinfo-center-block)
     (clock . org-texinfo-clock)
     (code . org-texinfo-code)
-    (comment . (lambda (&rest args) ""))
-    (comment-block . (lambda (&rest args) ""))
     (drawer . org-texinfo-drawer)
     (dynamic-block . org-texinfo-dynamic-block)
     (entity . org-texinfo-entity)
@@ -568,11 +566,13 @@ holding export options."
      ;; Title
      "@finalout\n"
      "@titlepage\n"
-     (format "@title %s\n" (or (plist-get info :texinfo-printed-title) title))
-     (let ((subtitle (plist-get info :subtitle)))
-       (and subtitle
-	    (org-element-normalize-string
-	     (replace-regexp-in-string "^" "@subtitle " subtitle))))
+     (when (plist-get info :with-title)
+       (concat
+	(format "@title %s\n" (or (plist-get info :texinfo-printed-title) title ""))
+	(let ((subtitle (plist-get info :subtitle)))
+	  (and subtitle
+	       (org-element-normalize-string
+		(replace-regexp-in-string "^" "@subtitle " subtitle))))))
      (when (plist-get info :with-author)
        (concat
 	;; Primary author.
@@ -606,10 +606,8 @@ holding export options."
      ;; Document's body.
      contents "\n"
      ;; Creator.
-     (case (plist-get info :with-creator)
-       ((nil) nil)
-       (comment (format "@c %s\n" (plist-get info :creator)))
-       (otherwise (concat (plist-get info :creator) "\n")))
+     (and (plist-get info :with-creator)
+	  (concat (plist-get info :creator) "\n"))
      ;; Document end.
      "@bye")))
 
@@ -917,7 +915,7 @@ INFO is a plist holding contextual information.  See
 		 (concat "file:" raw-path))
 		(t raw-path))))
     (cond
-     ((org-export-custom-protocol-maybe link desc info))
+     ((org-export-custom-protocol-maybe link desc 'texinfo))
      ((equal type "radio")
       (let ((destination (org-export-resolve-radio-link link info)))
 	(if (not destination) desc

@@ -1,5 +1,5 @@
 ;;; ox-publish.el --- Publish Related Org Mode Files as a Website
-;; Copyright (C) 2006-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2015 Free Software Foundation, Inc.
 
 ;; Author: David O'Toole <dto@gnu.org>
 ;; Maintainer: Carsten Dominik <carsten DOT dominik AT gmail DOT com>
@@ -175,6 +175,7 @@ included.  See the back-end documentation for more information.
   :with-footnotes           `org-export-with-footnotes'
   :with-inlinetasks         `org-export-with-inlinetasks'
   :with-latex               `org-export-with-latex'
+  :with-planning            `org-export-with-planning'
   :with-priority            `org-export-with-priority'
   :with-properties          `org-export-with-properties'
   :with-smart-quotes        `org-export-with-smart-quotes'
@@ -186,7 +187,7 @@ included.  See the back-end documentation for more information.
   :with-tags                `org-export-with-tags'
   :with-tasks               `org-export-with-tasks'
   :with-timestamps          `org-export-with-timestamps'
-  :with-planning            `org-export-with-planning'
+  :with-title               `org-export-with-title'
   :with-todo-keywords       `org-export-with-todo-keywords'
 
 The following properties may be used to control publishing of
@@ -838,17 +839,15 @@ time in `current-time' format."
 	   (date (plist-get
 		  (with-current-buffer file-buf
 		    (if visiting
-			(org-export-with-buffer-copy (org-export-get-environment))
+			(org-export-with-buffer-copy
+			 (org-export-get-environment))
 		      (org-export-get-environment)))
 		  :date)))
       (unless visiting (kill-buffer file-buf))
-      ;; DATE is either a timestamp object or a secondary string.  If it
-      ;; is a timestamp or if the secondary string contains a timestamp,
+      ;; DATE is a secondary string.  If it contains a timestamp,
       ;; convert it to internal format.  Otherwise, use FILE
       ;; modification time.
-      (cond ((eq (org-element-type date) 'timestamp)
-	     (org-time-string-to-time (org-element-interpret-data date)))
-	    ((let ((ts (and (consp date) (assq 'timestamp date))))
+      (cond ((let ((ts (and (consp date) (assq 'timestamp date))))
 	       (and ts
 		    (let ((value (org-element-interpret-data ts)))
 		      (and (org-string-nw-p value)

@@ -1,6 +1,6 @@
 ;;; ox-ascii.el --- ASCII Back-End for Org Export Engine
 
-;; Copyright (C) 2012-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2012-2015 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -49,8 +49,6 @@
     (center-block . org-ascii-center-block)
     (clock . org-ascii-clock)
     (code . org-ascii-code)
-    (comment . (lambda (&rest args) ""))
-    (comment-block . (lambda (&rest args) ""))
     (drawer . org-ascii-drawer)
     (dynamic-block . org-ascii-dynamic-block)
     (entity . org-ascii-entity)
@@ -781,7 +779,7 @@ contents according to the current headline."
 	    (or (not (plist-get info :with-tags))
 		(eq (plist-get info :with-tags) 'not-in-toc))
 	    'toc))))
-      (org-export-collect-headlines info n keyword) "\n"))))
+      (org-export-collect-headlines info n (and local keyword)) "\n"))))
 
 (defun org-ascii--list-listings (keyword info)
   "Return a list of listings.
@@ -969,7 +967,9 @@ INFO is a plist used as a communication channel."
 	 ;; Links in the title will not be resolved later, so we make
 	 ;; sure their path is located right after them.
 	 (info (org-combine-plists info '(:ascii-links-to-notes nil)))
-	 (title (org-export-data (plist-get info :title) info))
+	 (title (if (plist-get info :with-title)
+		    (org-export-data (plist-get info :title) info)
+		  ""))
 	 (author (and (plist-get info :with-author)
 		      (let ((auth (plist-get info :author)))
 			(and auth (org-export-data auth info)))))
@@ -1027,11 +1027,9 @@ INFO is a plist used as a communication channel."
 		 (upcase formatted-title)
 		 (cond
 		  ((and (org-string-nw-p author) (org-string-nw-p email))
-		   (concat (if utf8p "\n\n\n" "\n\n") author "\n" email))
-		  ((org-string-nw-p author)
-		   (concat (if utf8p "\n\n\n" "\n\n") author))
-		  ((org-string-nw-p email)
-		   (concat (if utf8p "\n\n\n" "\n\n") email)))
+		   (concat "\n\n" author "\n" email))
+		  ((org-string-nw-p author) (concat "\n\n" author))
+		  ((org-string-nw-p email) (concat "\n\n" email)))
 		 "\n" line
 		 (when (org-string-nw-p date) (concat "\n\n\n" date))
 		 "\n\n\n") text-width 'center)))))
@@ -1047,8 +1045,7 @@ holding export options."
        ;; 1. Document's body.
        contents
        ;; 2. Footnote definitions.
-       (let ((definitions (org-export-collect-footnote-definitions
-			   (plist-get info :parse-tree) info))
+       (let ((definitions (org-export-collect-footnote-definitions info))
 	     ;; Insert full links right inside the footnote definition
 	     ;; as they have no chance to be inserted later.
 	     (info (org-combine-plists info '(:ascii-links-to-notes nil))))
@@ -1096,7 +1093,7 @@ CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   (let ((global-margin (plist-get info :ascii-global-margin)))
     (concat
-     ;; 1. Build title block.
+     ;; Build title block.
      (org-ascii--indent-string
       (concat (org-ascii-template--document-title info)
 	      ;; 2. Table of contents.
@@ -1106,19 +1103,18 @@ holding export options."
 		   (org-ascii--build-toc info (and (wholenump depth) depth))
 		   "\n\n\n"))))
       global-margin)
-     ;; 3. Document's body.
+     ;; Document's body.
      contents
-     ;; 4. Creator.  Ignore `comment' value as there are no comments in
-     ;;    ASCII.  Justify it to the bottom right.
-     (org-ascii--indent-string
-      (let ((creator-info (plist-get info :with-creator))
-	    (text-width (- (plist-get info :ascii-text-width) global-margin)))
-	(unless (or (not creator-info) (eq creator-info 'comment))
-	  (concat
-	   "\n\n\n"
-	   (org-ascii--fill-string
-	    (plist-get info :creator) text-width info 'right))))
-      global-margin))))
+     ;; Creator.  Justify it to the bottom right.
+     (and (plist-get info :with-creator)
+	  (org-ascii--indent-string
+	   (let ((text-width
+		  (- (plist-get info :ascii-text-width) global-margin)))
+	     (concat
+	      "\n\n\n"
+	      (org-ascii--fill-string
+	       (plist-get info :creator) text-width info 'right)))
+	   global-margin)))))
 
 (defun org-ascii--translate (s info)
   "Translate string S according to specified language and charset.
@@ -1524,7 +1520,7 @@ DESC is the description part of the link, or the empty string.
 INFO is a plist holding contextual information."
   (let ((type (org-element-property :type link)))
     (cond
-     ((org-export-custom-protocol-maybe link desc info))
+     ((org-export-custom-protocol-maybe link desc 'ascii))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
 	(format (org-export-get-coderef-format ref desc)

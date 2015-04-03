@@ -1,6 +1,6 @@
 ;;; org-macro.el --- Macro Replacement Code for Org Mode
 
-;; Copyright (C) 2013-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou@gmail.com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -122,12 +122,12 @@ function installs the following ones: \"property\",
 	      (if old-template (setcdr old-template (cdr cell))
 		(push cell templates))))))
     ;; Install hard-coded macros.
-    (mapc (lambda (cell) (funcall update-templates cell))
+    (mapc update-templates
 	  (list (cons "property" "(eval (org-entry-get nil \"$1\" 'selective))")
 		(cons "time" "(eval (format-time-string \"$1\"))")))
     (let ((visited-file (buffer-file-name (buffer-base-buffer))))
       (when (and visited-file (file-exists-p visited-file))
-	(mapc (lambda (cell) (funcall update-templates cell))
+	(mapc update-templates
 	      (list (cons "input-file" (file-name-nondirectory visited-file))
 		    (cons "modification-time"
 			  (format "(eval (format-time-string \"$1\" '%s))"

@@ -1,6 +1,6 @@
 ;; ox-man.el --- Man Back-End for Org Export Engine
 
-;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2015 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou at gmail dot com>
 ;;      Luis R Anaya <papoanaya aroba hot mail punto com>
@@ -55,8 +55,6 @@
     (center-block . org-man-center-block)
     (clock . org-man-clock)
     (code . org-man-code)
-    (comment . (lambda (&rest args) ""))
-    (comment-block . (lambda (&rest args) ""))
     (drawer . org-man-drawer)
     (dynamic-block . org-man-dynamic-block)
     (entity . org-man-entity)
@@ -102,7 +100,7 @@
     (verse-block . org-man-verse-block))
   :export-block "MAN"
   :menu-entry
-  '(?m "Export to MAN"
+  '(?M "Export to MAN"
        ((?m "As MAN file" org-man-export-to-man)
 	(?p "As PDF file" org-man-export-to-pdf)
 	(?o "As PDF file and open"
@@ -311,7 +309,8 @@ This function shouldn't be used for floats.  See
   "Return complete document string after Man conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
-  (let* ((title (org-export-data (plist-get info :title) info))
+  (let* ((title (when (plist-get info :with-title)
+		  (org-export-data (plist-get info :title) info)))
         (attr (read (format "(%s)"
                             (mapconcat
                              #'identity
@@ -658,7 +657,7 @@ INFO is a plist holding contextual information.  See
          protocol)
     (cond
      ;; Link type is handled by a special function.
-     ((org-export-custom-protocol-maybe link desc info))
+     ((org-export-custom-protocol-maybe link desc 'man))
      ;; External link with a description part.
      ((and path desc) (format "%s \\fBat\\fP \\fI%s\\fP" path desc))
      ;; External link without a description part.

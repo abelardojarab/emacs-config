@@ -1,6 +1,6 @@
 ;;; ox-html.el --- HTML Back-End for Org Export Engine
 
-;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2015 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;;      Jambunathan K <kjambunathan at gmail dot com>
@@ -110,13 +110,13 @@
   :options-alist
   '((:html-doctype "HTML_DOCTYPE" nil org-html-doctype)
     (:html-container "HTML_CONTAINER" nil org-html-container-element)
+    (:description "DESCRIPTION" nil nil newline)
+    (:keywords "KEYWORDS" nil nil space)
     (:html-html5-fancy nil "html5-fancy" org-html-html5-fancy)
     (:html-link-use-abs-url nil "html-link-use-abs-url" org-html-link-use-abs-url)
     (:html-link-home "HTML_LINK_HOME" nil org-html-link-home)
     (:html-link-up "HTML_LINK_UP" nil org-html-link-up)
-    (:html-container "HTML_CONTAINER" nil org-html-container-element)
     (:html-mathjax "HTML_MATHJAX" nil "" space)
-    (:html-html5-fancy nil "html5-fancy" org-html-html5-fancy)
     (:html-link-use-abs-url nil "html-link-use-abs-url" org-html-link-use-abs-url)
     (:html-postamble nil "html-postamble" org-html-postamble)
     (:html-preamble nil "html-preamble" org-html-preamble)
@@ -1064,82 +1064,112 @@ See `format-time-string' for more information on its components."
 ;;;; Template :: Mathjax
 
 (defcustom org-html-mathjax-options
-  '((path  "http://orgmode.org/mathjax/MathJax.js")
+  '((path "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" )
     (scale "100")
     (align "center")
-    (indent "2em")
-    (mathml nil))
+    (font "TeX")
+    (linebreaks "false")
+    (autonumber "AMS")
+    (indent "0em")
+    (multlinewidth "85%")
+    (tagindent ".8em")
+    (tagside "right"))
   "Options for MathJax setup.
 
-path        The path where to find MathJax
-scale       Scaling for the HTML-CSS backend, usually between 100 and 133
-align       How to align display math: left, center, or right
-indent      If align is not center, how far from the left/right side?
-mathml      Should a MathML player be used if available?
-            This is faster and reduces bandwidth use, but currently
-            sometimes has lower spacing quality.  Therefore, the default is
-            nil.  When browsers get better, this switch can be flipped.
+Alist of the following elements.  All values are strings.
+
+path          The path to MathJax.
+scale         Scaling with HTML-CSS, MathML and SVG output engines.
+align         How to align display math: left, center, or right.
+font          The font to use with HTML-CSS and SVG output.  As of MathJax 2.5
+              the following values are understood: \"TeX\", \"STIX-Web\",
+              \"Asana-Math\", \"Neo-Euler\", \"Gyre-Pagella\",
+              \"Gyre-Termes\", and \"Latin-Modern\".
+linebreaks    Let MathJax perform automatic linebreaks.  Valid values
+              are \"true\" and \"false\".
+indent        If align is not center, how far from the left/right side?
+              Valid values are \"left\" and \"right\"
+multlinewidth The width of the multline environment.
+autonumber    How to number equations.  Valid values are \"None\", 
+              \"all\" and \"AMS Math\".
+tagindent     The amount tags are indented.
+tagside       Which side to show tags/labels on.  Valid values are 
+              \"left\" and \"right\"
 
 You can also customize this for each buffer, using something like
 
-#+MATHJAX: scale:\"133\" align:\"right\" mathml:t path:\"/MathJax/\""
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
+
+For further information about MathJax options, see the MathJax documentation:
+
+    http://docs.mathjax.org/
+
+Please note that by using the default CDN one must agree with
+MathJax CDN Terms of Service.
+
+    http://www.mathjax.org/mathjax-cdn-terms-of-service.html"
   :group 'org-export-html
+  :package-version '(Org . "8.3")
   :type '(list :greedy t
-	      (list :tag "path   (the path from where to load MathJax.js)"
-		    (const :format "       " path) (string))
-	      (list :tag "scale  (scaling for the displayed math)"
-		    (const :format "       " scale) (string))
-	      (list :tag "align  (alignment of displayed equations)"
-		    (const :format "       " align) (string))
-	      (list :tag "indent (indentation with left or right alignment)"
-		    (const :format "       " indent) (string))
-	      (list :tag "mathml (should MathML display be used is possible)"
-		    (const :format "       " mathml) (boolean))))
+	       (list :tag "path   (the path from where to load MathJax.js)"
+		     (const :format "       " path) (string))
+	       (list :tag "scale  (scaling for the displayed math)"
+		     (const :format "       " scale) (string))
+	       (list :tag "align  (alignment of displayed equations)"
+		     (const :format "       " align) (string))
+	       (list :tag "font (used to display math)"
+	       	     (const :format "            " font)
+	       	     (choice (const "TeX")
+	       		     (const "STIX-Web")
+	       		     (const "Asana-Math")
+	       		     (const "Neo-Euler")
+	       		     (const "Gyre-Pagella")
+	       		     (const "Gyre-Termes")
+	       		     (const "Latin-Modern")))
+	       (list :tag "linebreaks (automatic line-breaking)"
+		     (const :format "      " linebreaks)
+		     (choice (const "true")
+			     (const "false")))
+	       (list :tag "autonumber (when should equations be numbered)"
+		     (const :format "      " autonumber)
+		     (choice (const "AMS")
+			     (const "None")
+			     (const "All")))
+	       (list :tag "indent (indentation with left or right alignment)"
+		     (const :format "       " indent) (string))
+	       (list :tag "multlinewidth (width to use for the multline environment)"
+		     (const :format "       " multlinewidth) (string))
+	       (list :tag "tagindent (the indentation of tags from left or right)"
+		     (const :format "     " tagindent) (string))
+	       (list :tag "tagside (location of tags)"
+		     (const :format "      " tagside)
+		     (choice (const "left")
+			     (const "right")))))
 
 (defcustom org-html-mathjax-template
-  "<script type=\"text/javascript\" src=\"%PATH\"></script>
-<script type=\"text/javascript\">
-<!--/*--><![CDATA[/*><!--*/
+  "<script type=\"text/x-mathjax-config\">
     MathJax.Hub.Config({
-        // Only one of the two following lines, depending on user settings
-        // First allows browser-native MathML display, second forces HTML/CSS
-        :MMLYES: config: [\"MMLorHTML.js\"], jax: [\"input/TeX\"],
-        :MMLNO: jax: [\"input/TeX\", \"output/HTML-CSS\"],
-        extensions: [\"tex2jax.js\",\"TeX/AMSmath.js\",\"TeX/AMSsymbols.js\",
-                     \"TeX/noUndefined.js\"],
-        tex2jax: {
-            inlineMath: [ [\"\\\\(\",\"\\\\)\"] ],
-            displayMath: [ ['$$','$$'], [\"\\\\[\",\"\\\\]\"], [\"\\\\begin{displaymath}\",\"\\\\end{displaymath}\"] ],
-            skipTags: [\"script\",\"noscript\",\"style\",\"textarea\",\"pre\",\"code\"],
-            ignoreClass: \"tex2jax_ignore\",
-            processEscapes: false,
-            processEnvironments: true,
-            preview: \"TeX\"
-        },
-        showProcessingMessages: true,
         displayAlign: \"%ALIGN\",
         displayIndent: \"%INDENT\",
 
-        \"HTML-CSS\": {
-             scale: %SCALE,
-             availableFonts: [\"STIX\",\"TeX\"],
-             preferredFont: \"TeX\",
-             webFont: \"TeX\",
-             imageFont: \"TeX\",
-             showMathMenu: true,
-        },
-        MMLorHTML: {
-             prefer: {
-                 MSIE:    \"MML\",
-                 Firefox: \"MML\",
-                 Opera:   \"HTML\",
-                 other:   \"HTML\"
+        \"HTML-CSS\": { scale: %SCALE,
+                        linebreaks: { automatic: \"%LINEBREAKS\" },
+                        webFont: \"%FONT\"
+                       },
+        SVG: {scale: %SCALE,
+              linebreaks: { automatic: \"%LINEBREAKS\" },
+              font: \"%FONT\"},
+        NativeMML: {scale: %SCALE},
+        TeX: { equationNumbers: {autoNumber: \"%AUTONUMBER\"},
+               MultLineWidth: \"%MULTLINEWIDTH\",
+               TagSide: \"%TAGSIDE\",
+               TagIndent: \"%TAGINDENT\"
              }
-        }
-    });
-/*]]>*///-->
-</script>"
-  "The MathJax setup for XHTML files."
+});
+</script>
+<script type=\"text/javascript\"
+        src=\"%PATH\"></script>"
+  "The MathJax template.  See also `org-html-mathjax-options'."
   :group 'org-export-html
   :type 'string)
 
@@ -1559,8 +1589,7 @@ Replaces invalid characters with \"_\"."
 (defun org-html-footnote-section (info)
   "Format the footnote section.
 INFO is a plist used as a communication channel."
-  (let* ((fn-alist (org-export-collect-footnote-definitions
-		    (plist-get info :parse-tree) info))
+  (let* ((fn-alist (org-export-collect-footnote-definitions info))
 	 (fn-alist
 	  (loop for (n type raw) in fn-alist collect
 		(cons n (if (eq (org-element-type raw) 'org-data)
@@ -1680,7 +1709,7 @@ INFO is a plist used as a communication channel."
     (let ((template (plist-get info :html-mathjax-template))
 	  (options (plist-get info :html-mathjax-options))
 	  (in-buffer (or (plist-get info :html-mathjax) ""))
-	  name val (yes "   ") (no "// ") x)
+	  name val x)
       (mapc
        (lambda (e)
 	 (setq name (car e) val (nth 1 e))
@@ -1688,20 +1717,9 @@ INFO is a plist used as a communication channel."
 	     (setq val (car (read-from-string
 			     (substring in-buffer (match-end 0))))))
 	 (if (not (stringp val)) (setq val (format "%s" val)))
-	 (if (string-match (concat "%" (upcase (symbol-name name))) template)
-	     (setq template (replace-match val t t template))))
+	 (while (string-match (concat "%" (upcase (symbol-name name))) template)
+	   (setq template (replace-match val t t template))))
        options)
-      (setq val (nth 1 (assq 'mathml options)))
-      (if (string-match (concat "\\<mathml:") in-buffer)
-	  (setq val (car (read-from-string
-			  (substring in-buffer (match-end 0))))))
-      ;; Exchange prefixes depending on mathml setting.
-      (if (not val) (setq x yes yes no no x))
-      ;; Replace cookies to turn on or off the config/jax lines.
-      (if (string-match ":MMLYES:" template)
-	  (setq template (replace-match yes t t template)))
-      (if (string-match ":MMLNO:" template)
-	  (setq template (replace-match no t t template)))
       ;; Return the modified template.
       (org-element-normalize-string template))))
 
@@ -1848,9 +1866,11 @@ holding export options."
    (let ((div (assq 'content (plist-get info :html-divs))))
      (format "<%s id=\"%s\">\n" (nth 1 div) (nth 2 div)))
    ;; Document title.
-   (let ((title (plist-get info :title)))
-     (format "<h1 class=\"title\">%s</h1>\n"
-	     (org-export-data (or title "") info)))
+   (when (plist-get info :with-title)
+     (let ((title (org-export-data
+		   (or (plist-get info :title) "") info)))
+       (when (org-string-nw-p title)
+	 (format "<h1 class=\"title\">%s</h1>\n" title))))
    contents
    (format "</%s>\n" (nth 1 (assq 'content (plist-get info :html-divs))))
    ;; Postamble.
@@ -2734,8 +2754,9 @@ INFO is a plist holding contextual information.  See
 	 (path
 	  (cond
 	   ((member type '("http" "https" "ftp" "mailto"))
-	    (org-link-escape-browser
-	     (org-link-unescape (concat type ":" raw-path))))
+	    (org-html-encode-plain-text
+	     (org-link-escape-browser
+	      (org-link-unescape (concat type ":" raw-path)))))
 	   ((string= type "file")
 	    ;; Treat links to ".org" files as ".html", if needed.
 	    (setq raw-path
@@ -2782,7 +2803,7 @@ INFO is a plist holding contextual information.  See
 	    (if (org-string-nw-p attr) (concat " " attr) ""))))
     (cond
      ;; Link type is handled by a special function.
-     ((org-export-custom-protocol-maybe link desc info))
+     ((org-export-custom-protocol-maybe link desc 'html))
      ;; Image file.
      ((and (plist-get info :html-inline-images)
 	   (org-export-inline-image-p
@@ -2981,11 +3002,8 @@ contextual information."
 (defun org-html-encode-plain-text (text)
   "Convert plain text characters from TEXT to HTML equivalent.
 Possible conversions are set in `org-html-protect-char-alist'."
-  (mapc
-   (lambda (pair)
-     (setq text (replace-regexp-in-string (car pair) (cdr pair) text t t)))
-   org-html-protect-char-alist)
-  text)
+  (dolist (pair org-html-protect-char-alist text)
+    (setq text (replace-regexp-in-string (car pair) (cdr pair) text t t))))
 
 (defun org-html-plain-text (text info)
   "Transcode a TEXT string from Org to HTML.

@@ -1,6 +1,6 @@
 ;;; ox-md.el --- Markdown Back-End for Org Export Engine
 
-;; Copyright (C) 2012-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2012-2015 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou@gmail.com>
 ;; Keywords: org, wp, markdown
@@ -68,8 +68,6 @@ This variable can be set to either `atx' or `setext'."
 		(org-open-file (org-md-export-to-markdown nil s v)))))))
   :translate-alist '((bold . org-md-bold)
 		     (code . org-md-verbatim)
-		     (comment . (lambda (&rest args) ""))
-		     (comment-block . (lambda (&rest args) ""))
 		     (example-block . org-md-example-block)
 		     (export-block . org-md-export-block)
 		     (fixed-width . org-md-example-block)
@@ -314,7 +312,7 @@ a communication channel."
 	(type (org-element-property :type link)))
     (cond
      ;; Link type is handled by a special function.
-     ((org-export-custom-protocol-maybe link contents info))
+     ((org-export-custom-protocol-maybe link contents 'md))
      ((member type '("custom-id" "id"))
       (let ((destination (org-export-resolve-id-link link info)))
 	(if (stringp destination)	; External file.

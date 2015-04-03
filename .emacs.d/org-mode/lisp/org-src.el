@@ -1,6 +1,6 @@
 ;;; org-src.el --- Source code examples in Org
 ;;
-;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
 ;;
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;;	   Bastien Guerry <bzg@gnu.org>
@@ -305,6 +305,10 @@ END."
     (overlay-put overlay :read-only "Leave me alone")
     overlay))
 
+(defun org-src--remove-overlay ()
+  "Remove overlay from current source buffer."
+  (when (overlayp org-src--overlay) (delete-overlay org-src--overlay)))
+
 (defun org-src--on-element-p (element)
   "Non-nil when point is on ELEMENT."
   (and (>= (point) (org-element-property :begin element))
@@ -365,9 +369,7 @@ Leave point in edit buffer."
 	(org-src-switch-to-buffer old-edit-buffer 'return)
       ;; Discard old edit buffer.
       (when old-edit-buffer
-	(with-current-buffer old-edit-buffer
-	  (when (boundp 'org-src--overlay)
-	    (delete-overlay org-src--overlay)))
+	(with-current-buffer old-edit-buffer (org-src--remove-overlay))
 	(kill-buffer old-edit-buffer))
       (let* ((org-mode-p (derived-mode-p 'org-mode))
 	     (type (org-element-type element))
@@ -542,8 +544,7 @@ There is a mode hook, and keybindings for `org-edit-src-exit' and
 
 (defun org-src-mode-configure-edit-buffer ()
   (when (org-bound-and-true-p org-src--from-org-mode)
-    (org-add-hook 'kill-buffer-hook
-		  (lambda () (delete-overlay org-src--overlay)) nil 'local)
+    (org-add-hook 'kill-buffer-hook #'org-src--remove-overlay nil 'local)
     (if (org-bound-and-true-p org-src--allow-write-back-p)
 	(progn
 	  (setq buffer-offer-save t)

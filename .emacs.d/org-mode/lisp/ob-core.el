@@ -1,6 +1,6 @@
 ;;; ob-core.el --- working with code blocks in org-mode
 
-;; Copyright (C) 2009-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2015 Free Software Foundation, Inc.
 
 ;; Authors: Eric Schulte
 ;;	Dan Davison
@@ -192,7 +192,7 @@ This string must include a \"%s\" which will be replaced by the results."
 	  "\\("
 	  org-babel-multi-line-header-regexp
 	  "\\)*"
-	  "\\([^ ()\f\t\n\r\v]+\\)")
+	  "\\([^()\f\t\n\r\v]+\\)")
   "Regular expression matching source name lines with a name.")
 
 (defvar org-babel-src-block-regexp
@@ -409,12 +409,16 @@ a window into the `org-babel-get-src-block-info' function."
 	      (header-args (nth 2 info)))
 	  (when name            (funcall printf "Name: %s\n"     name))
 	  (when lang            (funcall printf "Lang: %s\n"     lang))
+	  (funcall printf "Properties:\n")
+	  (funcall printf "\t:header-args \t%s\n" (org-entry-get (point) "header-args" t))
+	  (funcall printf "\t:header-args:%s \t%s\n" lang (org-entry-get (point) (concat "header-args:" lang) t))
+
 	  (when (funcall full switches) (funcall printf "Switches: %s\n" switches))
 	  (funcall printf "Header Arguments:\n")
 	  (dolist (pair (sort header-args
 			      (lambda (a b) (string< (symbol-name (car a))
 						     (symbol-name (car b))))))
-	    (when (funcall full (cdr pair))
+	    (when (funcall full (format "%s" (cdr pair)))
 	      (funcall printf "\t%S%s\t%s\n"
 		       (car pair)
 		       (if (> (length (format "%S" (car pair))) 7) "" "\t")
@@ -2051,7 +2055,7 @@ If the path of the link is a file path it is expanded using
       (funcall echo-res result))))
 
 (defun org-babel-insert-result
-  (result &optional result-params info hash indent lang)
+    (result &optional result-params info hash indent lang)
   "Insert RESULT into the current buffer.
 
 By default RESULT is inserted after the end of the current source
@@ -2194,7 +2198,7 @@ INFO may provide the values of these header arguments (in the
 	      (setq results-switches
 		    (if results-switches (concat " " results-switches) ""))
 	      (let ((wrap (lambda (start finish &optional no-escape no-newlines
-					 inline-start inline-finish)
+				    inline-start inline-finish)
 			    (when inlinep
 			      (setq start inline-start)
 			      (setq finish inline-finish)
@@ -2208,7 +2212,15 @@ INFO may provide the values of these header arguments (in the
 			    (goto-char end)
 			    (unless no-newlines (goto-char (point-at-eol)))
 			    (setq end (point-marker))))
-		    (proper-list-p (lambda (it) (and (listp it) (null (cdr (last it)))))))
+		    (tabulablep
+		     (lambda (r)
+		       ;; Non-nil when result R can be turned into
+		       ;; a table.
+		       (and (listp r)
+			    (null (cdr (last r)))
+			    (org-every
+			     (lambda (e) (or (atom e) (null (cdr (last e)))))
+			     result)))))
 		;; insert results based on type
 		(cond
 		 ;; Do nothing for an empty result.
@@ -2227,18 +2239,25 @@ INFO may provide the values of these header arguments (in the
 			    (if (listp result) result (split-string result "\n" t))))
 		     '(:splicep nil :istart "- " :iend "\n")))
 		   "\n"))
-		 ;; assume the result is a table if it's not a string
-		 ((funcall proper-list-p result)
+		 ;; Try hard to print RESULT as a table.  Give up if
+		 ;; it contains an improper list.
+		 ((funcall tabulablep result)
 		  (goto-char beg)
 		  (insert (concat (orgtbl-to-orgtbl
 				   (if (org-every
-					(lambda (el) (or (listp el) (eq el 'hline)))
+					(lambda (e)
+					  (or (eq e 'hline) (listp e)))
 					result)
-				       result (list result))
-				   '(:fmt (lambda (cell) (format "%s" cell)))) "\n"))
-		  (goto-char beg) (when (org-at-table-p) (org-table-align)))
-		 ((and (listp result) (not (funcall proper-list-p result)))
-		  (insert (format "%s\n" result)))
+				       result
+				     (list result))
+				   nil)
+				  "\n"))
+		  (goto-char beg)
+		  (when (org-at-table-p) (org-table-align))
+		  (goto-char (org-table-end)))
+		 ;; Print verbatim a list that cannot be turned into
+		 ;; a table.
+		 ((listp result) (insert (format "%s\n" result)))
 		 ((member "file" result-params)
 		  (when inlinep
 		    (goto-char inlinep)
@@ -2250,11 +2269,10 @@ INFO may provide the values of these header arguments (in the
 		  (insert (org-macro-escape-arguments
 			   (org-babel-chomp result "\n"))))
 		 (t (goto-char beg) (insert result)))
-		(when (funcall proper-list-p result) (goto-char (org-table-end)))
 		(setq end (point-marker))
 		;; possibly wrap result
 		(cond
-		 (bad-inline-p) ; Do nothing.
+		 (bad-inline-p)		; Do nothing.
 		 ((assoc :wrap (nth 2 info))
 		  (let ((name (or (cdr (assoc :wrap (nth 2 info))) "RESULTS")))
 		    (funcall wrap (concat "#+BEGIN_" name)
@@ -2286,7 +2304,7 @@ INFO may provide the values of these header arguments (in the
 			   "{{{results(" ")}}}"))
 		 ((and inlinep (member "file" result-params))
 		  (funcall wrap nil nil nil nil "{{{results(" ")}}}"))
-		 ((and (not (funcall proper-list-p result))
+		 ((and (not (funcall tabulablep result))
 		       (not (member "file" result-params)))
 		  (let ((org-babel-inline-result-wrap
 			 ;; Hard code {{{results(...)}}} on top of customization.

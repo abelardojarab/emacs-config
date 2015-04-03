@@ -1,6 +1,6 @@
 ;;; ox-odt.el --- OpenDocument Text Exporter for Org Mode
 
-;; Copyright (C) 2010-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
 
 ;; Author: Jambunathan K <kjambunathan at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -97,6 +97,8 @@
 		(org-open-file (org-odt-export-to-odt nil s v) 'system))))))
   :options-alist
   '((:odt-styles-file "ODT_STYLES_FILE" nil nil t)
+    (:description "DESCRIPTION" nil nil newline)
+    (:keywords "KEYWORDS" nil nil space)
     ;; Other variables.
     (:odt-content-template-file nil nil org-odt-content-template-file)
     (:odt-display-outline-level nil nil org-odt-display-outline-level)
@@ -1329,8 +1331,8 @@ original parsed data.  INFO is a plist holding export options."
 	(author (let ((author (plist-get info :author)))
 		  (if (not author) "" (org-export-data author info))))
 	(email (plist-get info :email))
-	(keywords (plist-get info :keywords))
-	(description (plist-get info :description)))
+	(keywords (or (plist-get info :keywords) ""))
+	(description (or (plist-get info :description) "")))
     (write-region
      (concat
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -1359,9 +1361,7 @@ original parsed data.  INFO is a plist holding export options."
 	     (format "<meta:creation-date>%s</meta:creation-date>\n"
 		     iso-date)))))
       (format "<meta:generator>%s</meta:generator>\n"
-	      (let ((creator-info (plist-get info :with-creator)))
-		(if (or (not creator-info) (eq creator-info 'comment)) ""
-		  (plist-get info :creator))))
+	      (plist-get info :creator))
       (format "<meta:keyword>%s</meta:keyword>\n" keywords)
       (format "<dc:subject>%s</dc:subject>\n" description)
       (format "<dc:title>%s</dc:title>\n" title)
@@ -1508,7 +1508,8 @@ original parsed data.  INFO is a plist holding export options."
 
       ;; Preamble - Title, Author, Date etc.
       (insert
-       (let* ((title (org-export-data (plist-get info :title) info))
+       (let* ((title (and (plist-get info :with-title)
+			  (org-export-data (plist-get info :title) info)))
 	      (author (and (plist-get info :with-author)
 			   (let ((auth (plist-get info :author)))
 			     (and auth (org-export-data auth info)))))
@@ -1552,14 +1553,15 @@ original parsed data.  INFO is a plist holding export options."
 		   (timestamp (and (not (cdr date))
 				   (eq (org-element-type (car date)) 'timestamp)
 				   (car date))))
-	      (concat
-	       (format "\n<text:p text:style-name=\"%s\">%s</text:p>"
-		       "OrgSubtitle"
-		       (if (and (plist-get info :odt-use-date-fields) timestamp)
-			   (org-odt--format-timestamp (car date))
-			 (org-export-data (plist-get info :date) info)))
-	       ;; Separator
-	       "<text:p text:style-name=\"OrgSubtitle\"/>"))))))
+	      (when date
+		(concat
+		 (format "\n<text:p text:style-name=\"%s\">%s</text:p>"
+			 "OrgSubtitle"
+			 (if (and (plist-get info :odt-use-date-fields) timestamp)
+			     (org-odt--format-timestamp (car date))
+			   (org-export-data date info)))
+		 ;; Separator
+		 "<text:p text:style-name=\"OrgSubtitle\"/>")))))))
       ;; Table of Contents
       (let* ((with-toc (plist-get info :with-toc))
 	     (depth (and with-toc (if (wholenump with-toc)
@@ -1739,9 +1741,10 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 	    (format "<text:span text:style-name=\"%s\">%s</text:span>"
 		    "OrgSuperscript" ",")))
      ;; Transcode footnote reference.
-     (let ((n (org-export-get-footnote-number footnote-reference info)))
+     (let ((n (org-export-get-footnote-number footnote-reference info nil t)))
        (cond
-	((not (org-export-footnote-first-reference-p footnote-reference info))
+	((not
+	  (org-export-footnote-first-reference-p footnote-reference info nil t))
 	 (funcall --format-footnote-reference n))
 	;; Inline definitions are secondary strings.
 	;; Non-inline footnotes definitions are full Org data.
@@ -2632,11 +2635,12 @@ Return nil, otherwise."
 			 (t nil))))))))
 
 (defun org-odt-link--infer-description (destination info)
-  ;; DESTINATION is a HEADLINE, a "<<target>>" or an element (like
-  ;; paragraph, verse-block etc) to which a "#+NAME: label" can be
-  ;; attached.  Note that labels that are attached to captioned
-  ;; entities - inline images, math formulae and tables - get resolved
-  ;; as part of `org-odt-format-label' and `org-odt--enumerate'.
+  ;; DESTINATION is a headline or an element (like paragraph,
+  ;; verse-block etc) to which a "#+NAME: label" can be attached.
+
+  ;; Note that labels that are attached to captioned entities - inline
+  ;; images, math formulae and tables - get resolved as part of
+  ;; `org-odt-format-label' and `org-odt--enumerate'.
 
   ;; Create a cross-reference to DESTINATION but make best-efforts to
   ;; create a *meaningful* description.  Check item numbers, section
@@ -2744,7 +2748,7 @@ INFO is a plist holding contextual information.  See
 	 (path (replace-regexp-in-string "&" "&amp;" path)))
     (cond
      ;; Link type is handled by a special function.
-     ((org-export-custom-protocol-maybe link desc info))
+     ((org-export-custom-protocol-maybe link desc 'odt))
      ;; Image file.
      ((and (not desc) (org-export-inline-image-p
 		       link (plist-get info :odt-inline-image-rules)))
@@ -2792,11 +2796,10 @@ INFO is a plist holding contextual information.  See
 	  (target
 	   ;; If there's a description, create a hyperlink.
 	   ;; Otherwise, try to provide a meaningful description.
-	   (if (not desc) (org-odt-link--infer-description destination info)
-	     (let ((label (org-element-property :value destination)))
-	       (format "<text:a xlink:type=\"simple\" xlink:href=\"#%s\">%s</text:a>"
-		       (org-export-solidify-link-text label)
-		       desc))))
+	   (let ((label (org-element-property :value destination)))
+	     (format "<text:a xlink:type=\"simple\" xlink:href=\"#%s\">%s</text:a>"
+		     (org-export-solidify-link-text label)
+		     (or desc (org-export-get-ordinal destination info)))))
 	  ;; Case 4: Fuzzy link points to some element (e.g., an
 	  ;; inline image, a math formula or a table).
 	  (otherwise
@@ -3798,7 +3801,8 @@ contextual information."
 				 (file-name-nondirectory input-file))))
 		 (display-msg
 		  (case processing-type
-		    ((dvipng imagemagick) (format "Creating LaTeX Image %d..." count))
+		    ((dvipng imagemagick)
+		     (format "Creating LaTeX Image %d..." count))
 		    (mathml (format "Creating MathML snippet %d..." count))))
 		 ;; Get an Org-style link to PNG image or the MathML
 		 ;; file.
@@ -3810,46 +3814,45 @@ contextual information."
 						  nil processing-type)
 				(buffer-substring-no-properties
 				 (point-min) (point-max)))))
-		    (if (not (string-match "file:\\([^]]*\\)" link))
-			(prog1 nil (message "LaTeX Conversion failed."))
-		      link))))
+		    (if (org-string-match-p "file:\\([^]]*\\)" link) link
+		      (message "LaTeX Conversion failed.")
+		      nil))))
 	    (when org-link
-	      ;; Conversion succeeded.  Parse above Org-style link to a
-	      ;; `link' object.
-	      (let* ((link (car (org-element-map (with-temp-buffer
-						   (org-mode)
-						   (insert org-link)
-						   (org-element-parse-buffer))
-				    'link 'identity))))
-		;; Orphan the link.
-		(org-element-put-property link :parent nil)
-		(let* (
-		       (replacement
-			(case (org-element-type latex-*)
-			  ;; Case 1: LaTeX environment.
-			  ;; Mimic a "standalone image or formula" by
-			  ;; enclosing the `link' in a `paragraph'.
-			  ;; Copy over original attributes, captions to
-			  ;; the enclosing paragraph.
-			  (latex-environment
-			   (org-element-adopt-elements
-			    (list 'paragraph
-				  (list :style "OrgFormula"
-					:name (org-element-property :name
-								    latex-*)
-					:caption (org-element-property :caption
-								       latex-*)))
-			    link))
-			  ;; Case 2: LaTeX fragment.
-			  ;; No special action.
-			  (latex-fragment link))))
-		  ;; Note down the object that link replaces.
-		  (org-element-put-property replacement :replaces
-					    (list (org-element-type latex-*)
-						  (list :value latex-frag)))
-		  ;; Replace now.
-		  (org-element-set-element latex-* replacement))))))
-	info)))
+	      ;; Conversion succeeded.  Parse above Org-style link to
+	      ;; a `link' object.
+	      (let* ((link
+		      (org-element-map
+			  (org-element-parse-secondary-string org-link '(link))
+			  'link #'identity info t))
+		     (replacement
+		      (case (org-element-type latex-*)
+			;; Case 1: LaTeX environment.  Mimic
+			;; a "standalone image or formula" by
+			;; enclosing the `link' in a `paragraph'.
+			;; Copy over original attributes, captions to
+			;; the enclosing paragraph.
+			(latex-environment
+			 (org-element-adopt-elements
+			  (list 'paragraph
+				(list :style "OrgFormula"
+				      :name
+				      (org-element-property :name latex-*)
+				      :caption
+				      (org-element-property :caption latex-*)))
+			  link))
+			;; Case 2: LaTeX fragment.  No special action.
+			(latex-fragment link))))
+		;; Note down the object that link replaces.
+		(org-element-put-property replacement :replaces
+					  (list (org-element-type latex-*)
+						(list :value latex-frag)))
+		;; Restore blank after initial element or object.
+		(org-element-put-property
+		 replacement :post-blank
+		 (org-element-property :post-blank latex-*))
+		;; Replace now.
+		(org-element-set-element latex-* replacement)))))
+	info nil nil t)))
   tree)
 
 

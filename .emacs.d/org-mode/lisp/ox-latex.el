@@ -1,6 +1,6 @@
 ;;; ox-latex.el --- LaTeX Back-End for Org Export Engine
 
-;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2015 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -43,8 +43,6 @@
     (center-block . org-latex-center-block)
     (clock . org-latex-clock)
     (code . org-latex-code)
-    (comment . (lambda (&rest args) ""))
-    (comment-block . (lambda (&rest args) ""))
     (drawer . org-latex-drawer)
     (dynamic-block . org-latex-dynamic-block)
     (entity . org-latex-entity)
@@ -110,6 +108,8 @@
     (:latex-class-options "LATEX_CLASS_OPTIONS" nil nil t)
     (:latex-header "LATEX_HEADER" nil nil newline)
     (:latex-header-extra "LATEX_HEADER_EXTRA" nil nil newline)
+    (:description "DESCRIPTION" nil nil newline)
+    (:keywords "KEYWORDS" nil nil space)
     ;; Other variables.
     (:latex-active-timestamp-format nil nil org-latex-active-timestamp-format)
     (:latex-caption-above nil nil org-latex-caption-above)
@@ -205,9 +205,6 @@
 					  ("qbordermatrix" . "\\cr")
 					  ("kbordermatrix" . "\\\\"))
   "Alist between matrix macros and their row ending.")
-
-(defconst org-latex-pseudo-objects '(latex-math-block)
-  "List of pseudo-object types introduced in the back-end.")
 
 
 
@@ -386,11 +383,25 @@ are written as utf8 files."
 
 (defcustom org-latex-title-command "\\maketitle"
   "The command used to insert the title just after \\begin{document}.
-If this string contains the formatting specification \"%s\" then
-it will be used as a formatting string, passing the title as an
-argument."
+
+This format string may contain these elements:
+
+  %a for AUTHOR keyword
+  %t for TITLE keyword
+  %k for KEYWORDS line
+  %d for DESCRIPTION line
+  %c for CREATOR line
+  %l for Language keyword
+  %L for capitalized language keyword
+  %D for DATE keyword
+
+If you need to use a \"%\" character, you need to escape it
+like that: \"%%\".
+
+Setting :latex-title-command in publishing projects will take
+precedence over this variable."
   :group 'org-export-latex
-  :type 'string)
+  :type '(string :tag "Format string"))
 
 (defcustom org-latex-toc-command "\\tableofcontents\n\n"
   "LaTeX command to set the table of contents, list of figures, etc.
@@ -400,20 +411,30 @@ the toc:nil option, not to those generated with #+TOC keyword."
   :type 'string)
 
 (defcustom org-latex-hyperref-template
-  "\\hypersetup{\n pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c}}\n"
+  "\\hypersetup{\n pdfauthor={%a},\n pdftitle={%t},\n pdfkeywords={%k},
+ pdfsubject={%d},\n pdfcreator={%c}, \n pdflang={%L}}\n"
   "Template for hyperref package options.
 
-Value is a format string, which can contain the following placeholders:
+This format string may contain these elements:
 
+  %a for AUTHOR keyword
+  %t for TITLE keyword
   %k for KEYWORDS line
   %d for DESCRIPTION line
   %c for CREATOR line
+  %l for Language keyword
+  %L for capitalized language keyword
+  %D for DATE keyword
 
-Set it to the empty string to ignore the command completely."
+If you need to use a \"%\" character, you need to escape it
+like that: \"%%\".
+
+Setting :latex-hyperref-template in publishing projects will take
+precedence over this variable."
   :group 'org-export-latex
   :version "25.1"
   :package-version '(Org . "8.3")
-  :type 'string)
+  :type '(string :tag "Format string"))
 
 ;;;; Headline
 
@@ -1196,6 +1217,33 @@ just outside of it."
 INFO is a plist used as a communication channel."
   (org-export-translate s :latex info))
 
+(defun org-latex--format-spec (info)
+  "Create a format-spec for document meta-data.
+INFO is a plist used as a communication channel."
+  (let ((objects '(bold code entity export-snippet inline-babel-call
+			inline-src-block italic latex-fragment
+			latex-math-block link macro strike-through
+			subscript superscript timestamp underline
+			verbatim))
+	(language (let ((lang (plist-get info :language)))
+		    (or (cdr (assoc lang org-latex-babel-language-alist))
+			lang))))
+    `((?a . ,(org-export-data (plist-get info :author) info))
+      (?t . ,(org-export-data (plist-get info :title)  info))
+      (?k . ,(org-export-data (org-latex--wrap-latex-math-block
+			       (org-element-parse-secondary-string
+				(plist-get info :keywords) objects)
+			       info)
+			      info))
+      (?d . ,(org-export-data (org-latex--wrap-latex-math-block
+			       (org-element-parse-secondary-string
+				(plist-get info :description) objects)
+			       info)
+			      info))
+      (?c . ,(plist-get info :creator))
+      (?l . ,language)
+      (?L . ,(capitalize language))
+      (?D . ,(org-export-get-date info)))))
 
 
 ;;; Template
@@ -1204,7 +1252,8 @@ INFO is a plist used as a communication channel."
   "Return complete document string after LaTeX conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
-  (let ((title (org-export-data (plist-get info :title) info)))
+  (let ((title (org-export-data (plist-get info :title) info))
+	(spec (org-latex--format-spec info)))
     (concat
      ;; Time-stamp.
      (and (plist-get info :time-stamp-file)
@@ -1251,19 +1300,18 @@ holding export options."
      ;; Title
      (format "\\title{%s}\n" title)
      ;; Hyperref options.
-     (format-spec (plist-get info :latex-hyperref-template)
-                  (format-spec-make
-                   ?k (or (plist-get info :keywords) "")
-                   ?d (or (plist-get info :description)"")
-                   ?c (if (plist-get info :with-creator)
-                          (plist-get info :creator)
-                        "")))
+     (let ((template (plist-get info :latex-hyperref-template)))
+       (and (stringp template)
+            (format-spec template spec)))
      ;; Document start.
      "\\begin{document}\n\n"
      ;; Title command.
-     (let ((command (plist-get info :latex-title-command)))
+     (let* ((title-command (plist-get info :latex-title-command))
+            (command (and (stringp title-command)
+                          (format-spec title-command spec))))
        (org-element-normalize-string
-	(cond ((string= "" title) nil)
+	(cond ((not (plist-get info :with-title)) nil)
+	      ((string= "" title) nil)
 	      ((not (stringp command)) nil)
 	      ((string-match "\\(?:[^%]\\|^\\)%s" command)
 	       (format command title))
@@ -1277,12 +1325,8 @@ holding export options."
      ;; Document's body.
      contents
      ;; Creator.
-     (let ((creator-info (plist-get info :with-creator)))
-       (cond
-	((not creator-info) "")
-	((eq creator-info 'comment)
-	 (format "%% %s\n" (plist-get info :creator)))
-	(t (concat (plist-get info :creator) "\n"))))
+     (and (plist-get info :with-creator)
+	  (concat (plist-get info :creator) "\n"))
      ;; Document end.
      "\\end{document}")))
 
@@ -1995,7 +2039,7 @@ INFO is a plist holding contextual information.  See
 		(t raw-path))))
     (cond
      ;; Link type is handled by a special function.
-     ((org-export-custom-protocol-maybe link desc info))
+     ((org-export-custom-protocol-maybe link desc 'latex))
      ;; Image file.
      (imagep (org-latex--inline-image link info))
      ;; Radio link: Transcode target's contents and use them as link's
@@ -2643,8 +2687,7 @@ contextual information."
 	(format "\\begin{verbatim}\n%s\n\\end{verbatim}"
 		;; Re-create table, without affiliated keywords.
 		(org-trim (org-element-interpret-data
-			   `(table nil ,@(org-element-contents table))
-			   org-latex-pseudo-objects))))
+			   `(table nil ,@(org-element-contents table))))))
        ;; Case 2: Matrix.
        ((or (string= type "math") (string= type "inline-math"))
 	(org-latex--math-table table info))
@@ -2841,9 +2884,7 @@ This function assumes TABLE has `org' as its `:type' property and
 	       (concat
 		(mapconcat
 		 (lambda (cell)
-		   (substring
-		    (org-element-interpret-data cell org-latex-pseudo-objects)
-		    0 -1))
+		   (substring (org-element-interpret-data cell) 0 -1))
 		 (org-element-map row 'table-cell #'identity info) "&")
 		(or (cdr (assoc env org-latex-table-matrix-macros)) "\\\\")
 		"\n")))

@@ -1,6 +1,6 @@
 ;;; test-org-footnote.el --- Tests for org-footnote.el
 
-;; Copyright (C) 2012, 2013, 2014  Nicolas Goaziou
+;; Copyright (C) 2012-2015  Nicolas Goaziou
 
 ;; Author: Nicolas Goaziou <n.goaziou at gmail dot com>
 
@@ -18,6 +18,79 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Code:
+
+(ert-deftest test-org-footnote/new ()
+  "Test `org-footnote-new' specifications."
+  ;; `org-footnote-auto-label' is t.
+  (should
+   (string-match-p
+    "Test\\[fn:1\\]\n+\\[fn:1\\]"
+    (org-test-with-temp-text "Test<point>"
+      (let ((org-footnote-auto-label t)
+	    (org-footnote-section nil))
+	(org-footnote-new))
+      (buffer-string))))
+  ;; `org-footnote-auto-label' is `plain'.
+  (should
+   (string-match-p
+    "Test\\[1\\]\n+\\[1\\]"
+    (org-test-with-temp-text "Test<point>"
+      (let ((org-footnote-auto-label 'plain)
+	    (org-footnote-section nil))
+	(org-footnote-new))
+      (buffer-string))))
+  ;; `org-footnote-auto-label' is `random'.
+  (should
+   (string-match-p
+    "Test\\[fn:\\(.+?\\)\\]\n+\\[fn:\\1\\]"
+    (org-test-with-temp-text "Test<point>"
+      (let ((org-footnote-auto-label 'random)
+	    (org-footnote-section nil))
+	(org-footnote-new))
+      (buffer-string))))
+  ;; Error at beginning of line.
+  (should-error
+   (org-test-with-temp-text "<point>Test"
+     (org-footnote-new)))
+  ;; Error at keywords.
+  (should-error
+   (org-test-with-temp-text "#+TIT<point>LE: value"
+     (org-footnote-new)))
+  (should-error
+   (org-test-with-temp-text "#+CAPTION: <point>\nParagraph"
+     (org-footnote-new)))
+  ;; Allow new footnotes in blank lines at the beginning of the
+  ;; document.
+  (should
+   (string-match-p
+    " \\[fn:1\\]"
+    (org-test-with-temp-text " <point>"
+      (let ((org-footnote-auto-label t)) (org-footnote-new))
+      (buffer-string))))
+  ;; Allow new footnotes within recursive objects, but not in links.
+  (should
+   (string-match-p
+    " \\*bold\\[fn:1\\]\\*"
+    (org-test-with-temp-text " *bold<point>*"
+      (let ((org-footnote-auto-label t)) (org-footnote-new))
+      (buffer-string))))
+  (should-error
+   (org-test-with-temp-text " [[http://orgmode.org][Org mode<point>]]"
+     (org-footnote-new)))
+  ;; Allow new footnotes in blank lines after an element or white
+  ;; spaces after an object.
+  (should
+   (string-match-p
+    " \\[fn:1\\]"
+    (org-test-with-temp-text "#+BEGIN_EXAMPLE\nA\n#+END_EXAMPLE\n <point>"
+      (let ((org-footnote-auto-label t)) (org-footnote-new))
+      (buffer-string))))
+  (should
+   (string-match-p
+    " \\*bold\\*\\[fn:1\\]"
+    (org-test-with-temp-text " *bold*<point>"
+      (let ((org-footnote-auto-label t)) (org-footnote-new))
+      (buffer-string)))))
 
 (ert-deftest test-org-footnote/delete ()
   "Test `org-footnote-delete' specifications."
