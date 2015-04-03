@@ -1,35 +1,32 @@
-smart-mode-line
+smart-mode-line [![Melpa](http://melpa.org/packages/smart-mode-line-badge.svg)](http://melpa.org/#/smart-mode-line) [![Melpa-stable](http://stable.melpa.org/packages/smart-mode-line-badge.svg)](http://melpa.org/#/smart-mode-line)
 ---------------
 <!--     [![Say Thank You](https://img.shields.io/gratipay/Malabarba.svg)](https://gratipay.com/Malabarba/) -->
-(_[Wanna say thank you?](https://gratipay.com/Malabarba/)_)
+[Contribute](https://gratipay.com/Malabarba/)
 
 Smart Mode Line is a sexy mode-line for Emacs. It aims to be easy to
 read from small to large monitors by using *colors*, a *prefix feature*, and
 *smart truncation*. 
 
-[New in v2.5](https://github.com/Bruce-Connor/smart-mode-line/blob/master/news.md)
-===========
-- Emacs 24.4 compatible.
-- Integration with [Projectile](https://github.com/bbatsov/projectile)!
-- Display `current-directory` in Shell and eshell.
-- New value for `sml/theme`: `automatic` (highly recommended).
-- `sml/apply-theme` is interactive and has completion.
-- Smart-mode-line themes are now regular themes.
-
-[Further News](https://github.com/Bruce-Connor/smart-mode-line/blob/master/news.md)
-
 Images
 ======
 **Dark Theme**  
-![Dark Theme Screenshot](https://raw.github.com/Bruce-Connor/smart-mode-line/master/screenshot-2013-11-11-dark.png)
+![Dark Theme Screenshot](https://raw.github.com/Malabarba/smart-mode-line/master/screenshot-2013-11-11-dark.png)
 
 **Light Theme**  
-![Light Theme Screenshot](https://raw.github.com/Bruce-Connor/smart-mode-line/master/screenshot-2013-11-11-light.png)
+![Light Theme Screenshot](https://raw.github.com/Malabarba/smart-mode-line/master/screenshot-2013-11-11-light.png)
 
 **Powerline Theme**  
-![Powerline Theme Screenshot](https://raw.github.com/Bruce-Connor/smart-mode-line/master/screenshot-powerline-theme.png)
+![Powerline Theme Screenshot](https://raw.github.com/Malabarba/smart-mode-line/master/screenshot-powerline-theme.png)
 
-(Note: to use the powerline theme, install the "smart-mode-line-powerline-theme" package from MELPA)
+(Note: to use the powerline theme, install the `smart-mode-line-powerline-theme` package from MELPA)
+
+**Solarized Dark Theme**
+![Solarized Dark Theme Screenshot](screenshot-solarized-dark-theme.png)
+
+**Solarized Light Theme**
+![Solarized Light Theme Screenshot](screenshot-solarized-light-theme.png)
+
+(Note: to use the Solarized themes, install the [`solarized-theme`](https://github.com/bbatsov/solarized-emacs/) package from MELPA)
 
 Installation
 ===
@@ -38,42 +35,29 @@ way of installing it. If you do that, you can simply activate it with:
 
     (sml/setup)
 
-To install it manually, you need **emacs-version >= 24.3**. First
-make sure you install [dash.el](https://github.com/magnars/dash.el)
-(which is a dependency), then make sure *"smart-mode-line.el"* is in
-your load path, and finally place this code in your `.emacs` file:
+By default, `sml` will try to figure out the best sml theme to go with
+your Emacs theme. But if you want to chose the theme yourself, do one
+of the following BEFORE `sml/setup`:
 
-    (require 'smart-mode-line)
-    (sml/setup)
-
-To change the color theme, do one of the following:
-
-    (sml/apply-theme 'dark)
-    (sml/apply-theme 'light)
-    (sml/apply-theme 'respectful)
-    (sml/apply-theme 'automatic)
+    (setq sml/theme 'dark)
+    (setq sml/theme 'light)
+    (setq sml/theme 'respectful)
 
 #### Installation Issues (FAQ) ####
 
-- **Problem:** If emacs keeps warning you that *"Loading themes can run
-lisp code"* and asking *"Would you like to mark this theme as safe for
-future sessions?"*. That is probably an issue with your `init.el` or
-`.emacs` file, but we offer a workaround.
-- **Solution A:** Make sure the `(custom-set-variables ...)` sexp is at
-  the very top of your `.emacs` file. That is the right place for it.
-  If that doesn't work, you can work around it with the code `(setq sml/no-confirm-load-theme t)`,
-  but we recommend you try to figure out what's wrong with your configs.
-- **Solution B:** `smart-mode-line` ships with multiple themes, and
-  each must be separately marked as safe. And when `sml/apply-theme`
-  is set to `automatic`, it may attempt to load a theme which you
-  haven't previously loaded, causing the *"Would you like to mark this
-  theme as safe..."* question to be asked again.  
-  If you don't want to use the `sml/no-confirm-load-theme` variable, a
-  second option is to manually cycle through all the themes and say
-  "yes" to mark each of them safe. Your goal is for the
-  `(custom-set-variables ...)` sexp at the top of your `.emacs` to
-  contain at least three different entries under `(custom-safe-themes
-  ...)`.
+- **Problem:** If Emacs always warns you that *“Loading themes can
+  run lisp code”* and keeps asking *“Would you like to mark this theme as
+  safe for future sessions?”*. That is probably an issue with your
+  `init.el` or `.emacs` file, but we offer a workaround.
+- **Workaround:** Add the following snippet before `sml/setup` 
+
+        (setq sml/no-confirm-load-theme t)
+
+- **Proper Solution:** Make sure the `(custom-set-variables ...)` sexp
+  is at the very top of your `.emacs` file. That is the right place
+  for it. If that doesn't work, forget about smart-mode-line for a
+  moment and see if you have the same problem with other themes
+  installed from Melpa.
 
 Features
 ===
@@ -101,7 +85,7 @@ Its main features include:
     path. See below for examples.  	
 
  4. **Hide or Highlight minor-modes**:  
-    The [rich-minority](https://github.com/Bruce-Connor/rich-minority)
+    The [rich-minority](https://github.com/Malabarba/rich-minority)
     package saves even more space. Select which minor modes you don't
     want to see listed by adding them to the variable
     `rm-excluded-modes`, or even highlight the modes that are more
@@ -189,4 +173,10 @@ with your own definition you need to add it to the start of the list
 (note the ommited `t`):
 
     (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox/" ":DBox:"))
+
+
+Contributing
+=====
+
+[![Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.1.3/dist/gratipay.png)](https://gratipay.com/Malabarba)
 
