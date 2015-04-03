@@ -136,7 +136,7 @@ non-nil."
 (setq jit-lock-stealth-time 20.0
       jit-lock-stealth-load 300
       jit-lock-chunk-size 20
-      jit-lock-defer-time 1.0
+      jit-lock-defer-time 0.1
       jit-lock-stealth-nice 0.5
       jit-lock-contextually t
       jit-lock-stealth-verbose nil)
@@ -173,7 +173,7 @@ non-nil."
 (defun hi-lock-overlay-p (overlay)
   "Return the overlay if overlay is a hi-lock overlay."
   (if (and (overlayp overlay)
-         (eq (overlay-get overlay 'hi-lock-overlay) t))
+           (eq (overlay-get overlay 'hi-lock-overlay) t))
       overlay
     nil))
 
