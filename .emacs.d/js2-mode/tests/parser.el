@@ -48,7 +48,7 @@
       (if syntax-error
           (let ((errors (js2-ast-root-errors ast)))
             (should (= (or errors-count 1) (length errors)))
-            (cl-destructuring-bind (_ pos len) (cl-first errors)
+            (cl-destructuring-bind (_ pos len) (car (last errors))
               (should (string= syntax-error (substring code-string
                                                        (1- pos) (+ pos len -1))))))
         (should (= 0 (length (js2-ast-root-errors ast))))
@@ -184,7 +184,7 @@ the test."
   "var x = {a: 1, b, c: 1, d};")
 
 (js2-deftest-parse object-literal-shorthard-with-number
-  "var a = {1};" :syntax-error ";" :errors-count 2)
+  "var a = {1};" :syntax-error "}" :errors-count 2)
 
 (js2-deftest-parse object-literal-method
   "var x = {f(y) {  return y;\n}};")
@@ -255,10 +255,13 @@ the test."
   "([{a}, b]) => {  a + b;\n};")
 
 (js2-deftest-parse parenless-arrow-function-prohibits-rest
-  "...b => {b + 1;};" :syntax-error "=>" :errors-count 1)
+  "...b => {b + 1;};" :syntax-error "=>")
 
 (js2-deftest-parse parenless-arrow-function-prohibits-destructuring
-  "[a, b] => {a + b;};" :syntax-error "=>" :errors-count 4)
+  "[a, b] => {a + b;};" :syntax-error "]" :errors-count 4)
+
+(js2-deftest-parse arrow-function-recovers-from-error
+  "[(,foo) => 1];" :syntax-error "," :errors-count 6)
 
 ;;; Automatic semicolon insertion
 
@@ -605,6 +608,16 @@ the test."
     (should export-node)
     (should (js2-export-node-default export-node))))
 
+(js2-deftest export-function-no-semicolon "export default function foo() {}"
+  (js2-mode)
+  (should (equal nil js2-parsed-warnings)))
+(js2-deftest export-default-function-no-semicolon "export function foo() {}"
+  (js2-mode)
+  (should (equal nil js2-parsed-warnings)))
+(js2-deftest export-anything-else-does-require-a-semicolon "export var obj = {}"
+  (js2-mode)
+  (should (not (equal nil js2-parsed-warnings))))
+
 (js2-deftest-parse parse-export-rexport "export * from 'other/lib';")
 (js2-deftest-parse parse-export-export-named-list "export {foo, bar as bang};")
 (js2-deftest-parse parse-re-export-named-list "export {foo, bar as bang} from 'other/lib';")
@@ -670,6 +683,9 @@ the test."
 (js2-deftest-parse parse-super-keyword
   "class Foo {\n  constructor() {  super(42);\n}\n  foo() {  super.foo();\n}\n}")
 
+(js2-deftest-parse parse-class-keywordlike-method
+  "class C {\n  delete() {}\n  if() {}\n}")
+
 ;;; Scopes
 
 (js2-deftest ast-symbol-table-includes-fn-node "function foo() {}"
@@ -692,6 +708,20 @@ the test."
     (should (js2-function-node-p (js2-symbol-ast-node fn-entry)))
     (should (= (js2-symbol-decl-type var-entry) js2-VAR))
     (should (js2-name-node-p (js2-symbol-ast-node var-entry)))))
+
+(js2-deftest for-node-is-declaration-scope "for (let i = 0; i; ++i) {};"
+  (js2-mode)
+  (search-forward "i")
+  (forward-char -1)
+  (let ((scope (js2-node-get-enclosing-scope (js2-node-at-point))))
+    (should (js2-for-node-p (js2-get-defining-scope scope "i")))))
+
+(js2-deftest array-comp-is-result-scope "[x * 2 for (x in y)];"
+  (js2-mode)
+  (search-forward "x")
+  (forward-char -1)
+  (let ((scope (js2-node-get-enclosing-scope (js2-node-at-point))))
+    (should (js2-comp-loop-node-p (js2-get-defining-scope scope "x")))))
 
 ;;; Tokenizer
 
@@ -763,3 +793,15 @@ the test."
 (js2-deftest function-without-parens-error "function b {}"
   ;; Should finish the parse.
   (js2-mode))
+
+;;; Comments
+
+(js2-deftest comment-node-length "//"
+  (js2-mode)
+  (let ((node (js2-node-at-point (point-min))))
+    (should (= (js2-node-len node) 2))))
+
+(js2-deftest comment-node-length-newline "//\n"
+  (js2-mode)
+  (let ((node (js2-node-at-point (point-min))))
+    (should (= (js2-node-len node) 3))))

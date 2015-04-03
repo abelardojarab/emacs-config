@@ -1,6 +1,6 @@
 ;;; helm-mode.el --- Enable helm completion everywhere. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2014 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,6 +31,9 @@
     (describe-variable . helm-completing-read-symbols)
     (debug-on-entry . helm-completing-read-symbols)
     (find-function . helm-completing-read-symbols)
+    (trace-function . helm-completing-read-symbols)
+    (trace-function-foreground . helm-completing-read-symbols)
+    (trace-function-background . helm-completing-read-symbols)
     (find-tag . helm-completing-read-with-cands-in-buffer)
     (ffap-alternate-file . nil)
     (tmm-menubar . nil))
@@ -515,6 +518,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
                                             (and (funcall test x)
                                                  (not (keywordp x))))
                                           default))
+               :filtered-candidate-transformer 'helm-apropos-default-sort-fn
                :persistent-action 'helm-lisp-completion-persistent-action
                :persistent-help "Show brief doc in mode-line")
     :prompt prompt
@@ -737,7 +741,6 @@ Keys description:
                            (if ,marked-candidates
                                (helm-marked-candidates :with-wildcard t)
                              (identity candidate))))))
-         (helm-mp-highlight-delay nil)
          ;; Be sure we don't erase the underlying minibuffer if some.
          (helm-ff-auto-update-initial-value
           (and helm-ff-auto-update-initial-value
@@ -769,6 +772,7 @@ Keys description:
                             (concat hname helm-find-files-doc-header))
              :mode-line mode-line
              :candidates hist
+             :nohighlight t
              :persistent-action persistent-action
              :persistent-help persistent-help
              :nomark nomark
@@ -781,9 +785,9 @@ Keys description:
                      (setq helm-ff-auto-update-flag
                            helm-ff-auto-update-initial-value)
                      (setq helm-ff--auto-update-state
-                           helm-ff-auto-update-flag)
-                     (helm-set-local-variable 'helm-in-file-completion-p t))
+                           helm-ff-auto-update-flag))
              :mode-line mode-line
+             :nohighlight t
              :candidates
              (lambda ()
                (append (and (not (file-exists-p helm-pattern))
@@ -822,7 +826,7 @@ Keys description:
                  (stringp result)
                  (file-equal-p result initial-input)
                  default)
-            default)
+            (if (listp default) (car default) default))
            ((and result (stringp result))
             (expand-file-name result))
            ((and result (listp result))
@@ -834,6 +838,20 @@ Keys description:
        (identity helm-pattern))
      (helm-mode--keyboard-quit))))
 
+(defun helm-mode--default-filename (fname dir initial)
+  (unless dir (setq dir default-directory))
+  (unless (file-name-absolute-p dir)
+    (setq dir (expand-file-name dir)))
+  (unless (or fname (consp fname))
+    (setq fname (expand-file-name
+                 (or initial buffer-file-name dir)
+                 dir)))
+  (if (and fname (consp fname))
+      (setq fname (cl-loop for f in fname
+                           collect (expand-file-name f dir)))
+      (if (file-name-absolute-p fname)
+          fname (expand-file-name fname dir))))
+
 (cl-defun helm--generic-read-file-name
     (prompt &optional dir default-filename mustmatch initial predicate)
   "Generic helm replacement of `read-file-name'.
@@ -841,9 +859,9 @@ Don't use it directly, use instead `helm-read-file-name' in your programs."
   (let* ((init (or initial dir default-directory))
          (current-command (or (helm-this-command) this-command))
          (str-command (helm-symbol-name current-command))
-         (helm-file-completion-sources
+         (helm--file-completion-sources
           (cons str-command
-                (remove str-command helm-file-completion-sources)))
+                (remove str-command helm--file-completion-sources)))
          (buf-name (format "*helm-mode-%s*" str-command))
          (entry (assq current-command
                       helm-completing-read-handlers-alist))
@@ -857,6 +875,8 @@ Don't use it directly, use instead `helm-read-file-name' in your programs."
          helm-completion-mode-start-message ; Be quiet
          helm-completion-mode-quit-message  ; Same here
          fname)
+    (setq default-filename (helm-mode--default-filename
+                            default-filename dir initial))
     ;; Some functions that normally call `completing-read' can switch
     ;; brutally to `read-file-name' (e.g find-tag), in this case
     ;; the helm specialized function will fail because it is build
@@ -949,7 +969,10 @@ Can be used as value for `completion-in-region-function'."
                   (afun (plist-get completion-extra-properties :annotation-function))
                   (data (all-completions input collection predicate))
                   (init-space-suffix (unless helm-completion-in-region-fuzzy-match " "))
-                  (file-comp-p (helm-mode--in-file-completion-p input (car-safe data)))
+                  ;; Assume that when `afun' and `predicate' are null
+                  ;; we are in filename completion.
+                  (file-comp-p (or (helm-mode--in-file-completion-p)
+                                   (and (null afun) (null predicate)))) 
                   ;; Completion-at-point and friends have no prompt.
                   (result (if (stringp data)
                               data
@@ -1009,23 +1032,13 @@ Can be used as value for `completion-in-region-function'."
                                          (re-search-backward "~?/" start t)))
                                   (match-end 0) start)
                               end)
-               (insert (if file-comp-p
-                           (shell-quote-argument result)
-                           result))))
+               (insert result)))
         (advice-remove 'lisp--local-variables
                        #'helm-mode--advice-lisp--local-variables))))
 
-(defun helm-mode--in-file-completion-p (target candidate)
-  (when (and candidate target)
-    (or (string-match "/\\'" candidate)
-        (string-match "\\`~?/.*/\\'" target)
-        (string-match "\\`[a-zA-Z]:/.*/\\'" target)
-        (if (or (string-match "\\`~?/" target)
-                (string-match "\\`[a-zA-Z]:/" target))
-            (file-exists-p (expand-file-name candidate (helm-basedir target)))
-          (file-exists-p (expand-file-name
-                          candidate (with-helm-current-buffer
-                                      default-directory)))))))
+(defun helm-mode--in-file-completion-p ()
+  (with-helm-current-buffer
+    (run-hook-with-args-until-success 'file-name-at-point-functions)))
 
 (when (boundp 'completion-in-region-function)
   (defconst helm--old-completion-in-region-function completion-in-region-function))

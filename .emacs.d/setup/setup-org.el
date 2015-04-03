@@ -693,11 +693,12 @@ a link to this file."
 (require 'org-journal)
 
 ;; Pandoc
+(add-to-list 'load-path "~/.emacs.d/hydra")
 (add-to-list 'load-path "~/.emacs.d/pandoc-mode")
-(when (require 'pandoc-mode nil 'noerror)
-  (add-hook 'markdown-mode-hook 'turn-on-pandoc)
-  (add-hook 'org-mode-hook 'pandoc-load-default-settings)
-  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+(require 'pandoc-mode)
+(add-hook 'markdown-mode-hook 'turn-on-pandoc)
+(add-hook 'org-mode-hook 'pandoc-load-default-settings)
+(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
 
 (provide 'setup-org)
 ;;; setup-org.el ends here

@@ -81,16 +81,6 @@
 
 
 ;;; Environment information
-(defun flycheck-test-texinfo-version ()
-  "Determine the version of Texinfo.
-
-Return the version as string, or nil, if the texinfo version
-could not be determined."
-  (flycheck-ert-extract-version-command
-   (rx "makeinfo (GNU texinfo) "
-       (group (one-or-more (any digit)) "." (one-or-more (any digit))))
-   "makeinfo" "--version"))
-
 (defun flycheck-test-cppcheck-version ()
   "Determine the version of Cppcheck.
 
@@ -310,10 +300,13 @@ and extension, as in `file-name-base'."
 
 ;;; Global syntax checking
 
-(ert-deftest flycheck-may-enable-mode/not-in-ephemeral-buffers ()
+(ert-deftest flycheck-may-enable-mode/not-in-temporary-buffers ()
   :tags '(global-mode)
   (flycheck-ert-with-temp-buffer
-    (should-not (flycheck-may-enable-mode)))
+    (should-not (flycheck-may-enable-mode))))
+
+(ert-deftest flycheck-may-enable-mode/not-in-ephemeral-buffers ()
+  :tags '(global-mode)
   (flycheck-ert-with-temp-buffer
     (setq buffer-file-name "foo")
     (emacs-lisp-mode)
@@ -358,7 +351,6 @@ and extension, as in `file-name-base'."
       (rename-buffer "foo")
       (emacs-lisp-mode)
       (should-not (flycheck-may-enable-mode)))))
-
 
 (ert-deftest flycheck-may-enable-mode/some-modes-disabled ()
   :tags '(global-mode)
@@ -527,6 +519,7 @@ and extension, as in `file-name-base'."
     (let ((flycheck-check-syntax-automatically '(idle-change)))
       (flycheck-mode)
       (insert "Hello world")
+      (should-not (flycheck-deferred-check-p))
       (sleep-for 0.55)
       (should (flycheck-deferred-check-p)))))
 
@@ -584,6 +577,7 @@ and extension, as in `file-name-base'."
 (ert-deftest flycheck-buffer-automatically/does-not-check-with-disabled-mode ()
   :tags '(automatic)
   (flycheck-ert-with-temp-buffer
+    (rename-buffer "foo")
     (should-not flycheck-mode)
     (should-not (flycheck-deferred-check-p))
     (flycheck-buffer-automatically)
@@ -720,6 +714,37 @@ and extension, as in `file-name-base'."
 (ert-deftest flycheck-symbol-list-p/an-empty-list ()
   :tags '(utility)
   (should (flycheck-symbol-list-p '())))
+
+(ert-deftest flycheck-same-files-p/same-files ()
+  :tags '(utility)
+  (let ((default-directory flycheck-test-source-directory))
+    (should (flycheck-same-files-p "flycheck.el" "flycheck.el"))))
+
+(ert-deftest flycheck-same-files-p/different-files ()
+  :tags '(utility)
+  (let ((default-directory flycheck-test-source-directory))
+    (should-not (flycheck-same-files-p "flycheck.el" "Makefile"))))
+
+(ert-deftest flycheck-same-files-p/file-in-non-existing-directory ()
+  :tags '(utility)
+  (let ((default-directory flycheck-test-source-directory))
+    (should-not (flycheck-same-files-p "flycheck.el" "foobar/flycheck.el"))))
+
+(ert-deftest flycheck-same-files-p/non-existing-files ()
+  :tags '(utility)
+  (let ((default-directory flycheck-test-source-directory))
+    (should (flycheck-same-files-p "foobar/foobar" "foobar/foobar"))))
+
+(ert-deftest flycheck-same-files-p/across-symlinks ()
+  :tags '(utility)
+  (skip-unless (fboundp #'make-symbolic-link))
+  (let ((directory (make-temp-file "flycheck-test-same-files-p-" 'directory)))
+    (unwind-protect
+        (let ((link (expand-file-name "foobar.el" directory))
+              (flycheck (expand-file-name "flycheck.el" flycheck-test-source-directory)))
+          (make-symbolic-link flycheck link)
+          (should (flycheck-same-files-p flycheck link)))
+      (delete-directory directory 'recursive))))
 
 (ert-deftest flycheck-temp-dir-system ()
   :tags '(utility)
@@ -1170,13 +1195,9 @@ and extension, as in `file-name-base'."
     (unwind-protect
         (progn
           (should (equal (flycheck-checker-modes 'python-pylint)
-                         (cons 'emacs-lisp-mode modes)))
-          (flycheck-ert-with-resource-buffer "automatic-check-dummy.el"
-            (should (flycheck-may-use-checker 'python-pylint))))
+                         (cons 'emacs-lisp-mode modes))))
       (put 'python-pylint 'flycheck-modes modes)
-      (should (equal (flycheck-checker-modes 'python-pylint) modes))
-      (flycheck-ert-with-resource-buffer "automatic-check-dummy.el"
-        (should-not (flycheck-may-use-checker 'python-pylint))))))
+      (should (equal (flycheck-checker-modes 'python-pylint) modes)))))
 
 
 ;;; Checker API
@@ -1754,6 +1775,7 @@ and extension, as in `file-name-base'."
 (ert-deftest flycheck-disable-checker/disables-checker ()
   :tags '(selection)
   (flycheck-ert-with-temp-buffer
+    (flycheck-mode)
     (flycheck-disable-checker 'emacs-lisp)
     (should (equal '(emacs-lisp) flycheck-disabled-checkers))
     (should-not (default-value 'flycheck-disabled-checkers))
@@ -1764,6 +1786,7 @@ and extension, as in `file-name-base'."
 (ert-deftest flycheck-disable-checker/enables-checker ()
   :tags '(selection)
   (flycheck-ert-with-temp-buffer
+    (flycheck-mode)
     (setq flycheck-disabled-checkers '(emacs-lisp python-pylint))
     (flycheck-disable-checker 'emacs-lisp 'enable)
     (should (equal '(python-pylint) flycheck-disabled-checkers))))
@@ -1888,63 +1911,55 @@ and extension, as in `file-name-base'."
 (ert-deftest flycheck--manual/all-checkers-are-documented ()
   :tags '(documentation)
   (flycheck-ert-with-file-buffer
-      (expand-file-name "doc/guide/languages.rst"
+      (expand-file-name "doc/languages.texi"
                         flycheck-test-source-directory)
-    (let (documented-checkers)
-      (while (re-search-forward (rx line-start ".. flyc-checker:: "
-                                    (group (1+ not-newline))
-                                    "\n   :auto:" line-end)
+    (let ((expected-checkers flycheck-checkers)
+          documented-checkers)
+      (while (re-search-forward (rx "@flyc{" (group (1+ (not (any "}")))) "}")
                                 nil 'noerror)
-        (push (intern (match-string 1)) documented-checkers))
-      (should (equal flycheck-checkers (nreverse documented-checkers))))))
+        (let ((checker (intern (match-string 1))))
+          (unless (memq checker documented-checkers)
+            (push checker documented-checkers))))
+      (setq documented-checkers (nreverse documented-checkers))
+      (dolist (checker documented-checkers)
+        (let ((expected (pop expected-checkers)))
+          (should (equal checker expected)))))))
 
 (ert-deftest flycheck--manual/all-options-are-documented ()
   :tags '(documentation)
-  (flycheck-ert-with-file-buffer
-      (expand-file-name "doc/guide/languages.rst"
-                        flycheck-test-source-directory)
-    (while (re-search-forward (rx line-start ".. flyc-checker::" (1+ space)
-                                  (group (1+ not-newline))
-                                  line-end)
-                              nil 'noerror)
-      (let* ((checker (intern (match-string 1)))
-             (bound (save-excursion
-                      (search-forward ".. flyc-checker::" nil 'noerror)))
-             documented-vars)
-        (when (search-forward ".. rubric:: Options" bound 'noerror)
-          (while (and (re-search-forward (rx line-start "   .. "
-                                             (group (1+ (not (any ":"))))
-                                             "::" (1+ space)
-                                             (group (1+ not-newline))
-                                             (group (optional "\n      :auto:"))
-                                             line-end)
-                                         bound 'noerror)
-                      (equal (match-string 1) "option")
-                      (not (string-empty-p (match-string 3))))
-            (push (intern (match-string 2)) documented-vars)))
-        (should (equal (-sort #'string< (flycheck-checker-option-vars checker))
-                       (nreverse documented-vars)))))))
+  (let ((options (sort (apply #'append (mapcar #'flycheck-checker-option-vars
+                                               flycheck-checkers))
+                       #'string<))
+        (filename (expand-file-name "doc/languages.texi"
+                                    flycheck-test-source-directory))
+        documented-options)
+    (flycheck-ert-with-file-buffer filename
+      (while (re-search-forward (rx line-start "@flycoption" (opt "x") (1+ space)
+                                    (group (1+ not-newline)) line-end)
+                                nil 'no-error)
+        (push (match-string 1) documented-options)))
+    (setq documented-options (sort documented-options #'string<))
+    (dolist (option documented-options)
+      (let ((expected (pop options)))
+        (should (equal (intern option) expected))))))
 
 (ert-deftest flycheck--manual/all-config-file-vars-are-documented ()
   :tags '(documentation)
-  (flycheck-ert-with-file-buffer
-      (expand-file-name "doc/guide/languages.rst" flycheck-test-source-directory)
-    (while (re-search-forward (rx line-start ".. flyc-checker::" (1+ space)
-                                  (group (1+ not-newline)) line-end)
-                              nil 'noerror)
-      (let* ((checker (intern (match-string 1)))
-             (bound (save-excursion
-                      (search-forward ".. flyc-checker::" nil 'noerror)))
-             documented-var)
-        (when (search-forward ".. rubric:: Configuration file" bound 'noerror)
-          (re-search-forward (rx "   .. option:: "
-                                 (group (1+ not-newline))
-                                 "\n      :auto:"
-                                 line-end)
-                             bound 'noerror)
-          (setq documented-var (intern (match-string 1))))
-        (should (equal (flycheck-checker-config-file-var checker)
-                       documented-var))))))
+  (let ((config-file-vars (sort (delq nil
+                                      (mapcar #'flycheck-checker-config-file-var
+                                              flycheck-checkers))
+                                #'string<))
+        documented-config-files)
+    (flycheck-ert-with-file-buffer
+        (expand-file-name "doc/languages.texi" flycheck-test-source-directory)
+      (while (re-search-forward (rx line-start "@flycconfigfile{"
+                                    (group (1+ (not (any "," "}")))) ",")
+                                nil 'noerror)
+        (push (match-string 1) documented-config-files)))
+    (setq documented-config-files (sort documented-config-files #'string<))
+    (dolist (config-file documented-config-files)
+      (let ((expected (pop config-file-vars)))
+        (should (equal (intern config-file) expected))))))
 
 
 ;;; Checker error API
@@ -3878,7 +3893,7 @@ evaluating BODY."
 (flycheck-ert-def-checker-test coffee coffee syntax-error
   (flycheck-ert-should-syntax-check
    "checkers/coffee-syntax-error.coffee" 'coffee-mode
-   '(4 7 error "missing \", starting" :checker coffee)))
+   '(4 7 error "missing \"" :checker coffee)))
 
 (flycheck-ert-def-checker-test coffee-coffeelint coffee error
   :tags '(checkstyle-xml)
@@ -4009,7 +4024,7 @@ The term \"1\" has type \"nat\" while it is expected to have type
                   (file-error (cdr err))))
          (msg (format "Cannot open load file: %sdummy-package"
                       (if (= (length parts) 2) ""
-                        "no such file or directory, "))))
+                        "No such file or directory, "))))
     (flycheck-ert-should-syntax-check
      "checkers/emacs-lisp.el" 'emacs-lisp-mode
      '(12 nil warning "First sentence should end with punctuation"
@@ -4176,7 +4191,8 @@ The term \"1\" has type \"nat\" while it is expected to have type
      '(25 9 warning "if block ends with a return statement, so drop this else and outdent its block"
           :checker go-golint))))
 
-(flycheck-ert-def-checker-test (go-vet go-build go-golint) go print-functions
+(flycheck-ert-def-checker-test go-vet go print-functions
+  (funcall (flycheck-checker-predicate 'go-vet))
   (let ((flycheck-go-vet-print-functions '("Warn:0" "Warnf:1"))
         (flycheck-disabled-checkers '(go-golint go-build go-errcheck)))
     (flycheck-ert-with-env
@@ -4255,8 +4271,8 @@ The term \"1\" has type \"nat\" while it is expected to have type
 
 (flycheck-ert-def-checker-test handlebars handlebars nil
   (flycheck-ert-should-syntax-check
-   "checkers/handlebars-error.hbs" 'handlebars-mode
-   '(2 nil error "Expecting 'ID', 'DATA', got 'INVALID'"
+   "checkers/handlebars-error.hbs" '(handlebars-mode web-mode)
+   '(2 nil error "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'DATA', got 'INVALID'"
        :checker handlebars)))
 
 (ert-deftest flycheck-haskell-module-re/matches-module-name ()
@@ -4408,20 +4424,50 @@ Why not:
    '(1 42 error "found: ',' - expected: 'EOF'." :checker json-jsonlint)))
 
 (flycheck-ert-def-checker-test less less file-error
-  (flycheck-ert-should-syntax-check
-   "checkers/less-file-error.less" 'less-css-mode
-   '(3 1 error "'no-such-file.less' wasn't found" :checker less)))
+  (let* ((candidates (list (flycheck-ert-resource-filename "checkers/no-such-file.less")
+                           (flycheck-ert-resource-filename "checkers/no-such-file.less")
+                           "no-such-file.less"))
+         (message (string-join candidates ",")))
+    (flycheck-ert-should-syntax-check
+     "checkers/less-file-error.less" 'less-css-mode
+     `(3 1 error ,(concat "'no-such-file.less' wasn't found. Tried - "
+                          message)
+         :checker less))))
 
 (flycheck-ert-def-checker-test less less syntax-error
   (flycheck-ert-should-syntax-check
    "checkers/less-syntax-error.less" 'less-css-mode
    '(1 1 error "Unrecognised input" :checker less)))
 
-(flycheck-ert-def-checker-test lua lua nil
+(flycheck-ert-def-checker-test luacheck lua syntax-error
   (flycheck-ert-should-syntax-check
    "checkers/lua-syntax-error.lua" 'lua-mode
-   '(5 nil error "unfinished string near '\"oh no'"
-       :checker lua)))
+   '(5 7 error "unfinished string"
+       :checker luacheck)))
+
+(flycheck-ert-def-checker-test luacheck lua warnings
+  (flycheck-ert-should-syntax-check
+   "checkers/lua-warnings.lua" 'lua-mode
+   '(1 1 warning "setting non-standard global variable 'global_var'"
+       :id "W111" :checker luacheck)
+   '(3 16 warning "unused function 'test'"
+       :id "W211" :checker luacheck)
+   '(3 21 warning "unused argument 'arg'"
+       :id "W212" :checker luacheck)
+   '(4 11 warning "variable 'var2' is never set"
+       :id "W221" :checker luacheck)))
+
+(flycheck-ert-def-checker-test luacheck lua no-warnings
+  (let ((flycheck-luacheckrc "luacheckrc"))
+    (flycheck-ert-should-syntax-check
+     "checkers/lua-warnings.lua" 'lua-mode)))
+
+(flycheck-ert-def-checker-test lua lua nil
+  (let ((flycheck-disabled-checkers '(luacheck)))
+    (flycheck-ert-should-syntax-check
+     "checkers/lua-syntax-error.lua" 'lua-mode
+     '(5 nil error "unfinished string near '\"oh no'"
+         :checker lua))))
 
 (flycheck-ert-def-checker-test perl perl nil
   (flycheck-ert-should-syntax-check
@@ -4769,7 +4815,7 @@ Why not:
    "checkers/rst-sphinx/index.rst" 'rst-mode
    '(2 nil warning "Title underline too short." :checker rst-sphinx)
    '(9 nil error "Unknown target name: \"cool\"." :checker rst-sphinx)
-   '(9 nil warning "envvar reference target not found: FOO"
+   '(9 nil warning "u'envvar' reference target not found: FOO"
        :checker rst-sphinx)))
 
 (flycheck-ert-def-checker-test rst-sphinx rst no-reference-warnings
@@ -4923,7 +4969,7 @@ Why not:
 (flycheck-ert-def-checker-test rust rust help
   (flycheck-ert-should-syntax-check
    "checkers/rust-help.rs" 'rust-mode
-   '(3 1 error "not all control paths return a value"
+   '(3 1 error "not all control paths return a value [E0269]"
        :checker rust)
    '(4 11 info "consider removing this semicolon:"
        :checker rust)))
@@ -4941,7 +4987,7 @@ Why not:
    "checkers/rust-info.rs" 'rust-mode
    '(11 9 info "`x` moved here because it has type `NonPOD`, which is moved by default"
         :checker rust)
-   '(11 9 info "use `ref` to override" :checker rust)
+   '(11 10 info "use `ref` to override" :checker rust)
    '(12 9 error "use of moved value: `x`" :checker rust)))
 
 (flycheck-ert-def-checker-test rust rust library-path
@@ -5095,18 +5141,7 @@ Why not:
      '(7 nil warning "possible unwanted space at \"{\""
          :checker tex-lacheck))))
 
-(flycheck-ert-def-checker-test texinfo texinfo errors-only
-  ;; Before Texinfo 5, makeinfo only prints errors
-  (skip-unless (version< (flycheck-test-texinfo-version) "5"))
-  (flycheck-ert-should-syntax-check
-   "checkers/texinfo.texi" 'texinfo-mode
-   '(7 nil error "Unknown command `bold'." :checker texinfo)
-   '(7 nil error "Misplaced {." :checker texinfo)
-   '(7 nil error "Misplaced }." :checker texinfo)))
-
-(flycheck-ert-def-checker-test texinfo texinfo errors-and-warnings
-  ;; Before Texinfo 5, makeinfo does not output any warnings
-  (skip-unless (version<= "5" (flycheck-test-texinfo-version)))
+(flycheck-ert-def-checker-test texinfo texinfo nil
   (flycheck-ert-should-syntax-check
    "checkers/texinfo.texi" 'texinfo-mode
    '(   3 nil warning "@settitle missing argument" :checker texinfo)

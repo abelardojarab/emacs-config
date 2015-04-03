@@ -1,6 +1,6 @@
 ;;; helm-tags.el --- Helm for Etags and Ctags. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2014 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -328,7 +328,8 @@ This function aggregates three sources of tag files:
   (interactive "P")
   (let ((tag-files (helm-etags-all-tag-files))
         (helm-execute-action-at-once-if-one helm-etags-execute-action-at-once-if-one)
-        (str (thing-at-point 'symbol)))
+        (str (if (region-active-p) (buffer-substring-no-properties (region-beginning) (region-end))
+               (thing-at-point 'symbol))))
     (if (cl-notany 'file-exists-p tag-files)
         (message "Error: No tag file found. Create with etags shell command, or visit with `find-tag' or `visit-tags-table'.")
       (cl-loop for k being the hash-keys of helm-etags-cache

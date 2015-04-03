@@ -27,6 +27,7 @@
 
 (setq python-mode-interactive-tests
       (list
+       'opening-brace-on-builtins-lp-1400951-test
        'py-split-just-two-window-on-execute-lp-1361531-python-test
        'py-split-just-two-window-on-execute-lp-1361531-ipython-test
        'py-split-just-two-window-on-execute-lp-1361531-python2-test
@@ -192,7 +193,6 @@
        'python-dedicated-test
        'tqs-list-error-test
        'py-mark-def-commandp-test
-       'split-windows-on-execute-p-test
        'switch-windows-on-execute-p-test
        'py-install-directory-path-test
        'UnicodeEncodeError-python3-test
@@ -1189,23 +1189,6 @@ print(\"I'm the switch-windows-on-execute-p-test\")
      (string-match "*Python*" (buffer-name (current-buffer)))
      nil "switch-windows-on-execute-p-test failed")))
 
-(defun split-windows-on-execute-p-test (&optional arg load-branch-function)
-  (interactive "p")
-  (let ((teststring (concat py-test-shebang "
-# -*- coding: utf-8 -*-
-print(\"I'm the `split-windows-on-execute-p-test'\")
-")))
-    (py-bug-tests-intern 'split-windows-on-execute-p-base arg teststring)))
-
-(defun split-windows-on-execute-p-base (arg)
-  (delete-other-windows)
-  (let ((py-split-window-on-execute t)
-        (py-split-windows-on-execute-function 'split-window-vertically)
-        (py-switch-buffers-on-execute-p t)
-        (erg (current-window-configuration)))
-    (py-execute-buffer)
-    (assert (not (window-full-height-p)) nil "split-windows-on-execute-p-test failed")))
-
 ;; this test is not valable, as python-mode-map often changes
 (defun py-menu-pyshell-test (&optional arg load-branch-function)
   (interactive "p")
@@ -1345,36 +1328,16 @@ aus.write(result + \"\\n\")
   (py-end-of-statement)
   (assert (eq 225 (point)) nil "py-end-of-statement-test-2 #1 failed"))
 
-(defun py-beginning-of-statement-test-1 (&optional arg)
-  (interactive "p")
-  (let ((teststring "#! /usr/bin/python
-# -*- coding: utf-8 -*-
-print dir()
-c = Cat()
-c.hello() #causes error, but emacs tracking fails
-import sys, os; os.remove('do/something/nasty') # lp:1025000
-"))
-    (py-bug-tests-intern 'py-beginning-of-statement-1-base arg teststring)))
-
-(defun py-beginning-of-statement-1-base (arg)
-  (py-beginning-of-statement)
-  (assert (eq 132 (point)) nil "py-beginning-of-statement-test-1 #1 failed")
-  (assert (eq 116 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #2 failed")
-  (assert (eq 66 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #3 failed")
-  (assert (eq 56 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #4 failed")
-  (assert (eq 44 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #5 failed"))
 
 (defun key-binding-tests (&optional arg)
   (interactive "p")
-  (let ((teststring "#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-"))
+  (let ((teststring ""))
     (py-bug-tests-intern 'key-binding-base arg teststring)))
 
 (defun key-binding-base (arg)
+  (python-mode)
   (when py-debug-p (switch-to-buffer (current-buffer)))
   (assert (eq (key-binding [(:)]) 'py-electric-colon) nil "py-electric-colon key-binding test failed")
-
   (assert (eq (key-binding [(\#)]) 'py-electric-comment) nil "py-electric-comment key-binding test failed")
   (assert (eq (key-binding [(delete)]) 'py-electric-delete) nil "py-electric-delete key-binding test failed")
   (assert (eq (key-binding [(backspace)]) 'py-electric-backspace) nil "py-electric-backspace key-binding test failed")
@@ -1417,7 +1380,8 @@ import sys, os; os.remove('do/something/nasty') # lp:1025000
   (assert (eq (key-binding [(control c)(control p)]) 'py-beginning-of-statement) nil "py-beginning-of-statement key-binding test failed")
   (assert (eq (key-binding [(control c)(control n)]) 'py-end-of-statement) nil "py-end-of-statement key-binding test failed")
   (assert (eq (key-binding [(control j)]) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed")
-  (assert (eq (key-binding (kbd "RET")) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed"))
+  ;; (assert (eq (key-binding (kbd "RET")) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed")
+  )
 
 (defun py-smart-operator-test (&optional arg)
   (interactive "p")
@@ -1863,7 +1827,7 @@ def foo()
     (py-bug-tests-intern 'py-fill-string-django-base arg teststring)))
 
 (defun py-fill-string-django-base (arg)
-  (when py-debug-p (switch-to-buffer (current-buffer))) 
+  (when py-debug-p (switch-to-buffer (current-buffer)))
   (font-lock-fontify-buffer)
   (sit-for 0.1)
   (goto-char 99)
@@ -2181,11 +2145,12 @@ else:
 
 (defun py-execute-region-error-base (arg)
   (when py-debug-p (switch-to-buffer (current-buffer)))
-  (goto-char 152)
-  (push-mark)
-  (end-of-line)
-  (setq erg (py-execute-region (line-beginning-position) (line-end-position)))
-  (message "erg: %s" erg))
+  (let (py-exception-buffer (buffer-name (current-buffer)))
+    (goto-char 152)
+    (push-mark)
+    (end-of-line)
+    (setq erg (py-execute-region (line-beginning-position) (line-end-position)))
+    (message "erg: %s" erg)))
 
 (defun py-execute-statement-error-test (&optional arg)
   (interactive "p")

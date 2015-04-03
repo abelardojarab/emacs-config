@@ -1,6 +1,6 @@
 ;;; helm-elisp.el --- Elisp symbols completion for helm. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2014 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -731,7 +731,7 @@ Filename completion happen if string start after or between a double quote."
        ("Eval" . (lambda (candidate)
                    (and (boundp 'helm-sexp--last-sexp)
                         (setq helm-sexp--last-sexp candidate))
-                   (helm-run-after-quit 'helm-sexp-eval candidate)))
+                   (run-with-timer 0.1 nil #'helm-sexp-eval candidate)))
        ("Edit and eval" .
         (lambda (cand)
           (minibuffer-with-setup-hook

@@ -49,12 +49,11 @@ BODY is code to be executed within the temp buffer.  Point is
  at the end of buffer."
   (declare (indent 1) (debug t))
   `(with-temp-buffer
-;;     (and (featurep 'python) (unload-feature 'python))
+     ;; (and (featurep 'python) (unload-feature 'python))
      (let (hs-minor-mode)
        (python-mode)
        (insert ,contents)
-       (message "ERT %s" (point))
-
+       ;; (message "ERT %s" (point))
        ,@body)))
 
 (defun py-tests-go-to (string)
@@ -529,18 +528,16 @@ with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
     (font-lock-fontify-buffer)
     (search-forward "else:")
     (forward-char -1)
-    (should (eq 1 (py-beginning-of-top-level-position)))
-    (should (eq 445 (py-end-of-top-level-position)))
+    (should (eq 1 (py--beginning-of-top-level-position)))
+    (should (eq 445 (py--end-of-top-level-position)))
     (should (eq 362 (py--beginning-of-statement-position)))
     (should (eq 367 (py--end-of-statement-position)))
-    (should (eq 367 (py--end-of-line-position)))
-    (should (eq 354 (py--beginning-of-line-position)))
     (should (eq 1 (py--beginning-of-paragraph-position)))
     (should (eq 446 (py--end-of-paragraph-position)))
     (should (eq 190 (py--beginning-of-block-position)))
     (should (eq 445 (py--end-of-block-position)))
-    (should (eq 190 (py-beginning-of-minor-block-position)))
-    (should (eq 445 (py-end-of-minor-block-position)))
+    (should (eq 190 (py--beginning-of-minor-block-position)))
+    (should (eq 445 (py--end-of-minor-block-position)))
     (should (eq 362 (py--beginning-of-clause-position)))
     (should (eq 445 (py--end-of-clause-position)))
     (should (eq 362 (py--beginning-of-block-or-clause-position)))
@@ -552,25 +549,18 @@ with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
     (should (eq 71 (py--beginning-of-def-or-class-position)))
     (should (eq 445 (py--end-of-def-or-class-position)))
     (search-forward "#")
-    (should (eq 380 (py-beginning-of-comment-position)))
-    (should (eq 412 (py-end-of-comment-position)))))
+    (should (eq 380 (py--beginning-of-comment-position)))
+    (should (eq 412 (py--end-of-comment-position)))))
 
 (ert-deftest py-ert-copy-statement-test ()
   (interactive)
   (py-test-with-temp-buffer-point-min
    "from foo.bar.baz import something
 "
-   (should (and (not (py-copy-statement))(string-match "from foo.bar.baz import something" (car kill-ring))))))
-
-;; (ert-deftest py-ert-abbrevs-changed-lp-1270631 ()
-;;   (interactive)
-;;   (with-temp-buffer
-;;     (insert "foo")
-;;     (emacs-lisp-mode)
-;;     (define-abbrev lisp-mode-abbrev-table "fooa" "fooa")
-;;     (should abbrevs-changed)
-;;     (python-mode)
-;;     (should abbrevs-changed)))
+   (when py-debug-p (switch-to-buffer (current-buffer))
+	 (font-lock-fontify-buffer))
+   (py-copy-statement)
+   (should (string-match "from foo.bar.baz import something" (car kill-ring)))))
 
 (ert-deftest py-ert-honor-dedent-lp-1280982 ()
   (py-test-with-temp-buffer
@@ -584,26 +574,21 @@ with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
     (should (eq 42 (point)))))
 
 (ert-deftest py-ert-socket-modul-completion-lp-1284141 ()
-  (py-test-with-temp-buffer-point-min
-      "import socket"
+  (py-test-with-temp-buffer
+      "import socket\nsocket."
     (let ((py-debug-p t)
+	  (py-shell-name "python")
 	  oldbuf)
-      (py-execute-buffer-dedicated)
-      (sit-for 0.1 t)
-      (set-buffer py-output-buffer)
-      (when py-debug-p (switch-to-buffer (current-buffer)))
-      (insert "socket.")
-      (sit-for 0.1)
-      ;; (switch-to-buffer (current-buffer))
+      (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer))
       (py-indent-or-complete)
       (sit-for 0.1)
       (set-buffer "*Python Completions*")
-      ;; (switch-to-buffer (current-buffer))
+      (switch-to-buffer (current-buffer))
       (goto-char (point-min))
       (sit-for 0.2)
       (prog1 (should (search-forward "socket."))
-	(py-kill-buffer-unconditional oldbuf)
-	(py-kill-buffer-unconditional "py-buffer-name.txt")))))
+	(py-kill-buffer-unconditional (current-buffer))))))
 
 (ert-deftest py-ert-fill-paragraph-lp-1286318 ()
   (py-test-with-temp-buffer-point-min
@@ -817,6 +802,9 @@ def baz():
 (ert-deftest py-partial-expression-test ()
   (py-test-with-temp-buffer-point-min
       "foo=1"
+    (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer))
+    (message "%s" (py-partial-expression))
     (and (should (string= "foo" (py-partial-expression)))
 	 (py-kill-buffer-unconditional (current-buffer)))))
 
@@ -827,23 +815,13 @@ def baz():
     (let ((py-shell-name "python"))
       (py-execute-statement)
       (set-buffer ert-test-default-buffer)
-      (when py-debug-p (switch-to-buffer (current-buffer))) 
-      (goto-char (point-max)) 
+      (when py-debug-p (switch-to-buffer (current-buffer))
+	    (font-lock-fontify-buffer))
+      (goto-char (point-max))
       (sit-for 0.3 t)
       (and (should (search-backward "py-execute-statement-test" nil t 1))
+	   (sit-for 0.1 t)
 	   (py-kill-buffer-unconditional (current-buffer))))))
-
-(ert-deftest py-ert-execute-statement-python2-test ()
-  (py-test-with-temp-buffer-point-min
-      "print(\"I'm the py-execute-statement-python2-test\")"
-    (when py-debug-p (switch-to-buffer (current-buffer)))
-    (py-execute-statement-python2)
-    (set-buffer "*Python2*")
-    (goto-char (point-max))
-    (sit-for 0.2 t)
-    (when py-debug-p (switch-to-buffer (current-buffer)))
-    (and (should (search-backward "py-execute-statement-python2-test" nil t 1))
-	 (py-kill-buffer-unconditional (current-buffer)))))
 
 (ert-deftest py-ert-execute-statement-python3-dedicated-test ()
   (py-test-with-temp-buffer-point-min
@@ -862,10 +840,27 @@ def baz():
   (py-test-with-temp-buffer-point-min
       "print(123)"
     (let ((py-split-window-on-execute t))
+      (delete-other-windows)
       (py-execute-statement)
-      (sit-for 0.1 t) 
+      (sit-for 0.1 t)
       (should (not (one-window-p))))))
 
-;;;
+(ert-deftest py-ert-script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test ()
+  (py-test-with-temp-buffer
+      "#! /usr/bin/env python
+ # -*- coding: utf-8 -*-
+print(\"I'm the script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test\")
+"
+    (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer))
+    (let (py-switch-buffers-on-execute-p
+	  (py-split-window-on-execute t))
+      (delete-other-windows)
+      (ipython)
+      (sit-for 0.1)
+      (py-execute-buffer-ipython)
+      ;; (should (window-live-p (other-buffer)))
+      (should (not (window-full-height-p))))))
 
 (provide 'py-ert-tests-1)
+;;; py-ert-tests-1.el ends here

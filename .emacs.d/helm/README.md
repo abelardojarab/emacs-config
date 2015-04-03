@@ -1,15 +1,13 @@
-Emacs-helm [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=thierry.volpiatto@gmail.com&lc=US&currency_code=EUR&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted)
-=========================
+[![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
+[![MELPA](http://melpa.org/packages/helm-badge.svg)](http://melpa.org/#/helm)
+[![MELPA Stable](http://stable.melpa.org/packages/helm-badge.svg)](http://stable.melpa.org/#/helm)
+[![Gratipay](http://img.shields.io/gratipay/thierryvolpiatto.svg)](https://www.gratipay.com/thierryvolpiatto/)
 
+Emacs-helm
+==========
 
+You can  [![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.1.3/dist/gratipay.png)](https://gratipay.com/thierryvolpiatto) or [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=thierry.volpiatto@gmail.com&lc=US&currency_code=EUR&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted) to help this project.
 
-```
- _____                            _   _      _
-| ____|_ __ ___   __ _  ___ ___  | | | | ___| |_ __ ___
-|  _| | '_ ` _ \ / _` |/ __/ __| | |_| |/ _ \ | '_ ` _ \
-| |___| | | | | | (_| | (__\__ \ |  _  |  __/ | | | | | |
-|_____|_| |_| |_|\__,_|\___|___/ |_| |_|\___|_|_| |_| |_|
-```
 
 ## Abstract
 
@@ -102,15 +100,18 @@ Some people are installing `helm` with their own config using diverses `require`
 and other hacks, not using `helm-config`.
 Expect failures and slowdown at startup unless you really know what you are doing when you do so.
 
-### Emacs Prelude
+### Configuration
 
-If you're afraid to play with Emacs's configuration, but want to try
-out Helm - have NO FEAR. Have a look at
-[Emacs Prelude](https://github.com/bbatsov/prelude) - it has
-Helm built-in and properly set-up.
+For a minimal helm configuration, run the startup script `./emacs-helm.sh`
+and look at the file `/tmp/helm-cfg.el`.
 
-For a minimal helm configuration, run `./emacs-helm.sh` and look at the file
-`/tmp/helm-cfg.el`.
+The full configuration I use (helm maintainer) can be found [here](https://github.com/thierryvolpiatto/emacs-tv-config/blob/master/init-helm-thierry.el).
+
+Don't hesitate also to visit all helm customizable variables with the customize interface.
+Enabling `helm-mode` will give you completion in the diverse customize commands.
+
+Also you will find some packages like [Emacs Prelude](https://github.com/bbatsov/prelude) that
+have Helm built-in and properly set-up.
 
 ### Basic usage
 
@@ -233,3 +234,4 @@ on [emacs-helm google group](https://groups.google.com/group/emacs-helm?hl=en).
 Cheers,<br>
 The Helm Team
 
+[badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg

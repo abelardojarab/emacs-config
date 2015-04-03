@@ -6,8 +6,8 @@
 ;; URL: https://github.com/bbatsov/projectile
 ;; Created: 2011-31-07
 ;; Keywords: project, convenience
-;; Version: 0.11.0
-;; Package-Requires: ((helm "1.4.0") (projectile "0.11.0") (dash "1.5.0") (cl-lib "0.3"))
+;; Version: 0.12.0
+;; Package-Requires: ((helm "1.4.0") (projectile "0.12.0") (dash "1.5.0") (cl-lib "0.3"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -513,7 +513,7 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
                          (setq helm-buffer-max-len-mode (cdr result))))))
    (candidates :initform helm-buffers-list-cache)
    (matchplugin :initform nil)
-   (match :initform 'helm-buffers-list--match-fn)
+   (match :initform 'helm-buffers-match-function)
    (persistent-action :initform 'helm-buffers-list-persistent-action)
    (keymap :initform helm-buffer-map)
    (volatile :initform t)
@@ -730,9 +730,9 @@ If it is nil, or ack/ack-grep not found then use default grep command."
     (error "You're not in a project")))
 
 ;;;###autoload
-(defun helm-projectile-ag ()
+(defun helm-projectile-ag (&optional options)
   "Helm version of projectile-ag."
-  (interactive)
+  (interactive (if current-prefix-arg (list (read-string "option: " "" 'helm-ag-command-history))))
   (unless (executable-find "ag")
     (error "ag not available"))
   (if (require 'helm-ag nil  'noerror)
@@ -744,6 +744,7 @@ If it is nil, or ack/ack-grep not found then use default grep command."
                                        (concat "--ignore " i))
                                      (append grep-find-ignored-files grep-find-ignored-directories)
                                      " "))
+                 (helm-ag-command-option options)
                  (helm-ag-base-command (concat helm-ag-base-command " " ignored)))
             (helm-do-ag (projectile-project-root)))
         (error "You're not in a project"))

@@ -5,7 +5,7 @@
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
 ;; Keywords: project, convenience
-;; Version: 0.11.0
+;; Version: 0.13.0-cvs
 ;; Package-Requires: ((dash "1.5.0") (pkg-info "0.4"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -150,6 +150,7 @@ Otherwise consider the current directory the project root."
           (const :tag "Ido" ido)
           (const :tag "Grizzl" grizzl)
           (const :tag "Helm" helm)
+          (const :tag "Ivy" ivy)
           (const :tag "Default" default)
           (function :tag "Custom function")))
 
@@ -719,11 +720,14 @@ Files are returned as relative paths to the project root."
 
 (defun projectile-dir-files-native (root directory)
   "Get the files for ROOT under DIRECTORY using just Emacs Lisp."
-  (message "Projectile is indexing %s. This may take a while."
-           (propertize directory 'face 'font-lock-keyword-face))
-  ;; we need the files with paths relative to the project root
-  (-map (lambda (file) (file-relative-name file root))
-        (projectile-index-directory directory (projectile-patterns-to-ignore))))
+  (let ((progress-reporter
+         (make-progress-reporter
+          (format "Projectile is indexing %s"
+                  (propertize directory 'face 'font-lock-keyword-face)))))
+    ;; we need the files with paths relative to the project root
+    (-map (lambda (file) (file-relative-name file root))
+          (projectile-index-directory directory (projectile-patterns-to-ignore)
+                                      progress-reporter))))
 
 (defun projectile-dir-files-external (root directory)
   "Get the files for ROOT under DIRECTORY using external tools."
@@ -835,17 +839,19 @@ PROJECT is base directory to start search recursively."
   "Get a list of relative file names in the project root by executing COMMAND."
   (split-string (shell-command-to-string command) "\0" t))
 
-(defun projectile-index-directory (directory patterns)
+(defun projectile-index-directory (directory patterns progress-reporter)
   "Index DIRECTORY taking into account PATTERNS.
 The function calls itself recursively until all sub-directories
-have been indexed."
+have been indexed.  The PROGRESS-REPORTER is updated while the
+function is executing."
   (--mapcat
    (unless (or (and patterns (projectile-ignored-rel-p it directory patterns))
                (member (file-name-nondirectory (directory-file-name it))
                        '("." ".." ".svn" ".cvs")))
+     (progress-reporter-update progress-reporter)
      (if (file-directory-p it)
          (unless (projectile-ignored-directory-p it)
-           (projectile-index-directory it patterns))
+           (projectile-index-directory it patterns progress-reporter))
        (unless (projectile-ignored-file-p it)
          (list it))))
    (directory-files directory t)))
@@ -1111,6 +1117,11 @@ https://github.com/emacs-helm/helm")))
           (grizzl-completing-read prompt (grizzl-make-index choices))
         (user-error "Please install grizzl from \
 https://github.com/d11wtq/grizzl")))
+     ((eq projectile-completion-system 'ivy)
+      (if (fboundp 'ivy-read)
+          (ivy-read prompt choices initial-input)
+        (user-error "Please install ivy from \
+https://github.com/abo-abo/swiper")))
      (t (funcall projectile-completion-system prompt choices)))))
 
 (defun projectile-current-project-files ()
@@ -1468,6 +1479,7 @@ With a prefix ARG invalidates the cache first."
 (defvar projectile-gulp '("gulpfile.js"))
 (defvar projectile-haskell-cabal '("*.cabal"))
 (defvar projectile-rust-cargo '("Cargo.toml"))
+(defvar projectile-r '("DESCRIPTION"))
 
 (defun projectile-go ()
   (-any? (lambda (file)
@@ -1501,6 +1513,7 @@ With a prefix ARG invalidates the cache first."
    ((projectile-verify-files projectile-grunt) 'grunt)
    ((projectile-verify-files projectile-haskell-cabal) 'haskell-cabal)
    ((projectile-verify-files projectile-rust-cargo) 'rust-cargo)
+   ((projectile-verify-files projectile-r) 'r)
    ((funcall projectile-go-function) 'go)
    (t 'generic)))
 
@@ -1837,7 +1850,7 @@ regular expression."
   "Use a grep-like CMD to search for files within DIRECTORY.
 
 CMD should include the necessary search params and should output
-equivalently to grep -HLI (only unique matching filenames).
+equivalently to grep -HlI (only unique matching filenames).
 Returns a list of expanded filenames."
   (let ((default-directory directory))
     (--map (concat directory
@@ -1862,10 +1875,10 @@ files in the project."
                                  search-term))
                         ((and (executable-find "git")
                               (eq (projectile-project-vcs) 'git))
-                         (concat "git grep -HLI "
+                         (concat "git grep -HlI "
                                  search-term))
                         (t
-                         (concat "grep -rHLI "
+                         (concat "grep -rHlI "
                                  search-term
                                  " .")))))
         (projectile-files-from-cmd cmd directory))
@@ -1886,7 +1899,8 @@ to run the replacement."
                     (projectile-prepend-project-name
                      (format "Replace %s with: " old-text))))
          (directory (if arg
-                        (read-directory-name "Replace in directory: ")
+                        (file-name-as-directory
+                         (read-directory-name "Replace in directory: "))
                       (projectile-project-root)))
          (files (projectile-files-with-string old-text directory)))
     (tags-query-replace old-text new-text nil (cons 'list files))))
@@ -1995,6 +2009,9 @@ For git projects `magit-status-internal' is used if available."
 (defvar projectile-haskell-cabal-test-cmd "cabal test")
 (defvar projectile-rust-cargo-compile-cmd "cargo build")
 (defvar projectile-rust-cargo-test-cmd "cargo test")
+(defvar projectile-r-compile-cmd "R CMD INSTALL .")
+(defvar projectile-r-test-cmd (concat "R CMD check -o "
+                                      temporary-file-directory " ."))
 
 (--each '(projectile-rails-compile-cmd
           projectile-ruby-compile-cmd
@@ -2023,7 +2040,9 @@ For git projects `magit-status-internal' is used if available."
           projectile-haskell-cabal-compile-cmd
           projectile-haskell-cabal-test-cmd
           projectile-rust-cargo-compile-cmd
-          projectile-rust-cargo-test-cmd)
+          projectile-rust-cargo-test-cmd
+          projectile-r-compile-cmd
+          projectile-r-test-cmd)
   (put it 'safe-local-variable #'stringp))
 
 
@@ -2055,6 +2074,7 @@ For git projects `magit-status-internal' is used if available."
    ((eq project-type 'go) projectile-go-compile-cmd)
    ((eq project-type 'haskell-cabal) projectile-haskell-cabal-compile-cmd)
    ((eq project-type 'rust-cargo) projectile-rust-cargo-compile-cmd)
+   ((eq project-type 'r) projectile-r-compile-cmd)
    (t projectile-make-compile-cmd)))
 
 (defun projectile-default-test-command (project-type)
@@ -2078,6 +2098,7 @@ For git projects `magit-status-internal' is used if available."
    ((eq project-type 'go) projectile-go-test-cmd)
    ((eq project-type 'haskell-cabal) projectile-haskell-cabal-test-cmd)
    ((eq project-type 'rust-cargo) projectile-rust-cargo-test-cmd)
+   ((eq project-type 'r) projectile-r-test-cmd)
    (t projectile-make-test-cmd)))
 
 (defun projectile-compilation-command (project)

@@ -1,6 +1,6 @@
 ;;; helm-regexp.el --- In buffer regexp searching and replacement for helm. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2014 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -136,16 +136,13 @@ i.e Don't replace inside a word, regexp is surrounded with \\bregexp\\b."
   (let ((matches (match-data))
         (line    (buffer-substring s e)))
     (propertize
-     (cl-loop with ln = (format "%5d: %s" (line-number-at-pos (1- s)) line)
+     (cl-loop with ln = (format "%5d: %s" (line-number-at-pos s) line)
            for i from 0 to (1- (/ (length matches) 2))
            concat (format "\n         %s'%s'" (format "Group %d: " i)
                           (match-string i))
            into ln1
            finally return (concat ln ln1))
-     ;; match beginning
-     ;; KLUDGE: point of helm-candidate-buffer is +1 than that of helm-current-buffer.
-     ;; It is implementation problem of candidates-in-buffer.
-     'helm-realvalue (1- s))))
+     'helm-realvalue s)))
 
 (defun helm-regexp-persistent-action (pt)
   (helm-goto-char pt)
@@ -190,17 +187,35 @@ i.e Don't replace inside a word, regexp is surrounded with \\bregexp\\b."
                  bufstr)
              concat bufstr)))
 
+(defun helm-moccur--next-or-previous-char ()
+  (save-excursion
+    (or (re-search-forward "^." nil t)
+        (re-search-backward "^." nil t))))
+
 (defun helm-moccur-get-line (beg end)
   "Format line for `helm-source-moccur'."
-  (format "%s:%d:%s"
-          (get-text-property beg 'buffer-name)
-          (save-restriction
-            (narrow-to-region (previous-single-property-change
-                               (point) 'buffer-name)
-                              (next-single-property-change
-                               (point) 'buffer-name))
-            (line-number-at-pos beg))
-          (buffer-substring beg end)))
+  (prog1
+      (format "%s:%d:%s"
+              (get-text-property (if (= beg end)
+                                     (helm-moccur--next-or-previous-char)
+                                     beg)
+                                 'buffer-name)
+              (save-restriction
+                (narrow-to-region (or (previous-single-property-change
+                                       (point) 'buffer-name) 1)
+                                  (or (next-single-property-change
+                                       (if (= beg end)
+                                           (helm-moccur--next-or-previous-char)
+                                           (point))
+                                       'buffer-name)
+                                      (point-max)))
+                (line-number-at-pos beg))
+              ;; When matching empty line, use empty string
+              ;; to allow saving and modifying with wgrep.
+              (if (= beg end) "" (buffer-substring beg end)))
+    ;; When matching empty line, forward char ("\n")
+    ;; to not be blocked forever here.
+    (when (= beg end) (forward-char 1))))
 
 (cl-defun helm-moccur-action (candidate
                               &optional (method (quote buffer)) mark)
@@ -210,9 +225,7 @@ arg METHOD can be one of buffer, buffer-other-window, buffer-other-frame."
   (let* ((split (helm-grep-split-line candidate))
          (buf (car split))
          (lineno (string-to-number (nth 1 split)))
-         (split-pat (if helm-occur-match-plugin-mode
-                        (helm-mp-split-pattern helm-pattern)
-                      (list helm-pattern))))
+         (split-pat (helm-mp-split-pattern helm-pattern)))
     (cl-case method
       (buffer              (switch-to-buffer buf))
       (buffer-other-window (switch-to-buffer-other-window buf))
@@ -221,7 +234,9 @@ arg METHOD can be one of buffer, buffer-other-window, buffer-other-frame."
     ;; Move point to the nearest matching regexp from bol.
     (cl-loop for reg in split-pat
           when (save-excursion
-                 (re-search-forward reg (point-at-eol) t))
+                 (condition-case _err
+                     (re-search-forward reg (point-at-eol) t)
+                   (invalid-regexp nil)))
           collect (match-beginning 0) into pos-ls
           finally (when pos-ls (goto-char (apply #'min pos-ls))))
     (when mark
@@ -270,19 +285,6 @@ Same as `helm-moccur-goto-line' but go in new frame."
   (interactive)
   (with-helm-alive-p
     (helm-quit-and-execute-action 'helm-moccur-goto-line)))
-
-;;;###autoload
-(define-minor-mode helm-occur-match-plugin-mode
-    "Turn On/Off `helm-match-plugin-mode' only for `helm-m/occur'."
-  :global t
-  :init-value t
-  (if helm-occur-match-plugin-mode
-      (setq helm-source-moccur
-            (remove (assoc 'no-matchplugin helm-source-moccur)
-                    helm-source-moccur)
-            helm-source-occur helm-source-moccur)
-    (helm-attrset 'no-matchplugin nil helm-source-moccur)
-    (setq helm-source-occur helm-source-moccur)))
 
 (defvar helm-source-moccur nil)
 (defclass helm-source-multi-occur (helm-source-in-buffer)
@@ -368,8 +370,7 @@ Same as `helm-moccur-goto-line' but go in new frame."
                   ":"
                   (propertize lineno 'face 'helm-grep-lineno)
                   ":"
-                  (helm-grep-highlight-match
-                   str helm-occur-match-plugin-mode))
+                  (helm-grep-highlight-match str t))
           candidate)))
 
 (defun helm-multi-occur-1 (buffers &optional input)

@@ -31,7 +31,6 @@
 
 # Code:
 
-
 # if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
 #     hash -r 2>/dev/null
 # fi
@@ -46,7 +45,7 @@ PDIR=$(cd ..; pwd)
 # PDIR="$TESTDIR/.."
 
 # write PATH-TO-EMACS source code default directory here
-EMACS_DEFAULT_DIR="/usr/share/emacs/24.2"
+EMACS_DEFAULT_DIR="/usr/share/emacs/24.3"
 
 EMACS_DIR=
 if [ $1 ]; then
@@ -59,29 +58,28 @@ fi
 #     else
 # cat    <<EOF
 # usage: ${0##*/} EMACS_DIR
-# 
+#
 # This script tests python-mode with non-installed Emacsen in a Bash.
-# 
+#
 # It assumes being in directory "test" below python-mode.el and relies on source-code directories as delivered by bzr branch.
-# 
+#
 # Edit \$EMACS_DIR to specify an Emacs or put "PATH-TO-EMACS-SOURCES" as shell argument.
-# 
+#
 # To run tests with installed Emacs, load available test-files like "py-bug-numbered-tests.el" and do "M-x py-run-bug-numbered-tests". Alternatively you may edit variables making it point according to you installation.
-# 
+#
 # EOF
-# 
+#
 # fi
 
 echo "\$EMACS_DIR: $EMACS_DIR"
 
 if [ $1 ]; then
     EMACS="$EMACS_DIR/src/emacs"
- 
+
 else
     EMACS=emacs
 
 fi
-
 
 echo "\$EMACS: $EMACS"
 # EMACS="/usr/bin/emacs"
@@ -119,7 +117,7 @@ if [ -s ${HOME}/.emacs.d/elpa/smart-operator-4.0/smart-operator.elc ];then
     SO="${HOME}/.emacs.d/elpa/smart-operator-4.0/smart-operator.elc"
 elif [ -s ${HOME}/.emacs.d/elpa/smart-operator-4.0/smart-operator.el ];then
     SO="${HOME}/.emacs.d/elpa/smart-operator-4.0/smart-operator.el"
-else 
+else
     SO="${MYEXTENSIONS}/smart-operator.el"
 fi
 
@@ -132,16 +130,9 @@ if [ -s "${EMACS_DIR}/lisp/emacs-lisp/cl-macs.elc" ];then
 
 elif [ -s "${EMACS_DIR}/lisp/emacs-lisp/cl-macs.el" ];then
     CLMACS="${EMACS_DIR}/lisp/emacs-lisp/cl-macs.el"
-    
-else echo "${EMACS_DIR}/lisp/emacs-lisp/cl-macs.el not found"
-    
-fi
 
-# BYTECOMP="${EMACS_DIR}/lisp/emacs-lisp/bytecomp.el"
-if [ -s "${EMACS_DIR}/lisp/emacs-lisp/bytecomp.elc" ];then
-    BYTECOMP="${EMACS_DIR}/lisp/emacs-lisp/bytecomp.elc"
-else
-    BYTECOMP="${EMACS_DIR}/lisp/emacs-lisp/bytecomp.el"
+else echo "${EMACS_DIR}/lisp/emacs-lisp/cl-macs.el not found"
+
 fi
 
 if [ -s "${EMACS_DIR}/lisp/custom.elc" ];then
@@ -149,7 +140,7 @@ if [ -s "${EMACS_DIR}/lisp/custom.elc" ];then
 else
     CUSTOM="${EMACS_DIR}/lisp/comint.el"
 fi
- 
+
 if [ -s "${EMACS_DIR}/lisp/ansi-color.elc" ];then
     ANSICOLOR="${EMACS_DIR}/lisp/ansi-color.elc"
 else
@@ -162,19 +153,15 @@ else
     COMINT="${EMACS_DIR}/lisp/comint.el"
 fi
 
-if [ -s "${EMACS_DIR}/lisp/progmodes/cc-cmds.el" ];then
-    CC_CMDS="${EMACS_DIR}/lisp/progmodes/cc-cmds.el"
-    echo "\$CC_CMDS: $CC_CMDS"
-elif [ -s "${EMACS_DIR}/lisp/progmodes/cc-cmds.el.gz" ];then
-    CC_CMDS="${EMACS_DIR}/lisp/progmodes/cc-cmds.el.gz"
-    echo "\$CC_CMDS: $CC_CMDS"
-
-else
-    echo "${EMACS_DIR}/lisp/progmodes/cc-cmds.el not found"
-fi
-
-
-
+# if [ -s "${EMACS_DIR}/lisp/progmodes/cc-cmds.el" ];then
+#     CC_CMDS="${EMACS_DIR}/lisp/progmodes/cc-cmds.el"
+#     echo "\$CC_CMDS: $CC_CMDS"
+# elif [ -s "${EMACS_DIR}/lisp/progmodes/cc-cmds.el.gz" ];then
+#     CC_CMDS="${EMACS_DIR}/lisp/progmodes/cc-cmds.el.gz"
+#     echo "\$CC_CMDS: $CC_CMDS"
+# else
+# echo "${EMACS_DIR}/lisp/progmodes/cc-cmds.el not found"
+# fi
 
 # SKEL="${EMACS_DIR}/lisp/skeleton.el"
 if [ -s "${EMACS_DIR}/lisp/skeleton.elc" ];then
@@ -184,7 +171,6 @@ else
 fi
 
 PYCO="$PDIR/completion/pycomplete.el"
-
 
 # file holding the tests
 TESTFILE="py-bug-numbered-tests.el"
@@ -203,31 +189,9 @@ echo "\$PYMACS: $PYMACS"
 echo "\$PYTHONMODE: $PYTHONMODE"
 echo "\$PDIR/\$TESTFILE: $PDIR/$TESTFILE"
 
-
-# $EMACS -Q -batch -l $HOME/emacs_20130227/lisp/emacs-lisp/cl-lib.el -l $HOME/emacs_20130227/lisp/emacs-lisp/ert.el -l ${PCOT}/python-mode-ert-tests.el -f ert-run-tests-batch-and-exit
-# $EMACS -Q -batch -load ${EMACS_DIR}lisp/emacs-lisp/ert.el -load ${PCOT}/python-mode-ert-tests.el -f ert-run-tests-batch-and-exit
-$EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p t)" --eval "(when (featurep 'python)(unload-feature 'python t))" --eval "(when (featurep 'python-mode)(unload-feature 'python-mode t))" --eval "(add-to-list 'load-path \"$PDIR/\")" --eval "(add-to-list 'load-path \"$TESTDIR/\")" --eval "(setq py-install-directory \"$PDIR\"))" --eval "(message \"py-install-directory: %s\" py-install-directory)" --eval "(setq py-load-pymacs-p nil)" -load $BYTECOMP -load $CC_CMDS -load $COMINT -load $ANSICOLOR -load $CLMACS -load $CUSTOM -load $SKELETON -load $SO -load $COLMK -load $HIGHL -load $PYTHONMODE  --eval "(message \"py-temp-directory: %s\" py-temp-directory)" -load $PCOT/$TESTFILE -load $PCOT/$TESTFILE2 -load $PCOT/$TESTFILE3 -load $PCOT/$TESTFILE5 -load $PCOT/$TESTFILE6 -load $PCOT/$TESTFILE7 -load $PCOT/$TESTFILE8 -load $PDIR/$UTILS \
---eval "(when (file-exists-p \"~/.abbrev_defs\") (quietly-read-abbrev-file (expand-file-name \"~/.abbrev_defs\")))" \
-\
--eval "(assert (functionp 'word-at-point) nil \"new completion bug, lp-1034656, word-at-point not known\")" \
--eval "(assert (functionp 'py--shell-simple-send) nil \"py-shell-simple-send not detected as function\")" \
--eval "(assert (functionp 'py--shell-setup) nil \"py--shell-setup not detected as function\")" \
--eval "(assert (functionp 'py--shell-send-setup-code) nil \"py-shell-send-setup-code not detected as function\")" \
--eval "(assert (functionp 'py-beginning-of-top-level-p) nil \"py-beginning-of-top-level-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-line-p) nil \"py-beginning-of-line-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-buffer-p) nil \"py-beginning-of-buffer-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-paragraph-p) nil \"py-beginning-of-paragraph-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-statement-p) nil \"py-beginning-of-statement-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-expression-p) nil \"py-beginning-of-expression-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-partial-expression-p) nil \"py-beginning-of-partial-expression-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-block-p) nil \"py-beginning-of-block-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-clause-p) nil \"py-beginning-of-clause-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-block-or-clause-p) nil \"py-beginning-of-block-or-clause-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-def-p) nil \"py-beginning-of-def-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-class-p) nil \"py-beginning-of-class-p not detected as function\")" \
--eval "(assert (functionp 'py--beginning-of-def-or-class-p) nil \"py-beginning-of-def-or-class-p not detected as function\")" \
--eval "(assert (functionp 'py-beginning-of-minor-block-p) nil \"py-beginning-of-minor-block-p not detected as function\")" \
-\
+$EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p t)" --eval "(when (featurep 'python)(unload-feature 'python t))" --eval "(when (featurep 'python-mode)(unload-feature 'python-mode t))" --eval "(add-to-list 'load-path \"$PDIR/\")" --eval "(add-to-list 'load-path \"$TESTDIR/\")" --eval "(setq py-install-directory \"$PDIR\"))" --eval "(message \"py-install-directory: %s\" py-install-directory)" --eval "(setq py-load-pymacs-p nil)" \
+-load $COMINT -load $ANSICOLOR -load $CLMACS -load $CUSTOM -load $SO -load $COLMK -load $HIGHL -load $PYTHONMODE  --eval "(message \"py-temp-directory: %s\" py-temp-directory)" -load $PCOT/$TESTFILE -load $PCOT/$TESTFILE2 -load $PCOT/$TESTFILE3 -load $PCOT/$TESTFILE5 -load $PCOT/$TESTFILE6 -load $PCOT/$TESTFILE7 -load $PCOT/$TESTFILE8 -load $PDIR/$UTILS \
+-eval "(when (file-exists-p \"~/.abbrev_defs\") (quietly-read-abbrev-file (expand-file-name \"~/.abbrev_defs\")))" \
 -eval "(assert (commandp 'pylint-flymake-mode) nil \"pylint-flymake-mode not detected as command\")" \
 -eval "(assert (commandp 'pyflakes-flymake-mode) nil \"pyflakes-flymake-mode not detected as command\")" \
 -eval "(assert (commandp 'pychecker-flymake-mode) nil \"pychecker-flymake-mode not detected as command\")" \
@@ -274,43 +238,10 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p 
 -eval "(assert (commandp 'py-shift-statement-left) nil \"py-shift-statement-left not detected as command\")" \
 -eval "(assert (commandp 'py-indent-region) nil \"py-indent-region not detected as command\")" \
 -eval "(assert (commandp 'py--beginning-of-paragraph-position) nil \"py-beginning-of-paragraph-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-paragraph-position) nil \"py-end-of-paragraph-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-block-position) nil \"py-beginning-of-block-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-block-position) nil \"py-end-of-block-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-clause-position) nil \"py-beginning-of-clause-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-clause-position) nil \"py-end-of-clause-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-block-or-clause-position) nil \"py-beginning-of-block-or-clause-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-block-or-clause-position) nil \"py-end-of-block-or-clause-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-def-position) nil \"py-beginning-of-def-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-def-position) nil \"py-end-of-def-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-class-position) nil \"py-beginning-of-class-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-class-position) nil \"py-end-of-class-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-def-or-class-position) nil \"py-beginning-of-def-or-class-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-def-or-class-position) nil \"py-end-of-def-or-class-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-line-position) nil \"py-beginning-of-line-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-line-position) nil \"py-end-of-line-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-statement-position) nil \"py-beginning-of-statement-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-statement-position) nil \"py-end-of-statement-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-expression-position) nil \"py-beginning-of-expression-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-expression-position) nil \"py-end-of-expression-position not detected as command\")" \
--eval "(assert (commandp 'py--beginning-of-partial-expression-position) nil \"py-beginning-of-partial-expression-position not detected as command\")" \
--eval "(assert (commandp 'py--end-of-partial-expression-position) nil \"py-end-of-partial-expression-position not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-statement) nil \"py-bounds-of-statement not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-block) nil \"py-bounds-of-block not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-clause) nil \"py-bounds-of-clause not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-block-or-clause) nil \"py-bounds-of-block-or-clause not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-def) nil \"py-bounds-of-def not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-class) nil \"py-bounds-of-class not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-region) nil \"py-bounds-of-region not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-buffer) nil \"py-bounds-of-buffer not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-expression) nil \"py-bounds-of-expression not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-partial-expression) nil \"py-bounds-of-partial-expression not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-declarations) nil \"py-bounds-of-declarations not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-declarations) nil \"py-beginning-of-declarations not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-declarations) nil \"py-end-of-declarations not detected as command\")" \
 -eval "(assert (commandp 'py-declarations) nil \"py-declarations not detected as command\")" \
 -eval "(assert (commandp 'py-kill-declarations) nil \"py-kill-declarations not detected as command\")" \
--eval "(assert (commandp 'py-bounds-of-statements) nil \"py-bounds-of-statements not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-statements) nil \"py-beginning-of-statements not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-statements) nil \"py-end-of-statements not detected as command\")" \
 -eval "(assert (commandp 'py-statements) nil \"py-statements not detected as command\")" \
@@ -320,8 +251,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p 
 -eval "(assert (commandp 'py-compute-indentation) nil \"py-compute-indentation not detected as command\")" \
 -eval "(assert (commandp 'py-continuation-offset) nil \"py-continuation-offset not detected as command\")" \
 -eval "(assert (commandp 'py-indentation-of-statement) nil \"py-indentation-of-statement not detected as command\")" \
--eval "(assert (commandp 'py-list-beginning-position) nil \"py-list-beginning-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-list-position) nil \"py-end-of-list-position not detected as command\")" \
 -eval "(assert (commandp 'py-in-triplequoted-string-p) nil \"py-in-triplequoted-string-p not detected as command\")" \
 -eval "(assert (commandp 'py-in-string-p) nil \"py-in-string-p not detected as command\")" \
 -eval "(assert (commandp 'py-in-statement-p) nil \"py-in-statement-p not detected as command\")" \
@@ -707,49 +636,42 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p 
 -eval "(assert (commandp 'py-mark-clause-misbehave-lp-949310-test) nil \"py-mark-clause-misbehave-lp-949310-test not detected as command\")" \
 -eval "(assert (commandp 'py-mark-block-misbehave-lp-949310-test) nil \"py-mark-block-misbehave-lp-949310-test not detected as command\")" \
 -eval "(assert (commandp 'py-mark-partial-expression) nil \"py-mark-partial-expression not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-block-bol-p) nil \"py-beginning-of-block-bol-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-block-bol) nil \"py-beginning-of-block-bol not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-block-bol) nil \"py-end-of-block-bol not detected as command\")" \
 -eval "(assert (commandp 'py-mark-block-bol) nil \"py-mark-block-bol not detected as command\")" \
 -eval "(assert (commandp 'py-copy-block-bol) nil \"py-copy-block-bol not detected as command\")" \
 -eval "(assert (commandp 'py-kill-block-bol) nil \"py-kill-block-bol not detected as command\")" \
 -eval "(assert (commandp 'py-delete-block-bol) nil \"py-delete-block-bol not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-clause-bol-p) nil \"py-beginning-of-clause-bol-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-clause-bol) nil \"py-beginning-of-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-clause-bol) nil \"py-end-of-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-mark-clause-bol) nil \"py-mark-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-copy-clause-bol) nil \"py-copy-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-kill-clause-bol) nil \"py-kill-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-delete-clause-bol) nil \"py-delete-clause-bol not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-block-or-clause-bol-p) nil \"py-beginning-of-block-or-clause-bol-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-block-or-clause-bol) nil \"py-beginning-of-block-or-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-block-or-clause-bol) nil \"py-end-of-block-or-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-mark-block-or-clause-bol) nil \"py-mark-block-or-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-copy-block-or-clause-bol) nil \"py-copy-block-or-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-kill-block-or-clause-bol) nil \"py-kill-block-or-clause-bol not detected as command\")" \
 -eval "(assert (commandp 'py-delete-block-or-clause-bol) nil \"py-delete-block-or-clause-bol not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-def-bol-p) nil \"py-beginning-of-def-bol-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-def-bol) nil \"py-beginning-of-def-bol not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-def-bol) nil \"py-end-of-def-bol not detected as command\")" \
 -eval "(assert (commandp 'py-mark-def-bol) nil \"py-mark-def-bol not detected as command\")" \
 -eval "(assert (commandp 'py-copy-def-bol) nil \"py-copy-def-bol not detected as command\")" \
 -eval "(assert (commandp 'py-kill-def-bol) nil \"py-kill-def-bol not detected as command\")" \
 -eval "(assert (commandp 'py-delete-def-bol) nil \"py-delete-def-bol not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-class-bol-p) nil \"py-beginning-of-class-bol-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-class-bol) nil \"py-beginning-of-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-class-bol) nil \"py-end-of-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-mark-class-bol) nil \"py-mark-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-copy-class-bol) nil \"py-copy-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-kill-class-bol) nil \"py-kill-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-delete-class-bol) nil \"py-delete-class-bol not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-def-or-class-bol-p) nil \"py-beginning-of-def-or-class-bol-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-def-or-class-bol) nil \"py-beginning-of-def-or-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-def-or-class-bol) nil \"py-end-of-def-or-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-mark-def-or-class-bol) nil \"py-mark-def-or-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-copy-def-or-class-bol) nil \"py-copy-def-or-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-kill-def-or-class-bol) nil \"py-kill-def-or-class-bol not detected as command\")" \
 -eval "(assert (commandp 'py-delete-def-or-class-bol) nil \"py-delete-def-or-class-bol not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-statement-bol-p) nil \"py-beginning-of-statement-bol-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-statement-bol) nil \"py-beginning-of-statement-bol not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-statement-bol) nil \"py-end-of-statement-bol not detected as command\")" \
 -eval "(assert (commandp 'py-mark-statement-bol) nil \"py-mark-statement-bol not detected as command\")" \
@@ -805,9 +727,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p 
 -eval "(assert (commandp 'py-execute-file-bpython-switch) nil \"py-execute-file-bpython-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-bpython-no-switch) nil \"py-execute-file-bpython-no-switch not detected as command\")" \
 -eval "(assert (commandp 'py-execute-file-bpython-dedicated) nil \"py-execute-file-bpython-dedicated not detected as command\")" \
--eval "(assert (functionp 'py--top-level-form-p) nil \"py-top-level-form-p not detected as function\")" \
--eval "(assert (commandp 'py-beginning-of-top-level-position) nil \"py-beginning-of-top-level-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-top-level-position) nil \"py-end-of-top-level-position not detected as command\")" \
 -eval "(assert (commandp 'py-comment-top-level) nil \"py-comment-top-level not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-top-level-p) nil \"py-beginning-of-top-level-p not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-top-level) nil \"py-beginning-of-top-level not detected as command\")" \
@@ -818,8 +737,6 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p 
 -eval "(assert (commandp 'py-delete-top-level) nil \"py-delete-top-level not detected as command\")" \
 -eval "(assert (commandp 'py-kill-top-level) nil \"py-kill-top-level not detected as command\")" \
 -eval "(assert (commandp 'py-execute-top-level) nil \"py-execute-top-level not detected as command\")" \
--eval "(assert (commandp 'py-beginning-of-minor-block-position) nil \"py-beginning-of-minor-block-position not detected as command\")" \
--eval "(assert (commandp 'py-end-of-minor-block-position) nil \"py-end-of-minor-block-position not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-minor-block) nil \"py-beginning-of-minor-block not detected as command\")" \
 -eval "(assert (commandp 'py-beginning-of-minor-block-lc) nil \"py-beginning-of-minor-block-lc not detected as command\")" \
 -eval "(assert (commandp 'py-end-of-minor-block) nil \"py-end-of-minor-block not detected as command\")" \
@@ -834,226 +751,9 @@ $EMACS -Q --batch --eval "(message (emacs-version))" --eval "(setq py-verbose-p 
 -eval "(assert (commandp 'py-set-symmetric-docstring-style) nil \"py-set-symmetric-docstring-style not detected as command\")" \
 -eval "(assert (commandp 'py-set-onetwo-docstring-style) nil \"py-set-onetwo-docstring-style not detected as command\")" \
 -eval "(assert (commandp 'py-down-minor-block-bol) nil \"py-down-minor-block-bol not detected as command\")" \
--eval "(assert (functionp 'py--font-lock-syntactic-face-function) nil \"py-font-lock-syntactic-face-function not detected function\")" \
 -eval "(setq enable-local-variables :all)" \
--eval "(assert (boundp 'py-version) nil \"py-version not a variable\")" \
--eval "(assert (boundp 'python-mode-modeline-display) nil \"python-mode-modeline-display not a variable\")" \
--eval "(assert (boundp 'py-indent-offset) nil \"py-indent-offset not a variable\")" \
--eval "(assert (boundp 'pdb-path) nil \"pdb-path not a variable\")" \
--eval "(assert (boundp 'py-verbose-p) nil \"py-verbose-p not a variable\")" \
--eval "(assert (boundp 'py-load-pymacs-p) nil \"py-load-pymacs-p not a variable\")" \
--eval "(assert (boundp 'py-smart-operator-mode-p) nil \"py-smart-operator-mode-p not a variable\")" \
--eval "(assert (boundp 'py-sexp-function) nil \"py-sexp-function not a variable\")" \
--eval "(assert (boundp 'py-autopair-mode) nil \"py-autopair-mode not a variable\")" \
--eval "(assert (boundp 'py-no-completion-calls-dabbrev-expand-p) nil \"py-no-completion-calls-dabbrev-expand-p not a variable\")" \
--eval "(assert (boundp 'py-indent-no-completion-p) nil \"py-indent-no-completion-p not a variable\")" \
--eval "(assert (boundp 'py-fontify-shell-buffer-p) nil \"py-fontify-shell-buffer-p not a variable\")" \
--eval "(assert (boundp 'py-modeline-display-full-path-p) nil \"py-modeline-display-full-path-p not a variable\")" \
--eval "(assert (boundp 'py-modeline-acronym-display-home-p) nil \"py-modeline-acronym-display-home-p not a variable\")" \
--eval "(assert (boundp 'py-install-directory) nil \"py-install-directory not a variable\")" \
--eval "(assert (boundp 'py-guess-py-install-directory-p) nil \"py-guess-py-install-directory-p not a variable\")" \
--eval "(assert (boundp 'py-extensions) nil \"py-extensions not a variable\")" \
--eval "(assert (boundp 'py-error) nil \"py-error not a variable\")" \
--eval "(assert (boundp 'py-hide-show-minor-mode-p) nil \"py-hide-show-minor-mode-p not a variable\")" \
--eval "(assert (boundp 'empty-comment-line-separates-paragraph-p) nil \"empty-comment-line-separates-paragraph-p not a variable\")" \
--eval "(assert (boundp 'py-org-cycle-p) nil \"py-org-cycle-p not a variable\")" \
--eval "(assert (boundp 'py-outline-minor-mode-p) nil \"py-outline-minor-mode-p not a variable\")" \
--eval "(assert (boundp 'py-outline-mode-keywords) nil \"py-outline-mode-keywords not a variable\")" \
--eval "(assert (boundp 'py-close-provides-newline) nil \"py-close-provides-newline not a variable\")" \
--eval "(assert (boundp 'py-dedent-keep-relative-column) nil \"py-dedent-keep-relative-column not a variable\")" \
--eval "(assert (boundp 'py-indent-honors-inline-comment) nil \"py-indent-honors-inline-comment not a variable\")" \
--eval "(assert (boundp 'py-closing-list-dedents-bos) nil \"py-closing-list-dedents-bos not a variable\")" \
--eval "(assert (boundp 'py-electric-colon-active-p) nil \"py-electric-colon-active-p not a variable\")" \
--eval "(assert (boundp 'py-electric-colon-greedy-p) nil \"py-electric-colon-greedy-p not a variable\")" \
--eval "(assert (boundp 'py-electric-colon-newline-and-indent-p) nil \"py-electric-colon-newline-and-indent-p not a variable\")" \
--eval "(assert (boundp 'py-electric-comment-p) nil \"py-electric-comment-p not a variable\")" \
--eval "(assert (boundp 'py-electric-comment-add-space-p) nil \"py-electric-comment-add-space-p not a variable\")" \
--eval "(assert (boundp 'py-mark-decorators) nil \"py-mark-decorators not a variable\")" \
--eval "(assert (boundp 'py-tab-indent) nil \"py-tab-indent not a variable\")" \
--eval "(assert (boundp 'py-complete-function) nil \"py-complete-function not a variable\")" \
--eval "(assert (boundp 'py-encoding-string) nil \"py-encoding-string not a variable\")" \
--eval "(assert (boundp 'py-shebang-startstring) nil \"py-shebang-startstring not a variable\")" \
--eval "(assert (boundp 'py-python-command-args) nil \"py-python-command-args not a variable\")" \
--eval "(assert (boundp 'py-jython-command-args) nil \"py-jython-command-args not a variable\")" \
--eval "(assert (boundp 'py-lhs-inbound-indent) nil \"py-lhs-inbound-indent not a variable\")" \
--eval "(assert (boundp 'py-continuation-offset) nil \"py-continuation-offset not a variable\")" \
--eval "(assert (boundp 'py-indent-tabs-mode) nil \"py-indent-tabs-mode not a variable\")" \
--eval "(assert (boundp 'py-smart-indentation) nil \"py-smart-indentation not a variable\")" \
--eval "(assert (boundp 'py-block-comment-prefix) nil \"py-block-comment-prefix not a variable\")" \
--eval "(assert (boundp 'py-indent-comments) nil \"py-indent-comments not a variable\")" \
--eval "(assert (boundp 'py-separator-char) nil \"py-separator-char not a variable\")" \
--eval "(assert (boundp 'py-custom-temp-directory) nil \"py-custom-temp-directory not a variable\")" \
--eval "(assert (boundp 'py-jump-on-exception) nil \"py-jump-on-exception not a variable\")" \
--eval "(assert (boundp 'py-ask-about-save) nil \"py-ask-about-save not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-do-tracking-p) nil \"py-pdbtrack-do-tracking-p not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-filename-mapping) nil \"py-pdbtrack-filename-mapping not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-minor-mode-string) nil \"py-pdbtrack-minor-mode-string not a variable\")" \
--eval "(assert (boundp 'py-import-check-point-max) nil \"py-import-check-point-max not a variable\")" \
--eval "(assert (boundp 'py-jython-packages) nil \"py-jython-packages not a variable\")" \
--eval "(assert (boundp 'py-current-defun-show) nil \"py-current-defun-show not a variable\")" \
--eval "(assert (boundp 'py-current-defun-delay) nil \"py-current-defun-delay not a variable\")" \
--eval "(assert (boundp 'py-honor-IPYTHONDIR-p) nil \"py-honor-IPYTHONDIR-p not a variable\")" \
--eval "(assert (boundp 'py-ipython-history) nil \"py-ipython-history not a variable\")" \
--eval "(assert (boundp 'py-honor-PYTHONHISTORY-p) nil \"py-honor-PYTHONHISTORY-p not a variable\")" \
--eval "(assert (boundp 'py-master-file) nil \"py-master-file not a variable\")" \
--eval "(assert (boundp 'py-pychecker-command) nil \"py-pychecker-command not a variable\")" \
--eval "(assert (boundp 'py-pychecker-command-args) nil \"py-pychecker-command-args not a variable\")" \
--eval "(assert (boundp 'py-pep8-command) nil \"py-pep8-command not a variable\")" \
--eval "(assert (boundp 'py-pep8-command-args) nil \"py-pep8-command-args not a variable\")" \
--eval "(assert (boundp 'py-pyflakespep8-command) nil \"py-pyflakespep8-command not a variable\")" \
--eval "(assert (boundp 'py-pep8-command) nil \"py-pep8-command not a variable\")" \
--eval "(assert (boundp 'py-pep8-command-args) nil \"py-pep8-command-args not a variable\")" \
--eval "(assert (boundp 'py-pyflakespep8-command-args) nil \"py-pyflakespep8-command-args not a variable\")" \
--eval "(assert (boundp 'py-pyflakes-command) nil \"py-pyflakes-command not a variable\")" \
--eval "(assert (boundp 'py-pyflakes-command-args) nil \"py-pyflakes-command-args not a variable\")" \
--eval "(assert (boundp 'py-pep8-command-args) nil \"py-pep8-command-args not a variable\")" \
--eval "(assert (boundp 'py-pylint-command) nil \"py-pylint-command not a variable\")" \
--eval "(assert (boundp 'py-pylint-command-args) nil \"py-pylint-command-args not a variable\")" \
--eval "(assert (boundp 'py-shell-input-prompt-1-regexp) nil \"py-shell-input-prompt-1-regexp not a variable\")" \
--eval "(assert (boundp 'py-shell-input-prompt-2-regexp) nil \"py-shell-input-prompt-2-regexp not a variable\")" \
--eval "(assert (boundp 'py-shell-prompt-read-only) nil \"py-shell-prompt-read-only not a variable\")" \
--eval "(assert (boundp 'py-switch-buffers-on-execute-p) nil \"py-switch-buffers-on-execute-p not a variable\")" \
--eval "(assert (boundp 'py-split-window-on-execute) nil \"py-split-window-on-execute not a variable\")" \
--eval "(assert (boundp 'py-split-windows-on-execute-function) nil \"py-split-windows-on-execute-function not a variable\")" \
--eval "(assert (boundp 'py-hide-show-keywords) nil \"py-hide-show-keywords not a variable\")" \
--eval "(assert (boundp 'py-hide-show-hide-docstrings) nil \"py-hide-show-hide-docstrings not a variable\")" \
--eval "(assert (boundp 'python-mode-hook) nil \"python-mode-hook not a variable\")" \
--eval "(assert (boundp 'py--imenu-create-index-p) nil \"py-imenu-create-index-p not a variable\")" \
--eval "(assert (boundp 'py-shell-name) nil \"py-shell-name not a variable\")" \
--eval "(assert (boundp 'py-shell-toggle-1) nil \"py-shell-toggle-1 not a variable\")" \
--eval "(assert (boundp 'py-shell-toggle-2) nil \"py-shell-toggle-2 not a variable\")" \
--eval "(assert (boundp 'py-match-paren-mode) nil \"py-match-paren-mode not a variable\")" \
--eval "(assert (boundp 'py-kill-empty-line) nil \"py-kill-empty-line not a variable\")" \
--eval "(assert (boundp 'py-remove-cwd-from-path) nil \"py-remove-cwd-from-path not a variable\")" \
--eval "(assert (boundp 'py-imenu-show-method-args-p) nil \"py-imenu-show-method-args-p not a variable\")" \
--eval "(assert (boundp 'py-history-filter-regexp) nil \"py-history-filter-regexp not a variable\")" \
--eval "(assert (boundp 'py-use-local-default) nil \"py-use-local-default not a variable\")" \
--eval "(assert (boundp 'py-shell-local-path) nil \"py-shell-local-path not a variable\")" \
--eval "(assert (boundp 'py-underscore-word-syntax-p) nil \"py-underscore-word-syntax-p not a variable\")" \
--eval "(assert (boundp 'py-edit-only-p) nil \"py-edit-only-p not a variable\")" \
--eval "(assert (boundp 'py-force-py-shell-name-p) nil \"py-force-py-shell-name-p not a variable\")" \
--eval "(assert (boundp 'python-mode-v5-behavior-p) nil \"python-mode-v5-behavior-p not a variable\")" \
--eval "(assert (boundp 'py-trailing-whitespace-smart-delete-p) nil \"py-trailing-whitespace-smart-delete-p not a variable\")" \
--eval "(assert (boundp 'py--warn-tmp-files-left-p) nil \"py-warn-tmp-files-left-p not a variable\")" \
--eval "(assert (boundp 'py-ipython-execute-delay) nil \"py-ipython-execute-delay not a variable\")" \
--eval "(assert (boundp 'strip-chars-before) nil \"strip-chars-before not a variable\")" \
--eval "(assert (boundp 'strip-chars-after) nil \"strip-chars-after not a variable\")" \
--eval "(assert (boundp 'py-docstring-style) nil \"py-docstring-style not a variable\")" \
--eval "(assert (boundp 'py-number-face) nil \"py-number-face not a variable\")" \
--eval "(assert (boundp 'py-XXX-tag-face) nil \"py-XXX-tag-face not a variable\")" \
--eval "(assert (boundp 'py-pseudo-keyword-face) nil \"py-pseudo-keyword-face not a variable\")" \
--eval "(assert (boundp 'py-variable-name-face) nil \"py-variable-name-face not a variable\")" \
--eval "(assert (boundp 'py-decorators-face) nil \"py-decorators-face not a variable\")" \
--eval "(assert (boundp 'py-builtins-face) nil \"py-builtins-face not a variable\")" \
--eval "(assert (boundp 'py-class-name-face) nil \"py-class-name-face not a variable\")" \
--eval "(assert (boundp 'py-exception-name-face) nil \"py-exception-name-face not a variable\")" \
--eval "(assert (boundp 'python-mode-message-string) nil \"python-mode-message-string not a variable\")" \
--eval "(assert (boundp 'py-local-command) nil \"py-local-command not a variable\")" \
--eval "(assert (boundp 'py-local-versioned-command) nil \"py-local-versioned-command not a variable\")" \
--eval "(assert (boundp 'py-shell-complete-debug) nil \"py-shell-complete-debug not a variable\")" \
--eval "(assert (boundp 'py-encoding-string-re) nil \"py-encoding-string-re not a variable\")" \
--eval "(assert (boundp 'symbol-definition-start-re) nil \"symbol-definition-start-re not a variable\")" \
--eval "(assert (boundp 'symbol-definition-start-re) nil \"symbol-definition-start-re not a variable\")" \
--eval "(assert (boundp 'py-shebang-regexp) nil \"py-shebang-regexp not a variable\")" \
--eval "(assert (boundp 'py-separator-char) nil \"py-separator-char not a variable\")" \
--eval "(assert (boundp 'py-temp-directory) nil \"py-temp-directory not a variable\")" \
--eval "(assert (boundp 'py-exec-command) nil \"py-exec-command not a variable\")" \
--eval "(assert (boundp 'py-which-bufname) nil \"py-which-bufname not a variable\")" \
--eval "(assert (boundp 'py-pychecker-history) nil \"py-pychecker-history not a variable\")" \
--eval "(assert (boundp 'py-pep8-history) nil \"py-pep8-history not a variable\")" \
--eval "(assert (boundp 'py-pyflakespep8-history) nil \"py-pyflakespep8-history not a variable\")" \
--eval "(assert (boundp 'py-pyflakes-history) nil \"py-pyflakes-history not a variable\")" \
--eval "(assert (boundp 'py-pylint-history) nil \"py-pylint-history not a variable\")" \
--eval "(assert (boundp 'ipython-de-input-prompt-regexp) nil \"ipython-de-input-prompt-regexp not a variable\")" \
--eval "(assert (boundp 'ipython-de-input-prompt-regexp) nil \"ipython-de-input-prompt-regexp not a variable\")" \
--eval "(assert (boundp 'ipython-de-output-prompt-regexp) nil \"ipython-de-output-prompt-regexp not a variable\")" \
--eval "(assert (boundp 'py-force-local-shell-p) nil \"py-force-local-shell-p not a variable\")" \
--eval "(assert (boundp 'py-bol-forms-last-indent) nil \"py-bol-forms-last-indent not a variable\")" \
--eval "(assert (boundp 'python-mode-syntax-table) nil \"python-mode-syntax-table not a variable\")" \
--eval "(assert (boundp 'eldoc-documentation-function) nil \"eldoc-documentation-function not a variable\")" \
--eval "(assert (boundp 'py-completion-last-window-configuration) nil \"py-completion-last-window-configuration not a variable\")" \
--eval "(assert (boundp 'py-shell-template) nil \"py-shell-template not a variable\")" \
--eval "(assert (boundp 'py-execute-directory) nil \"py-execute-directory not a variable\")" \
--eval "(assert (boundp 'py-use-current-dir-when-execute-p) nil \"py-use-current-dir-when-execute-p not a variable\")" \
--eval "(assert (boundp 'py-exception-buffer) nil \"py-exception-buffer not a variable\")" \
--eval "(assert (boundp 'py-output-buffer) nil \"py-output-buffer not a variable\")" \
--eval "(assert (boundp 'py-string-delim-re) nil \"py-string-delim-re not a variable\")" \
--eval "(assert (boundp 'py-labelled-re) nil \"py-labelled-re not a variable\")" \
--eval "(assert (boundp 'py-expression-skip-regexp) nil \"py-expression-skip-regexp not a variable\")" \
--eval "(assert (boundp 'py-expression-skip-chars) nil \"py-expression-skip-chars not a variable\")" \
--eval "(assert (boundp 'py-expression-re) nil \"py-expression-re not a variable\")" \
--eval "(assert (boundp 'py-not-expression-regexp) nil \"py-not-expression-regexp not a variable\")" \
--eval "(assert (boundp 'py-not-expression-chars) nil \"py-not-expression-chars not a variable\")" \
--eval "(assert (boundp 'py-not-expression-chars) nil \"py-not-expression-chars not a variable\")" \
--eval "(assert (boundp 'py-partial-expression-forward-chars) nil \"py-partial-expression-forward-chars not a variable\")" \
--eval "(assert (boundp 'py-partial-expression-backward-chars) nil \"py-partial-expression-backward-chars not a variable\")" \
--eval "(assert (boundp 'py-operator-regexp) nil \"py-operator-regexp not a variable\")" \
--eval "(assert (boundp 'py-assignment-regexp) nil \"py-assignment-regexp not a variable\")" \
--eval "(assert (boundp 'py-delimiter-regexp) nil \"py-delimiter-regexp not a variable\")" \
--eval "(assert (boundp 'py-line-number-offset) nil \"py-line-number-offset not a variable\")" \
--eval "(assert (boundp 'match-paren-no-use-syntax-pps) nil \"match-paren-no-use-syntax-pps not a variable\")" \
--eval "(assert (boundp 'py-traceback-line-re) nil \"py-traceback-line-re not a variable\")" \
--eval "(assert (boundp 'py-traceback-line-re) nil \"py-traceback-line-re not a variable\")" \
--eval "(assert (boundp 'python-mode-abbrev-table) nil \"python-mode-abbrev-table not a variable\")" \
--eval "(assert (boundp 'inferior-python-mode-abbrev-table) nil \"inferior-python-mode-abbrev-table not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-input-prompt) nil \"py-pdbtrack-input-prompt not a variable\")" \
--eval "(assert (boundp 'py-pydbtrack-input-prompt) nil \"py-pydbtrack-input-prompt not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-is-tracking-p) nil \"py-pdbtrack-is-tracking-p not a variable\")" \
--eval "(assert (boundp 'py-shell-mode-map) nil \"py-shell-mode-map not a variable\")" \
--eval "(assert (boundp 'py-shell-map) nil \"py-shell-map not a variable\")" \
--eval "(assert (boundp 'py-mode-map) nil \"py-mode-map not a variable\")" \
--eval "(assert (boundp 'python-font-lock-keywords) nil \"python-font-lock-keywords not a variable\")" \
--eval "(assert (boundp 'py-dotted-expression-syntax-table) nil \"py-dotted-expression-syntax-table not a variable\")" \
--eval "(assert (boundp 'jython-mode-hook) nil \"jython-mode-hook not a variable\")" \
--eval "(assert (boundp 'py-shell-hook) nil \"py-shell-hook not a variable\")" \
--eval "(assert (boundp 'ipython-completion-command-string) nil \"ipython-completion-command-string not a variable\")" \
--eval "(assert (boundp 'ipython0\.10-completion-command-string) nil \"ipython0\.10-completion-command-string not a variable\")" \
--eval "(assert (boundp 'ipython0\.11-completion-command-string) nil \"ipython0\.11-completion-command-string not a variable\")" \
--eval "(assert (boundp 'py-last-exeption-buffer) nil \"py-last-exeption-buffer not a variable\")" \
--eval "(assert (boundp 'py-imenu-class-regexp) nil \"py-imenu-class-regexp not a variable\")" \
--eval "(assert (boundp 'py-imenu-method-regexp) nil \"py-imenu-method-regexp not a variable\")" \
--eval "(assert (boundp 'py-imenu-method-no-arg-parens) nil \"py-imenu-method-no-arg-parens not a variable\")" \
--eval "(assert (boundp 'py-imenu-method-arg-parens) nil \"py-imenu-method-arg-parens not a variable\")" \
--eval "(assert (boundp 'py-imenu-generic-expression) nil \"py-imenu-generic-expression not a variable\")" \
--eval "(assert (boundp 'py-imenu-generic-regexp) nil \"py-imenu-generic-regexp not a variable\")" \
--eval "(assert (boundp 'py-imenu-generic-parens) nil \"py-imenu-generic-parens not a variable\")" \
--eval "(assert (boundp 'py-mode-output-map) nil \"py-mode-output-map not a variable\")" \
--eval "(assert (boundp 'py-menu) nil \"py-menu not a variable\")" \
--eval "(assert (boundp 'py-already-guessed-indent-offset) nil \"py-already-guessed-indent-offset not a variable\")" \
--eval "(assert (boundp 'python-mode-map) nil \"python-mode-map not a variable\")" \
--eval "(assert (boundp 'skeleton-further-elements) nil \"skeleton-further-elements not a variable\")" \
--eval "(assert (boundp 'virtualenv-workon-home) nil \"virtualenv-workon-home not a variable\")" \
--eval "(assert (boundp 'virtualenv-name) nil \"virtualenv-name not a variable\")" \
--eval "(assert (boundp 'python-mode-syntax-table) nil \"python-mode-syntax-table not a variable\")" \
--eval "(assert (boundp 'py-shell-template) nil \"py-shell-template not a variable\")" \
--eval "(assert (boundp 'py-block-closing-keywords-re) nil \"py-block-closing-keywords-re not a variable\")" \
--eval "(assert (boundp 'py-finally-re) nil \"py-finally-re not a variable\")" \
--eval "(assert (boundp 'py-except-re) nil \"py-except-re not a variable\")" \
--eval "(assert (boundp 'py-else-re) nil \"py-else-re not a variable\")" \
--eval "(assert (boundp 'py-no-outdent-re) nil \"py-no-outdent-re not a variable\")" \
--eval "(assert (boundp 'py-assignment-re) nil \"py-assignment-re not a variable\")" \
--eval "(assert (boundp 'py-block-re) nil \"py-block-re not a variable\")" \
--eval "(assert (boundp 'py-minor-block-re) nil \"py-minor-block-re not a variable\")" \
--eval "(assert (boundp 'py-try-block-re) nil \"py-try-block-re not a variable\")" \
--eval "(assert (boundp 'py-class-re) nil \"py-class-re not a variable\")" \
--eval "(assert (boundp 'py-def-or-class-re) nil \"py-def-or-class-re not a variable\")" \
--eval "(assert (boundp 'py-def-re) nil \"py-def-re not a variable\")" \
--eval "(assert (boundp 'py-block-or-clause-re) nil \"py-block-or-clause-re not a variable\")" \
--eval "(assert (boundp 'py-extended-block-or-clause-re) nil \"py-extended-block-or-clause-re not a variable\")" \
--eval "(assert (boundp 'py-clause-re) nil \"py-clause-re not a variable\")" \
--eval "(assert (boundp 'py-elif-re) nil \"py-elif-re not a variable\")" \
--eval "(assert (boundp 'py-if-re) nil \"py-if-re not a variable\")" \
--eval "(assert (boundp 'py-try-re) nil \"py-try-re not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-stack-entry-regexp) nil \"py-pdbtrack-stack-entry-regexp not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-input-prompt) nil \"py-pdbtrack-input-prompt not a variable\")" \
--eval "(assert (boundp 'py-pydbtrack-input-prompt) nil \"py-pydbtrack-input-prompt not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-marker-regexp-file-group) nil \"py-pdbtrack-marker-regexp-file-group not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-marker-regexp-line-group) nil \"py-pdbtrack-marker-regexp-line-group not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-marker-regexp-funcname-group) nil \"py-pdbtrack-marker-regexp-funcname-group not a variable\")" \
--eval "(assert (boundp 'py-pdbtrack-track-range) nil \"py-pdbtrack-track-range not a variable\")" \
--eval "(assert (boundp 'py-compilation-regexp-alist) nil \"py-compilation-regexp-alist not a variable\")" \
--eval "(assert (boundp 'py-font-lock-syntactic-keywords) nil \"py-font-lock-syntactic-keywords not a variable\")" \
--eval "(assert (boundp 'virtualenv-name) nil \"virtualenv-name not a variable\")" \
+--funcall opening-brace-on-builtins-lp-1400951-test \
+--funcall key-binding-tests \
 --funcall comment-inside-curly-braces-lp-1395076-test \
 --funcall py-execute-region-python3-no-switch-test \
 --funcall script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test \

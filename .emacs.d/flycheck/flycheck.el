@@ -208,6 +208,7 @@ attention to case differences."
     javascript-gjslint
     json-jsonlint
     less
+    luacheck
     lua
     perl
     perl-perlcritic
@@ -310,10 +311,7 @@ file.  See Info Node `(emacs)Specifying File Variables' for more
 information about file variables.")
 (put 'flycheck-checker 'safe-local-variable 'flycheck-registered-checker-p)
 
-(defcustom flycheck-locate-config-file-functions
-  '(flycheck-locate-config-file-absolute-path
-    flycheck-locate-config-file-ancestor-directories
-    flycheck-locate-config-file-home)
+(defcustom flycheck-locate-config-file-functions nil
   "Functions to locate syntax checker configuration files.
 
 Each function in this hook must accept two arguments: The value
@@ -350,7 +348,7 @@ future syntax checks of the buffer."
   :risky t
   :package-version '(flycheck . "0.22"))
 
-(defcustom flycheck-process-error-functions '(flycheck-add-overlay)
+(defcustom flycheck-process-error-functions nil
   "Functions to process errors.
 
 Each function in this hook must accept a single argument: A
@@ -869,6 +867,20 @@ Mode Conventions'), regardless of the value of this option."
   :risky t
   :package-version '(flycheck . "0.23"))
 
+;; Add built-in functions to our hooks, via `add-hook', to make sure that our
+;; functions are really present, even if the variable was implicitly defined by
+;; another call to `add-hook' that occurred before Flycheck was loaded.  See
+;; http://lists.gnu.org/archive/html/emacs-devel/2015-02/msg01271.html for why
+;; we don't initialize the hook variables right away.  We append our own
+;; functions, because a user likely expects that their functions come first,
+;; even if the added them before Flycheck was loaded.
+(dolist (hook (list #'flycheck-locate-config-file-absolute-path
+                    #'flycheck-locate-config-file-ancestor-directories
+                    #'flycheck-locate-config-file-home))
+  (add-hook 'flycheck-locate-config-file-functions hook 'append))
+
+(add-hook 'flycheck-process-error-functions #'flycheck-add-overlay 'append)
+
 
 ;;; Global Flycheck menu
 (defvar flycheck-mode-menu-map
@@ -966,8 +978,16 @@ to a number and return it.  Otherwise return nil."
 
 (defun flycheck-same-files-p (file-a file-b)
   "Determine whether FILE-A and FILE-B refer to the same file."
-  (string= (directory-file-name (expand-file-name file-a))
-           (directory-file-name (expand-file-name file-b))))
+  (let ((file-a (expand-file-name file-a))
+        (file-b (expand-file-name file-b)))
+    ;; We must resolve symbolic links here, since some syntax checker always
+    ;; output canonical file names with all symbolic links resolved.  However,
+    ;; we still do a simple path compassion first, to avoid the comparatively
+    ;; expensive file system call if possible.  See
+    ;; https://github.com/flycheck/flycheck/issues/561
+    (or (string= (directory-file-name file-a) (directory-file-name file-b))
+        (string= (directory-file-name (file-truename file-a))
+                 (directory-file-name (file-truename file-b))))))
 
 (defvar-local flycheck-temporaries nil
   "Temporary files and directories created by Flycheck.")
@@ -2009,8 +2029,6 @@ buffer manually.
   :init-value nil
   :keymap flycheck-mode-map
   :lighter flycheck-mode-line
-  :group 'flycheck
-  :require 'flycheck
   :after-hook (flycheck-buffer-automatically 'mode-enabled 'force-deferred)
   (cond
    (flycheck-mode
@@ -2140,9 +2158,13 @@ buffer-local value of `flycheck-disabled-checkers'."
       ;; We must use `remq' instead of `delq', because we must _not_ modify the
       ;; list.  Otherwise we could potentially modify the global default value,
       ;; in case the list is the global default.
-      (setq flycheck-disabled-checkers (remq checker flycheck-disabled-checkers))
+      (when (memq checker flycheck-disabled-checkers)
+        (setq flycheck-disabled-checkers
+              (remq checker flycheck-disabled-checkers))
+        (flycheck-buffer))
     (unless (memq checker flycheck-disabled-checkers)
-      (push checker flycheck-disabled-checkers))))
+      (push checker flycheck-disabled-checkers)
+      (flycheck-buffer))))
 
 
 ;;; Syntax checks for the current buffer
@@ -2512,8 +2534,13 @@ returns t."
 (define-globalized-minor-mode global-flycheck-mode flycheck-mode
   flycheck-mode-on-safe
   :init-value nil
-  :group 'flycheck
-  :require 'flycheck)
+  ;; Do not expose Global Flycheck Mode on customize interface, because the
+  ;; interaction between package.el and customize is currently broken.  See
+  ;; https://github.com/flycheck/flycheck/issues/595
+
+  ;; :require 'flycheck :group
+  ;; 'flycheck
+  )
 
 (defun flycheck-global-teardown ()
   "Teardown Flycheck in all buffers.
@@ -3743,10 +3770,13 @@ non-nil."
 
 (defun flycheck-display-error-at-point ()
   "Display the all error messages at point in minibuffer."
-  (flycheck-cancel-error-display-error-at-point-timer)
-  (when flycheck-mode
-    (-when-let (errors (flycheck-overlay-errors-at (point)))
-      (flycheck-display-errors errors))))
+  ;; This function runs from a timer, so we must take care to not ignore any
+  ;; errors
+  (with-demoted-errors "Flycheck error display error: %s"
+    (flycheck-cancel-error-display-error-at-point-timer)
+    (when flycheck-mode
+      (-when-let (errors (flycheck-overlay-errors-at (point)))
+        (flycheck-display-errors errors)))))
 
 (defun flycheck-display-error-at-point-soon ()
   "Display the first error message at point in minibuffer delayed."
@@ -5648,8 +5678,9 @@ To initialize packages, call `package-initialize' before
 byte-compiling the file to check.
 
 When nil, never initialize packages.  When `auto', initialize
-packages only when checking files from `user-emacs-directory'.
-For any other non-nil value, always initialize packages."
+packages only when checking `user-init-file' or files from
+`user-emacs-directory'.  For any other non-nil value, always
+initialize packages."
   :type '(choice (const :tag "Do not initialize packages" nil)
                  (const :tag "Initialize packages for configuration only" auto)
                  (const :tag "Always initialize packages" t))
@@ -5666,7 +5697,14 @@ For any other non-nil value, always initialize packages."
   "Option VALUE filter for `flycheck-emacs-lisp-initialize-packages'."
   (let ((shall-initialize
          (if (eq value 'auto)
-             (flycheck-in-user-emacs-directory-p (buffer-file-name))
+             (or (flycheck-in-user-emacs-directory-p (buffer-file-name))
+                 ;; `user-init-file' is nil in non-interactive sessions.  Now,
+                 ;; no user would possibly use Flycheck in a non-interactive
+                 ;; session, but our unit tests run non-interactively, so we
+                 ;; have to handle this case anyway
+                 (and user-init-file
+                      (flycheck-same-files-p (buffer-file-name)
+                                             user-init-file)))
            value)))
     (when shall-initialize
       ;; If packages shall be initialized, return the corresponding form,
@@ -5931,7 +5969,7 @@ See URL `https://github.com/golang/lint'."
                   go-build go-test go-errcheck))
 
 (flycheck-def-option-var flycheck-go-vet-print-functions nil go-vet
-  "A comma-separated list of print-like functions for `go tool vet'.
+  "A list of print-like functions for `go tool vet'.
 
 Go vet will check these functions for format string problems and
 issues, such as a mismatch between the number of formats used,
@@ -6079,7 +6117,17 @@ See URL `http://handlebarsjs.com/'."
           "Error: Parse error on line " line ":" (optional "\r") "\n"
           (zero-or-more not-newline) "\n" (zero-or-more not-newline) "\n"
           (message) line-end))
-  :modes (handlebars-mode handlebars-sgml-mode))
+  :modes (handlebars-mode handlebars-sgml-mode web-mode)
+  :predicate
+  (lambda ()
+    (if (eq major-mode 'web-mode)
+        ;; Check if this is a handlebars file since web-mode does not store the
+        ;; non-canonical engine name
+        (let* ((regexp-alist (bound-and-true-p web-mode-engine-file-regexps))
+               (pattern (cdr (assoc "handlebars" regexp-alist))))
+          (and pattern (buffer-file-name)
+               (string-match-p pattern (buffer-file-name))))
+      t)))
 
 (defconst flycheck-haskell-module-re
   (rx line-start (zero-or-more (or "\n" (any space)))
@@ -6329,6 +6377,28 @@ See URL `http://lesscss.org'."
           ", column " column ":"
           line-end))
   :modes less-css-mode)
+
+(flycheck-def-config-file-var flycheck-luacheckrc luacheck ".luacheckrc"
+  :safe #'stringp
+  :package-version '(flycheck . "0.23"))
+
+(flycheck-define-checker luacheck
+  "A Lua syntax checker using luacheck.
+
+See URL `https://github.com/mpeterv/luacheck'."
+  :command ("luacheck"
+            (config-file "--config" flycheck-luacheckrc)
+            "--formatter" "plain"
+            "--codes"                   ; Show warning codes
+            "--no-color"
+            source)
+  :error-patterns
+  ((warning line-start (file-name)
+            ":" line ":" column ": (" (id (and "W" (one-or-more digit)))
+            ") " (message) line-end)
+   (error line-start (file-name)
+          ":" line ":" column ":" (message) line-end))
+  :modes lua-mode)
 
 (flycheck-define-checker lua
   "A Lua syntax checker using the Lua compiler.
@@ -7100,7 +7170,7 @@ See URL `http://www.zsh.org/'."
   :predicate (lambda () (eq sh-shell 'zsh))
   :next-checkers ((warning . sh-shellcheck)))
 
-(defconst flycheck-shellcheck-supported-shells '(bash ksh88 sh zsh)
+(defconst flycheck-shellcheck-supported-shells '(bash ksh88 sh)
   "Shells supported by ShellCheck.")
 
 (flycheck-def-option-var flycheck-shellcheck-excluded-warnings nil sh-shellcheck

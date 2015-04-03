@@ -1,6 +1,6 @@
 ;;; helm-org.el --- Helm for org headlines and keywords completion -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2014 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,6 +30,9 @@ This reflect fontification in helm-buffer when non--nil.
 NOTE: This will be slow on large org buffers."
   :group 'helm-org
   :type 'boolean)
+
+;; Internal
+(defvar helm-org-headings--nofilename nil)
 
 ;;; Org capture templates
 ;;
@@ -62,11 +65,9 @@ NOTE: This will be slow on large org buffers."
 
 (defun helm-org-insert-link-to-heading-at-marker (marker)
   (with-current-buffer (marker-buffer marker)
-    (goto-char (marker-position marker))
-    (let ((heading-name (nth 4 (org-heading-components)))
-          (file-name buffer-file-name))
-      (message heading-name)
-      (message file-name)
+    (let ((heading-name (save-excursion (goto-char (marker-position marker))
+                                        (nth 4 (org-heading-components))))
+          (file-name (buffer-file-name)))
       (with-helm-current-buffer
         (org-insert-link
          file-name (concat "file:" file-name "::*" heading-name))))))
@@ -85,20 +86,30 @@ NOTE: This will be slow on large org buffers."
   (apply #'append
    (mapcar (lambda (filename)
              (helm-get-org-candidates-in-file
-              filename min-depth max-depth helm-org-headings-fontify))
+              filename min-depth max-depth
+              helm-org-headings-fontify
+              helm-org-headings--nofilename))
            filenames)))
 
 (defun helm-get-org-candidates-in-file (filename min-depth max-depth
-                                        &optional fontify)
+                                        &optional fontify nofname)
   (with-current-buffer (find-file-noselect filename)
     (and fontify (jit-lock-fontify-now))
     (let ((match-fn (if fontify 'match-string 'match-string-no-properties)))
       (save-excursion
         (goto-char (point-min))
-        (cl-loop while (re-search-forward org-complex-heading-regexp nil t)
-              if (let ((num-stars (length (match-string-no-properties 1))))
-                   (and (>= num-stars min-depth) (<= num-stars max-depth)))
-              collect `(,(funcall match-fn 0) . ,(point-marker)))))))
+        (cl-loop with width = (window-width)
+                 while (re-search-forward org-complex-heading-regexp nil t)
+                 if (let ((num-stars (length (match-string-no-properties 1))))
+                      (and (>= num-stars min-depth) (<= num-stars max-depth)))
+                 collect `(,(let ((heading (funcall match-fn 4))
+                                  (file (unless nofname
+                                          (concat (helm-basename filename) ":")))
+                                  (level (length (match-string-no-properties 1))))
+                              (org-format-outline-path
+                               (append (org-get-outline-path t level heading)
+                                       (list heading)) width file))
+                           . ,(point-marker)))))))
 
 ;;;###autoload
 (defun helm-org-agenda-files-headings ()

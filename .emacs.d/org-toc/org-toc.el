@@ -29,11 +29,9 @@
 
 ;; After installation put into your .emacs file something like
 
-;; (eval-after-load "org-toc-autoloads"
-;;   '(progn
-;;      (if (require 'org-toc nil t)
-;;          (add-hook 'org-mode-hook 'org-toc-enable)
-;;        (warn "org-toc not found"))))
+;; (if (require 'org-toc nil t)
+;;     (add-hook 'org-mode-hook 'org-toc-enable)
+;;   (warn "org-toc not found"))
 
 ;; And every time you'll be saving an org file, the first headline with a :TOC:
 ;; tag will be updated with the current table of contents.
@@ -280,5 +278,6 @@ following tag formats:
 ;; compile-command: "emacs -batch -l ert -l *.el -f ert-run-tests-batch-and-exit && emacs -batch -f batch-byte-compile *.el 2>&1 | sed -n '/Warning\|Error/p' | xargs -r ls"
 ;; End:
 
+(provide 'org-toc-2)
 (provide 'org-toc)
 ;;; org-toc.el ends here

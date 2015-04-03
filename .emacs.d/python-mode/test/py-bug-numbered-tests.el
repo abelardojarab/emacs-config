@@ -70,6 +70,11 @@
 
 (setq bug-numbered-tests
       (list
+       'py-shell-invoking-python-lp-835151-test
+       'py-shell-invoking-ipython-lp-835151-test
+       'py-shell-invoking-python3-lp-835151-test
+       'py-shell-invoking-python2-lp-835151-test
+       'py-shell-invoking-jython-lp-835151-test
        'auto-indent-lp-134258-test
        'py-execute-buffer-ipython-lp-1252643-test
        'py-empty-line-closes-p-lp-1235324-test
@@ -227,14 +232,6 @@
        'py-indent-comments-nil-ignored-lp-958721-test
        'broken-font-locking-lp-961231-test
        'regression-in-py-execute-region-lp-962227-test
-
-       'py-shell-invoking-python-lp-835151-test
-       'py-shell-invoking-ipython-lp-835151-test
-       'py-shell-invoking-python3-lp-835151-test
-       'py-shell-invoking-python2-lp-835151-test
-       'py-shell-invoking-python2.7-lp-835151-test
-       'py-shell-invoking-jython-lp-835151-test
-
        'py-mark-block-clause-misbehave-lp-949310-test
        'py-mark-clause-misbehave-lp-949310-test
        'py-mark-block-misbehave-lp-949310-test
@@ -339,95 +336,6 @@ def main(argv):
 	(assert (eq (buffer-size) 233) nil "sexp-commands-lp-328778-test #3 failed")
       (message "%s" "sexp-commands-lp-328778-test #3 passed"))))
 
-(defun nested-dictionaries-indent-lp-328791-test (&optional arg)
-  "With ARG greater 1 keep test buffer open.
-
-If no `load-branch-function' is specified, make sure the appropriate branch is loaded. Otherwise default python-mode will be checked. "
-  (interactive "p")
-  (let ((teststring "
-
-# hanging
-asdf = {
-    'a':{
-         'b':3,
-         'c':4
-        }
-    }
-
-# closing
-asdf = {
-    'a':{
-        'b':3,
-        'c':4
-    }
-}
-
-data = {
-    'key':
-    {
-        'objlist': [
-            {
-                'pk': 1,
-                'name': 'first',
-            },
-            {
-                'pk': 2,
-                'name': 'second',
-            }
-        ]
-    }
-}
-
-"))
-    (py-bug-tests-intern 'nested-dictionaries-indent-lp-328791-base arg teststring)))
-
-(defun nested-dictionaries-indent-lp-328791-base (arg)
-  (let ((py-indent-honors-multiline-listing t)
-        py-closing-list-dedents-bos)
-    (goto-char (point-min))
-    (search-forward "'a':{")
-    (or
-	(assert (eq 4 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #1 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #1 passed"))
-    (search-forward "}")
-    (or
-	(assert (eq 8 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #2 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #2 passed"))
-    (search-forward "}")
-    (or
-	(assert (eq 4 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #3 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #3 passed"))
-
-    ;; py-closing-list-dedents-bos
-    (setq py-closing-list-dedents-bos t)
-    (search-forward "'a':{")
-    (or
-	(assert (eq 4 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #4 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #4 passed"))
-    (search-forward "}")
-    (or
-	(assert (eq 4 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #5 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #5 passed"))
-    (search-forward "}")
-    (or
-	(assert (eq 0 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #6 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #6 passed"))
-    (search-forward "}" nil nil 2)
-    (or
-	(assert (eq 12 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #7 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #7 passed"))
-    (search-forward "]")
-    (or
-	(assert (eq 8 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #8 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #8 passed"))
-    (search-forward "}")
-    (or
-	(assert (eq 4 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #9 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #9 passed"))
-    (search-forward "}")
-    (or
-	(assert (eq 0 (py-compute-indentation)) nil "nested-dictionaries-indent-lp-328791-test #10 failed")
-      (message "%s" "nested-dictionaries-indent-lp-328791-test #10 passed"))))
 
 (defun mark-block-region-lp-328806-test (&optional arg)
   "With ARG greater 1 keep test buffer open.
@@ -452,31 +360,6 @@ If no `load-branch-function' is specified, make sure the appropriate branch is l
   (forward-line -2)
   (py-mark-block)
   (assert (< (region-beginning) (region-end)) nil "mark-block-region-lp-328806-test failed!"))
-
-(defun flexible-indentation-lp-328842-test (&optional arg)
-  "With ARG greater 1 keep test buffer open.
-If no `load-branch-function' is specified, make sure the appropriate branch is loaded. Otherwise default python-mode will be checked."
-  (interactive "p")
-  (let ((teststring "
-\(long, sequence, of_items,
- that, needs, to_be, wrapped) = input_list
-
-packed_entry = (long, sequence, of_items,
-that, needs, to_be, wrapped)
-
-\( whitespaced, long, sequence, of_items,
-    that, needs, to_be, wrapped) = input_list
-"))
-    (py-bug-tests-intern 'flexible-indentation-lp-328842-base arg teststring)))
-
-(defun flexible-indentation-lp-328842-base (arg)
-  (let ((py-indent-honors-multiline-listing t))
-    (goto-char 33)
-    (assert (eq 1 (py-compute-indentation)) nil "flexible-indentation-lp-328842-test failed")
-    (goto-char 115)
-    (assert (eq 16 (py-compute-indentation)) nil "flexible-indentation-lp-328842-test failed")
-    (goto-char 202)
-    (assert (eq 2 (py-compute-indentation)) nil "flexible-indentation-lp-328842-test failed")))
 
 (defun py-current-defun-lp-328846-test (&optional arg)
   "With ARG greater 1 keep test buffer open.
@@ -695,6 +578,8 @@ If no `load-branch-function' is specified, make sure the appropriate branch is l
     (py-bug-tests-intern 'inbound-indentation-multiline-assignment-lp-629916 arg teststring)))
 
 (defun inbound-indentation-multiline-assignment-lp-629916 ()
+  (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer)) 
   (let ((py-indent-honors-multiline-listing t))
     (goto-char 33)
     (assert (eq 4 (py-compute-indentation)) nil "inbound-indentation-multiline-assignment-lp-629916-test #1 failed")
@@ -2230,8 +2115,6 @@ from __future__ import absolute_import
     (py-bug-tests-intern 'automatic-indentation-is-broken-lp-889643-base arg teststring)))
 
 (defun automatic-indentation-is-broken-lp-889643-base (arg)
-  ;; (if (string-match "components" (find-lisp-object-file-name 'python-mode 'python-mode))
-  ;; (assert (eq (key-binding (kbd "RET")) 'py-newline-and-indent) nil "automatic-indentation-is-broken-lp-889643-test failed")
   (assert (eq (key-binding (kbd "RET")) 'py-newline-and-indent) nil "automatic-indentation-is-broken-lp-889643-test failed")
   )
 
@@ -2450,6 +2333,18 @@ I am using version 6.0.4
   (goto-char (point-max))
   (assert (search-backward "py-shell-name: ipython")  nil "py-shell-invoking-ipython-lp-835151-test failed"))
 
+(defun py-shell-invoking-jython-lp-835151-test (&optional arg)
+  (interactive "p")
+  (let ((teststring "print(\"py-shell-name: jython\")"))
+    (py-bug-tests-intern 'py-shell-invoking-jython-lp-835151-base arg teststring)))
+
+(defun py-shell-invoking-jython-lp-835151-base (arg)
+  (setq py-shell-name "jython")
+  (py-execute-buffer)
+  (set-buffer py-buffer-name)
+  (goto-char (point-max))
+  (assert (search-backward "py-shell-name: jython")  nil "py-shell-invoking-jython-lp-835151-test failed"))
+
 (defun py-shell-invoking-python3-lp-835151-test (&optional arg)
   (interactive "p")
   (let ((teststring "print(\"py-shell-name: python3\")"))
@@ -2646,22 +2541,6 @@ foo, bar = toothpick
   (goto-char 50)
   (assert (eq (get-char-property (point) 'face) 'py-variable-name-face) nil "tuple-unpacking-highlighted-incorrectly-lp-961496-test failed"))
 
-(defun script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test (&optional arg)
-  (interactive "p")
-  (let ((teststring (concat py-test-shebang "
-# -*- coding: utf-8 -*-
-print(\"I'm the script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test\")
-")))
-    (py-bug-tests-intern 'script-buffer-appears-instead-of-python-shell-buffer-lp-957561-base arg teststring)))
-
-(defun script-buffer-appears-instead-of-python-shell-buffer-lp-957561-base (arg)
-  (let (py-switch-buffers-on-execute-p
-        (py-split-window-on-execute t))
-    (delete-other-windows)
-    (ipython)
-    (sit-for 0.1)
-    (assert (and (py-execute-buffer-ipython) (set-buffer "script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test") (not (window-full-height-p))) nil "script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test failed")))
-
 (defun new-problem-with-py-temp-directory-lp-965762-test (&optional arg)
   (interactive "p")
   (let ((teststring (concat py-test-shebang "
@@ -2700,14 +2579,15 @@ print(myobj.range(10))
     (py-bug-tests-intern 'another-broken-font-locking-lp-961231-base arg teststring)))
 
 (defun another-broken-font-locking-lp-961231-base (arg)
-  (when py-debug-p (switch-to-buffer (current-buffer)))
-  (font-lock-fontify-buffer)
+  (goto-char 120)
+  (sit-for 0.1)
+  (assert (not (get-char-property (point) 'face)) nil "another-broken-font-locking-lp-961231-test #2 failed")
   (goto-char 124)
   (sit-for 0.1)
-  (assert (eq (get-char-property (point) 'face) 'py-builtins-face) nil "another-broken-font-locking-lp-961231-test #1 failed")
+  (assert (eq (get-char-property (point) 'face) 'py-builtins-face) nil "another-broken-font-locking-lp-961231-test #2 failed")
   (goto-char 197)
   (sit-for 0.2)
-  (assert (eq (get-char-property (point) 'face) nil) nil "another-broken-font-locking-lp-961231-test #2 failed"))
+  (assert (eq (get-char-property (point) 'face) nil) nil "another-broken-font-locking-lp-961231-test #3 failed"))
 
 (defun temp-file-stored-in-python-script-directory-lp-958987-test (&optional arg)
   (interactive "p")
@@ -2998,7 +2878,8 @@ ex
   (when (buffer-live-p (get-buffer py-python-completions))
     (kill-buffer py-python-completions))
   (goto-char 51)
-  (ipython-complete)
+  ;; (ipython-complete)
+  (py-indent-or-complete)
   (set-buffer "*Python Completions*")
   (sit-for 0.1 t)
   (assert (search-forward "except") nil "completion-fails-in-python-script-r989-lp-1004613-test failed"))
@@ -5499,7 +5380,7 @@ def foo():
 
 \"\"\"Some docstring.\"\"\"
 
-__version__ = \"$Revision: 1.54 $\"
+__version__ = \"$Revision: 1.59 $\"
 
 "))
   (py-bug-tests-intern 'python-mode-very-slow-lp-1107037-base arg teststring)))
@@ -5923,7 +5804,8 @@ inode, start_no, end_no)
   (py-bug-tests-intern 'from-within-py-shell-call-another-instance-lp-1169687-base arg teststring)))
 
 (defun from-within-py-shell-call-another-instance-lp-1169687-base (arg)
-    (let ((py-split-window-on-execute t)
+    (let ((py-shell-name "python")
+	  (py-split-window-on-execute t)
           (py-switch-buffers-on-execute-p t))
     (py-shell)
     (sit-for 0.1 t)
@@ -6751,6 +6633,21 @@ def foo():
 (defun comment-inside-curly-braces-lp-1395076-base (arg)
   (goto-char 102)
   (assert (eq 8 (py-compute-indentation)) nil "comment-inside-curly-braces-lp-1395076-test failed"))
+
+
+(defun opening-brace-on-builtins-lp-1400951-test (&optional arg)
+  (interactive "p")
+   (let ((teststring "#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+print(sorted(range()))
+"))
+  (py-bug-tests-intern 'opening-brace-on-builtins-lp-1400951-base arg teststring)))
+
+(defun opening-brace-on-builtins-lp-1400951-base (arg)
+  (goto-char 53)
+  (assert (not (get-char-property (point) 'face)) nil "opening-brace-on-builtins-lp-1400951-test #1 failed")
+  (goto-char 60)
+  (assert (not (get-char-property (point) 'face)) nil "opening-brace-on-builtins-lp-1400951-test #2 failed"))
 
 
 (provide 'py-bug-numbered-tests)

@@ -1,6 +1,6 @@
 ;;; helm-help.el --- Help messages for Helm. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2014 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -35,25 +35,26 @@
   :type 'string)
 
 (defvar helm-help--string-list '(helm-help-message
-                                helm-buffer-help-message
-                                helm-ff-help-message
-                                helm-read-file-name-help-message
-                                helm-generic-file-help-message
-                                helm-grep-help-message
-                                helm-pdfgrep-help-message
-                                helm-etags-help-message
-                                helm-ucs-help-message
-                                helm-bookmark-help-message
-                                helm-esh-help-message
-                                helm-buffers-ido-virtual-help-message
-                                helm-moccur-help-message
-                                helm-top-help-message
-                                helm-apt-help-message
-                                helm-el-package-help-message
-                                helm-M-x-help-message
-                                helm-imenu-help-message
-                                helm-colors-help-message
-                                helm-semantic-help-message))
+                                 helm-buffer-help-message
+                                 helm-ff-help-message
+                                 helm-read-file-name-help-message
+                                 helm-generic-file-help-message
+                                 helm-grep-help-message
+                                 helm-pdfgrep-help-message
+                                 helm-etags-help-message
+                                 helm-ucs-help-message
+                                 helm-bookmark-help-message
+                                 helm-esh-help-message
+                                 helm-buffers-ido-virtual-help-message
+                                 helm-moccur-help-message
+                                 helm-top-help-message
+                                 helm-apt-help-message
+                                 helm-el-package-help-message
+                                 helm-M-x-help-message
+                                 helm-imenu-help-message
+                                 helm-colors-help-message
+                                 helm-semantic-help-message
+                                 helm-kmacro-help-message))
 
 
 ;;;###autoload
@@ -74,10 +75,11 @@ Find here the documentation of all sources actually documented."
             do (if (functionp str)
                    (insert (funcall str))
                  (insert str)))))
-  (helm :sources (helm-source-org-headings-for-files
-                  (list helm-documentation-file))
-        :candidate-number-limit 99999
-        :buffer "*helm documentation*"))
+  (let ((helm-org-headings--nofilename t))
+    (helm :sources (helm-source-org-headings-for-files
+                    (list helm-documentation-file))
+          :candidate-number-limit 99999
+          :buffer "*helm documentation*")))
 
 ;;; Global help message - Used by `helm-help'
 ;;
@@ -182,13 +184,15 @@ text to be displayed in BUFNAME."
 
 (defun helm-help-event-loop ()
   (let ((prompt (propertize
-                 "[SPC,C-v,down,next:NextPage  b,M-v,up,prior:PrevPage q:Quit]"
+                 "[SPC,C-v,down,next:NextPage  b,M-v,up,prior:PrevPage C-s/r:Isearch q:Quit]"
                  'face 'helm-helper))
         scroll-error-top-bottom)
     (cl-loop for event = (read-key prompt) do
              (cl-case event
                ((?\C-v ? down next) (helm-help-scroll-up helm-scroll-amount))
                ((?\M-v ?b up prior) (helm-help-scroll-down helm-scroll-amount))
+               (?\C-s (isearch-forward))
+               (?\C-r (isearch-backward))
                (?q (cl-return))
                (t (ignore))))))
 
@@ -196,15 +200,16 @@ text to be displayed in BUFNAME."
 (defun helm-help ()
   "Help of `helm'."
   (interactive)
-  (save-selected-window
-    (helm-help-internal
-     "*Helm Help*"
-     (lambda ()
-       (insert (substitute-command-keys
-                (helm-interpret-value (or (assoc-default
-                                           'help-message
-                                           (helm-get-current-source))
-                                          helm-help-message))))))))
+  (with-helm-alive-p
+    (save-selected-window
+      (helm-help-internal
+       "*Helm Help*"
+       (lambda ()
+         (insert (substitute-command-keys
+                  (helm-interpret-value (or (assoc-default
+                                             'help-message
+                                             (helm-get-current-source))
+                                            helm-help-message)))))))))
 
 ;;; `helm-buffer-list' help
 ;;
@@ -241,7 +246,7 @@ If you prefix the beginning of pattern with \"/\" the match will occur on direct
 of buffer, it is interesting to narrow down to one directory for example, subsequent string
 entered after a space will match on buffer-name only.
 Note that negation is not supported for matching on buffer-file-name.
-You can't cumulate both major-mode matching AND directory matching, choose one or the other.
+You can specify more than one directory starting from helm v1.6.8
  
 **** Fuzzy matching:
 
@@ -402,6 +407,26 @@ On completion:
 - target starts by ~/           => insert abbreviate file name.
 - target starts by / or [a-z]:/ => insert full path.
 - otherwise                     => insert relative file name.
+
+*** Using wildcard to select multiple files
+
+Use of wilcard is supported to give a set of files to an action:
+
+e.g
+You can copy all the files with \".el\" extension by using \"*.el\"
+and then run your copy action.
+
+You can do the same but with \"**.el\" (note the two stars),
+this will select recursively all \".el\" files under current directory.
+
+NOTE: When using an action that involve an external backend (e.g grep), using \"**\"
+is not advised (even if it works fine) because it will be slower to select all your files,
+you have better time letting the backend doing it, it will be faster.
+However, if you know you have not many files it is reasonable to use this,
+also using not recursive wilcard (e.g \"*.el\") is perfectly fine for this.
+
+This feature (\"**\") is activated by default with the option `helm-file-globstar'.
+The directory selection with \"**foo/\" like bash shopt globstar option is not supported yet.
 
 \n** Specific commands for `helm-find-files':\n
 \\<helm-find-files-map>
@@ -798,7 +823,42 @@ the command is called once for each file like this:
   "\n* Helm Moccur\n
 ** Helm Moccur tips:
 
+*** Matching
 Multiple regexp matching is allowed, just enter a space to separate your regexps.
+
+Matching empty lines is supported with the regexp \"^$\", you will get the results
+with only the buffer-name and the line number, you can of course save and edit these
+results.
+
+*** Jump to the corresponding line in the searched buffer
+You can do this with `C-j' (persistent-action), to do it repetitively
+you can use `C-<up>' and `C-<down>' or enable `helm-follow-mode' with `C-c C-f'.
+
+*** Saving results
+Same as with helm-grep, you can save the results with `C-x C-s'.
+Of course if you don't save your results, you can get back your session
+with `helm-resume'.
+
+*** Refreshing the resumed session.
+When the buffer(s) where you ran helm-(m)occur have been modified, you will be
+warned of this with the buffer flashing to red, you can refresh the buffer by running
+`C-c C-u'.
+This can be done automatically by customizing `helm-moccur-auto-update-on-resume'.
+
+*** Refreshing a saved buffer
+Just hit `g' to update your buffer.
+
+*** Edit a saved buffer
+
+To do so you have to install wgrep
+https://github.com/mhayashi1120/Emacs-wgrep
+and then:
+
+1) C-c C-p to edit the buffer(s).
+2) C-x C-s to save your changes.
+
+Tip: Use the excellent iedit https://github.com/tsdh/iedit
+to modify occurences in your buffer.
 
 \n** Specific commands for Helm Moccur:\n
 \\<helm-moccur-map>
@@ -1469,11 +1529,6 @@ HELM-ATTRIBUTE should be a symbol."
   `re-search-forward'. This attribute is meant to be used with
   (candidates . helm-candidates-in-buffer) or
   (candidates-in-buffer) in short.")
-
-(helm-document-attribute 'search-from-end "optional"
-  "  Make `helm-candidates-in-buffer' search from the end of buffer.
-  If this attribute is specified, `helm-candidates-in-buffer'
-  uses `re-search-backward' instead.")
 
 (helm-document-attribute 'get-line "optional"
   "  A function like `buffer-substring-no-properties' or `buffer-substring'.

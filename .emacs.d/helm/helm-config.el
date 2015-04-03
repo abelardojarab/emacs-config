@@ -1,6 +1,6 @@
 ;;; helm-config.el --- Applications library for `helm.el' -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2014 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -77,9 +77,6 @@
     (define-key map (kbd "l")         'helm-locate)
     (define-key map (kbd "s")         'helm-surfraw)
     (define-key map (kbd "r")         'helm-regexp)
-    (define-key map (kbd "w")         'helm-w3m-bookmarks)
-    (define-key map (kbd "x")         'helm-firefox-bookmarks)
-    (define-key map (kbd "#")         'helm-emms)
     (define-key map (kbd "m")         'helm-man-woman)
     (define-key map (kbd "t")         'helm-top)
     (define-key map (kbd "/")         'helm-find)
@@ -90,7 +87,7 @@
     (define-key map (kbd "M-y")       'helm-show-kill-ring)
     (define-key map (kbd "C-c <SPC>") 'helm-all-mark-rings)
     (define-key map (kbd "C-x C-f")   'helm-find-files)
-    (define-key map (kbd "f")         'helm-for-files)
+    (define-key map (kbd "f")         'helm-multi-files)
     (define-key map (kbd "C-:")       'helm-eval-expression-with-eldoc)
     (define-key map (kbd "C-,")       'helm-calcul-expression)
     (define-key map (kbd "M-x")       'helm-M-x)
@@ -124,7 +121,7 @@
 (easy-menu-add-item
  nil '("Tools")
  '("Helm"
-   ["Find any Files/Buffers" helm-for-files t]
+   ["Find any Files/Buffers" helm-multi-files t]
    ["Helm Everywhere (Toggle)" helm-mode t]
    ["Helm resume" helm-resume t]
    "----"
@@ -218,7 +215,7 @@ So far, F can only be a symbol, not a lambda expression.")
 ;;  It should have been generated either by
 ;;  package.el or the make file.
 
-(load "helm-autoloads")
+(load "helm-autoloads" nil t)
 
 (provide 'helm-config)
 
