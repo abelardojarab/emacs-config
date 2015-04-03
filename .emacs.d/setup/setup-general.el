@@ -728,8 +728,8 @@ not need to be wrapped, move point to the next line and return t."
 
 ;; better windows handling
 (add-to-list 'load-path "~/.emacs.d/imenu-list")
-(add-to-list 'load-path "~/.emacs.d/purpose")
-(require 'purpose)
+(add-to-list 'load-path "~/.emacs.d/window-purpose")
+;; (require 'window-purpose)
 (require 'imenu-list)
 
 ;; better windows handling
