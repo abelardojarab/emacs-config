@@ -1,9 +1,9 @@
 ;;; ggtags.el --- emacs frontend to GNU Global source code tagging system  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015  Free Software Foundation, Inc.
+;; Copyright (C) 2013-2014  Free Software Foundation, Inc.
 
 ;; Author: Leo Liu <sdl.web@gmail.com>
-;; Version: 0.8.10
+;; Version: 0.8.9
 ;; Keywords: tools, convenience
 ;; Created: 2013-01-29
 ;; URL: https://github.com/leoliu/ggtags
@@ -36,10 +36,10 @@
 ;;
 ;; All commands are available from the `Ggtags' menu in `ggtags-mode'.
 
-;;; NEWS 0.8.9 (2015-01-16):
+;;; NEWS 0.8.8 (2014-12-03):
 
-;; - `ggtags-visit-project-root' can visit past projects.
-;; - `eldoc' support enabled for emacs 24.4+.
+;; - Command `ggtags-update-tags' now runs in the background for large
+;;   projects (per `ggtags-oversize-limit') without blocking emacs.
 ;;
 ;; See full NEWS on https://github.com/leoliu/ggtags#news
 
@@ -204,14 +204,6 @@ This feature requires GNU Global 6.3.3+ and is ignored if `gtags'
 isn't built with sqlite3 support."
   :type 'boolean
   :safe 'booleanp
-  :group 'ggtags)
-
-(defcustom ggtags-update-on-save t
-  "Non-nil to update tags for current buffer on saving."
-  ;; It is reported that `global --single-update' can be slow in sshfs
-  ;; directories. See https://github.com/leoliu/ggtags/issues/85.
-  :safe #'booleanp
-  :type 'boolean
   :group 'ggtags)
 
 (defcustom ggtags-global-output-format 'grep
@@ -526,7 +518,7 @@ Value is new modtime if updated."
           project)
       (setq ggtags-last-default-directory default-directory)
       (setq ggtags-project-root
-            (or (ignore-errors-unless-debug
+            (or (ignore-errors
                   (file-name-as-directory
                    (concat (file-remote-p default-directory)
                            ;; Resolves symbolic links
@@ -557,10 +549,12 @@ Value is new modtime if updated."
 
 (defun ggtags-ensure-project ()
   (or (ggtags-find-project)
-      (progn (call-interactively #'ggtags-create-tags)
-             ;; Need checking because `ggtags-create-tags' can create
-             ;; tags in any directory.
-             (ggtags-check-project))))
+      (when (or (yes-or-no-p "File GTAGS not found; run gtags? ")
+                (user-error "Aborted"))
+        (call-interactively #'ggtags-create-tags)
+        ;; Need checking because `ggtags-create-tags' can create tags
+        ;; in any directory.
+        (ggtags-check-project))))
 
 (defvar delete-trailing-lines)          ;new in 24.3
 
@@ -728,16 +722,6 @@ source trees. See Info node `(global)gtags' for details."
     (ggtags-invalidate-buffer-project-root (file-truename root))
     (message "GTAGS generated in `%s'" root)
     root))
-
-(defun ggtags-explain-tags ()
-  "Explain how each file is indexed in current project."
-  (interactive (ignore (ggtags-check-project)
-                       (or (ggtags-process-succeed-p "gtags" "--explain" "--help")
-                           (user-error "Global 6.4+ required"))))
-  (ggtags-check-project)
-  (ggtags-with-current-project
-    (let ((default-directory (ggtags-current-project-root)))
-      (compilation-start (concat (ggtags-program-path "gtags") " --explain")))))
 
 (defun ggtags-update-tags (&optional force)
   "Update GNU Global tag database.
@@ -1955,7 +1939,7 @@ commands `next-error' and `previous-error'.
 (defun ggtags-after-save-function ()
   (when (ggtags-find-project)
     (ggtags-project-update-mtime-maybe)
-    (and buffer-file-name ggtags-update-on-save
+    (and buffer-file-name
          (ggtags-update-tags-single buffer-file-name 'nowait))))
 
 (defun ggtags-global-output (buffer cmds callback &optional cutoff)
@@ -2274,13 +2258,7 @@ to nil disables displaying this information.")
                   ;; Prevent multiple runs of ggtags-show-definition
                   ;; for the same tag.
                   (setq ggtags-eldoc-cache (list tag))
-                  (condition-case err
-                      (ggtags-show-definition tag)
-                    (file-error
-                     (remove-function (local 'eldoc-documentation-function)
-                                      'ggtags-eldoc-function)
-                     (message "\
-Function `ggtags-eldoc-function' disabled for eldoc in current buffer: %S" err)))
+                  (ggtags-show-definition tag)
                   nil))))))
 
 ;;; imenu
