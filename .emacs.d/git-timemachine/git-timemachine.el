@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014 Peter Stiernström
 
 ;; Author: Peter Stiernström <peter@stiernstrom.se>
-;; Version: 1.9
+;; Version: 2.3
 ;; URL: https://github.com/pidu/git-timemachine
 ;; Keywords: git
 
@@ -30,6 +30,7 @@
 ;;; Code:
 
 (require 'vc-git)
+(require 'cl-lib)
 
 (defcustom git-timemachine-abbreviation-length 12
  "Number of chars from the full sha1 hash to use for abbreviation."
@@ -74,15 +75,32 @@ will be shown in the minibuffer while navigating commits."
  (interactive)
  (git-timemachine-show-revision (car (git-timemachine--revisions))))
 
+(defun git-timemachine--next-revision (revisions)
+  "Return the revision following the current revision in REVISIONS."
+  (cadr (cl-member
+         (car git-timemachine-revision) ;; takes the hash
+         revisions
+         :key #'car ;; only compare hashes
+         :test #'string=)))
+
 (defun git-timemachine-show-previous-revision ()
- "Show previous revision of file."
- (interactive)
- (git-timemachine-show-revision (cadr (member git-timemachine-revision (git-timemachine--revisions)))))
+  "Show previous revision of file."
+  (interactive)
+  (git-timemachine-show-revision (git-timemachine--next-revision (git-timemachine--revisions))))
 
 (defun git-timemachine-show-next-revision ()
- "Show next revision of file."
- (interactive)
- (git-timemachine-show-revision (cadr (member git-timemachine-revision (reverse (git-timemachine--revisions))))))
+  "Show next revision of file."
+  (interactive)
+  (git-timemachine-show-revision (git-timemachine--next-revision (reverse (git-timemachine--revisions)))))
+
+(defun git-timemachine-show-nth-revision (rev-number)
+  "Show the REV-NUMBER revision."
+ (interactive "nEnter revision number: ")
+ (let* ((revisions (reverse (git-timemachine--revisions)))
+        (revision (nth (1- rev-number) revisions))
+        (num-revisions (length revisions)))
+  (if revision (git-timemachine-show-revision revision)
+   (message "Only %d revisions exist." num-revisions))))
 
 (defun git-timemachine-show-revision (revision)
  "Show a REVISION (commit hash) of the current file."
@@ -139,6 +157,7 @@ will be shown in the minibuffer while navigating commits."
  :keymap
  '(("p" . git-timemachine-show-previous-revision)
    ("n" . git-timemachine-show-next-revision)
+   ("g" . git-timemachine-show-nth-revision)
    ("q" . git-timemachine-quit)
    ("w" . git-timemachine-kill-abbreviated-revision)
    ("W" . git-timemachine-kill-revision))
@@ -153,6 +172,14 @@ Call with the value of 'buffer-file-name."
   (error "This file is not git tracked")))
 
 ;;;###autoload
+(defun git-timemachine-toggle ()
+ "Toggle git timemachine mode."
+ (interactive)
+ (if (bound-and-true-p git-timemachine-mode)
+  (git-timemachine-quit)
+  (git-timemachine)))
+ 
+;;;###autoload
 (defun git-timemachine ()
  "Enable git timemachine for file of current buffer."
  (interactive)
@@ -163,16 +190,16 @@ Call with the value of 'buffer-file-name."
        (cur-line (line-number-at-pos))
        (mode major-mode))
   (with-current-buffer (get-buffer-create timemachine-buffer)
+   (switch-to-buffer timemachine-buffer)
    (setq buffer-file-name file-name)
    (funcall mode)
-   (git-timemachine-mode)
    (setq git-timemachine-directory git-directory
          git-timemachine-file (file-relative-name file-name git-directory)
          git-timemachine-revision nil)
    (git-timemachine-show-current-revision)
-   (switch-to-buffer timemachine-buffer)
    (goto-char (point-min))
-   (forward-line (1- cur-line)))))
+   (forward-line (1- cur-line))
+   (git-timemachine-mode))))
 
 (provide 'git-timemachine)
 
