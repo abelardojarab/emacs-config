@@ -514,6 +514,66 @@ AddToFunc DestroyOnHold I Raise
 + H Destroy
 + H Beep
 
+DestroyMenu MenuFvwmConfig
+AddToMenu MenuFvwmConfig
++   %graphics_palette_view.png%"Colour Browser" Exec exec gcolor
++   %document_view.png%"Edit fvwm2rc"   Exec exec gvim -geom 115x46 ~/.fvwm/.fvwm2rc
++   ""                                  Nop
++   %plug.png%"Fvwm Modules"            Popup MenuFvwmModules
++   ""                                  Nop
++   %widget_buttons.png%"Configure FvwmForm..." Module FvwmForm FvwmForm-Form
++   %cursor.png%"Configure Cursor..."   Module FvwmForm FvwmForm-RootCursor
++   %television.png%"Configure Screensaver..."  Exec exec xscreensaver-demo
++   %hardware_mouse.png%"Configure Mouse..."    Module FvwmScript FvwmScript-PointerSetup
++   %hardware_keyboard.png%"Configure Keyboard..." Module FvwmScript FvwmScript-KeyboardSetup
++   %audio.png%"Configure Bell..."      Module FvwmScript FvwmScript-BellSetup
++   %tool_wrench.png%"General Settings..."  Module FvwmScript FvwmScript-BaseConfig
+
+#####
+# `Pick` is very handy, if it's obvious which window you're talking about,
+# The command is executed immediately within the context of that window.
+#
+# If it isnt obvious, for example, you select `Move` from the Root menu, the
+# cursor becomes a crosshair, and you can select the window you you would like
+# to apply the command to by clicking it.
+#
+# This saves a lot of work, you can use `Pick` with everything that might be
+# Called without context and only write one function/menu instead of two.
+#################
+DestroyMenu FvwmMoveMethods
+AddToMenu FvwmMoveMethods
++   "Move to Top"       Pick AnimatedMove keep 0p
++   "Move to Left"      Pick AnimatedMove 0p keep
++   "Move to Right"     Pick PipeRead \
+        "echo AnimatedMove `expr $[vp.width] - $[w.width]`p keep"
++   "Move to Bottom"    Pick PipeRead \
+        "echo AnimatedMove keep `expr $[vp.height] - $[w.height]`p"
++   ""                              Nop
++   %window.png%"Center Window" Pick PipeRead \
+    "echo AnimatedMove `expr \\( $[vp.width] - $[w.width] \\) / 2`p \
+    `expr \\( $[vp.height] - $[w.height] \\) / 2`p"
++   ""                              Nop
++   %hardware_mouse.png%"Pack Up"%alt_sft_up.png%   Pick PackWrapperUp
++   %hardware_mouse.png%"Pack Left"%alt_sft_left.png%   Pick PackWrapperLeft
++   %hardware_mouse.png%"Pack right"%alt_sft_right.png% Pick PackWrapperRight
++   %hardware_mouse.png%"Pack down"%alt_sft_down.png%   Pick PackWrapperDown
++   ""                              Nop
++   %numbers_counter.png%"Move To Page" Popup MenuPageList
++   ""                              Nop
++   %hardware_mouse.png%"Interactive Move"  Pick Move
+
+DestroyMenu MenuPageList
+AddToMenu MenuPageList
++ "1"   Pick MoveToPage 0 0
++ "2"   Pick MoveToPage 1 0
++ "3"   Pick MoveToPage 2 0
++ "4"   Pick MoveToPage 0 1
++ "5"   Pick MoveToPage 1 1
++ "6"   Pick MoveToPage 2 1
++ "7"   Pick MoveToPage 0 2
++ "8"   Pick MoveToPage 1 2
++ "9"   Pick MoveToPage 2 2
+
 DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: Geometry +0-0
 *FvwmTaskBar: Rows 1
