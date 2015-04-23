@@ -36,6 +36,9 @@
 ;; Advice function
 (require 'nadvice)
 
+;; Cursor sensor
+(require 'cursor-sensor)
+
 ;; GUI-specific thing
 (when (window-system)
   (setenv "EMACS_GUI" "t"))

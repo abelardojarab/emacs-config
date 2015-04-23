@@ -62,6 +62,9 @@ xterm*ScrollBar: true
 ! stop output to terminal from jumping down to bottom of scroll again
 xterm*scrollTtyOutput: false
 
+! No blinking
+xterm*visualBell: False
+
 ! *** Xdefaults Affecting CADENCE TOOLS ***
 !* NOTE:
 !*
