@@ -35,10 +35,10 @@
 (global-set-key [?\C- ] 'semantic-ia-complete-symbol-menu)
 (semantic-load-enable-code-helpers) ;; Enable prototype help and smart completion
 (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
 (add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode t)
 (add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode t)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode t)
 
 ;; Mouse-3
@@ -47,11 +47,15 @@
 
 ;; Enable plugins
 (global-semanticdb-minor-mode t)
-(global-semantic-idle-summary-mode t)
-(global-semantic-idle-completions-mode t)
 (global-semantic-highlight-func-mode t)
 (global-semantic-decoration-mode t)
 (global-semantic-idle-local-symbol-highlight-mode t)
+(global-semantic-idle-summary-mode t)
+(global-semantic-idle-completions-mode t)
+
+;; Faster parsing
+(setq semantic-idle-work-parse-neighboring-files-flag nil)
+(setq semantic-idle-work-update-headers-flag nil)
 
 ;; Enable code folding
 (global-semantic-tag-folding-mode)
@@ -94,12 +98,12 @@
 ;; smart completions
 (require 'semantic/ia)
 (setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
-                 '(project))
+                 '())
+(setq-mode-local lisp-mode semanticdb-find-default-throttle
+                 '())
 (setq-mode-local c-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
-                 '(project))
-(setq-mode-local lisp-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local python-mode semanticdb-find-default-throttle
                  '(project))
