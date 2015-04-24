@@ -13,7 +13,7 @@ SetEnv fvwm_wallpaper $[HOME]/Downloads/Wallpapers/1468177.png
 DeskTopSize 4x4
 EdgeScroll 0 0
 
-# You can use EwmhBaseStruts to stop Maximised windows from obscuring TaskBars/ButtonBars
+# You can use EwmhBaseStruts to stop Maximized windows from obscuring TaskBars/ButtonBars
 # or anything else you always want to be visible.
 #
 # This Setting makes sure my ButtonBar on the left and taskbar along the bottom is always
@@ -107,8 +107,11 @@ AddToFunc StartFunction
 + I Test (Init) Exec exec fvwm-root --dither --retain-pixmap $[fvwm_wallpaper]
 + I Test (Init) StartHiddenConsole
 
-Style FvwmButtons  NeverFocus, NoHandles, NoTitle, StaysOnBottom, Sticky
-Style FvwmPager    NeverFocus, NoHandles, NoTitle, StaysOnBottom, Sticky
+#styles
+Style "*" Icon xlogo32, BorderWidth 2, SloppyFocus
+Style "*" DecorateTransient, IconBox -132 110 -8 -8
+Style FvwmButtons NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
+Style FvwmPager NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
 
 # Set up the geometry so that the buttons stack vertically on the left.
 #
