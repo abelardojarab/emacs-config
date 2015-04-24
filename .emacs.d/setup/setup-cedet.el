@@ -64,10 +64,10 @@
 (setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Small workloads
-(setq semantic-idle-scheduler-idle-time 10)
+(setq semantic-idle-scheduler-idle-time 600)
 
 ;; Big workloads
-(setq semantic-idle-scheduler-work-idle-time 60)
+(setq semantic-idle-scheduler-work-idle-time 90)
 
 ;; Default directory
 (setq semanticdb-default-system-save-directory
