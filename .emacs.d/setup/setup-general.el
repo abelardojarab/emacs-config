@@ -246,14 +246,20 @@ Defaults to `error'."
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
-
-;; Try not to split windows
-(setq same-window-regexps '("."))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; Assure window is splitted horizontally (for compilation buffer)
 (setq split-width-threshold nil)
+
+;; Helper function for horizontal splitting
+(defun split-horizontally-not-vertically ()
+  "If there's only one window (excluding any possibly active minibuffer), then
+     split the current window horizontally."
+  (interactive)
+  (if (= (length (window-list nil 'dont-include-minibuffer-even-if-active)) 1)
+      (split-window-horizontally)))
+(add-hook 'temp-buffer-setup-hook 'split-horizontally-not-vertically)
 
 ;; Avoid to make a separate frame
 (setq display-buffer nil)
