@@ -100,7 +100,7 @@
 (setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
                  '())
 (setq-mode-local lisp-mode semanticdb-find-default-throttle
-                 '())
+                 '(project))
 (setq-mode-local c-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local c++-mode semanticdb-find-default-throttle

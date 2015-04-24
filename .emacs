@@ -74,6 +74,9 @@
  '(ecb-use-speedbar-instead-native-tree-buffer nil)
  '(ecb-vc-enable-support t)
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
+ '(ede-project-directories
+   (quote
+    ("/nfs/ltdn/disks/ltdn_lvd_disk27/advda/elisp/utils/workspace/frametools/projs/proj2")))
  '(initial-scratch-message ";; scratch buffer created -- start typing...")
  '(protect-buffer-bury-p nil)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
