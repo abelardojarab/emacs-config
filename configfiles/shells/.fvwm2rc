@@ -136,6 +136,7 @@ Style FvwmPager NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
 *FvwmButtons(Title XTerm, Icon xterm.xpm, Action 'Exec "xterm" xterm -ls &')
 *FvwmButtons(Title Emacs, Icon emacs.xpm, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title Emacs Client, Icon emacs.xpm, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
+*FvwmButtons(Title Glade, Icon glade.xpm, Action 'Exec "Glade" glade-3 &')
 # *FvwmButtons: (1x2+0+2, Back #dedbde, Frame 1, Action (Mouse 1) `Nop`)
 # *FvwmButtons: (Id AnalogDial, 1x2+0+4, Swallow (NoClose, UseOld) "xclock" 'Exec xclock &')
 
