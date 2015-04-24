@@ -50,8 +50,8 @@
 (setq py-shell-switch-buffers-on-execute-p t)
 (setq py-switch-buffers-on-execute-p t)
 
-;; don't split windows
-(setq py-split-windows-on-execute-p nil)
+;; split horizontally on execution
+(setq-default py-split-windows-on-execute-function 'split-window-horizontally)
 
 ;; try to automagically figure out indentation
 (setq py-smart-indentation t)
