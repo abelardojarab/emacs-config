@@ -64,7 +64,7 @@
 (setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Small workloads
-(setq semantic-idle-scheduler-idle-time 600)
+(setq semantic-idle-scheduler-idle-time 432000)
 
 ;; Big workloads
 (setq semantic-idle-scheduler-work-idle-time 90)
