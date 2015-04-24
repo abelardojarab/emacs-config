@@ -7,7 +7,7 @@
 
 (setq debug-on-error t)
 (defconst debian-emacs-flavor 'emacs24
-   "A symbol representing the particular debian flavor of emacs running.
+  "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/setup")
@@ -76,7 +76,7 @@
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(ede-project-directories
    (quote
-    ("/nfs/ltdn/disks/ltdn_lvd_disk27/advda/elisp/utils/workspace/frametools/projs/proj2")))
+    ("~/workspace/frametools")))
  '(initial-scratch-message ";; scratch buffer created -- start typing...")
  '(protect-buffer-bury-p nil)
  '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
