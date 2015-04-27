@@ -5,23 +5,10 @@ SetEnv fvwm_wallpaper $[HOME]/Downloads/Wallpapers/1468177.png
 # Viewport and Virtual Desktop Setup
 DeskTopSize 4x4
 EdgeScroll 0 0
-EwmhBaseStruts 0 128 0 20
+EwmhBaseStruts 128 0 0 20
 OpaqueMoveSize -1
 TitleStyle Height 13
 WindowFont -misc-fixed-medium-r-normal-*-10-*-*-*-*-*-iso10646-1
-
-# Transient Windows
-# By default FVWM will not put any decorations (borders) around transient
-# popup windows (such as FileChooser dialogs).  It is useful to have such
-# decorations, as without them you cannot grab the window to move it
-# (sometimes a dialog window pops up in the wrong place and you do want
-# to move it).  See http://fvwm.org/doc/unstable/commands/Style.html
-
-# These set the colors for my FvwmScript-DayDate script.
-# For reasons I don't understand, setting ForeColor and BackColor in the
-# widgets in the script itself doesn't work.
-*FvwmScript: DefaultFore blue
-*FvwmScript: DefaultBack black
 
 # Note: FvwmPager will be swallowed by FvwmButtons (below)
 *FvwmPager: Fore blue
@@ -51,6 +38,9 @@ AddToDecor   MyDecor
 + ButtonStyle 4 ActiveUp Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
 + ButtonStyle 4 ActiveDown Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
 + ButtonStyle 4 Inactive Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
++ ButtonStyle 3 ActiveUp Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
++ ButtonStyle 3 ActiveDown Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
++ ButtonStyle 3 Inactive Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
 + ButtonStyle 2 ActiveUp Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
 + ButtonStyle 2 ActiveDown Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
 + ButtonStyle 2 Inactive Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
@@ -68,7 +58,7 @@ Style "*" BorderWidth 0, HandleWidth 2
 Style "*" MWMBorder, FirmBorder
 Style "*" DecorateTransient
 Style "*" SnapAttraction 3
-Style FvwmTaskBar NoTitle, WindowListSkip, CirculateSkip, Sticky, BorderWidth 0, NoHandles, StaysOnBottom
+Style FvwmTaskBar NoTitle, WindowListSkip, CirculateSkip, Sticky, BorderWidth 0, NoHandles, StaysOnTop
 Style FvwmTaskBar NeverFocus, Layer 0
 
 # Set up the geometry so that the buttons stack vertically on the left.
@@ -77,22 +67,14 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtonsFore blick
 *FvwmButtons: BoxSize fixed
 *FvwmButtons: Rows 8
-*FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
 *FvwmButtons(Title XTerm, Icon xterm.xpm, Action 'Exec "xterm" xterm -ls &')
 *FvwmButtons(Title Emacs, Icon emacs.xpm, Action 'Exec "Emacs Server" emacs &')
-*FvwmButtons(Title Emacs Client, Icon emacs.xpm, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
+*FvwmButtons(Title EmacsClient, Icon emacs.xpm, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
 *FvwmButtons(Title Glade, Icon glade.xpm, Action 'Exec "Glade" glade-3 &')
-# *FvwmButtons: (1x2+0+2, Back #dedbde, Frame 1, Action (Mouse 1) `Nop`)
-# *FvwmButtons: (Id AnalogDial, 1x2+0+4, Swallow (NoClose, UseOld) "xclock" 'Exec xclock &')
 
 # Key Bindings: ctrl-arrow shifts viewports, alt-arrow shifts desktops
-#               A = All contexts
-#               M = meta = alt key
-#               C = control key
-# Do not wrap viewports.  Do wrap desktops.
-
 Key Left  A C GotoPage -1p +0p
 Key Right A C GotoPage +1p +0p
 Key Up    A C GotoPage +0p -1p
@@ -101,7 +83,7 @@ Key Left  A M GotoDesk -1 0 3
 Key Right A M GotoDesk 1 0 3
 
 # AutoHiding Console
-Style HiddenConsole Sticky, WindowListSkip, Notitle, StaysOnTop, NoHandles
+Style HiddenConsole Sticky, WindowListSkip, Notitle, StaysOnTop, !Handles, FixedSize, FixedPosition
 Style HiddenConsole WindowShadeSteps 100
 
 DestroyMenu GraphicsCADSubMenu
@@ -326,20 +308,20 @@ AddToFunc           FullScreen
 # A=any modifier
 
 # widows close,max,mini
+Mouse 0 4   A       Iconify
+Mouse 0 2   A       Maximize-func
+Mouse 0 1   A       Close
+Mouse 0 3   A       Menu Window-Ops Nop
 Mouse 1 4   A       Iconify
 Mouse 1 2   A       Maximize-func
-Mouse 1 1   A       Menu Window-Ops Nop
+Mouse 1 1   A       Close
+Mouse 1 3   A       Menu Window-Ops Nop
 
 # main pop-up menus
 Mouse 0 R       A       Menu MainMenu Nop
 Mouse 1 R       A       Menu MainMenu Nop
-Mouse 2 R       A       Menu Other-Logins Nop
-Mouse 3 R       A       Menu Utilities Nop
-
-# title bar buttons
-Mouse 0 1       A       Menu Window-Ops Nop
-Mouse 0 2       A       Resize
-Mouse 0 4       A       Iconify
+Mouse 2 R       A       Menu MainMenu Nop
+Mouse 3 R       A       Menu MainMenu Nop
 
 # for when you click the edge of a window
 Mouse 1 F   A   Resize-or-Raise
@@ -374,8 +356,11 @@ AddToFunc Move-or-Raise2    "M" Raise
 +               "D" Lower
 
 AddToFunc Maximize-Func     "M" Maximize     0 100
-+               "C" Maximize     0 80
-+               "D" Maximize     100 100
++ I ThisWindow (Maximized) DestroyWindowStyle
++ I TestRc (NoMatch) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
++ I UpdateStyles
++ I ThisWindow (Maximized) Maximize ewmhiwa true 98 98
++ I TestRc (NoMatch) Maximize ewmhiwa true 98 98
 
 AddToFunc Move-or-Iconify   "I" Raise
 +               "M" Move
