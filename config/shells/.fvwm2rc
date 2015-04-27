@@ -5,9 +5,10 @@ SetEnv fvwm_wallpaper $[HOME]/Downloads/Wallpapers/1468177.png
 # Viewport and Virtual Desktop Setup
 DeskTopSize 4x4
 EdgeScroll 0 0
-EwmhBaseStruts 128 0 0 20
+EwmhBaseStruts 128 20 0 20
 OpaqueMoveSize -1
 TitleStyle Height 13
+ColormapFocus FollowsFocus
 WindowFont -misc-fixed-medium-r-normal-*-10-*-*-*-*-*-iso10646-1
 
 # Note: FvwmPager will be swallowed by FvwmButtons (below)
@@ -24,9 +25,9 @@ WindowFont -misc-fixed-medium-r-normal-*-10-*-*-*-*-*-iso10646-1
 AddToFunc StartFunction
 + I FvwmButtons
 + I FvwmTaskBar
-+ I FvwmAuto FvwmAutohide -menter FuncAutoEnter
 + I Test (Init) Exec exec fvwm-root --dither --retain-pixmap $[fvwm_wallpaper]
-+ I Test (Init) StartHiddenConsole
+# + I FvwmAuto FvwmAutohide -menter FuncAutoEnter
+# + I Test (Init) StartHiddenConsole
 
 # Window Decor
 DestroyDecor MyDecor
@@ -192,7 +193,6 @@ AddToFunc StartHiddenConsole
 + I Autohide HiddenConsole 250 0 N
 
 # These functions modified from the functions provided in the fvwm FAQ.
-# [8]http://www.fvwm.org/documentation/faq/#7.17
 AddToFunc Autohide
 + I ThisWindow ($0) Deschedule $[w.id]
 + I TestRc (!Match) Deschedule -$[w.id]
