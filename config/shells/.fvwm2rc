@@ -5,22 +5,20 @@
 SetEnv fvwm_wallpaper $[HOME]/Downloads/Wallpapers/1468177.png
 
 # Location of FvwmScripts
-#########################
+#####
 *FvwmScript: Path /nfs/pdx/home/ajaraber/.fvwmrc
 
 # Viewport and Virtual Desktop Setup
-####################################
-DeskTopSize 4x4      # Sets number of viewports in each Desktop
-# Number of Desktops # Is set by GotoDesk command, below
-                     # See also FvwmPager and Style "FvwmPager", below 
+#####
+DeskTopSize 4x4
 EdgeScroll 0 0
 
-# You can use EwmhBaseStruts to stop Maximised windows from obscuring TaskBars/ButtonBars
+# You can use EwmhBaseStruts to stop Maximized windows from obscuring TaskBars/ButtonBars
 # or anything else you always want to be visible.
 #
 # This Setting makes sure my ButtonBar on the left and taskbar along the bottom is always
 # visible.
-#################
+#####
 EwmhBaseStruts 0 128 0 20
 
 # OpaqueMoveSize allows you to stop Large windows from being moved opaquely,
@@ -29,26 +27,23 @@ EwmhBaseStruts 0 128 0 20
 # SnapAttraction lets nearby windows snap together, or snap to edges so that they
 # are easier to align on your desktop, The default is off, if you set it too large
 # it's annoying as hell, 3 pixels is just right.
-#################
+#####
 OpaqueMoveSize -1
 Style * SnapAttraction 3
 
 # Set visual styles for components
-##################################
+#####
 
 # Window Style
-# I prefer very thin borders around windows.  
-# Use "HandleWidth" here as in an Fvwm window the non-title borders are 
-all
-# actually Handles.  (If you try to use BorderWidth, which requires 
-!Handles,
+# I prefer very thin borders around windows.
+# Use "HandleWidth" here as in an Fvwm window the non-title borders are all
+# actually Handles.  (If you try to use BorderWidth, which requires !Handles,
 # you cannot actually resize the windows.)
-# 3 pixel Handles are wide enough to grab without using much screen 
-space.
+# 3 pixel Handles are wide enough to grab without using much screen space.
 Style * HandleWidth 3
 
 # In the title bar, use a 10-pixel font in a 13-pixel bar
-TitleStyle Height 13 
+TitleStyle Height 13
 WindowFont -misc-fixed-medium-r-normal-*-10-*-*-*-*-*-iso10646-1
 #           foundry
 #                familyname
@@ -57,7 +52,7 @@ WindowFont -misc-fixed-medium-r-normal-*-10-*-*-*-*-*-iso10646-1
 #                               setwidthname
 #                                      additionalstyle
 #                                        pixelsize
-#                                           point size in tenths of a 
+#                                           point size in tenths of a
 point
 #                                             ...
 #                                                     charset encoding
@@ -65,10 +60,8 @@ point
 # Use xlsfonts and grep to find out what fonts are installed.
 
 # Transient Windows
-# By default FVWM will not put any decorations (borders) around 
-transient
-# popup windows (such as FileChooser dialogs).  It is useful to have 
-such
+# By default FVWM will not put any decorations (borders) around transient
+# popup windows (such as FileChooser dialogs).  It is useful to have such
 # decorations, as without them you cannot grab the window to move it
 # (sometimes a dialog window pops up in the wrong place and you do want
 # to move it).  See http://fvwm.org/doc/unstable/commands/Style.html
@@ -80,14 +73,13 @@ Style * DecorateTransient
 *FvwmScript: DefaultFore blue
 *FvwmScript: DefaultBack black
 
-
 # Title Bar Buttons
-###################
+#####
 
 AddButtonStyle 6 Pixmap button-close.xpm
-AddButtonStyle 4 Pixmap mini.iconify1.xpm 
-AddButtonStyle 2 Pixmap mini.maximize1.xpm 
-# Mouse Actions for the Title Bar Buttons: left 1 3 5 7 8   0 8 6 4 2 
+AddButtonStyle 4 Pixmap mini.iconify1.xpm
+AddButtonStyle 2 Pixmap mini.maximize1.xpm
+# Mouse Actions for the Title Bar Buttons: left 1 3 5 7 8   0 8 6 4 2
 right
 Mouse 0 1       A       Menu Window-Ops Close
 Mouse 0 6       A       Close
@@ -95,33 +87,54 @@ Mouse 0 4       A       Iconify
 Mouse 0 2       A       Maximize
 
 # Modules (configuration of)
-############################
+#####
 
 # Note: FvwmPager will be swallowed by FvwmButtons (below)
-#Module FvwmPager *                # Do not actually start it here
 *FvwmPager: Fore blue
 *FvwmPager: Back black
 *FvwmPager: Hilight gray
 *FvwmPager: SolidSeparators
-#*FvwmPager: Geometry 100x100+0+0  # No; set as swallowed by FvwmButtons
 *FvwmPager: Label 0 "0: General"
 *FvwmPager: Label 1 "1: Graphein"
 *FvwmPager: Label 2 "2: OpenSCAD"
 *FvwmPager: Label 3 "3: other"
 
-# FvwmButtons (an array of buttons)
-###################################
-
 # See: http://www.fvwm.org/documentation/manpages/unstable/fvwm.php
 AddToFunc StartFunction
-+ I FvwmButtons 
++ I FvwmButtons
 + I FvwmTaskBar
 + I FvwmAuto FvwmAutohide -menter FuncAutoEnter
 + I Test (Init) Exec exec fvwm-root --dither --retain-pixmap $[fvwm_wallpaper]
 + I Test (Init) StartHiddenConsole
 
-Style FvwmButtons  NeverFocus, NoHandles, NoTitle, StaysOnBottom, Sticky
-Style FvwmPager    NeverFocus, NoHandles, NoTitle, StaysOnBottom, Sticky
+#####
+## Window Decor
+#####
+DestroyDecor MyDecor
+AddToDecor   MyDecor
++ TitleStyle LeftJustified Height 14
++ ButtonStyle 1 ActiveUp Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
++ ButtonStyle 1 ActiveDown Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
++ ButtonStyle 1 Inactive Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
++ ButtonStyle 4 ActiveUp Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
++ ButtonStyle 4 ActiveDown Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
++ ButtonStyle 4 Inactive Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
++ ButtonStyle 2 ActiveUp Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
++ ButtonStyle 2 ActiveDown Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
++ ButtonStyle 2 Inactive Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
++ TitleStyle -- Flat
++ BorderStyle Simple -- NoInset Flat
++ ButtonStyle All -- UseTitleStyle
+
+#styles
+Style "*" Icon xlogo32, BorderWidth 2, SloppyFocus
+Style "*" DecorateTransient, IconBox -132 110 -8 -8
+Style FvwmButtons NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
+Style FvwmPager NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
+
+Style "*" UseDecor MyDecor
+Style "*" BorderWidth 0, HandleWidth 2
+Style "*" MWMBorder, FirmBorder
 
 # Set up the geometry so that the buttons stack vertically on the left.
 #
@@ -135,21 +148,25 @@ Style FvwmPager    NeverFocus, NoHandles, NoTitle, StaysOnBottom, Sticky
 #              Thus need 6 rows (and 1 column, redundantly)
 #              Use the FvwmButton geometry to specify the above,
 #              and also to specify the position of the button +x+y
+*FvwmButtonsFont -adobe-helvetica-bold-r-*-*-10-*
 *FvwmButtons: ButtonGeometry 100x50+0+0
+*FvwmButtonsFore blick
 *FvwmButtons: BoxSize fixed
 *FvwmButtons: Rows 8
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
+*FvwmButtons(Title XTerm, Icon xterm.xpm, Action 'Exec "xterm" xterm -ls &')
+*FvwmButtons(Title Emacs, Icon emacs.xpm, Action 'Exec "Emacs Server" emacs &')
+*FvwmButtons(Title Emacs Client, Icon emacs.xpm, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
+*FvwmButtons(Title Glade, Icon glade.xpm, Action 'Exec "Glade" glade-3 &')
 # *FvwmButtons: (1x2+0+2, Back #dedbde, Frame 1, Action (Mouse 1) `Nop`)
-# Note: Set up xclock foreground, background, hands, etc. in .Xdefaults
-*FvwmButtons: (Id AnalogDial, 1x2+0+4, Swallow (NoClose, UseOld) "xclock" 'Exec xclock &')
+# *FvwmButtons: (Id AnalogDial, 1x2+0+4, Swallow (NoClose, UseOld) "xclock" 'Exec xclock &')
 
 # Key Bindings: ctrl-arrow shifts viewports, alt-arrow shifts desktops
-######################################################################
-
+#####
 #               A = All contexts
-#               M = meta = alt key 
+#               M = meta = alt key
 #               C = control key
 # Do not wrap viewports.  Do wrap desktops.
 
@@ -159,7 +176,6 @@ Key Up    A C GotoPage +0p -1p
 Key Down  A C GotoPage +0p +1p
 Key Left  A M GotoDesk -1 0 3
 Key Right A M GotoDesk 1 0 3
-
 
 # Popup Menus From Desktop Background
 #####################################
@@ -200,10 +216,10 @@ AddToMenu MainMenu "Main Menu" Title
 + "Quit Fvwm" Quit
 
 # Menus from window title-bar buttons
-#####################################
+#####
 
 # Window-Ops is the leftmost window button.
-# See Title-Bar Buttons (above) for the code which links it to the 
+# See Title-Bar Buttons (above) for the code which links it to the
 button.
 AddToMenu Window-Ops    "&Move"         Move
 +                       "&Resize"       Resize
@@ -219,7 +235,7 @@ AddToMenu Window-Ops    "&Move"         Move
 
 #####
 # Miscellaneous Module Settings.
-#################
+#####
 
 # FvwmIdent is an xwininfo replacement.
 DestroyModuleConfig FvwmIdent: *
@@ -242,23 +258,58 @@ DestroyModuleConfig FvwmScroll: *
 #
 #           Thumbnailing example: [6]http://dev.gentoo.org/~taviso/step2.png
 #
-##################
+#####
+
 DestroyFunc Thumbnail
 AddToFunc Thumbnail
 + I Raise
-+ I PipeRead "xwd -silent -id $[w.id] | convert -scale $[fvwm_icon_size] -frame 1x1 \
-    -mattecolor black -quality 0 xwd:- png:$[HOME]/.fvwm/icon.tmp.$[w.id].png \
-    && echo WindowStyle IconOverride, Icon $[HOME]/.fvwm/icon.tmp.$[w.id].png, StaysOnBottom \
-    || echo Nop"
++ I SetEnv Icon-$[w.id] $[w.iconfile]
++ I ThisWindow (!Shaded Iconifiable !Iconic) PipeRead \
+    "xwd -silent -id $[w.id] | convert -scale $$(($[w.width]/5)) -frame 1x1 \
+    -mattecolor black -quality 0 xwd:- png:$[fvwm_tmp]/icon.tmp.$[w.id].png \
+    && echo Nop"
++ I TestRc (Match) Test (f $[fvwm_icon]/$[w.iconfile], f $[fvwm_tmp]/icon.tmp.$[w.id].png) \
+    PipeRead "composite -geometry +2+4 \
+    $[fvwm_icon]/$[w.iconfile] $[fvwm_tmp]/icon.tmp.$[w.id].png \
+    $[fvwm_tmp]/icon.tmp.$[w.id].png && \
+    echo WindowStyle IconOverride, Icon $[fvwm_tmp]/icon.tmp.$[w.id].png || echo Nop"
++ I TestRc (NoMatch) WindowStyle IconOverride, Icon $[fvwm_tmp]/icon.tmp.$[w.id].png
 + I Iconify
 
 DestroyFunc DeThumbnail
 AddToFunc DeThumbnail
-+ I DestroyWindowStyle
-+ I Exec exec rm -f $HOME/.fvwm/icon.tmp.$[w.id].png
++ I PipeRead "echo WindowStyle Icon \\$\\[Icon-$[w.id]\\]"
++ I UnsetEnv Icon-$[w.id]
++ I Exec rm -f $[fvwm_tmp]/icon.tmp.$[w.id].png
 
-# FIXME: This will destroy all Windowstyle settings.
+#####
+# FvwmEvent
+#####
+DestroyModuleConfig FvwmEvent: *
 *FvwmEvent: deiconify DeThumbnail
+
+DestroyFunc ReThumbnail
+AddToFunc   ReThumbnail
++ I Iconify
++ I Thumbnail
+
+#####
+# FvwmExpose
+#####
+DestroyFunc FvwmExpose
+AddToFunc FvwmExpose
++ I AddToMenu FvwmExposeMenu "e x p o s e" Title
++ I + DynamicPopDownAction DestroyMenu FvwmExposeMenu
++ I All (!Iconic !Shaded AcceptsFocus)\
+    PipeRead "echo Raise; \
+        xwd -silent -id $[w.id] | convert -scale $$(($[w.width]/10)) -quality 0 xwd:- \
+        png:$[fvwm_home]/tmp/icon.exp.$[w.id].png \
+    && echo AddToMenu FvwmExposeMenu \
+    %$[fvwm_home]/tmp/icon.exp.$[w.id].png%\\\'\"$[w.name]\"\\\' WindowID $[w.id] WarpToWindow 50 50 \
+        && echo AddToMenu FvwmExposeMenu \\\"\\\" Nop \
+    || Nop"
++ I Popup FvwmExposeMenu
++ I Exec exec rm -f $[fvwm_home]/tmp/icon.exp.*
 
 #####
 # Autohide console example: [4]http://dev.gentoo.org/~taviso/autohide_console.png
@@ -272,7 +323,7 @@ AddToFunc StartHiddenConsole
 ####
 # These functions modified from the functions provided in the fvwm FAQ.
 # [8]http://www.fvwm.org/documentation/faq/#7.17
-#################
+####
 AddToFunc Autohide
 + I ThisWindow ($0) Deschedule $[w.id]
 + I TestRc (!Match) Deschedule -$[w.id]
@@ -300,7 +351,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 
 #####
 # WindowOps, Main window controls menu.
-#################
+#####
 DestroyMenu MenuFvwmWindowOps
 AddToMenu MenuFvwmWindowOps
 +   %paper_geometry.png%"Resize"            Pick Resize
@@ -353,7 +404,7 @@ AddToMenu MenuFvwmStopModule
 # Bound:    MenuFvwmConfig, Focus Policy Changes.
 # Purpose:  Start using a new Focus Policy.
 #
-#################
+#####
 DestroyFunc FuncFvwmFocusPolicyChange
 AddToFunc FuncFvwmFocusPolicyChange
 + I Style * $0
@@ -378,7 +429,7 @@ AddToFunc FuncFvwmFocusPolicyChange
 #
 #           Windows are also Raised, you can disable this.
 #
-#################
+#####
 DestroyFunc PackWindowUp
 AddToFunc PackWindowUp
 + I SetEnv low_w 0
@@ -403,7 +454,7 @@ AddToFunc PackWrapperUp I NoWindow PackWindowUp $[w.y] $[w.x] $[w.width] $[w.id]
 # Bound:    Alt+Shift+Down When a window is active.
 # Purpose:  See PackWindowUp.
 #
-#################
+#####
 DestroyFunc PackWindowDown
 AddToFunc PackWindowDown
 + I SetEnv high_w $[vp.height]
@@ -446,7 +497,7 @@ AddToFunc PackWrapperDown I NoWindow PackWindowDown $[w.y] $[w.x] $[w.width] $[w
 #               Nop
 #   3. Move to Destination.
 #
-#################
+#####
 DestroyFunc PackWindowLeft
 AddToFunc PackWindowLeft
 + I SetEnv left_w 0
@@ -493,7 +544,7 @@ AddToFunc PackWrapperRight I NoWindow PackWindowRight $[w.y] $[w.x] $[w.width] $
 #           argument `True` and rolling it down uses `False`, so rolling the wheel
 #           down when the window isnt shaded has no effect, which I like :)
 #
-#################
+#####
 DestroyFunc WheelToggleShade
 AddToFunc WheelToggleShade D WindowShade $0
 
@@ -507,7 +558,7 @@ AddToFunc WheelToggleShade D WindowShade $0
 #           There is a 100ms delay before issuing `Close` so I have a chance to see the
 #           animation when the button changes from ActiveDown to ActiveUp :).
 #
-#################
+#####
 DestroyFunc DestroyOnHold
 AddToFunc DestroyOnHold I Raise
 + C Schedule 100 Close
@@ -539,7 +590,7 @@ AddToMenu MenuFvwmConfig
 #
 # This saves a lot of work, you can use `Pick` with everything that might be
 # Called without context and only write one function/menu instead of two.
-#################
+#####
 DestroyMenu FvwmMoveMethods
 AddToMenu FvwmMoveMethods
 +   "Move to Top"       Pick AnimatedMove keep 0p
@@ -573,6 +624,28 @@ AddToMenu MenuPageList
 + "7"   Pick MoveToPage 0 2
 + "8"   Pick MoveToPage 1 2
 + "9"   Pick MoveToPage 2 2
+
+DestroyFunc         TopHalfMix
+AddToFunc           TopHalfMix
++ "I" Maximize          100 50
+
+DestroyFunc                     LeftHalfMix
+AddToFunc                       LeftHalfMix
++ "I" Maximize                  50 100
+
+DestroyFunc         FullScreen
+AddToFunc           FullScreen
++ "I" Maximize          100 100
+
+####window move/resize####
+##Mouse     1   W   HM  Move
+DestroyFunc drag-n-move
+AddToFunc drag-n-move M move
+DestroyFunc drag-n-resize
+AddToFunc drag-n-resize M resize
+
+Mouse 1 W HM drag-n-move
+Mouse 3 W HM drag-n-resize
 
 DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: Geometry +0-0
