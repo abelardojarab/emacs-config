@@ -34,12 +34,6 @@
 (set-default 'semantic-case-fold t)
 (global-set-key [?\C- ] 'semantic-ia-complete-symbol-menu)
 (semantic-load-enable-code-helpers) ;; Enable prototype help and smart completion
-(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode t)
 
 ;; Mouse-3
 (global-cedet-m3-minor-mode 1)
@@ -52,22 +46,14 @@
 (global-semantic-idle-local-symbol-highlight-mode t)
 (global-semantic-idle-summary-mode t)
 (global-semantic-idle-completions-mode t)
+(global-semantic-tag-folding-mode)
 
 ;; Faster parsing
 (setq semantic-idle-work-parse-neighboring-files-flag nil)
 (setq semantic-idle-work-update-headers-flag nil)
-
-;; Enable code folding
-(global-semantic-tag-folding-mode)
-
-;; Don't reparse really big buffers.
-(setq semantic-idle-scheduler-max-buffer-size 1)
-
-;; Small workloads
 (setq semantic-idle-scheduler-idle-time 432000)
-
-;; Big workloads
 (setq semantic-idle-scheduler-work-idle-time 90)
+(setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Default directory
 (setq semanticdb-default-system-save-directory
@@ -114,12 +100,6 @@
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
 (ignore-errors
   (require 'semantic/bovine/c))
-(require 'semantic/bovine/gcc)
-(require 'semantic/bovine/clang)
-(require 'semantic/bovine/scm-by)
-
-;; Legacy
-;; (require 'semantic-util-modes)
 
 (defconst cedet-user-include-dirs
   (list ".." "../include" "../inc" "../common" "../public" "."

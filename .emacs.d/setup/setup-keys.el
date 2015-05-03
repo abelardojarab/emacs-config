@@ -334,6 +334,10 @@
 (define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
 (define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
 (define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-buffer)
+(define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
+(define-key my-keys-minor-mode-map (kbd "<f2>")   'bm-next)
+(define-key my-keys-minor-mode-map (kbd "<S-f2>") 'bm-previous)
+(define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
