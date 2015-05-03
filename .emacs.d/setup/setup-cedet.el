@@ -29,6 +29,13 @@
 
 ;; Enable Semantic
 (require 'semantic/ia)
+(require 'semantic/wisent)
+(setq semantic-default-submodes
+      '(global-semantic-idle-scheduler-mode
+        global-semanticdb-minor-mode
+        global-semantic-idle-summary-mode
+        global-semantic-tag-folding-mode
+        global-semantic-stickyfunc-mode))
 (semantic-mode 1)
 (global-semantic-idle-completions-mode)
 (set-default 'semantic-case-fold t)
@@ -38,15 +45,6 @@
 ;; Mouse-3
 (global-cedet-m3-minor-mode 1)
 (define-key cedet-m3-mode-map "\C-c " 'cedet-m3-menu-kbd)
-
-;; Enable plugins
-(global-semanticdb-minor-mode t)
-(global-semantic-highlight-func-mode t)
-(global-semantic-decoration-mode t)
-(global-semantic-idle-local-symbol-highlight-mode t)
-(global-semantic-idle-summary-mode t)
-(global-semantic-idle-completions-mode t)
-(global-semantic-tag-folding-mode)
 
 ;; Faster parsing
 (setq semantic-idle-work-parse-neighboring-files-flag nil)
@@ -114,26 +112,6 @@
           (semantic-add-system-include dir 'c-mode))
         include-dirs))
 (setq semantic-c-dependency-system-include-path "/usr/include/")
-
-;; Fast jump
-(defun semantic-jump-hook ()
-  (define-key c-mode-base-map [f1] 'semantic-ia-fast-jump)
-  (define-key c-mode-base-map [S-f1]
-    (lambda ()
-      (interactive)
-      (if (ring-empty-p (oref semantic-mru-bookmark-ring ring))
-          (error "Semantic bookmark ring is currently empty"))
-      (let* ((ring (oref semantic-mru-bookmark-ring ring))
-             (alist (semantic-mrub-ring-to-assoc-list ring))
-             (first (cdr (car alist))))
-        (if (semantic-equivalent-tag-p (oref first tag)
-                                       (semantic-current-tag))
-            (setq first (cdr (car (cdr alist)))))
-        (semantic-mrub-switch-tags first)))))
-(add-hook 'c-mode-common-hook 'semantic-jump-hook)
-(add-hook 'lisp-mode-hook 'semantic-jump-hook)
-(add-hook 'python-mode-hook 'semantic-jump-hook)
-(add-hook 'js2-mode-hook 'semantic-jump-hook)
 
 ;; Fast switch between header and implementation for C/C++
 (defun dts-switch-between-header-and-source ()
@@ -226,8 +204,6 @@
 (defun my/c-mode-init ()
   (c-set-style "k&r")
   (c-toggle-electric-state -1)
-  (define-key c-mode-map (kbd "C-c o") 'ff-find-other-file)
-  (define-key c++-mode-map (kbd "C-c o") 'ff-find-other-file)
   (setq c-basic-offset 4))
 
 (add-hook 'c-mode-hook #'my/c-mode-init)
