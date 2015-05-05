@@ -76,8 +76,9 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title EmacsClient, Icon emacs.xpm, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
 *FvwmButtons(Title Glade, Icon glade.xpm, Action 'Exec "Glade" glade-3 &')
 *FvwmButtons(Title Wing, Icon anjuta.xpm, Action 'Exec "Wing" ~/utils/wingide4.1/wing  &')
-*FvwmButtons(Title PyCharm, Icon anjuta.xpm, Action 'Exec "PyCharm" ~/utils/KomodoIDE7/bin/komodo &')
-*FvwmButtons(Title Komodo, Icon anjuta.xpm, Action 'Exec "Komodo" ~/utils/pycharm-4.0.6/bin/pycharm.sh &')
+*FvwmButtons(Title Komodo, Icon anjuta.xpm, Action 'Exec "Komodo" ~/utils/KomodoIDE7/bin/komodo &')
+*FvwmButtons(Title PyCharm, Icon anjuta.xpm, Action 'Exec "PyCharm" ~/utils/pycharm-4.0.6/bin/pycharm.sh &')
+*FvwmButtons(Title GTerminal, Icon xterm.xpm, Action 'Exec "GTerminal" gnome-terminal &')
 
 # Key Bindings: ctrl-arrow shifts viewports, alt-arrow shifts desktops
 Key Left  A C GotoPage -1p +0p
