@@ -64,16 +64,20 @@ Style FvwmTaskBar NeverFocus, Layer 0
 
 # Set up the geometry so that the buttons stack vertically on the left.
 *FvwmButtonsFont -adobe-helvetica-bold-r-*-*-10-*
-*FvwmButtons: ButtonGeometry 100x50+0+0
+*FvwmButtons: ButtonGeometry 100x50+1800+0
 *FvwmButtonsFore blick
 *FvwmButtons: BoxSize fixed
-*FvwmButtons: Rows 8
+*FvwmButtons: Rows 10
+*FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
 *FvwmButtons(Title XTerm, Icon xterm.xpm, Action 'Exec "xterm" xterm -ls &')
 *FvwmButtons(Title Emacs, Icon emacs.xpm, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title EmacsClient, Icon emacs.xpm, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
 *FvwmButtons(Title Glade, Icon glade.xpm, Action 'Exec "Glade" glade-3 &')
+*FvwmButtons(Title Wing, Icon anjuta.xpm, Action 'Exec "Wing" ~/utils/wingide4.1/wing  &')
+*FvwmButtons(Title PyCharm, Icon anjuta.xpm, Action 'Exec "PyCharm" ~/utils/KomodoIDE7/bin/komodo &')
+*FvwmButtons(Title Komodo, Icon anjuta.xpm, Action 'Exec "Komodo" ~/utils/pycharm-4.0.6/bin/pycharm.sh &')
 
 # Key Bindings: ctrl-arrow shifts viewports, alt-arrow shifts desktops
 Key Left  A C GotoPage -1p +0p
@@ -359,8 +363,8 @@ AddToFunc Maximize-Func     "M" Maximize     0 100
 + I ThisWindow (Maximized) DestroyWindowStyle
 + I TestRc (NoMatch) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
 + I UpdateStyles
-+ I ThisWindow (Maximized) Maximize ewmhiwa true 98 98
-+ I TestRc (NoMatch) Maximize ewmhiwa true 98 98
++ I ThisWindow (Maximized) Maximize ewmhiwa true 95 97
++ I TestRc (NoMatch) Maximize ewmhiwa true 95 97
 
 AddToFunc Move-or-Iconify   "I" Raise
 +               "M" Move
