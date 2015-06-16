@@ -34,8 +34,7 @@
       '(global-semantic-idle-scheduler-mode
         global-semanticdb-minor-mode
         global-semantic-idle-summary-mode
-        global-semantic-tag-folding-mode
-        global-semantic-stickyfunc-mode))
+        global-semantic-tag-folding-mode))
 (semantic-mode 1)
 (global-semantic-idle-completions-mode)
 (set-default 'semantic-case-fold t)
