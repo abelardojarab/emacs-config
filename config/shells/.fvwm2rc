@@ -9,7 +9,7 @@ EwmhBaseStruts 128 20 0 20
 OpaqueMoveSize -1
 TitleStyle Height 13
 ColormapFocus FollowsFocus
-WindowFont -misc-fixed-medium-r-normal-*-10-*-*-*-*-*-iso10646-1
+WindowFont  *-fixed-*-*-*-20-*
 
 # Pager background & foreground
 Colorset 3  bg #004020, fg #C0C0C0
@@ -38,7 +38,7 @@ AddToFunc StartFunction
 # Window Decor
 DestroyDecor MyDecor
 AddToDecor   MyDecor
-+ TitleStyle LeftJustified Height 14
++ TitleStyle LeftJustified Height 22
 + ButtonStyle 1 ActiveUp Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
 + ButtonStyle 1 ActiveDown Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
 + ButtonStyle 1 Inactive Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
@@ -71,7 +71,7 @@ Style FvwmTaskBar NoTitle, WindowListSkip, CirculateSkip, Sticky, BorderWidth 0,
 Style FvwmTaskBar NeverFocus, Layer 0
 
 # Set up the geometry so that the buttons stack vertically on the left.
-*FvwmButtonsFont -adobe-helvetica-bold-r-*-*-10-*
+*FvwmButtonsFont  *-fixed-*-*-*-20-*
 *FvwmButtons: ButtonGeometry 100x50+1800+0
 *FvwmButtonsFore blick
 *FvwmButtons: BoxSize fixed
@@ -92,6 +92,16 @@ Style FvwmTaskBar NeverFocus, Layer 0
 # AutoHiding Console
 Style HiddenConsole Sticky, WindowListSkip, Notitle, StaysOnTop, !Handles, FixedSize, FixedPosition
 Style HiddenConsole WindowShadeSteps 100
+
+# MenuStyles
+MenuStyle * TitleUnderlines2, SeparatorsLong, TrianglesSolid
+MenuStyle * BorderWidth 2
+MenuStyle * PopupAsSubmenu, HoldSubmenus, SubmenusRight
+MenuStyle * ItemFormat "%|%5.5i%1.3l%2.3>%|"
+MenuStyle * VerticalItemSpacing 1 1, VerticalTitleSpacing 2 2
+MenuStyle * MenuColorset 7
+MenuStyle * ActiveColorset 8
+MenuStyle * Font *-fixed-*-*-*-20-*
 
 DestroyMenu GraphicsCADSubMenu
 AddToMenu GraphicsCADSubMenu "Graphics/CAD" Title
