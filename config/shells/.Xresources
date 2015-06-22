@@ -22,10 +22,6 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 Xft.rgba: rgb
 
-! Use a nice truetype font and size by default... 
-xterm*faceName: Monospace
-xterm*faceSize: 12
-
 ! Every shell is a login shell by default (for inclusion of all necessary environment variables)
 xterm*loginshell: true
 
