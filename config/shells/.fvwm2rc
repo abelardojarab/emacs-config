@@ -401,14 +401,21 @@ DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: UseSkipList
 *FvwmTaskBar: PageOnly
 *FvwmTaskBar: ShowTips
-*FvwmTaskBar: NoDefaultStartButton
 *FvwmTaskBar: NoBrightFocus
 *FvwmTaskBar: 3DFvwm
 *FvwmTaskBar: MailCheck 0
-*FvwmTaskBar: IconColorset 11
-*FvwmTaskBar: FocusColorset 11
 *FvwmTaskBar: ClockFormat
 *FvwmTaskBar: WindowButtonsRightMargin 124
+*FvwmTaskBar: Font *-fixed-*-*-*-20-*
+*FvwmTaskBar: SelFont *-fixed-*-*-*-20-*
+*FvwmTaskBar: TipsBack bisque
+*FvwmTaskBar: TipsFore black
+*FvwmTaskBar: StatusFont fixed
+*FvwmTaskBar: Action Click1 DeiconifyRaiseAndFocus
+*FvwmTaskBar: Action Click2 Iconify On
+*FvwmTaskBar: Action Click3 Lower
+*FvwmTaskBar: StartName Start
+*FvwmTaskBar: StartMenu StartMenu
 
 # Key Bindings: ctrl-arrow shifts viewports, alt-arrow shifts desktops
 Key Left  A C GotoPage -1p +0p
