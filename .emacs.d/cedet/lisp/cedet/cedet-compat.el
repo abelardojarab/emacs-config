@@ -73,7 +73,10 @@
 ;;; locate-dominating-file
 ;;; Older Emacsen are missing the predicate feature.
 (when (version< emacs-version "24.3")
-  (load "../../etc/fallback-libraries/dominate/dominate.el"))
+  (load "../../etc/fallback-libraries/dominate/dominate.el")
+
+  ;; Older Emacsen missing the cl-lib package.
+  (load "../../etc/fallback-libraries/cl-lib/cl-lib.el"))
 
 (when (not (fboundp 'compare-strings))
 

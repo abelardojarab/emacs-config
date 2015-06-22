@@ -1,6 +1,6 @@
 ;;; semantic/scope.el --- Analyzer Scope Calculations
 
-;; Copyright (C) 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -509,7 +509,9 @@ the access would be 'protected.  Otherwise, access is 'public")
   "Return a list of slots that are valid completions from the list of SLOTS.
 If a tag in SLOTS has a named parent, then that implies that the
 tag is not something you can complete from within TYPE."
-  (let ((allslots (semantic-tag-components type))
+  ;; Pull in analyzed type members.
+  ;; For C, this strips out anon unions, and merges in anon union members.
+  (let ((allslots (semantic-analyze-tag-type-members type))
 	(leftover nil)
 	)
     (dolist (S allslots)
@@ -768,6 +770,16 @@ The class returned from the scope calculation is variable
 	;; can reset the scope cache without affecting others.
 	(clone scopecache)))))
 
+(defun semantic-calculate-scope-for-tag (tag)
+  "Calculate the current scope that is around TAG.
+Return nil if TAG has no position, or we cannot otherwise find a scope.
+Use this when pulling a datatype off TAG so when it is looked up
+it has the right context around it."
+   (save-current-buffer
+     (when (semantic-tag-with-position-p tag)
+       (semantic-go-to-tag tag)
+       (semantic-calculate-scope (point)))) )
+
 (defun semantic-scope-find (name &optional class scope-in)
   "Find the tag with NAME, and optional CLASS in the current SCOPE-IN.
 Searches various elements of the scope for NAME.  Return ALL the
@@ -810,7 +822,7 @@ hits in order, with the first tag being in the closest scope."
 		  (if (not ans)
 		      (setq typescoperaw nil)
 		    (when (cdr namesplit)
-		      (setq typescoperaw (semantic-tag-type-members
+		      (setq typescoperaw (semantic-analyze-tag-type-members
 					  (car ans)))))
 
 		  (setq namesplit (cdr namesplit)))

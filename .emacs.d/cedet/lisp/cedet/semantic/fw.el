@@ -390,15 +390,16 @@ FROM is an indication of where this function is called from as a value
 to pass to `throw'.  It is recommended to use the name of the function
 calling this one."
   `(when (and semantic-current-input-throw-symbol
-              (or (input-pending-p)
+	      (or (input-pending-p)
 		  ;; Timers might run during accept-process-output.
 		  ;; If they redisplay, point must be where the user
 		  ;; expects. (Bug#15045)
 		  (with-current-buffer (marker-buffer
 					semantic--on-input-start-marker)
-                    (goto-char (marker-position
-                                semantic--on-input-start-marker))
-                    (accept-process-output))))
+		    (save-excursion
+		      (goto-char (marker-position
+				  semantic--on-input-start-marker))
+		      (accept-process-output)))))
      (throw semantic-current-input-throw-symbol ,from)))
 
 

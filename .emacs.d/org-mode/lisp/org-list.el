@@ -94,30 +94,37 @@
 (defvar org-ts-regexp-both)
 (defvar org-drawer-regexp)
 
-(declare-function outline-invisible-p "outline" (&optional pos))
-(declare-function outline-flag-region "outline" (from to flag))
-(declare-function outline-next-heading "outline" ())
-(declare-function outline-previous-heading "outline" ())
-
-(declare-function org-at-heading-p "org" (&optional ignored))
-(declare-function org-before-first-heading-p "org" ())
+(declare-function org-at-heading-p "org" (&optional invisible-ok))
 (declare-function org-back-to-heading "org" (&optional invisible-ok))
+(declare-function org-before-first-heading-p "org" ())
 (declare-function org-combine-plists "org" (&rest plists))
 (declare-function org-count "org" (cl-item cl-seq))
 (declare-function org-current-level "org" ())
+(declare-function org-element-at-point "org-element" ())
+(declare-function org-element-context "org-element" (&optional element))
+(declare-function org-element-lineage "org-element"
+		  (blob &optional types with-self))
+(declare-function org-element-property "org-element" (property element))
+(declare-function org-element-type "org-element" (element))
+(declare-function org-element-update-syntax "org-element" ())
 (declare-function org-entry-get "org"
 		  (pom property &optional inherit literal-nil))
+(declare-function org-export-string-as "ox"
+		  (string backend &optional body-only ext-plist))
 (declare-function org-fix-tags-on-the-fly "org" ())
 (declare-function org-get-indentation "org" (&optional line))
 (declare-function org-icompleting-read "org" (&rest args))
 (declare-function org-in-block-p "org" (names))
 (declare-function org-in-regexp "org" (re &optional nlines visually))
+(declare-function org-inlinetask-goto-beginning "org-inlinetask" ())
+(declare-function org-inlinetask-goto-end "org-inlinetask" ())
+(declare-function org-inlinetask-in-task-p "org-inlinetask" ())
+(declare-function org-inlinetask-outline-regexp "org-inlinetask" ())
 (declare-function org-level-increment "org" ())
 (declare-function org-narrow-to-subtree "org" ())
-(declare-function org-at-heading-p "org" (&optional invisible-ok))
 (declare-function org-previous-line-empty-p "org" ())
-(declare-function org-remove-if "org" (predicate seq))
 (declare-function org-reduced-level "org" (L))
+(declare-function org-remove-if "org" (predicate seq))
 (declare-function org-show-subtree "org" ())
 (declare-function org-sort-remove-invisible "org" (S))
 (declare-function org-time-string-to-seconds "org" (s))
@@ -125,15 +132,10 @@
 (declare-function org-timer-item "org-timer" (&optional arg))
 (declare-function org-trim "org" (s))
 (declare-function org-uniquify "org" (list))
-
-(declare-function org-inlinetask-goto-beginning "org-inlinetask" ())
-(declare-function org-inlinetask-goto-end "org-inlinetask" ())
-(declare-function org-inlinetask-in-task-p "org-inlinetask" ())
-(declare-function org-inlinetask-outline-regexp "org-inlinetask" ())
-
-(declare-function org-export-string-as "ox"
-		  (string backend &optional body-only ext-plist))
-
+(declare-function outline-flag-region "outline" (from to flag))
+(declare-function outline-invisible-p "outline" (&optional pos))
+(declare-function outline-next-heading "outline" ())
+(declare-function outline-previous-heading "outline" ())
 
 
 
@@ -638,7 +640,7 @@ Assume point is at an item."
 	   (inlinetask-re (and (featurep 'org-inlinetask)
 			       (org-inlinetask-outline-regexp)))
 	   (beg-cell (cons (point) (org-get-indentation)))
-	   ind itm-lst itm-lst-2 end-lst end-lst-2 struct
+           itm-lst itm-lst-2 end-lst end-lst-2 struct
 	   (assoc-at-point
 	    (function
 	     ;; Return association at point.
@@ -923,13 +925,13 @@ Value returned is the position of the first child of ITEM."
 	       (< ind (org-list-get-ind child-maybe struct)))
       child-maybe)))
 
-(defun org-list-get-next-item (item struct prevs)
+(defun org-list-get-next-item (item _struct prevs)
   "Return next item in same sub-list as ITEM, or nil.
 STRUCT is the list structure.  PREVS is the alist of previous
 items, as returned by `org-list-prevs-alist'."
   (car (rassq item prevs)))
 
-(defun org-list-get-prev-item (item struct prevs)
+(defun org-list-get-prev-item (item _struct prevs)
   "Return previous item in same sub-list as ITEM, or nil.
 STRUCT is the list structure.  PREVS is the alist of previous
 items, as returned by `org-list-prevs-alist'."
@@ -961,7 +963,7 @@ items, as returned by `org-list-prevs-alist'."
       (push next-item after-item))
     (append before-item (list item) (nreverse after-item))))
 
-(defun org-list-get-children (item struct parents)
+(defun org-list-get-children (item _struct parents)
   "List all children of ITEM, or nil.
 STRUCT is the list structure.  PARENTS is the alist of parents,
 as returned by `org-list-parents-alist'."
@@ -979,7 +981,7 @@ STRUCT is the list structure."
 (defun org-list-get-bottom-point (struct)
   "Return point at bottom of list.
 STRUCT is the list structure."
-  (apply 'max
+  (apply #'max
 	 (mapcar (lambda (e) (org-list-get-item-end (car e) struct)) struct)))
 
 (defun org-list-get-list-begin (item struct prevs)
@@ -1636,8 +1638,7 @@ as returned by `org-list-prevs-alist'."
 	   ;; Pretend that bullets are uppercase and check if alphabet
 	   ;; is sufficient, taking counters into account.
 	   (while item
-	     (let ((bul (org-list-get-bullet item struct))
-		   (count (org-list-get-counter item struct)))
+	     (let ((count (org-list-get-counter item struct)))
 	       ;; Virtually determine current bullet
 	       (if (and count (string-match "[a-zA-Z]" count))
 		   ;; Counters are not case-sensitive.
@@ -1734,7 +1735,7 @@ This function modifies STRUCT."
 		  (replace-match "1" nil nil bullet))
 		 ;; Not an ordered list: keep bullet.
 		 (t bullet)))))))))
-    (mapc fix-bul (mapcar 'car struct))))
+    (mapc fix-bul (mapcar #'car struct))))
 
 (defun org-list-struct-fix-ind (struct parents &optional bullet-size)
   "Verify and correct indentation in STRUCT.
@@ -1762,7 +1763,7 @@ This function modifies STRUCT."
 				  org-list-indent-offset))
                 ;; If no parent, indent like top-point.
 		(org-list-set-ind item struct top-ind))))))
-    (mapc new-ind (mapcar 'car (cdr struct)))))
+    (mapc new-ind (mapcar #'car (cdr struct)))))
 
 (defun org-list-struct-fix-box (struct parents prevs &optional ordered)
   "Verify and correct checkboxes in STRUCT.
@@ -1777,7 +1778,7 @@ break this rule, the function will return the blocking item.  In
 all others cases, the return value will be nil.
 
 This function modifies STRUCT."
-  (let ((all-items (mapcar 'car struct))
+  (let ((all-items (mapcar #'car struct))
 	(set-parent-box
 	 (function
 	  (lambda (item)
@@ -2354,7 +2355,7 @@ in subtree, ignoring drawers."
 			       "\\|" org-clock-string "\\)"
 			       " *[[<]\\([^]>]+\\)[]>]"))
 	   (orderedp (org-entry-get nil "ORDERED"))
-	   (bounds
+	   (_bounds
 	    ;; In a region, start at first item in region.
 	    (cond
 	     ((org-region-active-p)
@@ -2411,7 +2412,7 @@ in subtree, ignoring drawers."
 	       (bottom (copy-marker (org-list-get-bottom-point struct)))
 	       (items-to-toggle (org-remove-if
 				 (lambda (e) (or (< e lim-up) (> e lim-down)))
-				 (mapcar 'car struct))))
+				 (mapcar #'car struct))))
 	  (mapc (lambda (e) (org-list-set-checkbox
 			     e struct
 			     ;; If there is no box at item, leave as-is
@@ -2460,130 +2461,122 @@ in subtree, ignoring drawers."
 
 (defun org-update-checkbox-count (&optional all)
   "Update the checkbox statistics in the current section.
+
 This will find all statistic cookies like [57%] and [6/12] and
 update them with the current numbers.
 
 With optional prefix argument ALL, do this for the whole buffer."
   (interactive "P")
-  (save-excursion
-    (let ((cookie-re "\\(\\(\\[[0-9]*%\\]\\)\\|\\(\\[[0-9]*/[0-9]*\\]\\)\\)")
-	  (box-re "^[ \t]*\\([-+*]\\|\\([0-9]+\\|[A-Za-z]\\)[.)]\\)[ \t]+\\(?:\\[@\\(?:start:\\)?\\([0-9]+\\|[A-Za-z]\\)\\][ \t]*\\)?\\(\\[[- X]\\]\\)")
+  (org-with-wide-buffer
+   (let* ((cookie-re "\\(\\(\\[[0-9]*%\\]\\)\\|\\(\\[[0-9]*/[0-9]*\\]\\)\\)")
+	  (box-re "^[ \t]*\\([-+*]\\|\\([0-9]+\\|[A-Za-z]\\)[.)]\\)[ \t]+\
+\\(?:\\[@\\(?:start:\\)?\\([0-9]+\\|[A-Za-z]\\)\\][ \t]*\\)?\\(\\[[- X]\\]\\)")
 	  (recursivep
 	   (or (not org-checkbox-hierarchical-statistics)
 	       (string-match "\\<recursive\\>"
 			     (or (org-entry-get nil "COOKIE_DATA") ""))))
-	  (bounds (if all
-		      (cons (point-min) (point-max))
-		    (cons (or (ignore-errors (org-back-to-heading t) (point))
-			      (point-min))
-			  (save-excursion (outline-next-heading) (point)))))
+	  (within-inlinetask (and (not all)
+				  (featurep 'org-inlinetask)
+				  (org-inlinetask-in-task-p)))
+	  (end (cond (all (point-max))
+		     (within-inlinetask
+		      (save-excursion (outline-next-heading) (point)))
+		     (t (save-excursion
+			  (org-with-limited-levels (outline-next-heading))
+			  (point)))))
 	  (count-boxes
-	   (function
-	    ;; Return number of checked boxes and boxes of all types
-	    ;; in all structures in STRUCTS.  If RECURSIVEP is
-	    ;; non-nil, also count boxes in sub-lists.  If ITEM is
-	    ;; nil, count across the whole structure, else count only
-	    ;; across subtree whose ancestor is ITEM.
-	    (lambda (item structs recursivep)
-	      (let ((c-on 0) (c-all 0))
-		(mapc
-		 (lambda (s)
-		   (let* ((pre (org-list-prevs-alist s))
-			  (par (org-list-parents-alist s))
-			  (items
-			   (cond
-			    ((and recursivep item) (org-list-get-subtree item s))
-			    (recursivep (mapcar 'car s))
-			    (item (org-list-get-children item s par))
-			    (t (org-list-get-all-items
-				(org-list-get-top-point s) s pre))))
-			  (cookies (delq nil (mapcar
-					      (lambda (e)
-						(org-list-get-checkbox e s))
-					      items))))
-		     (setq c-all (+ (length cookies) c-all)
-			   c-on (+ (org-count "[X]" cookies) c-on))))
-		 structs)
-		(cons c-on c-all)))))
-	  (backup-end 1)
-	  cookies-list structs-bak box-num)
-      (goto-char (car bounds))
-      ;; 1. Build an alist for each cookie found within BOUNDS.  The
-      ;;    key will be position at beginning of cookie and values
-      ;;    ending position, format of cookie, and a cell whose car is
-      ;;    number of checked boxes to report, and cdr total number of
-      ;;    boxes.
-      (while (re-search-forward cookie-re (cdr bounds) t)
-	(catch 'skip
-	  (save-excursion
-	    (push
-	     (list
-	      (match-beginning 1)	; cookie start
-	      (match-end 1)		; cookie end
-	      (match-string 2)		; percent?
-	      (cond			; boxes count
-	       ;; Cookie is at an heading, but specifically for todo,
-	       ;; not for checkboxes: skip it.
-	       ((and (org-at-heading-p)
-		     (string-match "\\<todo\\>"
-				   (downcase
-				    (or (org-entry-get nil "COOKIE_DATA") ""))))
-		(throw 'skip nil))
-	       ;; Cookie is at an heading, but all lists before next
-	       ;; heading already have been read.  Use data collected
-	       ;; in STRUCTS-BAK.  This should only happen when
-	       ;; heading has more than one cookie on it.
-	       ((and (org-at-heading-p)
-		     (<= (save-excursion (outline-next-heading) (point))
-			 backup-end))
-		(funcall count-boxes nil structs-bak recursivep))
-	       ;; Cookie is at a fresh heading.  Grab structure of
-	       ;; every list containing a checkbox between point and
-	       ;; next headline, and save them in STRUCTS-BAK.
-	       ((org-at-heading-p)
-		(setq backup-end (save-excursion
-				   (outline-next-heading) (point))
-		      structs-bak nil)
-		(while (org-list-search-forward box-re backup-end 'move)
-		  (let* ((struct (org-list-struct))
-			 (bottom (org-list-get-bottom-point struct)))
-		    (push struct structs-bak)
-		    (goto-char bottom)))
-		(funcall count-boxes nil structs-bak recursivep))
-	       ;; Cookie is at an item, and we already have list
-	       ;; structure stored in STRUCTS-BAK.
-	       ((and (org-at-item-p)
-		     (< (point-at-bol) backup-end)
-		     ;; Only lists in no special context are stored.
-		     (not (nth 2 (org-list-context))))
-		(funcall count-boxes (point-at-bol) structs-bak recursivep))
-	       ;; Cookie is at an item, but we need to compute list
-	       ;; structure.
-	       ((org-at-item-p)
-		(let ((struct (org-list-struct)))
-		  (setq backup-end (org-list-get-bottom-point struct)
-			structs-bak (list struct)))
-		(funcall count-boxes (point-at-bol) structs-bak recursivep))
-	       ;; Else, cookie found is at a wrong place.  Skip it.
-	       (t (throw 'skip nil))))
-	     cookies-list))))
-      ;; 2. Apply alist to buffer, in reverse order so positions stay
-      ;;    unchanged after cookie modifications.
-      (mapc (lambda (cookie)
-	      (let* ((beg (car cookie))
-		     (end (nth 1 cookie))
-		     (percentp (nth 2 cookie))
-		     (checked (car (nth 3 cookie)))
-		     (total (cdr (nth 3 cookie)))
-		     (new (if percentp
-			      (format "[%d%%]" (/ (* 100 checked)
-						  (max 1 total)))
-			    (format "[%d/%d]" checked total))))
-		(goto-char beg)
-		(insert new)
-		(delete-region (point) (+ (point) (- end beg)))
-		(when org-auto-align-tags (org-fix-tags-on-the-fly))))
+	   (lambda (item structs recursivep)
+	     ;; Return number of checked boxes and boxes of all types
+	     ;; in all structures in STRUCTS.  If RECURSIVEP is
+	     ;; non-nil, also count boxes in sub-lists.  If ITEM is
+	     ;; nil, count across the whole structure, else count only
+	     ;; across subtree whose ancestor is ITEM.
+	     (let ((c-on 0) (c-all 0))
+	       (dolist (s structs (list c-on c-all))
+		 (let* ((pre (org-list-prevs-alist s))
+			(par (org-list-parents-alist s))
+			(items
+			 (cond
+			  ((and recursivep item) (org-list-get-subtree item s))
+			  (recursivep (mapcar #'car s))
+			  (item (org-list-get-children item s par))
+			  (t (org-list-get-all-items
+			      (org-list-get-top-point s) s pre))))
+			(cookies (delq nil (mapcar
+					    (lambda (e)
+					      (org-list-get-checkbox e s))
+					    items))))
+		   (incf c-all (length cookies))
+		   (incf c-on (org-count "[X]" cookies)))))))
+	  cookies-list cache)
+     ;; Move to start.
+     (cond (all (goto-char (point-min)))
+	   (within-inlinetask (org-back-to-heading t))
+	   (t (org-with-limited-levels (outline-previous-heading))))
+     ;; Build an alist for each cookie found.  The key is the position
+     ;; at beginning of cookie and values ending position, format of
+     ;; cookie, number of checked boxes to report and total number of
+     ;; boxes.
+     (while (re-search-forward cookie-re end t)
+       (let ((context (save-excursion (backward-char)
+				      (save-match-data (org-element-context)))))
+	 (when (eq (org-element-type context) 'statistics-cookie)
+	   (push
+	    (append
+	     (list (match-beginning 1) (match-end 1) (match-end 2))
+	     (let* ((container
+		     (org-element-lineage
+		      context
+		      '(drawer center-block dynamic-block inlinetask plain-list
+			       quote-block special-block verse-block)))
+		    (beg (if container (org-element-property :begin container)
+			   (save-excursion
+			     (org-with-limited-levels (outline-previous-heading))
+			     (point)))))
+	       (or (cdr (assq beg cache))
+		   (save-excursion
+		     (goto-char beg)
+		     (let ((end
+			    (if container (org-element-property :end container)
+			      (save-excursion
+				(org-with-limited-levels (outline-next-heading))
+				(point))))
+			   structs)
+		       (while (re-search-forward box-re end t)
+			 (let ((element (org-element-at-point)))
+			   (when (eq (org-element-type element) 'item)
+			     (push (org-element-property :structure element)
+				   structs)
+			     (goto-char (org-element-property
+					 :end
+					 (org-element-property :parent
+							       element))))))
+		       ;; Cache count for cookies applying to the same
+		       ;; area.  Then return it.
+		       (let ((count
+			      (funcall count-boxes
+				       (and (eq (org-element-type container)
+						'plain-list)
+					    (org-element-property
+					     :contents-begin container))
+				       structs
+				       recursivep)))
+			 (push (cons beg count) cache)
+			 count))))))
 	    cookies-list))))
+     ;; Apply alist to buffer.
+     (dolist (cookie cookies-list)
+       (let* ((beg (car cookie))
+	      (end (nth 1 cookie))
+	      (percent (nth 2 cookie))
+	      (checked (nth 3 cookie))
+	      (total (nth 4 cookie)))
+	 (goto-char beg)
+	 (insert
+	  (if percent (format "[%d%%]" (/ (* 100 checked) (max 1 total)))
+	    (format "[%d/%d]" checked total)))
+	 (delete-region (point) (+ (point) (- end beg)))
+	 (when org-auto-align-tags (org-fix-tags-on-the-fly)))))))
 
 (defun org-get-checkbox-statistics-face ()
   "Select the face for checkbox statistics.
@@ -2769,6 +2762,7 @@ If a region is active, all items inside will be moved."
      (t (error "Not at an item")))))
 
 (defvar org-tab-ind-state)
+(defvar org-adapt-indentation)
 (defun org-cycle-item-indentation ()
   "Cycle levels of indentation of an empty item.
 The first run indents the item, if applicable.  Subsequent runs
@@ -2960,13 +2954,13 @@ will be parsed as:
   \(3 \"last item\"\)\)
 
 Point is left at list end."
+  (defvar parse-item)                   ;FIXME: Or use `cl-labels' or `letrec'.
   (let* ((struct (org-list-struct))
 	 (prevs (org-list-prevs-alist struct))
 	 (parents (org-list-parents-alist struct))
 	 (top (org-list-get-top-point struct))
 	 (bottom (org-list-get-bottom-point struct))
 	 out
-	 parse-item			; for byte-compiler
 	 (get-text
 	  (function
 	   ;; Return text between BEG and END, trimmed, with
@@ -3092,7 +3086,7 @@ for this list."
 	      (re-search-forward (org-item-beginning-re) bottom-point t)
 	      (match-beginning 0)))
 	   (plain-list (buffer-substring-no-properties top-point bottom-point))
-	   beg txt)
+	   beg)
       (unless (fboundp transform)
 	(error "No such transformation function %s" transform))
       (let ((txt (funcall transform plain-list)))
@@ -3102,7 +3096,8 @@ for this list."
 	  (unless (re-search-forward
 		   (concat "BEGIN RECEIVE ORGLST +"
 			   name
-			   "\\([ \t]\\|$\\)") nil t)
+			   "\\([ \t]\\|$\\)")
+                   nil t)
 	    (error "Don't know where to insert translated list"))
 	  (goto-char (match-beginning 0))
 	  (beginning-of-line 2)
@@ -3215,13 +3210,13 @@ items."
 	       (when nobr (setq first (org-list-item-trim-br first)))
 	       ;; Insert descriptive term if TYPE is `descriptive'.
 	       (when (eq type 'descriptive)
-		 (let* ((complete (string-match "^\\(.*\\)[ \t]+::" first))
+		 (let* ((complete
+			 (string-match "^\\(.*\\)[ \t]+::[ \t]*" first))
 			(term (if complete
 				  (save-match-data
 				    (org-trim (match-string 1 first)))
 				"???"))
-			(desc (if complete
-				  (org-trim (substring first (match-end 0)))
+			(desc (if complete (substring first (match-end 0))
 				first)))
 		   (setq first (concat (eval dtstart) term (eval dtend)
 				       (eval ddstart) desc))))
@@ -3250,7 +3245,7 @@ items."
 				      items (or (eval isep) ""))))))))
     (concat (funcall export-sublist list 0) "\n")))
 
-(defun org-list-to-latex (list &optional params)
+(defun org-list-to-latex (list &optional _params)
   "Convert LIST into a LaTeX list.
 LIST is as string representing the list to transform, as Org
 syntax.  Return converted list as a string."
@@ -3264,7 +3259,7 @@ syntax.  Return converted list as a string."
   (require 'ox-html)
   (org-export-string-as list 'html t))
 
-(defun org-list-to-texinfo (list &optional params)
+(defun org-list-to-texinfo (list &optional _params)
   "Convert LIST into a Texinfo list.
 LIST is as string representing the list to transform, as Org
 syntax.  Return converted list as a string."
@@ -3275,14 +3270,15 @@ syntax.  Return converted list as a string."
   "Convert LIST into an Org subtree.
 LIST is as returned by `org-list-parse-list'.  PARAMS is a property list
 with overruling parameters for `org-list-to-generic'."
+  (defvar get-stars) (defvar org--blankp)
   (let* ((rule (cdr (assq 'heading org-blank-before-new-entry)))
 	 (level (org-reduced-level (or (org-current-level) 0)))
-	 (blankp (or (eq rule t)
+	 (org--blankp (or (eq rule t)
 		     (and (eq rule 'auto)
 			  (save-excursion
 			    (outline-previous-heading)
 			    (org-previous-line-empty-p)))))
-	 (get-stars
+	 (get-stars ;FIXME: Can't rename without renaming it in org.el as well!
 	  (function
 	   ;; Return the string for the heading, depending on depth D
 	   ;; of current sub-list.
@@ -3297,12 +3293,12 @@ with overruling parameters for `org-list-to-generic'."
      list
      (org-combine-plists
       '(:splice t
-		:dtstart " " :dtend " "
-		:istart (funcall get-stars depth)
-		:icount (funcall get-stars depth)
-		:isep (if blankp "\n\n" "\n")
-		:csep (if blankp "\n\n" "\n")
-		:cbon "DONE" :cboff "TODO" :cbtrans "TODO")
+        :dtstart " " :dtend " "
+        :istart (funcall get-stars depth)
+        :icount (funcall get-stars depth)
+        :isep (if org--blankp "\n\n" "\n")
+        :csep (if org--blankp "\n\n" "\n")
+        :cbon "DONE" :cboff "TODO" :cbtrans "TODO")
       params))))
 
 (provide 'org-list)

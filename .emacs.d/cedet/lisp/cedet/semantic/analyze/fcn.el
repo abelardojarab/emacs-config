@@ -1,6 +1,6 @@
 ;;; semantic/analyze/fcn.el --- Analyzer support functions.
 
-;; Copyright (C) 2007-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2013, 2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -183,7 +183,16 @@ Optional SCOPE represents a calculated scope in which the
 types might be found.  This can be nil.
 If NOMETADEREF, then do not dereference metatypes.  This is
 used by the analyzer debugger."
-  (semantic-analyze-type (semantic-tag-type tag) scope nometaderef))
+  (or 
+   (semantic-analyze-type (semantic-tag-type tag) scope nometaderef)
+   ;; If we didn't find it the 'quick' way with the passed in scope,
+   ;; perhaps the type is using a shorthand only available from the
+   ;; location of TAG, which might be a member of some struct far away
+   ;; from the original source that spawed the search.
+   (let ((tagscope (semantic-calculate-scope-for-tag tag)))
+     (when tagscope
+       (semantic-analyze-type (semantic-tag-type tag)
+			      tagscope nometaderef)))))
 
 (defun semantic-analyze-type (type-declaration &optional scope nometaderef)
   "Return the semantic tag for TYPE-DECLARATION.

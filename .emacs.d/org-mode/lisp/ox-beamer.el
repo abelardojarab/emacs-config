@@ -105,7 +105,9 @@ key     Selection key for `org-beamer-select-environment'
 open    The opening template for the environment, with the following escapes
         %a   the action/overlay specification
         %A   the default action/overlay specification
-        %o   the options argument of the template
+        %R   the raw BEAMER_act value
+        %o   the options argument, with square brackets
+        %O   the raw BEAMER_opt value
         %h   the headline text
         %r   the raw headline text (i.e. without any processing)
         %H   if there is headline text, that raw text in {} braces
@@ -132,6 +134,15 @@ You might want to put e.g. \"allowframebreaks=0.9\" here."
   :group 'org-export-beamer
   :type '(string :tag "Outline frame options"))
 
+
+(defcustom org-beamer-subtitle-format "\\subtitle{%s}"
+  "Format string used for transcoded subtitle.
+The format string should have at most one \"%s\"-expression,
+which is replaced with the subtitle."
+  :group 'org-export-beamer
+  :version "25.1"
+  :package-version '(Org . "8.3")
+  :type '(string :tag "Format string"))
 
 
 ;;; Internal Variables
@@ -233,6 +244,7 @@ Return overlay specification, as a string, or nil."
   :options-alist
   '((:headline-levels nil "H" org-beamer-frame-level)
     (:latex-class "LATEX_CLASS" nil "beamer" t)
+    (:beamer-subtitle-format nil nil org-beamer-subtitle-format)
     (:beamer-column-view-format "COLUMNS" nil org-beamer-column-view-format)
     (:beamer-theme "BEAMER_THEME" nil org-beamer-theme)
     (:beamer-color-theme "BEAMER_COLOR_THEME" nil nil t)
@@ -322,13 +334,10 @@ The value is either the label specified in \"BEAMER_opt\"
 property, or a fallback value built from headline's number.  This
 function assumes HEADLINE will be treated as a frame."
   (let ((opt (org-element-property :BEAMER_OPT headline)))
-    (if (and (org-string-nw-p opt)
+    (if (and (stringp opt)
 	     (string-match "\\(?:^\\|,\\)label=\\(.*?\\)\\(?:$\\|,\\)" opt))
 	(match-string 1 opt)
-      (format "sec-%s"
-	      (mapconcat 'number-to-string
-			 (org-export-get-headline-number headline info)
-			 "-")))))
+      (format "{sec:%s}" (org-export-get-reference headline info)))))
 
 (defun org-beamer--frame-level (headline info)
   "Return frame level in subtree containing HEADLINE.
@@ -486,9 +495,10 @@ used as a communication channel."
 		(t (user-error "Wrong block type at a headline named \"%s\""
 			       raw-title))))
 	 (title (org-export-data (org-element-property :title headline) info))
-	 (options (let ((options (org-element-property :BEAMER_OPT headline)))
-		    (if (not options) ""
-		      (org-beamer--normalize-argument options 'option))))
+	 (raw-options (org-element-property :BEAMER_OPT headline))
+	 (options (if raw-options
+		      (org-beamer--normalize-argument raw-options 'option)
+		    ""))
 	 ;; Start a "columns" environment when explicitly requested or
 	 ;; when there is no previous headline or the previous
 	 ;; headline do not have a BEAMER_column property.
@@ -540,15 +550,18 @@ used as a communication channel."
 	  ;; overlay specification and the default one is nil.
 	  (let ((action (org-element-property :BEAMER_ACT headline)))
 	    (cond
-	     ((not action) (list (cons "a" "") (cons "A" "")))
+	     ((not action) (list (cons "a" "") (cons "A" "") (cons "R" "")))
 	     ((string-match "\\`\\[.*\\]\\'" action)
 	      (list
 	       (cons "A" (org-beamer--normalize-argument action 'defaction))
-	       (cons "a" "")))
+	       (cons "a" "")
+	       (cons "R" action)))
 	     (t
 	      (list (cons "a" (org-beamer--normalize-argument action 'action))
-		    (cons "A" "")))))
+		    (cons "A" "")
+		    (cons "R" action)))))
 	  (list (cons "o" options)
+		(cons "O" (or raw-options ""))
 		(cons "h" title)
 		(cons "r" raw-title)
 		(cons "H" (if (equal raw-title "") ""
@@ -710,8 +723,7 @@ used as a communication channel."
 	(if (not destination) contents
 	  (format "\\hyperlink%s{%s}{%s}"
 		  (or (org-beamer--element-has-overlay-p link) "")
-		  (org-export-solidify-link-text
-		   (org-element-property :value destination))
+		  (org-export-get-reference destination info)
 		  contents))))
      ((and (member type '("custom-id" "fuzzy" "id"))
 	   (let ((destination (if (string= type "fuzzy")
@@ -733,11 +745,11 @@ used as a communication channel."
 			    label
 			    contents))))
 	       (target
-		(let ((path (org-export-solidify-link-text path)))
-		  (if (not contents) (format "\\ref{%s}" path)
+		(let ((ref (org-export-get-reference destination info)))
+		  (if (not contents) (format "\\ref{%s}" ref)
 		    (format "\\hyperlink%s{%s}{%s}"
 			    (or (org-beamer--element-has-overlay-p link) "")
-			    path
+			    ref
 			    contents))))))))
      ;; Otherwise, use `latex' back-end.
      (t (org-export-with-backend 'latex link contents info)))))
@@ -775,7 +787,8 @@ contextual information."
 	      'option)
 	     ;; Eventually insert contents and close environment.
 	     contents
-	     latex-type))))
+	     latex-type)
+     info)))
 
 
 ;;;; Radio Target
@@ -786,8 +799,7 @@ TEXT is the text of the target.  INFO is a plist holding
 contextual information."
   (format "\\hypertarget%s{%s}{%s}"
 	  (or (org-beamer--element-has-overlay-p radio-target) "")
-	  (org-export-solidify-link-text
-	   (org-element-property :value radio-target))
+	  (org-export-get-reference radio-target info)
 	  text))
 
 
@@ -797,8 +809,7 @@ contextual information."
   "Transcode a TARGET object into Beamer code.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (format "\\label{%s}"
-	  (org-export-solidify-link-text (org-element-property :value target))))
+  (format "\\label{%s}" (org-export-get-reference target info)))
 
 
 ;;;; Template
@@ -810,7 +821,8 @@ information."
   "Return complete document string after Beamer conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
-  (let ((title (org-export-data (plist-get info :title) info)))
+  (let ((title (org-export-data (plist-get info :title) info))
+	(subtitle (org-export-data (plist-get info :subtitle) info)))
     (concat
      ;; 1. Time-stamp.
      (and (plist-get info :time-stamp-file)
@@ -877,6 +889,8 @@ holding export options."
        (format "\\date{%s}\n" (org-export-data date info)))
      ;; 7. Title
      (format "\\title{%s}\n" title)
+     (when (org-string-nw-p subtitle)
+       (concat (format (plist-get info :beamer-subtitle-format) subtitle) "\n"))
      ;; 8. Beamer-header
      (let ((beamer-header (plist-get info :beamer-header)))
        (when beamer-header

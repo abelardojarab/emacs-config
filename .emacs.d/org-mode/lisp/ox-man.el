@@ -651,8 +651,7 @@ INFO is a plist holding contextual information.  See
          (path (cond
                 ((member type '("http" "https" "ftp" "mailto"))
                  (concat type ":" raw-path))
-                ((and (string= type "file") (file-name-absolute-p raw-path))
-                 (concat "file:" raw-path))
+                ((string= type "file") (org-export-file-uri raw-path))
                 (t raw-path)))
          protocol)
     (cond
@@ -1073,8 +1072,7 @@ a communication channel."
   "Transcode a TARGET object from Org to Man.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (format "\\fI%s\\fP"
-          (org-export-solidify-link-text (org-element-property :value target))))
+  (format "\\fI%s\\fP" (org-export-get-reference target info)))
 
 
 ;;; Timestamp

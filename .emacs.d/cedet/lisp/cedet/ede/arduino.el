@@ -1,6 +1,6 @@
 ;;; ede/arduino.el --- EDE support for arduino projects / sketches
 ;;
-;; Copyright (C) 2012, 2013, 2014 Eric M. Ludlam
+;; Copyright (C) 2012, 2013, 2014, 2015 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;;
@@ -203,9 +203,10 @@ ROOTPROJ is nil, sinc there is only one project for a directory tree."
    ;; NOTE: In loaddefs, the pref file isn't there, so we need a fallback.
    ;;       when this files loads, we need to use the actual pref in case
    ;;       the user set it.
-   :fromconfig (if (boundp 'ede-arduino-preferences-file)
-		   ede-arduino-preferences-file 
-		 "~/.arduino/preferences.txt")
+   :fromconfig (lambda ()
+		 (if (boundp 'ede-arduino-preferences-file)
+		     ede-arduino-preferences-file 
+		   "~/.arduino/preferences.txt"))
    :configregex "^sketchbook.path=\\([^\n]+\\)$"
    :configregexidx 1)
   :proj-file 'ede-arduino-file

@@ -1,6 +1,6 @@
 ;;; semantic/analyze/complete.el --- Smart Completions
 
-;; Copyright (C) 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -235,7 +235,7 @@ FLAGS can be any number of:
 	   ((semantic-tag-type (car loopc))
 	    (let ((att (semantic-analyze-tag-type (car loopc) scope))
 		)
-	      (if (and att (semantic-tag-type-members att))
+	      (if (and att (semantic-analyze-tag-type-members att))
 		  (setq c (cons (car loopc) c))))
 	    )
 

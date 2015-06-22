@@ -76,3 +76,31 @@ void foo(void) {
   a.// -4-
     ; // #4# ( "Mumble" "get" )
 }
+
+// What happens if a type your looking for is scoped withing a type,
+// but you are one level into the completion so the originating scope
+// excludes the type of the variable you are completing through?
+// Thanks Martin Stein for this nice example.
+
+namespace ms_structs
+{
+   struct ms_aaa
+   {
+     int xx;
+   };
+
+   struct ms_bbb
+   {
+     struct ms_aaa yy;
+   };
+};
+
+int fun()
+{
+   using namespace ms_structs;
+   struct ms_bbb mszz;
+   int uu = mszz.// -5-
+     ; // #5# ( "yy" )
+   int kk = mszz.yy.// -6-
+     ; // #6# ( "xx" )
+}

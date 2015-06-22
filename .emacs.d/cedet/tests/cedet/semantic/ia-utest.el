@@ -1,6 +1,6 @@
 ;;; semantic/ia-utest.el --- Analyzer unit tests
 
-;; Copyright (C) 2008, 2009, 2010, 2011, 2014 Eric M. Ludlam
+;; Copyright (C) 2008, 2009, 2010, 2011, 2014, 2015 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -43,6 +43,7 @@
     "tests/testsubclass.cpp"
     "tests/testtypedefs.cpp"
     "tests/teststruct.cpp"
+    "tests/testunion.cpp"
     "tests/testtemplates.cpp"
     "tests/testfriends.cpp"
     "tests/testusing.cpp"
@@ -54,6 +55,9 @@
     "tests/testvarnames.java"
     "tests/testf90.f90"
     "tests/testwisent.wy"
+    "tests/test.texi"
+    "tests/test.mk"
+    "tests/test.srt"
     )
   "List of files with analyzer completion test points.")
 
@@ -113,6 +117,8 @@ Argument ARG specifies which set of tests to run.
 
 	      (semantic-ia-utest-log "  ** Starting tests in %s"
 				     (buffer-name))
+	      ;;(message "Mode: %S" major-mode)
+	      ;;(message "CSS: %S" comment-start-skip)
 
 	      (when (or (not arg) (= arg 1))
 		(semantic-ia-utest-buffer))
@@ -196,9 +202,9 @@ If the error occurs w/ a C or C++ file, rethrow the error."
 	 )
     ;; Keep looking for test points until we run out.
     (while (save-excursion
-	     (setq regex-p (concat comment-start-skip "\\s-*-"
+	     (setq regex-p (concat "\\(" comment-start-skip "\\)\\s-*-"
 				   (number-to-string idx) "-" )
-		   regex-a (concat comment-start-skip "\\s-*#"
+		   regex-a (concat "\\(" comment-start-skip "\\)\\s-*#"
 				   (number-to-string idx) "#" ))
 	     (goto-char (point-min))
 	     (save-match-data
@@ -212,6 +218,7 @@ If the error occurs w/ a C or C++ file, rethrow the error."
       (save-excursion
 
 	(goto-char p)
+	(skip-chars-backward " ") ;; some languages need a space.
 
 	(let* ((ctxt (semantic-analyze-current-context))
 	       (acomp
@@ -224,7 +231,10 @@ If the error occurs w/ a C or C++ file, rethrow the error."
 
 	(let ((bss (buffer-substring-no-properties (point) (point-at-eol))))
 	  (condition-case nil
-	      (setq desired (read bss))
+	      (progn
+		(setq desired (read bss))
+		;;(message "READ of %S from %S" desired bss)
+		)
 	    (error (setq desired (format "  FAILED TO PARSE: %S"
 					 bss)))))
 
@@ -273,8 +283,8 @@ If the error occurs w/ a C or C++ file, rethrow the error."
 	 )
     ;; Keep looking for test points until we run out.
     (while (save-excursion
-	     (setq regex-p (concat comment-start-skip
-				   "\\s-*\\^" (number-to-string idx) "^" )
+	     (setq regex-p (concat "\\(" comment-start-skip
+				   "\\)\\s-*\\^" (number-to-string idx) "^" )
 		   )
 	     (goto-char (point-min))
 	     (save-match-data
@@ -395,7 +405,7 @@ If the error occurs w/ a C or C++ file, rethrow the error."
 	 )
     ;; Keep looking for test points until we run out.
     (while (save-excursion
-	     (setq regex-p (concat comment-start-skip "\\s-*\\%"
+	     (setq regex-p (concat "\\(" comment-start-skip "\\)\\s-*\\%"
 				   (number-to-string idx) "%" )
 		   )
 	     (goto-char (point-min))
@@ -494,7 +504,7 @@ If the error occurs w/ a C or C++ file, rethrow the error."
 	 )
     ;; Keep looking for test points until we run out.
     (while (save-excursion
-	     (setq regex-p (concat comment-start-skip "\\s-*@"
+	     (setq regex-p (concat "\\(" comment-start-skip "\\)\\s-*@"
 				   (number-to-string idx)
 				   "@\\s-+\\w+" ))
 	     (goto-char (point-min))

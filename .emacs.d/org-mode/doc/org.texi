@@ -1,4 +1,4 @@
-\input texinfo
+\input texinfo  @c -*- coding: utf-8 -*-
 @c %**start of header
 @setfilename ../../info/org.info
 @settitle The Org Manual
@@ -2007,6 +2007,15 @@ location with a prefix argument, offer the same menu as @kbd{C-c C-x f}.
 @item C-c C-o  @r{or} mouse-1/2
 Footnote labels are also links to the corresponding definition/reference, and
 you can use the usual commands to follow these links.
+
+@vindex org-edit-footnote-reference
+@kindex C-c '
+@item C-c '
+@item C-c '
+Edit the footnote definition corresponding to the reference at point in a
+seperate window.  This may be useful if editing footnotes in a narrowed
+buffer.  The window can be closed by pressing @kbd{C-c '}.
+
 @end table
 
 @node Orgstruct mode
@@ -5916,7 +5925,7 @@ package@footnote{When working with the standard diary sexp functions, you
 need to be very careful with the order of the arguments.  That order depends
 evilly on the variable @code{calendar-date-style} (or, for older Emacs
 versions, @code{european-calendar-style}).  For example, to specify a date
-December 12, 2005, the call might look like @code{(diary-date 12 1 2005)} or
+December 1, 2005, the call might look like @code{(diary-date 12 1 2005)} or
 @code{(diary-date 1 12 2005)} or @code{(diary-date 2005 12 1)}, depending on
 the settings.  This has been the source of much confusion.  Org mode users
 can resort to special versions of these functions like @code{org-date} or
@@ -7282,7 +7291,7 @@ dynamic insertion of content.  The templates are expanded in the order given her
             @r{You may specify a default value and a completion table with}
             @r{%^@{prompt|default|completion2|completion3...@}.}
             @r{The arrow keys access a prompt-specific history.}
-%\n         @r{Insert the text entered at the nth %^@{@var{prompt}@}, where @code{n} is}
+%\\n        @r{Insert the text entered at the nth %^@{@var{prompt}@}, where @code{n} is}
             @r{a number, starting from 1.}
 %?          @r{After completing the template, position cursor here.}
 @end smallexample
@@ -10165,7 +10174,6 @@ an index} for more information.
 
 
 
-
 @node Macro replacement
 @section Macro replacement
 @cindex macro replacement, during export
@@ -10185,23 +10193,46 @@ escaped with another backslash character.}.
 
 These references, called macros, can be inserted anywhere Org markup is
 recognized: paragraphs, headlines, verse blocks, tables cells and lists.
-They cannot be used within ordinary keywords (starting with @code{#+}) but
-are allowed in @code{#+CAPTION}, @code{#+TITLE}, @code{#+AUTHOR} and
-@code{#+EMAIL}.
+They can also be used in keywords accepting Org syntax, e.g.,
+@code{#+CAPTION}, @code{#+TITLE}, @code{#+AUTHOR}, @code{#+DATE} and some
+others, export back-end specific, ones.
 
 In addition to user-defined macros, a set of predefined macros can be used:
-@code{@{@{@{title@}@}@}}, @code{@{@{@{author@}@}@}}, and
-@code{@{@{@{email@}@}@}} are replaced with the information set by their
-respective keywords.  Further, @code{@{@{@{date(@var{FORMAT})@}@}@}},
-@code{@{@{@{time(@var{FORMAT})@}@}@}} and
-@code{@{@{@{modification-time(@var{FORMAT})@}@}@}} refer to the @code{#+DATE}
-keyword, the current date, and the modification time of the file being
-exported, respectively.  @var{FORMAT} should be a format string understood by
-@code{format-time-string}.  Note that @var{FORMAT} is an optional argument to
-the @code{@{@{@{date@}@}@}} macro, and that it will only be used if
-@code{#+DATE} is a single timestamp.  Finally, the filename is available via
-@code{@{@{@{input-file@}@}@}} and properties can be accessed using
-@code{@{@{@{property(@var{PROPERTY-NAME})@}@}@}}.
+
+@table @code
+@item @{@{@{title@}@}@}
+@itemx @{@{@{author@}@}@}
+@itemx @{@{@{email@}@}@}
+@cindex title, macro
+@cindex author, macro
+@cindex email, macro
+These macros are replaced with the information available at the time of
+export.
+
+@item @{@{@{date@}@}@}
+@itemx @{@{@{date(@var{FORMAT})@}@}@}
+@itemx @{@{@{time(@var{FORMAT})@}@}@}
+@itemx @{@{@{modification-time(@var{FORMAT})@}@}@}
+@cindex date, macro
+@cindex time, macro
+@cindex modification time, macro
+These macros refer to the @code{#+DATE} keyword, the current date, and the
+modification time of the file being exported, respectively.  @var{FORMAT}
+should be a format string understood by @code{format-time-string}.  Note that
+@var{FORMAT} is an optional argument to the @code{@{@{@{date@}@}@}} macro,
+and that it will only be used if @code{#+DATE} is a single timestamp.
+
+@item @{@{@{input-file@}@}@}
+@cindex input file, macro
+This macro refers to the filename of the exported file, if any.
+
+@item @{@{@{property(@var{PROPERTY-NAME})@}@}@}
+@itemx @{@{@{property(@var{PROPERTY-NAME},@var{SEARCH-OPTION})@}@}@}
+@cindex property, macro
+This macro returns the value of property @var{PROPERTY-NAME} in current
+entry.  If @var{SEARCH-OPTION} (@pxref{Search options}) refers to a remote
+entry, it will be used instead.
+@end table
 
 The surrounding brackets can be made invisible by setting
 @code{org-hide-macro-markers} non-@code{nil}.
@@ -10338,9 +10369,10 @@ Text within the usual @LaTeX{} math delimiters.  To avoid conflicts with
 currency specifications, single @samp{$} characters are only recognized as
 math delimiters if the enclosed text contains at most two line breaks, is
 directly attached to the @samp{$} characters with no whitespace in between,
-and if the closing @samp{$} is followed by whitespace, punctuation or a dash.
-For the other delimiters, there is no such restriction, so when in doubt, use
-@samp{\(...\)} as inline math delimiters.
+and if the closing @samp{$} is followed by whitespace or punctuation
+(parentheses and quotes are considered to be punctuation in this
+context).  For the other delimiters, there is no such restriction, so when in
+doubt, use @samp{\(...\)} as inline math delimiters.
 @end itemize
 
 @noindent For example:
@@ -10557,7 +10589,6 @@ minibuffer.  From there one can still switch back to regular menu by pressing
 @key{?}.} from which it is possible to select an export format and to toggle
 export options.
 
-@c @quotation
 @table @asis
 @orgcmd{C-c C-e,org-export-dispatch}
 
@@ -10566,7 +10597,6 @@ prefix argument, repeat the last export command on the current buffer while
 preserving toggled options.  If the current buffer hasn't changed and subtree
 export was activated, the command will affect that same subtree.
 @end table
-@c @end quotation
 
 Normally the entire buffer is exported, but if there is an active region
 only that part of the buffer will be exported.
@@ -10926,6 +10956,17 @@ When the original file is @file{myfile.txt}, the resulting file becomes
 Export to a temporary buffer.  Do not create a file.
 @end table
 
+@subheading ASCII specific export settings
+
+ASCII export introduces a single of keywords, similar to the general options
+settings described in @ref{Export settings}.
+
+@table @samp
+@item SUBTITLE
+@cindex #+SUBTITLE (ASCII)
+The document subtitle.
+@end table
+
 @subheading Header and sectioning structure
 
 In the exported version, the first three outline levels become headlines,
@@ -11063,6 +11104,14 @@ inserted as metadata using @samp{hyperref}.  Document metadata can be
 configured via @code{org-latex-hyperref-template}.  Description can also be
 typeset as part of the front matter via @code{org-latex-title-command}.  You
 can use several @code{#+KEYWORDS} if the description is is long.
+
+@item SUBTITLE
+@cindex #+SUBTITLE (Beamer)
+@vindex org-beamer-subtitle-format
+The document subtitle.  This is typeset using the format string
+@code{org-beamer-subtitle-format}.  It can also access via
+@code{org-latex-hyperref-template} or typeset as part of the front
+matter via @code{org-latex-title-command}.
 @end table
 
 @node Sectioning Frames and Blocks in Beamer
@@ -11352,6 +11401,11 @@ is long.
 @cindex #+LATEX_HEADER (HTML)
 Arbitrary lines appended to the preamble used when transcoding @LaTeX{}
 fragments to images.  See @ref{Math formatting in HTML export} for details.
+
+@item SUBTITLE
+@cindex #+SUBTILE (HTML)
+The document subtitle.  The formatting depends on whether HTML5 in used
+and on the @samp{subtitle} CSS class.
 @end table
 
 These keywords are treated in details in the following sections.
@@ -11700,6 +11754,7 @@ p.author            @r{author information, including email}
 p.date              @r{publishing date}
 p.creator           @r{creator info, about org mode version}
 .title              @r{document title}
+.subtitle           @r{document subtitle}
 .todo               @r{TODO keywords, all not-done states}
 .done               @r{the DONE keywords, all states that count as done}
 .WAITING            @r{each TODO keyword also uses a class named after itself}
@@ -11921,6 +11976,16 @@ inserted as metadata using @samp{hyperref}.  Document metadata can be
 configured via @code{org-latex-hyperref-template}.  Description can also be
 typeset as part of the front matter via @code{org-latex-title-command}.  You
 can use several @code{#+KEYWORDS} if the description is is long.
+
+@item SUBTITLE
+@cindex #+SUBTITLE (@LaTeX{})
+@vindex org-latex-subtitle-separate
+@vindex org-latex-subtitle-format
+The document subtitle.  This is typeset according to
+@code{org-latex-subtitle-format}.  If @code{org-latex-subtitle-separate}
+is non-@code{nil} it is typed as part of the @samp{\title}-macro.  It
+can also access via @code{org-latex-hyperref-template} or typeset as
+part of the front matter via @code{org-latex-title-command}.
 @end table
 
 These keywords are treated in details in the following sections.
@@ -12410,6 +12475,10 @@ document metadata.  You can use several such keywords if the list is long.
 @vindex org-odt-styles-file
 The style file of the document (@code{org-odt-styles-file}).  See
 @ref{Applying custom styles} for details.
+
+@item SUBTITLE
+@cindex SUBTITLE (ODT)
+The document subtitle.
 @end table
 
 @node Extending ODT export
@@ -13321,7 +13390,7 @@ options settings described in @ref{Export settings}.
 @table @samp
 
 @item SUBTITLE
-@cindex #+SUBTITLE
+@cindex #+SUBTITLE (Texinfo)
 The document subtitle.
 
 @item SUBAUTHOR
@@ -13401,7 +13470,6 @@ to define your own class in @code{org-texinfo-classes}, which see.  Set
 @subsubheading Title and copyright page
 
 @cindex #+TEXINFO_PRINTED_TITLE
-@cindex #+SUBTITLE
 The default template includes a title page for hard copy output.  The title
 and author displayed on this page are extracted from, respectively,
 @code{#+TITLE} and @code{#+AUTHOR} keywords (@pxref{Export settings}).  It is
@@ -13550,9 +13618,9 @@ This paragraph is preceded by...
 @subsection Texinfo specific attributes
 
 @cindex #+ATTR_TEXINFO
-@samp{texinfo} back-end understands several attributes in plain lists and
-tables.  They must be specified using an @code{#+ATTR_TEXINFO} keyword,
-written just above the list or table.
+@samp{texinfo} back-end understands several attributes in plain lists, tables
+and images.  They must be specified using an @code{#+ATTR_TEXINFO} keyword,
+written just above the list, table or image.
 
 @subsubheading Plain lists
 
@@ -13583,13 +13651,25 @@ length, using @code{:columns} attribute.
 | a cell | another cell |
 @end example
 
+@subsubheading Images
+
+Images are links to files with a supported image extension and no
+description.  Image scaling is set with @code{:width} and @code{:height}
+attributes.  You can also use @code{:alt} to specify alternate text, as
+Texinfo code.
+
+@example
+#+ATTR_TEXINFO: :width 1in :alt Alternate @@i@{text@}
+[[ridt.pdf]]
+@end example
+
 @node An example
 @subsection An example
 
 Here is a thorough example.  @inforef{GNU Sample Texts,,texinfo} for an
 equivalent Texinfo code.
 
-@smallexample
+@example
 #+MACRO: version 2.0
 #+MACRO: updated last updated 4 March 2014
 
@@ -13607,7 +13687,7 @@ equivalent Texinfo code.
 #+TEXINFO_DIR_DESC: Invoking sample
 
 #+TEXINFO_PRINTED_TITLE: GNU Sample
-#+SUBTITLE: for version 2.0, last updated 4 March 2014
+#+SUBTITLE: for version @{@{@{version@}@}@}, @{@{@{updated@}@}@}
 
 * Copying 
   :PROPERTIES:
@@ -13649,7 +13729,7 @@ equivalent Texinfo code.
   :PROPERTIES:
   :INDEX:    cp
   :END:
-@end smallexample
+@end example
 
 @node iCalendar export
 @section iCalendar export
@@ -14207,6 +14287,7 @@ however, override everything.
 @item @code{:beamer-frame-default-options} @tab @code{org-beamer-frame-default-options}
 @item @code{:beamer-outline-frame-options} @tab @code{org-beamer-outline-frame-options}
 @item @code{:beamer-outline-frame-title}   @tab @code{org-beamer-outline-frame-title}
+@item @code{:beamer-subtitle-format}       @tab @code{org-beamer-subtitle-format}
 @end multitable
 
 @subsubheading HTML specific properties
@@ -14260,6 +14341,7 @@ however, override everything.
 @item @code{:html-use-infojs}                 @tab @code{org-html-use-infojs}
 @item @code{:html-use-unicode-chars}          @tab @code{org-html-use-unicode-chars}
 @item @code{:html-validation-link}            @tab @code{org-html-validation-link}
+@item @code{:html-viewport}                   @tab @code{org-html-viewport}
 @item @code{:html-xml-declaration}            @tab @code{org-html-xml-declaration}
 @end multitable
 
@@ -14270,7 +14352,6 @@ however, override everything.
 @item @code{:latex-caption-above}              @tab @code{org-latex-caption-above}
 @item @code{:latex-classes}                    @tab @code{org-latex-classes}
 @item @code{:latex-class}                      @tab @code{org-latex-default-class}
-@item @code{:latex-custom-id-labels}           @tab @code{org-latex-custom-id-as-label}
 @item @code{:latex-default-figure-position}    @tab @code{org-latex-default-figure-position}
 @item @code{:latex-default-table-environment}  @tab @code{org-latex-default-table-environment}
 @item @code{:latex-default-table-mode}         @tab @code{org-latex-default-table-mode}
@@ -14291,6 +14372,9 @@ however, override everything.
 @item @code{:latex-listings}                   @tab @code{org-latex-listings}
 @item @code{:latex-minted-langs}               @tab @code{org-latex-minted-langs}
 @item @code{:latex-minted-options}             @tab @code{org-latex-minted-options}
+@item @code{:latex-prefer-user-labels}         @tab @code{org-latex-prefer-user-labels}
+@item @code{:latex-subtitle-format}            @tab @code{org-latex-subtitle-format}
+@item @code{:latex-subtitle-separate}          @tab @code{org-latex-subtitle-separate}
 @item @code{:latex-table-scientific-notation}  @tab @code{org-latex-table-scientific-notation}
 @item @code{:latex-tables-booktabs}            @tab @code{org-latex-tables-booktabs}
 @item @code{:latex-tables-centered}            @tab @code{org-latex-tables-centered}
@@ -14953,26 +15037,28 @@ i}.
 
 Code blocks in the following languages are supported.
 
-@multitable @columnfractions 0.28 0.3 0.22 0.2
-@item @b{Language} @tab @b{Identifier} @tab @b{Language} @tab @b{Identifier}
+@multitable @columnfractions 0.25 0.25 0.25 0.25
+@headitem @b{Language} @tab @b{Identifier} @tab @b{Language} @tab @b{Identifier}
 @item Asymptote @tab asymptote @tab Awk @tab awk
-@item Emacs Calc @tab calc @tab C @tab C
-@item C++ @tab C++ @tab Clojure @tab clojure
-@item CSS @tab css @tab D @tab d
-@item ditaa @tab ditaa @tab Graphviz @tab dot
-@item Emacs Lisp @tab emacs-lisp @tab gnuplot @tab gnuplot
-@item Haskell @tab haskell @tab Java @tab java
-@item Javascript @tab js @tab LaTeX @tab latex
-@item Ledger @tab ledger @tab Lisp @tab lisp
-@item Lilypond @tab lilypond @tab MATLAB @tab matlab
-@item Mscgen @tab mscgen @tab Objective Caml @tab ocaml
-@item Octave @tab octave @tab Org mode @tab org
-@item Oz @tab oz @tab Perl @tab perl
-@item Plantuml @tab plantuml @tab Python @tab python
-@item R @tab R @tab Ruby @tab ruby
-@item Sass @tab sass @tab Scheme @tab scheme
-@item GNU Screen @tab screen @tab shell @tab sh
-@item SQL @tab sql @tab SQLite @tab sqlite
+@item C @tab C @tab C++ @tab C++ 
+@item Clojure @tab clojure @tab CSS @tab css 
+@item D @tab d @tab ditaa @tab ditaa 
+@item Graphviz @tab dot @tab Emacs Calc @tab calc
+@item Emacs Lisp @tab emacs-lisp @tab Fortran @tab fortran
+@item gnuplot @tab gnuplot @tab Haskell @tab haskell 
+@item Java @tab java @tab Javascript @tab js 
+@item LaTeX @tab latex @tab Ledger @tab ledger 
+@item Lisp @tab lisp @tab Lilypond @tab lilypond 
+@item MATLAB @tab matlab @tab Mscgen @tab mscgen 
+@item Objective Caml @tab ocaml @tab Octave @tab octave 
+@item Org mode @tab org @tab Oz @tab oz 
+@item Perl @tab perl @tab Plantuml @tab plantuml 
+@item Processing.js @tab processing @tab Python @tab python 
+@item R @tab R @tab Ruby @tab ruby 
+@item Sass @tab sass @tab Scheme @tab scheme 
+@item GNU Screen @tab screen @tab Sed @tab sed
+@item shell @tab sh @tab SQL @tab sql
+@item SQLite @tab sqlite @tab @tab
 @end multitable
 
 Language-specific documentation is available for some languages.  If
@@ -14984,10 +15070,8 @@ enabled for evaluation (by default only @code{emacs-lisp} is enabled).  This
 variable can be set using the customization interface or by adding code like
 the following to your emacs configuration.
 
-@quotation
 The following disables @code{emacs-lisp} evaluation and enables evaluation of
 @code{R} code blocks.
-@end quotation
 
 @lisp
 (org-babel-do-load-languages
@@ -14999,9 +15083,7 @@ The following disables @code{emacs-lisp} evaluation and enables evaluation of
 It is also possible to enable support for a language by loading the related
 elisp file with @code{require}.
 
-@quotation
 The following adds support for evaluating @code{clojure} code blocks.
-@end quotation
 
 @lisp
 (require 'ob-clojure)

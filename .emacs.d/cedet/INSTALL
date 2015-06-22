@@ -3,7 +3,6 @@ CEDET: Collection of Emacs Development Environment Tools
 CEDET is a top-level project containing several individual packages for Emacs,
 including:
 
-   EIEIO -    CLOS layer for Emacs Lisp
    Semantic - Parser Infrastructure for Emacs
    EDE -      File manager/ Makefile generator
    SRecode -  Template manager/ code generator
@@ -58,9 +57,9 @@ INSTALL:
   cedet-devel-load.el file that is next to this INSTALL file.
 
   You should place the `cedet-devel-load.el' command near the
-  beginning of your init file, otherwise parts of CEDET like EIEIO
-  might already be loaded from core Emacs. For more details on other
-  configuration options topic, see the info file common/cedet.info.
+  beginning of your init file, otherwise parts of CEDET might already
+  be loaded from core Emacs. For more details on other configuration
+  options topic, see the info file common/cedet.info.
 
   This code snippet can be copied into your .emacs file to enable the
   development version of cedet, and turn on all the features.'
@@ -68,8 +67,8 @@ INSTALL:
 -----------
 ;; Load CEDET.
 ;; See cedet/common/cedet.info for configuration details.
-;; IMPORTANT: Tou must place this *before* any CEDET component (including
-;; EIEIO) gets activated by another package (Gnus, auth-source, ...).
+;; IMPORTANT: Tou must place this *before* any CEDET component
+;; gets activated by another package (Gnus, auth-source, ...).
 (load-file "/home/user/cedet/cedet-devel-load.el")
 
 ;; Add further minor-modes to be enabled by semantic-mode.
@@ -155,16 +154,10 @@ BUGS/COMMENTS
 
    http://lists.sourceforge.net/lists/listinfo/cedet-semantic
 
-   For EIEIO, use the mailing list cedet-eieio@sourceforge.net
-   via the URL:
-
-   http://lists.sourceforge.net/lists/listinfo/cedet-eieio
-
    All mailing lists are also available via Gmane (gmane.org) as
 
      gmane.emacs.cedet
      gmane.emacs.semantic
-     gmane.emacs.eieio
 
 OTHER OPTIONAL REQUIREMENTS:
 

@@ -1,6 +1,6 @@
 ;;; semantic/analyze/debug.el --- Debug the analyzer
 
-;;; Copyright (C) 2008-2013 Free Software Foundation, Inc.
+;;; Copyright (C) 2008-2013, 2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -35,7 +35,7 @@
 (declare-function ede-get-locator-object "ede/files")
 
 ;;; Code:
-
+;;;###autoload
 (defun semantic-analyze-debug-assist ()
   "Debug semantic analysis at the current point."
   (interactive)
@@ -307,7 +307,7 @@ possible completions for \"")
 	(princ "\nKnown members of ")
 	(princ (semantic-tag-name dt))
 	(princ ":\n")
-	(dolist (M (semantic-tag-type-members dt))
+	(dolist (M (semantic-analyze-tag-type-members dt))
 	  (princ "  ")
 	  ;;(princ (semantic-format-tag-prototype M))
 	  (semantic-analyzer-debug-insert-tag M)

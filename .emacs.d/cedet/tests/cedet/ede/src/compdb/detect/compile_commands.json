@@ -1,0 +1,7 @@
+[
+{
+  "directory": ".",
+  "command": "c++ -o hello -c main.cpp",
+  "file": "main.cpp"
+}
+]

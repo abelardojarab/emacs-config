@@ -20,6 +20,22 @@
 
 ;;; Code:
 
+(ert-deftest test-org-babel/indented-cached-org-bracket-link ()
+  "When the result of a source block is a cached indented link it
+should still return the link."
+  (should
+   (let ((default-directory temporary-file-directory))
+     (org-test-with-temp-text
+      "
+* Test
+  #+<point>BEGIN_SRC emacs-lisp :file test.txt :cache yes
+    (message \"test\")
+  #+END_SRC"
+      ;; Execute twice as the first time creates the cache.
+      (org-babel-execute-src-block)
+      (string= (concat default-directory "test.txt")
+	       (org-babel-execute-src-block))))))
+
 (ert-deftest test-org-babel/multi-line-header-regexp ()
   (should(equal "^[ \t]*#\\+headers?:[ \t]*\\([^\n]*\\)$"
 		org-babel-multi-line-header-regexp))
@@ -249,23 +265,45 @@ this is simple"
     (should (= 14 (org-babel-execute-src-block)))))
 
 (ert-deftest test-org-babel/inline-src-blocks ()
-  (macrolet ((at-next (&rest body)
-	       `(progn
-		  (move-end-of-line 1)
-		  (re-search-forward org-babel-inline-src-block-regexp nil t)
-		  (goto-char (match-beginning 1))
-		  (save-match-data ,@body))))
-    (org-test-at-id
-     "54cb8dc3-298c-4883-a933-029b3c9d4b18"
-     (at-next (should (equal 1 (org-babel-execute-src-block))))
-     (at-next (should (equal 2 (org-babel-execute-src-block))))
-     (at-next (should (equal 3 (org-babel-execute-src-block)))))
-    (org-test-at-id
-     "cd54fc88-1b6b-45b6-8511-4d8fa7fc8076"
-     (at-next (should (equal 1 (org-babel-execute-src-block))))
-     (at-next (should (equal 2 (org-babel-execute-src-block))))
-     (at-next (should (equal 3 (org-babel-execute-src-block))))
-     (at-next (should (equal 4 (org-babel-execute-src-block)))))))
+  (should
+   (= 1
+      (org-test-with-temp-text
+	  "In the middle <point>src_emacs-lisp{(+ 0 1)} of a line"
+	(org-babel-execute-src-block))))
+  (should
+   (= 2
+      (org-test-with-temp-text
+	  "One at the end of a line: <point>src_emacs-lisp{(+ 1 1)}"
+	(org-babel-execute-src-block))))
+  (should
+   (= 3
+      (org-test-with-temp-text
+	  "src_emacs-lisp{(+ 2 1)} at the beginning of a line."
+	(org-babel-execute-src-block))))
+  (should
+   (= 4
+      (org-test-with-temp-text
+	  "In the middle <point>src_emacs-lisp[:results silent\
+ :exports code]{(+ 3 1)} of a line"
+	(org-babel-execute-src-block))))
+  (should
+   (= 5
+      (org-test-with-temp-text
+	  "One at the end of a line: <point>src_emacs-lisp[:results silent\
+ :exports code]{(+ 4 1)}"
+	(org-babel-execute-src-block))))
+  (should
+   (= 6
+      (org-test-with-temp-text
+	  "src_emacs-lisp[:results silent :exports code]{(+ 5 1)}\
+at the beginning of a line."
+	(org-babel-execute-src-block))))
+  (should
+   (= 7
+      (org-test-with-temp-text
+	  "One also evaluated: <point>src_emacs-lisp[:exports both\
+ :results silent]{(+ 6 1)}"
+	(org-babel-execute-src-block)))))
 
 (ert-deftest test-org-babel/org-babel-get-inline-src-block-matches ()
   (flet ((test-at-id (id)

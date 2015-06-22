@@ -67,6 +67,14 @@
     (org-test-with-temp-text " <point>"
       (let ((org-footnote-auto-label t)) (org-footnote-new))
       (buffer-string))))
+  ;; In an headline or inlinetask, point must be either on the
+  ;; heading itself or on the blank lines below.
+  (should (org-test-with-temp-text "* H<point>" (org-footnote-new) t))
+  (should
+   (org-test-with-temp-text "* H\n <point>\nParagraph" (org-footnote-new) t))
+  (should-error (org-test-with-temp-text "*<point> H" (org-footnote-new) t))
+  (should-error
+   (org-test-with-temp-text "* H <point>:tag:" (org-footnote-new) t))
   ;; Allow new footnotes within recursive objects, but not in links.
   (should
    (string-match-p
@@ -144,27 +152,43 @@
 	    (org-footnote-delete "1")
 	    (org-trim (buffer-string))))))
 
+(ert-deftest test-org-footnote/goto-definition ()
+  "Test `org-footnote-goto-definition' specifications."
+  ;; Error on unknown definitions.
+  (should-error
+   (org-test-with-temp-text "No footnote definition"
+     (org-footnote-goto-definition "fn:1")))
+  ;; Error when trying to reach a definition outside narrowed part of
+  ;; buffer.
+  (should-error
+   (org-test-with-temp-text "Some text<point>\n[fn:1] Definition."
+     (narrow-to-region (point-min) (point))
+     (org-footnote-goto-definition "fn:1")))
+  (should-error
+   (org-test-with-temp-text "[fn:1] Definition.\n<point>Some text"
+     (narrow-to-region (point) (point-max))
+     (org-footnote-goto-definition "fn:1")))
+  ;; Otherwise, move at the beginning of the definition, including
+  ;; anonymous footnotes.
+  (should
+   (equal
+    " Definition."
+    (org-test-with-temp-text "Some text\n[fn:1] Definition."
+      (org-footnote-goto-definition "fn:1")
+      (buffer-substring (point) (point-max)))))
+  (should
+   (equal
+    "definition]"
+    (org-test-with-temp-text "Some text[fn:label:definition]"
+      (org-footnote-goto-definition "fn:label")
+      (buffer-substring (point) (point-max))))))
+
 (ert-deftest test-org-footnote/normalize-in-org ()
   "Test specifications for `org-footnote-normalize' in an Org buffer."
-  ;; 1. With a non-nil `org-footnote-section'.
-  (let ((org-footnote-section "Footnotes")
-	(org-blank-before-new-entry '((heading . auto))))
-    ;; 1.1. Normalize each type of footnote: standard, labelled,
-    ;;      numbered, inline, anonymous.
-    (org-test-with-temp-text
-	"Paragraph[fn:1][fn:label][1][fn:inline:Inline][fn::Anonymous]
-
-* Footnotes
-
-\[fn:1] Standard
-
-\[fn:label] Labelled
-
-\[1] Numbered"
-      (org-footnote-normalize)
-      (should
-       (equal (buffer-string)
-	      "Paragraph[1][2][3][4][5]
+  ;; With a non-nil `org-footnote-section', normalize each type of
+  ;; footnote: standard, labelled, numbered, inline, anonymous.
+  (should
+   (equal "Paragraph[1][2][3][4][5]
 
 * Footnotes
 
@@ -179,51 +203,62 @@
 \[5] Anonymous
 
 
-")))
-    ;; 1.2. When no footnote section is present, create it.  Follow
-    ;;      `org-blank-before-new-entry' specifications when doing so.
-    (org-test-with-temp-text "Paragraph[fn:1]\n\n[fn:1] Definition"
-      (org-footnote-normalize)
-      (should (equal (buffer-string)
-		     "Paragraph[1]\n\n* Footnotes\n\n[1] Definition")))
-    (org-test-with-temp-text "Paragraph[fn:1]\n* Head1\n[fn:1] Definition"
-      (let ((org-blank-before-new-entry '((heading))))
-	(org-footnote-normalize))
-      (should (equal (buffer-string)
-		     "Paragraph[1]\n* Head1\n* Footnotes\n\n[1] Definition")))
-    ;; 1.3. When the footnote section is misplaced, move it at the end
-    ;;      of the buffer.
-    (org-test-with-temp-text "* Head1
-Body[fn:1]
+"
+	  (let ((org-footnote-section "Footnotes")
+		(org-blank-before-new-entry '((heading . auto))))
+	    (org-test-with-temp-text
+		"Paragraph[fn:1][fn:label][1][fn:inline:Inline][fn::Anonymous]
+
 * Footnotes
-\[fn:1] Definition 1
-* Head2"
-      (org-footnote-normalize)
-      (should
-       (equal (buffer-string)
-	      "* Head1
+
+\[fn:1] Standard
+
+\[fn:label] Labelled
+
+\[1] Numbered"
+	      (org-footnote-normalize)
+	      (buffer-string)))))
+  ;; When no footnote section is present, create it.  Follow
+  ;; `org-blank-before-new-entry' specifications when doing so.
+  (should
+   (equal "Paragraph[1]\n\n* Footnotes\n\n[1] Definition"
+	  (let ((org-footnote-section "Footnotes")
+		(org-blank-before-new-entry '((heading . auto))))
+	    (org-test-with-temp-text "Paragraph[fn:1]\n\n[fn:1] Definition"
+	      (org-footnote-normalize)
+	      (buffer-string)))))
+  (should
+   (equal
+    "Paragraph[1]\n* Head1\n* Footnotes\n\n[1] Definition"
+    (let ((org-footnote-section "Footnotes")
+	  (org-blank-before-new-entry '((heading))))
+      (org-test-with-temp-text "Paragraph[fn:1]\n* Head1\n[fn:1] Definition"
+	(org-footnote-normalize)
+	(buffer-string)))))
+  ;; When the footnote section is misplaced, move it at the end of
+  ;; the buffer.
+  (should
+   (equal
+    "* Head1
 Body[1]
 * Head2
 
 * Footnotes
 
-\[1] Definition 1"))))
-  ;; 2. With a nil `org-footnote-section'.
-  (let ((org-footnote-section nil))
-    ;; 2.1. Normalize each type of footnote: standard, labelled,
-    ;;      numbered, inline, anonymous.
-    (org-test-with-temp-text
-	"Paragraph[fn:1][fn:label][1][fn:inline:Inline][fn::Anonymous]
-
-\[fn:1] Standard
-
-\[fn:label] Labelled
-
-\[1] Numbered"
-      (org-footnote-normalize)
-      (should
-       (equal (buffer-string)
-	      "Paragraph[1][2][3][4][5]
+\[1] Definition 1"
+    (let ((org-footnote-section "Footnotes")
+	  (org-blank-before-new-entry '((heading . auto))))
+      (org-test-with-temp-text "* Head1
+Body[fn:1]
+* Footnotes
+\[fn:1] Definition 1
+* Head2"
+	(org-footnote-normalize)
+	(buffer-string)))))
+  ;; With a nil `org-footnote-section', normalize each type of
+  ;; footnote: standard, labelled, numbered, inline, anonymous.
+  (should
+   (equal "Paragraph[1][2][3][4][5]
 
 \[1] Standard
 
@@ -234,20 +269,22 @@ Body[1]
 \[4] Inline
 
 \[5] Anonymous
-")))
-    ;; 2.2. Put each footnote definition at the end of the section
-    ;;      containing its first reference.
-    (org-test-with-temp-text
-	"* Head 1
-Text[fn:1:Def1]
-* Head 2
-Text[fn:1]
-* Head 3
-Text[fn:2:Def2]"
-      (org-footnote-normalize)
-      (should
-       (equal (buffer-string)
-	      "* Head 1
+"
+	  (let ((org-footnote-section nil))
+	    (org-test-with-temp-text
+		"Paragraph[fn:1][fn:label][1][fn:inline:Inline][fn::Anonymous]
+
+\[fn:1] Standard
+
+\[fn:label] Labelled
+
+\[1] Numbered"
+	      (org-footnote-normalize)
+	      (buffer-string)))))
+  ;; Also put each footnote definition at the end of the section
+  ;; containing its first reference.
+  (should
+   (equal "* Head 1
 Text[1]
 
 \[1] Def1
@@ -257,7 +294,17 @@ Text[1]
 Text[2]
 
 \[2] Def2
-")))))
+"
+	  (let ((org-footnote-section nil))
+	    (org-test-with-temp-text
+		"* Head 1
+Text[fn:1:Def1]
+* Head 2
+Text[fn:1]
+* Head 3
+Text[fn:2:Def2]"
+	      (org-footnote-normalize)
+	      (buffer-string))))))
 
 (ert-deftest test-org-footnote/normalize-outside-org ()
   "Test `org-footnote-normalize' specifications for buffers not in Org mode."

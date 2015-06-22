@@ -388,16 +388,38 @@ Some other text
   "Test `babel-call' parsing."
   ;; Standard test.
   (should
-   (org-test-with-temp-text "#+CALL: test()"
-     (org-element-map (org-element-parse-buffer) 'babel-call 'identity)))
+   (eq 'babel-call
+       (org-test-with-temp-text "#+CALL: test()"
+	 (org-element-type (org-element-at-point)))))
   ;; Ignore case.
   (should
-   (org-test-with-temp-text "#+call: test()"
-     (org-element-map (org-element-parse-buffer) 'babel-call 'identity)))
+   (eq 'babel-call
+       (org-test-with-temp-text "#+call: test()"
+	 (org-element-type (org-element-at-point)))))
   ;; Handle non-empty blank line at the end of buffer.
   (should
    (org-test-with-temp-text "#+CALL: test()\n "
-     (= (org-element-property :end (org-element-at-point)) (point-max)))))
+     (= (org-element-property :end (org-element-at-point)) (point-max))))
+  ;; Parse call name.
+  (should
+   (equal "test"
+	  (org-test-with-temp-text "#+CALL: test()"
+	    (org-element-property :call (org-element-at-point)))))
+  ;; Parse inside header.
+  (should
+   (equal ":results output"
+	  (org-test-with-temp-text "#+CALL: test[:results output]()"
+	    (org-element-property :inside-header (org-element-at-point)))))
+  ;; Parse arguments.
+  (should
+   (equal "n=4"
+	  (org-test-with-temp-text "#+CALL: test(n=4)"
+	    (org-element-property :arguments (org-element-at-point)))))
+  ;; Parse end header.
+  (should
+   (equal ":results html"
+	  (org-test-with-temp-text "#+CALL: test() :results html"
+	    (org-element-property :end-header (org-element-at-point))))))
 
 
 ;;;; Bold
@@ -998,16 +1020,12 @@ Some other text
   (org-test-with-temp-text "* Headline :ARCHIVE:"
     (let ((org-archive-tag "ARCHIVE"))
       (let ((headline (org-element-at-point)))
-	(should (org-element-property :archivedp headline))
-	;; Test tag removal.
-	(should-not (org-element-property :tags headline)))))
+	(should (org-element-property :archivedp headline)))))
   ;; Multiple tags.
   (org-test-with-temp-text "* Headline :test:ARCHIVE:"
     (let ((org-archive-tag "ARCHIVE"))
       (let ((headline (org-element-at-point)))
-	(should (org-element-property :archivedp headline))
-	;; Test tag removal.
-	(should (equal (org-element-property :tags headline) '("test"))))))
+	(should (org-element-property :archivedp headline)))))
   ;; Tag is case-sensitive.
   (should-not
    (org-test-with-temp-text "* Headline :ARCHIVE:"
@@ -1091,10 +1109,39 @@ Some other text
 
 (ert-deftest test-org-element/inline-babel-call-parser ()
   "Test `inline-babel-call' parser."
+  ;; Standard test.
   (should
-   (org-test-with-temp-text "call_test()"
-     (org-element-map
-      (org-element-parse-buffer) 'inline-babel-call 'identity))))
+   (eq 'inline-babel-call
+       (org-test-with-temp-text "call_test()"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'inline-babel-call
+       (org-test-with-temp-text "call_test[:results output](x=2)[:results html]"
+	 (org-element-type (org-element-context)))))
+  ;; Parse call name.
+  (should
+   (equal
+    "test"
+    (org-test-with-temp-text "call_test[:results output](x=2)[:results html]"
+      (org-element-property :call (org-element-context)))))
+  ;; Parse inside header.
+  (should
+   (equal
+    ":results output"
+    (org-test-with-temp-text "call_test[:results output](x=2)[:results html]"
+      (org-element-property :inside-header (org-element-context)))))
+  ;; Parse arguments.
+  (should
+   (equal
+    "x=2"
+    (org-test-with-temp-text "call_test[:results output](x=2)[:results html]"
+      (org-element-property :arguments (org-element-context)))))
+  ;; Parse end header.
+  (should
+   (equal
+    ":results html"
+    (org-test-with-temp-text "call_test[:results output](x=2)[:results html]"
+      (org-element-property :end-header (org-element-context))))))
 
 
 ;;;; Inline Src Block
@@ -1394,24 +1441,50 @@ e^{i\\pi}+1=0
 (ert-deftest test-org-element/latex-fragment-parser ()
   "Test `latex-fragment' parser."
   (should
-   (org-test-with-temp-text "$a$"
-     (org-element-map (org-element-parse-buffer) 'latex-fragment 'identity)))
+   (eq 'latex-fragment
+       (org-test-with-temp-text "$a$"
+	 (org-element-type (org-element-context)))))
   (should
-   (org-test-with-temp-text "$$a$$"
-     (org-element-map (org-element-parse-buffer) 'latex-fragment 'identity)))
+   (eq 'latex-fragment
+       (org-test-with-temp-text "$a$!"
+	 (org-element-type (org-element-context)))))
   (should
-   (org-test-with-temp-text "\\(a\\)"
-     (org-element-map (org-element-parse-buffer) 'latex-fragment 'identity)))
+   (eq 'latex-fragment
+       (org-test-with-temp-text "$a$,"
+	 (org-element-type (org-element-context)))))
   (should
-   (org-test-with-temp-text "\\[a\\]"
-     (org-element-map
-	 (org-element-parse-buffer) 'latex-fragment 'identity)))
+   (eq 'latex-fragment
+       (org-test-with-temp-text "$a$\""
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'latex-fragment
+       (org-test-with-temp-text "$a$)"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'latex-fragment
+       (org-test-with-temp-text "$a$ "
+	 (org-element-type (org-element-context)))))
+  (should-not
+   (eq 'latex-fragment
+       (org-test-with-temp-text "$a$a"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'latex-fragment
+       (org-test-with-temp-text "$$a$$"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'latex-fragment
+       (org-test-with-temp-text "\\(a\\)"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'latex-fragment
+       (org-test-with-temp-text "\\[a\\]"
+	 (org-element-type (org-element-context)))))
   ;; Test fragment at the beginning of an item.
   (should
    (eq 'latex-fragment
-       (org-test-with-temp-text "- $x$"
-	 (progn (search-forward "$")
-		(org-element-type (org-element-context)))))))
+       (org-test-with-temp-text "- $<point>x$"
+	 (org-element-type (org-element-context))))))
 
 
 ;;;; Line Break
@@ -1521,10 +1594,9 @@ e^{i\\pi}+1=0
     (org-test-with-temp-text "[[file:projects.org::*task title]]"
       (org-element-map (org-element-parse-buffer) 'link
 	(lambda (l) (list (org-element-property :type l)
-			  (org-element-property :path l)
-			  (org-element-property :search-option l)))))))
+		     (org-element-property :path l)
+		     (org-element-property :search-option l)))))))
   ;; ... file-type link with application...
-  (require 'org-docview)
   (should
    (equal
     '("file" "projects.org" "emacs")
@@ -1539,19 +1611,17 @@ e^{i\\pi}+1=0
    (org-test-with-temp-text-in-file ""
      (let ((file (expand-file-name (buffer-file-name))))
        (insert (format "[[file://%s]]" file))
-       (equal (org-element-property :path (org-element-context))
-	      (concat "//" file)))))
+       (equal (org-element-property :path (org-element-context)) file))))
   (should
    (org-test-with-temp-text-in-file ""
      (let ((file (expand-file-name (buffer-file-name))))
        (insert (format "[[file:%s]]" file))
-       (equal (org-element-property :path (org-element-context))
-	      (concat "//" file)))))
+       (equal (org-element-property :path (org-element-context)) file))))
   (should
    (org-test-with-temp-text-in-file ""
-     (let ((file (file-relative-name (buffer-file-name))))
+     (let ((file (expand-file-name (buffer-file-name))))
        (insert (format "[[file:%s]]" file))
-       (list (org-element-property :path (org-element-context)) file))))
+       (equal (org-element-property :path (org-element-context)) file))))
   ;; ... multi-line link.
   (should
    (equal "//orgmode.org"
@@ -1700,10 +1770,29 @@ e^{i\\pi}+1=0
      (let ((elem (org-element-at-point)))
        (and (eq (org-element-type elem) 'paragraph)
 	    (= (point-max) (org-element-property :end elem))))))
+  (should
+   (org-test-with-temp-text "Paragraph\n\begin{equation}"
+     (let ((elem (org-element-at-point)))
+       (and (eq (org-element-type elem) 'paragraph)
+	    (= (point-max) (org-element-property :end elem))))))
+  ;; Stop at affiliated keywords.
+  (should
+   (org-test-with-temp-text "Paragraph\n#+NAME: test\n| table |"
+     (let ((elem (org-element-at-point)))
+       (and (eq (org-element-type elem) 'paragraph)
+	    (not (org-element-property :name elem))
+	    (= (org-element-property :end elem) (line-beginning-position 2))))))
+  (should
+   (org-test-with-temp-text
+       "Paragraph\n#+CAPTION[with short caption]: test\n| table |"
+     (let ((elem (org-element-at-point)))
+       (and (eq (org-element-type elem) 'paragraph)
+	    (not (org-element-property :name elem))
+	    (= (org-element-property :end elem) (line-beginning-position 2))))))
   ;; Do not steal affiliated keywords from container.
   (should
-   (org-test-with-temp-text "#+ATTR_LATEX: test\n- item 1"
-     (let ((elem (progn (search-forward "item") (org-element-at-point))))
+   (org-test-with-temp-text "#+ATTR_LATEX: test\n- item<point> 1"
+     (let ((elem (org-element-at-point)))
        (and (eq (org-element-type elem) 'paragraph)
 	    (not (org-element-property :attr_latex elem))
 	    (/= (org-element-property :begin elem) 1)))))
@@ -2448,17 +2537,17 @@ Outside list"
 		 "#+BEGIN_SPECIAL\nTest\n#+END_SPECIAL\n")))
 
 (ert-deftest test-org-element/babel-call-interpreter ()
-  "Test babel call interpreter."
-  ;; 1. Without argument.
+  "Test Babel call interpreter."
+  ;; Without argument.
   (should (equal (org-test-parse-and-interpret "#+CALL: test()")
 		 "#+CALL: test()\n"))
-  ;; 2. With argument.
+  ;; With argument.
   (should (equal (org-test-parse-and-interpret "#+CALL: test(x=2)")
 		 "#+CALL: test(x=2)\n"))
-  ;; 3. With header arguments.
+  ;; With header arguments.
   (should (equal (org-test-parse-and-interpret
-		  "#+CALL: test[:results output]()[:results html]")
-		 "#+CALL: test[:results output]()[:results html]\n")))
+		  "#+CALL: test[:results output]() :results html")
+		 "#+CALL: test[:results output]() :results html\n")))
 
 (ert-deftest test-org-element/clock-interpreter ()
   "Test clock interpreter."
@@ -2804,12 +2893,12 @@ DEADLINE: <2012-03-29 thu.> SCHEDULED: <2012-03-29 thu.> CLOSED: [2012-03-29 thu
 
 (ert-deftest test-org-element/inline-babel-call-interpreter ()
   "Test inline babel call interpreter."
-  ;; 1. Without arguments.
+  ;; Without arguments.
   (should (equal (org-test-parse-and-interpret "call_test()") "call_test()\n"))
-  ;; 2. With arguments.
+  ;; With arguments.
   (should (equal (org-test-parse-and-interpret "call_test(x=2)")
 		 "call_test(x=2)\n"))
-  ;; 3. With header arguments.
+  ;; With header arguments.
   (should (equal (org-test-parse-and-interpret
 		  "call_test[:results output]()[:results html]")
 		 "call_test[:results output]()[:results html]\n")))
@@ -3238,19 +3327,6 @@ Text
        (org-test-with-temp-text "* H\n  SCHEDULED: <2012-03-29 thu.>"
 	 (search-forward "SCHEDULED")
 	 (org-element-type (org-element-context)))))
-  ;; Find objects in document keywords.
-  (should
-   (eq 'macro
-       (org-test-with-temp-text "#+DATE: <point>{{{macro}}}"
-	 (org-element-type (org-element-context)))))
-  (should-not
-   (eq 'macro
-       (org-test-with-temp-text "#+DATE: {{{macro}}}\n<point>"
-	 (org-element-type (org-element-context)))))
-  (should-not
-   (eq 'macro
-       (org-test-with-temp-text "#+RANDOM_KEYWORD: <point>{{{macro}}}"
-	 (org-element-type (org-element-context)))))
   ;; Do not find objects in table rules.
   (should
    (eq 'table-row
@@ -3501,7 +3577,30 @@ Text
 	   (search-forward "# ")
 	   (delete-char -1)
 	   (search-backward "Para1")
-	   (org-element-type (org-element-at-point)))))))
+	   (org-element-type (org-element-at-point))))))
+  ;; Corner case: watch out drawers named "PROPERTIES" as they are
+  ;; fragile, unlike to other drawers.
+  (should
+   (eq 'node-property
+       (org-test-with-temp-text "* H\n:PROPERTIES:\n:A: 1\n:A<point>\n:END:"
+	 (let ((org-element-use-cache t))
+	   (org-element-at-point)
+	   (insert "+:")
+	   (org-element-type (org-element-at-point))))))
+  ;; Properly handle elements not altered by modifications but whose
+  ;; parents were removed from cache.
+  (should
+   (org-test-with-temp-text
+       "Paragraph\n\n\n\n#+begin_center\n<point>contents\n#+end_center"
+     (let ((org-element-use-cache t)
+	   (parent-end (point-max)))
+       (org-element-at-point)
+       (save-excursion (search-backward "Paragraph")
+		       (forward-line 2)
+		       (insert "\n  "))
+       (eq (org-element-property
+	    :end (org-element-property :parent (org-element-at-point)))
+	   (+ parent-end 3))))))
 
 
 (provide 'test-org-element)

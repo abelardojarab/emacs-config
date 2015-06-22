@@ -635,8 +635,9 @@
 	(let ((org-adapt-indentation t)) (org-indent-line))
 	(org-get-indentation))))
   ;; On blank lines at the end of a list, indent like last element
-  ;; within it if the line is still in the list.  Otherwise, indent
-  ;; like the whole list.
+  ;; within it if the line is still in the list.  If the last element
+  ;; is an item, indent like its contents.  Otherwise, indent like the
+  ;; whole list.
   (should
    (= 4
       (org-test-with-temp-text "* H\n- A\n  - AA\n"
@@ -649,6 +650,12 @@
       (goto-char (point-max))
       (let ((org-adapt-indentation t)) (org-indent-line))
       (org-get-indentation))))
+  (should
+   (= 4
+      (org-test-with-temp-text "* H\n- A\n  - \n"
+	(goto-char (point-max))
+	(let ((org-adapt-indentation t)) (org-indent-line))
+	(org-get-indentation))))
   ;; Likewise, on a blank line at the end of a footnote definition,
   ;; indent at column 0 if line belongs to the definition.  Otherwise,
   ;; indent like the definition itself.
@@ -826,8 +833,38 @@
 
 ;;; Editing
 
+(ert-deftest test-org/delete-indentation ()
+  "Test `org-delete-indentation' specifications."
+  ;; Regular test.
+  (should (equal "foo bar"
+		(org-test-with-temp-text
+		    "foo \n bar<point>"
+		  (org-delete-indentation)
+		  (buffer-string))))
+  ;; With optional argument.
+  (should (equal "foo bar"
+		(org-test-with-temp-text
+		    "foo<point> \n bar"
+		  (org-delete-indentation t)
+		  (buffer-string))))
+  ;; At headline text should be appended to the headline text.
+  (should
+   (equal"* foo bar :tag:"
+	 (let (org-auto-align-tags)
+	   (org-test-with-temp-text
+	       "* foo :tag:\n bar<point>"
+	     (org-delete-indentation)
+	     (buffer-string)))))
+  (should
+   (equal "* foo bar :tag:"
+	  (let (org-auto-align-tags)
+	    (org-test-with-temp-text
+		"* foo <point>:tag:\n bar"
+	      (org-delete-indentation t)
+	      (buffer-string))))))
+
 (ert-deftest test-org/return ()
-  "Test RET (`org-return') specifications."
+  "Test `org-return' specifications."
   ;; Regular test.
   (should
    (equal "Para\ngraph"
@@ -871,11 +908,36 @@
 	  (org-test-with-temp-text "- A\n<point>- B"
 	    (org-return t)
 	    (buffer-string))))
-  ;; Special case: on tags part of a headline, add a newline below it
-  ;; instead of breaking it.
+  ;; On tags part of a headline, add a newline below it instead of
+  ;; breaking it.
   (should
    (equal "* H :tag:\n"
 	  (org-test-with-temp-text "* H :<point>tag:"
+	    (org-return)
+	    (buffer-string))))
+  ;; Before headline text, add a newline below it instead of breaking
+  ;; it.
+  (should
+   (equal "* TODO H :tag:\n"
+	  (org-test-with-temp-text "* <point>TODO H :tag:"
+	    (org-return)
+	    (buffer-string))))
+  (should
+   (equal "* TODO [#B] H :tag:\n"
+	  (org-test-with-temp-text "* TODO<point> [#B] H :tag:"
+	    (org-return)
+	    (buffer-string))))
+  ;; At headline text, break headline text but preserve tags.
+  (should
+   (equal "* TODO [#B] foo    :tag:\nbar"
+	  (let (org-auto-align-tags)
+	    (org-test-with-temp-text "* TODO [#B] foo<point>bar :tag:"
+	      (org-return)
+	      (buffer-string)))))
+  ;; At bol of headline insert newline.
+  (should
+   (equal "\n* h"
+	  (org-test-with-temp-text "<point>* h"
 	    (org-return)
 	    (buffer-string)))))
 
@@ -1496,15 +1558,22 @@ drops support for Emacs 24.1 and 24.2."
 
 ;;;; Open at point
 
+(ert-deftest test-org/open-at-point-in-keyword ()
+  "Does `org-open-at-point' open link in a keyword line?"
+  (should
+   (org-test-with-temp-text
+       "#+KEYWORD: <point>[[info:emacs#Top]]"
+     (org-open-at-point) t)))
+
 (ert-deftest test-org/open-at-point-in-property ()
   "Does `org-open-at-point' open link in property drawer?"
   (should
    (org-test-with-temp-text
-    "* Headline
+       "* Headline
 :PROPERTIES:
 :URL: <point>[[info:emacs#Top]]
 :END:"
-    (org-open-at-point) t)))
+     (org-open-at-point) t)))
 
 (ert-deftest test-org/open-at-point-in-comment ()
   "Does `org-open-at-point' open link in a commented line?"
@@ -2302,6 +2371,92 @@ Text.
       (mapcar (lambda (ov) (cons (overlay-start ov) (overlay-end ov)))
 	      (overlays-in (point-min) (point-max)))))))
 
+(ert-deftest test-org/next-block ()
+  "Test `org-next-block' specifications."
+  ;; Regular test.
+  (should
+   (org-test-with-temp-text "Paragraph\n#+BEGIN_CENTER\ncontents\n#+END_CENTER"
+     (org-next-block 1)
+     (looking-at "#\\+BEGIN_CENTER")))
+  ;; Ignore case.
+  (should
+   (org-test-with-temp-text "Paragraph\n#+begin_center\ncontents\n#+end_center"
+     (let ((case-fold-search nil))
+       (org-next-block 1)
+       (looking-at "#\\+begin_center"))))
+  ;; Ignore current line.
+  (should
+   (org-test-with-temp-text
+       "#+BEGIN_QUOTE\n#+END_QUOTE\n#+BEGIN_CENTER\n#+END_CENTER"
+     (org-next-block 1)
+     (looking-at "#\\+BEGIN_CENTER")))
+  ;; Throw an error when no block is found.
+  (should-error
+   (org-test-with-temp-text "Paragraph"
+     (org-next-block 1)))
+  ;; With an argument, skip many blocks at once.
+  (should
+   (org-test-with-temp-text
+       "Start\n#+BEGIN_CENTER\nA\n#+END_CENTER\n#+BEGIN_QUOTE\nB\n#+END_QUOTE"
+     (org-next-block 2)
+     (looking-at "#\\+BEGIN_QUOTE")))
+  ;; With optional argument BLOCK-REGEXP, filter matched blocks.
+  (should
+   (org-test-with-temp-text
+       "Start\n#+BEGIN_CENTER\nA\n#+END_CENTER\n#+BEGIN_QUOTE\nB\n#+END_QUOTE"
+     (org-next-block 1 nil "^[ \t]*#\\+BEGIN_QUOTE")
+     (looking-at "#\\+BEGIN_QUOTE")))
+  ;; Optional argument is also case-insensitive.
+  (should
+   (org-test-with-temp-text
+       "Start\n#+BEGIN_CENTER\nA\n#+END_CENTER\n#+begin_quote\nB\n#+end_quote"
+     (let ((case-fold-search nil))
+       (org-next-block 1 nil "^[ \t]*#\\+BEGIN_QUOTE")
+       (looking-at "#\\+begin_quote")))))
+
+(ert-deftest test-org/previous-block ()
+  "Test `org-previous-block' specifications."
+  ;; Regular test.
+  (should
+   (org-test-with-temp-text "#+BEGIN_CENTER\ncontents\n#+END_CENTER\n<point>"
+     (org-previous-block 1)
+     (looking-at "#\\+BEGIN_CENTER")))
+  ;; Ignore case.
+  (should
+   (org-test-with-temp-text "#+begin_center\ncontents\n#+end_center\n<point>"
+     (let ((case-fold-search nil))
+       (org-previous-block 1)
+       (looking-at "#\\+begin_center"))))
+  ;; Ignore current line.
+  (should
+   (org-test-with-temp-text
+       "#+BEGIN_QUOTE\n#+END_QUOTE\n#+BEGIN_CENTER<point>\n#+END_CENTER"
+     (org-previous-block 1)
+     (looking-at "#\\+BEGIN_QUOTE")))
+  ;; Throw an error when no block is found.
+  (should-error
+   (org-test-with-temp-text "Paragraph<point>"
+     (org-previous-block 1)))
+  ;; With an argument, skip many blocks at once.
+  (should
+   (org-test-with-temp-text
+       "#+BEGIN_CENTER\nA\n#+END_CENTER\n#+BEGIN_QUOTE\nB\n#+END_QUOTE\n<point>"
+     (org-previous-block 2)
+     (looking-at "#\\+BEGIN_CENTER")))
+  ;; With optional argument BLOCK-REGEXP, filter matched blocks.
+  (should
+   (org-test-with-temp-text
+       "#+BEGIN_CENTER\nA\n#+END_CENTER\n#+BEGIN_QUOTE\nB\n#+END_QUOTE\n<point>"
+     (org-previous-block 1 "^[ \t]*#\\+BEGIN_QUOTE")
+     (looking-at "#\\+BEGIN_QUOTE")))
+  ;; Optional argument is also case-insensitive.
+  (should
+   (org-test-with-temp-text
+       "#+BEGIN_CENTER\nA\n#+END_CENTER\n#+begin_quote\nB\n#+end_quote\n<point>"
+     (let ((case-fold-search nil))
+       (org-next-block 1 "^[ \t]*#\\+BEGIN_QUOTE")
+       (looking-at "#\\+begin_quote")))))
+
 
 ;;; Outline structure
 
@@ -3002,6 +3157,30 @@ Text.
    (equal "cat"
 	  (org-test-with-temp-text "* H\n:PROPERTIES:\n:CATEGORY: cat\n:END:"
 	    (cdr (assoc "CATEGORY" (org-entry-properties nil "CATEGORY"))))))
+  (should
+   (equal "cat2"
+	  (org-test-with-temp-text
+	      (concat "* H\n:PROPERTIES:\n:CATEGORY: cat1\n:END:"
+		      "\n"
+		      "** H2\n:PROPERTIES:\n:CATEGORY: cat2\n:END:<point>")
+	    (cdr (assoc "CATEGORY" (org-entry-properties nil "CATEGORY"))))))
+  ;; Get "TIMESTAMP" and "TIMESTAMP_IA" properties.
+  (should
+   (equal "<2012-03-29 thu.>"
+    (org-test-with-temp-text "* Entry\n<2012-03-29 thu.>"
+      (cdr (assoc "TIMESTAMP" (org-entry-properties))))))
+  (should
+   (equal "[2012-03-29 thu.]"
+    (org-test-with-temp-text "* Entry\n[2012-03-29 thu.]"
+      (cdr (assoc "TIMESTAMP_IA" (org-entry-properties))))))
+  (should
+   (equal "<2012-03-29 thu.>"
+    (org-test-with-temp-text "* Entry\n[2014-03-04 tue.]<2012-03-29 thu.>"
+      (cdr (assoc "TIMESTAMP" (org-entry-properties nil "TIMESTAMP"))))))
+  (should
+   (equal "[2014-03-04 tue.]"
+    (org-test-with-temp-text "* Entry\n<2012-03-29 thu.>[2014-03-04 tue.]"
+      (cdr (assoc "TIMESTAMP_IA" (org-entry-properties nil "TIMESTAMP_IA"))))))
   ;; Get standard properties.
   (should
    (equal "1"

@@ -38,9 +38,12 @@
 (require 'org-compat)
 
 (declare-function message-point-in-header-p "message" ())
+(declare-function org-at-comment-p "org" ())
+(declare-function org-at-heading-p "org" (&optional ignored))
 (declare-function org-back-over-empty-lines "org" ())
 (declare-function org-back-to-heading "org" (&optional invisible-ok))
 (declare-function org-combine-plists "org" (&rest plists))
+(declare-function org-edit-footnote-reference "org-src" ())
 (declare-function org-element-context "org-element" (&optional element))
 (declare-function org-element-property "org-element" (property element))
 (declare-function org-element-type "org-element" (element))
@@ -49,23 +52,25 @@
 (declare-function org-icompleting-read "org" (&rest args))
 (declare-function org-id-uuid "org-id" ())
 (declare-function org-in-block-p "org" (names))
-(declare-function org-at-comment-p "org" ())
 (declare-function org-in-regexp "org" (re &optional nlines visually))
 (declare-function org-in-verbatim-emphasis "org" ())
 (declare-function org-inside-LaTeX-fragment-p "org" ())
 (declare-function org-inside-latex-macro-p "org" ())
 (declare-function org-mark-ring-push "org" (&optional pos buffer))
 (declare-function org-show-context "org" (&optional key))
+(declare-function org-skip-whitespace "org" ())
+(declare-function org-skip-whitespace "org" ())
 (declare-function org-trim "org" (s))
-(declare-function org-skip-whitespace "org" ())
 (declare-function outline-next-heading "outline")
-(declare-function org-skip-whitespace "org" ())
 
-(defvar org-outline-regexp-bol)		; defined in org.el
-(defvar org-odd-levels-only)		; defined in org.el
-(defvar org-bracket-link-regexp)	; defined in org.el
 (defvar message-cite-prefix-regexp)	; defined in message.el
 (defvar message-signature-separator)	; defined in message.el
+(defvar org-bracket-link-regexp)	; defined in org.el
+(defvar org-complex-heading-regexp)	; defined in org.el
+(defvar org-element-all-elements)	; defined in org-element.el
+(defvar org-element-all-objects)	; defined in org-element.el
+(defvar org-odd-levels-only)		; defined in org.el
+(defvar org-outline-regexp-bol)		; defined in org.el
 
 (defconst org-footnote-re
   ;; Only [1]-like footnotes are closed in this regexp, as footnotes
@@ -341,36 +346,56 @@ If no footnote is found, return nil."
 (defun org-footnote-get-definition (label)
   "Return label, boundaries and definition of the footnote LABEL."
   (let* ((label (regexp-quote (org-footnote-normalize-label label)))
-	 (re (format "^\\[%s\\]\\|.\\[%s:" label label))
-	 pos)
-    (save-excursion
-      (save-restriction
-	(when (or (re-search-forward re nil t)
-		  (and (goto-char (point-min))
-		       (re-search-forward re nil t))
-		  (and (progn (widen) t)
-		       (goto-char (point-min))
-		       (re-search-forward re nil t)))
-	  (let ((refp (org-footnote-at-reference-p)))
-	    (cond
-	     ((and (nth 3 refp) refp))
-	     ((org-footnote-at-definition-p)))))))))
+	 (re (format "^\\[%s\\]\\|.\\[%s:" label label)))
+    (org-with-wide-buffer
+     (goto-char (point-min))
+     (catch 'found
+       (while (re-search-forward re nil t)
+	 (let* ((datum (progn (backward-char) (org-element-context)))
+		(type (org-element-type datum)))
+	   (when (memq type '(footnote-definition footnote-reference))
+	     (throw 'found
+		    (list
+		     label
+		     (org-element-property :begin datum)
+		     (org-element-property :end datum)
+		     (let ((cbeg (org-element-property :contents-begin datum)))
+		       (if (not cbeg) ""
+			 (replace-regexp-in-string
+			  "[ \t\n]*\\'"
+			  ""
+			  (buffer-substring-no-properties
+			   cbeg
+			   (org-element-property :contents-end datum))))))))))
+       nil))))
 
-(defun org-footnote-goto-definition (label)
+(defun org-footnote-goto-definition (label &optional location)
   "Move point to the definition of the footnote LABEL.
-Return a non-nil value when a definition has been found."
+
+LOCATION, when non-nil specifies the buffer position of the
+definition.
+
+Throw an error if there is no definition or if it cannot be
+reached from current narrowed part of buffer.  Return a non-nil
+value if point was successfully moved."
   (interactive "sLabel: ")
-  (org-mark-ring-push)
-  (let ((def (org-footnote-get-definition label)))
-    (if (not def)
-	(error "Cannot find definition of footnote %s" label)
-      (goto-char (nth 1 def))
-      (looking-at (format "\\[%s\\]\\|\\[%s:" label label))
-      (goto-char (match-end 0))
-      (org-show-context 'link-search)
-      (when (derived-mode-p 'org-mode)
-	(message "Edit definition and go back with `C-c &' or, if unique, with `C-c C-c'."))
-      t)))
+  (let ((def-start (or location (nth 1 (org-footnote-get-definition label)))))
+    (cond
+     ((not def-start)
+      (user-error "Cannot find definition of footnote %s" label))
+     ((or (> def-start (point-max)) (< def-start (point-min)))
+      (user-error "Definition is outside narrowed part of buffer")))
+    (org-mark-ring-push)
+    (goto-char def-start)
+    (looking-at (format "\\[%s[]:]" label))
+    (goto-char (match-end 0))
+    (org-show-context 'link-search)
+    (when (derived-mode-p 'org-mode)
+      (message
+       (substitute-command-keys
+	"Edit definition and go back with `\\[org-mark-ring-goto]' or, if \
+unique, with `\\[org-ctrl-c-ctrl-c]'.")))
+    t))
 
 (defun org-footnote-goto-previous-reference (label)
   "Find the first closest (to point) reference of footnote with label LABEL."
@@ -467,6 +492,18 @@ buffer."
        ((eq type 'verse-block)
 	(and (>= (point) (org-element-property :contents-begin context))
 	     (< (point) (org-element-property :contents-end context))))
+       ;; In an headline or inlinetask, point must be either on the
+       ;; heading itself or on the blank lines below.
+       ((memq type '(headline inlinetask))
+	(or (not (org-at-heading-p))
+	    (and (save-excursion (beginning-of-line)
+				 (and (let ((case-fold-search t))
+					(not (looking-at "\\*+ END[ \t]*$")))
+				      (looking-at org-complex-heading-regexp)))
+		 (match-beginning 4)
+		 (>= (point) (match-beginning 4))
+		 (or (not (match-beginning 5))
+		     (< (point) (match-beginning 5))))))
        ;; White spaces after an object or blank lines after an element
        ;; are OK.
        ((>= (point)
@@ -504,51 +541,62 @@ or new, let the user edit the definition of the footnote."
 		  (mapcar #'list all) nil nil
 		  (and (eq org-footnote-auto-label 'confirm) propose))))))))
     (cond ((not label)
-	   (insert "[fn:: ]")
+	   (insert "[fn::]")
 	   (backward-char 1))
 	  ((member label all)
 	   (insert "[" label "]")
 	   (message "New reference to existing note"))
 	  (org-footnote-define-inline
-	   (insert "[" label ": ]")
+	   (insert "[" label ":]")
 	   (backward-char 1)
 	   (org-footnote-auto-adjust-maybe))
 	  (t
 	   (insert "[" label "]")
-	   (org-footnote-create-definition label)
-	   (org-footnote-auto-adjust-maybe)))))
+	   (let ((l (copy-marker (org-footnote-create-definition label))))
+	     (org-footnote-auto-adjust-maybe)
+	     (or (ignore-errors (org-footnote-goto-definition label l))
+		 ;; Since definition was created outside current
+		 ;; scope, edit it remotely.
+		 (progn (set-marker l nil)
+			(org-edit-footnote-reference))))))))
 
-(defvar org-blank-before-new-entry) ; silence byte-compiler
+(defvar org-blank-before-new-entry) ; Silence byte-compiler.
 (defun org-footnote-create-definition (label)
-  "Start the definition of a footnote with label LABEL."
-  (interactive "sLabel: ")
+  "Start the definition of a footnote with label LABEL.
+Return buffer position at the beginning of the definition.  In an
+Org buffer, this function doesn't move point."
   (let ((label (org-footnote-normalize-label label))
-	electric-indent-mode) ;; Prevent wrong indentation
+	electric-indent-mode)		; Prevent wrong indentation.
     (cond
-     ;; In an Org file.
+     ;; In an Org document.
      ((derived-mode-p 'org-mode)
       ;; If `org-footnote-section' is defined, find it, or create it
       ;; at the end of the buffer.
-      (when org-footnote-section
-	(goto-char (point-min))
-	(let ((re (concat "^\\*+[ \t]+" org-footnote-section "[ \t]*$")))
-	  (unless (or (re-search-forward re nil t)
-		      (and (progn (widen) t)
-			   (re-search-forward re nil t)))
-	    (goto-char (point-max))
-	    (skip-chars-backward " \t\r\n")
-	    (unless (bolp) (newline))
-	    ;; Insert new section.  Separate it from the previous one
-	    ;; with a blank line, unless `org-blank-before-new-entry'
-	    ;; explicitly says no.
-	    (when (and (cdr (assq 'heading org-blank-before-new-entry))
-		       (zerop (save-excursion (org-back-over-empty-lines))))
-	      (insert "\n"))
-	    (insert "* " org-footnote-section "\n"))))
-      ;; Move to the end of this entry (which may be
-      ;; `org-footnote-section' or the current one).
-      (org-footnote-goto-local-insertion-point)
-      (org-show-context 'link-search))
+      (org-with-wide-buffer
+       (cond
+	((not org-footnote-section)
+	 (org-footnote--goto-local-insertion-point))
+	((save-excursion
+	   (goto-char (point-min))
+	   (re-search-forward
+	    (concat "^\\*+[ \t]+" (regexp-quote org-footnote-section) "[ \t]*$")
+	    nil t))
+	 (goto-char (match-end 0))
+	 (forward-line)
+	 (unless (bolp) (insert "\n")))
+	(t
+	 (goto-char (point-max))
+	 (unless (bolp) (insert "\n"))
+	 ;; Insert new section.  Separate it from the previous one
+	 ;; with a blank line, unless `org-blank-before-new-entry'
+	 ;; explicitly says no.
+	 (when (and (cdr (assq 'heading org-blank-before-new-entry))
+		    (zerop (save-excursion (org-back-over-empty-lines))))
+	   (insert "\n"))
+	 (insert "* " org-footnote-section "\n")))
+       (when (zerop (org-back-over-empty-lines)) (insert "\n"))
+       (insert "[" label "] \n")
+       (line-beginning-position 0)))
      (t
       ;; In a non-Org file.  Search for footnote tag, or create it if
       ;; specified (at the end of buffer, or before signature if in
@@ -583,16 +631,11 @@ or new, let the user edit the definition of the footnote."
 	(skip-chars-backward " \t\r\n")
 	(delete-region (point) max)
 	(unless (bolp) (newline))
-	(set-marker max nil))))
-    ;; Insert footnote label.
-    (when (zerop (org-back-over-empty-lines)) (newline))
-    (insert "[" label "] \n")
-    (backward-char)
-    ;; Only notify user about next possible action when in an Org
-    ;; buffer, as the bindings may have different meanings otherwise.
-    (when (derived-mode-p 'org-mode)
-      (message
-       "Edit definition and go back with `C-c &' or, if unique, with `C-c C-c'."))))
+	(set-marker max nil))
+      (when (zerop (org-back-over-empty-lines)) (insert "\n"))
+      (insert "[" label "] \n")
+      (backward-char)
+      (line-beginning-position)))))
 
 ;;;###autoload
 (defun org-footnote-action (&optional special)
@@ -619,18 +662,22 @@ offer additional commands in a menu."
 	 ;; definition.
 	 ((not label)
 	  (goto-char (org-element-property :contents-begin context)))
-	 ;; A definition exists: move to it.
-	 ((ignore-errors (org-footnote-goto-definition label)))
+	 ;; Check if a definition exists: then move to it.
+	 ((let ((p (nth 1 (org-footnote-get-definition label))))
+	    (when p (org-footnote-goto-definition label p))))
 	 ;; No definition exists: offer to create it.
 	 ((yes-or-no-p (format "No definition for %s.  Create one? " label))
-	  (org-footnote-create-definition label)))))
+	  (let ((p (org-footnote-create-definition label)))
+	    (or (ignore-errors (org-footnote-goto-definition label p))
+		;; Since definition was created outside current scope,
+		;; edit it remotely.
+		(org-edit-footnote-reference)))))))
      ((eq type 'footnote-definition)
       (org-footnote-goto-previous-reference
        (org-element-property :label context)))
-     ((or special
-	  (zerop (current-column))
-	  (not (org-footnote-in-valid-context-p)))
-      (message "Footnotes: [s]ort  |  [r]enumber fn:N  |  [S]=r+s |->[n]umeric  |  [d]elete")
+     ((or special (not (org-footnote--allow-reference-p)))
+      (message "Footnotes: [s]ort  |  [r]enumber fn:N  |  [S]=r+s  |  \
+->[n]umeric  |  [d]elete")
       (let ((c (read-char-exclusive)))
 	(cond
 	 ((eq c ?s) (org-footnote-normalize 'sort))
@@ -667,163 +714,162 @@ referenced sequence."
 	  (concat "\\*" (if nstars (format "\\{1,%d\\} " nstars) "+ ")))
 	 (count 0)
 	 ins-point ref ref-table)
-    (save-excursion
-      ;; 1. Find every footnote reference, extract the definition, and
-      ;;    collect that data in REF-TABLE.  If SORT-ONLY is nil, also
-      ;;    normalize references.
-      (goto-char (point-min))
-      (while (setq ref (org-footnote-get-next-reference))
-	(let* ((lbl (car ref))
-	       (pos (nth 1 ref))
-	       ;; When footnote isn't anonymous, check if it's label
-	       ;; (REF) is already stored in REF-TABLE.  In that case,
-	       ;; extract number used to identify it (MARKER).  If
-	       ;; footnote is unknown, increment the global counter
-	       ;; (COUNT) to create an unused identifier.
-	       (a (and lbl (assoc lbl ref-table)))
-	       (marker (or (nth 1 a) (incf count)))
-	       ;; Is the reference inline or pointing to an inline
-	       ;; footnote?
-	       (inlinep (or (stringp (nth 3 ref)) (nth 3 a))))
-	  ;; Replace footnote reference with [MARKER].  Maybe fill
-	  ;; paragraph once done.  If SORT-ONLY is non-nil, only move
-	  ;; to the end of reference found to avoid matching it twice.
-	  (if sort-only (goto-char (nth 2 ref))
-	    (delete-region (nth 1 ref) (nth 2 ref))
-	    (goto-char (nth 1 ref))
-	    (insert (format "[%d]" marker))
-	    (and inlinep
-		 org-footnote-fill-after-inline-note-extraction
-		 (org-fill-paragraph)))
-	  ;; Add label (REF), identifier (MARKER), definition (DEF)
-	  ;; type (INLINEP) and position (POS) to REF-TABLE if data
-	  ;; was unknown.
-	  (unless a
-	    (let ((def (or (nth 3 ref)	; Inline definition.
-			   (nth 3 (org-footnote-get-definition lbl)))))
-	      (push (list lbl marker def
-			  ;; Reference beginning position is a marker
-			  ;; to preserve it during further buffer
-			  ;; modifications.
-			  inlinep (copy-marker pos)) ref-table)))))
-      ;; 2. Find and remove the footnote section, if any.  Also
-      ;;    determine where footnotes shall be inserted (INS-POINT).
-      (cond
-       ((and org-footnote-section (derived-mode-p 'org-mode))
-	(goto-char (point-min))
-	(if (re-search-forward
-	     (concat "^\\*[ \t]+" (regexp-quote org-footnote-section)
-		     "[ \t]*$") nil t)
-	    (delete-region (match-beginning 0) (org-end-of-subtree t t)))
-	;; A new footnote section is inserted by default at the end of
-	;; the buffer.
-	(goto-char (point-max))
-	(skip-chars-backward " \r\t\n")
-	(forward-line)
-	(unless (bolp) (newline)))
-       ;; No footnote section set: Footnotes will be added at the end
-       ;; of the section containing their first reference.
-       ((derived-mode-p 'org-mode))
-       (t
-	;; Remove any left-over tag in the buffer, if one is set up.
-	(when org-footnote-tag-for-non-org-mode-files
-	  (let ((tag (concat "^" (regexp-quote
-				  org-footnote-tag-for-non-org-mode-files)
-			     "[ \t]*$")))
-	    (goto-char (point-min))
-	    (while (re-search-forward tag nil t)
-	      (replace-match "")
-	      (delete-region (point) (progn (forward-line) (point))))))
-	;; In Message mode, ensure footnotes are inserted before the
-	;; signature.
-	(if (and (derived-mode-p 'message-mode)
-		 (goto-char (point-max))
-		 (re-search-backward message-signature-separator nil t))
-	    (beginning-of-line)
-	  (goto-char (point-max)))))
-      (setq ins-point (point-marker))
-      ;; 3. Clean-up REF-TABLE.
-      (setq ref-table
-	    (delq nil
-		  (mapcar
-		   (lambda (x)
-		     (cond
-		      ;; When only sorting, ignore inline footnotes.
-		      ;; Also clear position marker.
-		      ((and sort-only (nth 3 x))
-		       (set-marker (nth 4 x) nil) nil)
-		      ;; No definition available: provide one.
-		      ((not (nth 2 x))
-		       (append
-			(list (car x) (nth 1 x)
-			      (format "DEFINITION NOT FOUND: %s" (car x)))
-			(nthcdr 3 x)))
-		      (t x)))
-		   ref-table)))
-      (setq ref-table (nreverse ref-table))
-      ;; 4. Remove left-over definitions in the buffer.
-      (mapc (lambda (x)
-	      (unless (nth 3 x) (org-footnote-delete-definitions (car x))))
-	    ref-table)
-      ;; 5. Insert the footnotes again in the buffer, at the
-      ;;    appropriate spot.
-      (goto-char ins-point)
-      (cond
-       ;; No footnote: exit.
-       ((not ref-table))
-       ;; Cases when footnotes should be inserted in one place.
-       ((or (not (derived-mode-p 'org-mode)) org-footnote-section)
-	;; Insert again the section title, if any.  Ensure that title,
-	;; or the subsequent footnotes, will be separated by a blank
-	;; lines from the rest of the document.  In an Org buffer,
-	;; separate section with a blank line, unless explicitly
-	;; stated in `org-blank-before-new-entry'.
-	(if (not (derived-mode-p 'org-mode))
-	    (progn (skip-chars-backward " \t\n\r")
-		   (delete-region (point) ins-point)
-		   (unless (bolp) (newline))
-		   (when org-footnote-tag-for-non-org-mode-files
-		     (insert "\n" org-footnote-tag-for-non-org-mode-files "\n")))
-	  (when (and (cdr (assq 'heading org-blank-before-new-entry))
-		     (zerop (save-excursion (org-back-over-empty-lines))))
-	    (insert "\n"))
-	  (insert "* " org-footnote-section "\n"))
-	(set-marker ins-point nil)
-	;; Insert the footnotes, separated by a blank line.
-	(insert
-	 (mapconcat
-	  (lambda (x)
-	    ;; Clean markers.
-	    (set-marker (nth 4 x) nil)
-	    (format "\n[%s] %s" (nth (if sort-only 0 1) x) (nth 2 x)))
-	  ref-table "\n"))
-	(unless (eobp) (insert "\n\n")))
-       ;; Each footnote definition has to be inserted at the end of
-       ;; the section where its first reference belongs.
-       (t
-	(mapc
+    (org-with-wide-buffer
+     ;; 1. Find every footnote reference, extract the definition, and
+     ;;    collect that data in REF-TABLE.  If SORT-ONLY is nil, also
+     ;;    normalize references.
+     (goto-char (point-min))
+     (while (setq ref (org-footnote-get-next-reference))
+       (let* ((lbl (car ref))
+	      (pos (nth 1 ref))
+	      ;; When footnote isn't anonymous, check if it's label
+	      ;; (REF) is already stored in REF-TABLE.  In that case,
+	      ;; extract number used to identify it (MARKER).  If
+	      ;; footnote is unknown, increment the global counter
+	      ;; (COUNT) to create an unused identifier.
+	      (a (and lbl (assoc lbl ref-table)))
+	      (marker (or (nth 1 a) (incf count)))
+	      ;; Is the reference inline or pointing to an inline
+	      ;; footnote?
+	      (inlinep (or (stringp (nth 3 ref)) (nth 3 a))))
+	 ;; Replace footnote reference with [MARKER].  Maybe fill
+	 ;; paragraph once done.  If SORT-ONLY is non-nil, only move
+	 ;; to the end of reference found to avoid matching it twice.
+	 (if sort-only (goto-char (nth 2 ref))
+	   (delete-region (nth 1 ref) (nth 2 ref))
+	   (goto-char (nth 1 ref))
+	   (insert (format "[%d]" marker))
+	   (and inlinep
+		org-footnote-fill-after-inline-note-extraction
+		(org-fill-paragraph)))
+	 ;; Add label (REF), identifier (MARKER), definition (DEF)
+	 ;; type (INLINEP) and position (POS) to REF-TABLE if data was
+	 ;; unknown.
+	 (unless a
+	   (let ((def (or (nth 3 ref)	; Inline definition.
+			  (nth 3 (org-footnote-get-definition lbl)))))
+	     (push (list lbl marker def
+			 ;; Reference beginning position is a marker
+			 ;; to preserve it during further buffer
+			 ;; modifications.
+			 inlinep (copy-marker pos)) ref-table)))))
+     ;; 2. Find and remove the footnote section, if any.  Also
+     ;;    determine where footnotes shall be inserted (INS-POINT).
+     (cond
+      ((and org-footnote-section (derived-mode-p 'org-mode))
+       (goto-char (point-min))
+       (if (re-search-forward
+	    (concat "^\\*[ \t]+" (regexp-quote org-footnote-section)
+		    "[ \t]*$") nil t)
+	   (delete-region (match-beginning 0) (org-end-of-subtree t t)))
+       ;; A new footnote section is inserted by default at the end of
+       ;; the buffer.
+       (goto-char (point-max))
+       (skip-chars-backward " \r\t\n")
+       (forward-line)
+       (unless (bolp) (newline)))
+      ;; No footnote section set: Footnotes will be added at the end
+      ;; of the section containing their first reference.
+      ((derived-mode-p 'org-mode))
+      (t
+       ;; Remove any left-over tag in the buffer, if one is set up.
+       (when org-footnote-tag-for-non-org-mode-files
+	 (let ((tag (concat "^" (regexp-quote
+				 org-footnote-tag-for-non-org-mode-files)
+			    "[ \t]*$")))
+	   (goto-char (point-min))
+	   (while (re-search-forward tag nil t)
+	     (replace-match "")
+	     (delete-region (point) (progn (forward-line) (point))))))
+       ;; In Message mode, ensure footnotes are inserted before the
+       ;; signature.
+       (if (and (derived-mode-p 'message-mode)
+		(goto-char (point-max))
+		(re-search-backward message-signature-separator nil t))
+	   (beginning-of-line)
+	 (goto-char (point-max)))))
+     (setq ins-point (point-marker))
+     ;; 3. Clean-up REF-TABLE.
+     (setq ref-table
+	   (delq nil
+		 (mapcar
+		  (lambda (x)
+		    (cond
+		     ;; When only sorting, ignore inline footnotes.
+		     ;; Also clear position marker.
+		     ((and sort-only (nth 3 x))
+		      (set-marker (nth 4 x) nil) nil)
+		     ;; No definition available: provide one.
+		     ((not (nth 2 x))
+		      (append
+		       (list (car x) (nth 1 x)
+			     (format "DEFINITION NOT FOUND: %s" (car x)))
+		       (nthcdr 3 x)))
+		     (t x)))
+		  ref-table)))
+     (setq ref-table (nreverse ref-table))
+     ;; 4. Remove left-over definitions in the buffer.
+     (dolist (x ref-table)
+       (unless (nth 3 x) (org-footnote-delete-definitions (car x))))
+     ;; 5. Insert the footnotes again in the buffer, at the
+     ;;    appropriate spot.
+     (goto-char ins-point)
+     (cond
+      ;; No footnote: exit.
+      ((not ref-table))
+      ;; Cases when footnotes should be inserted in one place.
+      ((or (not (derived-mode-p 'org-mode)) org-footnote-section)
+       ;; Insert again the section title, if any.  Ensure that title,
+       ;; or the subsequent footnotes, will be separated by a blank
+       ;; lines from the rest of the document.  In an Org buffer,
+       ;; separate section with a blank line, unless explicitly stated
+       ;; in `org-blank-before-new-entry'.
+       (if (not (derived-mode-p 'org-mode))
+	   (progn (skip-chars-backward " \t\n\r")
+		  (delete-region (point) ins-point)
+		  (unless (bolp) (newline))
+		  (when org-footnote-tag-for-non-org-mode-files
+		    (insert "\n" org-footnote-tag-for-non-org-mode-files "\n")))
+	 (when (and (cdr (assq 'heading org-blank-before-new-entry))
+		    (zerop (save-excursion (org-back-over-empty-lines))))
+	   (insert "\n"))
+	 (insert "* " org-footnote-section "\n"))
+       (set-marker ins-point nil)
+       ;; Insert the footnotes, separated by a blank line.
+       (insert
+	(mapconcat
 	 (lambda (x)
-	   (let ((pos (nth 4 x)))
-	     (goto-char pos)
-	     ;; Clean marker.
-	     (set-marker pos nil))
-	   (org-footnote-goto-local-insertion-point)
-	   (insert (format "\n[%s] %s\n"
-			   (if sort-only (car x) (nth 1 x))
-			   (nth 2 x))))
-	 ref-table))))))
+	   ;; Clean markers.
+	   (set-marker (nth 4 x) nil)
+	   (format "\n[%s] %s" (nth (if sort-only 0 1) x) (nth 2 x)))
+	 ref-table "\n"))
+       (unless (eobp) (insert "\n\n")))
+      ;; Each footnote definition has to be inserted at the end of the
+      ;; section where its first reference belongs.
+      (t
+       (dolist (x ref-table)
+	 (let ((pos (nth 4 x)))
+	   (goto-char pos)
+	   ;; Clean marker.
+	   (set-marker pos nil))
+	 (org-footnote--goto-local-insertion-point)
+	 (insert (format "\n[%s] %s\n"
+			 (nth (if sort-only 0 1) x)
+			 (nth 2 x)))))))))
 
-(defun org-footnote-goto-local-insertion-point ()
-  "Find insertion point for footnote, just before next outline heading."
+(defun org-footnote--goto-local-insertion-point ()
+  "Find insertion point for footnote, just before next outline heading.
+Assume insertion point is within currently accessible part of the buffer."
   (org-with-limited-levels (outline-next-heading))
-  (or (bolp) (newline))
-  (beginning-of-line 0)
-  (while (and (not (bobp)) (= (char-after) ?#))
-    (beginning-of-line 0))
-  (if (let ((case-fold-search t)) (looking-at "[ \t]*#\\+tblfm:")) (beginning-of-line 2))
-  (end-of-line 1)
-  (skip-chars-backward "\n\r\t ")
-  (forward-line))
+  ;; Skip file local variables.  See `modify-file-local-variable'.
+  (when (eobp)
+    (let ((case-fold-search t))
+      (re-search-backward "^[ \t]*# +Local Variables:"
+			  (max (- (point-max) 3000) (point-min))
+			  t)))
+  (skip-chars-backward " \t\n")
+  (forward-line)
+  (unless (bolp) (insert "\n")))
 
 (defun org-footnote-delete-references (label)
   "Delete every reference to footnote LABEL.

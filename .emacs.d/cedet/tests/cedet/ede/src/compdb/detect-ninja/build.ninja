@@ -1,0 +1,9 @@
+# Dummy ninja build file
+
+rule CXX_COMPILER
+  depfile = $DEP_FILE
+  deps = gcc
+  command = c++ $DEFINES $FLAGS -MMD -MT $out -MF $DEP_FILE -o $out -c $in
+
+build hello: CXX_COMPILER hello
+  TARGET_FILE = hello

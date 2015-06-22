@@ -352,12 +352,9 @@ A headline is only used if #+OPENING is not set.  See also
   :type 'boolean)
 
 (defcustom org-koma-letter-prefer-subject nil
-  "Non-nil means title should be interpret as subject if subject is missing.
+  "Non-nil means title should be interpreted as subject if subject is missing.
 This option can also be set with the OPTIONS keyword,
-e.g. \"title-subject:t\".
-
-This may be useful for older documents where the SUBJECT keyword
-was not present."
+e.g. \"title-subject:t\"."
     :group 'org-export-koma-letter
     :type 'boolean)
 
@@ -391,7 +388,7 @@ was not present."
     (:email "EMAIL" nil (org-koma-letter--get-value org-koma-letter-email) t)
     (:to-address "TO_ADDRESS" nil nil newline)
     (:place "PLACE" nil org-koma-letter-place)
-    (:subject "SUBJECT" nil nil space)
+    (:subject "SUBJECT" nil nil parse)
     (:opening "OPENING" nil org-koma-letter-opening)
     (:closing "CLOSING" nil org-koma-letter-closing)
     (:signature "SIGNATURE" nil org-koma-letter-signature newline)
@@ -468,27 +465,27 @@ return a string or nil."
 	  (t value))))
 
 (defun org-koma-letter--special-contents-as-macro
-  (keywords &optional keep-newlines no-tag)
-  "Process KEYWORDS  members of `org-koma-letter-special-contents'.
+    (keywords &optional keep-newlines no-tag)
+  "Process KEYWORDS members of `org-koma-letter-special-contents'.
 KEYWORDS is a list of symbols.  Return them as a string to be
 formatted.
 
 The function is used for inserting content of special headings
 such as PS.
 
-If KEEP-NEWLINES is t newlines will not be removed.  If NO-TAG is
-t the content in `org-koma-letter-special-contents' will not be
-wrapped in a macro named whatever the members of KEYWORDS are
-called."
+If KEEP-NEWLINES is non-nil leading and trailing newlines are not
+removed.  If NO-TAG is non-nil the content in
+`org-koma-letter-special-contents' are not wrapped in a macro
+named whatever the members of KEYWORDS are called."
   (mapconcat
-   #'(lambda (keyword)
-       (let* ((name (org-koma-letter--get-value keyword))
-	      (value (org-koma-letter--get-tagged-contents name)))
-	 (when value
-	   (if no-tag (if keep-newlines value (org-trim value))
-	     (format "\\%s{%s}\n"
-		     name
-		     (if keep-newlines value (org-trim value)))))))
+   (lambda (keyword)
+     (let* ((name (org-koma-letter--get-value keyword))
+	    (value (org-koma-letter--get-tagged-contents name)))
+       (cond ((not value) nil)
+	     (no-tag (if keep-newlines value (org-trim value)))
+	     (t (format "\\%s{%s}\n"
+			name
+			(if keep-newlines value (org-trim value)))))))
    keywords
    ""))
 
@@ -619,37 +616,37 @@ holding export options."
    ;; Date.
    (format "\\date{%s}\n" (org-export-data (org-export-get-date info) info))
    ;; Hyperref, document start, and subject and title.
-   (let ((with-subject (plist-get info :with-subject)))
-     (when (and with-subject (plist-get info :with-title))
-       (concat
-	(unless (eq with-subject t)
-	  (format "\\KOMAoption{subject}{%s}\n"
-		  (if (symbolp with-subject) with-subject
-		    (mapconcat #'symbol-name with-subject ","))))
-	(let* ((title-as-subject (plist-get info :with-title-as-subject))
-	       (subject* (org-string-nw-p
-			  (org-export-data
-			   (org-element-parse-secondary-string
-			    (plist-get info :subject)
-			    (org-element-restriction 'keyword))
-			   info)))
-	       (title* (and (plist-get info :with-title)
-			    (org-string-nw-p
-			     (org-export-data (plist-get info :title) info))))
-	       (subject (if title-as-subject (or subject* title*) subject*))
-	       (title (if title-as-subject (and subject* title*) title*))
-	       (hyperref-template (plist-get info :latex-hyperref-template))
-	       (spec (append (list (cons ?t (or title subject "")))
-			     (org-latex--format-spec info))))
-	  (concat
-	   ;; Hyperref.
-	   (format-spec hyperref-template spec)
-	   ;; Document start.
-	   "\\begin{document}\n\n"
-	   ;; Subject and title.
-	   (when subject (format "\\setkomavar{subject}{%s}\n" subject))
-	   (when title (format "\\setkomavar{title}{%s}\n" title))
-	   (when (or (org-string-nw-p title) (org-string-nw-p subject)) "\n"))))))
+   (let* ((with-subject (plist-get info :with-subject))
+	  (with-title (plist-get info :with-title))
+	  (title-as-subject (and with-subject
+				 (plist-get info :with-title-as-subject)))
+	  (subject* (org-string-nw-p
+		     (org-export-data (plist-get info :subject) info)))
+	  (title* (and with-title
+		       (org-string-nw-p
+			(org-export-data (plist-get info :title) info))))
+	  (subject (cond ((not with-subject) nil)
+			 (title-as-subject (or subject* title*))
+			 (t subject*)))
+	  (title (cond ((not with-title) nil)
+		       (title-as-subject (and subject* title*))
+		       (t title*)))
+	  (hyperref-template (plist-get info :latex-hyperref-template))
+	  (spec (append (list (cons ?t (or title subject "")))
+			(org-latex--format-spec info))))
+     (concat
+      (when (and with-subject (not (eq with-subject t)))
+	(format "\\KOMAoption{subject}{%s}\n"
+		(if (symbolp with-subject) with-subject
+		  (mapconcat #'symbol-name with-subject ","))))
+      ;; Hyperref.
+      (format-spec hyperref-template spec)
+      ;; Document start.
+      "\\begin{document}\n\n"
+      ;; Subject and title.
+      (when subject (format "\\setkomavar{subject}{%s}\n" subject))
+      (when title (format "\\setkomavar{title}{%s}\n" title))
+      (when (or (org-string-nw-p title) (org-string-nw-p subject)) "\n")))
    ;; Letter start.
    (format "\\begin{letter}{%%\n%s}\n\n"
 	   (org-koma-letter--determine-to-and-from info 'to))

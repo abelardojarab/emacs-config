@@ -1,6 +1,6 @@
 ;;; cogre/srecode.el --- SRecode macros for COGRE.
 ;;
-;; Copyright (C) 2009, 2010, 2014 Eric M. Ludlam
+;; Copyright (C) 2009, 2010, 2014, 2015 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;;
@@ -75,7 +75,7 @@
     ))
 
 ;;;###autoload
-(eval-after-load "srecode-map" '(cogre-srecode-setup))
+(eval-after-load "srecode/map" '(cogre-srecode-setup))
 
 ;;;###autoload
 (defun srecode-semantic-handle-:dot (dict)

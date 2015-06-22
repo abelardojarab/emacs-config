@@ -1,6 +1,6 @@
 ;;; semantic/analyze.el --- Analyze semantic tags against local context
 
-;; Copyright (C) 2000-2005, 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2000-2005, 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -219,6 +219,23 @@ Optional argument DESIRED-TYPE may be a non-type tag to analyze."
   "Try the base, and if that fails, return what we are assigning into."
   (or (call-next-method) (car-safe (oref context :assignee))))
 
+;;; TYPE MEMBERS
+;;
+;; When analyzing tag sequences, we dive through structured data
+;; such as structs, classes, unions, etc.  The raw member list
+;; is sometimes insufficient for generating completions, so each
+;; language nees an opportunity to get the type members that are
+;; accessable via a code snippet.  A key example is anonymous
+;; unions in C/C++, whose members are completable in the parent
+;; member list, but are structured in the tag as a single item.
+(define-overloadable-function semantic-analyze-tag-type-members (tag)
+  "Return a list of members of TAG, where TAG is a type.
+By default, call `semantic-tag-type-members'.")
+
+(defun semantic-analyze-tag-type-members-default (tag)
+  "Return a list of members of TAG, where TAG is a type."
+  (semantic-tag-type-members tag))
+
 ;;; ANALYSIS
 ;;
 ;; Start out with routines that will calculate useful parts of
@@ -345,7 +362,7 @@ This function knows of flags:
 	(when miniscope
 	  (let ((rawscope
 		 (apply 'append
-			(mapcar 'semantic-tag-type-members tagtype))))
+			(mapcar 'semantic-analyze-tag-type-members tagtype))))
 	    (oset miniscope fullscope rawscope)))
 	)
       (setq s (cdr s)))
@@ -589,7 +606,7 @@ Returns an object based on symbol `semantic-analyze-context'."
 		;; the found datatype.
 		(setq fcn (semantic-find-tags-by-name
 			   (semantic-tag-name (car ty))
-			   (semantic-tag-type-members (car ty))))
+			   (semantic-analyze-tag-type-members (car ty))))
 		(if fcn
 		    (let ((lp fcn))
 		      (while lp

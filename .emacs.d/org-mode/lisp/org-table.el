@@ -56,7 +56,7 @@ This can be used to add additional functionality after the table is sent
 to the receiver position, otherwise, if table is not sent, the functions
 are not run.")
 
-(defvar org-table-TBLFM-begin-regexp "|\n[ \t]*#\\+TBLFM: ")
+(defvar org-table-TBLFM-begin-regexp "^[ \t]*|.*\n[ \t]*#\\+TBLFM: ")
 
 (defcustom orgtbl-optimized (eq org-enable-table-editor 'optimized)
   "Non-nil means use the optimized table editor version for `orgtbl-mode'.
@@ -722,7 +722,7 @@ When nil, simply write \"#ERROR\" in corrupted fields.")
   (let* (
 	 ;; Limits of table
 	 (beg (org-table-begin))
-	 (end (org-table-end))
+	 (end (copy-marker (org-table-end)))
 	 ;; Current cursor position
 	 (linepos (org-current-line))
 	 (colpos (org-table-current-column))
@@ -931,14 +931,13 @@ With argument TABLE-TYPE, go to the beginning of a table.el-type table."
 (defun org-table-end (&optional table-type)
   "Find the end of the table and return its position.
 With argument TABLE-TYPE, go to the end of a table.el-type table."
-  (save-excursion
-    (if (not (re-search-forward
-	      (if table-type org-table-any-border-regexp
-		org-table-border-regexp)
-	      nil t))
-	(goto-char (point-max))
-      (goto-char (match-beginning 0)))
-    (point-marker)))
+  (if (save-excursion
+	(re-search-forward
+	 (if table-type org-table-any-border-regexp
+	   org-table-border-regexp)
+	 nil t))
+      (match-beginning 0)
+    (point-max)))
 
 ;;;###autoload
 (defun org-table-justify-field-maybe (&optional new)
@@ -1377,7 +1376,7 @@ However, when FORCE is non-nil, create new columns if necessary."
   (org-table-find-dataline)
   (let* ((col (max 1 (org-table-current-column)))
 	 (beg (org-table-begin))
-	 (end (org-table-end))
+	 (end (copy-marker (org-table-end)))
 	 ;; Current cursor position
 	 (linepos (org-current-line))
 	 (colpos col))
@@ -1448,7 +1447,7 @@ first dline below it is used.  When ABOVE is non-nil, the one above is used."
   (org-table-check-inside-data-field)
   (let* ((col (org-table-current-column))
 	 (beg (org-table-begin))
-	 (end (org-table-end))
+	 (end (copy-marker (org-table-end)))
 	 ;; Current cursor position
 	 (linepos (org-current-line))
 	 (colpos col))
@@ -1493,7 +1492,7 @@ first dline below it is used.  When ABOVE is non-nil, the one above is used."
   (let* ((col (org-table-current-column))
 	 (col1 (if left (1- col) col))
 	 (beg (org-table-begin))
-	 (end (org-table-end))
+	 (end (copy-marker (org-table-end)))
 	 ;; Current cursor position
 	 (linepos (org-current-line))
 	 (colpos (if left (1- col) (1+ col))))
@@ -1904,8 +1903,8 @@ blindly applies a recipe that works for simple tables."
   (require 'table)
   (if (org-at-table.el-p)
       ;; convert to Org-mode table
-      (let ((beg (move-marker (make-marker) (org-table-begin t)))
-	    (end (move-marker (make-marker) (org-table-end t))))
+      (let ((beg (copy-marker (org-table-begin t)))
+	    (end (copy-marker (org-table-end t))))
 	(table-unrecognize-region beg end)
 	(goto-char beg)
 	(while (re-search-forward "^\\([ \t]*\\)\\+-.*\n" end t)
@@ -1913,8 +1912,8 @@ blindly applies a recipe that works for simple tables."
 	(goto-char beg))
     (if (org-at-table-p)
 	;; convert to table.el table
-	(let ((beg (move-marker (make-marker) (org-table-begin)))
-	      (end (move-marker (make-marker) (org-table-end))))
+	(let ((beg (copy-marker (org-table-begin)))
+	      (end (copy-marker (org-table-end))))
 	  ;; first, get rid of all horizontal lines
 	  (goto-char beg)
 	  (while (re-search-forward "^\\([ \t]*\\)|-.*\n" end t)
@@ -2791,15 +2790,19 @@ not overwrite the stored one."
 		     (string-match (regexp-quote form) formrpl)))
 	      (setq form (replace-match formrpl t t form))
 	    (user-error "Spreadsheet error: invalid reference \"%s\"" form)))
-	;; Insert simple ranges
-	(while (string-match "\\$\\([0-9]+\\)\\.\\.\\$\\([0-9]+\\)"  form)
+	;; Insert simple ranges, i.e. included in the current row.
+	(while (string-match
+		"\\$\\(\\([-+]\\)?[0-9]+\\)\\.\\.\\$\\(\\([-+]\\)?[0-9]+\\)"
+		form)
 	  (setq form
 		(replace-match
 		 (save-match-data
 		   (org-table-make-reference
-		    (org-sublist
-		     fields (string-to-number (match-string 1 form))
-		     (string-to-number (match-string 2 form)))
+		    (org-sublist fields
+				 (+ (if (match-end 2) n0 0)
+				    (string-to-number (match-string 1 form)))
+				 (+ (if (match-end 4) n0 0)
+				    (string-to-number (match-string 3 form))))
 		    keep-empty numbers lispp))
 		 t t form)))
 	(setq form0 form)
@@ -3152,7 +3155,7 @@ known that the table will be realigned a little later anyway."
 	;; Get the correct line range to process
 	(if all
 	    (progn
-	      (setq end (move-marker (make-marker) (1+ (org-table-end))))
+	      (setq end (copy-marker (1+ (org-table-end))))
 	      (goto-char (setq beg (org-table-begin)))
 	      (if (re-search-forward org-table-calculate-mark-regexp end t)
 		  ;; This is a table with marked lines, compute selected lines
@@ -3328,33 +3331,31 @@ with the prefix ARG."
   (interactive "P")
   (unless (org-at-TBLFM-p) (user-error "Not at a #+TBLFM line"))
   (let ((formula (buffer-substring
-		  (point-at-bol)
-		  (point-at-eol)))
-	s e)
+		  (line-beginning-position)
+		  (line-end-position))))
     (save-excursion
       ;; Insert a temporary formula at right after the table
       (goto-char (org-table-TBLFM-begin))
-      (setq s (set-marker (make-marker) (point)))
-      (insert (concat formula "\n"))
-      (setq e (set-marker (make-marker) (point)))
-      ;; Recalculate the table
-      (beginning-of-line 0)		; move to the inserted line
-      (skip-chars-backward " \r\n\t")
-      (if (org-at-table-p)
+      (let ((s (point-marker)))
+	(insert formula "\n")
+	(let ((e (point-marker)))
+	  ;; Recalculate the table.
+	  (beginning-of-line 0)		; move to the inserted line
+	  (skip-chars-backward " \r\n\t")
 	  (unwind-protect
-	      (org-call-with-arg 'org-table-recalculate (or arg t))
-	    ;; delete the formula inserted temporarily
-	    (delete-region s e))))))
+	      (org-call-with-arg #'org-table-recalculate (or arg t))
+	    ;; Delete the formula inserted temporarily.
+	    (delete-region s e)
+	    (set-marker s nil)
+	    (set-marker e nil)))))))
 
 (defun org-table-TBLFM-begin ()
   "Find the beginning of the TBLFM lines and return its position.
 Return nil when the beginning of TBLFM line was not found."
   (save-excursion
     (when (progn (forward-line 1)
-	      (re-search-backward
-	       org-table-TBLFM-begin-regexp
-	       nil t))
-	  (point-at-bol 2))))
+		 (re-search-backward org-table-TBLFM-begin-regexp nil t))
+      (line-beginning-position 2))))
 
 (defun org-table-expand-lhs-ranges (equations)
   "Expand list of formulas.
@@ -3420,25 +3421,33 @@ borders of the table using the @< @> $< $> makers."
 
 (defun org-table-formula-substitute-names (f)
   "Replace $const with values in string F."
-  (let ((start 0) a (f1 f) (pp (/= (string-to-char f) ?')))
-    ;; First, check for column names
-    (while (setq start (string-match org-table-column-name-regexp f start))
-      (setq start (1+ start))
-      (setq a (assoc (match-string 1 f) org-table-column-names))
-      (setq f (replace-match (concat "$" (cdr a)) t t f)))
-    ;; Parameters and constants
-    (setq start 0)
-    (while (setq start (string-match "\\$\\([a-zA-Z][_a-zA-Z0-9]*\\)\\|\\(\\<remote([^)]*)\\)" f start))
-      (if (match-end 2)
-	  (setq start (match-end 2))
-	(setq start (1+ start))
-	(if (setq a (save-match-data
-		      (org-table-get-constant (match-string 1 f))))
-	    (setq f (replace-match
-		     (concat (if pp "(") a (if pp ")")) t t f)))))
-    (if org-table-formula-debug
-	(put-text-property 0 (length f) :orig-formula f1 f))
-    f))
+  (let ((start 0)
+	(pp (/= (string-to-char f) ?'))
+	(duration (org-string-match-p ";.*[Tt].*\\'" f))
+	(new (replace-regexp-in-string	; Check for column names.
+	      org-table-column-name-regexp
+	      (lambda (m)
+		(concat "$" (cdr (assoc (match-string 1 m)
+					org-table-column-names))))
+	      f t t)))
+    ;; Parameters and constants.
+    (while (setq start
+		 (string-match
+		  "\\$\\([a-zA-Z][_a-zA-Z0-9]*\\)\\|\\(\\<remote([^)]*)\\)"
+		  new start))
+      (if (match-end 2) (setq start (match-end 2))
+	(incf start)
+	;; When a duration is expected, convert value on the fly.
+	(let ((value
+	       (save-match-data
+		 (let ((v (org-table-get-constant (match-string 1 new))))
+		   (if (and (org-string-nw-p v) duration)
+		       (org-table-time-string-to-seconds v)
+		     v)))))
+	  (when value
+	    (setq new (replace-match
+		       (concat (and pp "(") value (and pp ")")) t t new))))))
+    (if org-table-formula-debug (org-propertize new :orig-formula f)) new))
 
 (defun org-table-get-constant (const)
   "Find the value for a parameter or constant in a formula.

@@ -108,13 +108,13 @@
     (:latex-class-options "LATEX_CLASS_OPTIONS" nil nil t)
     (:latex-header "LATEX_HEADER" nil nil newline)
     (:latex-header-extra "LATEX_HEADER_EXTRA" nil nil newline)
-    (:description "DESCRIPTION" nil nil newline)
-    (:keywords "KEYWORDS" nil nil space)
+    (:description "DESCRIPTION" nil nil parse)
+    (:keywords "KEYWORDS" nil nil parse)
+    (:subtitle "SUBTITLE" nil nil parse)
     ;; Other variables.
     (:latex-active-timestamp-format nil nil org-latex-active-timestamp-format)
     (:latex-caption-above nil nil org-latex-caption-above)
     (:latex-classes nil nil org-latex-classes)
-    (:latex-custom-id-labels nil nil org-latex-custom-id-as-label)
     (:latex-default-figure-position nil nil org-latex-default-figure-position)
     (:latex-default-table-environment nil nil org-latex-default-table-environment)
     (:latex-default-table-mode nil nil org-latex-default-table-mode)
@@ -135,6 +135,9 @@
     (:latex-listings-options nil nil org-latex-listings-options)
     (:latex-minted-langs nil nil org-latex-minted-langs)
     (:latex-minted-options nil nil org-latex-minted-options)
+    (:latex-prefer-user-labels nil nil org-latex-prefer-user-labels)
+    (:latex-subtitle-format nil nil org-latex-subtitle-format)
+    (:latex-subtitle-separate nil nil org-latex-subtitle-separate)
     (:latex-table-scientific-notation nil nil org-latex-table-scientific-notation)
     (:latex-tables-booktabs nil nil org-latex-tables-booktabs)
     (:latex-tables-centered nil nil org-latex-tables-centered)
@@ -142,7 +145,7 @@
     (:latex-title-command nil nil org-latex-title-command)
     (:latex-toc-command nil nil org-latex-toc-command)
     ;; Redefine regular options.
-    (:date "DATE" nil "\\today" t)))
+    (:date "DATE" nil "\\today" parse)))
 
 
 
@@ -206,6 +209,19 @@
 					  ("kbordermatrix" . "\\\\"))
   "Alist between matrix macros and their row ending.")
 
+(defconst org-latex-math-environments-re
+  (format
+   "\\`[ \t]*\\\\begin{%s\\*?}"
+   (regexp-opt
+	   '("equation" "eqnarray" "math" "displaymath"
+	     "align"  "gather" "multline" "flalign"  "alignat"
+	     "xalignat" "xxalignat"
+	     "subequations"
+	     ;; breqn
+	     "dmath" "dseries" "dgroup" "darray"
+	     ;; empheq
+	     "empheq")))
+  "Regexp of LaTeX math environments.")
 
 
 ;;; User Configurable Variables
@@ -233,6 +249,61 @@ symbols are: `image', `table', `src-block' and `special-block'."
 	       (const :tag "Tables" table)
 	       (const :tag "Source code" src-block)
 	       (const :tag "Special blocks" special-block))))
+
+(defcustom org-latex-prefer-user-labels nil
+   "Use user-provided labels instead of internal ones when non-nil.
+
+When this variable is non-nil, Org will use the value of
+CUSTOM_ID property, NAME keyword or Org target as the key for the
+\\label commands generated.
+
+By default, Org generates its own internal labels during LaTeX
+export.  This process ensures that the \\label keys are unique
+and valid, but it means the keys are not available in advance of
+the export process.
+
+Setting this variable gives you control over how Org generates
+labels during LaTeX export, so that you may know their keys in
+advance.  One reason to do this is that it allows you to refer to
+various elements using a single label both in Org's link syntax
+and in embedded LaTeX code.
+
+For example, when this variable is non-nil, a headline like this:
+
+  ** Some section
+     :PROPERTIES:
+     :CUSTOM_ID: sec:foo
+     :END:
+  This is section [[#sec:foo]].
+  #+BEGIN_LATEX
+  And this is still section \\ref{sec:foo}.
+  #+END_LATEX
+
+will be exported to LaTeX as:
+
+  \\subsection{Some section}
+  \\label{sec:foo}
+  This is section \\ref{sec:foo}.
+  And this is still section \\ref{sec:foo}.
+
+Note, however, that setting this variable introduces a limitation
+on the possible values for CUSTOM_ID and NAME.  When this
+variable is non-nil, Org passes their value to \\label unchanged.
+You are responsible for ensuring that the value is a valid LaTeX
+\\label key, and that no other \\label commands with the same key
+appear elsewhere in your document.  (Keys may contain letters,
+numbers, and the following punctuation: '_' '.'  '-' ':'.)  There
+are no such limitations on CUSTOM_ID and NAME when this variable
+is nil.
+
+For headlines that do not define the CUSTOM_ID property or
+elements without a NAME, Org will continue to use its default
+labeling scheme to generate labels and resolve links into proper
+references."
+  :group 'org-export-latex
+  :type 'boolean
+  :version "25.1"
+  :package-version '(Org . "8.3"))
 
 ;;;; Preamble
 
@@ -388,6 +459,7 @@ This format string may contain these elements:
 
   %a for AUTHOR keyword
   %t for TITLE keyword
+  %s for SUBTITLE keyword
   %k for KEYWORDS line
   %d for DESCRIPTION line
   %c for CREATOR line
@@ -402,6 +474,22 @@ Setting :latex-title-command in publishing projects will take
 precedence over this variable."
   :group 'org-export-latex
   :type '(string :tag "Format string"))
+
+(defcustom org-latex-subtitle-format "\\\\\\medskip\n\\large %s"
+  "Format string used for transcoded subtitle.
+The format string should have at most one \"%s\"-expression,
+which is replaced with the subtitle."
+  :group 'org-export-latex
+  :version "25.1"
+  :package-version '(Org . "8.3")
+  :type '(string :tag "Format string"))
+
+(defcustom org-latex-subtitle-separate nil
+  "Non-nil means the subtitle is not typeset as part of title."
+  :group 'org-export-latex
+  :version "25.1"
+  :package-version '(Org . "8.3")
+  :type 'boolean)
 
 (defcustom org-latex-toc-command "\\tableofcontents\n\n"
   "LaTeX command to set the table of contents, list of figures, etc.
@@ -419,6 +507,7 @@ This format string may contain these elements:
 
   %a for AUTHOR keyword
   %t for TITLE keyword
+  %s for SUBTITLE keyword
   %k for KEYWORDS line
   %d for DESCRIPTION line
   %c for CREATOR line
@@ -456,59 +545,6 @@ The function result will be used in the section format string."
   :package-version '(Org . "8.0")
   :type 'function)
 
-(defcustom org-latex-custom-id-as-label nil
-   "Toggle use of CUSTOM_ID properties for generating section labels.
-
-When this variable is non-nil, Org will use the value of a
-headline's CUSTOM_ID property as the key for the \\label command
-for the LaTeX section corresponding to the headline.
-
-By default, Org generates its own internal section labels for all
-headlines during LaTeX export.  This process ensures that the
-\\label keys are unique and valid, but it means the keys are not
-available in advance of the export process.
-
-Setting this variable gives you control over how Org generates
-labels for sections during LaTeX export, so that you may know
-their keys in advance.  One reason to do this is that it allows
-you to refer to headlines using a single label both in Org's link
-syntax and in embedded LaTeX code.
-
-For example, when this variable is non-nil, a headline like this:
-
-  ** Some section
-     :PROPERTIES:
-     :CUSTOM_ID: sec:foo
-     :END:
-  This is section [[#sec:foo]].
-  #+BEGIN_LATEX
-  And this is still section \\ref{sec:foo}.
-  #+END_LATEX
-
-will be exported to LaTeX as:
-
-  \\subsection{Some section}
-  \\label{sec:foo}
-  This is section \\ref{sec:foo}.
-  And this is still section \\ref{sec:foo}.
-
-Note, however, that setting this variable introduces a limitation
-on the possible values for CUSTOM_ID.  When this variable is
-non-nil and a headline defines a CUSTOM_ID value, Org simply
-passes this value to \\label unchanged.  You are responsible for
-ensuring that the value is a valid LaTeX \\label key, and that no
-other \\label commands with the same key appear elsewhere in your
-document.  (Keys may contain letters, numbers, and the following
-punctuation: '_' '.' '-' ':'.)  There are no such limitations on
-CUSTOM_ID when this variable is nil.
-
-For headlines that do not define the CUSTOM_ID property, Org will
-continue to use its default labeling scheme to generate labels
-and resolve links into section references."
-  :group 'org-export-latex
-  :type 'boolean
-  :version "25.1"
-  :package-version '(Org . "8.3"))
 
 ;;;; Footnotes
 
@@ -667,7 +703,7 @@ When nil, no transformation is made."
 ;;;; Text markup
 
 (defcustom org-latex-text-markup-alist '((bold . "\\textbf{%s}")
-					 (code . verb)
+					 (code . protectedtexttt)
 					 (italic . "\\emph{%s}")
 					 (strike-through . "\\sout{%s}")
 					 (underline . "\\uline{%s}")
@@ -687,6 +723,8 @@ to typeset and try to protect special characters.
 If no association can be found for a given markup, text will be
 returned as-is."
   :group 'org-export-latex
+  :version "25.1"
+  :package-version '(Org . "8.3")
   :type 'alist
   :options '(bold code italic strike-through underline verbatim))
 
@@ -1022,6 +1060,46 @@ INFO is a plist holding contextual information."
       (let ((type (org-element-type element)))
 	(memq (if (eq type 'link) 'image type) above)))))
 
+(defun org-latex--label (datum info &optional force full)
+  "Return an appropriate label for DATUM.
+DATUM is an element or a `target' type object.  INFO is the
+current export state, as a plist.
+
+Return nil if element DATUM has no NAME or VALUE affiliated
+keyword or no CUSTOM_ID property, unless FORCE is non-nil.  In
+this case always return a unique label.
+
+Eventually, if FULL is non-nil, wrap label within \"\\label{}\"."
+  (let* ((type (org-element-type datum))
+	 (user-label
+	  (org-element-property
+	   (case type
+	     ((headline inlinetask) :CUSTOM_ID)
+	     (target :value)
+	     (otherwise :name))
+	   datum))
+	 (label
+	  (and (or user-label force)
+	       (if (and user-label (plist-get info :latex-prefer-user-labels))
+		   user-label
+		 (concat (case type
+			   (headline "sec:")
+			   (table "tab:")
+			   (latex-environment
+			    (and (org-string-match-p
+				  org-latex-math-environments-re
+				  (org-element-property :value datum))
+				 "eq:"))
+			   (paragraph
+			    (and (org-element-property :caption datum)
+				 "fig:")))
+			 (org-export-get-reference datum info))))))
+    (cond ((not full) label)
+	  (label (format "\\label{%s}%s"
+			 label
+			 (if (eq type 'target) "" "\n")))
+	  (t ""))))
+
 (defun org-latex--caption/label-string (element info)
   "Return caption and label LaTeX string for ELEMENT.
 
@@ -1029,25 +1107,23 @@ INFO is a plist holding contextual information.  If there's no
 caption nor label, return the empty string.
 
 For non-floats, see `org-latex--wrap-label'."
-  (let* ((label (org-element-property :name element))
-	 (label-str (if (not (org-string-nw-p label)) ""
-		      (format "\\label{%s}"
-			      (org-export-solidify-link-text label))))
+  (let* ((label (org-latex--label element info nil t))
 	 (main (org-export-get-caption element))
 	 (short (org-export-get-caption element t))
-	 (caption-from-attr-latex (org-export-read-attribute :attr_latex element :caption)))
+	 (caption-from-attr-latex
+	  (org-export-read-attribute :attr_latex element :caption)))
     (cond
      ((org-string-nw-p caption-from-attr-latex)
       (concat caption-from-attr-latex "\n"))
-     ((and (not main) (equal label-str "")) "")
-     ((not main) (concat label-str "\n"))
+     ((and (not main) (equal label "")) "")
+     ((not main) (concat label "\n"))
      ;; Option caption format with short name.
      (short (format "\\caption[%s]{%s%s}\n"
 		    (org-export-data short info)
-		    label-str
+		    label
 		    (org-export-data main info)))
      ;; Standard caption format.
-     (t (format "\\caption{%s%s}\n" label-str (org-export-data main info))))))
+     (t (format "\\caption{%s%s}\n" label (org-export-data main info))))))
 
 (defun org-latex-guess-inputenc (header)
   "Set the coding system in inputenc to what the buffer is.
@@ -1123,54 +1199,50 @@ nil."
 	     options
 	     ","))
 
-(defun org-latex--wrap-label (element output)
+(defun org-latex--wrap-label (element output info)
   "Wrap label associated to ELEMENT around OUTPUT, if appropriate.
-This function shouldn't be used for floats.  See
+INFO is the current export state, as a plist.  This function
+should not be used for floats.  See
 `org-latex--caption/label-string'."
-  (let ((label (org-element-property :name element)))
-    (if (not (and (org-string-nw-p output) (org-string-nw-p label))) output
-      (concat (format "\\phantomsection\n\\label{%s}\n"
-		      (org-export-solidify-link-text label))
-	      output))))
+  (if (not (and (org-string-nw-p output) (org-element-property :name element)))
+      output
+    (concat (format "\\phantomsection\n\\label{%s}\n"
+		    (org-latex--label element info))
+	    output)))
+
+(defun org-latex--protect-text (text)
+  "Protect special characters in string TEXT and return it."
+  (replace-regexp-in-string
+   "--\\|[\\{}$%&_#~^]"
+   (lambda (m)
+     (cond ((equal m "--") "-{}-")
+	   ((equal m "\\") "\\textbackslash{}")
+	   ((equal m "~") "\\textasciitilde{}")
+	   ((equal m "^") "\\textasciicircum{}")
+	   (t (concat "\\" m))))
+   text nil t))
 
 (defun org-latex--text-markup (text markup info)
   "Format TEXT depending on MARKUP text markup.
 INFO is a plist used as a communication channel.  See
 `org-latex-text-markup-alist' for details."
   (let ((fmt (cdr (assq markup (plist-get info :latex-text-markup-alist)))))
-    (cond
-     ;; No format string: Return raw text.
-     ((not fmt) text)
-     ;; Handle the `verb' special case: Find an appropriate separator
-     ;; and use "\\verb" command.
-     ((eq 'verb fmt)
-      (let ((separator (org-latex--find-verb-separator text)))
-	(concat "\\verb" separator
-		(replace-regexp-in-string "\n" " " text)
-		separator)))
-     ;; Handle the `protectedtexttt' special case: Protect some
-     ;; special chars and use "\texttt{%s}" format string.
-     ((eq 'protectedtexttt fmt)
-      (let ((start 0)
-	    (trans '(("\\" . "\\textbackslash{}")
-		     ("~" . "\\textasciitilde{}")
-		     ("^" . "\\textasciicircum{}")))
-	    (rtn "")
-	    char)
-	(while (string-match "[\\{}$%&_#~^]" text)
-	  (setq char (match-string 0 text))
-	  (if (> (match-beginning 0) 0)
-	      (setq rtn (concat rtn (substring text 0 (match-beginning 0)))))
-	  (setq text (substring text (1+ (match-beginning 0))))
-	  (setq char (or (cdr (assoc char trans)) (concat "\\" char))
-		rtn (concat rtn char)))
-	(setq text (concat rtn text)
-	      fmt "\\texttt{%s}")
-	(while (string-match "--" text)
-	  (setq text (replace-match "-{}-" t t text)))
-	(format fmt text)))
-     ;; Else use format string.
-     (t (format fmt text)))))
+    (case fmt
+      ;; No format string: Return raw text.
+      ((nil) text)
+      ;; Handle the `verb' special case: Find an appropriate separator
+      ;; and use "\\verb" command.
+      (verb
+       (let ((separator (org-latex--find-verb-separator text)))
+	 (concat "\\verb" separator
+		 (replace-regexp-in-string "\n" " " text)
+		 separator)))
+      ;; Handle the `protectedtexttt' special case: Protect some
+      ;; special chars and use "\texttt{%s}" format string.
+      (protectedtexttt
+       (format "\\texttt{%s}" (org-latex--protect-text text)))
+      ;; Else use format string.
+      (t (format fmt text)))))
 
 (defun org-latex--delayed-footnotes-definitions (element info)
   "Return footnotes definitions in ELEMENT as a string.
@@ -1220,25 +1292,16 @@ INFO is a plist used as a communication channel."
 (defun org-latex--format-spec (info)
   "Create a format-spec for document meta-data.
 INFO is a plist used as a communication channel."
-  (let ((objects '(bold code entity export-snippet inline-babel-call
-			inline-src-block italic latex-fragment
-			latex-math-block link macro strike-through
-			subscript superscript timestamp underline
-			verbatim))
-	(language (let ((lang (plist-get info :language)))
+  (let ((language (let ((lang (plist-get info :language)))
 		    (or (cdr (assoc lang org-latex-babel-language-alist))
 			lang))))
     `((?a . ,(org-export-data (plist-get info :author) info))
-      (?t . ,(org-export-data (plist-get info :title)  info))
+      (?t . ,(org-export-data (plist-get info :title) info))
       (?k . ,(org-export-data (org-latex--wrap-latex-math-block
-			       (org-element-parse-secondary-string
-				(plist-get info :keywords) objects)
-			       info)
+			       (plist-get info :keywords) info)
 			      info))
       (?d . ,(org-export-data (org-latex--wrap-latex-math-block
-			       (org-element-parse-secondary-string
-				(plist-get info :description) objects)
-			       info)
+			       (plist-get info :description) info)
 			      info))
       (?c . ,(plist-get info :creator))
       (?l . ,language)
@@ -1297,8 +1360,18 @@ holding export options."
      ;; Date.
      (let ((date (and (plist-get info :with-date) (org-export-get-date info))))
        (format "\\date{%s}\n" (org-export-data date info)))
-     ;; Title
-     (format "\\title{%s}\n" title)
+     ;; Title and subtitle.
+     (let* ((subtitle (plist-get info :subtitle))
+	    (formatted-subtitle
+	     (when subtitle
+	       (format (plist-get info :latex-subtitle-format)
+		       (org-export-data subtitle info))))
+	    (separate (plist-get info :latex-subtitle-separate)))
+       (concat
+	(format "\\title{%s%s}\n" title
+		(if separate "" (or formatted-subtitle "")))
+	(when (and separate subtitle)
+	  (concat formatted-subtitle "\n"))))
      ;; Hyperref options.
      (let ((template (plist-get info :latex-hyperref-template)))
        (and (stringp template)
@@ -1350,8 +1423,7 @@ contextual information."
 CONTENTS holds the contents of the center block.  INFO is a plist
 holding contextual information."
   (org-latex--wrap-label
-   center-block
-   (format "\\begin{center}\n%s\\end{center}" contents)))
+   center-block (format "\\begin{center}\n%s\\end{center}" contents) info))
 
 
 ;;;; Clock
@@ -1388,7 +1460,7 @@ holding contextual information."
   (let* ((name (org-element-property :drawer-name drawer))
 	 (output (funcall (plist-get info :latex-format-drawer-function)
 			  name contents)))
-    (org-latex--wrap-label drawer output)))
+    (org-latex--wrap-label drawer output info)))
 
 
 ;;;; Dynamic Block
@@ -1397,7 +1469,7 @@ holding contextual information."
   "Transcode a DYNAMIC-BLOCK element from Org to LaTeX.
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information.  See `org-export-data'."
-  (org-latex--wrap-label dynamic-block contents))
+  (org-latex--wrap-label dynamic-block contents info))
 
 
 ;;;; Entity
@@ -1419,7 +1491,8 @@ information."
     (org-latex--wrap-label
      example-block
      (format "\\begin{verbatim}\n%s\\end{verbatim}"
-	     (org-export-format-code-default example-block info)))))
+	     (org-export-format-code-default example-block info))
+     info)))
 
 
 ;;;; Export Block
@@ -1449,7 +1522,8 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
    fixed-width
    (format "\\begin{verbatim}\n%s\\end{verbatim}"
 	   (org-remove-indentation
-	    (org-element-property :value fixed-width)))))
+	    (org-element-property :value fixed-width)))
+   info))
 
 
 ;;;; Footnote Reference
@@ -1474,7 +1548,8 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
      "\\footnotemark")
     ;; Otherwise, define it with \footnote command.
     (t
-     (let ((def (org-export-get-footnote-definition footnote-reference info)))
+     (let ((def (org-latex--wrap-latex-math-block
+		 (org-export-get-footnote-definition footnote-reference info) info)))
        (concat
 	(format "\\footnote{%s}" (org-trim (org-export-data def info)))
 	;; Retrieve all footnote references within the footnote and
@@ -1540,13 +1615,9 @@ holding contextual information."
 	   (full-text (funcall (plist-get info :latex-format-headline-function)
 			       todo todo-type priority text tags info))
 	   ;; Associate \label to the headline for internal links.
-	   (headline-label
-	    (format "\\label{%s}\n"
-		    (or (and (plist-get info :latex-custom-id-labels)
-			     (org-element-property :CUSTOM_ID headline))
-			(org-export-get-headline-id headline info))))
+	   (headline-label (org-latex--label headline info t t))
 	   (pre-blanks
-	    (make-string (org-element-property :pre-blank headline) 10)))
+	    (make-string (org-element-property :pre-blank headline) ?\n)))
       (if (or (not section-fmt) (org-export-low-level-p headline info))
 	  ;; This is a deep sub-tree: export it as a list item.  Also
 	  ;; export as items headlines for which no section format has
@@ -1599,9 +1670,9 @@ holding contextual information."
 				  (org-string-match-p "\\<local\\>" v)
 				  (format "\\stopcontents[level-%d]" level)))))
 		    info t)))))
-	  (if (and numberedp opt-title
+	  (if (and opt-title
 		   (not (equal opt-title full-text))
-		   (string-match "\\`\\\\\\(.*?[^*]\\){" section-fmt))
+		   (string-match "\\`\\\\\\(.+?\\){" section-fmt))
 	      (format (replace-match "\\1[%s]" nil nil section-fmt 1)
 		      ;; Replace square brackets with parenthesis
 		      ;; since square brackets are not supported in
@@ -1647,7 +1718,8 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
       horizontal-rule
       (format "\\rule{%s}{%s}"
 	      (or (plist-get attr :width) "\\linewidth")
-	      (or (plist-get attr :thickness) "0.5pt"))))))
+	      (or (plist-get attr :thickness) "0.5pt"))
+      info))))
 
 
 ;;;; Inline Src Block
@@ -1660,7 +1732,7 @@ contextual information."
 	 (separator (org-latex--find-verb-separator code)))
     (case (plist-get info :latex-listings)
       ;; Do not use a special package: transcode it verbatim.
-      ((nil) (concat "\\verb" separator code separator))
+      ((nil) (format "\\texttt{%s}" (org-latex--protect-text code)))
       ;; Use minted package.
       (minted
        (let* ((org-lang (org-element-property :language inline-src-block))
@@ -1702,10 +1774,7 @@ holding contextual information."
 		   (org-export-get-tags inlinetask info)))
 	(priority (and (plist-get info :with-priority)
 		       (org-element-property :priority inlinetask)))
-	(contents (concat
-		   (let ((label (org-element-property :CUSTOM_ID inlinetask)))
-		     (and label (format "\\label{%s}\n" label)))
-		   contents)))
+	(contents (concat (org-latex--label inlinetask info) contents)))
     (funcall (plist-get info :latex-format-inlinetask-function)
 	     todo todo-type priority title tags contents info)))
 
@@ -1849,10 +1918,9 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
   "Transcode a LATEX-ENVIRONMENT element from Org to LaTeX.
 CONTENTS is nil.  INFO is a plist holding contextual information."
   (when (plist-get info :with-latex)
-    (let ((label (org-element-property :name latex-environment))
-	  (value (org-remove-indentation
+    (let ((value (org-remove-indentation
 		  (org-element-property :value latex-environment))))
-      (if (not (org-string-nw-p label)) value
+      (if (not (org-element-property :name latex-environment)) value
 	;; Environment is labeled: label must be within the environment
 	;; (otherwise, a reference pointing to that element will count
 	;; the section instead).
@@ -1860,8 +1928,7 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 	  (insert value)
 	  (goto-char (point-min))
 	  (forward-line)
-	  (insert
-	   (format "\\label{%s}\n" (org-export-solidify-link-text label)))
+	  (insert (org-latex--label latex-environment info nil t))
 	  (buffer-string))))))
 
 
@@ -2032,10 +2099,9 @@ INFO is a plist holding contextual information.  See
 	 (imagep (org-export-inline-image-p
 		  link (plist-get info :latex-inline-image-rules)))
 	 (path (cond
-		((member type '("http" "https" "ftp" "mailto"))
+		((member type '("http" "https" "ftp" "mailto" "doi"))
 		 (concat type ":" raw-path))
-		((and (string= type "file") (file-name-absolute-p raw-path))
-		 (concat "file:" raw-path))
+		((string= type "file") (org-export-file-uri raw-path))
 		(t raw-path))))
     (cond
      ;; Link type is handled by a special function.
@@ -2048,8 +2114,7 @@ INFO is a plist holding contextual information.  See
       (let ((destination (org-export-resolve-radio-link link info)))
 	(if (not destination) desc
 	  (format "\\hyperref[%s]{%s}"
-		  (org-export-solidify-link-text
-		   (org-element-property :value destination))
+		  (org-export-get-reference destination info)
 		  desc))))
      ;; Links pointing to a headline: Find destination and build
      ;; appropriate referencing command.
@@ -2063,7 +2128,7 @@ INFO is a plist holding contextual information.  See
 	   (if desc (format "\\href{%s}{%s}" destination desc)
 	     (format "\\url{%s}" destination)))
 	  ;; Fuzzy link points nowhere.
-	  ('nil
+	  ((nil)
 	   (format (plist-get info :latex-link-with-unknown-path-format)
 		   (or desc
 		       (org-export-data
@@ -2073,11 +2138,7 @@ INFO is a plist holding contextual information.  See
 	  ;; number.  Otherwise, display description or headline's
 	  ;; title.
 	  (headline
-	   (let* ((custom-label
-		   (and (plist-get info :latex-custom-id-labels)
-			(org-element-property :CUSTOM_ID destination)))
-		  (label (or custom-label
-			     (org-export-get-headline-id destination info))))
+	   (let ((label (org-latex--label destination info t)))
 	     (if (and (not desc)
 		      (org-export-numbered-headline-p destination info))
 		 (format "\\ref{%s}" label)
@@ -2087,9 +2148,9 @@ INFO is a plist holding contextual information.  See
 			    (org-element-property :title destination) info))))))
           ;; Fuzzy link points to a target.  Do as above.
 	  (otherwise
-	   (let ((path (org-export-solidify-link-text path)))
-	     (if (not desc) (format "\\ref{%s}" path)
-	       (format "\\hyperref[%s]{%s}" path desc)))))))
+	   (let ((ref (org-latex--label destination info t)))
+	     (if (not desc) (format "\\ref{%s}" ref)
+	       (format "\\hyperref[%s]{%s}" ref desc)))))))
      ;; Coderef: replace link with the reference name or the
      ;; equivalent line number.
      ((string= type "coderef")
@@ -2143,7 +2204,8 @@ contextual information."
 	     latex-type
 	     (or (plist-get attr :options) "")
 	     contents
-	     latex-type))))
+	     latex-type)
+     info)))
 
 
 ;;;; Plain Text
@@ -2371,8 +2433,7 @@ channel."
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
   (org-latex--wrap-label
-   quote-block
-   (format "\\begin{quote}\n%s\\end{quote}" contents)))
+   quote-block (format "\\begin{quote}\n%s\\end{quote}" contents) info))
 
 
 ;;;; Radio Target
@@ -2381,10 +2442,7 @@ holding contextual information."
   "Transcode a RADIO-TARGET object from Org to LaTeX.
 TEXT is the text of the target.  INFO is a plist holding
 contextual information."
-  (format "\\label{%s}%s"
-	  (org-export-solidify-link-text
-	   (org-element-property :value radio-target))
-	  text))
+  (format "\\label{%s}%s" (org-export-get-reference radio-target info) text))
 
 
 ;;;; Section
@@ -2997,8 +3055,7 @@ a communication channel."
   "Transcode a TARGET object from Org to LaTeX.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (format "\\label{%s}"
-	  (org-export-solidify-link-text (org-element-property :value target))))
+  (format "\\label{%s}" (org-latex--label target info)))
 
 
 ;;;; Timestamp
@@ -3055,7 +3112,8 @@ contextual information."
 	     "^[ \t]*\\\\\\\\$" "\\vspace*{1em}"
 	     (replace-regexp-in-string
 	      "\\([ \t]*\\\\\\\\\\)?[ \t]*\n" "\\\\\n"
-	      contents nil t) nil t) nil t))))
+	      contents nil t) nil t) nil t))
+   info))
 
 
 

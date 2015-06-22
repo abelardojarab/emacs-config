@@ -3,7 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "android" "android.el" (21742 6753 177 0))
+;;;### (autoloads nil "android" "android.el" (21896 16562 1265 0))
 ;;; Generated autoloads from android.el
 
 (autoload 'srecode-semantic-handle-:android "android" "\
@@ -13,8 +13,8 @@ Add android specific symbols into DICT based on the current project.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/compile" "compile.el" (21742 6753
-;;;;;;  208 0))
+;;;### (autoloads nil "srecode/compile" "compile.el" (21896 16562
+;;;;;;  1296 0))
 ;;; Generated autoloads from compile.el
 
 (autoload 'srecode-compile-templates "srecode/compile" "\
@@ -24,7 +24,7 @@ Compile a semantic recode template file into a mode-local variable.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/cpp" "cpp.el" (21742 6753 225 0))
+;;;### (autoloads nil "srecode/cpp" "cpp.el" (21896 16562 1313 0))
 ;;; Generated autoloads from cpp.el
 
 (autoload 'srecode-semantic-handle-:c "srecode/cpp" "\
@@ -45,8 +45,8 @@ Also adds the following:
 
 ;;;***
 
-;;;### (autoloads nil "srecode/document" "document.el" (21742 6753
-;;;;;;  273 0))
+;;;### (autoloads nil "srecode/document" "document.el" (21896 16562
+;;;;;;  1361 0))
 ;;; Generated autoloads from document.el
 
 (autoload 'srecode-document-insert-comment "srecode/document" "\
@@ -86,7 +86,7 @@ If there is only one tag in the region, complain.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/el" "el.el" (21742 6753 293 0))
+;;;### (autoloads nil "srecode/el" "el.el" (21896 16562 1381 0))
 ;;; Generated autoloads from el.el
 
 (autoload 'srecode-semantic-handle-:el "srecode/el" "\
@@ -106,8 +106,8 @@ Adds the following:
 
 ;;;***
 
-;;;### (autoloads nil "srecode/expandproto" "expandproto.el" (21742
-;;;;;;  6753 304 0))
+;;;### (autoloads nil "srecode/expandproto" "expandproto.el" (21896
+;;;;;;  16562 1392 0))
 ;;; Generated autoloads from expandproto.el
 
 (autoload 'srecode-insert-prototype-expansion "srecode/expandproto" "\
@@ -117,7 +117,7 @@ Insert get/set methods for the current class.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/getset" "getset.el" (21742 6753 372
+;;;### (autoloads nil "srecode/getset" "getset.el" (21896 16562 1460
 ;;;;;;  0))
 ;;; Generated autoloads from getset.el
 
@@ -132,7 +132,7 @@ will be derived.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/insert" "insert.el" (21742 6753 390
+;;;### (autoloads nil "srecode/insert" "insert.el" (21896 16562 1478
 ;;;;;;  0))
 ;;; Generated autoloads from insert.el
 
@@ -144,7 +144,8 @@ DICT-ENTRIES are additional dictionary values to add.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/java" "java.el" (21742 6753 413 0))
+;;;### (autoloads nil "srecode/java" "java.el" (21896 16562 1501
+;;;;;;  0))
 ;;; Generated autoloads from java.el
 
 (autoload 'srecode-semantic-handle-:java "srecode/java" "\
@@ -157,7 +158,7 @@ FILENAME_AS_CLASS - file converted to a Java class name.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/m3" "m3.el" (21742 6753 424 0))
+;;;### (autoloads nil "srecode/m3" "m3.el" (21896 16562 1512 0))
 ;;; Generated autoloads from m3.el
 
 (autoload 'srecode-m3-items "srecode/m3" "\
@@ -167,7 +168,7 @@ Return a list of menu items based on SRecode features.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/map" "map.el" (21742 6753 436 0))
+;;;### (autoloads nil "srecode/map" "map.el" (21896 16562 1524 0))
 ;;; Generated autoloads from map.el
 
 (autoload 'srecode-get-maps "srecode/map" "\
@@ -178,7 +179,8 @@ Optional argument RESET forces a reset of the current map.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/mode" "mode.el" (21742 6753 451 0))
+;;;### (autoloads nil "srecode/mode" "mode.el" (21896 16562 1539
+;;;;;;  0))
 ;;; Generated autoloads from mode.el
 
 (autoload 'srecode-minor-mode "srecode/mode" "\
@@ -211,7 +213,7 @@ If ARG is positive or nil, enable, if it is negative, disable.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/srt" "srt.el" (21742 6753 480 0))
+;;;### (autoloads nil "srecode/srt" "srt.el" (21896 16562 1568 0))
 ;;; Generated autoloads from srt.el
 
 (autoload 'srecode-semantic-handle-:srt "srecode/srt" "\
@@ -225,8 +227,8 @@ MODE - The mode of this buffer.  If not declared yet, guess.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/srt-mode" "srt-mode.el" (21742 6753
-;;;;;;  952 0))
+;;;### (autoloads nil "srecode/srt-mode" "srt-mode.el" (21896 16563
+;;;;;;  304 0))
 ;;; Generated autoloads from srt-mode.el
 
 (autoload 'srecode-template-mode "srecode/srt-mode" "\
@@ -238,8 +240,8 @@ Major-mode for writing SRecode macros.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/template" "template.el" (21742 6753
-;;;;;;  517 0))
+;;;### (autoloads nil "srecode/template" "template.el" (21896 16562
+;;;;;;  1605 0))
 ;;; Generated autoloads from template.el
 
 (autoload 'srecode-template-setup-parser "srecode/template" "\
@@ -249,7 +251,8 @@ Setup buffer for parse.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/texi" "texi.el" (21742 6753 529 0))
+;;;### (autoloads nil "srecode/texi" "texi.el" (21896 16562 1617
+;;;;;;  0))
 ;;; Generated autoloads from texi.el
 
 (autoload 'srecode-semantic-handle-:texi "srecode/texi" "\
@@ -271,7 +274,7 @@ Adds the following:
 
 ;;;### (autoloads nil nil ("args.el" "ctxt.el" "dictionary.el" "extract.el"
 ;;;;;;  "fields.el" "filters.el" "find.el" "semantic.el" "srt-wy.el"
-;;;;;;  "table.el") (21742 6773 208217 90000))
+;;;;;;  "table.el") (21896 16795 145799 69000))
 
 ;;;***
 

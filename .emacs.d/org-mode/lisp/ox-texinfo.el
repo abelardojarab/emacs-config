@@ -80,19 +80,23 @@
     (verse-block . org-texinfo-verse-block))
   :export-block "TEXINFO"
   :filters-alist
-  '((:filter-headline . org-texinfo-filter-section-blank-lines)
+  '((:filter-headline . org-texinfo--filter-section-blank-lines)
     (:filter-parse-tree . org-texinfo--normalize-headlines)
-    (:filter-section . org-texinfo-filter-section-blank-lines))
+    (:filter-section . org-texinfo--filter-section-blank-lines))
   :menu-entry
   '(?i "Export to Texinfo"
        ((?t "As TEXI file" org-texinfo-export-to-texinfo)
-	(?i "As INFO file" org-texinfo-export-to-info)))
+	(?i "As INFO file" org-texinfo-export-to-info)
+	(?o "As INFO file and open"
+	    (lambda (a s v b)
+	      (if a (org-texinfo-export-to-info t s v b)
+		(org-open-file (org-texinfo-export-to-info nil s v b)))))))
   :options-alist
   '((:texinfo-filename "TEXINFO_FILENAME" nil nil t)
     (:texinfo-class "TEXINFO_CLASS" nil org-texinfo-default-class t)
     (:texinfo-header "TEXINFO_HEADER" nil nil newline)
     (:texinfo-post-header "TEXINFO_POST_HEADER" nil nil newline)
-    (:subtitle "SUBTITLE" nil nil newline)
+    (:subtitle "SUBTITLE" nil nil parse)
     (:subauthor "SUBAUTHOR" nil nil newline)
     (:texinfo-dircat "TEXINFO_DIR_CATEGORY" nil nil t)
     (:texinfo-dirtitle "TEXINFO_DIR_TITLE" nil nil t)
@@ -381,10 +385,15 @@ Specified coding system will be matched against these strings.
 If two strings share the same prefix (e.g. \"ISO-8859-1\" and
 \"ISO-8859-15\"), the most specific one has to be listed first.")
 
+(defconst org-texinfo-inline-image-rules
+  (list (cons "file"
+	      (regexp-opt '("eps" "pdf" "png" "jpg" "jpeg" "gif" "svg"))))
+  "Rules characterizing image files that can be inlined.")
+
 
 ;;; Internal Functions
 
-(defun org-texinfo-filter-section-blank-lines (headline back-end info)
+(defun org-texinfo--filter-section-blank-lines (headline back-end info)
   "Filter controlling number of blank lines after a section."
   (let ((blanks (make-string 2 ?\n)))
     (replace-regexp-in-string "\n\\(?:\n[ \t]*\\)*\\'" blanks headline)))
@@ -459,17 +468,13 @@ anchor name is unique."
     (or (cdr (assq blob cache))
 	(let ((name
 	       (org-texinfo--sanitize-node
-		(case (org-element-type blob)
-		  (headline
-		   (org-export-data (org-export-get-alt-title blob info) info))
-		  ((radio-target target) (org-element-property :value blob))
-		  (otherwise (or (org-element-property :name blob) ""))))))
+		(if (eq (org-element-type blob) 'headline)
+		    (org-export-data (org-export-get-alt-title blob info) info)
+		  (org-export-get-reference blob info)))))
 	  ;; Ensure NAME is unique.
 	  (while (rassoc name cache) (setq name (concat name "x")))
 	  (plist-put info :texinfo-node-cache (cons (cons blob name) cache))
 	  name))))
-
-;;;; Menu sanitizing
 
 (defun org-texinfo--sanitize-node (title)
   "Bend string TITLE to node line requirements.
@@ -482,12 +487,48 @@ are not significant.  Also remove the following characters: @
     "\\`(\\(.*)\\)" "[\\1"
     (org-trim (replace-regexp-in-string "[ \t]\\{2,\\}" " " title)))))
 
-;;;; Content sanitizing
-
 (defun org-texinfo--sanitize-content (text)
   "Escape special characters in string TEXT.
 Special characters are: @ { }"
   (replace-regexp-in-string "[@{}]" "@\\&" text))
+
+(defun org-texinfo--wrap-float (value info &optional type label caption short)
+  "Wrap string VALUE within a @float command.
+INFO is the current export state, as a plist.  TYPE is float
+type, as a string.  LABEL is the cross reference label for the
+float, as a string.  CAPTION and SHORT are, respectively, the
+caption and shortcaption used for the float, as secondary
+strings (e.g., returned by `org-export-get-caption')."
+  (let* ((backend
+	  (org-export-create-backend
+	   :parent 'texinfo
+	   :transcoders '((link . (lambda (object c i) c))
+			  (radio-target . (lambda (object c i) c))
+			  (target . ignore))))
+	 (short-backend
+	  (org-export-create-backend
+	   :parent 'texinfo
+	   :transcoders '((footnote-reference . ignore)
+			  (inline-src-block . ignore)
+			  (link . (lambda (object c i) c))
+			  (radio-target . (lambda (object c i) c))
+			  (target . ignore)
+			  (verbatim . ignore))))
+	 (short-str
+	  (if (and short caption)
+	      (format "@shortcaption{%s}\n"
+		      (org-export-data-with-backend short short-backend info))
+	    ""))
+	 (caption-str
+	  (if (or short caption)
+	      (format "@caption{%s}\n"
+		      (org-export-data-with-backend
+		       (or caption short)
+		       (if (equal short-str "") short-backend backend)
+		       info))
+	    "")))
+    (format "@float %s%s\n%s\n%s%s@end float"
+	    type (if label (concat "," label) "") value caption-str short-str)))
 
 ;;; Template
 
@@ -570,9 +611,9 @@ holding export options."
        (concat
 	(format "@title %s\n" (or (plist-get info :texinfo-printed-title) title ""))
 	(let ((subtitle (plist-get info :subtitle)))
-	  (and subtitle
-	       (org-element-normalize-string
-		(replace-regexp-in-string "^" "@subtitle " subtitle))))))
+	  (when subtitle
+	    (format "@subtitle %s\n"
+		    (org-export-data subtitle info))))))
      (when (plist-get info :with-author)
        (concat
 	;; Primary author.
@@ -887,7 +928,14 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
      ((string= key "KINDEX") (format "@kindex %s" value))
      ((string= key "PINDEX") (format "@pindex %s" value))
      ((string= key "TINDEX") (format "@tindex %s" value))
-     ((string= key "VINDEX") (format "@vindex %s" value)))))
+     ((string= key "VINDEX") (format "@vindex %s" value))
+     ((string= key "TOC")
+      (cond ((org-string-match-p "\\<tables\\>" value)
+	     (concat "@listoffloats "
+		     (org-export-translate "Table" :utf-8 info)))
+	    ((org-string-match-p "\\<listings\\>" value)
+	     (concat "@listoffloats "
+		     (org-export-translate "Listing" :utf-8 info))))))))
 
 ;;;; Line Break
 
@@ -911,11 +959,12 @@ INFO is a plist holding contextual information.  See
 	 (path (cond
 		((member type '("http" "https" "ftp"))
 		 (concat type ":" raw-path))
-		((and (string= type "file") (file-name-absolute-p raw-path))
-		 (concat "file:" raw-path))
+		((string= type "file") (org-export-file-uri raw-path))
 		(t raw-path))))
     (cond
      ((org-export-custom-protocol-maybe link desc 'texinfo))
+     ((org-export-inline-image-p link org-texinfo-inline-image-rules)
+      (org-texinfo--inline-image link info))
      ((equal type "radio")
       (let ((destination (org-export-resolve-radio-link link info)))
 	(if (not destination) desc
@@ -941,33 +990,35 @@ INFO is a plist holding contextual information.  See
 		   (cond
 		    (desc)
 		    ((org-export-numbered-headline-p destination info)
-		     (org-export-data
-		      (org-element-property :title destination) info))
-		    (t
 		     (mapconcat
 		      #'number-to-string
-		      (org-export-get-headline-number destination info) ".")))))
+		      (org-export-get-headline-number destination info) "."))
+		    (t (org-export-data
+			(org-element-property :title destination) info)))))
 	  (otherwise
-	   (let ((topic
-		  (or desc
-		      (if (and (eq (org-element-type destination) 'headline)
-			       (not (org-export-numbered-headline-p
-				     destination info)))
-			  (org-export-data
-			   (org-element-property :title destination) info))
-		      (let ((n (org-export-get-ordinal destination info)))
-			(cond
-			 ((not n) nil)
-			 ((integerp n) n)
-			 (t (mapconcat #'number-to-string n ".")))))))
-	     (when topic
-	       (format "@ref{%s,,%s}"
-		       (org-texinfo--get-node destination info)
-		       topic)))))))
+	   (format "@ref{%s,,%s}"
+		   (org-texinfo--get-node destination info)
+		   (cond
+		    (desc)
+		    ;; No description is provided: first try to
+		    ;; associate destination to a number.
+		    ((let ((n (org-export-get-ordinal destination info)))
+		       (cond ((not n) nil)
+			     ((integerp n) n)
+			     (t (mapconcat #'number-to-string n ".")))))
+		    ;; Then grab title of headline containing
+		    ;; DESTINATION.
+		    ((let ((h (org-element-lineage destination '(headline) t)))
+		       (and h
+			    (org-export-data
+			     (org-element-property :title destination) info))))
+		    ;; Eventually, just return "Top" to refer to the
+		    ;; beginning of the info file.
+		    (t "Top")))))))
      ((equal type "info")
       (let* ((info-path (split-string path "[:#]"))
 	     (info-manual (car info-path))
-	     (info-node (or (cadr info-path) "top"))
+	     (info-node (or (cadr info-path) "Top"))
 	     (title (or desc "")))
 	(format "@ref{%s,%s,,%s,}" info-node title info-manual)))
      ((string= type "mailto")
@@ -981,6 +1032,36 @@ INFO is a plist holding contextual information.  See
      ;; No path, only description.  Try to do something useful.
      (t
       (format (plist-get info :texinfo-link-with-unknown-path-format) desc)))))
+
+(defun org-texinfo--inline-image (link info)
+  "Return Texinfo code for an inline image.
+LINK is the link pointing to the inline image.  INFO is the
+current state of the export, as a plist."
+  (let* ((parent (org-export-get-parent-element link))
+	 (label (and (org-element-property :name parent)
+		     (org-texinfo--get-node parent info)))
+	 (caption (org-export-get-caption parent))
+	 (shortcaption (org-export-get-caption parent t))
+	 (path  (org-element-property :path link))
+	 (filename
+	  (file-name-sans-extension
+	   (if (file-name-absolute-p path) (expand-file-name path) path)))
+	 (extension (file-name-extension path))
+	 (attributes (org-export-read-attribute :attr_texinfo parent))
+	 (height (or (plist-get attributes :height) ""))
+	 (width (or (plist-get attributes :width) ""))
+	 (alt (or (plist-get attributes :alt) ""))
+	 (image (format "@image{%s,%s,%s,%s,%s}"
+			filename width height alt extension)))
+    (cond ((or caption shortcaption)
+	   (org-texinfo--wrap-float image
+				    info
+				    (org-export-translate "Figure" :utf-8 info)
+				    label
+				    caption
+				    shortcaption))
+	  (label (concat "@anchor{" label "}\n" image))
+	  (t image))))
 
 
 ;;;; Menu
@@ -1205,8 +1286,7 @@ holding contextual information."
 TEXT is the text of the target.  INFO is a plist holding
 contextual information."
   (format "@anchor{%s}%s"
-	  (org-export-solidify-link-text
-	   (org-element-property :value radio-target))
+	  (org-export-get-reference radio-target info)
 	  text))
 
 ;;;; Section
@@ -1234,11 +1314,22 @@ as a communication channel."
   "Transcode a SRC-BLOCK element from Org to Texinfo.
 CONTENTS holds the contents of the item.  INFO is a plist holding
 contextual information."
-  (let ((lispp (org-string-match-p "lisp"
+  (let* ((lisp (org-string-match-p "lisp"
 				   (org-element-property :language src-block)))
-	(code (org-texinfo--sanitize-content
-	       (org-export-format-code-default src-block info))))
-    (format (if lispp "@lisp\n%s@end lisp" "@example\n%s@end example") code)))
+	 (code (org-texinfo--sanitize-content
+		(org-export-format-code-default src-block info)))
+	 (value (format
+		 (if lisp "@lisp\n%s@end lisp" "@example\n%s@end example")
+		 code))
+	 (caption (org-export-get-caption src-block))
+	 (shortcaption (org-export-get-caption src-block t)))
+    (if (not (or caption shortcaption)) value
+      (org-texinfo--wrap-float value
+			       info
+			       (org-export-translate "Listing" :utf-8 info)
+			       (org-export-get-reference src-block info)
+			       caption
+			       shortcaption))))
 
 ;;;; Statistics Cookie
 
@@ -1276,10 +1367,19 @@ contextual information."
     (let* ((col-width (org-export-read-attribute :attr_texinfo table :columns))
 	   (columns
 	    (if col-width (format "@columnfractions %s" col-width)
-	      (org-texinfo-table-column-widths table info))))
-      (format "@multitable %s\n%s@end multitable"
-	      columns
-	      contents))))
+	      (org-texinfo-table-column-widths table info)))
+	   (caption (org-export-get-caption table))
+	   (shortcaption (org-export-get-caption table t))
+	   (table-str (format "@multitable %s\n%s@end multitable"
+			      columns
+			      contents)))
+      (if (not (or caption shortcaption)) table-str
+	(org-texinfo--wrap-float table-str
+				 info
+				 (org-export-translate "Table" :utf-8 info)
+				 (org-export-get-reference table info)
+				 caption
+				 shortcaption)))))
 
 (defun org-texinfo-table-column-widths (table info)
   "Determine the largest table cell in each column to process alignment.
@@ -1345,8 +1445,7 @@ a communication channel."
   "Transcode a TARGET object from Org to Texinfo.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (format "@anchor{%s}"
-	  (org-export-solidify-link-text (org-element-property :value target))))
+  (format "@anchor{%s}" (org-export-get-reference target info)))
 
 ;;;; Timestamp
 
@@ -1496,6 +1595,7 @@ Return INFO file name or an error if it couldn't be produced."
       ;; before applying it.  Output is redirected to "*Org INFO
       ;; Texinfo Output*" buffer.
       (let ((outbuf (get-buffer-create "*Org INFO Texinfo Output*")))
+	(with-current-buffer outbuf (compilation-mode))
 	(dolist (command org-texinfo-info-process)
 	  (shell-command
 	   (replace-regexp-in-string
