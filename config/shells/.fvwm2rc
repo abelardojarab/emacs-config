@@ -373,8 +373,8 @@ AddToFunc Maximize-Func     "M" Maximize     0 100
 + I ThisWindow (Maximized) DestroyWindowStyle
 + I TestRc (NoMatch) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
 + I UpdateStyles
-+ I ThisWindow (Maximized) Maximize ewmhiwa true 95 97
-+ I TestRc (NoMatch) Maximize ewmhiwa true 95 97
++ I ThisWindow (Maximized) Maximize ewmhiwa true 95 96
++ I TestRc (NoMatch) Maximize ewmhiwa true 95 96
 
 AddToFunc Move-or-Iconify   "I" Raise
 +               "M" Move
@@ -411,9 +411,6 @@ DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: TipsBack bisque
 *FvwmTaskBar: TipsFore black
 *FvwmTaskBar: StatusFont fixed
-*FvwmTaskBar: Action Click1 DeiconifyRaiseAndFocus
-*FvwmTaskBar: Action Click2 Iconify On
-*FvwmTaskBar: Action Click3 Lower
 *FvwmTaskBar: StartName Start
 *FvwmTaskBar: StartMenu StartMenu
 
