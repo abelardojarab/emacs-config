@@ -22,6 +22,9 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 Xft.rgba: rgb
 
+! Bigger font
+xterm*font:     *-fixed-*-*-*-18-*
+
 ! Every shell is a login shell by default (for inclusion of all necessary environment variables)
 xterm*loginshell: true
 
@@ -57,6 +60,10 @@ xterm*ScrollBar: true
 
 ! stop output to terminal from jumping down to bottom of scroll again
 xterm*scrollTtyOutput: false
+
+! URxvt
+URxvt*keysym.Home: \033[1~
+URxvt*keysym.End: \033[4~
 
 ! *** Xdefaults Affecting CADENCE TOOLS ***
 !* NOTE:
