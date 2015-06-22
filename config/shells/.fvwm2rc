@@ -345,7 +345,6 @@ DestroyFunc drag-n-move
 AddToFunc drag-n-move M move
 DestroyFunc drag-n-resize
 AddToFunc drag-n-resize M resize
-
 Mouse 1 W HM drag-n-move
 Mouse 3 W HM drag-n-resize
 
