@@ -11,6 +11,12 @@ TitleStyle Height 13
 ColormapFocus FollowsFocus
 WindowFont -misc-fixed-medium-r-normal-*-10-*-*-*-*-*-iso10646-1
 
+# Pager background & foreground
+Colorset 3  bg #004020, fg #C0C0C0
+# Pager inactive and active window colors
+Colorset 4  bg #808080
+Colorset 5  bg #502000
+
 # Note: FvwmPager will be swallowed by FvwmButtons (below)
 *FvwmPager: Fore blue
 *FvwmPager: Back black
@@ -50,8 +56,10 @@ AddToDecor   MyDecor
 + ButtonStyle All -- UseTitleStyle
 
 #styles
-Style "*" Icon xlogo32, BorderWidth 2, SloppyFocus
+Style "*" BorderWidth 4, GrabFocus, IgnoreRestack, MinOverlapPlacement
+Style "*" NoPPosition, NoTransientPPosition, ResizeOpaque, SloppyFocus
 Style "*" DecorateTransient, IconBox -132 110 -8 -8
+Style * EWMHMiniIconOverride
 Style FvwmButtons NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
 Style FvwmPager NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
 Style "*" UseDecor MyDecor
@@ -81,14 +89,6 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title PyCharm, Icon anjuta.xpm, Action 'Exec "PyCharm" pycharms.sh &')
 *FvwmButtons(Title GTerminal, Icon xterm.xpm, Action 'Exec "GTerminal" gnome-terminal &')
 
-# Key Bindings: ctrl-arrow shifts viewports, alt-arrow shifts desktops
-Key Left  A C GotoPage -1p +0p
-Key Right A C GotoPage +1p +0p
-Key Up    A C GotoPage +0p -1p
-Key Down  A C GotoPage +0p +1p
-Key Left  A M GotoDesk -1 0 3
-Key Right A M GotoDesk 1 0 3
-
 # AutoHiding Console
 Style HiddenConsole Sticky, WindowListSkip, Notitle, StaysOnTop, !Handles, FixedSize, FixedPosition
 Style HiddenConsole WindowShadeSteps 100
@@ -108,7 +108,6 @@ AddToMenu OfficeTextSubMenu "Office/Text" Title
 + "Emacs Server"  Exec exec emacs
 + "LibreOffice"  Exec exec soffice
 
-# Fvwm ships with a hardcoded "Builtin" menu linked to mouse button 0.
 # Replace Mouse Button 0 with my main ("start button") menu.
 Mouse 0 R N Menu MainMenu
 
@@ -400,3 +399,65 @@ DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: FocusColorset 11
 *FvwmTaskBar: ClockFormat
 *FvwmTaskBar: WindowButtonsRightMargin 124
+
+# Key Bindings: ctrl-arrow shifts viewports, alt-arrow shifts desktops
+Key Left  A C GotoPage -1p +0p
+Key Right A C GotoPage +1p +0p
+Key Up    A C GotoPage +0p -1p
+Key Down  A C GotoPage +0p +1p
+Key Left  A M GotoDesk -1 0 3
+Key Right A M GotoDesk 1 0 3
+
+# Save alt-tab for emacs
+Key Tab A M -
+
+# Popup WindowList with the Windows "menu" key.
+Key F15 A A  PickWindow
+
+# Circulate through windows with left and right "window" keys.
+Key F13  A A  Prev (CurrentPage !Sticky !Shaded !Iconic) RaiseAndFocus
+Key F14  A A  Next (CurrentPage !Sticky !Shaded !Iconic) RaiseAndFocus
+
+# Switch pages via keypad (no modifier)
+Key KP_Home  A N  GotoPageFocus  0 0
+Key KP_Up    A N  GotoPageFocus  1 0
+Key KP_Prior A N  GotoPageFocus  2 0
+Key KP_Left  A N  GotoPageFocus  0 1
+Key KP_Begin A N  GotoPageFocus  1 1
+Key KP_Right A N  GotoPageFocus  2 1
+Key KP_End   A N  GotoPageFocus  0 2
+Key KP_Down  A N  GotoPageFocus  1 2
+Key KP_Next  A N  GotoPageFocus  2 2
+
+# Move windows to strategic points on the current page via shift-keypad
+Key KP_Home  A S  Move   0     0
+Key KP_End   A S  Move   0    -0
+Key KP_Prior A S  Move  -0     0
+Key KP_Next  A S  Move  -0    -0
+Key KP_Up    A S  Move 136p    0
+Key KP_Down  A S  Move 136p   -0
+Key KP_Left  A S  Move 136p   keep
+Key KP_Right A S  Move  -0    keep
+Key KP_Begin A S  PipeRead 'fvwm_center_window $[vp.width] $[vp.height] $[w.width] $[w.height]'
+
+# Move a window to a different page via alt-keypad
+Key KP_Home  A M  MoveToPage  0 0
+Key KP_Up    A M  MoveToPage  1 0
+Key KP_Prior A M  MoveToPage  2 0
+Key KP_Left  A M  MoveToPage  0 1
+Key KP_Begin A M  MoveToPage  1 1
+Key KP_Right A M  MoveToPage  2 1
+Key KP_End   A M  MoveToPage  0 2
+Key KP_Down  A M  MoveToPage  1 2
+Key KP_Next  A M  MoveToPage  2 2
+
+# Move a window and follow it via ctrl-keypad
+Key KP_Home  A C  MoveAndGotoPage  0 0
+Key KP_Up    A C  MoveAndGotoPage  1 0
+Key KP_Prior A C  MoveAndGotoPage  2 0
+Key KP_Left  A C  MoveAndGotoPage  0 1
+Key KP_Begin A C  MoveAndGotoPage  1 1
+Key KP_Right A C  MoveAndGotoPage  2 1
+Key KP_End   A C  MoveAndGotoPage  0 2
+Key KP_Down  A C  MoveAndGotoPage  1 2
+Key KP_Next  A C  MoveAndGotoPage  2 2
