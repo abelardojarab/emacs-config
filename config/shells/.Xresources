@@ -23,7 +23,7 @@ Xft.lcdfilter: lcddefault
 Xft.rgba: rgb
 
 ! Bigger font
-xterm*font:     *-fixed-*-*-*-18-*
+xterm*font:     *-fixed-*-*-*-20-*
 xterm*faceSize: 12
 
 ! Every shell is a login shell by default (for inclusion of all necessary environment variables)
