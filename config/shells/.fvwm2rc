@@ -12,14 +12,14 @@ ColormapFocus FollowsFocus
 WindowFont  *-fixed-*-*-*-20-*
 
 # Note: FvwmPager will be swallowed by FvwmButtons (below)
-*FvwmPager: Fore blue
+*FvwmPager: Fore grey
 *FvwmPager: Back black
-*FvwmPager: Hilight gray
+*FvwmPager: Colorset 8
 *FvwmPager: SolidSeparators
 *FvwmPager: Label 0 "0: General"
-*FvwmPager: Label 1 "1: Graphein"
-*FvwmPager: Label 2 "2: OpenSCAD"
-*FvwmPager: Label 3 "3: other"
+*FvwmPager: Label 1 "1: Office"
+*FvwmPager: Label 2 "2: CAD"
+*FvwmPager: Label 3 "3: Other"
 
 # See: http://www.fvwm.org/documentation/manpages/unstable/fvwm.php
 AddToFunc StartFunction
@@ -84,6 +84,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtonsFont  *-fixed-*-*-*-20-*
 *FvwmButtons: ButtonGeometry 100x50+1800+0
 *FvwmButtonsFore blick
+*FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
 *FvwmButtons: Rows 11
 *FvwmButtons: Columns 1
