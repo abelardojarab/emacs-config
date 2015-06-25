@@ -29,8 +29,11 @@ xterm*faceSize: 12
 ! Every shell is a login shell by default (for inclusion of all necessary environment variables)
 xterm*loginshell: true
 
-! I like a LOT of scrollback...
+! Scrolling
 xterm*savelines: 16384
+xterm*Scrollbar*thickness: 2
+xterm*Scrollbar*background: #c6c6c6
+xterm*Scrollbar*foreground: #515151
 
 ! double-click to select whole URLs :D
 xterm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
