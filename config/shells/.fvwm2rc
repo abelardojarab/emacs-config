@@ -104,7 +104,7 @@ Style HiddenConsole Sticky, WindowListSkip, Notitle, StaysOnTop, !Handles, Fixed
 Style HiddenConsole WindowShadeSteps 100
 
 # Menu Style
-MenuStyle * PopupOffset 10 100, TitleWarpOff
+MenuStyle * PopupOffset 0 100, TitleWarpOff
 MenuStyle * TitleUnderlines2, SeparatorsLong, TrianglesSolid
 MenuStyle * BorderWidth 2
 MenuStyle * PopupAsSubmenu, HoldSubmenus, SubmenusRight
