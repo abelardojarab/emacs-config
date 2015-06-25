@@ -400,6 +400,8 @@ DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: TipsBack bisque
 *FvwmTaskBar: TipsFore black
 *FvwmTaskBar: StatusFont fixed
+*FvwmTaskBar: Colorset 7
+*FvwmTaskBar: FocusColorset 6
 *FvwmTaskBar: StartName Start
 *FvwmTaskBar: StartMenu MainMenu mouse c -100m -60p
 
