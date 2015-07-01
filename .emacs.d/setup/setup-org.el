@@ -276,7 +276,14 @@
   "#+end_src\n")
 (define-abbrev org-mode-abbrev-table "jssrc" "" 'skel-org-block-js)
 
-;; PlantUML
+;; Images
+(add-to-list 'load-path "~/.emacs.d/image+")
+(eval-after-load 'image '(require 'image+))
+(eval-after-load 'image+ '(imagex-global-sticky-mode 1))
+(eval-after-load 'image+ '(imagex-auto-adjust-mode 1))
+(setq imagex-quiet-error t)
+
+;; Showing images
 (require 'iimage)
 (autoload 'iimage-mode "iimage" "Support Inline image minor mode." t)
 (autoload 'turn-on-iimage-mode "iimage" "Turn on Inline image minor mode." t)
@@ -399,7 +406,7 @@ a link to this file."
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                      "/clippaste /convert=" filename))
+                                                                                "/clippaste /convert=" filename))
 
       (if (equal system-type 'darwin)
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
