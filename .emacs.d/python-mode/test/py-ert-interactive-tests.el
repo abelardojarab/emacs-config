@@ -99,10 +99,10 @@ def foo():
 	  py-split-window-on-execute
 	  py-switch-buffers-on-execute-p)
       (py-execute-buffer)
+      (sit-for 0.5 t)
       (set-buffer "*IPython*")
-      (goto-char (point-max))
       (when py-debug-p (switch-to-buffer (current-buffer)))
-      (sit-for 0.1 t)
+      (goto-char (point-max))
       (should (search-backward "1")))))
 
 (ert-deftest py-ipython-shell-test ()
@@ -160,7 +160,7 @@ def foo():
 	 (py-kill-buffer-unconditional (current-buffer)))))
 
 (ert-deftest py-ert-always-reuse-lp-1361531-test ()
-  (with-temp-buffer
+  (py-test-with-temp-buffer
     "#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 print(\"I'm the py-always-reuse-lp-1361531-test\")"
@@ -240,7 +240,7 @@ print(\"I'm the py-just-two-split-dedicated-lp-1361531-jython-test\")"
   (python)
   (ipython)
   (sit-for 0.1 t)
-  (with-temp-buffer
+  (py-test-with-temp-buffer
     ;; this should not open a "*Python*<2>"
     (python)
     (ipython)
@@ -259,3 +259,52 @@ print(\"I'm the py-just-two-split-dedicated-lp-1361531-jython-test\")"
    (should flycheck-mode)
    (py-flycheck-mode -1)
    (should-not flycheck-mode)))
+
+(ert-deftest py-face-lp-1454858-python3-1-test ()
+  (let ((py-python-edit-version ""))
+    (py-test-with-temp-buffer
+	"#! /usr/bin/env python3
+file.close()"
+      (beginning-of-line)
+      (font-lock-fontify-buffer)
+      (sit-for 0.1)
+      (should-not (eq (face-at-point) 'py-builtins-face)))))
+
+(ert-deftest py-face-lp-1454858-python3-2-test ()
+  (let ((py-python-edit-version "python3"))
+    (py-test-with-temp-buffer
+	"#! /usr/bin/env python3
+file.close()"
+      (beginning-of-line)
+      (font-lock-fontify-buffer)
+      (sit-for 0.1)
+      (should-not (eq (face-at-point) 'py-builtins-face)))))
+
+(ert-deftest py-face-lp-1454858-python3-3-test ()
+  (let ((py-python-edit-version "python3"))
+  (py-test-with-temp-buffer
+      "#! /usr/bin/env python2
+print()"
+    (beginning-of-line)
+    (font-lock-fontify-buffer)
+    (sit-for 0.1)
+    (should (eq (face-at-point) 'py-builtins-face)))))
+
+(ert-deftest py-face-lp-1454858-python3-4-test ()
+  (let ((py-python-edit-version ""))
+  (py-test-with-temp-buffer
+      "#! /usr/bin/env python3
+print()"
+    (beginning-of-line)
+    (sit-for 0.1)
+    (should (eq (face-at-point) 'py-builtins-face)))))
+
+(ert-deftest py-ert-execute-statement-split ()
+  (py-test-with-temp-buffer-point-min
+      "print(123)"
+    (let ((py-split-window-on-execute t))
+      (delete-other-windows)
+      (py-execute-statement)
+      (sit-for 0.1 t)
+      (should (not (one-window-p))))))
+

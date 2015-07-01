@@ -44,7 +44,11 @@ TEST4=$TESTDIR/py-ert-just-two-split-lp-1361531-tests.el
 TEST5=$TESTDIR/py-ert-beginning-tests.el
 TEST6=$TESTDIR/py-ert-end-tests.el
 TEST7=$TESTDIR/py-ert-function-tests.el
-# TEST8=$TESTDIR/py-ert-variablen-tests.el
+TEST8=$TESTDIR/py-ert-variablen-tests.el
+TEST9=$TESTDIR/py-shell-arg-ert-tests.el
+TEST10=$TESTDIR/py-ert-execute-block-test.el
+TEST11=$TESTDIR/py-ert-execute-region-test.el
+TEST12=$TESTDIR/py-execute-region-commandp-test.el
 
 if [ -s emacs24 ]; then
     EMACS=emacs24
@@ -56,4 +60,4 @@ echo "\$EMACS: $EMACS"
 
 PYCO="$PDIR/completion/pycomplete.el"
 
-$EMACS -Q --batch --eval "(message (emacs-version))" --eval "(add-to-list 'load-path \"$PDIR/\")" --eval "(add-to-list 'load-path \"$TESTDIR/\")" -load $SETUP -load $PYTHONMODE -l $TEST2 -l $TEST4 -l $TEST5 -l $TEST6 -l $TEST7  -f ert-run-tests-batch-and-exit
+$EMACS -Q --batch --eval "(message (emacs-version))" --eval "(add-to-list 'load-path \"$PDIR/\")" --eval "(add-to-list 'load-path \"$TESTDIR/\")" -load $SETUP -load $PYTHONMODE -l $TEST2 -l $TEST4 -l $TEST5 -l $TEST6 -l $TEST7 -l $TEST8 -l $TEST12 -f ert-run-tests-batch-and-exit

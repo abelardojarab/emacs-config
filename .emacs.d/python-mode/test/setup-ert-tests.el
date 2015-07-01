@@ -23,7 +23,7 @@
 ;;; Code:
 
 (setq py-install-directory default-directory)
-(sit-for 0.1 t) 
+(sit-for 0.1 t)
 
 
 ;; (require 'python-mode)
@@ -31,14 +31,34 @@
 (defvar py-debug-p nil
   "Avoid error")
 
-(defmacro ar-test-with-temp-buffer (contents &rest body)
-  "Create temp buffer inserting CONTENTS.
+(defmacro py-test-with-temp-buffer-point-min (contents &rest body)
+  "Create temp buffer in `python-mode' inserting CONTENTS.
+BODY is code to be executed within the temp buffer.  Point is
+ at the beginning of buffer."
+  (declare (indent 1) (debug t))
+  `(with-temp-buffer
+     ;;     (and (featurep 'python) (unload-feature 'python))
+     (let (hs-minor-mode)
+       (python-mode)
+       (insert ,contents)
+       (message "ERT %s" (point))
+       (goto-char (point-min))
+       (when py-debug-p (switch-to-buffer (current-buffer))
+	     (font-lock-fontify-buffer))
+       ,@body)))
+
+(defmacro py-test-with-temp-buffer (contents &rest body)
+  "Create temp buffer in `python-mode' inserting CONTENTS.
 BODY is code to be executed within the temp buffer.  Point is
  at the end of buffer."
-  (declare (indent 2) (debug t))
+  (declare (indent 1) (debug t))
   `(with-temp-buffer
+     ;; (and (featurep 'python) (unload-feature 'python))
      (let (hs-minor-mode)
+       (python-mode)
        (insert ,contents)
+       (when py-debug-p (switch-to-buffer (current-buffer))
+	     (font-lock-fontify-buffer))
        ;; (message "ERT %s" (point))
        ,@body)))
 

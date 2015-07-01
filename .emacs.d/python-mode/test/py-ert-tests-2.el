@@ -47,64 +47,6 @@
 		    (buffer-live-p (get-buffer  "*Python Completions*"))))
       (py-kill-buffer-unconditional erg)))))
 
-(ert-deftest py-ert-fast-complete-1 ()
-  (py-test-with-temp-buffer
-      "pri"
-    (let ((py-return-result-p t)
-	  py-result py-store-result-p)
-      (when py-debug-p (switch-to-buffer (current-buffer)))
-      (py-fast-complete)
-      (should (eq (char-before) 40)))))
-
-(ert-deftest py-ert-execute-statement-fast-1 ()
-  (py-test-with-temp-buffer-point-min
-      "print(1)"
-    (let ((py-fast-process-p t)
-	  (py-return-result-p t)
-	  py-result py-store-result-p)
-      (py-execute-statement)
-      (should (string= "1" py-result)))))
-
-(ert-deftest py-ert-execute-statement-fast-2 ()
-  (py-test-with-temp-buffer-point-min
-      "print(2)"
-    (let ((py-fast-process-p t)
-	  (py-return-result-p t)
-	  py-result py-store-result-p)
-      (py-execute-statement-fast)
-      (should (string= "2" py-result)))))
-
-(ert-deftest py-ert-execute-block-fast ()
-  (py-test-with-temp-buffer-point-min
-      "if True:
-    a = 1
-    print(a)"
-    (let ((py-fast-process-p t)
-	  (py-return-result-p t)
-	  (py-debug-p t)
-	  py-result)
-      (py-execute-block)
-      (when py-debug-p (message "py-ert-execute-block-fast, py-result: %s" py-result))
-      (sit-for 0.1 t)
-      (should (string= "1" py-result)))))
-
-(ert-deftest py-ert-execute-block-fast-2 ()
-  (py-test-with-temp-buffer-point-min
-      "try:
-    a
-except NameError:
-    a=1
-finally:
-    a+=1
-    print(a)"
-    (let ((py-fast-process-p t)
-	  (py-return-result-p t)
-	  (py-debug-p t)
-	  py-result)
-      (py-execute-block)
-      (when py-debug-p (message "py-ert-execute-block-fast, py-result: %s" py-result))
-      (should (numberp (string-to-number (car (split-string py-result))))))))
-
 ;;;
 (ert-deftest py-ert-keyword-face-lp-1294742 ()
   (py-test-with-temp-buffer-point-min
@@ -112,14 +54,6 @@ finally:
     (font-lock-fontify-buffer)
     (while (and (not (eobp))(< 0 (skip-chars-forward " ")))
       (should (eq 'font-lock-keyword-face (get-char-property (point) 'face)))
-      (skip-chars-forward "^ \n"))))
-
-(ert-deftest py-ert-exception-name-face-lp-1294742 ()
-  (py-test-with-temp-buffer-point-min
-      " ArithmeticError AssertionError AttributeError BaseException BufferError BytesWarning DeprecationWarning EOFError EnvironmentError Exception FloatingPointError FutureWarning GeneratorExit IOError ImportError ImportWarning IndentationError IndexError KeyError KeyboardInterrupt LookupError MemoryError NameError NoResultFound NotImplementedError OSError OverflowError PendingDeprecationWarning ReferenceError RuntimeError RuntimeWarning StandardError StopIteration SyntaxError SyntaxWarning SystemError SystemExit TabError TypeError UnboundLocalError UnicodeDecodeError UnicodeEncodeError UnicodeError UnicodeTranslateError UnicodeWarning UserWarning ValueError Warning ZeroDivisionError"
-    (font-lock-fontify-buffer)
-    (while (and (not (eobp))(< 0 (skip-chars-forward " ")))
-      (should (eq 'py-exception-name-face (get-char-property (point) 'face)))
       (skip-chars-forward "^ \n"))))
 
 (ert-deftest py-ert-builtins-face-lp-1294742 ()
@@ -593,7 +527,6 @@ def foo(*args):2
     (py-beginning-of-statement)
     (should (bobp))))
 
-
 (ert-deftest py-ert-beginning-of-except-block-test ()
   (py-test-with-temp-buffer
       "
@@ -774,319 +707,6 @@ that, needs, to_be, wrapped)
     (beginning-of-line)
     (should (eq 9 (py-compute-indentation)))))
 
-(ert-deftest py-ert-variablen-tests ()
-  (py-test-with-temp-buffer ""
-    (sit-for 0.1 t)
-    (should (boundp 'virtualenv-workon-home))
-    (should (boundp 'virtualenv-name))
-    (should (boundp 'virtualenv-old-path))
-    (should (boundp 'virtualenv-old-exec-path))
-    (should (boundp 'virtualenv-name))
-    (should (boundp 'py-last-exeption-buffer))
-    (should (boundp 'py-keywords))
-    (should (boundp 'py-pdbtrack-is-tracking-p))
-    (should (boundp 'py-underscore-word-syntax-p))
-    (should (boundp 'auto-fill-mode-orig))
-    (should (boundp 'fill-column-orig))
-    (should (boundp 'py-match-paren-mode))
-    (should (boundp 'py-match-paren-key))
-    (should (boundp 'py-kill-empty-line))
-    (should (boundp 'python-mode-map))
-    (should (boundp 'py-python-shell-mode-map))
-    (should (boundp 'py-ipython-shell-mode-map))
-    (should (boundp 'py-shell-map))
-    (should (boundp 'py--timer))
-    (should (boundp 'py--timer-delay))
-    (should (boundp 'py-eldoc-string-code))
-    (should (boundp 'py-install-directory))
-    (should (boundp 'python-mode-modeline-display))
-    (should (boundp 'py-extensions))
-    (should (boundp 'info-lookup-mode))
-    (should (boundp 'py-fast-process-p))
-    (should (boundp 'py-shell-unfontify-p))
-    (should (boundp 'py-session-p))
-    (should (boundp 'py-max-help-buffer-p))
-    (should (boundp 'py-highlight-error-source-p))
-    (should (boundp 'py-set-pager-cat-p))
-    (should (boundp 'py-empty-line-closes-p))
-    (should (boundp 'py-prompt-on-changed-p))
-    (should (boundp 'py-dedicated-process-p))
-    (should (boundp 'py-store-result-p))
-    (should (boundp 'py-return-result-p))
-    (should (boundp 'py-new-session-p))
-    (should (boundp 'py-hide-show-minor-mode-p))
-    (should (boundp 'py-load-skeletons-p))
-    (should (boundp 'py-if-name-main-permission-p))
-    (should (boundp 'py-use-font-lock-doc-face-p))
-    (should (boundp 'empty-comment-line-separates-paragraph-p))
-    (should (boundp 'py-indent-honors-inline-comment))
-    (should (boundp 'py-auto-fill-mode))
-    (should (boundp 'py-error-markup-delay))
-    (should (boundp 'py-fast-completion-delay))
-    (should (boundp 'py-new-shell-delay))
-    (should (boundp 'py-autofill-timer-delay))
-    (should (boundp 'py-docstring-fill-column))
-    (should (boundp 'py-comment-fill-column))
-    (should (boundp 'py-fontify-shell-buffer-p))
-    (should (boundp 'py-modeline-display-full-path-p))
-    (should (boundp 'py-modeline-acronym-display-home-p))
-    (should (boundp 'smart-operator-mode))
-    (should (boundp 'highlight-indent-active))
-    (should (boundp 'autopair-mode))
-    (should (boundp 'py-result))
-    (should (boundp 'py-error))
-    (should (boundp 'py-python-completions))
-    (should (boundp 'py-ipython-completions))
-    (should (boundp 'py-timer-close-completions-p))
-    (should (boundp 'py-smart-operator-mode-p))
-    (should (boundp 'py-autopair-mode))
-    (should (boundp 'py-no-completion-calls-dabbrev-expand-p))
-    (should (boundp 'py-indent-no-completion-p))
-    (should (boundp 'py-company-pycomplete-p))
-    (should (boundp 'py-auto-completion-mode-p))
-    (should (boundp 'py-complete-last-modified))
-    (should (boundp 'py--auto-complete-timer))
-    (should (boundp 'py-auto-completion-buffer))
-    (should (boundp 'py--auto-complete-timer))
-    (should (boundp 'py--auto-complete-timer-delay))
-    (should (boundp 'py-auto-complete-p))
-    (should (boundp 'py-tab-shifts-region-p))
-    (should (boundp 'py-tab-indents-region-p))
-    (should (boundp 'py-block-comment-prefix-p))
-    (should (boundp 'py-org-cycle-p))
-    (should (boundp 'py-set-complete-keymap-p))
-    (should (boundp 'py-outline-minor-mode-p))
-    (should (boundp 'py-guess-py-install-directory-p))
-    (should (boundp 'py-load-pymacs-p))
-    (should (boundp 'py-verbose-p))
-    (should (boundp 'py-sexp-function))
-    (should (boundp 'py-close-provides-newline))
-    (should (boundp 'py-dedent-keep-relative-column))
-    (should (boundp 'py-indent-honors-multiline-listing))
-    (should (boundp 'py-indent-paren-spanned-multilines-p))
-    (should (boundp 'py-closing-list-dedents-bos))
-    (should (boundp 'py-closing-list-space))
-    (should (boundp 'py-max-specpdl-size))
-    (should (boundp 'py-closing-list-keeps-space))
-    (should (boundp 'py-electric-kill-backward-p))
-    (should (boundp 'py-electric-colon-active-p))
-    (should (boundp 'py-electric-colon-bobl-only))
-    (should (boundp 'py-electric-yank-active-p))
-    (should (boundp 'py-electric-colon-greedy-p))
-    (should (boundp 'py-electric-colon-newline-and-indent-p))
-    (should (boundp 'py-electric-comment-p))
-    (should (boundp 'py-electric-comment-add-space-p))
-    (should (boundp 'py-mark-decorators))
-    (should (boundp 'py-defun-use-top-level-p))
-    (should (boundp 'py-tab-indent))
-    (should (boundp 'py-return-key))
-    (should (boundp 'py-complete-function))
-    (should (boundp 'ipython-complete-function))
-    (should (boundp 'py-encoding-string))
-    (should (boundp 'py-shebang-startstring))
-    (should (boundp 'py-flake8-command))
-    (should (boundp 'py-flake8-command-args))
-    (should (boundp 'py-flake8-history))
-    (should (boundp 'py-message-executing-temporary-file))
-    (should (boundp 'py-execute-no-temp-p))
-    (should (boundp 'py-lhs-inbound-indent))
-    (should (boundp 'py-continuation-offset))
-    (should (boundp 'py-indent-tabs-mode))
-    (should (boundp 'py-smart-indentation))
-    (should (boundp 'py-block-comment-prefix))
-    (should (boundp 'py-indent-offset))
-    (should (boundp 'py-backslashed-lines-indent-offset))
-    (should (boundp 'pdb-path))
-    (should (boundp 'py-indent-comments))
-    (should (boundp 'py-uncomment-indents-p))
-    (should (boundp 'py-separator-char))
-    (should (boundp 'py-custom-temp-directory))
-    (should (boundp 'py-beep-if-tab-change))
-    (should (boundp 'py-jump-on-exception))
-    (should (boundp 'py-ask-about-save))
-    (should (boundp 'py-delete-function))
-    (should (boundp 'py-pdbtrack-do-tracking-p))
-    (should (boundp 'py-pdbtrack-filename-mapping))
-    (should (boundp 'py-pdbtrack-minor-mode-string))
-    (should (boundp 'py-import-check-point-max))
-    (should (boundp 'py-jython-packages))
-    (should (boundp 'py-current-defun-show))
-    (should (boundp 'py-current-defun-delay))
-    (should (boundp 'py-python-send-delay))
-    (should (boundp 'py-ipython-send-delay))
-    (should (boundp 'py-master-file))
-    (should (boundp 'py-pychecker-command))
-    (should (boundp 'py-pychecker-command-args))
-    (should (boundp 'py-pyflakes-command))
-    (should (boundp 'py-pyflakes-command-args))
-    (should (boundp 'py-pep8-command))
-    (should (boundp 'py-pep8-command-args))
-    (should (boundp 'py-pyflakespep8-command))
-    (should (boundp 'py-pyflakespep8-command-args))
-    (should (boundp 'py-pylint-command))
-    (should (boundp 'py-pylint-command-args))
-    (should (boundp 'py-shell-input-prompt-1-regexp))
-    (should (boundp 'py-shell-input-prompt-2-regexp))
-    (should (boundp 'py-shell-prompt-read-only))
-    (should (boundp 'py-honor-IPYTHONDIR-p))
-    (should (boundp 'py-ipython-history))
-    (should (boundp 'py-honor-PYTHONHISTORY-p))
-    (should (boundp 'py-python-history))
-    (should (boundp 'py-switch-buffers-on-execute-p))
-    (should (boundp 'py-split-window-on-execute))
-    (should (boundp 'py-split-windows-on-execute-function))
-    (should (boundp 'py-hide-show-keywords))
-    (should (boundp 'py-hide-show-hide-docstrings))
-    (should (boundp 'py-hide-comments-when-hiding-all))
-    (should (boundp 'py-outline-mode-keywords))
-    (should (boundp 'python-mode-hook))
-    (should (boundp 'py-shell-name))
-    (should (boundp 'py-default-interpreter))
-    (should (boundp 'py-python-command))
-    (should (boundp 'py-python-command-args))
-    (should (boundp 'py-python2-command))
-    (should (boundp 'py-python2-command-args))
-    (should (boundp 'py-python3-command))
-    (should (boundp 'py-python3-command-args))
-    (should (boundp 'py-ipython-command))
-    (should (boundp 'py-ipython-command-args))
-    (should (boundp 'py-jython-command))
-    (should (boundp 'py-jython-command-args))
-    (should (boundp 'py-bpython-command))
-    (should (boundp 'py-bpython-command-args))
-    (should (boundp 'py-shell-toggle-1))
-    (should (boundp 'py-shell-toggle-2))
-    (should (boundp 'py--imenu-create-index-p))
-    (should (boundp 'py-history-filter-regexp))
-    (should (boundp 'py-match-paren-mode))
-    (should (boundp 'py-match-paren-key))
-    (should (boundp 'py-kill-empty-line))
-    (should (boundp 'py-imenu-show-method-args-p))
-    (should (boundp 'py-use-local-default))
-    (should (boundp 'py-edit-only-p))
-    (should (boundp 'py-force-py-shell-name-p))
-    (should (boundp 'python-mode-v5-behavior-p))
-    (should (boundp 'py-trailing-whitespace-smart-delete-p))
-    (should (boundp 'py-newline-delete-trailing-whitespace-p))
-    (should (boundp 'py--warn-tmp-files-left-p))
-    (should (boundp 'py-complete-ac-sources))
-    (should (boundp 'py-remove-cwd-from-path))
-    (should (boundp 'py-ignore-result-p))
-    (should (boundp 'py-shell-local-path))
-    (should (boundp 'py-ipython-execute-delay))
-    (should (boundp 'py-shell-completion-setup-code))
-    (should (boundp 'py-shell-module-completion-code))
-    (should (boundp 'py-ipython-module-completion-code))
-    (should (boundp 'py-ipython-module-completion-string))
-    (should (boundp 'py--imenu-create-index-function))
-    (should (boundp 'python-source-modes))
-    (should (boundp 'py-input-filter-re))
-    (should (boundp 'strip-chars-before))
-    (should (boundp 'strip-chars-after))
-    (should (boundp 'py-docstring-style))
-    (should (boundp 'py-execute-directory))
-    (should (boundp 'py-use-current-dir-when-execute-p))
-    (should (boundp 'py-keep-shell-dir-when-execute-p))
-    (should (boundp 'py-fileless-buffer-use-default-directory-p))
-    (should (boundp 'py-check-command))
-    (should (boundp 'py-this-abbrevs-changed))
-    (should (boundp 'py-ffap-p))
-    (should (boundp 'py-ffap))
-    (should (boundp 'ffap-alist))
-    (should (boundp 'py-buffer-name))
-    (should (boundp 'py-orig-buffer-or-file))
-    (should (boundp 'py-ffap-p))
-    (should (boundp 'py-keep-windows-configuration))
-    (should (boundp 'py-output-buffer))
-    (should (boundp 'py-ffap-string-code))
-    (should (boundp 'py-shell-prompt-regexp))
-    (should (boundp 'py-ffap-setup-code))
-    (should (boundp 'py-eldoc-setup-code))
-    (should (boundp 'py-shell-prompt-output-regexp))
-    (should (boundp 'py-underscore-word-syntax-p))
-    (should (boundp 'py-autofill-timer))
-    (should (boundp 'py-fill-column-orig))
-    (should (boundp 'python-mode-message-string))
-    (should (boundp 'python-mode-syntax-table))
-    (should (boundp 'py-local-command))
-    (should (boundp 'py-local-versioned-command))
-    (should (boundp 'ipython-completion-command-string))
-    (should (boundp 'ipython0.10-completion-command-string))
-    (should (boundp 'ipython0.11-completion-command-string))
-    (should (boundp 'py-encoding-string-re))
-    (should (boundp 'py-shebang-regexp))
-    (should (boundp 'py-separator-char))
-    (should (boundp 'py-temp-directory))
-    (should (boundp 'py-pdbtrack-input-prompt))
-    (should (boundp 'py-pydbtrack-input-prompt))
-    (should (boundp 'ipython-de-input-prompt-regexp))
-    (should (boundp 'py-exec-command))
-    (should (boundp 'py-which-bufname))
-    (should (boundp 'py-pychecker-history))
-    (should (boundp 'py-pyflakes-history))
-    (should (boundp 'py-pep8-history))
-    (should (boundp 'py-pyflakespep8-history))
-    (should (boundp 'py-pylint-history))
-    (should (boundp 'ipython-de-input-prompt-regexp))
-    (should (boundp 'ipython-de-output-prompt-regexp))
-    (should (boundp 'py-mode-output-map))
-    (should (boundp 'hs-hide-comments-when-hiding-all))
-    (should (boundp 'py-force-local-shell-p))
-    (should (boundp 'py-shell-complete-debug))
-    (should (boundp 'py-debug-p))
-    (should (boundp 'py-completion-last-window-configuration))
-    (should (boundp 'py-exception-buffer))
-    (should (boundp 'py-string-delim-re))
-    (should (boundp 'py-labelled-re))
-    (should (boundp 'py-expression-skip-regexp))
-    (should (boundp 'py-expression-skip-chars))
-    (should (boundp 'py-expression-re))
-    (should (boundp 'py-not-expression-regexp))
-    (should (boundp 'py-not-expression-chars))
-    (should (boundp 'py-partial-expression-backward-chars))
-    (should (boundp 'py-partial-expression-forward-chars))
-    (should (boundp 'py-operator-regexp))
-    (should (boundp 'py-assignment-regexp))
-    (should (boundp 'py-delimiter-regexp))
-    (should (boundp 'py-line-number-offset))
-    (should (boundp 'match-paren-no-use-syntax-pps))
-    (should (boundp 'py-traceback-line-re))
-    (should (boundp 'py-bol-forms-last-indent))
-    (should (boundp 'py-XXX-tag-face))
-    (should (boundp 'py-pseudo-keyword-face))
-    (should (boundp 'py-variable-name-face))
-    (should (boundp 'py-number-face))
-    (should (boundp 'py-decorators-face))
-    (should (boundp 'py-object-reference-face))
-    (should (boundp 'py-builtins-face))
-    (should (boundp 'py-class-name-face))
-    (should (boundp 'py-exception-name-face))
-    (should (boundp 'py-import-from-face))
-    (should (boundp 'py-def-class-face))
-    (should (boundp 'py-try-if-face))
-    (should (boundp 'py-file-queue))
-    (should (boundp 'jython-mode-hook))
-    (should (boundp 'py-shell-hook))
-    (should (boundp 'python-font-lock-keywords))
-    (should (boundp 'py-dotted-expression-syntax-table))
-    (should (boundp 'python-default-template))
-    (should (boundp 'py-already-guessed-indent-offset))
-    (should (boundp 'py-shell-template))
-    (should (boundp 'py-fast-filter-re))
-    (should (boundp 'py-block-closing-keywords-re))
-    (should (boundp 'py-block-or-clause-re))
-    (should (boundp 'py-compilation-regexp-alist))
-    (should (boundp 'py-windows-config))
-    (should (boundp 'symbol-definition-start-re))
-    (should (boundp 'python-font-lock-keywords))
-    (should (boundp 'py-imenu-class-regexp))
-    (should (boundp 'py-imenu-method-regexp))
-    (should (boundp 'py-imenu-method-no-arg-parens))
-    (should (boundp 'py-imenu-method-arg-parens))
-    (should (boundp 'py-imenu-generic-expression))
-    (should (boundp 'py-imenu-generic-regexp))
-    (should (boundp 'py-imenu-generic-parens))))
-
 (ert-deftest py-complete-in-ipython-shell-test ()
   (let ((py-shell-name "ipython")
 	(py-switch-buffers-on-execute-p t))
@@ -1098,7 +718,7 @@ that, needs, to_be, wrapped)
     (forward-word -1)
     (should (eq ?p (char-after)))))
 
-(ert-deftest py-complete-in-python-shell-tests ()
+(ert-deftest py-complete-in-python-shell-test ()
   (let ((py-shell-name "python")
 	(py-switch-buffers-on-execute-p t))
     (py-kill-buffer-unconditional "*Python*")
@@ -1109,7 +729,7 @@ that, needs, to_be, wrapped)
     (forward-word -1)
     (should (eq ?p (char-after)))))
 
-(ert-deftest py-complete-in-python3-shell-tests ()
+(ert-deftest py-complete-in-python3-shell-test ()
   (let ((py-shell-name "python3")
 	(py-switch-buffers-on-execute-p t))
     (py-kill-buffer-unconditional "*Python3*")
@@ -1119,6 +739,200 @@ that, needs, to_be, wrapped)
     (py-indent-or-complete)
     (forward-word -1)
     (should (eq ?p (char-after)))))
+
+(ert-deftest py-complete-empty-string-result-test ()
+  (let ((py-shell-name "python3")
+	(py-switch-buffers-on-execute-p t))
+    (py-kill-buffer-unconditional "*Python3*")
+    (python3)
+    (goto-char (point-max))
+    (insert "foo")
+    (py-indent-or-complete)
+    (should (looking-back "foo"))))
+
+(ert-deftest py-ert-close-block-test ()
+  (py-test-with-temp-buffer-point-min
+      "# -*- coding: utf-8 -*-
+
+def main():
+    if len(sys.argv)==1:
+        usage()
+        sys.exit()
+if __name__==\"__main__\":
+    main()
+"
+    (when py-debug-p (switch-to-buffer (current-buffer))
+          (font-lock-fontify-buffer))
+    (search-forward "exit()")
+    (should (eq 4 (py-close-block)))))
+
+(ert-deftest py-ert-close-clause-test ()
+  (py-test-with-temp-buffer-point-min
+      "# -*- coding: utf-8 -*-
+
+def main():
+    if len(sys.argv)==1:
+        usage()
+        sys.exit()
+if __name__==\"__main__\":
+    main()
+"
+    (when py-debug-p (switch-to-buffer (current-buffer))
+          (font-lock-fontify-buffer))
+    (search-forward "exit()")
+    (should (eq 4 (py-close-clause)))))
+
+(ert-deftest py-ert-close-block-or-clause-test ()
+  (py-test-with-temp-buffer-point-min
+      "# -*- coding: utf-8 -*-
+
+def main():
+    if len(sys.argv)==1:
+        usage()
+        sys.exit()
+if __name__==\"__main__\":
+    main()
+"
+    (when py-debug-p (switch-to-buffer (current-buffer))
+          (font-lock-fontify-buffer))
+    (search-forward "exit()")
+    (should (eq 4 (py-close-block-or-clause)))))
+
+(ert-deftest py-ert-close-def-or-class-test ()
+  (py-test-with-temp-buffer-point-min
+      "# -*- coding: utf-8 -*-
+
+def main():
+    if len(sys.argv)==1:
+        usage()
+        sys.exit()
+if __name__==\"__main__\":
+    main()
+"
+    (when py-debug-p (switch-to-buffer (current-buffer))
+          (font-lock-fontify-buffer))
+    (search-forward "exit()")
+    (should (eq 0 (py-close-def-or-class)))))
+
+(ert-deftest py-ert-close-def-test ()
+  (py-test-with-temp-buffer-point-min
+      "# -*- coding: utf-8 -*-
+
+def main():
+    if len(sys.argv)==1:
+        usage()
+        sys.exit()
+if __name__==\"__main__\":
+    main()
+"
+    (when py-debug-p (switch-to-buffer (current-buffer))
+          (font-lock-fontify-buffer))
+    (search-forward "exit()")
+    (should (eq 0 (py-close-def)))))
+
+(ert-deftest py-ert-close-class-test ()
+  (py-test-with-temp-buffer-point-min
+      "# -*- coding: utf-8 -*-
+class asdf:
+    def main():
+        if len(sys.argv)==1:
+            usage()
+            sys.exit()
+    if __name__==\"__main__\":
+        main()
+"
+    (search-forward "exit()")
+    (should (eq 0 (py-close-class)))))
+
+(ert-deftest py-ert-dedent-forward-test ()
+  (py-test-with-temp-buffer
+   "with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
+    for i in range(anzahl):
+        klauf.pylauf()
+        datei.write(str(spiel[i]) + \"\\n\")"
+   (skip-chars-backward " \t\r\n\f")
+   (py-dedent-forward-line)
+   (should (empty-line-p))
+   (forward-line -1)
+   (should (eq 4 (current-indentation)))))
+
+;; (ert-deftest py-builtins-face-lp-1454858-1-test ()
+;;   (py-test-with-temp-buffer
+;;       "#! /usr/bin/env python2
+;; file.close()"
+;;     (beginning-of-line)
+;;     (should (eq (face-at-point) 'py-builtins-face))))
+
+;; (ert-deftest py-builtins-face-lp-1454858-2-test ()
+;;   (py-test-with-temp-buffer
+;;       "#! /usr/bin/env python3
+;; file.close()"
+;;     (beginning-of-line)
+;;     (should-not (eq (face-at-point) 'py-builtins-face))))
+
+(ert-deftest py-face-lp-1454858-python2-1-test ()
+  (let ((py-python-edit-version ""))
+    (py-test-with-temp-buffer
+	"#! /usr/bin/env python2
+file.close()"
+      (beginning-of-line)
+      (font-lock-fontify-buffer)
+      (sit-for 0.1)
+      (should (eq (face-at-point) 'py-builtins-face)))))
+
+;; Setting of py-python-edit-version should precede
+(ert-deftest py-face-lp-1454858-python2-2-test ()
+  (let ((py-python-edit-version "python2"))
+    (py-test-with-temp-buffer
+	"#! /usr/bin/env python3
+file.close()"
+      (beginning-of-line)
+      (font-lock-fontify-buffer)
+      (sit-for 0.1)
+      (should (eq (face-at-point) 'py-builtins-face)))))
+
+(ert-deftest py-face-lp-1454858-python2-3-test ()
+  (let ((py-python-edit-version ""))
+    (with-temp-buffer
+      (insert "#! /usr/bin/env python2
+print()")
+      (switch-to-buffer (current-buffer))
+      (beginning-of-line)
+      (python-mode)
+      (font-lock-fontify-buffer)
+      (sit-for 0.1)
+      (should (eq (face-at-point) 'font-lock-keyword-face)))))
+
+(ert-deftest py-ert-in-comment-p-test ()
+  (py-test-with-temp-buffer
+      "# "
+    (should (py--in-comment-p))))
+
+(ert-deftest py-ert-in-sq-string-p-test ()
+  (py-test-with-temp-buffer
+      "' "
+    (should (py-in-string-p))))
+
+(ert-deftest py-ert-in-dq-string-p-test ()
+  (py-test-with-temp-buffer
+      "\" "
+    (should (py-in-string-p))))
+
+(ert-deftest py-ert-in-sq-tqs-string-p-test ()
+  (py-test-with-temp-buffer
+      "''' "
+    (should (py-in-string-p))))
+
+(ert-deftest py-ert-in-dq-tqs-string-p-test ()
+  (py-test-with-temp-buffer
+      "\"\"\" "
+    (should (py-in-string-p))))
+
+(ert-deftest py-ert-electric-delete-test ()
+  (py-test-with-temp-buffer-point-min
+      "  {}"
+    (py-electric-delete)
+    (should (eq (char-after) ?{))))
 
 
 (provide 'py-ert-tests-2)

@@ -1,7 +1,7 @@
 ;; py-ert-tests.el --- Tests, some adapted from python.el
 
 ;; Copyright (C) 2013 Free Software Foundation, Inc.
-;; Copyright (C) 2014 Andreas Roehler, <andreas.roehler@online.de>
+;; Copyright (C) 2014-2015 Andreas Roehler, <andreas.roehler@online.de>
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -29,63 +29,75 @@
 (add-to-list 'load-path default-directory)
 (require 'python-mode-test)
 
-(defmacro py-test-with-temp-buffer-point-min (contents &rest body)
-  "Create temp buffer in `python-mode' inserting CONTENTS.
-BODY is code to be executed within the temp buffer.  Point is
- at the beginning of buffer."
-  (declare (indent 1) (debug t))
-  `(with-temp-buffer
-;;     (and (featurep 'python) (unload-feature 'python))
-     (let (hs-minor-mode)
-       (python-mode)
-       (insert ,contents)
-       (message "ERT %s" (point))
-       (goto-char (point-min))
-       ,@body)))
-
-(defmacro py-test-with-temp-buffer (contents &rest body)
-  "Create temp buffer in `python-mode' inserting CONTENTS.
-BODY is code to be executed within the temp buffer.  Point is
- at the end of buffer."
-  (declare (indent 1) (debug t))
-  `(with-temp-buffer
-     ;; (and (featurep 'python) (unload-feature 'python))
-     (let (hs-minor-mode)
-       (python-mode)
-       (insert ,contents)
-       ;; (message "ERT %s" (point))
-       ,@body)))
 
 (defun py-tests-go-to (string)
   "Move point at beginning of STRING in the current test. "
   (and (eq (point) (point-max))(goto-char (point-min)))
   (search-forward string nil t 1))
 
-(ert-deftest py-ert-electric-kill-backward-test1 ()
+(ert-deftest py-ert-electric-kill-backward-bracket-test ()
   (let ((py-electric-kill-backward-p t))
-    (with-temp-buffer
-      (insert "mystring[0:1]")
+    (py-test-with-temp-buffer
+      "mystring[0:1]"
       (py-electric-backspace 1)
       (should (eq ?\] (char-after))))))
 
-(ert-deftest py-ert-electric-kill-backward-test2 ()
+(ert-deftest py-ert-electric-kill-backward-region-test ()
+  (let ((py-electric-kill-backward-p t)
+	(delete-active-region t)
+	(transient-mark-mode t))
+    (py-test-with-temp-buffer
+	"mystring[0:1]     "
+      (skip-chars-backward " \t\r\n\f")
+      (set-mark (point))
+      (goto-char (point-max))
+      (py-electric-backspace 1)
+      (should (eq ?\] (char-before))))))
+
+(ert-deftest py-ert-electric-delete-eob-test ()
+  (let ((py-electric-kill-backward-p t)
+	(delete-active-region t)
+	(transient-mark-mode t))
+    (py-test-with-temp-buffer
+	"mystring[0:1]     "
+      (skip-chars-backward " \t")
+      (set-mark (point))
+      (skip-chars-forward " \t") 
+      (py-electric-delete)
+      (should (eobp)))))
+
+(ert-deftest py-ert-electric-delete-test ()
+  (let ((py-electric-kill-backward-p t)
+	(delete-active-region t)
+	(transient-mark-mode t))
+    (py-test-with-temp-buffer
+	"mystring[0:1]     "
+      (set-mark (point))
+      (skip-chars-backward " \t\r\n\f")
+      (py-electric-delete)
+      (should (eobp)))))
+
+(ert-deftest py-ert-electric-kill-backward-paren-test ()
   (let ((py-electric-kill-backward-p t))
-    (with-temp-buffer
-      (insert "mystring(\"asdf\")")
+    (py-test-with-temp-buffer
+      "mystring(\"asdf\")"
       (py-electric-backspace 1)
       (should (eq ?\) (char-after)))
       )))
 
-(ert-deftest py-ert-electric-kill-backward-test3 ()
+(ert-deftest py-ert-electric-kill-backward-brace-test ()
   (let ((py-electric-kill-backward-p t))
-    (with-temp-buffer
-      (insert "mystring{0 . 1}")
+    (py-test-with-temp-buffer
+      "mystring{0 . 1}"
       (py-electric-backspace 1)
       (should (eq ?\} (char-after))))))
 
 (ert-deftest py-ert-indent-dedenters-1 ()
   "Check all dedenters."
-  (py-test-with-temp-buffer-point-min
+
+
+
+(py-test-with-temp-buffer-point-min
    "
 def foo(a, b, c):
     if a:
@@ -574,21 +586,27 @@ with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
     (should (eq 42 (point)))))
 
 (ert-deftest py-ert-socket-modul-completion-lp-1284141 ()
-  (py-test-with-temp-buffer
-      "import socket\nsocket."
-    (let ((py-debug-p t)
-	  (py-shell-name "python")
-	  oldbuf)
-      (when py-debug-p (switch-to-buffer (current-buffer))
-	  (font-lock-fontify-buffer))
-      (py-indent-or-complete)
-      (sit-for 0.1)
-      (set-buffer "*Python Completions*")
-      (switch-to-buffer (current-buffer))
-      (goto-char (point-min))
-      (sit-for 0.2)
-      (prog1 (should (search-forward "socket."))
-	(py-kill-buffer-unconditional (current-buffer))))))
+  (dolist (ele py-ert-test-default-executables)
+    (when (buffer-live-p (get-buffer "*Python Completions*"))
+      (py-kill-buffer-unconditional (get-buffer "*Python Completions*")))
+    (py-test-with-temp-buffer
+	"import socket\nsocket."
+      (let ((py-debug-p t)
+	    (py-shell-name ele)
+	    oldbuf)
+	(when py-debug-p (switch-to-buffer (current-buffer))
+	      (font-lock-fontify-buffer))
+	(py-indent-or-complete)
+	(if (string-match "ipython" ele)
+	    (sit-for 0.5)
+	  (sit-for 0.1))
+	(should (buffer-live-p (get-buffer "*Python Completions*")))
+	(set-buffer "*Python Completions*")
+	(switch-to-buffer (current-buffer))
+	(goto-char (point-min))
+	(sit-for 0.1)
+	(prog1 (should (search-forward "socket."))
+	  (py-kill-buffer-unconditional (current-buffer)))))))
 
 (ert-deftest py-ert-fill-paragraph-lp-1286318 ()
   (py-test-with-temp-buffer-point-min
@@ -765,7 +783,7 @@ def baz():
       (fill-paragraph)
       (search-backward "\"\"\"")
       (goto-char (match-end 0))
-      (eolp)
+      (should (eolp))
       (forward-line 1)
       (end-of-line)
       (when py-debug-p (message "fill-column: %s" fill-column))
@@ -836,15 +854,6 @@ def baz():
       (goto-char (point-min))
       (should (search-forward "py-execute-statement-python3-dedicated-test" nil t 1)))))
 
-(ert-deftest py-ert-execute-statement-split ()
-  (py-test-with-temp-buffer-point-min
-      "print(123)"
-    (let ((py-split-window-on-execute t))
-      (delete-other-windows)
-      (py-execute-statement)
-      (sit-for 0.1 t)
-      (should (not (one-window-p))))))
-
 (ert-deftest py-ert-script-buffer-appears-instead-of-python-shell-buffer-lp-957561-test ()
   (py-test-with-temp-buffer
       "#! /usr/bin/env python
@@ -861,6 +870,151 @@ print(\"I'm the script-buffer-appears-instead-of-python-shell-buffer-lp-957561-t
       (py-execute-buffer-ipython)
       ;; (should (window-live-p (other-buffer)))
       (should (not (window-full-height-p))))))
+
+(ert-deftest indent-region-lp-997958-lp-1426903-no-arg-1-test ()
+  "Indent line-by-line as first line is okay "
+  (py-test-with-temp-buffer-point-min
+   "#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+def foo ():
+if True:
+    print(123)
+
+with file(\"foo\" + zeit + \".ending\", 'w') as datei:
+    for i in range(anzahl):
+        bar.dosomething()
+        datei.write(str(baz[i]) + \"\\n\")
+"
+   (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer))
+   (search-forward "True")
+   (py-indent-region (line-beginning-position) (point-max))
+   (should (eq 4 (current-indentation)))
+   (search-forward "with file")
+   (should (eq 4 (current-indentation)))
+   (search-forward "for i ")
+   (should (eq 8 (current-indentation)))
+   (search-forward "bar.")
+   (should (eq 12 (current-indentation)))
+   (search-forward "datei.write")
+   (should (eq 12 (current-indentation)))))
+
+(ert-deftest indent-region-lp-997958-lp-1426903-no-arg-2-test ()
+  "Keep indent of remaining block as first line was fixed. "
+  (py-test-with-temp-buffer-point-min
+   "#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+    def foo ():
+        if True:
+            print(123)
+
+    with file(\"foo\" + zeit + \".ending\", 'w') as datei:
+        for i in range(anzahl):
+            bar.dosomething()
+            datei.write(str(baz[i]) + \"\\n\")
+"
+   (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer))
+   (search-forward "def foo")
+   (py-indent-region (line-beginning-position) (point-max))
+   (search-forward "True")
+   (should (eq 4 (current-indentation)))
+   (search-forward "with file")
+   (should (eq 0 (current-indentation)))
+   (search-forward "for i ")
+   (should (eq 4 (current-indentation)))
+   (search-forward "bar.")
+   (should (eq 8 (current-indentation)))
+   (search-forward "datei.write")
+   (should (eq 8 (current-indentation)))))
+
+(ert-deftest indent-region-lp-997958-lp-1426903-no-arg-3-test ()
+  "Indent line-by-line as first line is okay "
+  (py-test-with-temp-buffer-point-min
+   "#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+def foo ():
+if True:
+    print(123)
+
+with file(\"foo\" + zeit + \".ending\", 'w') as datei:
+    for i in range(anzahl):
+        bar.dosomething()
+        # also wrong indent needs to be preserved here
+            datei.write(str(baz[i]) + \"\\n\")
+"
+   (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer))
+   (search-forward "True")
+   (py-indent-region (line-beginning-position) (point-max))
+   (should (eq 4 (current-indentation)))
+   (search-forward "with file")
+   (should (eq 4 (current-indentation)))
+   (search-forward "for i ")
+   (should (eq 8 (current-indentation)))
+   (search-forward "bar.")
+   (should (eq 12 (current-indentation)))
+   (search-forward "datei.write")
+   (should (eq 16 (current-indentation)))))
+
+(ert-deftest indent-region-lp-997958-lp-1426903-arg-1-test ()
+  (py-test-with-temp-buffer
+   "#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+def foo ():
+print(123)
+
+with file(\"foo\" + zeit + \".ending\", 'w') as datei:
+for i in range(anzahl):
+bar.dosomething()
+datei.write(str(baz[i]) + \"\\n\")
+"
+   (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer))
+   (py-indent-region 48 (point-max) '(4))
+   (goto-char (point-min))
+   (search-forward "print(123)")
+   (should (eq 4 (current-indentation)))
+   (search-forward "with file")
+   (should (eq 4 (current-indentation)))
+   (search-forward "for i ")
+   (should (eq 8 (current-indentation)))
+   (search-forward "bar.")
+   (should (eq 12 (current-indentation)))
+   (search-forward "datei.write")
+   (should (eq 12 (current-indentation)))))
+
+(ert-deftest indent-region-lp-997958-lp-1426903-arg-2-test ()
+  "Indent line-by-line as first line is okay "
+  (py-test-with-temp-buffer-point-min
+   "#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+with file(\"foo\" + zeit + \".ending\", 'w') as datei:
+    for i in range(anzahl):
+        bar.dosomething()
+        # called from correct first line
+        # wrong indent should to be fixed
+            datei.write(str(baz[i]) + \"\\n\")
+"
+   (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer))
+   (search-forward "with file")
+   (py-indent-region (line-beginning-position) (point-max))
+   (should (eq 0 (current-indentation)))
+   (search-forward "for i ")
+   (should (eq 4 (current-indentation)))
+   (search-forward "bar.")
+   (should (eq 8 (current-indentation)))
+   (search-forward "datei.write")
+   (should (eq 8 (current-indentation)))))
+
+(ert-deftest py--pdb-versioned-test ()
+  (py-test-with-temp-buffer
+      ""
+    (let ((py-shell-name "python3"))
+      (should (string= "pdb3" (py--pdb-versioned))))
+    (let ((py-shell-name "python"))
+      (should (string= "pdb" (py--pdb-versioned))))))
 
 (provide 'py-ert-tests-1)
 ;;; py-ert-tests-1.el ends here

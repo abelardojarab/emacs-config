@@ -2733,26 +2733,6 @@ os.chmod
   (switch-to-buffer (current-buffer))
   (assert (looking-at "Help on built-in function chmod in os:") nil "py-describe-symbol-fails-on-modules-lp-919719-test failed"))
 
-(defun indent-region-lp-997958-test (&optional arg)
-  (interactive "p")
-  (let ((teststring "#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-with file(\"foo\" + zeit + \".ending\", 'w') as datei:
-for i in range(anzahl):
-bar.dosomething()
-datei.write(str(baz[i]) + \"\\n\")
-"))
-    (py-bug-tests-intern 'indent-region-lp-997958-base arg teststring)))
-
-(defun indent-region-lp-997958-base (arg)
-  (py-indent-region 48 172)
-  (goto-char 99)
-  (back-to-indentation)
-  (assert (eq 4 (current-column))  nil "indent-region-lp-997958-test #1 failed")
-  (goto-char 127)
-  (back-to-indentation)
-  (assert (eq 8 (current-column))  nil "indent-region-lp-997958-test #2 failed"))
-
 (defun pycomplete-same-folder-def-lp-889052-test (&optional arg)
   (interactive "p")
   (save-excursion
@@ -2809,7 +2789,6 @@ CLASS_INS.someDe
 (defun pycomplete-same-folder-class-lp-889052-base (arg)
   (let ((testfile1 (concat (expand-file-name (py--normalize-directory py-install-directory)) "completion" "/" "classblah.py"))
         (testfile2 (concat (expand-file-name (py--normalize-directory py-install-directory)) "completion" "/" "somedef.py"))
-        py-no-completion-calls-dabbrev-expand-p
         py-indent-no-completion-p)
     (write-file testfile2)
     (goto-char 107)
@@ -2831,8 +2810,7 @@ CLASS_INS.someDe
 
 (defun no-completion-at-all-lp-1001328-test (&optional arg)
   (interactive "p")
-  (let ((py-no-completion-calls-dabbrev-expand-p t)
-        (teststring "#!/usr/bin/python
+  (let ((teststring "#!/usr/bin/python
 basdklfjasdf = 3
 basd
 "))
@@ -4756,6 +4734,8 @@ for lines in f:
   (py-bug-tests-intern 'temporary-files-remain-when-python-raises-exception-lp-1083973-n4-base arg teststring)))
 
 (defun temporary-files-remain-when-python-raises-exception-lp-1083973-n4-base (arg)
+  (when py-debug-p (switch-to-buffer (current-buffer))
+	  (font-lock-fontify-buffer)) 
   (py-execute-buffer)
   (assert (py-execute-buffer) nil "temporary-files-remain-when-python-raises-exception-lp-1083973-n4-test failed"))
 
@@ -5380,7 +5360,7 @@ def foo():
 
 \"\"\"Some docstring.\"\"\"
 
-__version__ = \"$Revision: 1.59 $\"
+__version__ = \"$Revision: 1.63 $\"
 
 "))
   (py-bug-tests-intern 'python-mode-very-slow-lp-1107037-base arg teststring)))
@@ -6547,13 +6527,6 @@ d[\"a\""))
 (defun interpreter-mode-alist-lp-1355458-base-4 ()
   (assert (eq 'python-mode major-mode) nil "interpreter-mode-alist-lp-1355458-test-4 failed")
   (py-kill-buffer-unconditional (current-buffer)))
-
-(defun interpreter-mode-alist-lp-1355458-test-5 (&optional arg)
-  (interactive "p")
-   (let ((teststring "#! /usr/bin/env bpython
-# -*- coding: utf-8 -*-
-"))
-  (py-bug-tests-intern 'interpreter-mode-alist-lp-1355458-base-5 arg teststring)))
 
 (defun interpreter-mode-alist-lp-1355458-base-5 ()
   (assert (eq 'python-mode major-mode) nil "interpreter-mode-alist-lp-1355458-test-5 failed")
