@@ -1,8 +1,9 @@
 ;;; flycheck-test.el --- Flycheck: Unit test suite   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015  Sebastian Wiesner
+;; Copyright (C) 2013-2015 Sebastian Wiesner and Flycheck contributors
 
 ;; Author: Sebastian Wiesner <swiesner@lunaryorn.com>
+;; Maintainer: Sebastian Wiesner <swiesner@lunaryorn.com>
 ;; URL: https://github.com/flycheck/flycheck
 
 ;; This file is not part of GNU Emacs.
@@ -1630,136 +1631,39 @@ and extension, as in `file-name-base'."
     (should-not flycheck-checker)))
 
 (ert-deftest flycheck-select-checker/selecting-runs-a-syntax-check ()
-  :tags '(selection external-tool language-python
-                    checker-python-pylint checker-python-flake8)
-  (skip-unless (executable-find (flycheck-checker-executable 'python-pylint)))
-  (skip-unless (executable-find (flycheck-checker-executable 'python-flake8)))
-  (flycheck-ert-with-resource-buffer "checkers/python/test.py"
-    (python-mode)
+  :tags '(selection language-emacs-lisp
+                    checker-emacs-lisp checker-emacs-lisp-checkdoc)
+  (flycheck-ert-with-resource-buffer "checkers/emacs-lisp.el"
+    (emacs-lisp-mode)
     (flycheck-mode)
-    ;; By default, Flake8 is preferred, so we get errors from Flake8
+    ;; By default we should get both, because emacs-lisp chains to checkdoc
     (flycheck-ert-buffer-sync)
-    (flycheck-ert-should-errors
-     '(5 1 warning "'antigravit' imported but unused" :id "F401"
-         :checker python-flake8)
-     '(7 1 warning "expected 2 blank lines, found 1" :id "E302"
-         :checker python-flake8)
-     '(9 9 info "function name should be lowercase"
-         :checker python-flake8 :id "N802")
-     '(12 29 warning "unexpected spaces around keyword / parameter equals"
-          :id "E251" :checker python-flake8)
-     '(12 31 warning "unexpected spaces around keyword / parameter equals"
-          :id "E251" :checker python-flake8)
-     '(22 1 error "undefined name 'antigravity'" :id "F821"
-          :checker python-flake8))
-    ;; Selecting Pylint should give us its errors
-    (flycheck-select-checker 'python-pylint)
+    (dolist (err flycheck-current-errors)
+      (should (memq (flycheck-error-checker err)
+                    '(emacs-lisp emacs-lisp-checkdoc))))
+    ;; We select checkdoc, and should now only have checkdoc errors
+    (flycheck-select-checker 'emacs-lisp-checkdoc)
     (flycheck-ert-wait-for-syntax-checker)
-    (flycheck-ert-should-errors
-     '(1 1 info "Missing module docstring" :id "C0111" :checker python-pylint)
-     '(4 1 error "Unable to import 'spam'" :id "F0401" :checker python-pylint)
-     '(5 1 error "No name 'antigravit' in module 'python'" :id "E0611"
-         :checker python-pylint)
-     '(5 1 warning "Unused import antigravit" :id "W0611" :checker python-pylint)
-     '(7 1 info "Missing class docstring" :id "C0111" :checker python-pylint)
-     '(9 5 info "Invalid method name \"withEggs\"" :id "C0103"
-         :checker python-pylint)
-     '(9 5 info "Missing method docstring" :id "C0111" :checker python-pylint)
-     '(9 5 warning "Method could be a function" :id "R0201" :checker python-pylint)
-     '(10 16 warning "Used builtin function 'map'" :id "W0141"
-          :checker python-pylint)
-     '(12 1 info "No space allowed around keyword argument assignment"
-          :id "C0326" :checker python-pylint)
-     '(12 5 info "Missing method docstring" :id "C0111" :checker python-pylint)
-     '(12 5 warning "Method could be a function" :id "R0201"
-          :checker python-pylint)
-     '(14 16 error "Module 'sys' has no 'python_version' member" :id "E1101"
-          :checker python-pylint)
-     '(15 1 info "Unnecessary parens after u'print' keyword" :id "C0325"
-          :checker python-pylint)
-     '(17 1 info "Unnecessary parens after u'print' keyword" :id "C0325"
-          :checker python-pylint)
-     '(22 1 error "Undefined variable 'antigravity'" :id "E0602"
-          :checker python-pylint))))
+    (dolist (err flycheck-current-errors)
+      (should (eq (flycheck-error-checker err) 'emacs-lisp-checkdoc)))))
 
 (ert-deftest flycheck-select-checker/unselecting-a-checker-goes-back-to-automatic-selection ()
-  :tags '(selection external-tool language-python
-                    checker-python-pylint checker-python-flake8)
-  (skip-unless (executable-find (flycheck-checker-executable 'python-pylint)))
-  (skip-unless (executable-find (flycheck-checker-executable 'python-flake8)))
+  :tags '(selection language-emacs-lisp
+                    checker-emacs-lisp checker-emacs-lisp-checkdoc)
   (flycheck-ert-with-resource-buffer "checkers/python/test.py"
-    (python-mode)
+    (emacs-lisp-mode)
     (flycheck-mode)
-    (flycheck-select-checker 'python-pylint)
-    (should (eq flycheck-checker 'python-pylint))
+    (flycheck-select-checker 'emacs-lisp-checkdoc)
+    (should (eq flycheck-checker 'emacs-lisp-checkdoc))
     (flycheck-ert-wait-for-syntax-checker)
-    (flycheck-ert-should-errors
-     '(1 1 info "Missing module docstring" :id "C0111" :checker python-pylint)
-     '(4 1 error "Unable to import 'spam'" :id "F0401" :checker python-pylint)
-     '(5 1 error "No name 'antigravit' in module 'python'" :id "E0611"
-         :checker python-pylint)
-     '(5 1 warning "Unused import antigravit" :id "W0611"
-         :checker python-pylint)
-     '(7 1 info "Missing class docstring" :id "C0111" :checker python-pylint)
-     '(9 5 info "Invalid method name \"withEggs\"" :id "C0103"
-         :checker python-pylint)
-     '(9 5 info "Missing method docstring" :id "C0111" :checker python-pylint)
-     '(9 5 warning "Method could be a function" :id "R0201" :checker python-pylint)
-     '(10 16 warning "Used builtin function 'map'" :id "W0141"
-          :checker python-pylint)
-     '(12 1 info "No space allowed around keyword argument assignment"
-          :id "C0326" :checker python-pylint)
-     '(12 5 info "Missing method docstring" :id "C0111" :checker python-pylint)
-     '(12 5 warning "Method could be a function" :id "R0201"
-          :checker python-pylint)
-     '(14 16 error "Module 'sys' has no 'python_version' member" :id "E1101"
-          :checker python-pylint)
-     '(15 1 info "Unnecessary parens after u'print' keyword" :id "C0325"
-          :checker python-pylint)
-     '(17 1 info "Unnecessary parens after u'print' keyword" :id "C0325"
-          :checker python-pylint)
-     '(22 1 error "Undefined variable 'antigravity'" :id "E0602"
-          :checker python-pylint))
+    (dolist (err flycheck-current-errors)
+      (should (eq (flycheck-error-checker err) 'emacs-lisp-checkdoc)))
     (flycheck-select-checker nil)
     (should-not flycheck-checker)
     (flycheck-ert-wait-for-syntax-checker)
-    (flycheck-ert-should-errors
-     '(5 1 warning "'antigravit' imported but unused" :id "F401"
-         :checker python-flake8)
-     '(7 1 warning "expected 2 blank lines, found 1" :id "E302"
-         :checker python-flake8)
-     '(9 9 info "function name should be lowercase"
-         :checker python-flake8 :id "N802")
-     '(12 29 warning "unexpected spaces around keyword / parameter equals"
-          :id "E251" :checker python-flake8)
-     '(12 31 warning "unexpected spaces around keyword / parameter equals"
-          :id "E251" :checker python-flake8)
-     '(22 1 error "undefined name 'antigravity'" :id "F821"
-          :checker python-flake8))))
-
-(ert-deftest flycheck/selects-checker-automatically/first-enabled-checker ()
-  :tags '(selection external-tool language-python checker-python-flake8)
-  (skip-unless (executable-find (flycheck-checker-executable 'python-pylint)))
-  (skip-unless (executable-find (flycheck-checker-executable 'python-flake8)))
-  (flycheck-ert-with-resource-buffer "checkers/python/test.py"
-    (python-mode)
-    (flycheck-mode)
-    (flycheck-ert-buffer-sync)
-    (should-not flycheck-checker)
-    (should (eq flycheck-last-checker 'python-flake8))
-    (flycheck-ert-should-errors
-     '(5 1 warning "'antigravit' imported but unused" :id "F401"
-         :checker python-flake8)
-     '(7 1 warning "expected 2 blank lines, found 1" :id "E302"
-         :checker python-flake8)
-     '(9 9 info "function name should be lowercase"
-         :checker python-flake8 :id "N802")
-     '(12 29 warning "unexpected spaces around keyword / parameter equals"
-          :id "E251" :checker python-flake8)
-     '(12 31 warning "unexpected spaces around keyword / parameter equals"
-          :id "E251" :checker python-flake8)
-     '(22 1 error "undefined name 'antigravity'" :id "F821"
-          :checker python-flake8))))
+    (dolist (err flycheck-current-errors)
+      (should (memq (flycheck-error-checker err)
+                    '(emacs-lisp emacs-lisp-checkdoc))))))
 
 (ert-deftest flycheck/selects-checker-automatically/no-disabled-checker ()
   :tags '(selection language-emacs-lisp checker-emacs-lisp-checkdoc)
@@ -1767,7 +1671,6 @@ and extension, as in `file-name-base'."
     (let ((flycheck-disabled-checkers '(emacs-lisp)))
       (flycheck-ert-buffer-sync)
       (should-not flycheck-checker)
-      (should (eq flycheck-last-checker 'emacs-lisp-checkdoc))
       (flycheck-ert-should-errors
        '(12 nil warning "First sentence should end with punctuation"
             :checker emacs-lisp-checkdoc)))))
@@ -1776,11 +1679,13 @@ and extension, as in `file-name-base'."
   :tags '(selection)
   (flycheck-ert-with-temp-buffer
     (flycheck-mode)
-    (flycheck-disable-checker 'emacs-lisp)
+    (with-no-warnings
+      (flycheck-disable-checker 'emacs-lisp))
     (should (equal '(emacs-lisp) flycheck-disabled-checkers))
     (should-not (default-value 'flycheck-disabled-checkers))
     ;; Disabling a disabled checker should be a no-op
-    (flycheck-disable-checker 'emacs-lisp)
+    (with-no-warnings
+      (flycheck-disable-checker 'emacs-lisp))
     (should (equal '(emacs-lisp) flycheck-disabled-checkers))))
 
 (ert-deftest flycheck-disable-checker/enables-checker ()
@@ -1788,7 +1693,8 @@ and extension, as in `file-name-base'."
   (flycheck-ert-with-temp-buffer
     (flycheck-mode)
     (setq flycheck-disabled-checkers '(emacs-lisp python-pylint))
-    (flycheck-disable-checker 'emacs-lisp 'enable)
+    (with-no-warnings
+      (flycheck-disable-checker 'emacs-lisp 'enable))
     (should (equal '(python-pylint) flycheck-disabled-checkers))))
 
 
@@ -2482,6 +2388,12 @@ of the file will be interrupted because there are too many #ifdef configurations
   (let ((err (flycheck-error-new-at 1 0 'error "foo")))
     (should (equal (flycheck-sanitize-errors (list err))
                    (list (flycheck-error-new-at 1 nil 'error "foo"))))))
+
+(ert-deftest flycheck-sanitize-errors/empty-error-id ()
+  :tags '(error-filtering)
+  (let ((err (flycheck-error-new-at 1 1 'error "foo" :id "")))
+    (should (equal (flycheck-sanitize-errors (list err))
+                   (list (flycheck-error-new-at 1 1 'error "foo"))))))
 
 (ert-deftest flycheck-increment-error-columns/ignores-nil ()
   :tags '(error-filtering)
@@ -3454,7 +3366,8 @@ evaluating BODY."
       (should (file-exists-p file-name))
       (should (file-executable-p file-name))
       (should-not (local-variable-p 'flycheck-emacs-lisp-executable))
-      (flycheck-set-checker-executable 'emacs-lisp file-name)
+      (with-no-warnings
+        (flycheck-set-checker-executable 'emacs-lisp file-name))
       (should (local-variable-p 'flycheck-emacs-lisp-executable))
       (should (string= flycheck-emacs-lisp-executable file-name))))
   ;; The global value should remain unaffected
@@ -3466,7 +3379,8 @@ evaluating BODY."
     (let ((file-name (flycheck-ert-resource-filename "bin/dummy-emacs")))
       (setq-local flycheck-emacs-lisp-executable file-name)
       (should (string= flycheck-emacs-lisp-executable file-name))
-      (flycheck-set-checker-executable 'emacs-lisp)
+      (with-no-warnings
+        (flycheck-set-checker-executable 'emacs-lisp))
       (should-not flycheck-emacs-lisp-executable)
       (should (local-variable-p 'flycheck-emacs-lisp-executable)))))
 
@@ -3476,7 +3390,8 @@ evaluating BODY."
     (let ((file-name (flycheck-ert-resource-filename "bin/dummy-emacs")))
       (setq-local flycheck-emacs-lisp-executable file-name)
       (should (string= flycheck-emacs-lisp-executable file-name))
-      (flycheck-set-checker-executable 'emacs-lisp nil)
+      (with-no-warnings
+        (flycheck-set-checker-executable 'emacs-lisp nil))
       (should-not flycheck-emacs-lisp-executable)
       (should (local-variable-p 'flycheck-emacs-lisp-executable)))))
 
@@ -3958,14 +3873,18 @@ The term \"1\" has type \"nat\" while it is expected to have type
 
 (ert-deftest flycheck-d-module-re/matches-module-name ()
   :tags '(language-d)
-  (ert-skip "Skipped pending https://github.com/flycheck/flycheck/issues/531")
+  (unless (version<= "24.4" emacs-version)
+    (ert-skip "Skipped because CC Mode is broken on 24.3.
+See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
   (let ((s "module spam.with.eggs ;"))
     (should (string-match flycheck-d-module-re s))
     (should (string= "spam.with.eggs" (match-string 1 s)))))
 
 (ert-deftest flycheck-d-base-directory/no-module-declaration ()
   :tags '(language-d)
-  (ert-skip "Skipped pending https://github.com/flycheck/flycheck/issues/531")
+  (unless (version<= "24.4" emacs-version)
+    (ert-skip "Skipped because CC Mode is broken on 24.3.
+See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
   (flycheck-ert-with-resource-buffer "checkers/d/src/dmd/no_module.d"
     (should (flycheck-same-files-p
              (flycheck-d-base-directory)
@@ -3973,7 +3892,9 @@ The term \"1\" has type \"nat\" while it is expected to have type
 
 (ert-deftest flycheck-d-base-directory/with-module-declaration ()
   :tags '(language-d)
-  (ert-skip "Skipped pending https://github.com/flycheck/flycheck/issues/531")
+  (unless (version<= "24.4" emacs-version)
+    (ert-skip "Skipped because CC Mode is broken on 24.3.
+See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
   (flycheck-ert-with-resource-buffer "checkers/d/src/dmd/warning.d"
     (should (flycheck-same-files-p
              (flycheck-d-base-directory)
@@ -3981,14 +3902,18 @@ The term \"1\" has type \"nat\" while it is expected to have type
 
 (ert-deftest flycheck-d-base-directory/package-file ()
   :tags '(language-d)
-  (ert-skip "Skipped pending https://github.com/flycheck/flycheck/issues/531")
+  (unless (version<= "24.4" emacs-version)
+    (ert-skip "Skipped because CC Mode is broken on 24.3.
+See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
   (flycheck-ert-with-resource-buffer "checkers/d/src/dmd/package.d"
     (should (flycheck-same-files-p
              (flycheck-d-base-directory)
              (flycheck-ert-resource-filename "checkers/d/src")))))
 
 (flycheck-ert-def-checker-test d-dmd d warning-include-path
-  (ert-skip "Skipped pending https://github.com/flycheck/flycheck/issues/531")
+  (unless (version<= "24.4" emacs-version)
+    (ert-skip "Skipped because CC Mode is broken on 24.3.
+See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
   (let ((flycheck-dmd-include-path '("../../lib")))
     (flycheck-ert-should-syntax-check
      "checkers/d/src/dmd/warning.d" 'd-mode
@@ -3997,22 +3922,13 @@ The term \"1\" has type \"nat\" while it is expected to have type
           :checker d-dmd))))
 
 (flycheck-ert-def-checker-test d-dmd d missing-import
-  (ert-skip "Skipped pending https://github.com/flycheck/flycheck/issues/531")
+  (unless (version<= "24.4" emacs-version)
+    (ert-skip "Skipped because CC Mode is broken on 24.3.
+See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
   (flycheck-ert-should-syntax-check
    "checkers/d/src/dmd/warning.d" 'd-mode
    '(4 8 error "module external_library is in file 'external_library.d' which cannot be read"
        :checker d-dmd)))
-
-(flycheck-ert-def-checker-test elixir elixir error
-  (flycheck-ert-should-syntax-check
-   "checkers/elixir-error.ex" 'elixir-mode
-   '(5 nil error "function puts/1 undefined" :checker elixir)))
-
-(flycheck-ert-def-checker-test elixir elixir warnings
-  (flycheck-ert-should-syntax-check
-   "checkers/elixir-warnings.ex" 'elixir-mode
-   '(7 nil warning "this clause cannot match because a previous clause at line 4 always matches"
-       :checker elixir)))
 
 (flycheck-ert-def-checker-test emacs-lisp emacs-lisp nil
   ;; Determine how the Emacs message for load file errors looks like: In Emacs
@@ -4272,7 +4188,7 @@ The term \"1\" has type \"nat\" while it is expected to have type
 (flycheck-ert-def-checker-test handlebars handlebars nil
   (flycheck-ert-should-syntax-check
    "checkers/handlebars-error.hbs" '(handlebars-mode web-mode)
-   '(2 nil error "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'DATA', got 'INVALID'"
+   '(2 nil error "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'INVALID'"
        :checker handlebars)))
 
 (ert-deftest flycheck-haskell-module-re/matches-module-name ()
@@ -4299,14 +4215,6 @@ Expected type: String
   Actual type: Bool
 In the first argument of ‘putStrLn’, namely ‘True’
 In the expression: putStrLn True" :checker haskell-ghc)))
-
-(flycheck-ert-def-checker-test haskell-ghc haskell no-user-package-database
-  :expected-result :failed
-  (error "Not implemented!"))
-
-(flycheck-ert-def-checker-test haskell-ghc haskell package-databases
-  :expected-result :failed
-  (error "Not implemented!"))
 
 (flycheck-ert-def-checker-test haskell-ghc haskell search-path
   (let* ((lib-dir (flycheck-ert-resource-filename "checkers/Haskell/lib"))
@@ -4372,20 +4280,27 @@ Why not:
         (js3-mode-show-parse-errors nil))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-syntax-error.js" '(js-mode js2-mode js3-mode)
-     '(3 11 error "Unclosed string." :id "E029" :checker javascript-jshint)
-     '(3 25 warning "Unclosed string." :id "W112" :checker javascript-jshint)
-     '(4 1 warning "Unclosed string." :id "W112" :checker javascript-jshint)
-     '(4 1 warning "Missing semicolon." :id "W033"
-         :checker javascript-jshint))))
+     '(3 4 error "Unmatched '('." :id "E019" :checker javascript-jshint)
+     '(3 25 error "Expected an identifier and instead saw ')'." :id "E030"
+         :checker javascript-jshint)
+     '(4 1 error "Unexpected early end of program." :id "E006"
+         :checker javascript-jshint)
+     '(4 1 error "Expected an identifier and instead saw '(end)'." :id "E030"
+         :checker javascript-jshint)
+     '(4 1 warning "Expected an assignment or function call and instead saw an expression."
+         :id "W030" :checker javascript-jshint)
+     '(4 1 warning "Missing semicolon."  :id "W033" :checker javascript-jshint))))
 
 (flycheck-ert-def-checker-test javascript-jshint javascript error-disabled
   :tags '(checkstyle-xml)
-  (flycheck-ert-should-syntax-check
-   "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)))
+  (let ((flycheck-disabled-checkers '(javascript-jscs)))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode))))
 
 (flycheck-ert-def-checker-test javascript-jshint javascript nil
   :tags '(checkstyle-xml)
-  (let ((flycheck-jshintrc "jshintrc"))
+  (let ((flycheck-jshintrc "jshintrc")
+        (flycheck-disabled-checkers '(javascript-jscs)))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)
      '(4 9 warning "'foo' is defined but never used." :id "W098"
@@ -4396,27 +4311,119 @@ Why not:
   (let ((flycheck-disabled-checkers '(javascript-jshint)))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-syntax-error.js" '(js-mode js2-mode js3-mode)
-     '(3 26 error "Unexpected token ILLEGAL" :checker javascript-eslint))))
+     '(3 26 error "Unexpected token )" :checker javascript-eslint))))
 
 (flycheck-ert-def-checker-test javascript-eslint javascript warning
   :tags '(checkstyle-xml)
   (let ((flycheck-eslintrc "eslint.json")
-        (flycheck-disabled-checkers '(javascript-jshint)))
+        (flycheck-disabled-checkers '(javascript-jshint javascript-jscs)))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)
-     '(3 1 warning "Missing \"use strict\" statement." :id "strict"
+     '(3 2 warning "Missing \"use strict\" statement." :id "strict"
          :checker javascript-eslint)
-     '(4 8 warning "foo is defined but never used" :id "no-unused-vars"
+     '(4 9 warning "foo is defined but never used" :id "no-unused-vars"
          :checker javascript-eslint))))
 
 (flycheck-ert-def-checker-test javascript-gjslint javascript nil
-  (let ((flycheck-disabled-checkers '(javascript-jshint javascript-eslint)))
+  (let ((flycheck-disabled-checkers
+         '(javascript-jshint javascript-eslint javascript-jscs)))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)
      '(4 nil warning "Single-quoted string preferred over double-quoted string."
          :id "0131" :checker javascript-gjslint)
      '(4 nil warning "Extra space before \"]\""
          :id "0001" :checker javascript-gjslint))))
+
+(flycheck-ert-def-checker-test javascript-jscs javascript nil
+  :tags '(checkstyle-xml)
+  (let ((flycheck-jscsrc "jscsrc")
+        (flycheck-disabled-checkers
+         '(javascript-jshint javascript-eslint javascript-gjslint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript-style.js" '(js-mode js2-mode js3-mode)
+     '(4 3 error "Expected indentation of 2 characters"
+         :checker javascript-jscs))))
+
+(flycheck-ert-def-checker-test javascript-jscs javascript no-config
+  :tags '(checkstyle-xml)
+  (let ((flycheck-disabled-checkers
+         '(javascript-jshint javascript-eslint javascript-gjslint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript-style.js" '(js-mode js2-mode js3-mode)
+     '(1 nil warning "No JSCS configuration found.  Set `flycheck-jscsrc' for JSCS"
+         :checker javascript-jscs))))
+
+(flycheck-ert-def-checker-test (javascript-jshint javascript-jscs)
+    javascript complete-chain
+  :tags '(checkstyle-xml)
+  (let ((flycheck-jshintrc "jshintrc")
+        (flycheck-jscsrc "jscsrc"))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)
+     '(4 3 error "Expected indentation of 2 characters"
+         :checker javascript-jscs)
+     '(4 9 warning "'foo' is defined but never used." :id "W098"
+         :checker javascript-jshint))))
+
+(flycheck-ert-def-checker-test (javascript-eslint javascript-jscs)
+    javascript complete-chain
+  :tags '(checkstyle-xml)
+  (let ((flycheck-eslintrc "eslint.json")
+        (flycheck-jscsrc "jscsrc")
+        (flycheck-disabled-checkers '(javascript-jshint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)
+     '(3 2 warning "Missing \"use strict\" statement." :id "strict"
+         :checker javascript-eslint)
+     '(4 3 error "Expected indentation of 2 characters"
+         :checker javascript-jscs)
+     '(4 9 warning "foo is defined but never used" :id "no-unused-vars"
+         :checker javascript-eslint))))
+
+(flycheck-ert-def-checker-test (javascript-gjslint javascript-jscs)
+    javascript complete-chain
+  :tags '(checkstyle-xml)
+  (let ((flycheck-jscsrc "jscsrc")
+        (flycheck-disabled-checkers '(javascript-jshint javascript-eslint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)
+     '(4 nil warning "Single-quoted string preferred over double-quoted string."
+         :id "0131" :checker javascript-gjslint)
+     '(4 nil warning "Extra space before \"]\""
+         :id "0001" :checker javascript-gjslint)
+     '(4 3 error "Expected indentation of 2 characters"
+         :checker javascript-jscs))))
+
+(flycheck-ert-def-checker-test javascript-standard javascript error
+  (let ((flycheck-checker 'javascript-standard))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript-style.js" '(js-mode js2-mode js3-mode)
+     '(3 9 error "Missing space before function parentheses."
+         :checker javascript-standard)
+     '(4 2 error "Expected indentation of 2 characters."
+         :checker javascript-standard)
+     '(4 5 error "foo is defined but never used"
+         :checker javascript-standard)
+     '(4 12 error "Strings must use singlequote."
+         :checker javascript-standard)
+     '(4 27 error "Extra semicolon."
+         :checker javascript-standard)
+     '(5 5 error "Extra semicolon."
+         :checker javascript-standard))))
+
+(flycheck-ert-def-checker-test javascript-standard javascript semistandard
+  (let ((flycheck-checker 'javascript-standard)
+        (flycheck-javascript-standard-executable "semistandard"))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript-style.js" '(js-mode js2-mode js3-mode)
+     '(3 9 error "Missing space before function parentheses."
+         :checker javascript-standard)
+     '(4 2 error "Expected indentation of 2 characters."
+         :checker javascript-standard)
+     '(4 5 error "foo is defined but never used"
+         :checker javascript-standard)
+     '(4 12 error "Strings must use singlequote."
+         :checker javascript-standard))))
 
 (flycheck-ert-def-checker-test json-jsonlint json nil
   (flycheck-ert-should-syntax-check
@@ -4572,14 +4579,13 @@ Why not:
 (flycheck-ert-def-checker-test puppet-parser puppet singleline-syntax-error
   (flycheck-ert-should-syntax-check
    "checkers/puppet-parser-singleline.pp" 'puppet-mode
-   '(3 nil error "Syntax error at ','; expected '}'" :checker puppet-parser)))
+   '(3 9 error "Syntax error at '>'" :checker puppet-parser)))
 
 (flycheck-ert-def-checker-test puppet-parser puppet multiline-syntax-error
   (flycheck-ert-should-syntax-check
    "checkers/puppet-parser-multiline.pp" 'puppet-mode
-   '(8 nil error "Unclosed quote after '' in 'something
-}
-'" :checker puppet-parser)))
+   '(8 13 error "Unclosed quote after \"'\" followed by 'somet...'"
+       :checker puppet-parser)))
 
 (flycheck-ert-def-checker-test puppet-lint puppet nil
   (flycheck-ert-should-syntax-check
@@ -4953,6 +4959,13 @@ Why not:
    "checkers/rust-test-syntax-error.rs" 'rust-mode
    '(5 5 error "unresolved name `bla`" :checker rust)))
 
+(flycheck-ert-def-checker-test rust rust multiline-error
+  (flycheck-ert-should-syntax-check
+   "checkers/rust-multiple-error.rs" 'rust-mode
+   '(7 9 error "mismatched types:
+ expected `u8`,\n    found `i8`
+(expected u8,\n    found i8)" :checker rust :id "E0308")))
+
 (flycheck-ert-def-checker-test rust rust test-check-tests-disabled
   (let ((flycheck-rust-check-tests nil))
     (flycheck-ert-should-syntax-check
@@ -4969,8 +4982,8 @@ Why not:
 (flycheck-ert-def-checker-test rust rust help
   (flycheck-ert-should-syntax-check
    "checkers/rust-help.rs" 'rust-mode
-   '(3 1 error "not all control paths return a value [E0269]"
-       :checker rust)
+   '(3 1 error "not all control paths return a value"
+       :checker rust :id "E0269")
    '(4 11 info "consider removing this semicolon:"
        :checker rust)))
 
@@ -4987,13 +5000,8 @@ Why not:
    "checkers/rust-info.rs" 'rust-mode
    '(11 9 info "`x` moved here because it has type `NonPOD`, which is moved by default"
         :checker rust)
-   '(11 10 info "use `ref` to override" :checker rust)
+   '(11 9 info "use `ref` to override" :checker rust)
    '(12 9 error "use of moved value: `x`" :checker rust)))
-
-(flycheck-ert-def-checker-test rust rust library-path
-  :expected-result :failed
-  ;; TODO: How can we test this without adding binary libraries to our repo?
-  (error "Not implemented!"))
 
 (flycheck-ert-def-checker-test rust rust crate-root-not-set
   (flycheck-ert-should-syntax-check
@@ -5055,21 +5063,40 @@ Why not:
     (flycheck-ert-should-syntax-check
      "checkers/scala-scalastyle-style-warning.scala" 'scala-mode)))
 
+(flycheck-ert-def-checker-test scss-lint scss nil
+  (let ((flycheck-scss-lintrc "scss-lint.yml"))
+    (flycheck-ert-should-syntax-check
+     "checkers/scss-lint-error.scss" 'scss-mode
+     '(1 1 error "Avoid using id selectors"
+         :checker scss-lint :id "IdSelector")
+     '(3 16 warning "Color `red` should be written in hexadecimal form as `#ff0000`"
+         :checker scss-lint :id "ColorKeyword"))))
+
+(flycheck-ert-def-checker-test scss-lint scss syntax-error
+  (let ((flycheck-disabled-checkers '(scss)))
+    (flycheck-ert-should-syntax-check
+     "checkers/scss-error.scss" 'scss-mode
+     '(3 1 error "Syntax Error: Invalid CSS after \"...    c olor: red\": expected \"{\", was \";\""
+         :checker scss-lint))))
+
 (flycheck-ert-def-checker-test scss scss nil
-  (flycheck-ert-should-syntax-check
-   "checkers/scss-error.scss" 'scss-mode
-   '(3 nil error "Invalid CSS after \"...    c olor: red\": expected \"{\", was \";\""
-       :checker scss)))
+  (let ((flycheck-disabled-checkers '(scss-lint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/scss-error.scss" 'scss-mode
+     '(3 nil error "Invalid CSS after \"...    c olor: red\": expected \"{\", was \";\""
+         :checker scss))))
 
 (flycheck-ert-def-checker-test scss scss import-error
-  (flycheck-ert-should-syntax-check
-   "checkers/scss-compass.scss" 'scss-mode
-   `(2 nil error ,(format "File to import not found or unreadable: compass/css3.
+  (let ((flycheck-disabled-checkers '(scss-lint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/scss-compass.scss" 'scss-mode
+     `(2 nil error ,(format "File to import not found or unreadable: compass/css3.
        Load path: %s" (flycheck-ert-resource-filename "checkers"))
-       :checker scss)))
+         :checker scss))))
 
 (flycheck-ert-def-checker-test scss scss compass
-  (let ((flycheck-scss-compass t))
+  (let ((flycheck-disabled-checkers '(scss-lint))
+        (flycheck-scss-compass t))
     (flycheck-ert-should-syntax-check
      "checkers/scss-compass.scss" 'scss-mode)))
 
@@ -5105,7 +5132,9 @@ Why not:
        :checker sh-shellcheck)
    '(3 7 error "Double quote array expansions, otherwise they're like $* and break on spaces."
        :id "SC2068" :checker sh-shellcheck)
-   '(4 11 info "Use $(..) instead of deprecated `..`" :id "SC2006"
+   '(4 8 warning "Declare and assign separately to avoid masking return values."
+       :id "SC2155" :checker sh-shellcheck)
+   '(4 11 info "Use $(..) instead of legacy `..`." :id "SC2006"
        :checker sh-shellcheck)))
 
 (flycheck-ert-def-checker-test sh-shellcheck sh excluded-warning
@@ -5115,7 +5144,9 @@ Why not:
      "checkers/sh-shellcheck.sh" 'sh-mode
      '(3 7 error "Double quote array expansions, otherwise they're like $* and break on spaces."
          :id "SC2068" :checker sh-shellcheck)
-     '(4 11 info "Use $(..) instead of deprecated `..`" :id "SC2006"
+     '(4 8 warning "Declare and assign separately to avoid masking return values."
+         :id "SC2155" :checker sh-shellcheck)
+     '(4 11 info "Use $(..) instead of legacy `..`." :id "SC2006"
          :checker sh-shellcheck))))
 
 (flycheck-ert-def-checker-test slim slim nil

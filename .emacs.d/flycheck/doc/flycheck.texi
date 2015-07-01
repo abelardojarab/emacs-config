@@ -64,7 +64,6 @@ International Public License. A copy of the license can be obtained at
 @titlepage
 @title Flycheck
 @subtitle Modern on-the-fly syntax checking for GNU Emacs
-@subtitle Version 0.23
 @author Sebastian Wiesner @email{swiesner@@lunaryorn.com}
 @page
 @vskip 0pt plus 1filll
@@ -83,11 +82,16 @@ checking for buffers.  It is intended as replacement for the older
 Flymake package which is built into Emacs.
 
 @xref{Introduction}, for more information about Flycheck.  For
-installations instructions and a quick tutorial, @pxref {Installation}
+installations instructions and a quick tutorial, @pxref{Installation}
 and @ref{Quickstart} respectively.  @xref{Usage}, for a detailed user
 guide.
 
-For more information about Flymake, @pxref{Top,,Overview,flymake}.
+@ifnotinfo
+@noindent
+@strong{With Flycheck installed you can read this manual inside Emacs
+with @key{M-x flycheck-info}}.  This opens Emacs' built-in Info reader.
+@xref{Getting Started,,,info}, to see how to use this reader.
+@end ifnotinfo
 
 @menu
 * Introduction::                An introduction to Flycheck
@@ -95,7 +99,7 @@ For more information about Flymake, @pxref{Top,,Overview,flymake}.
 * Quickstart::                  A quick Flycheck tutorial
 * Usage::                       How to use Flycheck
 * Syntax checker definitions::  How to add new syntax checkers to Flycheck
-* Flycheck hooks::              How to hook into Flycheckx
+* Flycheck hooks::              How to hook into Flycheck
 * Flycheck API::                API documentation
 * Supported languages::         A list of supported languages
 * Issues::                      How to report issues in Flycheck
@@ -1423,7 +1427,7 @@ interface, which you can use for your own extensions.
 
 @section Status changes
 
-:hook:@code{flycheck-before-syntax-check-hook} and
+@code{flycheck-before-syntax-check-hook} and
 @code{flycheck-after-syntax-check-hook} run before and after syntax
 checks, and let you update your Emacs instance according to Flycheck's
 state.  For instance, @ghref{flycheck/flycheck-color-mode-line,

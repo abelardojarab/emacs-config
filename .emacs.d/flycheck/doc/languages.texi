@@ -99,6 +99,12 @@ Whether to disable RTTI in Clang/GCC, via @option{-fno-rtti}.
 The name of the standard library to use for Clang, as string.
 @flycoption flycheck-gcc-openmp
 Whether to enable OpenMP in GCC.
+@flycoption flycheck-clang-pedantic
+@flycoption flycheck-gcc-pedantic
+Whether to warn about language extensions in Clang/GCC.
+@flycoption flycheck-clang-pedantic-errors
+@flycoption flycheck-gcc-pedantic-errors
+Whether to error on language extensions in Clang/GCC.
 @flycoption flycheck-clang-warnings
 @flycoptionx flycheck-gcc-warnings
 A list of additional warnings to enable in Clang.  Each item is the name
@@ -129,7 +135,14 @@ yield more false positives than normal checks.
 @itemize
 @item
 @flyc{chef-foodcritic} (style check with
-@uref{http://acrmp.github.io/foodcritic/,foodcritic})
+@uref{http://acrmp.github.io/foodcritic/,foodcritic}), with the
+following option:
+
+@table @asis
+@flycoption flycheck-foodcritic-tags
+A list of tags to select for Foodcritic.
+@end table
+
 @end itemize
 
 @flyclanguage{Coffeescript}
@@ -172,6 +185,8 @@ option:
 @table @asis
 @flycoption flycheck-dmd-include-path
 A list of include directories for DMD.
+@flycoption flycheck-dmd-args
+A list of additional arguments for DMD.
 @end table
 
 @end itemize
@@ -181,13 +196,6 @@ The extension @ghref{flycheck/flycheck-d-unittest,flycheck-d-unittest}
 adds a syntax checker which runs D unittests on the fly and reports the
 results.
 @end smallindentedblock
-
-@flyclanguage{Elixir}
-
-@itemize
-@item
-@flyc{elixir} (@uref{http://elixir-lang.org/,Elixir interpreter})
-@end itemize
 
 @flyclanguage{Emacs Lisp}
 
@@ -229,6 +237,12 @@ effect if @code{flycheck-emacs-lisp-initialize-packages} is nil.
 @itemize
 @item
 @flyc{erlang} (@uref{http://www.erlang.org/,Erlang})
+
+@table @asis
+@flycoption flycheck-erlang-include-path
+A list of include directories for Erlang.
+@end table
+
 @end itemize
 
 @flyclanguage{ERuby}
@@ -371,6 +385,8 @@ with the following option:
 
 @flyclanguage{Javascript}
 
+@enumerate
+@item
 @itemize
 @item
 @flyc{javascript-jshint} (@uref{http://jshint.com/,JSHint})
@@ -380,6 +396,13 @@ Or @flyc{javascript-eslint} (@uref{http://eslint.org/,ESLint})
 Or @flyc{javascript-gjslint}
 (@uref{https://developers.google.com/closure/utilities,Closure Linter})
 @end itemize
+@item
+@flyc{javascript-jscs} (@uref{http://jscs.info/,JSCS})
+@item
+@flyc{javascript-standard}
+(@uref{https://github.com/feross/standard,Standard} or
+@uref{https://github.com/Flet/semistandard,Semistandard})
+@end enumerate
 
 The @flyc{javascript-eslint} checker provides the following option:
 
@@ -389,12 +412,13 @@ A directory with custom rules for ESLint.
 @flycconfigfile{flycheck-eslintrc,ESLint}
 @end table
 
-@flyc{javascript-jshint} and @flyc{javascript-gjslint} read
-configuration files:
+@flyc{javascript-jshint}, @flyc{javascript-gjslint} and @flyc{javascript-jscs}
+read configuration files:
 
 @table @asis
 @flycconfigfile{flycheck-jshintrc,JSHint}
 @flycconfigfile{flycheck-gjslintrc,Closure Linter}
+@flycconfigfile{flycheck-jscsrc,JSCS}
 @end table
 
 @flyclanguage{JSON}
@@ -437,9 +461,12 @@ interpreter})
 @uref{https://metacpan.org/pod/Perl::Critic, Perl::Critic})
 @end enumerate
 
-The @flyc{perl-perlcritic} checker provides the following option:
+These syntax checkers checker provide the following options:
 
 @table @asis
+@flycoption flycheck-perl-include-path
+A list of include directories for Perl, relative to the file being
+checked.
 @flycoption flycheck-perlcritic-severity
 The severity level for Perl::Critic, as integer for the
 @option{--severity} option of Perl::Critic.
@@ -615,6 +642,8 @@ interpreter}),
 with the following options:
 
 @table @asis
+@flycoption flycheck-rust-args
+A list of additional arguments for the Rust compiler @command{rustc}.
 @flycoption flycheck-rust-check-tests
 Whether to check test code in Rust.
 
@@ -679,16 +708,21 @@ If these options are not set, @flyc{scala-scalastyle} will not be used.
 
 @itemize
 @item
+@flyc{scss-lint} (using @uref{https://github.com/brigade/scss-lint,
+SCSS-Lint}), or
+@item
 @flyc{scss} (using the @uref{http://sass-lang.com/,standard SCSS
-processor}, with the following option:
+processor})
+@end itemize
+
+These syntax checkers provide the following options:
 
 @table @asis
 @flycoption flycheck-scss-compass
 Whether to enable the Compass CSS framework in SCSS, via
 @option{--compass}.
+@flycconfigfile{flycheck-scss-lintrc,SCSS-Lint}
 @end table
-
-@end itemize
 
 @flyclanguage{Shell scripting languages}
 

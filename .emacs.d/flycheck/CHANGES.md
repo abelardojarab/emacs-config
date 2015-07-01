@@ -3,15 +3,46 @@ master (in development)
 
 - **Breaking changes**:
 
+  - Remove Elixir syntax checker due to code execution [GH-630]
+
+- New syntax checkers:
+
+  - Javascript with `jscs` [GH-634] and `standard` [GH-644]
+
+- New features:
+
+  - Add `flycheck-perl-include-path` to set include directories for Perl
+    [GH-621]
+  - Add `flycheck-rust-args` to pass additional arguments to `rustc`
+  - Add `flycheck-dmd-args` to pass additional arguments to `dmd` [GH-655]
+  - Add `flycheck-erlang-include-path` to set include directories for Erlang
+    [GH-668]
+
+- Bug fixes:
+
+  - Fix offset of column numbers in ESLint [GH-640]
+  - Properly parse indentation errors from Python 2.7 [GH-635]
+  - Don’t choke if `default-directory` does not exist [GH-625]
+  - Fix error parsing for Puppet 4
+  - Fix duplicate checkdoc errors on Emacs 25
+  - Fix level of `info` messages in `flycheck-compile` [GH-669]
+
+0.23 (Apr 6, 2015)
+==================
+
+- **Breaking changes**:
+
   - New manual in native Texinfo format, to achieve higher quality Info manuals
   - Remove `make` syntax checker due to various issues [GH-572] [GH-573]
   - Remove `zsh` support from `sh-shellcheck`, since Shellcheck does not support
     Zsh anymore
+  - Remove `global-flycheck-mode` from customization interface [GH-595]
 
 - New syntax checkers:
 
   - R with `lintr` [GH-512]
   - Lua with `luacheck` [GH-591] [GH-609]
+  - SCSS with `scss-lint` [GH-582] [GH-598]
 
 - New features:
 
@@ -19,25 +50,27 @@ master (in development)
     buffer
   - Add `flycheck-global-modes` to control in which modes `global-flycheck-mode`
     turns on `flycheck-mode`
+  - Add `pedantic` and `pedantic-errors` options to Clang and GCC [GH-543]
+  - Add `flycheck-foodcritic-tags` to select tags for Foodcritic [GH-560]
 
 - Improvements:
 
   - `chef-foodcritic` handles relative paths correctly now [GH-556]
   - Global Flycheck Mode enables Flycheck Mode even if there is no syntax
     checker for the buffer yet [GH-568]
-  - Remove `global-flycheck-mode` from customization interface [GH-595]
   - `handlebars` now supports Web Mode [GH-605]
+  - Extract error IDs from `rustc`
+  - Don’t cache last syntax checker in buffer anymore
 
 - Bug fixes:
 
-  - Cache last used syntax checker only when actually checking the buffer
-    [GH-559]
   - Fix void variable error when trying to use `flycheck-compile` with a
     non-command checker [GH-563]
   - Fix faulty mode line reporting [GH-564]
   - Automatically initialize packages when checking `user-init-file`
   - Properly initialize hook variables [GH-593]
   - Fix handling of file names with symbolic links for some checkers [GH-561]
+  - Parse multiline type errors from `rustc` [GH-592]
 
 0.22 (Dec 23, 2014)
 ===================
