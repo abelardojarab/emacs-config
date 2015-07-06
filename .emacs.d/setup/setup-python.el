@@ -59,7 +59,7 @@
 ;; in cedet semantic-python-get-system-include-path forces starting of the python interpreter
 (defun python-shell-internal-send-string (string) "")
 
-;; Restore Wisent
+;; Add Wisent
 (add-hook 'python-mode-hook 'wisent-python-default-setup)
 
 ;; Python hook

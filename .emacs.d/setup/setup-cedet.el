@@ -31,15 +31,19 @@
 (require 'semantic/ia)
 (require 'semantic/wisent)
 (setq semantic-default-submodes
-      '(global-semantic-idle-scheduler-mode
-        global-semanticdb-minor-mode
+      '(global-semanticdb-minor-mode
         global-semantic-idle-summary-mode
         global-semantic-tag-folding-mode))
 (semantic-mode 1)
 (global-semantic-idle-completions-mode)
 (set-default 'semantic-case-fold t)
-(global-set-key [?\C- ] 'semantic-ia-complete-symbol-menu)
 (semantic-load-enable-code-helpers) ;; Enable prototype help and smart completion
+
+;; Messages
+(add-hook 'semantic-before-idle-scheduler-reparse-hooks
+          (lambda () (message "Idle reparse...")))
+(add-hook 'semantic-after-idle-scheduler-reparse-hooks
+          (lambda () (message "Idle reparse...done")))
 
 ;; Mouse-3
 (global-cedet-m3-minor-mode 1)
@@ -74,14 +78,12 @@
   (local-set-key "." 'ac-complete-semantic-self-insert)
   (local-set-key ">" 'ac-complete-semantic-self-insert)
   (local-set-key ":" 'ac-complete-semantic-self-insert))
-
 (add-hook 'c-mode-common-hook 'cc-mode-ac-key-bindings)
-(global-set-key (kbd "M-n") 'ac-complete-semantic-self-insert)
 
 ;; smart completions
 (require 'semantic/ia)
 (setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
-                 '())
+                 '(project))
 (setq-mode-local lisp-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local c-mode semanticdb-find-default-throttle
