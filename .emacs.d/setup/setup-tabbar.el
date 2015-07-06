@@ -40,7 +40,7 @@
 (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
   (setq ad-return-value
         (if (and (buffer-modified-p (tabbar-tab-value tab))
-               (buffer-file-name (tabbar-tab-value tab)))
+                 (buffer-file-name (tabbar-tab-value tab)))
             (concat "+" (concat ad-return-value ""))
           (concat "" (concat ad-return-value "")))))
 
@@ -60,7 +60,6 @@
 (add-to-list 'load-path "~/.emacs.d/tabbar-ruler")
 (setq tabbar-ruler-global-tabbar 't) ; If you want tabbar
 (require 'tabbar-ruler)
-(tabbar-ruler-group-by-projectile-project)
 (setq tabbar-separator '(0.5))
 
 ;; Fix for tabbar under Emacs 24.4
@@ -74,9 +73,9 @@
        "Return a frame-local hash table that acts as a memoization
        cache for tabbar. Create one if the frame doesn't have one yet."
        (or (gethash (selected-frame) tabbar-caches)
-          (let ((frame-cache (make-hash-table :test 'equal)))
-            (puthash (selected-frame) frame-cache tabbar-caches)
-            frame-cache)))
+           (let ((frame-cache (make-hash-table :test 'equal)))
+             (puthash (selected-frame) frame-cache tabbar-caches)
+             frame-cache)))
      ))
 
 ;; necessary support function for buffer burial
