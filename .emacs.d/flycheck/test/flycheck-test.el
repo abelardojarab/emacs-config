@@ -164,8 +164,8 @@ and extension, as in `file-name-base'."
 (ert-deftest flycheck-checkers/should-have-either-patterns-or-parser ()
   :tags '(customization)
   (dolist (checker flycheck-checkers)
-    (let ((patterns (flycheck-checker-error-patterns checker))
-          (parser (flycheck-checker-error-parser checker)))
+    (let ((patterns (flycheck-checker-get checker 'error-patterns))
+          (parser (flycheck-checker-get checker 'error-parser)))
       (should checker)
       (should (or (and (eq parser 'flycheck-parse-with-patterns) patterns)
                   (null patterns))))))
@@ -1159,24 +1159,24 @@ and extension, as in `file-name-base'."
 
 (ert-deftest flycheck-add-next-checker/prepend ()
   :tags '(extending)
-  (let ((next-checkers (flycheck-checker-next-checkers 'emacs-lisp)))
+  (let ((next-checkers (flycheck-checker-get 'emacs-lisp 'next-checkers)))
     (flycheck-add-next-checker 'emacs-lisp 'texinfo)
     (unwind-protect
-        (should (equal (flycheck-checker-next-checkers 'emacs-lisp)
+        (should (equal (flycheck-checker-get 'emacs-lisp 'next-checkers)
                        (cons 'texinfo next-checkers)))
       (put 'emacs-lisp 'flycheck-next-checkers next-checkers)
-      (should (equal (flycheck-checker-next-checkers 'emacs-lisp)
+      (should (equal (flycheck-checker-get 'emacs-lisp 'next-checkers)
                      next-checkers)))))
 
 (ert-deftest flycheck-add-next-checker/append ()
   :tags '(extending)
-  (let ((next-checkers (flycheck-checker-next-checkers 'emacs-lisp)))
+  (let ((next-checkers (flycheck-checker-get 'emacs-lisp 'next-checkers)))
     (flycheck-add-next-checker 'emacs-lisp 'texinfo 'append)
     (unwind-protect
-        (should (equal (flycheck-checker-next-checkers 'emacs-lisp)
+        (should (equal (flycheck-checker-get 'emacs-lisp 'next-checkers)
                        (append next-checkers '(texinfo))))
       (put 'emacs-lisp 'flycheck-next-checkers next-checkers)
-      (should (equal (flycheck-checker-next-checkers 'emacs-lisp)
+      (should (equal (flycheck-checker-get 'emacs-lisp 'next-checkers)
                      next-checkers)))))
 
 (ert-deftest flycheck-add-mode/no-valid-checker ()
@@ -1191,14 +1191,14 @@ and extension, as in `file-name-base'."
 
 (ert-deftest flycheck-add-mode ()
   :tags '(extending)
-  (let ((modes (flycheck-checker-modes 'python-pylint)))
+  (let ((modes (flycheck-checker-get 'python-pylint 'modes)))
     (flycheck-add-mode 'python-pylint 'emacs-lisp-mode)
     (unwind-protect
         (progn
-          (should (equal (flycheck-checker-modes 'python-pylint)
+          (should (equal (flycheck-checker-get 'python-pylint 'modes)
                          (cons 'emacs-lisp-mode modes))))
       (put 'python-pylint 'flycheck-modes modes)
-      (should (equal (flycheck-checker-modes 'python-pylint) modes)))))
+      (should (equal (flycheck-checker-get 'python-pylint 'modes) modes)))))
 
 
 ;;; Checker API
@@ -1271,11 +1271,11 @@ and extension, as in `file-name-base'."
                               (flycheck-checker-executable ',checker)))
                      "some-nice-executable")))))
 
-(ert-deftest flycheck-checker-modes ()
+(ert-deftest flycheck-checker-get/modes ()
   :tags '(checker-api)
   (dolist (checker flycheck-checkers)
-    (should (listp (flycheck-checker-modes checker)))
-    (should (-all? #'symbolp (flycheck-checker-modes checker)))))
+    (should (listp (flycheck-checker-get checker 'modes)))
+    (should (-all? #'symbolp (flycheck-checker-get checker 'modes)))))
 
 (ert-deftest flycheck-substitute-argument/source ()
   :tags '(checker-api)
@@ -1452,6 +1452,24 @@ and extension, as in `file-name-base'."
     (flycheck-may-use-checker 'emacs-lisp)
     (let ((flycheck-disabled-checkers '(emacs-lisp)))
       (should-not (flycheck-may-use-checker 'emacs-lisp)))))
+
+
+;;; Generic syntax checkers
+(ert-deftest flycheck-checker-get/gets-a-property ()
+  :tags '(generic-checkers)
+  (should (equal (flycheck-checker-get 'emacs-lisp 'modes)
+                 '(emacs-lisp-mode lisp-interaction-mode))))
+
+(ert-deftest flycheck-checker-get/setf ()
+  :tags '(generic-checkers)
+  (let ((checker 'bar)
+        (property 'foo))
+    (should-not (flycheck-checker-get checker property))
+    (setf (flycheck-checker-get checker property) "Hello world")
+    (unwind-protect
+        (should (equal (flycheck-checker-get checker property)
+                       "Hello world"))
+      (put checker 'flycheck-foo nil))))
 
 
 ;;; Configuration file functions
@@ -1766,7 +1784,7 @@ and extension, as in `file-name-base'."
     (flycheck-ert-with-help-buffer
       (shut-up (flycheck-describe-checker checker))
       (with-current-buffer (help-buffer)
-        (let ((config-file-var (flycheck-checker-config-file-var checker)))
+        (let ((config-file-var (flycheck-checker-get checker 'config-file-var)))
           (if (not config-file-var)
               (should-not (string-match-p
                            (rx "configuration file")
@@ -1783,7 +1801,7 @@ and extension, as in `file-name-base'."
       (shut-up (flycheck-describe-checker checker))
       (with-current-buffer (help-buffer)
         (let ((option-vars (-sort #'string<
-                                  (flycheck-checker-option-vars checker)))
+                                  (flycheck-checker-get checker 'option-vars)))
               ;; The regular expression to find the beginning of the option
               ;; variable list
               (regexp "This\\s-+syntax\\s-+checker\\s-+can\\s-+be\\s-+configured\\s-+with\\s-+these\\s-+options:\n"))
@@ -1811,7 +1829,7 @@ and extension, as in `file-name-base'."
       (shut-up (flycheck-describe-checker checker))
       (with-current-buffer (help-buffer)
         (should (string-match-p
-                 (regexp-quote (flycheck-checker-documentation checker))
+                 (regexp-quote (flycheck-checker-get checker 'documentation))
                  (buffer-substring (point-min) (point-max))))))))
 
 (ert-deftest flycheck--manual/all-checkers-are-documented ()
@@ -1833,8 +1851,10 @@ and extension, as in `file-name-base'."
 
 (ert-deftest flycheck--manual/all-options-are-documented ()
   :tags '(documentation)
-  (let ((options (sort (apply #'append (mapcar #'flycheck-checker-option-vars
-                                               flycheck-checkers))
+  (let ((options (sort (apply #'append
+                              (mapcar (lambda (c)
+                                        (flycheck-checker-get c 'option-vars))
+                                      flycheck-checkers))
                        #'string<))
         (filename (expand-file-name "doc/languages.texi"
                                     flycheck-test-source-directory))
@@ -1851,10 +1871,13 @@ and extension, as in `file-name-base'."
 
 (ert-deftest flycheck--manual/all-config-file-vars-are-documented ()
   :tags '(documentation)
-  (let ((config-file-vars (sort (delq nil
-                                      (mapcar #'flycheck-checker-config-file-var
-                                              flycheck-checkers))
-                                #'string<))
+  (let ((config-file-vars (sort
+                           (delq
+                            nil
+                            (mapcar (lambda (c)
+                                      (flycheck-checker-get c 'config-file-var))
+                                    flycheck-checkers))
+                           #'string<))
         documented-config-files)
     (flycheck-ert-with-file-buffer
         (expand-file-name "doc/languages.texi" flycheck-test-source-directory)
@@ -2683,14 +2706,14 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer nil
     (goto-char (point-max))
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/errors-when-moving-too-far ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer nil
     (let ((err (should-error (flycheck-next-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/navigate-by-two-errors ()
@@ -2722,14 +2745,14 @@ evaluating BODY."
     (flycheck-next-error)
     (should (flycheck-ert-at-nth-error 1))
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/errors-before-first-error ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer nil
     (let ((err (should-error (flycheck-previous-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/goes-to-last-error ()
@@ -2757,7 +2780,7 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer nil
     (goto-char (point-max))
     (let ((err (should-error (flycheck-previous-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-first-error/goes-to-first-error ()
@@ -2793,7 +2816,7 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'error
     (flycheck-next-error)
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-errors/errors-beyond-last-error ()
@@ -2801,21 +2824,21 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'error
     (goto-char (point-max))
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-errors/errors-when-moving-too-far ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'error
     (let ((err (should-error (flycheck-next-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-errors/navigate-by-two-errors ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'error
     (let ((err (should-error (flycheck-next-error 2)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-errors/navigate-back-by-two-errors ()
@@ -2823,7 +2846,7 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'error
     (goto-char (point-max))
     (let ((err (should-error (flycheck-next-error -2)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-errors/reset-navigates-to-first-error ()
@@ -2840,14 +2863,14 @@ evaluating BODY."
     (narrow-to-defun)
     (goto-char (point-min))
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/over-errors/errors-before-first-error ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'error
     (let ((err (should-error (flycheck-previous-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/over-errors/goes-to-last-error ()
@@ -2862,14 +2885,14 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'error
     (goto-char (point-max))
     (let ((err (should-error (flycheck-previous-error -2)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/over-errors/navigate-back-by-two-errors ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'error
     (let ((err (should-error (flycheck-previous-error -2)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/over-errors/errors-when-moving-too-far ()
@@ -2877,7 +2900,7 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'error
     (goto-char (point-max))
     (let ((err (should-error (flycheck-previous-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-first-error/over-errors/goes-to-first-error ()
@@ -2900,7 +2923,7 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'error
     (goto-char (point-max))
     (let ((err (should-error (flycheck-first-error 2)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-warnings/goes-to-first-error ()
@@ -2921,21 +2944,21 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'warning
     (goto-char (point-max))
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-warnings/errors-when-moving-too-far ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'warning
     (let ((err (should-error (flycheck-next-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-warnings/navigate-by-two-errors ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'warning
     (let ((err (should-error (flycheck-next-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-warnings/navigate-back-by-two-errors ()
@@ -2961,14 +2984,14 @@ evaluating BODY."
     (flycheck-next-error)
     (should (flycheck-ert-at-nth-error 1))
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/over-warnings/errors-before-first-error ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'warning
     (let ((err (should-error (flycheck-previous-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/over-warnings/goes-to-last-error ()
@@ -2996,7 +3019,7 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'warning
     (goto-char (point-max))
     (let ((err (should-error (flycheck-previous-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-first-error/over-warnings/goes-to-first-error ()
@@ -3039,14 +3062,14 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'info
     (goto-char (point-max))
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-informational/errors-when-moving-too-far ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'info
     (let ((err (should-error (flycheck-next-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-next-error/over-informational/navigate-by-two-errors ()
@@ -3078,14 +3101,14 @@ evaluating BODY."
     (flycheck-next-error)
     (should (flycheck-ert-at-nth-error 1))
     (let ((err (should-error (flycheck-next-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/over-informational/errors-before-first-error ()
   :tags '(navigation)
   (flycheck-test-with-nav-buffer 'info
     (let ((err (should-error (flycheck-previous-error)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-previous-error/over-informational/goes-to-last-error ()
@@ -3113,7 +3136,7 @@ evaluating BODY."
   (flycheck-test-with-nav-buffer 'info
     (goto-char (point-max))
     (let ((err (should-error (flycheck-previous-error 4)
-                             :type flycheck-ert-user-error-type)))
+			     :type flycheck-ert-user-error-type)))
       (should (string= (cadr err) "No more Flycheck errors")))))
 
 (ert-deftest flycheck-first-error/over-informational/goes-to-first-error ()
@@ -4085,7 +4108,7 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
    '(6 1 error "expected ')', found '}'" :checker go-gofmt)))
 
 (flycheck-ert-def-checker-test (go-build go-golint go-vet) go complete-chain
-  (skip-unless (funcall (flycheck-checker-predicate 'go-vet)))
+  (skip-unless (funcall (flycheck-checker-get 'go-vet 'predicate)))
   (flycheck-ert-with-env
       `(("GOPATH" . ,(flycheck-ert-resource-filename "checkers/go")))
     (flycheck-ert-should-syntax-check
@@ -4108,7 +4131,7 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
           :checker go-golint))))
 
 (flycheck-ert-def-checker-test go-vet go print-functions
-  (funcall (flycheck-checker-predicate 'go-vet))
+  (funcall (flycheck-checker-get 'go-vet 'predicate))
   (let ((flycheck-go-vet-print-functions '("Warn:0" "Warnf:1"))
         (flycheck-disabled-checkers '(go-golint go-build go-errcheck)))
     (flycheck-ert-with-env
@@ -4280,16 +4303,11 @@ Why not:
         (js3-mode-show-parse-errors nil))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-syntax-error.js" '(js-mode js2-mode js3-mode)
-     '(3 4 error "Unmatched '('." :id "E019" :checker javascript-jshint)
-     '(3 25 error "Expected an identifier and instead saw ')'." :id "E030"
-         :checker javascript-jshint)
-     '(4 1 error "Unexpected early end of program." :id "E006"
-         :checker javascript-jshint)
-     '(4 1 error "Expected an identifier and instead saw '(end)'." :id "E030"
-         :checker javascript-jshint)
-     '(4 1 warning "Expected an assignment or function call and instead saw an expression."
-         :id "W030" :checker javascript-jshint)
-     '(4 1 warning "Missing semicolon."  :id "W033" :checker javascript-jshint))))
+     '(3 4 error "Unmatched '('." :checker javascript-jshint :id "E019")
+     '(3 25 error "Expected an identifier and instead saw ')'."
+         :checker javascript-jshint :id "E030")
+     '(4 nil error "Unrecoverable syntax error. (100% scanned)."
+         :checker javascript-jshint :id "E041"))))
 
 (flycheck-ert-def-checker-test javascript-jshint javascript error-disabled
   :tags '(checkstyle-xml)
@@ -4723,30 +4741,14 @@ Why not:
      '(22 1 error "Undefined variable 'antigravity'" :id "E0602"
           :checker python-pylint))))
 
-(flycheck-ert-def-checker-test python-pycompile python python26
-  (skip-unless (executable-find "python2.6"))
-  (let ((flycheck-disabled-checkers '(python-flake8 python-pylint))
-        (flycheck-python-pycompile-executable "python2.6")
-        ;; Silence Python Mode
-        (python-indent-guess-indent-offset nil))
-    (flycheck-ert-should-syntax-check
-     "checkers/python-syntax-error.py" 'python-mode
-     '(3 12 error "invalid syntax" :checker python-pycompile))))
-
 (flycheck-ert-def-checker-test python-pycompile python python27
-  (skip-unless (executable-find "python2.7"))
+  (skip-unless (executable-find "python2"))
   (let ((flycheck-disabled-checkers '(python-flake8 python-pylint))
-        (flycheck-python-pycompile-executable "python2.7")
-        (python-version (flycheck-ert-extract-version-command
-                         (rx line-start
-                             "Python " (group (1+ not-newline))
-                             line-end)
-                         "python2.7" "--version"))
+        (flycheck-python-pycompile-executable "python2")
         (python-indent-guess-indent-offset nil))
     (flycheck-ert-should-syntax-check
      "checkers/python-syntax-error.py" 'python-mode
-     `(3 ,(if (version< python-version "2.7.6") 12 nil)
-         error "invalid syntax" :checker python-pycompile))))
+     `(3 nil error "invalid syntax" :checker python-pycompile))))
 
 (flycheck-ert-def-checker-test python-pycompile python has-no-warnings
   (let ((flycheck-disabled-checkers '(python-flake8 python-pylint)))
@@ -5025,8 +5027,7 @@ Why not:
 (flycheck-ert-def-checker-test sass sass import-error
   (flycheck-ert-should-syntax-check
    "checkers/sass-compass.sass" 'sass-mode
-   `(2 nil error ,(format "File to import not found or unreadable: compass/css3.
-       Load path: %s" (flycheck-ert-resource-filename "checkers"))
+   `(2 nil error "File to import not found or unreadable: compass/css3."
        :checker sass)))
 
 (flycheck-ert-def-checker-test sass sass compass
@@ -5045,14 +5046,14 @@ Why not:
 
 (flycheck-ert-def-checker-test scala-scalastyle scala error
   (let ((flycheck-scalastylerc "scalastyle.xml")
-        (flycheck-scalastyle-jar "/opt/scalastyle-batch_2.10-0.5.0/scalastyle-batch_2.10.jar"))
+        (flycheck-scalastyle-jar "/opt/scalastyle/scalastyle-batch.jar"))
     (flycheck-ert-should-syntax-check
      "checkers/scala-scalastyle-style-error.scala" 'scala-mode
      '(6 4 error "Don't use println" :checker scala-scalastyle))))
 
 (flycheck-ert-def-checker-test scala-scalastyle scala warning
   (let ((flycheck-scalastylerc "scalastyle.xml")
-        (flycheck-scalastyle-jar "/opt/scalastyle-batch_2.10-0.5.0/scalastyle-batch_2.10.jar"))
+        (flycheck-scalastyle-jar "/opt/scalastyle/scalastyle-batch.jar"))
     (flycheck-ert-should-syntax-check
      "checkers/scala-scalastyle-style-warning.scala" 'scala-mode
      '(5 8 warning "Redundant braces after class definition"
@@ -5090,8 +5091,7 @@ Why not:
   (let ((flycheck-disabled-checkers '(scss-lint)))
     (flycheck-ert-should-syntax-check
      "checkers/scss-compass.scss" 'scss-mode
-     `(2 nil error ,(format "File to import not found or unreadable: compass/css3.
-       Load path: %s" (flycheck-ert-resource-filename "checkers"))
+     `(2 nil error "File to import not found or unreadable: compass/css3."
          :checker scss))))
 
 (flycheck-ert-def-checker-test scss scss compass
@@ -5185,7 +5185,7 @@ Why not:
 (flycheck-ert-def-checker-test verilog-verilator verilog error
   (flycheck-ert-should-syntax-check
    "checkers/verilog_verilator_error.v" 'verilog-mode
-   '(4 nil error "syntax error, unexpected ')'"
+   '(4 nil error "Unsupported: $fopen with multichannel descriptor.  Add ,\"w\" as second argument to open a file descriptor."
        :checker verilog-verilator)))
 
 (flycheck-ert-def-checker-test verilog-verilator verilog warning
