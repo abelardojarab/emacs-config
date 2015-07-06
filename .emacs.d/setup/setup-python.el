@@ -34,6 +34,7 @@
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
+(add-hook 'python-mode-hook 'hideshowvis-enable)
 
 ;; Update imenu
 (defun python-reset-imenu ()

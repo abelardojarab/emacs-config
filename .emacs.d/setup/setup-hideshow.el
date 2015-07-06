@@ -137,7 +137,6 @@
   "Will indicate regions foldable with hideshow in the fringe."
   'interactive)
 (dolist (hook (list 'lisp-mode-hook
-                    'python-mode-hook
                     'js2-mode-hook
                     'emacs-lisp-mode-hook
                     'c++-mode-hook))
