@@ -136,13 +136,13 @@ Stages and commits the whole buffer.
 #### `git-gutter+-unstage-whole-buffer`
 
 Unstages all changes in the current buffer.
-Use this to undo any effects caused by git-gutter+-stage-hunks.
+Use this to undo any effects caused by `git-gutter+-stage-hunks`.
 
 Committing
 ----------
 
 The commit message buffer is based on
-[git-commit-mode](https://github.com/magit/git-modes).
+[git-commit](https://github.com/magit/magit/blob/master/lisp/git-commit.el).
 Besides the default `git-commit-mode` bindings, the following bindings
 are provided:
 
@@ -161,13 +161,19 @@ are provided:
 
 Changelog
 ---------
+### 0.3
+  * 3 fixes:
+    * Fixed staging and committing with Tramp
+    * Fixed errors with symlinked files
+    * Support the latest version of `git-commit'
+
 ### 0.2
   * 2 enhancements:
     * New interactive functions `git-gutter+-stage-and-commit-whole-buffer` and
       `git-gutter+-unstage-whole-buffer`
     * Refresh gutter when a buffer is staged or unstaged in Magit
-  * 4 bug fixes:
-    * `M-n` is now guaranteed to insert the message of the previous commit
+  * 4 fixes:
+    * `M-p` is now guaranteed to insert the message of the previous commit
     * Fixed compatibility with current versions of `git-commit-mode`
     * `git-gutter+-diff-args` is now properly handled as a list of strings
     * Fixed extraneous window splits that occured when displaying staged changes

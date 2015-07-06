@@ -1,11 +1,10 @@
-;;; flymake-tip.el ---
+;;; flymake-tip.el --- show flymake's error by popup-tip -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 by Yuta Yamada
 
 ;; Author: Yuta Yamada <cokesboy"at"gmail.com>
 ;; URL: https://github.com/yuutayamada/
 ;; Version: 0.0.1
-;; Package-Requires: ((package "version-number"))
 ;; Keywords: keyword
 
 ;;; License:
@@ -25,18 +24,17 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
 (require 'error-tip)
 (require 'flymake)
+(require 'cl-lib)
 
 (defun flymake-tip-collect-current-line-errors ()
   (interactive)
-  (lexical-let*
-      ((current-line (flymake-current-line-no))
-       (line-err-info-list
-        (nth 0 (flymake-find-err-info flymake-err-info current-line)))
-       (menu-data (flymake-make-err-menu-data current-line line-err-info-list)))
-    (loop for (err . b) in (cadr menu-data) collect err)))
+  (cl-loop with line-err-info = (flymake-find-err-info
+                                 flymake-err-info (line-number-at-pos))
+           for err in (car line-err-info)
+           if (vectorp err)
+           collect (elt err 4)))
 
 (defun flymake-tip-cycle (reverse)
   (interactive)

@@ -7,12 +7,11 @@ This program can show you error by popup-tip.
 
 ## Requirements
 
-You need s, flycheck, and popup packages.
+You need `flycheck` and `popup` packages.
 But if you are already using auto-complete.el, then you don't need
 install popup.el. Because auto-complete.el is including it.
-<!-- WIP If you can install package from MELPA ...-->
 
-## Configuration
+## Usage
 
 ```lisp
 (require 'flycheck-tip)
@@ -26,11 +25,24 @@ echo area function, then configure like this:
 (flycheck-tip-use-timer 'verbose)
 ```
 
-## Usage
+If you are still using flymake, you can use combined function that
+show error by popup in flymake-mode or flycheck-mode.
+
+```lisp
+(define-key global-map (kbd "C-0") 'error-tip-cycle-dwim)
+(define-key global-map (kbd "C-9") 'error-tip-cycle-dwim-reverse)
+```
 
 Do M-x flycheck-tip-cycle or push its key when error occurred on
 flycheck-mode. Then you can move next error.
 If next error isn't exists then the cursor moves to first error if it's exists.
+
+# Keep errors on notification area
+If you build Emacs with D-Bus option, you may configure following setting.
+This keeps the errors on notification area. Please check
+`error-tip-notify-timeout` to change limit of the timeout as well.
+
+    (setq error-tip-notify-keep-messages t)
 
 # Show eclim's error
 
@@ -48,3 +60,6 @@ to your .emacs:
 ```lisp
 (setq flycheck-tip-avoid-show-func nil)
 ```
+
+# Similar Project
+flycheck-pos-tip: https://github.com/flycheck/flycheck-pos-tip

@@ -4,7 +4,7 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com> and contributors
 ;; URL: https://github.com/nonsequitur/git-gutter-plus
-;; Version: 0.2
+;; Version: 0.3
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; Package-Requires: ((git-commit-mode "0.14"))
+;; Package-Requires: ((git-commit "0"))
 
 ;;; Commentary:
 ;;
@@ -30,7 +30,7 @@
 (require 'cl)
 (require 'tramp)
 (require 'log-edit)
-(require 'git-commit-mode)
+(require 'git-commit)
 
 (defgroup git-gutter+ nil
   "Manage Git hunks straight from the buffer"
@@ -192,11 +192,13 @@ calculated width looks wrong. (This can happen with some special characters.)"
   (let ((args (git-gutter+-diff-args curfile))
         (file (buffer-file-name))) ;; for tramp
     (with-temp-buffer
-      (when (zerop (git-gutter+-call-git args file))
-        (goto-char (point-min))
-        (let ((diff-header (git-gutter+-get-diff-header))
-              (diffinfos   (git-gutter+-get-diffinfos)))
-          (list diff-header diffinfos))))))
+      (if (zerop (git-gutter+-call-git args file))
+          (progn (goto-char (point-min))
+                 (let ((diff-header (git-gutter+-get-diff-header))
+                       (diffinfos   (git-gutter+-get-diffinfos)))
+                   (list diff-header diffinfos)))
+        (message "Error callling git diff:\n%s" (buffer-string))
+        nil))))
 
 (defun git-gutter+-get-diff-header ()
   (save-excursion
@@ -331,12 +333,15 @@ calculated width looks wrong. (This can happen with some special characters.)"
   :lighter    git-gutter+-lighter
   (if git-gutter+-mode
       (if (and (git-gutter+-file-buffer-p)
+               (not (file-symlink-p (buffer-file-name)))
                (git-gutter+-in-git-repository-p (buffer-file-name)))
           (progn
             (git-gutter+-add-local-hooks)
             (git-gutter+-refresh))
         (if (called-interactively-p 'any)
-            (message "No Git repo for current buffer"))
+            (message (if (and (buffer-file-name) (file-symlink-p (buffer-file-name)))
+                         "Symlinked files are not supported by Git-Gutter+"
+                       "No Git repo for current buffer")))
         (git-gutter+-mode -1))
     (git-gutter+-remove-local-hooks)
     (git-gutter+-clear)))
@@ -436,13 +441,15 @@ calculated width looks wrong. (This can happen with some special characters.)"
   (remove-overlays (point-min) (point-max) 'git-gutter+ t))
 
 (defun git-gutter+-process-diff (curfile)
-  (destructuring-bind
-      (diff-header diffinfos) (git-gutter+-diff curfile)
-    (setq git-gutter+-diff-header diff-header
-          git-gutter+-diffinfos   diffinfos)
-    (save-restriction
-      (widen)
-      (funcall git-gutter+-view-diff-function diffinfos))))
+  (let ((diff-result (git-gutter+-diff curfile)))
+    (when diff-result
+      (destructuring-bind
+          (diff-header diffinfos) diff-result
+        (setq git-gutter+-diff-header diff-header
+              git-gutter+-diffinfos   diffinfos)
+        (save-restriction
+          (widen)
+          (funcall git-gutter+-view-diff-function diffinfos))))))
 
 (defun git-gutter+-search-near-diff-index (diffinfos is-reverse)
   (loop with current-line = (line-number-at-pos)
@@ -665,13 +672,29 @@ calculated width looks wrong. (This can happen with some special characters.)"
                                 (1+ (- start-line diff-start-line))
                                 (1+ (- end-line diff-start-line)))))))
 
+(unless (fboundp 'tramp-sh-handle-call-process-region)
+  (defun tramp-sh-handle-call-process-region
+    (start end program &optional delete buffer display &rest args)
+    "Like `call-process-region', for Tramp files."
+    (let ((tmpfile (tramp-compat-make-temp-file "")))
+      (write-region start end tmpfile)
+      (when delete (delete-region start end))
+      (unwind-protect
+          (apply 'process-file program tmpfile buffer display args)
+        (delete-file tmpfile)))))
+
 (defun git-gutter+-call-git-on-current-buffer (args)
   "Sends the current buffer contents to Git and replaces them with Git's output.
 
  RETURNS nil if Git ran successfully. Returns an error description otherwise."
-  (unless (zerop (apply #'call-process-region (point-min) (point-max)
-                        git-gutter+-git-executable t t nil args))
-    (buffer-string)))
+  (let ((call-process-region-func
+         (if (eq (tramp-find-foreign-file-name-handler default-directory)
+                 'tramp-sh-file-name-handler)
+             #'tramp-sh-handle-call-process-region
+           #'call-process-region)))
+    (unless (zerop (apply call-process-region-func (point-min) (point-max)
+                          git-gutter+-git-executable t t nil args))
+      (buffer-string))))
 
 (defsubst git-gutter+-read-hunk-header (hunk)
   ;; @@ -{del-line},{del-len} +{add-line},{add-len} @@
@@ -1036,7 +1059,7 @@ set remove it."
   ;; that's incompatible with `git-gutter+-commit-mode'.
   (setq font-lock-defaults (list (git-commit-mode-font-lock-keywords) t))
   (set (make-local-variable 'font-lock-multiline) t)
-  (git-commit-font-lock-diff)
+  (git-commit-propertize-diff)
   (setq fill-column git-commit-fill-column)
   ;; Recognize changelog-style paragraphs
   (set (make-local-variable 'paragraph-start)

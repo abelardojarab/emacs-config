@@ -1,11 +1,11 @@
-;;; flycheck-tip.el --- show flycheck's error by popup-tip
+;;; flycheck-tip.el --- Show flycheck/flymake errors by tooltip -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013 by Yuta Yamada
 
 ;; Author: Yuta Yamada <cokesboy"at"gmail.com>
 ;; URL: https://github.com/yuutayamada/flycheck-tip
 ;; Version: 0.0.1
-;; Package-Requires: ((flycheck "0.13") (dash "1.2") (emacs "24.1") (popup "0.5.0") (s "1.9.0"))
+;; Package-Requires: ((flycheck "0.13") (emacs "24.1") (popup "0.5.0"))
 ;; Keywords: flycheck
 
 ;;; License:
@@ -23,15 +23,28 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; see readme.md
-
+;; Usage:
+;; Basic setting
+;;
+;;   (require 'flycheck-tip)
+;;   (define-key your-prog-mode (kbd "C-c C-n") 'flycheck-tip-cycle)
+;;
+;; If you are still using flymake, you can use combined function that
+;; show error by popup in flymake-mode or flycheck-mode.
+;;
+;;   (define-key global-map (kbd "C-0") 'error-tip-cycle-dwim)
+;;   (define-key global-map (kbd "C-9") 'error-tip-cycle-dwim-reverse)
+;;
+;; If you build Emacs with D-Bus option, you may configure following setting.
+;; This keeps the errors on notification area. Please check
+;; ‘error-tip-notify-timeout’ to change limit of the timeout as well.
+;;
+;;   (setq error-tip-notify-keep-messages t)
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 (require 'flycheck)
 (require 'error-tip)
-(require 'popup)
-(require 's)
 
 (defvaralias 'flycheck-tip-timer-delay 'error-tip-timer-delay
   "Alias of `error-tip-timer-delay'.")
@@ -74,14 +87,6 @@ Move to previous error if REVERSE is non-nil."
       nil
     ad-do-it))
 
-(defun flycheck-tip-display-current-line-error-message (errors)
-  "Show current line's ERRORS by popup."
-  (error-tip-delete-popup)
-  (lexical-let
-      ((current-line-errors (-keep #'flycheck-error-message errors)))
-    (when current-line-errors
-      (popup-tip (format "*%s" (s-join "\n*" current-line-errors))))))
-
 (defun flycheck-tip-use-timer (order)
   "You can set 'normal, 'verbose or nil to ORDER.
 The normal means, use error popup and using timer or not is configurable.
@@ -89,7 +94,7 @@ The verbose means, use error popup and popup current-line error if it's exists
 after `error-tip-timer-delay' seconds.
 If you set nil, show popup error immediately after you invoke flycheck-tip-cycle
 or flycheck-tip-cycle-reverse."
-  (case order
+  (cl-case order
     (normal
      (setq flycheck-tip-avoid-show-func t))
     (verbose

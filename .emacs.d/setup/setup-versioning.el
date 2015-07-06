@@ -47,6 +47,7 @@
 
 ;; git
 (add-to-list 'load-path "~/.emacs.d/git-modes")
+(add-to-list 'load-path "~/.emacs.d/git-commit")
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 (add-to-list 'load-path "~/.emacs.d/git-gutter-plus")
 (add-to-list 'load-path "~/.emacs.d/git-gutter-fringe-plus")
@@ -56,6 +57,7 @@
   '(progn (info-initialize)
           (add-to-list 'Info-directory-list "~/.emacs.d/magit/")))
 
+(require 'git-commit)
 (require 'magit)
 (require 'setup-magit)
 (require 'git-gutter-fringe+)

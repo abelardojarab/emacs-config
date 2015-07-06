@@ -1,4 +1,4 @@
-;;; error-tip.el --- showing error library by popup.el
+;;; error-tip.el --- showing error library by popup.el -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 by Yuta Yamada
 
@@ -25,12 +25,23 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 (require 'popup)
+(require 'notifications) ; this introduced from Emacs 24
 
 (autoload 'flycheck-tip-cycle "flycheck-tip")
 (autoload 'flymake-tip-cycle "flymake-tip")
 (autoload 'eclim-tip-cycle "eclim-tip")
+
+(defvar error-tip-notify-keep-messages nil
+  "If the value is non-nil, keep error messages to notification area.
+This feature only activates when you leave from popup's message.")
+
+(defvar error-tip-notify-last-notification nil
+  "Last notification id.")
+
+(defvar error-tip-notify-timeout (* 60 1000)
+  "Value for time out.  The default value is 1 minute.")
 
 ;; INTERNAL VARIABLE
 (defvar error-tip-popup-object nil)
@@ -45,7 +56,7 @@ If you set nil to this variable, then do not use delay timer.")
 (defun error-tip-cycle (errors &optional reverse)
   (error-tip-delete-popup)
   (when errors
-    (lexical-let*
+    (let*
         ((next     (assoc-default :next         errors))
          (previous (assoc-default :previous     errors))
          (cur-line (assoc-default :current-line errors))
@@ -65,73 +76,76 @@ If you set nil to this variable, then do not use delay timer.")
 (defun error-tip-get (err element)
   (cond
    ((bound-and-true-p flycheck-mode)
-    (case element
+    (cl-case element
       (line    (elt err 4))
       (file    (elt err 3))
       (message (elt err 6))))
    ((bound-and-true-p eclim-mode)
-    (case element
+    (cl-case element
       (line    (assoc-default 'line     err))
       (file    (assoc-default 'filename err))
       (message (assoc-default 'message  err))))))
 
 (defun error-tip-collect-current-file-errors (errors)
   "Collect errors from ERRORS."
-  (loop with c-line = (line-number-at-pos (point))
-        with next and previous and current-line
-        for err in errors
-        for err-line = (error-tip-get err 'line)
-        if (and buffer-file-truename ; whether file or buffer
-                (not (equal (expand-file-name buffer-file-truename)
-                            (error-tip-get err 'file))))
-        do '() ; skip
-        else if (< c-line err-line)
-        collect err into next
-        else if (> c-line err-line)
-        collect err into previous
-        else if (= c-line err-line)
-        collect err into current-line
-        finally return (when (or next previous current-line)
-                         (list (cons :next         next)
-                               (cons :previous     previous)
-                               (cons :current-line current-line)))))
+  (cl-loop with c-line = (line-number-at-pos (point))
+           for err in errors
+           for err-line = (error-tip-get err 'line)
+           if (and buffer-file-truename ; whether file or buffer
+                   (not (equal (expand-file-name buffer-file-truename)
+                               (error-tip-get err 'file))))
+           do '() ; skip
+           else if (< c-line err-line)
+           collect err into next
+           else if (> c-line err-line)
+           collect err into previous
+           else if (= c-line err-line)
+           collect err into current-line
+           finally return (when (or next previous current-line)
+                            (list (cons :next         next)
+                                  (cons :previous     previous)
+                                  (cons :current-line current-line)))))
 
 (defun error-tip-popup-error-message (errors)
   "Popup error message(s) from ERRORS.
 If there are multiple errors on current line, all current line's errors are
 appeared."
   (setq error-tip-popup-object
-        (popup-tip (error-tip-format errors) :nowait t))
+        (popup-tip (error-tip-format errors) :nowait t :point (error-tip-get-point)))
   (add-hook 'pre-command-hook 'error-tip-delete-popup))
+
+(defun error-tip-get-point ()
+  "Return point where the popup message emerges."
+  (1+ (point-at-bol)))
 
 (defun error-tip-format (errors)
   "Format ERRORS."
-  (lexical-let ((messages (format "*%s" (mapconcat 'identity errors "\n*"))))
+  (let ((messages (format "*%s" (mapconcat 'identity errors "\n*"))))
     (if error-tip-newline-character
         (replace-regexp-in-string error-tip-newline-character "\n" messages)
       messages)))
 
 (defun error-tip-get-errors ()
   "Get errors."
-  (loop with result and fallback
-        with current-line = (line-number-at-pos (point))
-        for error in error-tip-current-errors
-        for e-line = (error-tip-get error 'line)
-        for e-str  = (error-tip-get error 'message)
-        if (or (equal current-line e-line)
-               (and (equal 1 current-line)
-                    (equal 0 e-line)))
-        collect e-str into result
-        else if (and (< (- 1 current-line) e-line)
-                     (> (+ 1 current-line) e-line))
-        collect e-str into fallback
-        finally return (or result fallback)))
+  (cl-loop with current-line = (line-number-at-pos (point))
+           for error in error-tip-current-errors
+           for e-line = (error-tip-get error 'line)
+           for e-str  = (error-tip-get error 'message)
+           if (or (equal current-line e-line)
+                  (and (equal 1 current-line)
+                       (equal 0 e-line)))
+           collect e-str into result
+           else if (and (< (- 1 current-line) e-line)
+                        (> (+ 1 current-line) e-line))
+           collect e-str into fallback
+           finally return (or result fallback)))
 
 (defun error-tip-delete-popup ()
   "Delete popup object."
   (condition-case err
       (when (popup-live-p error-tip-popup-object)
-        (popup-delete error-tip-popup-object))
+        (popup-delete error-tip-popup-object)
+        (when error-tip-notify-keep-messages (error-tip-notify)))
     (error err))
   (remove-hook 'pre-command-hook 'error-tip-delete-popup))
 
@@ -168,6 +182,18 @@ This function can catch error against flycheck, flymake and emcas-eclim."
 (defun error-tip-cycle-dwim-reverse ()
   (interactive)
   (error-tip-cycle-dwim t))
+
+;; Show errors by using notifications.el(D-Bus)
+(defun error-tip-notify ()
+  "Keep ERROR-MESSAGES on notification area.
+See also ‘error-tip-notify-keep-messages’"
+  (setq error-tip-notify-last-notification
+        (notifications-notify
+         :title "flycheck-tip"
+         :body  (format "%s" (error-tip-format (error-tip-get-errors)))
+         :category "im.error"
+         :replaces-id error-tip-notify-last-notification
+         :timeout error-tip-notify-timeout)))
 
 (provide 'error-tip)
 

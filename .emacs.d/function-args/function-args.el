@@ -1,10 +1,11 @@
-;;; function-args.el --- C++ completion for GNU Emacs
+;;; function-args.el --- C++ completion for GNU Emacs -*- lexical-binding: t -*-
 
-;; Copyright (C) 2013  Oleh Krehel
+;; Copyright (C) 2013-2014  Oleh Krehel
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/function-args
-;; Version: 0.5.0
+;; Version: 0.5.1
+;; Package-Requires: ((swiper "0.2.0"))
 
 ;; This file is not part of GNU Emacs
 
@@ -52,58 +53,80 @@
 
 (defgroup function-args-faces nil
   "Font-lock faces for `function-args'."
-  :group 'function-args
   :prefix "fa-")
 
 (defcustom fa-hint-position-below nil
   "Non-nil means hint will be shown below point (instead of above)."
-  :type 'boolean
-  :group 'function-args)
+  :type 'boolean)
 
 (defcustom fa-max-one-line-width 60
   "Max hint size that can be displayed on one line."
-  :type 'integer
-  :group 'function-args)
+  :type 'integer)
 
-(defcustom moo-select-method 'helm
+(defcustom moo-select-method 'ivy
   "Method to select a candidate from a list of strings."
   :type '(choice
+          (const :tag "Ivy" ivy)
           (const :tag "Helm" helm)
           (const :tag "Helm fuzzy" helm-fuzzy)
-          (const :tag "Plain" display-completion-list))
-  :group 'function-args)
+          (const :tag "Plain" display-completion-list)))
 
 (defcustom fa-insert-method 'name
   "How to insert a function completed with `moo-complete'."
   :type '(choice
           (const :tag "Name only" name)
           (const :tag "Name and parens" name-and-parens)
-          (const :tag "Name and parens and hint" name-and-parens-and-hint))
-  :group 'function-args)
+          (const :tag "Name and parens and hint" name-and-parens-and-hint)))
+
+(defconst fa-hint-dark-color "gray20")
 
 (defface fa-face-hint
-    '((t (:background "#fff3bc" :foreground "black")))
+    `((((class color) (background light))
+       :inherit 'default :background "#fff3bc")
+      (((class color) (background dark))
+       :background ,fa-hint-dark-color))
   "Basic hint face."
   :group 'function-args-faces)
 
 (defface fa-face-hint-bold
-    '((t (:background "#fff3bc" :bold t)))
+  '((t (:inherit fa-face-hint :bold t)))
   "Basic hint face with bold font. Bold is used to signify the current element."
   :group 'function-args-faces)
 
 (defface fa-face-type
-    '((t (:inherit 'font-lock-type-face :background "#fff3bc")))
+    `((((class color) (background light))
+       :inherit 'font-lock-type-face :background "#fff3bc")
+      (((class color) (background dark))
+       :inherit 'font-lock-type-face :background ,fa-hint-dark-color))
   "Face for displaying types."
   :group 'function-args-faces)
 
 (defface fa-face-type-bold
-    '((t (:inherit 'font-lock-type-face :background "#fff3bc" :bold t)))
+    '((t (:inherit 'fa-face-type :bold t)))
   "Face for displaying types. Bold is used to signify the current element"
   :group 'function-args-faces)
 
 (defface fa-face-semi
-    '((t (:foreground "#2a00ff" :background "#fff3bc" :bold t)))
+    '((((class color) (background light))
+       :inherit fa-face-hint-bold
+       :foreground "#2a00ff")
+      (((class color) (background dark))
+       :inherit fa-face-hint-bold
+       :foreground "white"))
   "Face for displaying separators."
+  :group 'function-args-faces)
+
+(defface fa-face-type-definition
+    `((((class color) (background light))
+      :inherit font-lock-type-face :background "#CECEFF")
+     (((class color) (background dark))
+      :inherit font-lock-type-face :background ,fa-hint-dark-color))
+  "Face for type definitions."
+  :group 'function-args-faces)
+
+(defface fa-face-type-compound
+  '((t (:inherit font-lock-type-face)))
+  "Face for compound types."
   :group 'function-args-faces)
 
 (defconst fa-paren-open (propertize "(" 'face 'fa-face-semi)
@@ -134,6 +157,15 @@
   (if function-args-mode
       (semantic-mode 1)))
 
+(defvar fa-idx nil
+  "Current function arguments variant.")
+
+(defvar fa-lst nil
+  "Current function arguments variants.")
+
+(defvar fa-arg 0
+  "Current function argument.")
+
 (defun fa-idx-cycle-down ()
   "Cycle `fa-idx' down and redisplay function arguments."
   (interactive)
@@ -159,6 +191,9 @@
   (define-key map (kbd "M-j") 'fa-jump-maybe)
   (define-key map (kbd "C-M-j") 'moo-jump-local))
 
+(defvar fa-overlay nil
+  "Hint overlay instance.")
+
 (defun fa-jump-maybe ()
   "Jump to definition if `fa-show' overlay is active.
 Otherwise, call `c-indent-new-comment-line' that's usually bound to \"M-j\"."
@@ -178,9 +213,6 @@ Otherwise, call `c-indent-new-comment-line' that's usually bound to \"M-j\"."
   (add-hook 'c-mode-hook 'turn-on-function-args-mode))
 
 ;; ——— Internal variables ——————————————————————————————————————————————————————
-(defvar fa-overlay nil
-  "Hint overlay instance.")
-
 (defvar fa-hint-pos nil
   "Point position where the hint should be (re-) displayed.")
 
@@ -189,15 +221,6 @@ Otherwise, call `c-indent-new-comment-line' that's usually bound to \"M-j\"."
 
 (defvar fa-end-pos nil
   "Position of ) after `fa-start-tracking' was invoked.")
-
-(defvar fa-lst nil
-  "Current function arguments variants.")
-
-(defvar fa-arg 0
-  "Current function argument.")
-
-(defvar fa-idx nil
-  "Current function arguments variant.")
 
 (defvar fa-superclasses (make-hash-table :test 'equal)
   "Stores superclasses tags.")
@@ -305,38 +328,6 @@ When ARG is not nil offer only variables as candidates."
          (cl-delete-duplicates candidates :test #'moo-tag=))
       ;; ———  ————————————————————————————————————————————————————————————————————————
       (semantic-ia-complete-symbol (point)))))
-
-(defun moo-propose-virtual ()
-  "Call `moo-propose' for virtual functions."
-  (interactive)
-  (moo-propose (fa-and moo-functionp moo-virtualp)))
-
-(defun moo-propose-override ()
-  "Call `moo-propose' for all functions."
-  (interactive)
-  (moo-propose #'moo-functionp))
-
-(defun moo-propose-variables ()
-  "Call `moo-propose' for all variables."
-  (interactive)
-  (moo-propose #'moo-variablep))
-
-(defun moo-jump-local ()
-  "Select a tag to jump to from tags defined in current buffer."
-  (interactive)
-  (let ((tags (semantic-fetch-tags)))
-    (moo-select-candidate
-     (if (memq major-mode '(c++-mode c-mode))
-         (mapcar
-          (lambda (x) (cons x (moo-tag->str x)))
-          (moo-flatten-namepaces tags))
-       tags)
-     #'moo-action-jump)))
-
-(defun moo-reset-superclasses-cache ()
-  "Reset `fa-superclasses'."
-  (interactive)
-  (setq fa-superclasses (make-hash-table :test 'equal)))
 
 ;; ——— Predicates ——————————————————————————————————————————————————————————————
 (defmacro fa-and (&rest predicates)
@@ -522,6 +513,26 @@ When ARG is not nil offer only variables as candidates."
               (semantic-tag-get-attribute type :members))))
    types-list))
 
+(defcustom fa-do-comments nil
+  "When non-nil, try to add the declaration comment to the overlay.")
+
+(defun fa-get-comment (x)
+  "Try to extract the declaration comment from X.
+X is an element of `fa-lst'."
+  (let* ((file-and-pos (nth 2 (car x)))
+         (file (car file-and-pos))
+         (pos (cdr file-and-pos)))
+    (with-current-buffer (find-file-noselect file)
+      (save-excursion
+        (goto-char pos)
+        (cond ((looking-back "\\(\\*/\\)\n*")
+               (goto-char (match-end 1))
+               (let ((end (point)))
+                 (comment-search-backward (point-min) t)
+                 (buffer-substring
+                  (point)
+                  (- end 2)))))))))
+
 ;; ——— Pretty priting ——————————————————————————————————————————————————————————
 (defun fa-fancy-string (wspace)
   "Return the string that corresponds to (nth fa-idx fa-lst).
@@ -534,6 +545,7 @@ WSPACE is the padding."
               (format "[%d of %d] " (+ fa-idx 1) (length fa-lst))
             ""))
          (padding-length (- wspace (+ 1 (length n-string))))
+         (padder (when (> padding-length 0) (make-string padding-length ?\ )))
          (str-width (+ (apply #'+ (mapcar (lambda (x) (+ (length (car x))
                                                          (length (cdr x))))
                                           (cdr lst)))
@@ -547,12 +559,22 @@ WSPACE is the padding."
                  fa-comma))
          (args (mapcar #'fa-fancy-argument
                        (cdr lst)))
-         (args-current-cdr (nthcdr fa-arg args)))
+         (args-current-cdr (nthcdr fa-arg args))
+         comment)
     (when args-current-cdr
       (setcar args-current-cdr
               (fa-fancy-argument (nth fa-arg (cdr lst)) t)))
     (concat
-     (when (> padding-length 0) (make-string padding-length ?\ ))
+     (if (or (null fa-do-comments)
+             (null (setq comment (fa-get-comment lst))))
+         ""
+       (concat
+        (mapconcat (lambda (x)
+                     (concat " " padder x))
+                   (split-string comment "\n")
+                   "\n")
+        "\n"))
+     padder
      (propertize n-string 'face 'fa-face-hint-bold)
      " "
      fa-paren-open
@@ -563,16 +585,19 @@ WSPACE is the padding."
      ;; name
      (and (cadar lst) (propertize (cadar lst) 'face 'fa-face-type)))))
 
-(defun fa-fancy-argument (cell &optional bold)
-  "Return string representation for CELL.
-CELL is (TYPE . NAME).
+(defun fa-fancy-argument (cel &optional bold)
+  "Return string representation for CEL.
+CEL is (TYPE . NAME).
 Select bold faces when BOLD is t."
-  (concat
-   (propertize (car cell) 'face
-               (if bold 'fa-face-type-bold 'fa-face-type))
-   (propertize " " 'face 'fa-face-hint)
-   (propertize (cdr cell) 'face
-               (if bold 'fa-face-hint-bold 'fa-face-hint))))
+  (if (= (length (cdr cel)) 0)
+      (propertize (car cel) 'face
+                  (if bold 'fa-face-type-bold 'fa-face-type))
+    (concat
+     (propertize (car cel) 'face
+                 (if bold 'fa-face-type-bold 'fa-face-type))
+     (propertize " " 'face 'fa-face-hint)
+     (propertize (cdr cel) 'face
+                 (if bold 'fa-face-hint-bold 'fa-face-hint)))))
 
 (defun fa-tfunction->fal (tag &optional output-string)
   "Return function argument list structure for TAG.
@@ -644,8 +669,8 @@ It has the structure: (template type (file . position) arguments)."
                'font-lock-keyword-face))
          (if constructor-flag-p
              ""
-           return-type)
-         " " (propertize name 'face 'font-lock-function-name-face)
+           (concat return-type " "))
+         (propertize name 'face 'font-lock-function-name-face)
          "("
          (mapconcat (lambda (x) (concat (car x) " " (cdr x)))
                     argument-conses
@@ -723,20 +748,26 @@ TYPE and NAME are strings."
                   (function
                    (fa-tfunction->fal tag t))
                   (variable
-                   (let ((type (semantic-tag-type tag)))
+                   (let ((type (semantic-tag-type tag))
+                         (face 'font-lock-type-face)
+                         pointer-depth)
                      (cond ((consp type)
-                            (setq type (car type)))
+                            (setq type (car type))
+                            (setq face 'fa-face-type-compound))
                            ((null type)
                             (setq type "#define")))
                      (format "%s%s%s %s"
                              (if (semantic-tag-get-attribute tag :constant-flag)
                                  (propertize "const " 'face 'font-lock-keyword-face)
                                "")
-                             (propertize type 'face 'font-lock-type-face)
-                             (if (semantic-tag-get-attribute tag :pointer) "*" "")
+                             (propertize type 'face face)
+                             (if (setq pointer-depth (semantic-tag-get-attribute tag :pointer))
+                                 (make-string pointer-depth ?*)
+                               "")
                              (propertize (car tag) 'face 'font-lock-variable-name-face))))
                   (type
-                   (propertize (car tag) 'face 'font-lock-type-face))
+                   (propertize (car tag) 'face
+                               'fa-face-type-definition))
                   (label)
                   (include
                    (format "%s <%s>"
@@ -755,6 +786,46 @@ TYPE and NAME are strings."
        str))))
 
 ;; ——— Misc non-pure ———————————————————————————————————————————————————————————
+(defun moo-propose-virtual ()
+  "Call `moo-propose' for virtual functions."
+  (interactive)
+  (moo-propose (fa-and moo-functionp moo-virtualp)))
+
+(defun moo-propose-override ()
+  "Call `moo-propose' for all functions."
+  (interactive)
+  (moo-propose #'moo-functionp))
+
+(defun moo-propose-variables ()
+  "Call `moo-propose' for all variables."
+  (interactive)
+  (moo-propose #'moo-variablep))
+
+(defun moo-jump-local ()
+  "Select a tag to jump to from tags defined in current buffer."
+  (interactive)
+  (let* ((tags (semantic-fetch-tags))
+         (preselect (moo-tag->str (semantic-current-tag)))
+         (preselect (when (stringp preselect)
+                      (regexp-quote preselect))))
+    (moo-select-candidate
+     (if (memq major-mode '(c++-mode c-mode))
+         (delq nil
+               (mapcar
+                (lambda (x)
+                  (let ((s (moo-tag->str x)))
+                    (when s
+                      (cons s x))))
+                (moo-flatten-namepaces tags)))
+       tags)
+     #'moo-action-jump
+     preselect)))
+
+(defun moo-reset-superclasses-cache ()
+  "Reset `fa-superclasses'."
+  (interactive)
+  (setq fa-superclasses (make-hash-table :test 'equal)))
+
 (defun fa-do-position ()
   "Position the cursor at the `(', which is logically closest."
   (cond
@@ -890,7 +961,7 @@ PARAMS are passed further to `moo-action-insert'."
   "Return for TAG a cons (TAG . STR).
 STR is the result of `moo-tag->str' on TAG,
 NAME is the TAG name."
-  (cons tag (moo-tag->str tag)))
+  (cons (moo-tag->str tag) tag))
 
 (defun moo-action-insert (candidate formatter &optional prefix)
   "Insert tag CANDIDATE.
@@ -919,42 +990,42 @@ When PREFIX is not nil, erase it before inserting."
         (t
          (error "Unexpected"))))
 
-(defun moo-select-candidate (candidates action &optional name)
-  (setq name (or name "Candidates"))
-  (if (eq moo-select-method 'display-completion-list)
-      (with-output-to-temp-buffer "*Completions*"
-        (display-completion-list
-         (all-completions "" (mapcar #'caar candidates))))
+(defun moo-select-candidate (candidates action &optional preselect)
+  (cond ((eq moo-select-method 'display-completion-list)
+         (with-output-to-temp-buffer "*moo-jump*"
+           (display-completion-list
+            (all-completions "" candidates))))
 
-    (let ((candidates
-           (delq nil (mapcar
-                      (lambda (x)
-                        (if (listp x)
-                            (if (stringp (cdr x))
-                                (cons (cdr x) (car x))
-                              (when (stringp (car x))
-                                (cons (car x) x)))
-                          x))
-                      candidates)))
-          (preselect
-           (regexp-quote (or (moo-tag->str (semantic-current-tag))
-                             ""))))
-      (require 'helm)
-      (require 'helm-help)
-      (cl-case moo-select-method
-        (helm
+        ((eq moo-select-method 'ivy)
+         (require 'ivy)
+         (let ((ivy-height 20))
+           (ivy-read "tag: " candidates
+                     :preselect preselect
+                     :action (lambda (x)
+                               (funcall
+                                action (cdr (assoc x candidates)))))))
+
+        ((prog1 (eq moo-select-method 'helm)
+           (require 'helm)
+           (require 'helm-help)
+           (require 'helm-source))
          (helm :sources
-               `((name . ,name)
+               `((name . "semantic tags")
                  (candidates . ,candidates)
                  (action . ,action))
-               :preselect preselect))
-        (helm-fuzzy
+               :preselect preselect
+               :buffer "*moo-jump*"))
+
+        ((eq moo-select-method 'helm-fuzzy)
          (helm :sources
-               (helm-build-sync-source name
+               (helm-build-sync-source "semantic tags"
                  :candidates candidates
                  :fuzzy-match t
                  :action action)
-               :preselect preselect))))))
+               :preselect preselect
+               :buffer "*moo-jump*"))
+        (t
+         (error "Bad `moo-select-method': %S" moo-select-method))))
 
 (defun moo-action-jump (tag)
   (when (semantic-tag-p tag)
@@ -1567,6 +1638,36 @@ At least what the syntax thinks is a list."
     (and (or (semantic-tag-with-position-p first)
              (semantic-tag-get-attribute first :line))
          (semantic-tag-file-name first))))
+
+(defun moo-doxygen ()
+  "Generate a doxygen yasnippet and expand it with `aya-expand'.
+The point should be on the top-level function name."
+  (interactive)
+  (move-beginning-of-line nil)
+  (let ((tag (semantic-current-tag)))
+    (unless (semantic-tag-of-class-p tag 'function)
+      (error "Expected function, got %S" tag))
+    (let* ((name (semantic-tag-name tag))
+           (attrs (semantic-tag-attributes tag))
+           (args (plist-get attrs :arguments))
+           (ord 1))
+      (setq aya-current
+            (format
+             "/**
+* $1
+*
+%s
+* @return $%d
+*/
+"
+             (mapconcat
+              (lambda (x)
+                (format "* @param %s $%d"
+                        (car x) (incf ord)))
+              args
+              "\n")
+             (incf ord)))
+      (aya-expand))))
 
 (provide 'function-args)
 
