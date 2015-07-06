@@ -21,3 +21,5 @@
     setenv no_proxy intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,127.0.0.0/8,134.134.0.0/16
     setenv GIT_PROXY_COMMAND /nfs/pdx/home/ajaraber/bin/gitproxy
     setenv GDK_NATIVE_WINDOWS 1
+
+    source /p/foundry/env/startup/envrc.tcsh
