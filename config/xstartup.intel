@@ -1,0 +1,74 @@
+#!/bin/sh
+# EC Standard Login Environment
+# user vnc xstartup file
+# $Source: /usr/cvs/cvsrep/ec_environ-1.0/release/user/vnc/xstartup,v $
+# $Revision: 1.10 $
+
+# hint to .xsession for vnc-specific controls
+VNCSESSION=1 export VNCSESSION
+unset SESSION_MANAGER
+unset XDG_RUNTIME_DIR
+unset DBUS_SESSION_BUS_ADDRESS
+export XKL_XMODMAP_DISABLE=1
+
+[ -r ~/.Xresources] && xrdb -merge ~/.Xresources
+
+# ssh agent startup is in a global file;
+# uncomment this line to disable and do
+# your own agent management
+# EC_X_NO_SSHAGENT=1
+
+# execute global setup provided by EC
+if [ -r $EC_ENV_ROOT/ec/vnc/xstartup ]; then
+    . $EC_ENV_ROOT/ec/vnc/xstartup
+fi
+
+###
+### change the order of these or comment
+### any of them to disable; session will
+### use the first available
+###
+
+# NOTE THAT EC CURRENTLY SUPPORTS FVWM2 ONLY
+# because it is available and known to work
+# consistently on all platforms.
+#
+# Use of gnome/kde/whatever is at your discretion
+# and EC will not provide your base configuration
+# nor answer configuration questions.
+
+## traditional xdm/xinit/startx style
+vncsession=$HOME/.xinitrc
+[ -r $vncsession ] && exec $vncsession
+
+# CDE (HP/Sun)
+#vncsession=/usr/dt/bin/dtsession
+#[ -r $vncsession ] && exec $vncsession
+
+# KDE (linux)
+#
+#    CAUTION: as of this writing, KDE maintains one
+#    set of control files in your home and cannot
+#    cleanly run two kdesktop sessions simultaneously.
+#    For this reason, do not try to run KDE in two VNC
+#    sessions, nor one at a workstation console and
+#    another through VNC.
+#
+#vncsession=/usr/bin/startkde #redhat
+#vncsession=/opt/kde3/bin/startkde #SLES
+#[ -r $vncsession ] && exec $vncsession
+
+# Gnome (linux)
+# vncsession=/usr/bin/gnome-session #redhat
+#vncsession=/opt/gnome/gnome-session #SLES
+#[ -r $vncsession ] && exec $vncsession
+
+## section added by intelpedia.intel.com/KDE ##
+#[ -r /usr/bin/startkde  ] && vncsession=/usr/bin/startkde
+#[ -r /opt/kde3/bin/startkde ] && vncsession=/opt/kde3/bin/startkde
+#[ -z $vncsession ] && vncsession=$HOME/.xinitrc
+#[ -r $vncsession ] && exec $vncsession
+
+# basic defaults run if above choices failed
+#xsetroot -solid gray
+#xterm -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &

@@ -13,7 +13,7 @@
     setenv EC_DISABLE_VAL 1
     setenv NODE_PATH  ${HOME}/workspace/builds/nodejs/lib/node_modules
     setenv CAMDEXGT_CAD_ROOT ${HOME}/camdex/data
-    setenv PYTHONPATH ${HOME}/pythonlibs/lib/python2.7/site-packages
+    setenv PYTHONPATH ${HOME}/workspace/pythonlibs/lib/python2.7/site-packages
     setenv _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
     setenv http_proxy http://proxy-chain.intel.com:911
     setenv https_proxy http://proxy-chain.intel.com:911
