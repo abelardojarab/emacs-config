@@ -266,18 +266,9 @@
 (eval-after-load "hideshow"
   '(hs-minor-mode-settings))
 
-;; Yafolding
-(add-to-list 'load-path "~/.emacs.d/yafolding")
-(when (require 'yafolding nil 'noerror)
-  (add-hook 'prog-mode-hook
-            (lambda () (yafolding-mode t)))
-  (define-key yafolding-mode-map (kbd "<C-S-return>") nil)
-  (define-key yafolding-mode-map (kbd "<C-return>") nil)
-  (define-key yafolding-mode-map (kbd "C-c <C-S-return>") 'yafolding-toggle-all)
-  (define-key yafolding-mode-map (kbd "C-c <C-return>") 'yafolding-toggle-element))
-
-;; Indent Hint
-;; (require 'indent-hint)
+;; Origami
+(add-to-list 'load-path "~/.emacs.d/origami")
+(require 'origami)
 
 (provide 'setup-hideshow)
 ;;; setup-hideshow.el ends here

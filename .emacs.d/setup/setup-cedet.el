@@ -24,20 +24,15 @@
 
 ;;; Code:
 
-;; Make a #define be left-aligned
-(setq c-electric-pound-behavior (quote (alignleft)))
-
 ;; Enable Semantic
 (require 'semantic/ia)
 (require 'semantic/wisent)
 (setq semantic-default-submodes
       '(global-semanticdb-minor-mode
-        global-semantic-idle-summary-mode
         global-semantic-tag-folding-mode))
 (semantic-mode 1)
-(global-semantic-idle-completions-mode)
 (set-default 'semantic-case-fold t)
-(semantic-load-enable-code-helpers) ;; Enable prototype help and smart completion
+(semantic-load-enable-minimum-features)
 
 ;; Messages
 (add-hook 'semantic-before-idle-scheduler-reparse-hooks
@@ -53,7 +48,7 @@
 (setq semantic-idle-work-parse-neighboring-files-flag nil)
 (setq semantic-idle-work-update-headers-flag nil)
 (setq semantic-idle-scheduler-idle-time 432000)
-(setq semantic-idle-scheduler-work-idle-time 90)
+(setq semantic-idle-scheduler-work-idle-time 180)
 (setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Default directory
