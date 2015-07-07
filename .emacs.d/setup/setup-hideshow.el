@@ -276,5 +276,8 @@
   (define-key yafolding-mode-map (kbd "C-c <C-S-return>") 'yafolding-toggle-all)
   (define-key yafolding-mode-map (kbd "C-c <C-return>") 'yafolding-toggle-element))
 
+;; Indent Hint
+;; (require 'indent-hint)
+
 (provide 'setup-hideshow)
 ;;; setup-hideshow.el ends here
