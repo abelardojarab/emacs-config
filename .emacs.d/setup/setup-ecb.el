@@ -1,6 +1,6 @@
 ;;; setup-ecb.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -135,9 +135,9 @@ the layout contains no persistent compilation window and the other windows get a
 little more place."
   (ecb-set-sources-buffer)
   (ecb-split-ver 0.5)
-  (ecb-set-analyse-buffer)
-  (select-window (next-window (next-window)))
   (ecb-set-methods-buffer)
+  (select-window (next-window (next-window)))
+  (ecb-set-analyse-buffer)
   (ecb-split-ver 0.5)
   (ecb-set-symboldef-buffer)
   (select-window (previous-window (previous-window (selected-window) 0) 0)))
@@ -215,18 +215,18 @@ little more place. "
 
 ;; Pin and unpin the speedbar
 (defadvice speedbar-update-directory-contents
-  (around graphene-speedbar-pin-directory activate disable)
+    (around graphene-speedbar-pin-directory activate disable)
   "Pin the speedbar to the directory set in graphene-speedbar-pinned-directory."
   (let ((default-directory graphene-speedbar-pinned-directory))
     ad-do-it))
 
 (defadvice speedbar-dir-follow
-  (around graphene-speedbar-prevent-follow activate disable)
+    (around graphene-speedbar-prevent-follow activate disable)
   "Prevent speedbar changing directory on button clicks."
   (speedbar-toggle-line-expansion))
 
 (defadvice speedbar-directory-buttons-follow
-  (around graphene-speedbar-prevent-root-follow activate disable)
+    (around graphene-speedbar-prevent-root-follow activate disable)
   "Prevent speedbar changing root directory on button clicks.")
 
 (defvar graphene-speedbar-pin-advice
