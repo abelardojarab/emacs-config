@@ -33,7 +33,7 @@
 ;;       or, if -Q isn't supported
 ;;
 ;;     emacs -q --no-site-file -l cedet-build.el -f cedet-build
-
+(setq filename nil)
 
 ;;; Code:
 (defvar cedet-build-location
