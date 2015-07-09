@@ -8,7 +8,7 @@
 PATH="$PATH:/usr/X11R6/bin/"
 
 # The Username:Group that will run VNC
-export USER="abelardo"
+export USER="abelardojara"
 HOME="/home/$USER"
 
 #${RUNAS}
@@ -17,11 +17,11 @@ HOME="/home/$USER"
 DISPLAY="99"
 
 # Color depth (between 8 and 32)
-DEPTH=16
+DEPTH=24
 
 # The Desktop geometry to use.
 #GEOMETRY="<WIDTH>x<HEIGHT>"
-GEOMETRY="1900x1280"
+GEOMETRY="1920x1080"
 OPTIONS="-SecurityTypes=VncAuth -auth /home/${USER}/.Xauthority -depth ${DEPTH} -geometry ${GEOMETRY} :${DISPLAY}"
 
 case "$1" in
@@ -44,8 +44,8 @@ echo "[done]"
 stop)
 echo "Stoping vncserver for user '${USER}' on localhost:${DISPLAY}"
 su ${USER} -c "/usr/bin/vncserver -kill :${DISPLAY}"
-rm -rf /tmp/.X11-unix/X2
-rm -rf /tmp/.X2-lock
+rm -rf /tmp/.X11-unix/X${DISPLAY}
+rm -rf /tmp/.X${DISPLAY}-lock
 echo "[done]"
 ;;
 

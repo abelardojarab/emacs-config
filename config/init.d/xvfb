@@ -1,8 +1,10 @@
 #!/bin/bash
 #chkconfig: 345 95 50
-#description: Starts xvfb on display 1
+#description: Starts xvfb on display 98
 
-export USER="abelardo"
+export USER="abelardojara"
+DISPLAY="98"
+HOME="/home/$USER"
 
 if [ -z "$1" ]; then
 echo "`basename $0` {start|stop}"
@@ -11,8 +13,8 @@ fi
 
 case "$1" in
    start)
-        su $USER -c "xinit -- /usr/bin/Xvfb :1 -screen 0 1900x1280x24 -ac +extension GLX +render -noreset" &
-        su $USER -c "x11vnc -display :1 -bg -forever -rfbauth ~/.vnc/passwd" &
+        su $USER -c "xinit -- /usr/bin/Xvfb :${DISPLAY} -screen 0 1900x1280x24 -ac +extension GLX +render -noreset" &
+        su $USER -c "x11vnc -display :${DISPLAY} -bg -forever -rfbauth /home/${USER}/.vnc/passwd" &
 	e=$?
 	if [ $e -eq 1 ]; then
 	  echo "Server is already running."
@@ -23,14 +25,14 @@ case "$1" in
 	  echo "Server couldn't start."
 	  exit 1
 	fi
-	DISPLAY=:1 su $USER -c "x-window-manager" &
+	DISPLAY=:${DISPLAY} su $USER -c "x-window-manager" &
 	echo "[done]"
         ;;
    stop)
         killall x11vnc &
 	killall Xvfb &
-	rm -rf /tmp/.X11-unix/X1
-	rm -rf /tmp/.X1-lock
+	rm -rf /tmp/.X11-unix/X${DISPLAY}
+	rm -rf /tmp/.X${DISPLAY}-lock
 	echo "[done]"
         ;;
 
