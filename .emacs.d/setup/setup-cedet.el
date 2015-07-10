@@ -40,15 +40,11 @@
 (add-hook 'semantic-after-idle-scheduler-reparse-hooks
           (lambda () (message "Idle reparse...done")))
 
-;; Mouse-3
-(global-cedet-m3-minor-mode 1)
-(define-key cedet-m3-mode-map "\C-c " 'cedet-m3-menu-kbd)
-
 ;; Faster parsing
 (setq semantic-idle-work-parse-neighboring-files-flag nil)
 (setq semantic-idle-work-update-headers-flag nil)
-(setq semantic-idle-scheduler-idle-time 432000)
-(setq semantic-idle-scheduler-work-idle-time 180)
+(setq semantic-idle-scheduler-idle-time 180000)
+(setq semantic-idle-scheduler-work-idle-time 1800)
 (setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Default directory
@@ -76,7 +72,6 @@
 (add-hook 'c-mode-common-hook 'cc-mode-ac-key-bindings)
 
 ;; smart completions
-(require 'semantic/ia)
 (setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local lisp-mode semanticdb-find-default-throttle
@@ -89,6 +84,13 @@
                  '(project))
 (setq-mode-local js2-mode semanticdb-find-default-throttle
                  '(project))
+
+;; working with tags
+(semanticdb-enable-gnu-global-databases 'c-mode)
+(semanticdb-enable-gnu-global-databases 'c++-mode)
+(semanticdb-enable-gnu-global-databases 'lisp-mode)
+(semanticdb-enable-gnu-global-databases 'python-mode)
+(semanticdb-enable-gnu-global-databases 'js2-mode)
 
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
@@ -189,19 +191,11 @@
 (setq gdb-many-windows t
       gdb-max-frames 120)
 
-;; working with tags
-(semanticdb-enable-gnu-global-databases 'c-mode)
-(semanticdb-enable-gnu-global-databases 'c++-mode)
-(semanticdb-enable-gnu-global-databases 'lisp-mode)
-(semanticdb-enable-gnu-global-databases 'python-mode)
-(semanticdb-enable-gnu-global-databases 'js2-mode)
-
 ;; C/C++ style
 (defun my/c-mode-init ()
   (c-set-style "k&r")
   (c-toggle-electric-state -1)
   (setq c-basic-offset 4))
-
 (add-hook 'c-mode-hook #'my/c-mode-init)
 (add-hook 'c++-mode-hook #'my/c-mode-init)
 

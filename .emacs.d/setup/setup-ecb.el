@@ -133,7 +133,8 @@
 If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
-  (ecb-set-sources-buffer)
+  (ecb-set-speedbar-buffer)
+  ;; (ecb-set-sources-buffer)
   (ecb-split-ver 0.5)
   (ecb-set-methods-buffer)
   (select-window (next-window (next-window)))
@@ -172,6 +173,31 @@ the layout contains no persistent compilation window and the other windows get a
 little more place. "
   (ecb-set-speedbar-buffer)
   (select-window (next-window)))
+
+;; disable global semantic idle scheduler.
+;; it doesn't really seem to work all that well in automatically
+;; reparsing buffers and it's actually intrusive when i'm typing:
+(add-hook 'ecb-activate-hook
+          '(lambda()
+             (semantic-mode t)
+             (ecb-maximize-window-methods)
+             (setq global-semantic-idle-scheduler-mode nil)))
+
+;; Reparse after a file save
+(add-hook 'after-save-hook
+          '(lambda()
+             (when (bound-and-true-p ecb-minor-mode)
+               ;; this is to get the methods buffer to refresh correctly.
+               ;; semantic idle mode refresh doesn't seem to work all that     well.
+               (semantic-force-refresh))))
+
+;; Fonts
+(set-face-attribute 'ecb-default-general-face nil
+                    :inherit 'default)
+(set-face-attribute 'ecb-default-highlight-face nil
+                    :background "#464646")
+(set-face-attribute 'ecb-tag-header-face nil
+                    :background "#464646")
 
 ;; Speedbar
 (require 'sr-speedbar)
