@@ -182,15 +182,14 @@ non-nil."
 (size-indication-mode t)
 
 ;; Use 10-pt Consolas as default font
-(if (find-font (font-spec :name "Consolas"))
-    (set-face-attribute 'default nil :font "Consolas-11"))
+(when (find-font (font-spec :name "Consolas"))
+  (set-face-attribute 'default nil :font "Consolas-11")
+  (set-face-attribute 'fixed-pitch nil :font "Consolas-11:antialias=subpixel")
+  (add-to-list 'default-frame-alist '(font . "Consolas-11"))) ;; default font, used by Speedbar
 
 (if (find-font (font-spec :name "Calibri"))
     (set-face-attribute 'variable-pitch nil :font "Calibri-12" :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
-
-(if (find-font (font-spec :name "Consolas"))
-    (set-face-attribute 'fixed-pitch nil :font "Consolas-11:antialias=subpixel"))
 
 ;; Fallback for Unicode symbols
 (if (find-font (font-spec :name "Symbola"))
@@ -208,8 +207,8 @@ non-nil."
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
 (add-to-list 'load-path "~/.emacs.d/volatile-highlights")
-(when (require 'volatile-highlights nil 'noerror)
-  (volatile-highlights-mode t))
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
 
 ;; Do not use linum, but nlinum instead
 (require 'nlinum)
@@ -258,14 +257,14 @@ non-nil."
                       (progn ;; HD monitor in Windows and Mac
                         (setq main-programming-font "Consolas-12:antialias=subpixel")
                         (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-16"))
+                        (setq main-writing-font (concat main-writing-font "-14"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))))
                 (progn ;; Small display
                   (if (equal system-type 'darwin)
                       (progn
-                        (setq main-programming-font "Consolas-13:antialias=subpixel")
+                        (setq main-programming-font "Consolas-12:antialias=subpixel")
                         (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-16"))
+                        (setq main-writing-font (concat main-writing-font "-15"))
                         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
                     (progn
                       (setq main-programming-font "Consolas-10:antialias=subpixel")
