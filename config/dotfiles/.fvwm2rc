@@ -2,11 +2,14 @@
 SetEnv fvwm_wallpaper $[HOME]/Images/Wallpapers/1468177.png
 
 # Pixmap
-ImagePath $[HOME]/Images/Icons:/usr/share/icons
+ImagePath $[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
+IconPath  $[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16/apps:/usr/share/icons/HighContrast/scalable/apps-extra:/usr/share/icons/icons/hicolor/16x16/apps:/usr/share/icons/oxygen/16x16/apps:/usr/share/icons/oxygen/16x16/actions:/usr/share/icons/gnome/16x16/apps:/usr/share/icons/oxygen/16x16/categories:/usr/share/icons/hicolor/scalable/apps:/usr/share/icons/HighContrast/16x16/apps:/usr/share/icons/locolor/16x16/apps
 
 # Viewport and Virtual Desktop Setup
 DeskTopSize 4x4
 EdgeScroll 0 0
+EdgeThickness 2
+EdgeResistance 400
 EwmhBaseStruts 128 20 0 20
 OpaqueMoveSize -1
 TitleStyle Height 13
@@ -97,16 +100,16 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
-*FvwmButtons(Title XTerm, Icon xterm.xpm, Action 'Exec "xterm" xterm -ls &')
-*FvwmButtons(Title Emacs, Icon emacs.xpm, Action 'Exec "Emacs Server" emacs &')
-*FvwmButtons(Title EmacsClient, Icon emacs.xpm, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
-*FvwmButtons(Title Glade, Icon glade.xpm, Action 'Exec "Glade" glade-3 &')
-*FvwmButtons(Title Wing, Icon wing.xpm, Action 'Exec "Wing" wing  &')
-*FvwmButtons(Title Sublime, Icon sublime.xpm, Action 'Exec "Sublime" sublime_text &')
-*FvwmButtons(Title Komodo, Icon komodo.xpm, Action 'Exec "Komodo" komodo &')
-*FvwmButtons(Title PyCharm, Icon anjuta.xpm, Action 'Exec "PyCharm" pycharms.sh &')
-*FvwmButtons(Title GTerminal, Icon terminal.xpm, Action 'Exec "GTerminal" gnome-terminal &')
-*FvwmButtons(Title Firefox, Icon firefox.xpm, Action 'Exec "Firefox" firefox &')
+*FvwmButtons(Title XTerm, Icon xterm.png, Action 'Exec "xterm" xterm -ls &')
+*FvwmButtons(Title Emacs, Icon emacs.png, Action 'Exec "Emacs Server" emacs &')
+*FvwmButtons(Title EmacsClient, Icon emacs.png, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
+*FvwmButtons(Title Glade, Icon glade.png, Action 'Exec "Glade" glade-3 &')
+*FvwmButtons(Title Wing, Icon wing.png, Action 'Exec "Wing" wing  &')
+*FvwmButtons(Title Sublime, Icon sublime.png, Action 'Exec "Sublime" sublime_text &')
+*FvwmButtons(Title Komodo, Icon komodo.png, Action 'Exec "Komodo" komodo &')
+*FvwmButtons(Title PyCharm, Icon anjuta.png, Action 'Exec "PyCharm" pycharms.sh &')
+*FvwmButtons(Title GTerminal, Icon terminal.png, Action 'Exec "GTerminal" gnome-terminal &')
+*FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
 
 # AutoHiding Console
 Style HiddenConsole Sticky, WindowListSkip, Notitle, StaysOnTop, !Handles, FixedSize, FixedPosition
