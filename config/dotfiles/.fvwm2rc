@@ -21,18 +21,25 @@ WindowFont  *-fixed-*-*-*-20-*
 *FvwmPager: Back black
 *FvwmPager: Colorset 8
 *FvwmPager: SolidSeparators
+*FvwmPager: Balloons All
 *FvwmPager: Label 0 "0: General"
 *FvwmPager: Label 1 "1: Office"
 *FvwmPager: Label 2 "2: CAD"
 *FvwmPager: Label 3 "3: Other"
 
-# See: http://www.fvwm.org/documentation/manpages/unstable/fvwm.php
+# Start function
 AddToFunc StartFunction
 + I FvwmButtons
 + I FvwmTaskBar
 + I Test (Init) Exec exec fvwm-root --dither --retain-pixmap $[fvwm_wallpaper]
 # + I FvwmAuto FvwmAutohide -menter FuncAutoEnter
 # + I Test (Init) StartHiddenConsole
+
+# Init function
+DestroyFunc InitFunction
+AddToFunc   InitFunction
++ I Exec exec feh --bg-fill ~/Bilder/Walls/blox.jpg
++ I Exec exec conky
 
 # Window Decor
 DestroyDecor MyDecor
@@ -74,13 +81,13 @@ HilightColor black gainsboro
 
 # Styles
 Style * IconBox 700x84-220+12, IconFill right bottom
-Style * SmartPlacement, RandomPlacement
+Style * SmartPlacement, RandomPlacement, ResizeOutline
 Style * BorderWidth 4, GrabFocus, IgnoreRestack, MinOverlapPlacement
 Style * NoPPosition, NoTransientPPosition, ResizeOpaque, SloppyFocus
 Style * DecorateTransient, IconBox -132 110 -8 -8
 Style * EWMHMiniIconOverride
 Style * UseDecor MyDecor
-Style * BorderWidth 0, HandleWidth 2
+Style * BorderWidth 2, HandleWidth 2
 Style * MWMBorder, FirmBorder
 Style * SnapAttraction 3
 Style * GrabFocusTransientOff
@@ -182,9 +189,11 @@ AddToFunc Thumbnail
 
 DestroyFunc DeThumbnail
 AddToFunc DeThumbnail
-+ I PipeRead "echo WindowStyle Icon \\$\\[Icon-$[w.id]\\]"
++ I PipeRead "echo Test \\(i \\$\\[Icon-$[w.id]\\]\\) WindowStyle Icon \\$\\[Icon-$[w.id]\\]"
++ I TestRc (NoMatch) WindowStyle NoIconOverride, Icon
++ I Exec rm -f $[FVWM_USERDIR]/icon.tmp.$[w.id].png
++ I All (Iconic, CurrentPage) PlaceAgain icon
 + I UnsetEnv Icon-$[w.id]
-+ I Exec rm -f $[fvwm_tmp]/icon.tmp.$[w.id].png
 
 # FvwmEvent
 DestroyModuleConfig FvwmEvent: *
@@ -395,6 +404,20 @@ AddToFunc Resize-or-Raise   "I" Raise
 + C Focus
 + M Resize
 
+DestroyFunc WheelScroll
+AddToFunc WheelScroll I PipeRead 'case $0 in \
+      up) test $[page.ny] -eq $$(($[desk.pagesy]-1)) -a $[page.nx] -lt $$(($[desk.pagesx]-1)) \
+         && echo GotoPage +1p 0 \
+         || echo GotoPage 0p +1p;; \
+      down) test $[page.ny] -eq 0 -a $[page.nx] -gt 0 \
+         && echo GotoPage -1p $$(($[desk.pagesy]-1)) \
+         || echo GotoPage 0p -1p;; \
+   esac'
+
+DestroyFunc ShowDesktop
+AddToFunc ShowDesktop
++  I All (AcceptsFocus CurrentPage !Iconic !Shaded !ButtonDocks) Iconify
+
 DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: Geometry +0-0
 *FvwmTaskBar: Rows 1
@@ -405,15 +428,16 @@ DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: NoBrightFocus
 *FvwmTaskBar: 3DFvwm
 *FvwmTaskBar: MailCheck 0
-*FvwmTaskBar: ClockFormat
+*FvwmTaskBar: ClockFormat %T [%d/%m/%y]
 *FvwmTaskBar: WindowButtonsRightMargin 124
 *FvwmTaskBar: Font *-fixed-*-*-*-20-*
 *FvwmTaskBar: SelFont *-fixed-*-*-*-20-*
+*FvwmTaskBar: StatusFont *-fixed-*-*-*-20-*
 *FvwmTaskBar: TipsBack bisque
 *FvwmTaskBar: TipsFore black
-*FvwmTaskBar: StatusFont fixed
 *FvwmTaskBar: Colorset 7
 *FvwmTaskBar: FocusColorset 6
+*FvwmTaskBar: UseIconNames
 *FvwmTaskBar: StartName Start
 *FvwmTaskBar: StartMenu MainMenu mouse c -100m -60p
 
@@ -425,7 +449,7 @@ Key Down  A C GotoPage +0p +1p
 Key Left  A M GotoDesk -1 0 3
 Key Right A M GotoDesk 1 0 3
 
-# Save alt-tab for emacs
+# Save Alt-tab for emacs
 Key Tab A M -
 
 # Popup WindowList with the Windows "menu" key.
