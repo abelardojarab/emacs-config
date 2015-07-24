@@ -44,19 +44,12 @@ minor mode is enabled." t nil)
 
 ;;;***
 
-;;;### (autoloads (wisent-csharp-default-setup) "wisent-csharp" "wisent-csharp.el"
-;;;;;;  (17880 37474))
-;;; Generated autoloads from wisent-csharp.el
 
 (autoload (quote wisent-csharp-default-setup) "wisent-csharp" nil nil nil)
 
 (add-hook (quote csharp-mode-hook) (function wisent-csharp-default-setup))
 
 ;;;***
-
-;;;### (autoloads (wisent-javascript-setup-parser) "wisent-javascript"
-;;;;;;  "wisent-javascript.el" (17213 40199))
-;;; Generated autoloads from wisent-javascript.el
 
 (autoload (quote wisent-javascript-setup-parser) "wisent-javascript" "\
 Setup buffer for parse." nil nil)

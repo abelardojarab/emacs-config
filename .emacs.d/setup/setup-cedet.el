@@ -28,8 +28,7 @@
 (require 'semantic/ia)
 (require 'semantic/wisent)
 (setq semantic-default-submodes
-      '(global-semanticdb-minor-mode
-        global-semantic-tag-folding-mode))
+      '(global-semantic-tag-folding-mode))
 (semantic-mode 1)
 (set-default 'semantic-case-fold t)
 (semantic-load-enable-minimum-features)
@@ -72,25 +71,17 @@
 (add-hook 'c-mode-common-hook 'cc-mode-ac-key-bindings)
 
 ;; smart completions
-(setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
-                 '(project))
 (setq-mode-local lisp-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local c-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
                  '(project))
-(setq-mode-local python-mode semanticdb-find-default-throttle
-                 '(project))
-(setq-mode-local js2-mode semanticdb-find-default-throttle
-                 '(project))
 
 ;; working with tags
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
 (semanticdb-enable-gnu-global-databases 'lisp-mode)
-(semanticdb-enable-gnu-global-databases 'python-mode)
-(semanticdb-enable-gnu-global-databases 'js2-mode)
 
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")

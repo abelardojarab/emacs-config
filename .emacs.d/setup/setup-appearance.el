@@ -183,9 +183,9 @@ non-nil."
 
 ;; Use 10-pt Consolas as default font
 (when (find-font (font-spec :name "Consolas"))
-  (set-face-attribute 'default nil :font "Consolas-11")
-  (set-face-attribute 'fixed-pitch nil :font "Consolas-11:antialias=subpixel")
-  (add-to-list 'default-frame-alist '(font . "Consolas-11"))) ;; default font, used by Speedbar
+  (set-face-attribute 'default nil :font "Consolas-12")
+  (set-face-attribute 'fixed-pitch nil :font "Consolas-12:antialias=subpixel")
+  (add-to-list 'default-frame-alist '(font . "Consolas-12"))) ;; default font, used by Speedbar
 
 (if (find-font (font-spec :name "Calibri"))
     (set-face-attribute 'variable-pitch nil :font "Calibri-12" :weight 'normal))
@@ -234,8 +234,8 @@ non-nil."
     (defun fontify-frame (frame)
       (interactive)
       (let (main-writing-font main-programming-font)
+        (setq main-programming-font "Consolas-12")
         (setq main-writing-font "Consolas")
-        (setq main-programming-font "Consolas-11")
         (if (find-font (font-spec :name "Calibri"))
             (setq main-writing-font "Calibri"))
 
@@ -245,32 +245,28 @@ non-nil."
                   (if (equal system-type 'windows-nt)
                       (progn ;; HD monitor in Windows
                         (setq main-programming-font "Consolas-11:antialias=subpixel")
-                        (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-13"))
-                        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
+                        (setq main-writing-font (concat main-writing-font "-13")))
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
                           (setq main-programming-font "Consolas-15:antialias=subpixel")
-                          (set-default-font main-programming-font frame)
-                          (setq main-writing-font (concat main-writing-font "-17"))
-                          (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
-                      (progn ;; HD monitor in Windows and Mac
-                        (setq main-programming-font "Consolas-12:antialias=subpixel")
-                        (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-14"))
-                        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))))
+                          (setq main-writing-font (concat main-writing-font "-17")))
+                      (progn ;; HD monitor
+                        (setq main-programming-font "Consolas-13:antialias=subpixel")
+                        (setq main-writing-font (concat main-writing-font "-15")))))
                 (progn ;; Small display
                   (if (equal system-type 'darwin)
                       (progn
                         (setq main-programming-font "Consolas-12:antialias=subpixel")
-                        (set-default-font main-programming-font frame)
-                        (setq main-writing-font (concat main-writing-font "-15"))
-                        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
+                        (setq main-writing-font (concat main-writing-font "-15")))
                     (progn
                       (setq main-programming-font "Consolas-10:antialias=subpixel")
-                      (set-default-font main-programming-font frame)
-                      (setq main-writing-font (concat main-writing-font "-13"))
-                      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))))))))
+                      (setq main-writing-font (concat main-writing-font "-13"))))))))
+
+        ;; Apply fonts
+        (set-default-font main-programming-font frame)
+        (add-to-list 'default-frame-alist '(font . main-programming-font))
+        (set-face-attribute 'fixed-pitch nil :font main-programming-font)
+        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
 
     ;; Fontify current frame
     (fontify-frame nil)
@@ -285,9 +281,9 @@ non-nil."
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 

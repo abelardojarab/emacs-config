@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Disable editing of compressed files
+(auto-compression-mode 0)
+
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 
@@ -246,8 +249,8 @@ Defaults to `error'."
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                    (save-excursion
-                      (untabify (point-min) (point-max)))) nil))
+                         (save-excursion
+                           (untabify (point-min) (point-max)))) nil))
 
 ;; Assure window is splitted horizontally (for compilation buffer)
 (setq split-width-threshold nil)
