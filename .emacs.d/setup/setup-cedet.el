@@ -71,8 +71,6 @@
 (add-hook 'c-mode-common-hook 'cc-mode-ac-key-bindings)
 
 ;; smart completions
-(setq-mode-local lisp-mode semanticdb-find-default-throttle
-                 '(project))
 (setq-mode-local c-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
@@ -81,7 +79,6 @@
 ;; working with tags
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
-(semanticdb-enable-gnu-global-databases 'lisp-mode)
 
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
