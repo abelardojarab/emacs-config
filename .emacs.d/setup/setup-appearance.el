@@ -264,7 +264,7 @@ non-nil."
 
         ;; Apply fonts
         (set-default-font main-programming-font frame)
-        (add-to-list 'default-frame-alist '(font . main-programming-font))
+        (add-to-list 'default-frame-alist (cons 'font main-programming-font))
         (set-face-attribute 'fixed-pitch nil :font main-programming-font)
         (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
 

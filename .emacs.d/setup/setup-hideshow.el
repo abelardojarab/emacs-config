@@ -130,6 +130,15 @@
 (global-set-key (kbd "M-s C-<SPC>") 'fold-dwim-hide-all)
 (global-set-key (kbd "M-s M-<SPC>") 'fold-dwim-show-all)
 
+;; Extra syntax for nxml
+(add-to-list 'hs-special-modes-alist
+             '(nxml-mode
+               "<!--\\|<[^/>]*[^/]>"
+               "-->\\|</[^/>]*[^/]>"
+               "<!--"
+               sgml-skip-tag-forward
+               nil))
+
 ;; Code folding
 (autoload 'hideshowvis-enable "hideshowvis" "Highlight foldable regions")
 (autoload 'hideshowvis-minor-mode
@@ -139,7 +148,9 @@
 (dolist (hook (list 'lisp-mode-hook
                     'js2-mode-hook
                     'emacs-lisp-mode-hook
-                    'c++-mode-hook))
+                    'python-mode
+                    'nxml-mode
+                    'c-mode-common-hook))
   (add-hook hook 'hideshowvis-enable))
 (global-set-key (kbd "<f7>") 'hs-hide-block)
 (global-set-key (kbd "S-<f7>") 'hs-show-block)
@@ -147,7 +158,7 @@
 
 ;; enable `hs-minor-mode' at startup
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
-(dolist (x '(emacs-lisp lisp java perl sh python js2))
+(dolist (x '(emacs-lisp lisp java perl sh python js2 nxml))
   (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hs-minor-mode))
 
 (defun hs-minor-mode-settings ()
