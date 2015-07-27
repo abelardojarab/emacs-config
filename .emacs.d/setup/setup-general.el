@@ -527,7 +527,7 @@ Defaults to `error'."
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-               (eq 'not-yanks search-upper-case))
+             (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message
@@ -537,8 +537,6 @@ Defaults to `error'."
             isearch-yank-flag t)
       (isearch-search-and-update))))
 (add-hook 'isearch-mode-hook 'my-isearch-yank-word-hook)
-(global-set-key (kbd "C-*") 'my-isearch-word-at-point)
-(global-set-key [(control kp-multiply)] 'my-isearch-word-at-point)
 
 ;; Keep the search results in the center in incremental search
 (defadvice isearch-repeat-forward (after isearch-repeat-forward-recenter activate)
@@ -551,14 +549,6 @@ Defaults to `error'."
 ;; Search at point
 (require 'thingatpt)
 (require 'thingatpt+)
-(define-key isearch-mode-map (kbd "C-*")
-  (lambda ()
-    "Reset current isearch to a word-mode search of the word under point."
-    (interactive)
-    (setq isearch-word t
-          isearch-string ""
-          isearch-message "")
-    (isearch-yank-string (word-at-point))))
 
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)

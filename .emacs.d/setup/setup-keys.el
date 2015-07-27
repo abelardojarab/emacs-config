@@ -38,17 +38,6 @@
 (add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (require 'multiple-cursors)
 
-;; Enter changes lines and auto-indents the new line
-(mapc (lambda (mode)
-        (add-hook mode '(lambda () (define-key java-mode-map "\C-m" 'newline-and-indent))))
-      '(c-mode-hook
-        c++-mode-hook
-        lisp-mode-hook
-        python-mode-hook
-        js2-mode-hook
-        vhdl-mode-hook
-        java-mode-hook))
-
 ;; Smart tab
 (add-to-list 'load-path "~/.emacs.d/smart-tab")
 (when (require 'smart-tab nil 'noerror)
@@ -147,6 +136,18 @@
 
 ;; exit search mode with any key
 (setq search-exit-option t)
+
+;; Search at point
+(global-set-key (kbd "C-*") 'my-isearch-word-at-point)
+(global-set-key [(control kp-multiply)] 'my-isearch-word-at-point)
+(define-key isearch-mode-map (kbd "C-*")
+  (lambda ()
+    "Reset current isearch to a word-mode search of the word under point."
+    (interactive)
+    (setq isearch-word t
+          isearch-string ""
+          isearch-message "")
+    (isearch-yank-string (word-at-point))))
 
 ;; Cancel minibuffer operation if you click outside
 (defun stop-using-minibuffer ()
