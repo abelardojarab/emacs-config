@@ -61,6 +61,7 @@
 (setq tabbar-ruler-global-tabbar 't) ; If you want tabbar
 (require 'tabbar-ruler)
 (setq tabbar-separator '(0.5))
+(tabbar-ruler-group-buffer-groups)
 
 ;; Fix for tabbar under Emacs 24.4
 (eval-after-load "tabbar-ruler"
@@ -73,10 +74,9 @@
        "Return a frame-local hash table that acts as a memoization
        cache for tabbar. Create one if the frame doesn't have one yet."
        (or (gethash (selected-frame) tabbar-caches)
-           (let ((frame-cache (make-hash-table :test 'equal)))
-             (puthash (selected-frame) frame-cache tabbar-caches)
-             frame-cache)))
-     ))
+          (let ((frame-cache (make-hash-table :test 'equal)))
+            (puthash (selected-frame) frame-cache tabbar-caches)
+            frame-cache)))))
 
 ;; necessary support function for buffer burial
 (defun crs-delete-these (delete-these from-this-list)
@@ -98,7 +98,6 @@
 (add-to-list 'crs-hated-buffers "*etags tmp*")
 (add-to-list 'crs-hated-buffers "*Python*")
 (add-to-list 'crs-hated-buffers "vc")
-(add-to-list 'crs-hated-buffers "html-tag-list")
 
 ;; might as well use this for both
 (setq iswitchb-buffer-ignore (append '("^ " "*Buffer") crs-hated-buffers))
