@@ -249,10 +249,10 @@ non-nil."
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
                           (setq main-programming-font "Consolas-15:antialias=subpixel")
-                          (setq main-writing-font (concat main-writing-font "-17")))
+                          (setq main-writing-font (concat main-writing-font "-20")))
                       (progn ;; HD monitor
                         (setq main-programming-font "Consolas-13:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-15")))))
+                        (setq main-writing-font (concat main-writing-font "-18")))))
                 (progn ;; Small display
                   (if (equal system-type 'darwin)
                       (progn
@@ -281,9 +281,9 @@ non-nil."
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 

@@ -26,7 +26,13 @@
 
 ;; write good mode
 (add-to-list 'load-path "~/.emacs.d/writegood-mode")
-(require 'writegood-mode nil 'noerror)
+(require 'writegood-mode)
+(set-face-attribute 'writegood-weasels-face nil
+                    :background "#464646")
+(set-face-attribute 'writegood-passive-voice-face nil
+                    :background "#464646")
+(set-face-attribute 'writegood-duplicates-face nil
+                    :background "#464646")
 
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
@@ -406,7 +412,7 @@ a link to this file."
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                "/clippaste /convert=" filename))
+                                                                                      "/clippaste /convert=" filename))
 
       (if (equal system-type 'darwin)
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
