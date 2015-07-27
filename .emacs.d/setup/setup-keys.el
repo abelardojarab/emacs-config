@@ -100,7 +100,7 @@
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
-     (executable-find "kdialog"))
+       (executable-find "kdialog"))
   (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
   ) ;; if
@@ -321,8 +321,8 @@
 
 ;; Drag stuff
 (add-to-list 'load-path "~/.emacs.d/drag-stuff")
-(when (require 'drag-stuff nil 'noerror)
-  (drag-stuff-global-mode t))
+(require 'drag-stuff)
+(drag-stuff-global-mode t)
 
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")

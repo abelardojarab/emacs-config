@@ -2,6 +2,28 @@
 
 ## master (unreleased)
 
+### New features
+
+* Add the ability to specify the project type via `.dir-locals.el`.
+* Add support for projects using Midje.
+* Add the ability to create missing tests automatically (controlled via the `projectile-create-missing-test-files` defcustom).
+* Add the ability to dynamically decide if a project should be added to `projectile-known-projects` (via new `projectile-ignored-project-function` defcustom).
+* Add the ability to register new project types dynamically with `projectile-register-project-type`.
+* Add the ability to specify a project compilation and test commands via `.dir-locals.el`.
+This is done via the variables `projectile-project-compilation-cmd` and `projectile-project-test-cmd`.
+* [#489](https://github.com/bbatsov/projectile/issues/489): New interactive command `projectile-run-project`.
+
+### Changes
+
+* `projectile-compile-project` now offers appropriate completion
+  targets even when called from a subdirectory.
+
+### Bugs fixed
+
+* [#721](https://github.com/bbatsov/projectile/issues/721#issuecomment-100830507): Remove current buffer from `helm-projectile-switch-project`.
+* [#667](https://github.com/bbatsov/projectile/issues/667) Use `file-truename` when caching filenames to prevent duplicate/symlinked filepaths from appearing when opening a project file.
+* [#625](https://github.com/bbatsov/projectile/issues/625): Ensure the directory has a trailing slash while searching for it.
+
 ## 0.12.0 (03/29/2015)
 
 ### New features

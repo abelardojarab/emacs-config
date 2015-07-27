@@ -6,7 +6,7 @@
 ;; URL: http://github.com/Malabarba/smart-mode-line
 ;; Version: 2.8
 ;; Package-Requires: ((emacs "24.3") (rich-minority "0.1.1"))
-;; Keywords: mode-line faces theme themes
+;; Keywords: mode-line faces themes
 ;; Prefix: sml
 ;; Separator: /
 
@@ -1089,7 +1089,7 @@ the mode-line will be setup."
   (eval-after-load "projectile"
     '(progn
        (setq sml/projectile-loaded-p t)
-       (defcustom sml/projectile-replacement-format "[P/%s]"
+       (defcustom sml/projectile-replacement-format "[%s]"
          "Format used for replacements derived from projectile."
          :type 'string
          :group 'smart-mode-line-others

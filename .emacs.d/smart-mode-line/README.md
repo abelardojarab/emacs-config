@@ -21,10 +21,10 @@ Images
 (Note: to use the powerline theme, install the `smart-mode-line-powerline-theme` package from MELPA)
 
 **Solarized Dark Theme**
-![Solarized Dark Theme Screenshot](screenshot-solarized-dark-theme.png)
+![Solarized Dark Theme Screenshot](https://cloud.githubusercontent.com/assets/601365/7131638/34a3b0f8-e247-11e4-8fd5-811365167d22.png)
 
 **Solarized Light Theme**
-![Solarized Light Theme Screenshot](screenshot-solarized-light-theme.png)
+![Solarized Light Theme Screenshot](https://cloud.githubusercontent.com/assets/601365/7131637/34946ac6-e247-11e4-8e0e-35a47df70686.png)
 
 (Note: to use the Solarized themes, install the [`solarized-theme`](https://github.com/bbatsov/solarized-emacs/) package from MELPA)
 
@@ -174,6 +174,14 @@ with your own definition you need to add it to the start of the list
 
     (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox/" ":DBox:"))
 
+In order to use more complex transformations (like upcasing), you'll need to write a more complex
+replacement. The second argument needs to be a function that accepts the matched string as its
+argument and returns the replacement string. You can access matched data with the `match-string`
+function as explained [in the manual.](https://www.gnu.org/software/emacs/manual/html_node/elisp/Simple-Match-Data.html#Simple-Match-Data) For example, for using the upcased project name (assuming the project is in the `~/Projects` directory:
+
+    (add-to-list 'sml/replacer-regexp-list '("^~/Projects/\\(\\w+\\)/"
+                                                (lambda(s) (concat ":" (upcase (match-string 1 s)) ":"))
+                                                ) t)
 
 Contributing
 =====
