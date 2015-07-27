@@ -1,6 +1,6 @@
-;;; erewhon.el --- AUCTeX style for `erewhon.sty' (v1.0)
+;;; erewhon.el --- AUCTeX style for `erewhon.sty' (v1.04)
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2015 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <esbati'at'gmx.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `erewhon.sty' (v1.0) from 2014/09/08.
+;; This file adds support for `erewhon.sty' (v1.04) from 2015/04/07.
 ;; `erewhon.sty' is part of TeXLive.
 
 ;;; Code:
@@ -43,8 +43,14 @@
 
     ;; Only preamble commands
     '("useosf"  0)
+    '("useproportional" 0)
 
     ;; Text commands
+    '("lfstyle"   -1)   ; lf declaration
+    '("tlfstyle"  -1)   ; tlf declaration
+    '("osfstyle"  -1)   ; osf declaration
+    '("tosfstyle" -1)   ; tosf declaration
+    '("sufigures" -1)   ; superior figures declaration
     '("textlf"     t)   ; proportional lining figures
     '("texttlf"    t)   ; tabular lining figures
     '("textosf"    t)   ; proportional oldstyle figures
@@ -57,18 +63,24 @@
 
    ;; Fontification
    (when (and (featurep 'font-latex)
-              (eq TeX-install-font-lock 'font-latex-setup))
+	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("textlf"    "{")
-                                ("texttlf"   "{")
-                                ("textosf"   "{")
-                                ("texttosf"  "{")
+				("texttlf"   "{")
+				("textosf"   "{")
+				("texttosf"  "{")
 				("textsu"    "{")
 				("textin"    "{")
 				("textnu"    "{")
 				("textde"    "{"))
-                              'type-command)
+			      'type-command)
+     (font-latex-add-keywords '(("lfstyle"   "")
+				("tlfstyle"  "")
+				("osfstyle"  "")
+				("tosfstyle" "")
+				("sufigures" ""))
+			      'type-declaration)
      (font-latex-add-keywords '(("textfrac"  "{{"))
-                              'textual)))
+			      'textual)))
  LaTeX-dialect)
 
 (defvar LaTeX-erewhon-package-options

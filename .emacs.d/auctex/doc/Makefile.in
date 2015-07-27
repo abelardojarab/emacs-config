@@ -2,7 +2,7 @@
 
 # Maintainer: auctex-devel@gnu.org
 
-# Copyright (C) 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2003-2008, 2013-2015 Free Software Foundation, Inc.
 
 # This file is part of AUCTeX.
 
@@ -90,7 +90,8 @@ dist: $(DISTTEXTS) preview-latex.info auctex.info tex-ref.pdf
 extradist: html/$(TEXI2HTML_TOC) auctex.ps auctex.pdf tex-ref.ps tex-ref.pdf
 
 .PHONY: all info dvi dist install-auctex disttexts clean distclean \
-	maintainer-clean install-preview install-man html-docs extradist
+	maintainer-clean install-preview install-man uninstall html-docs \
+	extradist
 
 # AUCTeX
 
@@ -199,6 +200,15 @@ install-preview: preview-latex.info
 	$(MAKEINFO) $(MAKEINFO_PLAIN) --number-sections preview-problems.texi --output $@
 
 # clean
+
+uninstall:
+	for info in $(DESTDIR)$(infodir)/{auctex.info,preview-latex.info}; do \
+		test ! -f $${info} || \
+		$(INSTALL_INFO) --delete --info-dir=$(DESTDIR)$(infodir) $${info}; \
+	done
+	rm -f $(DESTDIR)$(infodir)/auctex.info $(DESTDIR)$(infodir)/auctex.info-* \
+	$(DESTDIR)$(infodir)/preview-latex.info*
+	test X$(packagedir) != Xno || rm -rf -f $(DESTDIR)$(docdir)
 
 clean:
 	rm -f *.dvi *.ps *.pdf *.aux *.cp *.fn *.ky *.log *~ \#*\# \

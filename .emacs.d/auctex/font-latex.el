@@ -918,9 +918,9 @@ have changed."
 		       ;; package).
 		       "\\(?:\\[[^\]\[]*\\(?:\\[[^\]\[]*\\][^\]\[]*\\)*\\]\\)?"
 		       ;; After the optional argument, there may also be
-		       ;; another mandatory argument (e.g. with VerbatimOut or
-		       ;; the minted envs).
-		       "\\(?:{[^}]+}\\)?"
+		       ;; another mandatory argument(s) (e.g. with VerbatimOut or
+		       ;; the minted envs or defined with `lstnewenvironment').
+		       "\\(?:{[^}]+}\\)*"
 		       "\\(\n\\)")
 		     (1 "|" t)))
       (add-to-list 'font-latex-syntactic-keywords
@@ -1494,7 +1494,7 @@ Returns nil if none of KEYWORDS is found."
 			     (list (point)
 				   (progn
 				     (forward-char)
-				     (if (zerop (skip-chars-forward "A-Za-z@"))
+				     (if (zerop (skip-syntax-forward "_w"))
 					 (forward-char) ; Single-char macro.
 				       (skip-chars-forward "*"))
 				     (point))))
@@ -1634,7 +1634,8 @@ marks boundaries for searching for group ends."
 
 (defun font-latex-match-simple-command (limit)
   "Search for command like \\foo before LIMIT."
-  (TeX-re-search-forward-unescaped "\\\\[@A-Za-z]+" limit t))
+  ;; \s_ matches chars with symbol syntax, \sw chars with word syntax
+  (TeX-re-search-forward-unescaped "\\\\\\(?:\\s_\\|\\sw\\)+" limit t))
 
 (defun font-latex-match-math-env (limit)
   "Match math pattern up to LIMIT.

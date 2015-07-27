@@ -306,7 +306,7 @@ AC_SHELL_QUOTIFY(TEXI2HTML)
 AC_SHELL_QUOTIFY(TEXI2DVI)
 AC_SHELL_QUOTIFY(TEXI2PDF)
 
-AC_OUTPUT(Makefile tex-site.el.out:tex-site.el.in doc/Makefile auctex.el preview.el auto.el latex/Makefile)
+AC_OUTPUT(Makefile tex-site.el.out:tex-site.el.in doc/Makefile auctex.el preview.el latex/Makefile)
 
 
 cat >&2 <<EOF

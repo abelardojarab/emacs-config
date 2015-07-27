@@ -124,7 +124,7 @@
     '("shoveright" [ TeX-arg-size ] 1)
     ;; don't understand t, but intertext in amsmath.el uses it
     '("shortintertext" t)
-    '("DeclarePairedDelimeter" TeX-arg-macro "Left delimeter" "Right delimeter")
+    '("DeclarePairedDelimiter" TeX-arg-macro "Left delimiter" "Right delimiter")
     ;; 3.4.4
     '("MoveEqLeft" [ "Number" ])
     '("ArrowBetweenLines" [ TeX-arg-macro ] )
@@ -194,7 +194,6 @@
 	(setq width (concat LaTeX-optop width LaTeX-optcl))
       (setq width ""))
     (setq extra (concat pos width))
-    (LaTeX-insert-environment env extra)
-    (newline-and-indent)))
+    (LaTeX-insert-environment env extra)))
 
 ;;; mathtools.el ends here.

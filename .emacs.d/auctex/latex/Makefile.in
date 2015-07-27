@@ -2,7 +2,8 @@
 
 # Maintainer: auctex-devel@gnu.org
 
-# Copyright (C) 2002, 2003, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2002-2006, 2008, 2014, 2015 Free Software Foundation,
+#   Inc.
 
 # This file is part of AUCTeX.
 
@@ -41,6 +42,8 @@ INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 MKINSTALLDIRS = ../mkinstalldirs
 
+.PHONY: all install install-texmf install-texmf-doc uninstall clean
+
 all: $(TEXMFGEN) preview.drv preview-mk.ins preview.dvi preview.pdf
 
 install: install-texmf install-texmf-doc
@@ -61,8 +64,11 @@ install-texmf: $(TEXMFGEN)
 	fi
 
 install-texmf-doc: preview.dvi
-	-$(MKINSTALLDIRS) $(DESTDIR)$(previewdocdir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(previewdocdir)
 	$(INSTALL_DATA) preview.dvi $(DESTDIR)$(previewdocdir)
+
+uninstall:
+	rm -rf $(DESTDIR)$(previewdocdir)/preview.dvi $(DESTDIR)$(previewtexmfdir)
 
 preview-mk.ins: preview.dtx bootstrap.ins
 	$(TEX) '\nonstopmode \input bootstrap.ins'
@@ -87,5 +93,5 @@ preview.pdf: preview.drv preview.dtx preview.sty
 	$(PDFLATEX) '\nonstopmode \AtBeginDocument{\OnlyDescription}\input{preview.drv}'
 
 clean:
-	rm -f *~ *.aux *.dvi *.drv *.log 
-	rm -f $(TEXMFGEN) preview.ins preview-mk.ins 
+	rm -f *~ *.aux *.dvi *.drv *.log
+	rm -f $(TEXMFGEN) preview.ins preview-mk.ins

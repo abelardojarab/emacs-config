@@ -1,6 +1,6 @@
-;;; newtxtext.el --- AUCTeX style for `newtxtext.sty' (v1.321)
+;;; newtxtext.el --- AUCTeX style for `newtxtext.sty' (v1.434)
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2015 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <esbati'at'gmx.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `newtxtext.sty' (v1.321) from 2014/11/16.
+;; This file adds support for `newtxtext.sty' (v1.434) from 2015/04/07.
 ;; `newtxtext.sty' is part of TeXLive.
 
 ;;; Code:
@@ -40,11 +40,41 @@
 
    ;; New symbols
    (TeX-add-symbols
-    '("useosf"  0)))  ; Only preamble command
+    '("useosf"          0)  ; Only preamble command
+    '("useproportional" 0)  ; Only preamble command
+    '("lfstyle"        -1)  ; lf declaration
+    '("tlfstyle"       -1)  ; tlf declaration
+    '("osfstyle"       -1)  ; osf declaration
+    '("tosfstyle"      -1)  ; tosf declaration
+    '("sustyle"        -1)  ; sup style declaration
+    '("textlf"          t)  ; lf command
+    '("texttlf"         t)  ; tlf command
+    '("textosf"         t)  ; osf command
+    '("texttosf"        t)  ; tosf command
+    '("textsu"          t)) ; sup style command
+
+   ;; Fontification
+   (when (and (featurep 'font-latex)
+              (eq TeX-install-font-lock 'font-latex-setup))
+     (font-latex-add-keywords '(("textlf"    "{")
+                                ("texttlf"   "{")
+                                ("textosf"   "{")
+                                ("texttosf"  "{")
+				("textsu"    "{"))
+                              'type-command)
+     (font-latex-add-keywords '(("lfstyle"   "")
+                                ("tlfstyle"  "")
+                                ("osfstyle"  "")
+				("tosfstyle" "")
+				("sustyle"   ""))
+                              'type-declaration)))
  LaTeX-dialect)
 
 (defvar LaTeX-newtxtext-package-options
-  '("defaultsups" "helvratio" "osf" "scaled" "scosf")
+  '("defaultsups" "helvratio" "osf" "scaled" "scosf"
+    ;; New options since 1.4
+    "largesc" "adobesc" "theoremfont"
+    "lining" "lf" "oldstyle" "tabular" "p" "proportional")
   "Package options for the newtxtext package.")
 
 ;;; newtxtext.el ends here

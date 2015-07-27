@@ -1,6 +1,6 @@
 ;;; minted.el --- AUCTeX style for `minted.sty'
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2015 Free Software Foundation, Inc.
 
 ;; Author: Tassilo Horn <tsdh@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -103,9 +103,6 @@
 		    (LaTeX-minted-language-list))
    optional))
 
-;; FIXME: All the \newmint-macros allow to specify the env/macro name as
-;; optional 1st arg, e.g., with \newminted[fifi]{cpp}{opts} the resulting
-;; environments are fifi and fifi* rather than cppcode and cppcode*.
 (defvar LaTeX-minted-auto-newminted nil)
 (defvar LaTeX-minted-newminted-regexp
   '("\\\\newminted\\(?:\\[\\([^]]+\\)\\]\\)?{\\([^}]+\\)}{[^}]*}"
@@ -138,7 +135,7 @@
   (dolist (name-lang LaTeX-minted-auto-newminted)
     (let* ((env (if (> (length (car name-lang)) 0)
 		    (car name-lang)
-		  (cadr name-lang)))
+		  (concat (cadr name-lang) "code")))
 	   (env* (concat env "*")))
       (add-to-list 'LaTeX-auto-environment (list env))
       (add-to-list 'LaTeX-auto-environment
@@ -181,6 +178,7 @@
 
 (add-hook 'TeX-auto-prepare-hook #'LaTeX-minted-auto-prepare t)
 (add-hook 'TeX-auto-cleanup-hook #'LaTeX-minted-auto-cleanup t)
+(add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 (TeX-add-style-hook
  "minted"

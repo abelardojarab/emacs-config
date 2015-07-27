@@ -1,6 +1,6 @@
-;;; fbb.el --- AUCTeX style for `fbb.sty' (v1.06)
+;;; fbb.el --- AUCTeX style for `fbb.sty' (v1.07)
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2015 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <esbati'at'gmx.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `fbb.sty' (v1.06) from 2014/09/09.
+;; This file adds support for `fbb.sty' (v1.07) from 2015/04/06.
 ;; `fbb.sty' is part of TeXLive.
 
 ;;; Code:
@@ -41,11 +41,15 @@
    ;; New symbols
    (TeX-add-symbols
 
-    ;; Only preamble commands
+    ;; Only preamble command
     '("useosf"  0)
-    '("usetosf" 0)
 
     ;; Text commands
+    '("lfstyle"   -1)   ; lf declaration
+    '("tlfstyle"  -1)   ; tlf declaration
+    '("osfstyle"  -1)   ; osf declaration
+    '("tosfstyle" -1)   ; tosf declaration
+    '("sufigures" -1)   ; superior figures declaration
     '("textlf"     t)   ; proportional lining figures
     '("texttlf"    t)   ; tabular lining figures
     '("textosf"    t)   ; proportional oldstyle figures
@@ -54,13 +58,19 @@
 
    ;; Fontification
    (when (and (featurep 'font-latex)
-              (eq TeX-install-font-lock 'font-latex-setup))
+	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("textlf"    "{")
 				("texttlf"   "{")
-                                ("textosf"   "{")
-                                ("texttosf"  "{")
+				("textosf"   "{")
+				("texttosf"  "{")
 				("textsu"    "{"))
-                              'type-command)))
+			      'type-command)
+     (font-latex-add-keywords '(("lfstyle"   "")
+				("tlfstyle"  "")
+				("osfstyle"  "")
+				("tosfstyle" "")
+				("sufigures" ""))
+			      'type-declaration)))
  LaTeX-dialect)
 
 (defvar LaTeX-fbb-package-options

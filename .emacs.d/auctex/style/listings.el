@@ -1,6 +1,6 @@
 ;;; listings.el --- AUCTeX style for `listings.sty'
 
-;; Copyright (C) 2004, 2005, 2009, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2009, 2013, 2015 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -27,6 +27,9 @@
 ;;; Commentary:
 
 ;; This file adds support for `listings.sty'.
+;;
+;; May 2015: The style detects new environments defined with
+;; `\lstnewenvironment'.  Users need to invoke `C-c C-n' for this.
 ;;
 ;; FIXME: Please make me more sophisticated!
 
@@ -142,8 +145,8 @@
     ("indexstyle")
     ;; Column alignment
     ("columns" ("fixed" "flexible" "fullflexible" "spaceflexible")) ;
-                                        ; Also supports an optional
-                                        ; argument with {c,l,r}.
+					; Also supports an optional
+					; argument with {c,l,r}.
     ("flexiblecolumns" ("true" "false"))
     ("keepspaces" ("true" "false"))
     ("basewidth")
@@ -217,9 +220,55 @@
     ("multicolumn"))
   "Key=value options for listings macros and environments.")
 
+(defvar LaTeX-auto-listings-lstnewenvironment nil
+  "Temporary for parsing the arguments of `\\lstnewenvironment'
+from `listings' package.")
+
+(defvar LaTeX-listing-lstnewenvironment-regexp
+  `(,(concat "\\\\lstnewenvironment"
+	     "[ \t\n\r]*{\\([A-Za-z0-9]+\\)}%?"
+	     "[ \t\n\r]*\\[?\\([0-9]?\\)\\]?%?"
+	     "[ \t\n\r]*\\(\\[\\)?")
+    (1 2 3) LaTeX-auto-listings-lstnewenvironment)
+  "Matches the argument of `\\lstnewenvironment' from `listings.sty'.")
+
+(defun LaTeX-listings-auto-prepare ()
+  "Clear temporary variable from `listings.sty' before parsing."
+  (setq LaTeX-auto-listings-lstnewenvironment nil))
+
+(defun LaTeX-listings-auto-cleanup ()
+  "Process the parsed results of `\\lstnewenvironment'."
+  (dolist (env-args LaTeX-auto-listings-lstnewenvironment)
+    (let ((env  (car   env-args))
+	  (args (cadr  env-args))
+	  (opt  (nth 2 env-args)))
+      (cond (;; opt. 1st argument and mandatory argument(s)
+	     (and args (not (string-equal args ""))
+		  opt  (not (string-equal opt  "")))
+	     (add-to-list 'LaTeX-auto-environment
+			  (list env 'LaTeX-env-args (vector "argument")
+				(1- (string-to-number args)))))
+	    (;; mandatory argument(s) only
+	     (and args (not (string-equal args ""))
+		  (string-equal opt ""))
+	     (add-to-list 'LaTeX-auto-environment
+			  (list env (string-to-number args))))
+	    (t ; No args
+	     (add-to-list 'LaTeX-auto-environment (list env))))
+      (add-to-list 'LaTeX-indent-environment-list `(,env current-indentation))
+      (add-to-list 'LaTeX-verbatim-environments-local env))))
+
+(add-hook 'TeX-auto-prepare-hook #'LaTeX-listings-auto-prepare t)
+(add-hook 'TeX-auto-cleanup-hook #'LaTeX-listings-auto-cleanup t)
+(add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
+
 (TeX-add-style-hook
  "listings"
  (lambda ()
+
+   ;; Add it to the parser
+   (TeX-auto-add-regexp LaTeX-listing-lstnewenvironment-regexp)
+
    ;; New symbols
    (TeX-add-symbols
     '("lstalias" ["Alias dialect"] "Alias" ["Dialect"] "Language")
@@ -236,10 +285,10 @@
     ;; 4.17 Short Inline Listing Commands
     '("lstMakeShortInline" [ "Options" ] "Character")
     '("lstDeleteShortInline" "Character")
-    
+
     "lstgrinddeffile" "lstaspectfiles" "lstlanguagefiles"
     "lstlistingname" "lstlistlistingname")
-   
+
    ;; New environments
    (LaTeX-add-environments
     '("lstlisting" LaTeX-env-args
@@ -272,11 +321,11 @@
      (font-lock-set-defaults)))
  LaTeX-dialect)
 
-(defvar LaTeX-listings-package-options '("draft" "final" "savemem" 
+(defvar LaTeX-listings-package-options '("draft" "final" "savemem"
 					 "noaspects"
-                                         ;; procnames is mentioned in
-                                         ;; Section 5.2 
-                                         "procnames")
+					 ;; procnames is mentioned in
+					 ;; Section 5.2
+					 "procnames")
   "Package options for the listings package.")
 
 ;;; listings.el ends here

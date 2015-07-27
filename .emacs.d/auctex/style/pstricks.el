@@ -1,6 +1,6 @@
 ;;; pstricks.el --- AUCTeX style for the `pstricks' package.
 
-;; Copyright (C) 2007, 2009, 2013, 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2009, 2013-2015 Free Software Foundation, Inc.
 
 ;; Author: Holger Sparr <holger.sparr@gmx.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -699,10 +699,9 @@ package PNAME"
   "Clear `LaTeX-auto-pstricks' before use."
   (setq LaTeX-auto-pstricks nil))
 
-;; FIXME: This does not seem to work unless one does a manual reparse.
-;; Check e.g. with "\definecolor" and "fillcolor=".
-(add-hook 'TeX-auto-prepare-hook 'LaTeX-pst-prepare)
-(add-hook 'TeX-auto-cleanup-hook 'LaTeX-pst-cleanup)
+(add-hook 'TeX-auto-prepare-hook #'LaTeX-pst-prepare t)
+(add-hook 'TeX-auto-cleanup-hook #'LaTeX-pst-cleanup )
+(add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 ;;; Additional Functionality
 (defun LaTeX-pst-parameters-add (&optional arg)

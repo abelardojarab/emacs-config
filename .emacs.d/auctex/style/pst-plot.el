@@ -1,6 +1,6 @@
 ;;; pst-plot.el --- AUCTeX style for `pst-plot.sty'
 
-;; Copyright (C) 2007, 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2014, 2015 Free Software Foundation, Inc.
 
 ;; Author: Holger Sparr <holger.sparr@gmx.net>
 ;; Created: 21 Jun 2007
@@ -57,8 +57,9 @@
   "Clear `LaTeX-auto-pstplot' before use."
   (setq LaTeX-auto-pstplot nil))
 
-(add-hook 'TeX-auto-prepare-hook 'LaTeX-pstplot-prepare)
-(add-hook 'TeX-auto-cleanup-hook 'LaTeX-pstplot-cleanup)
+(add-hook 'TeX-auto-prepare-hook #'LaTeX-pstplot-prepare t)
+(add-hook 'TeX-auto-cleanup-hook #'LaTeX-pstplot-cleanup t)
+(add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 ;;; Parameters
 (defvar LaTeX-pstplot-datasets nil

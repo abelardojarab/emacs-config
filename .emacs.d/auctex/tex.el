@@ -1,6 +1,6 @@
 ;;; tex.el --- Support for TeX documents.
 
-;; Copyright (C) 1985-1987, 1991, 1993-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1987, 1991, 1993-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -640,7 +640,7 @@ overlays between two existing ones.")
 (when (featurep 'xemacs)
 
   (defun TeX-read-string
-    (prompt &optional initial-input history default-value)
+      (prompt &optional initial-input history default-value)
     (condition-case nil
 	(read-string prompt initial-input history default-value t)
       (wrong-number-of-arguments
@@ -763,7 +763,19 @@ If POS is nil, use current buffer location."
 
   (defun TeX-activate-region ()
     (setq deactivate-mark nil)
-    (activate-mark))
+    (if (fboundp 'activate-mark)
+	(activate-mark)
+      ;; COMPATIBILITY for Emacs <= 22
+      ;; This part is adopted from `activate-mark' of Emacs 24.5.
+      (when (mark t)
+	(unless (and transient-mark-mode mark-active
+		 (mark))
+	  (force-mode-line-update) ;Refresh toolbar (bug#16382).
+	  (setq mark-active t)
+	  (unless transient-mark-mode
+	    (setq transient-mark-mode 'lambda))
+	  (if (boundp 'activate-mark-hook)
+	      (run-hooks 'activate-mark-hook))))))
 
   (defun TeX-overlay-prioritize (start end)
     "Calculate a priority for an overlay extending from START to END.
@@ -1073,28 +1085,50 @@ given, only the minimal requirements needed by backward search
 are checked.  If OPTIONS include `:forward', which is currently
 the only option, then additional requirements needed by forward
 search are checked, too."
-  (and (featurep 'dbusbind)
-       (require 'dbus nil :no-error)
-       (dbus-ignore-errors (dbus-get-unique-name :session))
-       (dbus-ping :session "org.gnome.evince.Daemon")
-       (executable-find "evince")
-       (or (not (memq :forward options))
-	   (let ((spec (dbus-introspect-get-method
-			:session "org.gnome.evince.Daemon"
-			"/org/gnome/evince/Daemon"
-			"org.gnome.evince.Daemon"
-			"FindDocument")))
-	     ;; FindDocument must exist, and its signature must be (String,
-	     ;; Boolean, String).  Evince versions between 2.30 and 2.91.x
-	     ;; didn't have the Boolean spawn argument we need to start evince
-	     ;; initially.
-	     (and spec
-		  (equal '("s" "b" "s")
-			 (delq nil (mapcar (lambda (elem)
-					     (when (and (listp elem)
-							(eq (car elem) 'arg))
-					       (cdr (caar (cdr elem)))))
-					   spec))))))))
+  (let ((dbus-debug nil))
+    (and (featurep 'dbusbind)
+	 (require 'dbus nil :no-error)
+	 (dbus-ignore-errors (dbus-get-unique-name :session))
+	 (dbus-ping :session "org.gnome.evince.Daemon")
+	 (executable-find "evince")
+	 (or (not (memq :forward options))
+	     (let ((spec (dbus-introspect-get-method
+			  :session "org.gnome.evince.Daemon"
+			  "/org/gnome/evince/Daemon"
+			  "org.gnome.evince.Daemon"
+			  "FindDocument")))
+	       ;; FindDocument must exist, and its signature must be (String,
+	       ;; Boolean, String).  Evince versions between 2.30 and 2.91.x
+	       ;; didn't have the Boolean spawn argument we need to start evince
+	       ;; initially.
+	       (and spec
+		    (equal '("s" "b" "s")
+			   (delq nil (mapcar (lambda (elem)
+					       (when (and (listp elem)
+							  (eq (car elem) 'arg))
+						 (cdr (caar (cdr elem)))))
+					     spec)))))))))
+
+(defun TeX-pdf-tools-sync-view ()
+  "Focus the focused page/paragraph in `pdf-view-mode'.
+If `TeX-source-correlate-mode' is disabled, only find and pop to
+the output PDF file.  Used by default for the PDF Tools viewer
+entry in `TeX-view-program-list-builtin'."
+  (unless (featurep 'pdf-tools)
+    (error "PDF Tools are not installed"))
+  (unless TeX-PDF-mode
+    (error "PDF Tools only work with PDF output"))
+  (add-hook 'pdf-sync-backward-redirect-functions
+	    #'TeX-source-correlate-handle-TeX-region)
+  (if (and TeX-source-correlate-mode
+	   (fboundp 'pdf-sync-forward-search))
+      (with-current-buffer (or (find-buffer-visiting
+				(concat file "." TeX-default-extension))
+			       (current-buffer))
+	(pdf-sync-forward-search))
+    (let ((pdf (concat file "." (TeX-output-extension))))
+      (pop-to-buffer (or (find-buffer-visiting pdf)
+			 (find-file-noselect pdf))))))
 
 (defvar url-unreserved-chars)
 
@@ -1132,8 +1166,8 @@ the requirements are met."
   (cond
    ((eq system-type 'windows-nt)
     '(("Yap" ("yap -1" (mode-io-correlate " -s %n%b") " %o") "yap")
-      ("dvips and start" "dvips %d -o && start \"\" %f" ,(list "dvips" "start"))
-      ("start" "start \"\" %o" "start")))
+      ("dvips and start" "dvips %d -o && start \"\" %f" "dvips")
+      ("start" "start \"\" %o")))
    ((eq system-type 'darwin)
     '(("Preview.app" "open -a Preview.app %o" "open")
       ("Skim" "open -a Skim.app %o" "open")
@@ -1164,7 +1198,8 @@ the requirements are met."
 				    " -i %(outpage)"
 				  " -p %(outpage)")) " %o")) "evince")
       ("Okular" ("okular --unique %o" (mode-io-correlate "#src:%n%a")) "okular")
-      ("xdg-open" "xdg-open %o" "xdg-open"))))
+      ("xdg-open" "xdg-open %o" "xdg-open")
+      ("PDF Tools" TeX-pdf-tools-sync-view))))
   "Alist of built-in viewer specifications.
 This variable should not be changed by the user who can use
 `TeX-view-program-list' to add new viewers or overwrite the
@@ -1212,7 +1247,7 @@ restarting Emacs."
      (string :tag "Name")
      (choice
       (group :tag "Command" (string :tag "Command"))
-      (group :tag "Command parts"
+      (group :inline t :tag "Command parts"
 	     (repeat
 	      :tag "Command parts"
 	      (choice
@@ -1301,8 +1336,8 @@ are evaluated positively is chosen."
 				   (mapc (lambda (spec)
 					   (add-to-list 'list
 							`(const ,(car spec))))
-				     (append TeX-view-program-list
-					     TeX-view-program-list-builtin))
+					 (append TeX-view-program-list
+						 TeX-view-program-list-builtin))
 				   (sort list
 					 (lambda (a b)
 					   (string< (downcase (cadr a))
@@ -1601,6 +1636,21 @@ If this is nil, an empty string will be returned."
   "Keymap for `TeX-source-correlate-mode'.
 You could use this for unusual mouse bindings.")
 
+(defun TeX-source-correlate-handle-TeX-region (file line col)
+  "Translate backward search info with respect to `TeX-region'.
+That is, if FILE is `TeX-region', update FILE to the real tex
+file and LINE to (+ LINE offset-of-region).  Else, return nil."
+  (when (string-equal TeX-region (file-name-sans-extension
+				  (file-name-nondirectory file)))
+    (with-current-buffer (or (find-buffer-visiting file)
+			     (find-file-noselect file))
+      (goto-char 0)
+      (when (re-search-forward "!offset(\\([[:digit:]]+\\))" nil t)
+	(let ((offset (string-to-int (match-string-no-properties 1))))
+	  (when TeX-region-orig-buffer
+	    (list (expand-file-name (buffer-file-name TeX-region-orig-buffer))
+		  (+ line offset) col)))))))
+
 (defun TeX-source-correlate-sync-source (file linecol &rest ignored)
   "Show TeX FILE with point at LINECOL.
 This function is called when emacs receives a SyncSource signal
@@ -1610,55 +1660,37 @@ or newer."
   ;; FILE may be given as relative path to the TeX-master root document or as
   ;; absolute file:// URL.  In the former case, the tex file has to be already
   ;; opened.
-  (let* ((line (car linecol))
-	 (col (cadr linecol))
-	 (region (string= TeX-region (file-name-sans-extension
-				      (file-name-nondirectory file))))
-	 (region-search-string nil)
-	 (buf (let ((f (condition-case nil
-			   (progn
-			     (require 'url-parse)
-			     (require 'url-util)
-			     (url-unhex-string (aref (url-generic-parse-url file) 6)))
-			 ;; For Emacs 21 compatibility, which doesn't have the
-			 ;; url package.
-			 (file-error (replace-regexp-in-string "^file://" "" file)))))
-		(cond
-		 ;; Copy the text referenced by syntex relative in the region
-		 ;; file so that we can search it in the original file.
-		 (region (let ((region-buf (get-buffer (file-name-nondirectory file))))
-			   (when region-buf
-			     (with-current-buffer region-buf
-			       (goto-char (point-min))
-			       (forward-line (1- line))
-			       (let* ((p (point))
-				      (bound (save-excursion
-					       (re-search-backward "\\\\message{[^}]+}" nil t)
-					       (end-of-line)
-					       (point)))
-				      (start (save-excursion
-					       (while (< (- p (point)) 250)
-						 (backward-paragraph))
-					       (point))))
-				 (setq region-search-string (buffer-substring-no-properties
-							     (if (< start bound) bound start)
-							     (point))))
-			       ;; TeX-region-create stores the original buffer
-			       ;; locally as TeX-region-orig-buffer.
-			       (get-buffer TeX-region-orig-buffer)))))
-		 ((file-name-absolute-p f) (find-file f))
-		 (t (get-buffer (file-name-nondirectory file)))))))
-    (if (null buf)
-	(message "No buffer for %s." file)
-      (switch-to-buffer buf)
-      (push-mark (point) 'nomsg)
-      (goto-char (point-min))
-      (if region
-	  (search-forward region-search-string nil t)
-	(forward-line (1- line)))
-      (unless (= col -1)
-	(move-to-column col))
-      (raise-frame))))
+  (let* ((file (condition-case nil
+		   (progn
+		     (require 'url-parse)
+		     (require 'url-util)
+		     (url-unhex-string (aref (url-generic-parse-url file) 6)))
+		 ;; For Emacs 21 compatibility, which doesn't have the
+		 ;; url package.
+		 (file-error (replace-regexp-in-string "^file://" "" file))))
+	 (flc (or (apply #'TeX-source-correlate-handle-TeX-region file linecol)
+		  (apply #'list file linecol)))
+	 (file (car flc))
+	 (line (cadr flc))
+	 (col  (nth 2 flc)))
+    (pop-to-buffer (or (find-buffer-visiting file)
+                       (find-file-noselect file)))
+    (push-mark nil 'nomsg)
+    (let ((pos
+	   (when (> line 0)
+	     (save-excursion
+	       (save-restriction
+		 (widen)
+		 (goto-char 1)
+		 (forward-line (1- line))
+		 (when (> col 0)
+		   (forward-char (1- col)))
+		 (point))))))
+      (when pos
+	(when (or (< pos (point-min))
+		  (> pos (point-max)))
+	  (widen))
+	(goto-char pos)))))
 
 (define-minor-mode TeX-source-correlate-mode
   "Minor mode for forward and inverse search.
@@ -1996,12 +2028,12 @@ output files."
 	 (master-dir (file-name-directory master))
 	 (regexp (concat "\\("
 			 (regexp-quote (file-name-nondirectory master)) "\\|"
-			 (TeX-region-file nil t)
+			 (regexp-quote (TeX-region-file nil t))
 			 "\\)"
 			 "\\("
 			 (mapconcat 'identity suffixes "\\|")
 			 "\\)\\'"
-			 "\\|" (TeX-region-file t t)))
+			 "\\|" (regexp-quote (TeX-region-file t t))))
 	 (files (when regexp
 		  (directory-files (or master-dir ".") nil regexp))))
     (if files
@@ -2330,42 +2362,43 @@ If REGEXP is nil, or \"\", an error will occur."
 
 (defun TeX-tree-expand (vars program &optional subdirs)
   "Return directories corresponding to the kpathsea variables VARS.
-This is done calling `kpsewhich --expand-path' for each variable.
+This is done calling `kpsewhich --expand-path' for the variables.
 PROGRAM is passed as the parameter for --progname.  SUBDIRS are
 subdirectories which are appended to the directories of the TeX
 trees.  Only existing directories are returned."
   ;; FIXME: The GNU convention only uses "path" to mean "list of directories"
   ;; and uses "filename" for the name of a file even if it contains possibly
   ;; several elements separated by "/".
-  (let (path-list path exit-status input-dir-list)
-    (condition-case nil
-	(dolist (var vars)
-	  (setq path (with-output-to-string
-		       (setq exit-status (call-process
-					  "kpsewhich"  nil
-					  (list standard-output nil) nil
-					  "--progname" program
-					  "--expand-path" var))))
-	  (when (zerop exit-status)
-            (pushnew path path-list :test #'equal)))
-      (error nil))
-    (dolist (elt (nreverse path-list))
-      (let ((separators (if (string-match "^[A-Za-z]:" elt)
+  (let* ((exit-status 1)
+	 (path-list (ignore-errors
+		      (with-output-to-string
+			(setq exit-status
+			      (call-process
+			       "kpsewhich"  nil
+			       (list standard-output nil) nil
+			       "--progname" program
+			       "--expand-path"
+			       (mapconcat #'identity vars
+					  (if (eq system-type 'windows-nt)
+					      ";" ":"))))))))
+    (when (zerop exit-status)
+      (let ((separators (if (string-match "^[A-Za-z]:" path-list)
 			    "[\n\r;]"
-			  "[\n\r:]")))
+			  "[\n\r:]"))
+	    path input-dir-list)
 	(dolist (item (condition-case nil
-			  (split-string elt separators t)
+			  (split-string path-list separators t)
 			;; COMPATIBILITY for XEmacs <= 21.4.15
-			(error (delete "" (split-string elt separators)))))
+			(error (delete "" (split-string path-list separators)))))
 	  (if subdirs
 	      (dolist (subdir subdirs)
 		(setq path (file-name-as-directory (concat item subdir)))
 		(when (file-exists-p path)
-                  (pushnew path input-dir-list :test #'equal)))
+		  (pushnew path input-dir-list :test #'equal)))
 	    (setq path (file-name-as-directory item))
 	    (when (file-exists-p path)
-	      (pushnew path input-dir-list :test #'equal))))))
-    (nreverse input-dir-list)))
+	      (pushnew path input-dir-list :test #'equal))))
+	(nreverse input-dir-list)))))
 
 (defun TeX-macro-global ()
   "Return directories containing the site's TeX macro and style files."
@@ -2421,11 +2454,13 @@ These correspond to the personal TeX macros."
   (let ((path))
     ;; Put directories in an order where the more local files can
     ;; override the more global ones.
-    (mapc (lambda (file) (when file (add-to-list 'path file t)))
+    (mapc (lambda (file)
+	    (when (and file (not (member file path)))
+	      (setq path (cons file path))))
           (append (list TeX-auto-global TeX-style-global)
                   TeX-auto-private TeX-style-private
                   (list TeX-auto-local TeX-style-local)))
-    path)
+    (nreverse path))
   "List of directories to search for AUCTeX style files.
 Per default the list is built from the values of the variables
 `TeX-auto-global', `TeX-style-global', `TeX-auto-private',
@@ -2687,7 +2722,11 @@ See variable `TeX-style-hook-dialect' for supported dialects."
 				(and (TeX-shdex-in-p TeX-style-hook-dialect (aref hook 2))
 				     (funcall (aref hook 1))))
 			       (t (error "Invalid style hook %S" hook))))
-			    (cdr-safe (TeX-assoc-string style TeX-style-hook-list)))
+			    ;; Reverse the list of style hooks in order to run
+			    ;; styles in the order global, private, local
+			    ;; (assuming TeX-style-path has that ordering,
+			    ;; too).
+			    (reverse (cdr-safe (TeX-assoc-string style TeX-style-hook-list))))
 		  ;; This happens in case some style added a new parser, and
 		  ;; now the style isn't used anymore (user deleted
 		  ;; \usepackage{style}).  Then we're left over with, e.g.,
@@ -3000,10 +3039,9 @@ Space will complete and exit."
 
 First argument SYMBOL is the name of the macro.
 
-If called with no additional arguments, insert macro with point
-inside braces.  Otherwise, each argument of this function should
-match an argument to the TeX macro.  What is done depend on the
-type of ARGS:
+If ARGS is nil, insert macro with point inside braces.
+Otherwise, each element in ARGS should match an argument to the
+TeX macro.  What is done depend on the type of the element:
 
   string: Use the string as a prompt to prompt for the argument.
 
@@ -3206,8 +3244,7 @@ Unless optional argument COMPLETE is non-nil, ``: '' will be appended."
 	  (if complete "" ": ")))
 
 (defun TeX-string-divide-number-unit (string)
-  "Divide number and unit in STRING.
-Return the number as car and unit as cdr."
+  "Divide number and unit in STRING and return a list (number unit)."
   (if (string-match "[0-9]*\\.?[0-9]+" string)
       (list (substring string 0 (string-match "[^.0-9]" string))
 	    (substring string (if (string-match "[^.0-9]" string)
@@ -3728,15 +3765,15 @@ If TEX is a directory, generate style files for all files in the directory."
 		    "                     '" (prin1-to-string pkg-opts) ")"))
 	  (dolist (env verb-envs)
 	    (insert
-	     (format "\n  (add-to-list 'LaTeX-verbatim-environments-local \"%s\")"
+	     (format "\n   (add-to-list 'LaTeX-verbatim-environments-local \"%s\")"
 		     env)))
 	  (dolist (env verb-macros-braces)
 	    (insert
-	     (format "\n  (add-to-list 'LaTeX-verbatim-macros-with-braces-local \"%s\")"
+	     (format "\n   (add-to-list 'LaTeX-verbatim-macros-with-braces-local \"%s\")"
 		     env)))
 	  (dolist (env verb-macros-delims)
 	    (insert
-	     (format "\n  (add-to-list 'LaTeX-verbatim-macros-with-delims-local \"%s\")"
+	     (format "\n   (add-to-list 'LaTeX-verbatim-macros-with-delims-local \"%s\")"
 		     env)))
 	  (mapc (lambda (el) (TeX-auto-insert el style))
 		TeX-auto-parser)
@@ -4439,15 +4476,15 @@ element to ALIST-VAR."
 
 (progn ; Define TeX-mode-syntax-table.
   (modify-syntax-entry (string-to-char TeX-esc)
-			   "\\" TeX-mode-syntax-table)
+		       "\\" TeX-mode-syntax-table)
   (modify-syntax-entry ?\f ">"  TeX-mode-syntax-table)
   (modify-syntax-entry ?\n ">"  TeX-mode-syntax-table)
   (modify-syntax-entry (string-to-char TeX-grop)
-			   (concat "(" TeX-grcl)
-				TeX-mode-syntax-table)
+		       (concat "(" TeX-grcl)
+		       TeX-mode-syntax-table)
   (modify-syntax-entry (string-to-char TeX-grcl)
-			   (concat ")" TeX-grop)
-				TeX-mode-syntax-table)
+		       (concat ")" TeX-grop)
+		       TeX-mode-syntax-table)
   (modify-syntax-entry ?%  "<"  TeX-mode-syntax-table)
   (modify-syntax-entry ?\" "."  TeX-mode-syntax-table)
   (modify-syntax-entry ?&  "."  TeX-mode-syntax-table)
@@ -4457,7 +4494,8 @@ element to ALIST-VAR."
   (modify-syntax-entry ?$  "$"  TeX-mode-syntax-table)
   (modify-syntax-entry ?'  "w"  TeX-mode-syntax-table)
   (modify-syntax-entry ?«  "."  TeX-mode-syntax-table)
-  (modify-syntax-entry ?»  "."  TeX-mode-syntax-table))
+  (modify-syntax-entry ?»  "."  TeX-mode-syntax-table)
+  (modify-syntax-entry ?|  "$"  TeX-mode-syntax-table))
 
 ;;; Menu Support
 

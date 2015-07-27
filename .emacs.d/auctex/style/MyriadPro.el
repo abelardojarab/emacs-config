@@ -46,22 +46,26 @@
     '("slantfrac" "Numerator" "Denominator")
     '("boldsymbol" "Symbol"))
 
+   ;; More control over spacing in `\slantfrac':
+   (LaTeX-add-lengths "MdSlantfracSpacingBeforeSlash"
+		      "MdSlantfracSpacingAfterSlash")
+
    ;; `\mathversion' is available with sansmath option
    (when (LaTeX-provided-package-options-member "MyriadPro" "sansmath")
      (TeX-add-symbols
       '("mathversion"
-        (TeX-arg-eval completing-read "Math version: "
-                      '(("sans")        ("sansbold")
-                        ("sanstabular") ("sansboldtabular"))))))
+	(TeX-arg-eval completing-read "Math version: "
+		      '(("sans")        ("sansbold")
+			("sanstabular") ("sansboldtabular"))))))
 
    ;; Fontification
    (when (and (featurep 'font-latex)
-              (eq TeX-install-font-lock 'font-latex-setup))
+	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("smallfrac"   "{{")
-                                ("slantfrac"   "{{"))
-                              'textual)
+				("slantfrac"   "{{"))
+			      'textual)
      (font-latex-add-keywords '(("mathversion" "{"))
-                              'variable)))
+			      'variable)))
  LaTeX-dialect)
 
 (defvar LaTeX-MyriadPro-package-options

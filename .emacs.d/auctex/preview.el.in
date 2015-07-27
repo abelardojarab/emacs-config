@@ -1,6 +1,6 @@
 ;;; preview.el --- embed preview LaTeX images in source buffer
 
-;; Copyright (C) 2001-2006, 2010-2014  Free Software Foundation, Inc.
+;; Copyright (C) 2001-2006, 2010-2015  Free Software Foundation, Inc.
 
 ;; Author: David Kastrup
 ;; Keywords: tex, wp, convenience
@@ -1436,19 +1436,11 @@ icon is cached in the property list of the symbol."
 	     (throw 'preview-filter-specs nil)
 	   (preview-filter-specs-1 args))))
 
-(defvar preview-datadir (file-name-directory load-file-name)
-  "The directory relative to which package data may be found.
-This should be hardwired into the startup file containing the
-autoloads for preview-latex.")
-
 (put 'preview-filter-specs :file
      #'(lambda (_keyword value &rest args)
 	 `(:file ,(expand-file-name value (expand-file-name "images"
-							    preview-datadir))
+							    TeX-data-directory))
 		 ,@(preview-filter-specs-1 args))))
-
-(defvar preview-lispdir TeX-lisp-directory
-  "The directory where the preview lisp files are located.")
 
 (defun preview-ascent-from-bb (bb)
   "This calculates the image ascent from its bounding box.

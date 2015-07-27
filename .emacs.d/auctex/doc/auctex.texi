@@ -1590,6 +1590,11 @@ function additionally indents the current line.  If you choose
 @key{RET} is pressed.
 @end defopt
 
+@AUCTeX{} treats by default @samp{\[...\]} math mode as a regular
+environment and indents it accordingly.  If you do not like such
+behavior you only need to remove @code{\|\[} and @code{\|\]} from
+@code{LaTeX-begin-regexp} and @code{LaTeX-end-regexp} variables
+respectively.
 
 @node Filling
 @section Filling
@@ -1739,6 +1744,26 @@ inserted in the same line.  If the option
 default) and the comment does not fit into the line, a line break will
 be inserted before the last non-comment word to minimize the chance that
 the line becomes overfull.
+@end defopt
+
+@defopt LaTeX-fill-excluded-macros
+A list of macro names (without leading backslash) for whose arguments
+filling should be disabled.  Typically, you will want to add macros here
+which have long, multi-line arguments.  An example is
+@code{\pgfplotstabletypeset} from the pgfplotstable package which is
+used as shown in the following listing:
+
+@verbatim
+\pgfplotstabletypeset[skip first n=4]{%
+  XYZ Format,
+  Version 1.234
+  Date 2010-09-01
+  @author Mustermann
+  A B C
+  1 2 3
+  4 5 6
+}
+@end verbatim
 @end defopt
 
 @node Display
@@ -3467,6 +3492,20 @@ for one of the modes listed above, put it into the respective mode hook,
 if it is relevant for any @AUCTeX{} mode, add it to @code{TeX-mode-hook}
 and if it is relevant for all text modes, append it to
 @code{text-mode-hook}.
+
+Other useful hooks are listed below.
+
+@defvr Variable TeX-after-TeX-LaTeX-command-finished-hook
+Hook which is run after the @TeX{}/@LaTeX{} processor has successfully
+finished compiling your document.  (@xref{Processing}, for finding out
+how to compile your document).  Each function in the hook is run with
+the compiled output document as its argument.
+
+This is useful for automatically refreshing the viewer after
+re-compilation especially when using Emacs viewers such as DocView or
+PDF Tools.
+@end defvr
+@vindex TeX-after-TeX-LaTeX-command-finished-hook
 
 @node Multifile
 @section Multifile Documents

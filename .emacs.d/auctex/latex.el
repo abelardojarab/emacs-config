@@ -441,11 +441,11 @@ the name of the sectioning command inserted with `\\[LaTeX-section]'."
   (let ((string (completing-read
 		 (concat "Level: (default " name ") ")
 		 LaTeX-section-list
-		 nil nil nil)))
-    ; Update name
+		 nil nil nil nil name)))
+    ;; Update name
     (if (not (zerop (length string)))
 	(setq name string))
-    ; Update level
+    ;; Update level
     (setq level (LaTeX-section-level name))))
 
 (defun LaTeX-section-title ()
@@ -644,7 +644,11 @@ With prefix-argument, reopen environment afterwards."
 			 marker))
 	(move-marker marker nil)))))
 
-(defvar LaTeX-after-insert-env-hooks nil
+(if (featurep 'xemacs)
+    (define-obsolete-variable-alias 'LaTeX-after-insert-env-hooks 'LaTeX-after-insert-env-hook)
+  (define-obsolete-variable-alias 'LaTeX-after-insert-env-hooks 'LaTeX-after-insert-env-hook "11.89"))
+
+(defvar LaTeX-after-insert-env-hook nil
   "List of functions to be run at the end of `LaTeX-insert-environment'.
 Each function is called with three arguments: the name of the
 environment just inserted, the buffer position just before
@@ -738,26 +742,48 @@ allowing one level of TeX group braces."
 	  (regexp-quote TeX-grop) "]*" (regexp-quote TeX-grcl) "\\)*[^"
 	  (regexp-quote TeX-grcl) (regexp-quote TeX-grop) "]*\\)"))
 
+(defvar LaTeX-after-modify-env-hook nil
+  "List of functions to be run at the end of `LaTeX-modify-environment'.
+Each function is called with four arguments: the new name of the
+environment, the former name of the environment, the buffer
+position just before \\begin and the position just before
+\\end.")
+
 (defun LaTeX-modify-environment (environment)
   "Modify current ENVIRONMENT."
-  (save-excursion
-    (LaTeX-find-matching-end)
-    (re-search-backward (concat (regexp-quote TeX-esc)
-				"end"
-				(regexp-quote TeX-grop)
-				(LaTeX-environment-name-regexp)
-				(regexp-quote TeX-grcl))
-			(save-excursion (beginning-of-line 1) (point)))
-    (replace-match (concat TeX-esc "end" TeX-grop environment TeX-grcl) t t)
-    (beginning-of-line 1)
-    (LaTeX-find-matching-begin)
-    (re-search-forward (concat (regexp-quote TeX-esc)
-			       "begin"
-			       (regexp-quote TeX-grop)
-			       (LaTeX-environment-name-regexp)
-			       (regexp-quote TeX-grcl))
-		       (save-excursion (end-of-line 1) (point)))
-    (replace-match (concat TeX-esc "begin" TeX-grop environment TeX-grcl) t t)))
+  (let ((goto-end (lambda ()
+		    (LaTeX-find-matching-end)
+		    (re-search-backward (concat (regexp-quote TeX-esc)
+						"end"
+						(regexp-quote TeX-grop)
+						"\\("
+						(LaTeX-environment-name-regexp)
+						"\\)"
+						(regexp-quote TeX-grcl))
+					(save-excursion (beginning-of-line 1) (point)))))
+	(goto-begin (lambda ()
+		      (LaTeX-find-matching-begin)
+		      (prog1 (point)
+			(re-search-forward (concat (regexp-quote TeX-esc)
+						   "begin"
+						   (regexp-quote TeX-grop)
+						   "\\("
+						   (LaTeX-environment-name-regexp)
+						   "\\)"
+						   (regexp-quote TeX-grcl))
+					   (save-excursion (end-of-line 1) (point)))))))
+    (save-excursion
+      (funcall goto-end)
+      (let ((old-env (match-string 1)))
+	(replace-match environment t t nil 1)
+	(beginning-of-line 1)
+	(funcall goto-begin)
+	(replace-match environment t t nil 1)
+	(end-of-line 1)
+	(run-hook-with-args 'LaTeX-after-modify-env-hook
+			    environment old-env
+			    (save-excursion (funcall goto-begin))
+			    (progn (funcall goto-end) (point)))))))
 
 (defun LaTeX-current-environment (&optional arg)
   "Return the name (a string) of the enclosing LaTeX environment.
@@ -1344,6 +1370,7 @@ right number."
 (defvar LaTeX-auto-arguments nil)
 (defvar LaTeX-auto-optional nil)
 (defvar LaTeX-auto-env-args nil)
+(defvar LaTeX-auto-env-args-with-opt nil)
 
 (TeX-auto-add-type "label" "LaTeX")
 (TeX-auto-add-type "bibitem" "LaTeX")
@@ -1437,7 +1464,7 @@ This is necessary since index entries may contain commands and stuff.")
        (,(concat "\\\\\\(?:new\\|provide\\)command\\*?{?\\\\\\(" token "+\\)}?")
 	1 TeX-auto-symbol)
        (,(concat "\\\\newenvironment\\*?{?\\(" token "+\\)}?\\[\\([0-9]+\\)\\]\\[")
-	1 LaTeX-auto-environment)
+	(1 2) LaTeX-auto-env-args-with-opt)
        (,(concat "\\\\newenvironment\\*?{?\\(" token "+\\)}?\\[\\([0-9]+\\)\\]")
 	(1 2) LaTeX-auto-env-args)
        (,(concat "\\\\newenvironment\\*?{?\\(" token "+\\)}?")
@@ -1664,6 +1691,12 @@ The value is actually the tail of the list of options given to PACKAGE."
 		       (list (nth 0 entry)
 			     (string-to-number (nth 1 entry)))))
 	LaTeX-auto-env-args)
+  ;; Ditto for environments with an optional arg
+  (mapc (lambda (entry)
+	  (add-to-list 'LaTeX-auto-environment
+		       (list (nth 0 entry) 'LaTeX-env-args (vector "argument")
+			     (1- (string-to-number (nth 1 entry))))))
+	LaTeX-auto-env-args-with-opt)
 
   ;; Cleanup use of def to add environments
   ;; NOTE: This uses an O(N^2) algorithm, while an O(N log N)
@@ -2917,12 +2950,12 @@ indentation level in columns."
 (make-obsolete-variable 'LaTeX-verbatim-regexp 'LaTeX-verbatim-environments-local
 			"2014-12-19")
 
-(defcustom LaTeX-begin-regexp "begin\\b"
+(defcustom LaTeX-begin-regexp "begin\\b\\|\\["
   "*Regexp matching macros considered begins."
   :group 'LaTeX-indentation
   :type 'regexp)
 
-(defcustom LaTeX-end-regexp "end\\b"
+(defcustom LaTeX-end-regexp "end\\b\\|\\]"
   "*Regexp matching macros considered ends."
   :group 'LaTeX-indentation
   :type 'regexp)
@@ -3327,6 +3360,12 @@ does not fit into the line."
   :group 'LaTeX
   :type 'boolean)
 
+(defcustom LaTeX-fill-excluded-macros nil
+  "List of macro names (without leading \\) whose arguments must
+not be subject to filling."
+  :group 'LaTeX
+  :type '(repeat string))
+
 (defvar LaTeX-nospace-between-char-regexp
   (if (featurep 'xemacs)
     (if (and (boundp 'word-across-newline) word-across-newline)
@@ -3353,6 +3392,7 @@ pass args FROM, TO and JUSTIFY-FLAG."
   (interactive "*r\nP")
   (let ((end-marker (save-excursion (goto-char to) (point-marker))))
     (if (or (assoc (LaTeX-current-environment) LaTeX-indent-environment-list)
+	    (member (TeX-current-macro) LaTeX-fill-excluded-macros)
 	    ;; This could be generalized, if there are more cases where
 	    ;; a special string at the start of a region to fill should
 	    ;; inhibit filling.
@@ -4442,10 +4482,7 @@ If COUNT is non-nil, do it COUNT times."
 						"[@A-Za-z]+\\|[ \t]*\\($\\|"
 						TeX-comment-start-regexp "\\)"))
 			    (progn
-			      (when (string= (buffer-substring-no-properties
-					      (point) (+ (point)
-							 (length TeX-esc)))
-					     TeX-esc)
+			      (when (looking-at (regexp-quote TeX-esc))
 				(goto-char (TeX-find-macro-end)))
 			      (forward-line 1)
 			      (when (< (point) start)
@@ -5847,7 +5884,7 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
 		  LaTeX-section-list)))
 
   (set (make-local-variable 'TeX-auto-full-regexp-list)
-	(append LaTeX-auto-regexp-list plain-TeX-auto-regexp-list))
+       (append LaTeX-auto-regexp-list plain-TeX-auto-regexp-list))
 
   (LaTeX-set-paragraph-start)
   (setq paragraph-separate
@@ -5863,10 +5900,10 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
        LaTeX-search-files-type-alist)
 
   (set (make-local-variable 'LaTeX-item-list) '(("description" . LaTeX-item-argument)
-			  ("thebibliography" . LaTeX-item-bib)
-			  ("array" . LaTeX-item-array)
-			  ("tabular" . LaTeX-item-array)
-			  ("tabular*" . LaTeX-item-tabular*)))
+						("thebibliography" . LaTeX-item-bib)
+						("array" . LaTeX-item-array)
+						("tabular" . LaTeX-item-array)
+						("tabular*" . LaTeX-item-tabular*)))
 
   (setq TeX-complete-list
 	(append '(("\\\\cite\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
@@ -5936,11 +5973,11 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
   (LaTeX-add-counters "page" "equation" "enumi" "enumii" "enumiii"
 		      "enumiv" "footnote" "mpfootnote")
 
-  (LaTeX-add-lengths "baselineskip" "baselinestretch" "columnsep"
-		     "columnwidth" "evensidemargin" "linewidth" "oddsidemargin"
-		     "paperwidth" "paperheight" "parindent" "parskip"
-		     "tabcolsep" "textheight" "textwidth" "topmargin"
-		     "unitlength")
+  (LaTeX-add-lengths "arraycolsep" "arrayrulewidth" "baselineskip" "baselinestretch"
+		     "columnsep" "columnwidth" "doublerulesep" "evensidemargin"
+		     "linewidth" "oddsidemargin" "paperwidth" "paperheight"
+		     "parindent" "parskip" "tabcolsep" "textheight" "textwidth"
+		     "topmargin" "unitlength")
 
   (TeX-add-symbols
    '("addtocounter" TeX-arg-counter "Value")
@@ -6190,6 +6227,10 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
        [ "Number of arguments" ] [ "Default value for first argument" ] t)
      '("renewcommand*" TeX-arg-macro
        [ "Number of arguments" ] [ "Default value for first argument" ] t)
+     '("newenvironment" TeX-arg-define-environment
+       [ "Number of arguments" ] [ "Default value for first argument" ] t t)
+     '("renewenvironment" TeX-arg-environment
+       [ "Number of arguments" ] [ "Default value for first argument" ] t t)
      '("usepackage" LaTeX-arg-usepackage)
      '("RequirePackage" LaTeX-arg-usepackage)
      '("ProvidesPackage" (TeX-arg-file-name-sans-extension "Package name")

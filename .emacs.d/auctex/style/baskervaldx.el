@@ -1,6 +1,6 @@
-;;; baskervaldx.el --- AUCTeX style for `baskervaldx.sty' (v1.04)
+;;; baskervaldx.el --- AUCTeX style for `baskervaldx.sty' (v1.07)
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2015 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <esbati'at'gmx.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `baskervaldx.sty' (v1.04) from 2014/04/27.
+;; This file adds support for `baskervaldx.sty' (v1.07) from 2015/04/06.
 ;; `baskervaldx.sty' is part of TeXLive.
 
 ;;; Code:
@@ -45,6 +45,11 @@
     '("useosf"  0)
 
     ;; Text commands
+    '("lfstyle"   -1)   ; lf declaration
+    '("tlfstyle"  -1)   ; tlf declaration
+    '("osfstyle"  -1)   ; osf declaration
+    '("tosfstyle" -1)   ; tosf declaration
+    '("sufigures" -1)   ; superior figures declaration
     '("textlf"     t)   ; proportional lining figures
     '("texttlf"    t)   ; tabular lining figures
     '("textosf"    t)   ; proportional oldstyle figures
@@ -61,12 +66,18 @@
 				("texttosf"  "{")
 				("textsu"    "{"))
 			      'type-command)
+     (font-latex-add-keywords '(("lfstyle"   "")
+				("tlfstyle"  "")
+				("osfstyle"  "")
+				("tosfstyle" "")
+				("sufigures" ""))
+			      'type-declaration)
      (font-latex-add-keywords '(("swshape"   ""))
 			      'bold-declaration)))
  LaTeX-dialect)
 
 (defvar LaTeX-baskervaldx-package-options
-  '("lining" "lf" "oldstyle" "osf" "tabular" "proportional"
+  '("lining" "lf" "oldstyle" "osf" "tabular" "proportional" "p"
     "scale" "scaled" "sups" "swash")
   "Package options for the baskervaldx package.")
 

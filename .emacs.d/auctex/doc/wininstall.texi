@@ -362,7 +362,7 @@ choose another image format to be used by @previewlatex{}.
 
 Adding support for an image format usually involves the installation of
 a library, e.g. from @uref{http://gnuwin32.sf.net/}.  If you got your
-Emacs from @uref{gnu.org} you might want to check its
+Emacs from @uref{http://www.gnu.org} you might want to check its
 @uref{ftp://ftp.gnu.org/gnu/emacs/windows/README,README file} for
 details.
 

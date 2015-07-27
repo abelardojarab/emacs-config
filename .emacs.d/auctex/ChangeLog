@@ -1,3 +1,496 @@
+2015-07-18  Arash Esbati  <esbati@gmx.de>
+
+	* latex.el (LaTeX-common-initialization): Query for the default
+	value of first arg when (re-)defining new environments.
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/vwcol.el: New file.
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/textpos.el: New file.
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/environ.el: New file.
+
+	* style/tabulary.el ("tabulary"): Add `LCRJ' to
+	`LaTeX-array-column-letters'.
+
+	* style/tabularx.el ("tabularx"): Add `X' to
+	`LaTeX-array-column-letters'.
+
+	* style/array.el: Parse user-defined new column types and add them
+	to `LaTeX-array-column-letters'.
+
+2015-07-09  Mosè Giordano  <mose@gnu.org>
+
+	* latex/README: restore file deleted by mistake when preview/
+	directory has been moved to top level.
+
+	* Makefile.in: Use everywhere $(MAKE) in place of make.
+
+2015-06-21  Mosè Giordano  <mose@gnu.org>
+
+	* tex-buf.el (TeX-LaTeX-sentinel): Add support for hf-tikz
+	messages.
+
+	* style/mnras.el: New style file.
+
+	* Makefile.in (STYLESRC): Activate it.
+
+2015-06-14  Arash Esbati  <esbati@gmx.de>
+
+	* style/pdfpages.el ("pdfpages"): Restrict suggested files to
+	*.pdf files.  File name should be relative to master file
+	directory.
+
+2015-06-13  Mosè Giordano  <mose@gnu.org>
+
+	* tex-buf.el (TeX-LaTeX-sentinel-has-warnings, TeX-parse-error):
+	Cater for packages with digits in their names (e.g., fixltx2e,
+	which emits a warning from TeX Live 2015).
+
+2015-06-09  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-evince-dbus-p): Explicitly bind dbus-debug to nil in
+	order to really ignore dbus errors with dbus-ignore-errors.
+
+2015-06-05  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/pdfpages.el: New file.
+
+	* style/listings.el (LaTeX-listings-auto-cleanup): Add support for
+	the optional argument of env's defined with `\lstnewenvironment'.
+	(LaTeX-listing-lstnewenvironment-regexp): Ditto.
+
+2015-06-05  Ikumi Keita  <ikumi@ikumi.que.jp>
+
+	* tex.el (featurep): Restore compatibility with emacs versions
+	which don't have `activate-mark' (Emacs <= 22).
+
+2015-06-02  Arash Esbati  <esbati@gmx.de>
+
+	* latex.el (LaTeX-auto-cleanup): Prepare so that an optional
+	environment arg is also queried.
+
+2015-06-01  Tassilo Horn  <tsdh@gnu.org>
+
+	* latex.el (LaTeX-auto-env-args-with-opt): New variable for
+	collecting environments with an optional argument.
+	(LaTeX-auto-regexp-list): Use it.
+	(LaTeX-auto-cleanup): Initialize \newenvironment{foo}[n][d]{}{}
+	with the n-1 remaining mandatory arguments.
+
+2015-05-29  Nicolas Richard  <youngfrog@members.fsf.org>
+
+	* latex.el (LaTeX-backward-paragraph): Make it work in narrowed
+	buffers.  Fixes bug#20685.
+
+2015-05-18  Orlando Iovino  <orlando.iovino@yahoo.it>  (tiny change)
+
+	* style/beamer.el ("beamer"): Add `subtitle' to the `slide-title'
+	class.
+
+2015-05-16  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new styles.
+
+	* style/newpxmath.el: New file.
+
+	* style/newpxtext.el: New file.
+
+	* font-latex.el (font-latex-set-syntactic-keywords): Allow for
+	multiple mandatory argument for a verbatim environment.
+
+	* style/listings.el ("listings"): Add support for parsing new
+	env's defined with `\lstnewenvironment' command.
+
+2015-05-08  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-mode-syntax-table): Use paired delimiter syntax for
+	character |.
+	(TeX-tree-expand): Fix docstring.
+
+2015-05-07  Mosè Giordano  <mose@gnu.org>
+
+	* tex.el: Update copyright years.
+	(TeX-view-program-list): Fix type.  (Bug#20513)
+
+2015-05-05  Mosè Giordano  <mose@gnu.org>
+
+	* style/italian.el: Evaluate `TeX-quote-after-quote'.
+
+2015-05-01  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-tree-expand): Expand all given vars in just one
+	single call of kpsewhich.  Users reported that on some windows and
+	mac systems, kpsewhich is extremely slow leading to auctex startup
+	times of several seconds.
+
+2015-04-29  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-string-divide-number-unit): Fix docstring.
+
+	* style/mathtools.el ("mathtools"): Fix typos.
+
+2015-04-25  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-parse-macro): Improve docstring.
+
+2015-04-19  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-clean): Also regexp-quote TeX-region-file.
+
+2015-04-17  Tassilo Horn  <tsdh@gnu.org>
+
+	* preview.el.in (preview-datadir, preview-lispdir): Delete these
+	two variables.
+	(preview-filter-specs): Use TeX-data-directory in place of
+	preview-datadir.
+
+	* configure.ac: Remove auto.el from AC_OUTPUT.
+
+	* Makefile.in (auto.el): Delete target.
+
+2015-04-11  Tassilo Horn  <tsdh@gnu.org>
+
+	* style/mathtools.el (LaTeX-mathtools-env-multlined): Don't call
+	newline-and-indent after inserting environment.
+
+2015-04-11  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/attachfile.el: New file.
+
+	* style/fbb.el: Update style to LaTeX package v1.07 from
+	2015/04/06.
+
+	* style/erewhon.el ("erewhon"): Update style to LaTeX package
+	v1.04 from 2015/04/07.
+
+	* style/baskervaldx.el ("baskervaldx"): Update style to LaTeX
+	package v1.07 from 2015/04/06.
+
+	* style/newtxtext.el ("newtxtext"): Update style to LaTeX package
+	v1.434 from 2015/04/07.
+
+	* style/enumitem.el ("enumitem"): Fix typos.
+
+	* style/everysel.el ("everysel"): Fix typo (AtNextSelect_f_ont).
+
+	* style/color.el: Replace `read-string' with `TeX-read-string'.
+
+	* style/currvita.el: Replace `read-string' with `TeX-read-string'.
+
+	* style/wrapfig.el: Replace `read-string' with `TeX-read-string'.
+
+	* style/MyriadPro.el ("MyriadPro"): Add missing lenghts
+	`MdSlantfracSpacingBeforeSlash' and `MdSlantfracSpacingAfterSlash'.
+
+	* style/caption.el (LaTeX-caption-key-val-options): Delete wrong
+	values for `margin'-key.
+	(LaTeX-arg-caption-command): Use `TeX-argument-insert' and do not
+	rely on `TeX-arg-eval' anymore.
+	(LaTeX-arg-caption-DeclareCaption): Ditto.
+
+2015-04-02  Mosè Giordano  <mose@gnu.org>
+
+	* doc/auctex.texi (Indenting): Document indentation of "\[...\]".
+
+	* doc/changes.texi: Mention it.
+
+2015-03-30  Mosè Giordano  <mose@gnu.org>
+
+	* latex.el (LaTeX-begin-regexp): Add "\[".
+	(LaTeX-indent-calculate): Remove indentation of "\[...\]" from
+	here, it is automatically done in `LaTeX-indent-level-count' now
+	that `LaTeX-begin-regexp' has "\[".  (Bug#20227)
+
+2015-03-28  Mosè Giordano  <mose@gnu.org>
+
+	* style/acro.el:
+
+	* style/acronym.el:
+
+	* style/caption.el:
+
+	* style/color.el:
+
+	* style/enumitem.el:
+
+	* style/geometry.el:
+
+	* style/minted.el:
+
+	* style/pst-plot.el:
+
+	* style/pstricks.el:
+
+	* style/siunitx.el: Update copyright years and add
+	`TeX-auto-parse' to `TeX-update-style-hook'.
+
+2015-03-28  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/colortbl.el: New file.
+
+	* style/ltxtable.el ("ltxtable"): Ask for a `Width' and not for a
+	`Length' in minibuffer.
+
+	* latex.el (LaTeX-common-initialization): Add standard LaTeX
+	lengths `arraycolsep', `arrayrulewidth' and `doublerulesep'.
+
+2015-03-23  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-run-style-hooks): Apply style hooks in reverse
+	order.  With that, a local style can modify a private or a global
+	style, and a private style can modify a global one.
+
+2015-03-17  Mosè Giordano  <mose@gnu.org>
+
+	* doc/wininstall.texi: Fix a broken link.
+
+	* style/mn2e.el: New style file.
+
+	* Makefile.in (STYLESRC): Activate new style.
+
+2015-03-15  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/ltxtable.el: New file.
+
+2015-03-15  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/ltablex.el: New file.
+
+2015-03-15  Arash Esbati  <esbati@gmx.de>
+
+	* style/enumitem.el (LaTeX-enumitem-SetEnumitemKey-regexp): Delete
+	match for the second argument.
+	(LaTeX-enumitem-SetEnumitemValue-regexp): Delete match for the
+	third argument.
+	(LaTeX-arg-SetEnumitemValue): Replace the randomly generated
+	number with something human-readable.
+
+	* style/caption.el (LaTeX-caption-DeclareCaption-regexp): Delete
+	match for the second argument.
+	(LaTeX-arg-caption-DeclareCaption): Replace the randomly generated
+	number with something human-readable.
+
+2015-03-10  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-style-path): Replace `pushnew' with equivalent code
+	since defcustom init-forms don't seem to get compiled.
+
+	* doc/auctex.texi (Modes and Hooks): Document
+	TeX-after-TeX-LaTeX-command-finished-hook.
+
+	* tex-buf.el (TeX-after-TeX-LaTeX-command-finished-hook): New
+	hook.
+	(TeX-LaTeX-sentinel): Call it.
+
+2015-03-09  Mosè Giordano  <mose@gnu.org>
+
+	* tex-buf.el (TeX-find-display-help): Display the help also when
+	the file cannot be determined.
+
+	* latex.el (LaTeX-end-regexp): Add "\]".
+	(LaTeX-indent-calculate): Indent "\[...\]" display math as a
+	regular environment.
+
+2015-03-08  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/geometry.el: New file.
+
+2015-03-08  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/caption.el: New file.
+
+2015-03-08  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/enumitem.el: New file.
+
+2015-03-08  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-style-path): Replace add-to-list on local with
+	pushnew.
+
+	* style/bidibeamer.el: New style.
+
+	* Makefile.in (STYLESRC): Activate new bidibeamer style.
+
+2015-03-07  Mosè Giordano  <mose@gnu.org>
+
+	* doc/install.texi: Mention uninstallation in menus.
+	(Build/install and uninstall): Add "Uninstallation" index entry.
+	Document uninstallation process.
+
+	* Makefile.in: Update copyright years.
+	(.PHONY): Add uninstall rule.
+	(uninstall): New rule.
+
+	* doc/Makefile.in: Update copyright years.
+	(.PHONY): Add uninstall rule.
+	(uninstall): New rule.
+
+	* latex/Makefile.in: Update copyright years.
+	(.PHONY): Declare phony targets.
+	(install-texmf-doc): Do not ignore errors in this rule.
+	(uninstall): New rule.
+
+2015-03-03  Tassilo Horn  <tsdh@gnu.org>
+
+	* doc/auctex.texi (Filling): Document LaTeX-fill-excluded-macros.
+
+	* latex.el (LaTeX-fill-excluded-macros): New defcustom for
+	excluding macro arguments from filling.
+	(LaTeX-fill-region-as-paragraph): Use it.
+
+2015-03-02  Tassilo Horn  <tsdh@gnu.org>
+
+	* font-latex.el (font-latex-match-command-with-arguments): Fix
+	error introduced in the last change.
+
+2015-02-24  Tassilo Horn  <tsdh@gnu.org>
+
+	* style/expl3.el: New style for the wrapper package for
+	experimental LaTeX 3.
+
+	* Makefile.in (STYLESRC): Activate new style.
+
+	* font-latex.el (font-latex-match-simple-command)
+	(font-latex-match-command-with-arguments): Use \s_ and \sw regexp
+	classes instead of hard-coding [A-Za-z@] as LaTeX macro chars.
+
+2015-02-17  Tassilo Horn  <tsdh@gnu.org>
+
+	* latex.el (LaTeX-after-insert-env-hook): Rename from
+	`LaTeX-after-insert-env-hooks' which is now an obsolete variable
+	alias.
+	(LaTeX-after-modify-env-hook): New hook.
+	(LaTeX-modify-environment): Run `LaTeX-after-modify-env-hook'.
+
+2015-02-13  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-pdf-tools-sync-view, TeX-PDF-mode): Move addition of
+	`TeX-source-correlate-handle-TeX-region' to
+	`pdf-sync-backward-redirect-functions' from `TeX-PDF-mode' to
+	`TeX-pdf-tools-sync-view'.
+
+2015-02-09  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-pdf-tools-sync-view): Make it work with
+	`TeX-command-region'.
+
+2015-02-09  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-pdf-tools-sync-view): Simplify function.
+
+2015-02-09  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/color.el: New style.
+
+2015-02-08  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-source-correlate-handle-TeX-region): Fix
+	void-variable error.
+
+2015-02-07  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-pdf-tools-sync-view)
+	(TeX-source-correlate-handle-TeX-region)
+	(TeX-source-correlate-sync-source, TeX-PDF-mode): Adapt PDF Tools
+	forward/backward search to latest PDF Tools changes.
+
+2015-02-06  Mosè Giordano  <mose@gnu.org>
+
+	* tex.el (TeX-source-correlate-handle-TeX-region): Replace
+	`file-name-base', introduced in GNU Emacs 24, with
+	`file-name-sans-extension'+`file-name-nondirectory'.
+
+2015-02-06  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-source-correlate-handle-TeX-region): New function.
+	(TeX-source-correlate-sync-source): Use it.
+	(TeX-PDF-mode): Set `pdf-sync-correlate-tex-refine-function' to
+	`TeX-source-correlate-sync-source'.
+
+2015-02-05  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-pdf-tools-sync-view): New function to use PDF Tools
+	`pdf-view-mode' as a viewer.
+	(TeX-view-program-list-builtin): Add PDF Tools entry calling
+	`TeX-pdf-tools-sync-view'.
+
+2015-02-04  Tassilo Horn  <tsdh@gnu.org>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/tcolorbox.el: New style.
+
+2015-01-31  Arash Esbati  <esbati@gmx.de>
+
+	* Makefile.in (STYLESRC): Add new style.
+
+	* style/currvita.el: New file.
+
+2015-01-27  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-view-program-list-builtin): Remove "start" as
+	executable entry because it's no executable but a Windows system
+	command.
+	(TeX-view-program-list-builtin): Also remove "start" as executable
+	from the "dvips and start" entry.
+
+2015-01-25  Tassilo Horn  <tsdh@gnu.org>
+
+	* latex.el (LaTeX-section-heading): Use default parameter of
+	completing-read.  Fixes bug#19675.
+
+2015-01-19  Tassilo Horn  <tsdh@gnu.org>
+
+	* tex.el (TeX-auto-store): Fix indentation in auto files.
+
+2015-01-16  Arash Esbati  <esbati@gmx.de>
+
+	* style/minted.el: Update copyright year.
+	(LaTeX-minted-auto-cleanup): Fix the name of the new langcode
+	environment.
+
+2014-12-30  Arash Esbati  <esbati@gmx.de>
+
+	* style/multirow.el ("multirow"): Fix a typo in the name of a
+	variable.
+
+	* Makefile.in (STYLESRC): Add new styles.
+
+	* style/relsize.el: New file.
+
+	* style/wrapfig.el: New file.
+
+	* style/hyperref.el ("hyperref"): Add `Form' environment needed
+	for PDF and HTML forms.
+	(LaTeX-hyperref-forms-options): New variable for key-val options
+	used in form related macros (`TextField', `CheckBox',
+	`ChoiceMenu', `PushButton', `Submit', `Reset').
+
 2014-12-22  Tassilo Horn  <tsdh@gnu.org>
 
 	* doc/changes.texi: Document addition of LaTeX-command-section and

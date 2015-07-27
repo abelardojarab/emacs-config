@@ -2,7 +2,7 @@
 
 # Maintainer: auctex-devel@gnu.org
 
-# Copyright (C) 2003-2008, 2010, 2013, 2014 Free Software
+# Copyright (C) 2003-2008, 2010, 2013-2015 Free Software
 #   Foundation, Inc.
 
 # This file is part of AUCTeX.
@@ -142,7 +142,16 @@ STYLESRC = style/prosper.el \
 	   style/XCharter.el  style/zlmtt.el     style/ifluatex.el \
 	   style/luatextra.el style/erewhon.el   style/baskervaldx.el \
 	   style/fbb.el       style/newtxmath.el style/newtxsf.el \
-	   style/newtxtext.el style/newtxttt.el  style/minted.el
+	   style/newtxtext.el style/newtxttt.el  style/minted.el \
+	   style/wrapfig.el   style/relsize.el   style/currvita.el \
+	   style/tcolorbox.el style/color.el	 style/expl3.el \
+	   style/bidibeamer.el style/enumitem.el style/caption.el \
+	   style/geometry.el  style/ltablex.el   style/ltxtable.el \
+	   style/mn2e.el      style/colortbl.el  style/attachfile.el \
+	   style/newpxtext.el style/newpxmath.el style/pdfpages.el \
+	   style/mnras.el     style/environ.el   style/textpos.el \
+	   style/vwcol.el
+
 STYLEELC = $(STYLESRC:.el=.elc)
 
 ifeq (@preview_enabled@,yes)
@@ -182,7 +191,7 @@ all: texmf lisp docs
 	install-man clean distclean maintainer-clean extraclean		\
 	tar-ball-clean check-tag check release-commit dist snapshot	\
 	patch tar-ball rpm-packages wc xemacs-package windows-package	\
-	release-sign release-upload preview-ball
+	release-sign release-upload preview-ball uninstall
 
 texmf: latex/Makefile
 	$(TEXMF)
@@ -191,7 +200,7 @@ lisp:	tex-site.el $(AUCSRC) $(STYLESRC) $(MULESRC) $(PREVIEWSRC)
 	$(ELCC) -f batch-byte-compile $(AUCSRC) $(STYLESRC) $(MULESRC) $(PREVIEWSRC)
 	$(PREVIEWLATEX)
 
-preview-latex.el: preview.el auto.el
+preview-latex.el: preview.el
 	rm -f preview-latex.el
 	-$(EMACS) -batch -no-site-file -no-init-file $(PREVIEW_AUTOLOAD) ; \
 	test -r $@ || { \
@@ -199,7 +208,6 @@ preview-latex.el: preview.el auto.el
 	  echo "" >> $@ ; \
 	  $(EMACS) -batch -no-site-file -no-init-file $(PREVIEW_AUTOLOAD) ; \
 	}
-	cat auto.el >> $@
 
 docs:
 	cd doc ; $(MAKE) all
@@ -223,9 +231,6 @@ auctex.el: auctex.el.in config.status
 	./config.status
 
 latex/Makefile: latex/Makefile.in Makefile config.status
-	./config.status
-
-auto.el: auto.el.in Makefile config.status
 	./config.status
 
 configure: configure.ac aclocal.m4
@@ -349,6 +354,21 @@ install-metadata:
 	  done && \
 	  echo "pkginfo/MANIFEST.$(PACKAGE)" >> "pkginfo/MANIFEST.$(PACKAGE)" ; \
 	}
+
+uninstall:
+	rm -rf $(DESTDIR)$(packagelispdir) $(DESTDIR)$(packagedatadir) \
+		$(DESTDIR)$(autodir)
+	if test X$(packagedir) = Xno ; then \
+		rm -f $(DESTDIR)$(lispdir)/tex-site.el \
+		$(DESTDIR)$(auctexstartfile) ; \
+	else \
+		rm -f $(DESTDIR)$(packagedir)/man/auctex/RELEASE \
+		$(DESTDIR)$(packagedir)/pkginfo/MANIFEST.$(PACKAGE); \
+	fi
+	cd doc ; $(MAKE) DESTDIR=$(DESTDIR) uninstall
+	rm -f $(DESTDIR)$(previewstartfile)
+	rm -rf $(DESTDIR)$(packagelispdir)
+	(cd latex ; $(MAKE) DESTDIR=$(DESTDIR) uninstall)
 
 .el.elc:
 	$(ELCC) -f batch-byte-compile $<
@@ -486,7 +506,7 @@ xemacs-package: check-tag
 	$(CP_A) auctex-$(TAG) $(XEMACS_BUILD_DIR)
 	cd $(XEMACS_BUILD_DIR) \
 	&& ./configure INSTALL_INFO=: TEXHASH=: --with-xemacs --with-packagedir=`pwd`/xemacs-package --without-texmf-dir --with-auto-dir=etc/auctex/auto \
-	&& make all install-man install && cd xemacs-package && tar -cf - --owner=root --group=root . | gzip --best > $(FTPDIR)/auctex-$(TAG)-pkg.tar.gz
+	&& $(MAKE) all install-man install && cd xemacs-package && tar -cf - --owner=root --group=root . | gzip --best > $(FTPDIR)/auctex-$(TAG)-pkg.tar.gz
 
 # Pre-compiled AUCTeX package for Emacs on Windows
 WBUILDDIR=$(PWD)/windows-package
@@ -546,9 +566,9 @@ windows-package: check-tag
 	  --without-texmf-dir --with-emacs=$(WEMACS) \
 	  --with-lispdir=$(WBUILDDIR)/emacs-$(WEMACSVER)/$(WEMACSSITELISP) \
 	  --datarootdir=$(WBUILDDIR)/emacs-$(WEMACSVER)/$(WEMACSDATAROOTDIR) \
-	&& make \
+	&& $(MAKE) \
 	&& sed -i -e 's/"\/[^\n]\+/(expand-file-name "..\/var\/auctex" (file-name-directory load-file-name))/' tex-site.el \
-	&& make install
+	&& $(MAKE) install
 # Create the package
 	test -d $(FTPDIR) || mkdir -p $(FTPDIR)
 	rm -f $(FTPDIR)/$(WPACKAGE)
@@ -603,7 +623,7 @@ preview-ball: check-tag
 # Use TAG_EXPORT if set (for snapshots)
 	git archive $${TAG_EXPORT:=`echo release_$(TAG) | sed 's/[.]/_/g'`} \
 	  latex/ | tar -xC $(PREVIEW_BUILD_DIR) --strip-components=1
-	cd $(PREVIEW_BUILD_DIR) && make -f ../latex/Makefile preview.ins preview.pdf
+	cd $(PREVIEW_BUILD_DIR) && $(MAKE) -f ../latex/Makefile preview.ins preview.pdf
 	chmod -R go-w+rX $(PREVIEW_BUILD_DIR)
 	test -d $(CTANDIR) || mkdir -p $(CTANDIR)
 # CTAN requires a top level directory "preview/" for the archive.

@@ -29,6 +29,9 @@ New option @code{TeX-file-line-error} allows to select file:line:error
 style for error messages.
 
 @item
+Indent @samp{\[...\]} math mode as a regular environment by default.
+
+@item
 @code{TeX-view-program-list} can contain, as third optional element of
 each item, the name of the executable(s) needed to open the viewer.
 @end itemize

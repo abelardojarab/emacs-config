@@ -557,8 +557,8 @@ QUEUE is non-nil when we are checking for the printer queue."
   (if (listp TeX-output-extension)
       (car TeX-output-extension)
     (or (TeX-process-get-variable (TeX-active-master)
-				'TeX-output-extension
-				TeX-output-extension)
+				  'TeX-output-extension
+				  TeX-output-extension)
 	TeX-output-extension)))
 
 (defun TeX-view-mouse (event)
@@ -602,6 +602,12 @@ the current style options."
       "%v")))
 
 ;;; Command Hooks
+
+(defvar TeX-after-TeX-LaTeX-command-finished-hook nil
+  "Hook being run after TeX/LaTeX finished successfully.
+The functions in this hook are run with the DVI/PDF output file
+given as argument.  Using this hook can be useful for updating
+the viewer automatically after re-compilation of the document.")
 
 (defvar TeX-after-start-process-function nil
   "Hooks to run after starting an asynchronous process.
@@ -1008,7 +1014,7 @@ Warnings can be indicated by LaTeX or packages."
   (save-excursion
     (goto-char (point-min))
     (re-search-forward
-     "^\\(LaTeX [A-Za-z]*\\|Package [A-Za-z]+ \\)Warning:" nil t)))
+     "^\\(LaTeX [A-Za-z]*\\|Package [A-Za-z0-9]+ \\)Warning:" nil t)))
 
 (defun TeX-LaTeX-sentinel-has-bad-boxes ()
   "Return non-nil, if LaTeX output indicates overfull or underfull boxes."
@@ -1092,6 +1098,11 @@ changed\\. Rerun LaTeX\\." nil t)
 	 (message
 	  "%s" "You should run LaTeX again to get table formatting right")
 	 (setq TeX-command-next TeX-command-default))
+	((re-search-forward "^hf-TikZ Warning: Mark '.*' changed\\. \
+Rerun to get mark in right position\\." nil t)
+	 (message
+	  "%s" "You should run LaTeX again to get TikZ marks in right position")
+	 (setq TeX-command-next TeX-command-default))
 	((re-search-forward
 	  "^\\(\\*\\* \\)?J?I?p?\\(La\\|Sli\\)TeX\\(2e\\)? \
 \\(Version\\|ver\\.\\|<[0-9/]*>\\)" nil t)
@@ -1110,7 +1121,12 @@ changed\\. Rerun LaTeX\\." nil t)
 	 (setq TeX-command-next TeX-command-Show))
 	(t
 	 (message "%s%s%s" name ": problems after " (TeX-current-pages))
-	 (setq TeX-command-next TeX-command-default))))
+	 (setq TeX-command-next TeX-command-default)))
+  (unless TeX-error-list
+    (run-hook-with-args 'TeX-after-TeX-LaTeX-command-finished-hook
+			(with-current-buffer TeX-command-buffer
+			  (expand-file-name
+			   (TeX-active-master (TeX-output-extension)))))))
 
 ;; should go into latex.el? --pg
 (defun TeX-BibTeX-sentinel (process name)
@@ -1737,7 +1753,7 @@ Return non-nil if an error or warning is found."
 	  "^\\(\\(?:Overfull\\|Underfull\\|Tight\\|Loose\\)\
  \\\\.*?[0-9]+--[0-9]+\\)\\|"
 	  ;; LaTeX warning
-	  "^\\(LaTeX [A-Za-z]*\\|Package [A-Za-z]+ \\)Warning:.*"))
+	  "^\\(LaTeX [A-Za-z]*\\|Package [A-Za-z0-9]+ \\)Warning:.*"))
 	(error-found nil))
     (while
 	(cond
@@ -1820,14 +1836,6 @@ Return non-nil if an error or warning is found."
 (defun TeX-find-display-help (type file line error offset context string
 				   line-end bad-box error-point)
   "Find the error and display the help."
-  (unless file
-    (cond
-     ;; XXX: error messages have to be different?
-     ((equal type 'error)
-      (error "Error occurred after last TeX file closed"))
-     (t
-      (error "Could not determine file for warning"))))
-
   ;; Go back to TeX-buffer
   (let ((runbuf (TeX-active-buffer))
 	(master (with-current-buffer TeX-command-buffer
@@ -1835,33 +1843,41 @@ Return non-nil if an error or warning is found."
 	(command-buffer TeX-command-buffer)
 	error-file-buffer start)
     (run-hooks 'TeX-translate-location-hook)
-    (setq error-file-buffer
-	  (find-file
-	   (expand-file-name file (file-name-directory master))))
-    ;; Set the value of `TeX-command-buffer' in the next file with an
-    ;; error to be displayed to the value it has in the current buffer.
-    (with-current-buffer error-file-buffer
-      (set (make-local-variable 'TeX-command-buffer) command-buffer))
 
-    ;; Find the location of the error or warning.
-    (when line
-      (goto-char (point-min))
-      (forward-line (+ offset line -1))
-      (cond
-       ;; Error.
-       ((equal type 'error)
-	(if (not (string= string " "))
-	    (search-forward string nil t)))
-       ;; Warning or bad box.
-       (t
-	(beginning-of-line 0)
-	(setq start (point))
-	(goto-char (point-min))
-	(forward-line (+ offset line-end -1))
-	(end-of-line)
-	(when string
-	  (search-backward string start t)
-	  (search-forward string nil t)))))
+    (if file
+	(progn
+	  (setq error-file-buffer
+		(find-file
+		 (expand-file-name file (file-name-directory master))))
+	  ;; Set the value of `TeX-command-buffer' in the next file with an
+	  ;; error to be displayed to the value it has in the current buffer.
+	  (with-current-buffer error-file-buffer
+	    (set (make-local-variable 'TeX-command-buffer) command-buffer))
+
+	  ;; Find the location of the error or warning.
+	  (when line
+	    (goto-char (point-min))
+	    (forward-line (+ offset line -1))
+	    (cond
+	     ;; Error.
+	     ((equal type 'error)
+	      (if (not (string= string " "))
+		  (search-forward string nil t)))
+	     ;; Warning or bad box.
+	     (t
+	      (beginning-of-line 0)
+	      (setq start (point))
+	      (goto-char (point-min))
+	      (forward-line (+ offset line-end -1))
+	      (end-of-line)
+	      (when string
+		(search-backward string start t)
+		(search-forward string nil t))))))
+      ;; When the file cannot be determined stay here but issue a warning.
+      (message (concat "Could not determine file for "
+		       (cond ((equal type 'error) "error")
+			     (t "warning"))))
+      (beep))
 
     ;; Display the help.
     (cond ((eq TeX-display-help 'expert)

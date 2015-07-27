@@ -43,7 +43,7 @@ the file @file{INSTALL.windows}.
 @menu
 * Prerequisites::
 * Configure::
-* Build/install::
+* Build/install and uninstall::
 * Loading the package::
 * Advice for package providers::
 * Advice for non-privileged users::
@@ -56,7 +56,7 @@ the file @file{INSTALL.windows}.
 @menu
 * Prerequisites::
 * Configure::
-* Build/install::
+* Build/install and uninstall::
 * Loading the package::
 * Advice for package providers::
 * Advice for non-privileged users::
@@ -270,11 +270,12 @@ It is to be used when you are using @code{--with-tex-dir=@var{/dir}},
 but is normally not necessary otherwise.
 @end table
 
-@node Build/install
-@section Build/install
+@node Build/install and uninstall
+@section Build/install and uninstall
 
 @cindex Installation
 @cindex Make
+@cindex Uninstallation
 
 Once @command{configure} has been run, simply enter
 
@@ -291,7 +292,19 @@ locations chosen earlier, type
 make install
 @end example
 
+@noindent
 You may need special privileges to install, e.g., if you are installing
+into system directories.
+
+Should you want to completely remove the installed package, in the same
+directory you built @AUCTeX{} run
+
+@example
+make uninstall
+@end example
+
+@noindent
+You will need administration privileges if you installed the package
 into system directories.
 
 @node Loading the package
@@ -575,3 +588,8 @@ directories will be searched recursively, so there is no reason to list
 subdirectories explicitly.  Automatic configuration will already have
 set the variable for you if it could use the program @samp{kpsewhich}.
 In this case you normally don't have to alter anything.
+
+@c Local Variables:
+@c mode: texinfo
+@c TeX-master: "auctex"
+@c End:
