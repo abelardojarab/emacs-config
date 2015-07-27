@@ -100,7 +100,7 @@
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
-       (executable-find "kdialog"))
+     (executable-find "kdialog"))
   (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
   ) ;; if
@@ -121,6 +121,18 @@
 (global-set-key "\C-cy" '(lambda ()
                            (interactive)
                            (popup-menu 'yank-menu)))
+
+;; Highlight symbol at point
+(global-set-key [f3] 'highlight-symbol-at-point)
+(global-set-key [(control f3)] 'highlight-symbol-next)
+(global-set-key [(shift f3)] 'highlight-symbol-prev)
+(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
+(global-set-key [(control shift mouse-1)]
+                (lambda (event)
+                  (interactive "e")
+                  (goto-char (posn-point (event-start event)))
+                  (highlight-symbol-at-point)))
+
 
 ;; search forward with Ctrl-f
 (global-set-key [(control f)] 'isearch-forward)

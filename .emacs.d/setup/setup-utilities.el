@@ -1,6 +1,6 @@
 ;;; setup-utilities.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -141,7 +141,6 @@ When there is a text selection, act on the region."
           (insert (format format-string i))
           (forward-line 1)))
   (goto-char start))
-
 (global-set-key (kbd "C-x r N") 'number-rectangle)
 
 ;; Beautify buffer in C/C++
@@ -173,9 +172,8 @@ buffer."
 
 ;; Help to determine who modifies buffer
 (defvar my-debug-set-buffer-modified-p-buffers nil)
-
 (defadvice set-buffer-modified-p
-  (before my-debug-set-buffer-modified-p-advice)
+    (before my-debug-set-buffer-modified-p-advice)
   (when (memq (current-buffer) my-debug-set-buffer-modified-p-buffers)
     (debug)))
 (ad-activate 'set-buffer-modified-p)

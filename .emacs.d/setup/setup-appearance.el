@@ -47,7 +47,7 @@
 ;; Non-nil means no need to redraw entire frame after suspending.
 (setq no-redraw-on-reenter nil)
 
-;; Do not improve Emacs display engine
+;; Improve Emacs display engine
 (setq redisplay-dont-pause t)
 
 ;; Disable bidirectional text support
@@ -173,7 +173,7 @@ non-nil."
 (defun hi-lock-overlay-p (overlay)
   "Return the overlay if overlay is a hi-lock overlay."
   (if (and (overlayp overlay)
-           (eq (overlay-get overlay 'hi-lock-overlay) t))
+         (eq (overlay-get overlay 'hi-lock-overlay) t))
       overlay
     nil))
 
@@ -363,15 +363,6 @@ non-nil."
 (require 'highlight-symbol)
 (add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
 (setq highlight-symbol-on-navigation-p t)
-(global-set-key [f3] 'highlight-symbol-at-point)
-(global-set-key [(control f3)] 'highlight-symbol-next)
-(global-set-key [(shift f3)] 'highlight-symbol-prev)
-(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
-(global-set-key [(control shift mouse-1)]
-                (lambda (event)
-                  (interactive "e")
-                  (goto-char (posn-point (event-start event)))
-                  (highlight-symbol-at-point)))
 
 ;; higlight changes in documents
 (global-highlight-changes-mode t)

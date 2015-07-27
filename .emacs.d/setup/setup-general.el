@@ -214,9 +214,6 @@ Defaults to `error'."
 ;; turn-off info about of pointee for symlinks
 (setq dired-listing-switches "-alLF")
 
-;; Make ?, ? and such work
-(set-language-environment 'spanish)
-
 ;; Garantee utf8 as input-method
 (set-input-method nil)
 (setq read-quoted-char-radix 10)
@@ -527,7 +524,7 @@ Defaults to `error'."
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-             (eq 'not-yanks search-upper-case))
+               (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message

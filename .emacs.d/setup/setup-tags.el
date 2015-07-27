@@ -90,13 +90,13 @@
 ;; Helper functions for etags/ctags
 (defun create-ctags (dir-name)
   "Create tags file."
-  (interactive "DDirectory: ")
+  (interactive "Directory: ")
   (shell-command
    (format "ctags -f %s -e -R %s" path-to-ctags (directory-file-name dir-name))))
 
 (defun create-etags (dir-name)
   "Create tags file."
-  (interactive "DDirectory: ")
+  (interactive "Directory: ")
   (eshell-command
    (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 

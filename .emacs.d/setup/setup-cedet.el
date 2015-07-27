@@ -33,12 +33,6 @@
 (set-default 'semantic-case-fold t)
 (semantic-load-enable-minimum-features)
 
-;; Messages
-(add-hook 'semantic-before-idle-scheduler-reparse-hooks
-          (lambda () (message "Idle reparse...")))
-(add-hook 'semantic-after-idle-scheduler-reparse-hooks
-          (lambda () (message "Idle reparse...done")))
-
 ;; Faster parsing
 (setq semantic-idle-work-parse-neighboring-files-flag nil)
 (setq semantic-idle-work-update-headers-flag nil)
@@ -82,69 +76,8 @@
 
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
-(ignore-errors
-  (require 'semantic/bovine/c))
-
-(defconst cedet-user-include-dirs
-  (list ".." "../include" "../inc" "../common" "../public" "."
-        "../.." "../../include" "../../inc" "../../common" "../../public"))
-(setq cedet-sys-include-dirs (list
-                              "/usr/include"
-                              "/usr/include/c++"))
-(let ((include-dirs cedet-user-include-dirs))
-  (setq include-dirs (append include-dirs cedet-sys-include-dirs))
-  (mapc (lambda (dir)
-          (semantic-add-system-include dir 'c++-mode)
-          (semantic-add-system-include dir 'c-mode))
-        include-dirs))
-(setq semantic-c-dependency-system-include-path "/usr/include/")
-
-;; Fast switch between header and implementation for C/C++
-(defun dts-switch-between-header-and-source ()
-  "Switch between a c/c++ header (.h) and its corresponding source (.c/.cpp)."
-  (interactive)
-  (setq bse (file-name-sans-extension buffer-file-name))
-  (setq ext (downcase (file-name-extension buffer-file-name)))
-  (cond
-   ((or (equal ext "h") (equal ext "hpp"))
-    ;; first, look for bse.c
-    (setq nfn (concat bse ".c"))
-    (if (file-exists-p nfn)
-        (find-file nfn)
-      (progn
-        (setq nfn (concat bse ".cpp"))
-        (find-file nfn))))
-   ;; second condition - the extension is "cpp"
-   ((equal ext "cpp")
-    (setq nfn (concat bse ".h"))
-    (if (file-exists-p nfn)
-        (find-file nfn)
-      (progn
-        (setq nfn (concat bse ".hpp"))
-        (find-file nfn))))
-
-   ((equal ext "c")
-    (setq nfn (concat bse ".h"))
-    (find-file nfn))
-
-   ((equal ext "hxx")
-    (setq nfn (concat bse ".cxx"))
-    (find-file nfn))
-
-   ((equal ext "cxx")
-    (setq nfn (concat bse ".hxx"))
-    (find-file nfn))
-
-   ((equal ext "hx")
-    (setq nfn (concat bse ".cx"))
-    (find-file nfn))
-
-   ((equal ext "cx")
-    (setq nfn (concat bse ".hx"))
-    (find-file nfn))
-
-   ) ;; cond
-  ) ;; defun
+(require 'semantic/bovine/c)
+(require 'semantic/bovine/clang)
 
 ;; Eassist header switches
 (require 'eassist nil 'noerror)
