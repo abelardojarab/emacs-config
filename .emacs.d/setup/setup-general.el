@@ -61,7 +61,7 @@ Defaults to `error'."
                       (mapcar (lambda (parent)
                                 (cons parent
                                       (or (get parent 'error-conditions)
-                                         (error "Unknown signal `%s'" parent))))
+                                          (error "Unknown signal `%s'" parent))))
                               parent))
              (cons parent (get parent 'error-conditions)))))
       (put name 'error-conditions
@@ -249,8 +249,8 @@ Defaults to `error'."
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                    (save-excursion
-                      (untabify (point-min) (point-max)))) nil))
+                         (save-excursion
+                           (untabify (point-min) (point-max)))) nil))
 
 ;; Assure window is splitted horizontally (for compilation buffer)
 (setq split-width-threshold nil)
@@ -263,17 +263,6 @@ Defaults to `error'."
   (if (= (length (window-list nil 'dont-include-minibuffer-even-if-active)) 1)
       (split-window-horizontally)))
 (add-hook 'temp-buffer-setup-hook 'split-horizontally-not-vertically)
-
-;; Avoid to make a separate frame
-(setq display-buffer-reuse-frames t)
-(setq menu-bar-select-buffer-function 'switch-to-buffer)
-(add-to-list 'display-buffer-alist
-             `(,(rx bos "*Flycheck errors*" eos)
-               (display-buffer-reuse-window
-                display-buffer-in-side-window)
-               (reusable-frames . visible)
-               (side            . bottom)
-               (window-height   . 0.4)))
 
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
@@ -538,7 +527,7 @@ Defaults to `error'."
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-               (eq 'not-yanks search-upper-case))
+             (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message
@@ -547,7 +536,6 @@ Defaults to `error'."
                                string ""))
             isearch-yank-flag t)
       (isearch-search-and-update))))
-
 (add-hook 'isearch-mode-hook 'my-isearch-yank-word-hook)
 (global-set-key (kbd "C-*") 'my-isearch-word-at-point)
 (global-set-key [(control kp-multiply)] 'my-isearch-word-at-point)
@@ -555,10 +543,8 @@ Defaults to `error'."
 ;; Keep the search results in the center in incremental search
 (defadvice isearch-repeat-forward (after isearch-repeat-forward-recenter activate)
   (recenter))
-
 (defadvice isearch-repeat-backward (after isearch-repeat-backward-recenter activate)
   (recenter))
-
 (ad-activate 'isearch-repeat-forward)
 (ad-activate 'isearch-repeat-backward)
 
@@ -603,8 +589,7 @@ Defaults to `error'."
 (add-hook 'c-mode-hook 'subword-mode)
 (mapc (lambda (mode)
         (add-hook mode 'subword-mode))
-      '(c-mode-hook
-        c++-mode-hook
+      '(c-common-mode-hook
         python-mode-hook
         js2-mode-hook
         java-mode-hook))
@@ -723,11 +708,11 @@ not need to be wrapped, move point to the next line and return t."
 (require 'buff-menu+)
 
 ;; Measure Emacs startup time
-(defun nox/show-startup-time ()
+(defun show-startup-time ()
   "Show Emacs's startup time in the minibuffer"
   (message "Startup time: %s seconds."
            (emacs-uptime "%s")))
-(add-hook 'emacs-startup-hook 'nox/show-startup-time 'append)
+(add-hook 'emacs-startup-hook 'show-startup-time 'append)
 
 ;; Benchmark-init can give us a breakdown of time spent on require and load calls:
 (add-to-list 'load-path "~/.emacs.d/benchmark-init")
@@ -743,10 +728,22 @@ not need to be wrapped, move point to the next line and return t."
 (require 'persistent-soft)
 (setq pcache-directory (expand-file-name "~/.emacs.cache"))
 
-;; better windows handling
+;; windows handling
 (add-to-list 'load-path "~/.emacs.d/window-purpose")
-(add-to-list 'load-path "~/.emacs.d/imenu-list")
 (require 'window-purpose)
+(setq pop-up-frames nil)
+(setq display-buffer-reuse-frames t)
+(setq menu-bar-select-buffer-function 'switch-to-buffer)
+(add-to-list 'display-buffer-alist
+             `(,(rx bos "*Flycheck errors*" eos)
+               (display-buffer-reuse-window
+                display-buffer-in-side-window)
+               (reusable-frames . visible)
+               (side            . bottom)
+               (window-height   . 0.4)))
+
+;; IMenu list
+(add-to-list 'load-path "~/.emacs.d/imenu-list")
 (require 'imenu-list)
 
 ;; Browse kill ring
