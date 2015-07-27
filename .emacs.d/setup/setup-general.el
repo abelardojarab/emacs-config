@@ -24,14 +24,14 @@
 
 ;;; Code:
 
-;; Disable editing of compressed files
-(auto-compression-mode 0)
-
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 
 ;; Disable tool-bar
 (tool-bar-mode -1)
+
+;; Disable editing of compressed files
+(auto-compression-mode 0)
 
 ;; Undefined function
 (require 'let-alist)
@@ -61,7 +61,7 @@ Defaults to `error'."
                       (mapcar (lambda (parent)
                                 (cons parent
                                       (or (get parent 'error-conditions)
-                                          (error "Unknown signal `%s'" parent))))
+                                         (error "Unknown signal `%s'" parent))))
                               parent))
              (cons parent (get parent 'error-conditions)))))
       (put name 'error-conditions
@@ -249,8 +249,8 @@ Defaults to `error'."
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; Assure window is splitted horizontally (for compilation buffer)
 (setq split-width-threshold nil)
@@ -265,10 +265,15 @@ Defaults to `error'."
 (add-hook 'temp-buffer-setup-hook 'split-horizontally-not-vertically)
 
 ;; Avoid to make a separate frame
-(setq display-buffer nil)
 (setq display-buffer-reuse-frames t)
-(setq pop-up-frames nil)
 (setq menu-bar-select-buffer-function 'switch-to-buffer)
+(add-to-list 'display-buffer-alist
+             `(,(rx bos "*Flycheck errors*" eos)
+               (display-buffer-reuse-window
+                display-buffer-in-side-window)
+               (reusable-frames . visible)
+               (side            . bottom)
+               (window-height   . 0.4)))
 
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")

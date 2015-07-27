@@ -59,7 +59,10 @@
 
 ;;; Types
 
-;;;###autoload
+;; `purpose-conf' is not an autoload because there is a bug in autoloading
+;; `defclass' in Emacs 24.3. (no problem with Emacs 24.4)
+;; If we decide to drop support for Emacs 24.3, we can make `purpose-conf' an
+;; autoload again.
 (defclass purpose-conf ()
   ((mode-purposes :initarg :mode-purposes
                   :initform '()
@@ -120,8 +123,57 @@ valid regexp.")
 
 
 ;;; Variables
-;; Custom variables are at the end of the file, because they need some
-;; functions to be defined earlier for the `defcustom' to work
+
+(defcustom purpose-use-default-configuration t
+  "Determine if the default configuration should be used.
+If this is nil, the default configuration is ignored when getting the
+purpose of a buffer.  The user configuration and extended configuration
+are used anyway."
+  :group 'purpose
+  :type 'boolean
+  :package-version "1.2")
+
+(defcustom purpose-user-mode-purposes nil
+  "User configured alist mapping of modes to purposes.
+The alist should match `purpose-mode-alist-p'.
+If you set this variable in elisp-code, you should call the function
+`purpose-compile-user-configuration' immediately afterwards."
+  :group 'purpose
+  :type '(alist :key-type (symbol :tag "major mode")
+                :value-type (symbol :tag "purpose"))
+  :set #'(lambda (symbol value)
+           (prog1 (set-default symbol value)
+             (purpose-compile-user-configuration)))
+  :initialize 'custom-initialize-default
+  :package-version "1.2")
+
+(defcustom purpose-user-name-purposes nil
+  "User configured alist mapping of names to purposes.
+The alist should match `purpose-name-alist-p'.
+If you set this variable in elisp-code, you should call the function
+`purpose-compile-user-configuration' immediately afterwards."
+  :group 'purpose
+  :type '(alist :key-type (string :tag "name")
+                :value-type (symbol :tag "purpose"))
+  :set #'(lambda (symbol value)
+           (prog1 (set-default symbol value)
+             (purpose-compile-user-configuration)))
+  :initialize 'custom-initialize-default
+  :package-version "1.2")
+
+(defcustom purpose-user-regexp-purposes nil
+  "User configured alist mapping of regexps to purposes.
+The alist should match `purpose-regexp-alist-p'.
+If you set this variable in elisp-code, you should call the function
+`purpose-compile-user-configuration' immediately afterwards."
+  :group 'purpose
+  :type '(alist :key-type (string :tag "regexp")
+                :value-type (symbol :tag "purpose"))
+  :set #'(lambda (symbol value)
+           (prog1 (set-default symbol value)
+             (purpose-compile-user-configuration)))
+  :initialize 'custom-initialize-default
+  :package-version "1.2")
 
 (defvar purpose-extended-configuration nil
   "A plist containing `purpose-conf' objects.
@@ -297,60 +349,63 @@ done."
 
 
 
-;;; Custom variables
-;; custom variables are here because they need some functions to be defined
-;; earlier for the `defcustom' to work
+;;; change purposes temporarily
 
-(defcustom purpose-use-default-configuration t
-  "Determine if the default configuration should be used.
-If this is nil, the default configuration is ignored when getting the
-purpose of a buffer.  The user configuration and extended configuration
-are used anyway."
-  :group 'purpose
-  :type 'boolean
-  :package-version "1.2")
+(defmacro purpose-save-purpose-config (&rest body)
+  "Save the purpose configuration, execute BODY, restore the configuration."
+  `(let ((purpose--user-mode-purposes (copy-hash-table purpose--user-mode-purposes))
+         (purpose--user-name-purposes (copy-hash-table purpose--user-name-purposes))
+         (purpose--user-regexp-purposes (copy-hash-table purpose--user-regexp-purposes))
+         (purpose--extended-mode-purposes (copy-hash-table purpose--extended-mode-purposes))
+         (purpose--extended-name-purposes (copy-hash-table purpose--extended-name-purposes))
+         (purpose--extended-regexp-purposes (copy-hash-table purpose--extended-regexp-purposes))
+         (purpose--default-mode-purposes (copy-hash-table purpose--default-mode-purposes))
+         (purpose--default-name-purposes (copy-hash-table purpose--default-name-purposes))
+         (purpose--default-regexp-purposes (copy-hash-table purpose--default-regexp-purposes))
+         (purpose-use-default-configuration purpose-use-default-configuration)
+         (purpose-user-mode-purposes purpose-user-mode-purposes)
+         (purpose-user-name-purposes purpose-user-name-purposes)
+         (purpose-user-regexp-purposes purpose-user-regexp-purposes)
+         (purpose-extended-configuration purpose-extended-configuration))
+     ,@body))
 
-(defcustom purpose-user-mode-purposes nil
-  "User configured alist mapping of modes to purposes.
-The alist should match `purpose-mode-alist-p'.
-If you set this variable in elisp-code, you should call the function
-`purpose-compile-user-configuration' immediately afterwards."
-  :group 'purpose
-  :type '(alist :key-type (symbol :tag "major mode")
-                :value-type (symbol :tag "purpose"))
-  :set #'(lambda (symbol value)
-           (prog1 (set-default symbol value)
-             (purpose--fill-hash purpose--user-mode-purposes
-                                 purpose-user-mode-purposes)))
-  :package-version "1.2")
+(defmacro purpose-with-temp-purposes (names regexps modes &rest body)
+  "Execute BODY with a temporary purpose configuration.
+NAMES, REGEXPS and MODES should be alists as described in
+`purpose-user-name-purposes', `purpose-user-regexp-purposes' and
+`purpose-user-mode-purposes'.
+NAMES, REGEXPS and MODES are used instead of the current purpose configuration
+while BODY is executed. The purpose configuration is restored after BODY
+is executed."
+  `(purpose-save-purpose-config
+    (let ((purpose-use-default-configuration nil)
+          (purpose-extended-configuration nil)
+          (purpose-user-name-purposes ,names)
+          (purpose-user-regexp-purposes ,regexps)
+          (purpose-user-mode-purposes ,modes))
+      (purpose-compile-user-configuration)
+      (purpose-compile-extended-configuration)
+      ,@body)))
 
-(defcustom purpose-user-name-purposes nil
-  "User configured alist mapping of names to purposes.
-The alist should match `purpose-name-alist-p'.
-If you set this variable in elisp-code, you should call the function
-`purpose-compile-user-configuration' immediately afterwards."
-  :group 'purpose
-  :type '(alist :key-type (string :tag "name")
-                :value-type (symbol :tag "purpose"))
-  :set #'(lambda (symbol value)
-           (prog1 (set-default symbol value)
-             (purpose--fill-hash purpose--user-name-purposes
-                                 purpose-user-name-purposes)))
-  :package-version "1.2")
+(defmacro purpose-with-empty-purposes (&rest body)
+  "Execute BODY with an empty purpose configuration.
+The purpose configuration is restored after BODY is executed."
+  `(purpose-with-temp-purposes nil nil nil ,@body))
 
-(defcustom purpose-user-regexp-purposes nil
-  "User configured alist mapping of regexps to purposes.
-The alist should match `purpose-regexp-alist-p'.
-If you set this variable in elisp-code, you should call the function
-`purpose-compile-user-configuration' immediately afterwards."
-  :group 'purpose
-  :type '(alist :key-type (string :tag "regexp")
-                :value-type (symbol :tag "purpose"))
-  :set #'(lambda (symbol value)
-           (prog1 (set-default symbol value)
-             (purpose--fill-hash purpose--user-regexp-purposes
-                                 purpose-user-regexp-purposes)))
-  :package-version "1.2")
+(defmacro purpose-with-additional-purposes (names regexps modes &rest body)
+  "Execute BODY with an additional purpose configuration.
+NAMES, REGEXPS and MODES should be alists as described in
+`purpose-user-name-purposes', `purpose-user-regexp-purposes' and
+`purpose-user-mode-purposes'.
+NAMES, REGEXPS and MODES are used to add purposes to the current purpose
+configuration while BODY is executed. The purpose configuration is restored
+after BODY is executed."
+  `(purpose-save-purpose-config
+    (let ((purpose-user-name-purposes (append ,names purpose-user-name-purposes))
+          (purpose-user-regexp-purposes (append ,regexps purpose-user-regexp-purposes))
+          (purpose-user-mode-purposes (append ,modes purpose-user-mode-purposes)))
+      (purpose-compile-user-configuration)
+      ,@body)))
 
 
 

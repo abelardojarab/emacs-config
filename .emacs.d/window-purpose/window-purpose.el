@@ -4,7 +4,7 @@
 
 ;; Author: Bar Magal (2015)
 ;; Package: purpose
-;; Version: 1.3.50
+;; Version: 1.4
 ;; Keywords: frames
 ;; Homepage: https://github.com/bmag/emacs-purpose
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5") (let-alist "1.0.3") (imenu-list "0.1"))
@@ -71,7 +71,7 @@
 (require 'window-purpose-prefix-overload)
 (require 'window-purpose-fixes)
 
-(defconst purpose-version "1.3.50"
+(defconst purpose-version "1.4"
   "Purpose's version.")
 
 
@@ -88,7 +88,7 @@ The lambda calls IDO-FN interactively when `ido-mode' is on, otherwise
 it calls OTHER-FN interactively.
 Example:
   (purpose-ido-caller #'ido-find-file #'find-file)"
-  `(lambda (&rest args)
+  `(lambda (&rest _args)
      (interactive)
      (call-interactively (if ido-mode ,ido-fn ,other-fn))))
 
@@ -123,7 +123,7 @@ This allows Purpose to work well with both `ido' and `helm'.")
 
 (defalias 'purpose-friendly-switch-buffer-other-window
   (purpose-ido-caller #'ido-switch-buffer-other-window
-		      #'switch-to-buffer-other-window)
+                      #'switch-to-buffer-other-window)
   "Call `switch-to-buffer-other-window' or
 `ido-switch-buffer-other-window' intelligently.
 If `ido-mode' is on, call `ido-switch-buffer-other-window'.  Otherwise,
@@ -132,7 +132,7 @@ This allows Purpose to work well with both `ido' and `helm'.")
 
 (defalias 'purpose-friendly-switch-buffer-other-frame
   (purpose-ido-caller #'ido-switch-buffer-other-frame
-		      #'switch-to-buffer-other-frame)
+                      #'switch-to-buffer-other-frame)
   "Call `switch-to-buffer-other-frame' or
 `ido-switch-buffer-other-frame' intelligently.
 If `ido-mode' is on, call `ido-switch-buffer-other-frame'.  Otherwise,
@@ -214,23 +214,22 @@ This allows Purpose to work well with both `ido' and `helm'.")
     ;; We use "C-c ," for compatibility with key-binding conventions
     (define-key map (kbd "C-c ,") 'purpose-mode-prefix-map)
     (define-prefix-command 'purpose-mode-prefix-map)
-    (dolist (binding
-	     '(;; switch to any buffer
-	       ("o" . purpose-switch-buffer)
-	       ("[" . purpose-switch-buffer-other-frame)
-	       ("p" . purpose-switch-buffer-other-window)
-	       ;; switch to buffer with current buffer's purpose
-	       ("b" . purpose-switch-buffer-with-purpose)
-	       ("4 b" . purpose-switch-buffer-with-purpose-other-window)
-	       ("5 b" . purpose-switch-buffer-with-purpose-other-frame)
-	       ;; toggle window dedication (buffer, purpose)
-	       ("d" . purpose-toggle-window-purpose-dedicated)
-	       ("D" . purpose-toggle-window-buffer-dedicated)
-	       ;; delete windows
-	       ("w" . purpose-delete-window-at)
-	       ("1" . purpose-delete-non-dedicated-windows)))
-      (define-key purpose-mode-prefix-map (kbd (car binding)) (cdr binding)))
-
+    (cl-loop for (key . def)
+             in '(;; switch to any buffer
+                  ("o" . purpose-switch-buffer)
+                  ("[" . purpose-switch-buffer-other-frame)
+                  ("p" . purpose-switch-buffer-other-window)
+                  ;; switch to buffer with current buffer's purpose
+                  ("b" . purpose-switch-buffer-with-purpose)
+                  ("4 b" . purpose-switch-buffer-with-purpose-other-window)
+                  ("5 b" . purpose-switch-buffer-with-purpose-other-frame)
+                  ;; toggle window dedication (buffer, purpose)
+                  ("d" . purpose-toggle-window-purpose-dedicated)
+                  ("D" . purpose-toggle-window-buffer-dedicated)
+                  ;; delete windows
+                  ("w" . purpose-delete-window-at)
+                  ("1" . purpose-delete-non-dedicated-windows))
+             do (define-key purpose-mode-prefix-map key def))
     map)
   "Keymap for Purpose mode.")
 
@@ -239,57 +238,68 @@ This allows Purpose to work well with both `ido' and `helm'.")
 
 (defun purpose--modeline-string ()
   "Return the presentation of a window's purpose for display in the
-modeline.  The string returned has two forms.  For example, if window's
-purpose is 'edit: If (purpose-window-purpose-dedicated-p), return
-\"[edit!]\", otherwise return \"[edit]\"."
-  (format " [%s%s]"
-	  (purpose-window-purpose)
-	  (if (purpose-window-purpose-dedicated-p) "!" "")))
+modeline.  The basic form of the string is \"[<purpose>]\".  If the
+window is purpose-dedicated, add a \"!\" before \"]\".  If the window is
+buffer-dedicated, add a \"#\" before \"]\".
+Some examples:
+\"[edit]\": window's purpose is 'edit, and it is not dedicated.
+\"[edit!]\": window is dedicated to 'edit purpose.
+\"[edit#]\": window's purpose is 'edit, and it is dedicated to its
+           current buffer.
+\"[edit!#]\": window is dedicated to 'edit purpose and to its current buffer."
+  (format " [%s%s%s]"
+          (purpose-window-purpose)
+          (if (purpose-window-purpose-dedicated-p) "!" "")
+          (if (window-dedicated-p) "#" "")))
 
 (defun purpose--add-advices ()
   "Add all advices needed for Purpose to work.
 This function is called when `purpose-mode' is activated."
   (purpose-advice-add 'switch-to-buffer :around
-		      #'purpose-switch-to-buffer-advice)
+                      #'purpose-switch-to-buffer-advice)
   (purpose-advice-add 'switch-to-buffer-other-window :around
-		      #'purpose-switch-to-buffer-other-window-advice)
+                      #'purpose-switch-to-buffer-other-window-advice)
   (purpose-advice-add 'switch-to-buffer-other-frame :around
-		      #'purpose-switch-to-buffer-other-frame-advice)
+                      #'purpose-switch-to-buffer-other-frame-advice)
   (purpose-advice-add 'pop-to-buffer :around
-		      #'purpose-pop-to-buffer-advice)
+                      #'purpose-pop-to-buffer-advice)
   (purpose-advice-add 'pop-to-buffer-same-window :around
-		      #'purpose-pop-to-buffer-same-window-advice)
+                      #'purpose-pop-to-buffer-same-window-advice)
   (purpose-advice-add 'display-buffer :around
-		      #'purpose-display-buffer-advice))
+                      #'purpose-display-buffer-advice))
 
 (defun purpose--remove-advices ()
   "Remove all advices needed for Purpose to work.
 This function is called when `purpose-mode' is deactivated."
   (purpose-advice-remove 'switch-to-buffer :around
-			 #'purpose-switch-to-buffer-advice)
+                         #'purpose-switch-to-buffer-advice)
   (purpose-advice-remove 'switch-to-buffer-other-window :around
-			 #'purpose-switch-to-buffer-other-window-advice)
+                         #'purpose-switch-to-buffer-other-window-advice)
   (purpose-advice-remove 'switch-to-buffer-other-frame :around
-			 #'purpose-switch-to-buffer-other-frame-advice)
+                         #'purpose-switch-to-buffer-other-frame-advice)
   (purpose-advice-remove 'pop-to-buffer :around
-			 #'purpose-pop-to-buffer-advice)
+                         #'purpose-pop-to-buffer-advice)
   (purpose-advice-remove 'pop-to-buffer-same-window :around
-			 #'purpose-pop-to-buffer-same-window-advice)
+                         #'purpose-pop-to-buffer-same-window-advice)
   (purpose-advice-remove 'display-buffer :around
-			 #'purpose-display-buffer-advice))
+                         #'purpose-display-buffer-advice))
 
 ;;;###autoload
 (define-minor-mode purpose-mode
-  nil :global t :lighter (:eval (purpose--modeline-string))
+  ;; can't do coverage in Emacs 24.3 and older if the docstring is nil :-(
+  ;; this is because of a bug in `edebug-defun'
+  "Toggle Purpose mode on or off according to the regular rules."
+  :global t :lighter (:eval (purpose--modeline-string))
   (if purpose-mode
       (progn
-	(purpose--add-advices)
-	(setq display-buffer-overriding-action
-	      '(purpose--action-function . nil))
-	(setq purpose--active-p t)
-	(purpose-fix-install))
+        (purpose--add-advices)
+        (setq display-buffer-overriding-action
+              '(purpose--action-function . nil))
+        (setq purpose--active-p t)
+        (purpose-fix-install))
     (purpose--remove-advices)
     (setq purpose--active-p nil)))
 
+(push '(purpose-dedicated . writable) window-persistent-parameters)
 (provide 'window-purpose)
 ;;; window-purpose.el ends here

@@ -55,14 +55,14 @@ Any other value is treated the same as nil."
                  (const error)
                  (const nil)
                  function)
-  :package-version "1.3.50")
+  :package-version "1.4")
 
 (defcustom purpose-display-buffer-functions nil
   "Hook to run after displaying a buffer with `purpose--action-function'.
 This hook is called with one argument - the window used for display."
   :group 'purpose
   :type 'hook
-  :package-version "1.3.50")
+  :package-version "1.4")
 
 (defcustom purpose-select-buffer-hook nil
   "Hook to run after selecting a buffer with `purpose-select-buffer'."
@@ -137,7 +137,7 @@ case, `purpose-display-at-top-height' is ignored."
   :group 'purpose
   :type '(choice number
                  (const nil))
-  :package-version "1.3.50")
+  :package-version "1.4")
 
 (defcustom purpose-display-at-bottom-height 8
   "Height for new windows created by `purpose-display-at-bottom'.
@@ -151,7 +151,7 @@ this case, `purpose-display-at-bottom-height' is ignored."
   :group 'purpose
   :type '(choice number
                  (const nil))
-  :package-version "1.3.50")
+  :package-version "1.4")
 
 (defcustom purpose-display-at-left-width 32
   "Width for new windows created by `purpose-display-at-left'.
@@ -164,7 +164,7 @@ case, `purpose-display-at-left-width' is ignored."
   :group 'purpose
   :type '(choice number
                  (const nil))
-  :package-version "1.3.50")
+  :package-version "1.4")
 
 (defcustom purpose-display-at-right-width 32
   "Width for new windows created by `purpose-display-at-right'.
@@ -178,7 +178,7 @@ this case, `purpose-display-at-right-width' is ignored."
   :group 'purpose
   :type '(choice number
                  (const nil))
-  :package-version "1.3.50")
+  :package-version "1.4")
 
 
 
@@ -439,7 +439,8 @@ FRAME defaults to the selected frame."
                 (eql (window-buffer window) buffer))
             (or (not (purpose-window-purpose-dedicated-p window))
                 (eql (purpose-window-purpose window)
-                     (purpose-buffer-purpose buffer)))))
+                     (purpose-buffer-purpose buffer)))
+            (not (window-minibuffer-p window))))
    (window-list frame)))
 
 (defun purpose-display-maybe-other-window (buffer alist)
@@ -452,7 +453,7 @@ Possible windows to use match these requirements:
     (let ((windows (purpose-display--frame-usable-windows nil buffer))
           window)
       ;; (when .inhibit-same-window
-      ;; 	(setq windows (delete (selected-window) windows)))
+      ;;   (setq windows (delete (selected-window) windows)))
       (setq windows (delete (selected-window) windows))
       (setq window (car windows))
       (when window
@@ -752,8 +753,7 @@ If ALIST is nil, it is ignored and `purpose--alist' is used instead."
   (purpose-message "Purpose display: Buffer: %S; Alist: %S" buffer alist)
   (when (purpose--use-action-function-p buffer alist)
     (let-alist alist
-      (let* ((old-frame (selected-frame))
-             (special-action-sequence (purpose--special-action-sequence buffer
+      (let* ((special-action-sequence (purpose--special-action-sequence buffer
                                                                         alist))
              (normal-action-sequence (purpose-alist-get
                                       (or .action-order
@@ -809,18 +809,17 @@ ACTION-ORDER is used as the `action-order' entry in
 `purpose--action-function''s alist.
 This function runs hook `purpose-select-buffer-hook' when its done."
   (let* ((buffer (window-normalize-buffer-to-switch-to buffer-or-name))
-	 (purpose--alist (purpose-alist-set 'action-order
-					    action-order
-					    purpose--alist))
-	 (old-window (selected-window))
-	 (old-frame (selected-frame))
-	 (new-window (display-buffer buffer-or-name))
-	 (new-frame (window-frame new-window)))
+         (purpose--alist (purpose-alist-set 'action-order
+                                            action-order
+                                            purpose--alist))
+         (old-frame (selected-frame))
+         (new-window (display-buffer buffer-or-name))
+         (new-frame (window-frame new-window)))
     (when new-window
       ;; If we chose another frame, make sure it gets input focus. - taken from
       ;; `pop-to-buffer''s code
       (unless (eq new-frame old-frame)
-	(select-frame-set-input-focus new-frame norecord))
+        (select-frame-set-input-focus new-frame norecord))
       (select-window new-window norecord))
     (run-hooks 'purpose-select-buffer-hook)
     buffer))
@@ -937,7 +936,14 @@ If Purpose is active (`purpose--active-p' is non-nil), call
    (if (purpose--use-action-function-p
         (window-normalize-buffer-to-switch-to buffer-or-name) nil)
        (setq ad-return-value
-             (purpose-switch-buffer buffer-or-name norecord force-same-window))
+             (purpose-switch-buffer buffer-or-name
+                                    norecord
+                                    ;; when `switch-to-buffer' is called
+                                    ;; interactively force-same-window is non-nil,
+                                    ;; but want it to be nil, so we check
+                                    ;; `called-interactively-p' as well
+                                    (and force-same-window
+                                         (not (called-interactively-p 'interactive)))))
      ad-do-it)))
 
 (define-purpose-compatible-advice 'switch-to-buffer-other-window
@@ -1043,13 +1049,11 @@ This works internally by using `without-purpose' and
 
 (defun purpose-read-buffers-with-purpose (purpose)
   "Prompt the user for a buffer with purpose PURPOSE."
-  (let ((reader (if ido-mode
-                    #'ido-completing-read
-                  #'completing-read)))
-    (funcall reader "[PU] Buffer: "
-             (mapcar #'buffer-name
-                     (delq (current-buffer)
-                           (purpose-buffers-with-purpose purpose))))))
+  (funcall (purpose-get-completing-read-function)
+           "[PU] Buffer: "
+           (mapcar #'buffer-name
+                   (delq (current-buffer)
+                         (purpose-buffers-with-purpose purpose)))))
 
 (defun purpose-switch-buffer-with-purpose (&optional purpose)
   "Prompt the user and switch to a buffer with purpose PURPOSE.
@@ -1059,6 +1063,14 @@ current buffer's purpose."
   (purpose-switch-buffer
    (purpose-read-buffers-with-purpose
     (or purpose (purpose-buffer-purpose (current-buffer))))))
+
+(defun purpose-switch-buffer-with-some-purpose (purpose)
+  (interactive
+   (list (purpose-read-purpose "Purpose: "
+                               (cl-delete-if-not #'purpose-buffers-with-purpose
+                                                 (purpose-get-all-purposes))
+                               t)))
+  (purpose-switch-buffer-with-purpose purpose))
 
 (defun purpose-switch-buffer-with-purpose-other-window (&optional purpose)
   "Prompt the user and switch to a buffer with purpose PURPOSE.
@@ -1094,7 +1106,7 @@ and EXTRA-ARGS, like so:
   (apply display-fn buffer alist extra-args).
 
 Example of how this macro might be used:
-  (defalias display-at-bottom-and-dedicate
+  (defalias 'display-at-bottom-and-dedicate
             (purpose-generate-display-and-dedicate
              'purpose-display-at-bottom))
 Another example:
@@ -1106,6 +1118,65 @@ Another example:
        (when window
          (purpose-set-window-purpose-dedicated-p window t))
        window)))
+
+(defmacro purpose-generate-display-and-do (display-fn do-fn)
+  "Generate a lambda to display a buffer and execute additional actions.
+The generated lambda receives two arguments - buffer and alist - and can
+be used as a display function.
+The buffer is displayed by calling DISPLAY-FN with arguments two
+arguments - buffer and alist.
+If the display is successful, DO-FN is called with one argument - the
+window that was used for displaying the buffer.
+The lambda returns the window used for display, or nil if display was
+unsuccessful.
+
+Possible usage:
+  (defalias 'display-at-left-and-do-stuff
+            (purpose-generate-display-and-do
+              'purpose-display-at-left
+              (lambda (window) (message \"Let's do stuff!!\"))))"
+  `(lambda (buffer alist)
+     (let ((window (funcall ,display-fn buffer alist)))
+       (when window
+         (funcall ,do-fn window))
+       window)))
+
+
+
+;;; change `purpose-special-action-sequences' temporarily
+
+(defmacro purpose-with-temp-display-actions (actions &rest body)
+  "Override `purpose-special-action-sequences' temporarily.
+Set ACTIONS as `purpose-special-action-sequences' while BODY is executed.
+`purpose-special-action-sequences' is restored after BODY is executed."
+  `(let ((purpose-special-action-sequences ,actions))
+     ,@body))
+
+(defmacro purpose-with-temp-display-action (action &rest body)
+  "Override `purpose-special-action-sequences' temporarily.
+Shortcut for using `purpose-with-temp-display-actions' with only one action.
+ACTION should be an entry suitable for `purpose-special-action-sequences'.
+BODY has the same meaning as in `purpose-with-temp-display-actions'."
+  `(purpose-with-temp-display-actions (list ,action) ,@body))
+
+(defmacro purpose-with-additional-display-actions (actions &rest body)
+  "Add to `purpose-special-action-sequences' temporarily.
+ACTIONS is a list of actions that are added to
+`purpose-special-action-sequences' while BODY is executed.
+`purpose-special-action-sequences' is restored after BODY is executed."
+  `(let ((purpose-special-action-sequences
+          (append ,actions purpose-special-action-sequences)))
+     ,@body))
+
+(defmacro purpose-with-additional-display-action (action &rest body)
+  "Add to `purpose-special-action-sequences' temporarily.
+Shortcut for using `purpose-with-additional-display-actions' with only one
+action.
+ACTION should be an entry suitable for `purpose-special-action-sequences'.
+BODY has the same meaning as in `purpose-with-additional-display-actions'."
+  `(purpose-with-additional-display-actions (list ,action) ,@body))
+
+
 
 (provide 'window-purpose-switch)
 ;;; window-purpose-switch.el ends here

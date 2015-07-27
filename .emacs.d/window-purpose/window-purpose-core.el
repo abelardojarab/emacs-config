@@ -40,18 +40,22 @@
   :type 'symbol
   :package-version "1.2")
 
+(defcustom purpose-preferred-prompt 'auto
+  "Which interface should Purpose use when prompting the user.
+Available options are: 'auto - use IDO when `ido-mode' is enabled,
+otherwise Helm when `helm-mode' is enabled, otherwise use default Emacs
+prompts; 'ido - use IDO; 'helm - use Helm; 'vanilla - use default Emacs
+prompts."
+  :group 'purpose
+  :type '(choice (const auto)
+                 (const ido)
+                 (const helm)
+                 (const vanilla))
+  :package-version "1.4")
+
+
 
 ;;; utilities
-(defun purpose--iter-hash (function table)
-  "Like `maphash', but return a list the results of calling FUNCTION
-for each entry in hash-table TABLE."
-  (let (results)
-    (maphash #'(lambda (key value)
-		 (setq results
-		       (append results
-			       (list (funcall function key value)))))
-	     table)
-    results))
 
 (defun purpose--buffer-major-mode (buffer-or-name)
   "Return the major mode of BUFFER-OR-NAME."
@@ -70,12 +74,55 @@ A dummy buffer is a buffer with a name that starts with \"*pu-dummy-\"
 and ends with \"*\".  For example, the buffer \"*pu-dummy-edit*\" is a
 dummy buffer with the purpose 'edit."
   (let ((name (if (stringp buffer-or-name)
-		  buffer-or-name
-		(buffer-name buffer-or-name))))
+                  buffer-or-name
+                (buffer-name buffer-or-name))))
     (when (and (string-prefix-p "*pu-dummy-" name)
-	       (string= "*" (substring name -1)))
+               (string= "*" (substring name -1)))
       ;; 10 = (length "*pu-dummy-")
       (intern (substring name 10 -1)))))
+
+(defun purpose-get-read-function (ido-method helm-method vanilla-method)
+  "Get function to read something from the user.
+Return value depends on `purpose-preferred-prompt', `ido-mode' and
+`helm-mode'.
+| `purpose-preferred-prompt' | `ido-mode' | `helm-mode' | method  |
+|----------------------------+------------+-------------+---------|
+| auto                       | t          | any         | ido     |
+| auto                       | nil        | t           | helm    |
+| auto                       | nil        | nil         | vanilla |
+| ido                        | any        | any         | ido     |
+| helm                       | any        | any         | helm    |
+| vanilla                    | any        | any         | vanilla |"
+  (cl-case purpose-preferred-prompt
+    ('auto (cond ((bound-and-true-p ido-mode) ido-method)
+                 ((bound-and-true-p helm-mode) helm-method)
+                 (t vanilla-method)))
+    ('ido ido-method)
+    ('helm helm-method)
+    (t vanilla-method)))
+
+(defun purpose-get-completing-read-function ()
+  "Intelligently choose a function to perform completing read.
+The returned function is chosen according to the rules of
+`purpose-get-read-function'.
+ido method: `ido-completing-read'
+helm method: `completing-read' (this is on purpose)
+vanilla method: `completing-read'"
+  (purpose-get-read-function #'ido-completing-read
+                             #'completing-read
+                             #'completing-read))
+
+(defun purpose-get-read-file-name-function ()
+  "Intelligently choose a function to read a file name.
+The returned function is chosen according to the rules of
+`purpose-get-read-function'.
+ido method: `ido-read-file-name'
+helm method: `read-file-name'
+vanilla method: `read-file-name'"
+  (purpose-get-read-function #'ido-read-file-name
+                             #'read-file-name
+                             #'read-file-name))
+
 
 
 ;;; simple purpose-finding operations for `purpose-buffer-purpose'
@@ -83,29 +130,29 @@ dummy buffer with the purpose 'edit."
   "Return the purpose of buffer BUFFER-OR-NAME, as determined by its
 mode and MODE-CONF.
 MODE-CONF is a hash table mapping modes to purposes."
-  (when (get-buffer buffer-or-name)	; check if buffer exists
+  (when (get-buffer buffer-or-name)     ; check if buffer exists
     (let* ((major-mode (purpose--buffer-major-mode buffer-or-name))
-	   (derived-modes (purpose--iter-hash #'(lambda (mode purpose) mode)
-					      mode-conf))
-	   (derived-mode (apply #'derived-mode-p derived-modes)))
+           (derived-modes (purpose--iter-hash #'(lambda (mode _purpose) mode)
+                                              mode-conf))
+           (derived-mode (apply #'derived-mode-p derived-modes)))
       (when derived-mode
-	(gethash derived-mode mode-conf)))))
+        (gethash derived-mode mode-conf)))))
 
 (defun purpose--buffer-purpose-name (buffer-or-name name-conf)
   "Return the purpose of buffer BUFFER-OR-NAME, as determined by its
 exact name and NAME-CONF.
 NAME-CONF is a hash table mapping names to purposes."
   (gethash (if (stringp buffer-or-name)
-	       buffer-or-name
-	     (buffer-name buffer-or-name))
-	   name-conf))
+               buffer-or-name
+             (buffer-name buffer-or-name))
+           name-conf))
 
 (defun purpose--buffer-purpose-name-regexp-1 (buffer-or-name regexp purpose)
   "Return purpose PURPOSE if buffer BUFFER-OR-NAME's name matches
 regexp REGEXP."
   (when (string-match-p regexp (or (and (bufferp buffer-or-name)
-					(buffer-name buffer-or-name))
-				   buffer-or-name))
+                                        (buffer-name buffer-or-name))
+                                   buffer-or-name))
     purpose))
 
 (defun purpose--buffer-purpose-name-regexp (buffer-or-name regexp-conf)
@@ -113,12 +160,12 @@ regexp REGEXP."
 regexps matched by its name.
 REGEXP-CONF is a hash table mapping name regexps to purposes."
   (car (remove nil
-	       (purpose--iter-hash
-		#'(lambda (regexp purpose)
-		    (purpose--buffer-purpose-name-regexp-1 buffer-or-name
-							   regexp
-							   purpose))
-		regexp-conf))))
+               (purpose--iter-hash
+                #'(lambda (regexp purpose)
+                    (purpose--buffer-purpose-name-regexp-1 buffer-or-name
+                                                           regexp
+                                                           purpose))
+                regexp-conf))))
 
 (defun purpose-buffer-purpose (buffer-or-name)
   "Get the purpose of buffer BUFFER-OR-NAME.
@@ -143,27 +190,27 @@ If no purpose was determined, return `default-purpose'."
    ;; check user config
    (purpose--buffer-purpose-name buffer-or-name purpose--user-name-purposes)
    (purpose--buffer-purpose-name-regexp buffer-or-name
-					purpose--user-regexp-purposes)
+                                        purpose--user-regexp-purposes)
    (purpose--buffer-purpose-mode buffer-or-name purpose--user-mode-purposes)
 
    ;; check extensions' config
    (purpose--buffer-purpose-name buffer-or-name
-				 purpose--extended-name-purposes)
+                                 purpose--extended-name-purposes)
    (purpose--buffer-purpose-name-regexp buffer-or-name
-					purpose--extended-regexp-purposes)
+                                        purpose--extended-regexp-purposes)
    (purpose--buffer-purpose-mode buffer-or-name
-				 purpose--extended-mode-purposes)
+                                 purpose--extended-mode-purposes)
 
    ;; check default config
    (and
     purpose-use-default-configuration
     (or
      (purpose--buffer-purpose-name buffer-or-name
-				   purpose--default-name-purposes)
+                                   purpose--default-name-purposes)
      (purpose--buffer-purpose-name-regexp buffer-or-name
-					  purpose--default-regexp-purposes)
+                                          purpose--default-regexp-purposes)
      (purpose--buffer-purpose-mode buffer-or-name
-				   purpose--default-mode-purposes)))
+                                   purpose--default-mode-purposes)))
 
    ;; fallback to default purpose
    default-purpose))
@@ -171,9 +218,9 @@ If no purpose was determined, return `default-purpose'."
 (defun purpose-buffers-with-purpose (purpose)
   "Return a list of all existing buffers with purpose PURPOSE."
   (cl-remove-if-not #'(lambda (buffer)
-			(and (eql purpose (purpose-buffer-purpose buffer))
-			     (not (minibufferp buffer))))
-		    (buffer-list)))
+                        (and (eql purpose (purpose-buffer-purpose buffer))
+                             (not (minibufferp buffer))))
+                    (buffer-list)))
 
 (defun purpose-window-purpose (&optional window)
   "Get the purpose of window WINDOW.
@@ -184,9 +231,42 @@ WINDOW defaults to the selected window."
 (defun purpose-windows-with-purpose (purpose)
   "Return a list of all live windows with purpose PURPOSE."
   (cl-remove-if-not #'(lambda (window)
-			(eql purpose (purpose-window-purpose window)))
-		    (window-list)))
+                        (eql purpose (purpose-window-purpose window)))
+                    (window-list)))
 
+(defun purpose-get-all-purposes ()
+  "Return a list of all known purposes."
+  (delete-dups
+   (append (list default-purpose)
+           (purpose-flatten
+            (mapcar #'purpose-hash-table-values
+                    (append (when purpose-use-default-configuration
+                              (list purpose--default-name-purposes
+                                    purpose--default-mode-purposes
+                                    purpose--default-regexp-purposes))
+                            (list purpose--extended-name-purposes
+                                  purpose--extended-mode-purposes
+                                  purpose--extended-regexp-purposes
+                                  purpose--user-mode-purposes
+                                  purpose--user-name-purposes
+                                  purpose--user-regexp-purposes)))))))
+
+(defun purpose-read-purpose (prompt &optional purposes require-match initial-output)
+  "Read a purpose from the user.
+PROMPT is the prompt to show the user.
+PURPOSES is the available purposes the user can choose from, and
+defaults to all defined purposes.
+REQUIRE-MATCH and INITIAL-OUTPUT have the same meaning as in
+`completing-read'."
+  (let ((purpose-strings (mapcar #'symbol-name
+                                 (or purposes (purpose-get-all-purposes))))
+        (reader-function (purpose-get-completing-read-function)))
+    (intern (funcall reader-function
+                     prompt
+                     purpose-strings
+                     nil
+                     require-match
+                     initial-output))))
 
 
 ;;; purpose-aware buffer low-level functions
@@ -224,16 +304,11 @@ WINDOW defaults to the selected window."
 WINDOW defaults to the selected window."
   (interactive)
   (let ((flag (not (purpose-window-purpose-dedicated-p window))))
-    ;; window's purpose is displayed in modeline, so no need to print message
-    ;; for the user
-    ;;      (msg (if flag
-    ;;      	  "Window purpose is now dedicated"
-    ;; 	         "Window purpose is not dedicated anymore")))
     (purpose-set-window-purpose-dedicated-p window flag)
+    (if flag
+        (message "Window purpose is now dedicated")
+      (message "Window purpose is not dedicated anymore"))
     (force-mode-line-update)
-    ;; window's purpose is displayed in modeline, so no need to print message
-    ;; for the user
-    ;;(message msg)
     flag))
 
 ;; not really purpose-related, but helpful for the user
@@ -241,12 +316,12 @@ WINDOW defaults to the selected window."
   "Toggle window WINDOW's dedication to its current buffer on or off.
 WINDOW defaults to the selected window."
   (interactive)
-  (let* ((flag (not (window-dedicated-p window)))
-	 (msg (if flag
-		  "Window buffer is now dedicated"
-		"Window buffer is not dedicated anymore")))
+  (let* ((flag (not (window-dedicated-p window))))
     (set-window-dedicated-p window flag)
-    (message msg)
+    (if flag
+        (message "Window buffer is now dedicated")
+      (message "Window buffer is not dedicated anymore"))
+    (force-mode-line-update)
     flag))
 
 
@@ -258,12 +333,12 @@ The top window is a window that takes up all the of the frame's width
 and has no window above it.  If there is no top window, return nil."
   (let (top-window)
     (walk-window-tree #'(lambda (window)
-			  (unless (or (window-in-direction 'left window)
-				      (window-in-direction 'right window)
-				      (window-in-direction 'above window)
-				      (not (window-in-direction 'below window)))
-			    (setq top-window window)))
-		      frame)
+                          (unless (or (window-in-direction 'left window)
+                                      (window-in-direction 'right window)
+                                      (window-in-direction 'above window)
+                                      (not (window-in-direction 'below window)))
+                            (setq top-window window)))
+                      frame)
     top-window))
 
 (defun purpose-get-bottom-window (&optional frame)
@@ -272,12 +347,12 @@ The bottom window is a window that takes up all the of the frame's width
 and has no window below it.  If there is no bottom window, return nil."
   (let (bottom-window)
     (walk-window-tree #'(lambda (window)
-			  (unless (or (window-in-direction 'left window)
-				      (window-in-direction 'right window)
-				      (window-in-direction 'below window)
-				      (not (window-in-direction 'above window)))
-			    (setq bottom-window window)))
-		      frame)
+                          (unless (or (window-in-direction 'left window)
+                                      (window-in-direction 'right window)
+                                      (window-in-direction 'below window)
+                                      (not (window-in-direction 'above window)))
+                            (setq bottom-window window)))
+                      frame)
     bottom-window))
 
 (defun purpose-get-left-window (&optional frame)
@@ -287,12 +362,12 @@ height and has no window to its left.  If there is no left window,
 return nil."
   (let (left-window)
     (walk-window-tree #'(lambda (window)
-			  (unless (or (window-in-direction 'above window)
-				      (window-in-direction 'below window)
-				      (window-in-direction 'left window)
-				      (not (window-in-direction 'right window)))
-			    (setq left-window window)))
-		      frame)
+                          (unless (or (window-in-direction 'above window)
+                                      (window-in-direction 'below window)
+                                      (window-in-direction 'left window)
+                                      (not (window-in-direction 'right window)))
+                            (setq left-window window)))
+                      frame)
     left-window))
 
 (defun purpose-get-right-window (&optional frame)
@@ -302,12 +377,12 @@ height and has no window to its right.  If there is no right window,
 return nil."
   (let (right-window)
     (walk-window-tree #'(lambda (window)
-			  (unless (or (window-in-direction 'above window)
-				      (window-in-direction 'below window)
-				      (window-in-direction 'right window)
-				      (not (window-in-direction 'left window)))
-			    (setq right-window window)))
-		      frame)
+                          (unless (or (window-in-direction 'above window)
+                                      (window-in-direction 'below window)
+                                      (window-in-direction 'right window)
+                                      (not (window-in-direction 'left window)))
+                            (setq right-window window)))
+                      frame)
     right-window))
 
 (provide 'window-purpose-core)

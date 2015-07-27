@@ -30,6 +30,9 @@
 ;; - popup-switcher: command `purpose-x-psw-switch-buffer-with-purpose'
 ;;   uses `popup-switcher' to switch to another buffer with the same
 ;;   purpose as the current buffer
+;; - popwin: extension that emulates popwin's behavior.
+;; - persp: extension to attach purpose configurations to perspectives.
+;;   also provides commands such as `purpose-x-persp-switch-buffer'.
 
 ;;; Code:
 
@@ -54,23 +57,27 @@
     (t
      (0 0 29 35)
      (:purpose dired :purpose-dedicated t :width 0.16 :height 0.5 :edges
-	       (0.0 0.0 0.19333333333333333 0.5))
+               (0.0 0.0 0.19333333333333333 0.5))
      (:purpose buffers :purpose-dedicated t :width 0.16 :height 0.4722222222222222 :edges
-	       (0.0 0.5 0.19333333333333333 0.9722222222222222)))
+               (0.0 0.5 0.19333333333333333 0.9722222222222222)))
     (:purpose edit :purpose-dedicated t :width 0.6 :height 0.9722222222222222 :edges
-	      (0.19333333333333333 0.0 0.8266666666666667 0.9722222222222222))
+              (0.19333333333333333 0.0 0.8266666666666667 0.9722222222222222))
     (:purpose ilist :purpose-dedicated t :width 0.15333333333333332 :height 0.9722222222222222 :edges
-	      (0.8266666666666667 0.0 1.0133333333333334 0.9722222222222222)))
+              (0.8266666666666667 0.0 1.0133333333333334 0.9722222222222222)))
   "Window layout for purpose-x-code1-dired-ibuffer.
 Has a main 'edit window, and two side windows - 'dired and 'buffers.
 All windows are purpose-dedicated.")
 
 ;; the name arg ("purpose-x-code1") is necessary for Emacs 24.3 and older
-(defvar purpose-x-code1-purpose-config (purpose-conf "purpose-x-code1"
-					    :mode-purposes
-					    '((ibuffer-mode . buffers)
-					      (dired-mode . dired)
-					      (imenu-list-major-mode . ilist))))
+(defvar purpose-x-code1-purpose-config
+  (purpose-conf "purpose-x-code1"
+                :mode-purposes
+                '((ibuffer-mode . buffers)
+                  (dired-mode . dired)
+                  (imenu-list-major-mode . ilist))))
+
+(defvar purpose-x-code1-buffers-changed nil
+  "Internal variable for use with `frame-or-buffer-changed-p'.")
 
 (define-ibuffer-filter purpose-x-code1-ibuffer-files-only
     "Display only buffers that are bound to files."
@@ -80,8 +87,8 @@ All windows are purpose-dedicated.")
 (defun purpose-x-code1--setup-ibuffer ()
   "Set up ibuffer settings."
   (add-hook 'ibuffer-mode-hook
-  	    #'(lambda ()
-  		(ibuffer-filter-by-purpose-x-code1-ibuffer-files-only nil)))
+            #'(lambda ()
+                (ibuffer-filter-by-purpose-x-code1-ibuffer-files-only nil)))
   (add-hook 'ibuffer-mode-hook #'ibuffer-auto-mode)
   (setq ibuffer-formats '((mark " " name)))
   (setq ibuffer-display-summary nil)
@@ -90,24 +97,25 @@ All windows are purpose-dedicated.")
   ;; (setq ibuffer-default-shrink-to-minimum-size t)
   (when (get-buffer "*Ibuffer*")
     (kill-buffer "*Ibuffer*"))
-  (ibuffer-list-buffers))
+  (save-selected-window
+    (ibuffer-list-buffers)))
 
 (defun purpose-x-code1--unset-ibuffer ()
   "Unset ibuffer settings."
   (remove-hook 'ibuffer-mode-hook
-	       #'(lambda ()
-		   (ibuffer-filter-by-purpose-x-code1-ibuffer-files-only nil)))
+               #'(lambda ()
+                   (ibuffer-filter-by-purpose-x-code1-ibuffer-files-only nil)))
   (remove-hook 'ibuffer-mode-hook #'ibuffer-auto-mode)
   (setq ibuffer-formats '((mark modified read-only " "
-				(name 18 18 :left :elide)
-				" "
-				(size 9 -1 :right)
-				" "
-				(mode 16 16 :left :elide)
-				" " filename-and-process)
-			  (mark " "
-				(name 16 -1)
-				" " filename)))
+                                (name 18 18 :left :elide)
+                                " "
+                                (size 9 -1 :right)
+                                " "
+                                (mode 16 16 :left :elide)
+                                " " filename-and-process)
+                          (mark " "
+                                (name 16 -1)
+                                " " filename)))
   (setq ibuffer-display-summary t)
   (setq ibuffer-use-header-line t))
 
@@ -118,29 +126,21 @@ the directory of the current buffer in that window, using `dired'.
 If there is no window available, do nothing.
 If current buffer doesn't have a filename, do nothing."
   (when (and (buffer-file-name)
-	     (cl-delete-if #'window-dedicated-p (purpose-windows-with-purpose 'dired)))
+             (cl-delete-if #'window-dedicated-p
+                           (purpose-windows-with-purpose 'dired)))
     (save-selected-window
       (dired (file-name-directory (buffer-file-name)))
       (when (fboundp 'dired-hide-details-mode)
-	(dired-hide-details-mode)))))
+        (dired-hide-details-mode))
+      (bury-buffer (current-buffer)))))
 
-(defun purpose-x-code1--setup-dired ()
-  "Setup dired settings."
-  (add-hook 'purpose-select-buffer-hook #'purpose-x-code1-update-dired))
-
-(defun purpose-x-code1--unset-dired ()
-  "Unset dired settings."
-  (remove-hook 'purpose-select-buffer-hook #'purpose-x-code1-update-dired))
-
-(defun purpose-x-code1--setup-imenu-list ()
-  "Setup imenu-list settings."
-  (add-hook 'purpose-select-buffer-hook #'imenu-list-update-safe)
-  (imenu-list-minor-mode 1))
-
-(defun purpose-x-code1--unset-imenu-list ()
-  "Unset imenu-list settings."
-  (remove-hook 'purpose-select-buffer-hook #'imenu-list-update-safe)
-  (imenu-list-minor-mode -1))
+(defun purpose-x-code1-update-changed ()
+  "Update auxiliary buffers if frame/buffer had changed.
+Uses `frame-or-buffer-changed-p' to determine whether the frame or
+buffer had changed."
+  (when (frame-or-buffer-changed-p 'purpose-x-code1-buffers-changed)
+    (purpose-x-code1-update-dired)
+    (imenu-list-update-safe)))
 
 ;;;###autoload
 (defun purpose-x-code1-setup ()
@@ -157,8 +157,10 @@ imenu."
   (interactive)
   (purpose-set-extension-configuration :purpose-x-code1 purpose-x-code1-purpose-config)
   (purpose-x-code1--setup-ibuffer)
-  (purpose-x-code1--setup-dired)
-  (purpose-x-code1--setup-imenu-list)
+  (purpose-x-code1-update-dired)
+  (imenu-list-minor-mode)
+  (frame-or-buffer-changed-p 'purpose-x-code1-buffers-changed)
+  (add-hook 'post-command-hook #'purpose-x-code1-update-changed)
   (purpose-set-window-layout purpose-x-code1--window-layout))
 
 (defun purpose-x-code1-unset ()
@@ -166,8 +168,8 @@ imenu."
   (interactive)
   (purpose-del-extension-configuration :purpose-x-code1)
   (purpose-x-code1--unset-ibuffer)
-  (purpose-x-code1--unset-dired)
-  (purpose-x-code1--unset-imenu-list))
+  (imenu-list-minor-mode -1)
+  (remove-hook 'post-command-hook #'purpose-x-code1-update-changed))
 
 ;;; --- purpose-x-code1 ends here ---
 
@@ -187,22 +189,22 @@ imenu."
 
 (defvar purpose-x-magit-single-conf
   (purpose-conf "magit-single"
-		:regexp-purposes '(("^\\*magit" . magit)))
-  "Configuration that gives each magit major-mode the same purpose.")
+                :regexp-purposes '(("^\\*magit" . magit)))
+  "Configuration that gives each magit major mode the same purpose.")
 
 (defvar purpose-x-magit-multi-conf
   (purpose-conf
    "magit-multi"
    :mode-purposes '((magit-diff-mode . magit-diff)
-		    (magit-status-mode . magit-status)
-		    (magit-log-mode . magit-log)
-		    (magit-commit-mode . magit-commit)
-		    (magit-cherry-mode . magit-cherry)
-		    (magit-branch-manager-mode . magit-branch-manager)
-		    (magit-process-mode . magit-process)
-		    (magit-reflog-mode . magit-reflog)
-		    (magit-wazzup-mode . magit-wazzup)))
-  "Configuration that gives each magit major-mode its own purpose.")
+                    (magit-status-mode . magit-status)
+                    (magit-log-mode . magit-log)
+                    (magit-commit-mode . magit-commit)
+                    (magit-cherry-mode . magit-cherry)
+                    (magit-branch-manager-mode . magit-branch-manager)
+                    (magit-process-mode . magit-process)
+                    (magit-reflog-mode . magit-reflog)
+                    (magit-wazzup-mode . magit-wazzup)))
+  "Configuration that gives each magit major mode its own purpose.")
 
 ;;;###autoload
 (defun purpose-x-magit-single-on ()
@@ -267,12 +269,353 @@ Add `golden-ratio' at the end of `purpose-select-buffer-hook' if
     "Use `psw-switcher' to open another buffer with the current purpose."
     (interactive)
     (psw-switcher :items-list (purpose-buffers-with-purpose
-			       (purpose-buffer-purpose (current-buffer)))
-		  :item-name-getter #'buffer-name
-		  :switcher #'purpose-switch-buffer)))
+                               (purpose-buffer-purpose (current-buffer)))
+                  :item-name-getter #'buffer-name
+                  :switcher #'purpose-switch-buffer)))
 
 ;;; --- purpose-x-popup-switcher ends here ---
 
+
+
+;;; --- purpose-x-popwin ---
+;;; An extension for displaying buffers in a temporary popup-window, similar
+;;; to the `popwin' package.
+
+(defcustom purpose-x-popwin-position 'bottom
+  "Position for the popup window.
+Legal values for this variable are 'top, 'bottom, 'left and 'right.  It
+is also possible to set this variable to a function.  That function will
+be used to create new popup windows and should be a display function
+compatible with `display-buffer'."
+  :group 'purpose
+  :type '(choice (const top)
+                 (const bottom)
+                 (const left)
+                 (const right)
+                 function)
+  :package-version "1.4")
+
+(defcustom purpose-x-popwin-width 0.4
+  "Width of popup window when displayed at left or right.
+Can have the same values as `purpose-display-at-left-width' and
+`purpose-display-at-right-width'"
+  :group 'purpose
+  :type '(choice number
+                 (const nil))
+  :package-version "1.4")
+
+(defcustom purpose-x-popwin-height 0.35
+  "Height of popup window when displayed at top or bottom.
+Can have the same values as `purpose-display-at-top-height' and
+`purpose-display-at-bottom-height'"
+  :group 'purpose
+  :type '(choice number
+                 (const nil))
+  :package-version "1.4")
+
+(defcustom purpose-x-popwin-major-modes '(help-mode
+                                          compilation-mode
+                                          occur-mode)
+  "List of major modes that should be opened as popup windows.
+When changing the value of this variable in elisp code, you should call
+`purpose-x-popwin-update-conf' for the change to take effect."
+  :group 'purpose
+  :type 'list
+  :set #'(lambda (symbol value)
+           (prog1 (set-default symbol value)
+             (purpose-x-popwin-update-conf)))
+  :initialize 'custom-initialize-default
+  :package-version "1.4")
+
+(defcustom purpose-x-popwin-buffer-names '("*Shell Command Output*")
+  "List of buffer names that should be opened as popup windows.
+Buffers whose name is contained in this list will be opened as popup
+windows.
+When changing the value of this variable in elisp code, you should call
+`purpose-x-popwin-update-conf' for the change to take effect."
+  :group 'purpose
+  :type 'list
+  :set #'(lambda (symbol value)
+           (prog1 (set-default symbol value)
+             (purpose-x-popwin-update-conf)))
+  :initialize 'custom-initialize-default
+  :package-version "1.4")
+
+(defcustom purpose-x-popwin-buffer-name-regexps nil
+  "List of regexp that should be opened as popup windows.
+Buffers whose name matches a regexp in this list will be opened as popup
+windows.
+When changing the value of this variable in elisp code, you should call
+`purpose-x-popwin-update-conf' for the change to take effect."
+  :group 'purpose
+  :type 'list
+  :set #'(lambda (symbol value)
+           (prog1 (set-default symbol value)
+             (purpose-x-popwin-update-conf)))
+  :initialize 'custom-initialize-default
+  :package-version "1.4")
+
+(defun purpose-x-popupify-purpose (purpose &optional display-fn)
+  "Set up a popup-like behavior for buffers with purpose PURPOSE.
+DISPLAY-FN is the display function to use for creating the popup window
+for purpose PURPOSE, and defaults to `purpose-display-at-bottom'."
+  (setq purpose-special-action-sequences
+        (cl-delete purpose purpose-special-action-sequences :key #'car))
+  (push (list purpose
+              #'purpose-display-reuse-window-buffer
+              #'purpose-display-reuse-window-purpose
+              (or display-fn #'purpose-display-at-bottom))
+        purpose-special-action-sequences))
+
+(defun purpose-x-unpopupify-purpose (purpose)
+  "Remove popup-like behavior for buffers purpose PURPOSE.
+This actually removes any special treatment for PURPOSE in
+`purpose-special-action-sequences', not only popup-like behavior."
+  (setq purpose-special-action-sequences
+        (cl-delete purpose purpose-special-action-sequences :key #'car)))
+
+(defun purpose-x-popwin-update-conf ()
+  "Update purpose-x-popwin's purpose configuration.
+The configuration is updated according to
+`purpose-x-popwin-major-modes', `purpose-x-popwin-buffer-names' and
+`purpose-x-popwin-buffer-name-regexps'."
+  (interactive)
+  (cl-flet ((joiner (x) (cons x 'popup)))
+    (let ((conf (purpose-conf
+                 "popwin"
+                 :mode-purposes (mapcar #'joiner purpose-x-popwin-major-modes)
+                 :name-purposes (mapcar #'joiner purpose-x-popwin-buffer-names)
+                 :regexp-purposes (mapcar #'joiner
+                                          purpose-x-popwin-buffer-name-regexps))))
+      (purpose-set-extension-configuration :popwin conf))))
+
+(defun purpose-x-popwin-get-display-function ()
+  "Return function for creating new popup windows.
+The function is determined by the value of `purpose-x-popwin-position'."
+  (or (cl-case purpose-x-popwin-position
+        ('top 'purpose-display-at-top)
+        ('bottom 'purpose-display-at-bottom)
+        ('left 'purpose-display-at-left)
+        ('right 'purpose-display-at-right))
+      (and (functionp purpose-x-popwin-position)
+           purpose-x-popwin-position)
+      (user-error "purpose-x-popwin-position has an invalid value: %S"
+                  purpose-x-popwin-position)))
+
+(defun purpose-x-popwin-display-buffer (buffer alist)
+  "Display BUFFER in a popup window.
+See `display-buffer' for the meaning of ALIST."
+  (let ((purpose-display-at-top-height purpose-x-popwin-height)
+        (purpose-display-at-bottom-height purpose-x-popwin-height)
+        (purpose-display-at-left-width purpose-x-popwin-width)
+        (purpose-display-at-right-width purpose-x-popwin-width))
+    (let ((window
+           (funcall (purpose-x-popwin-get-display-function) buffer alist)))
+      (purpose-set-window-purpose-dedicated-p window t)
+      (purpose-x-popwin-add-hooks)
+      window)))
+
+(defun purpose-x-popwin-close-windows ()
+  "Delete all popup windows.
+Internally, this function works be deleting all windows that have the
+'popup purpose.  It also buried all popup buffers so they don't bother
+the user when switching buffers."
+  (interactive)
+  (mapc #'delete-window (purpose-windows-with-purpose 'popup))
+  ;; we bury all popup buffers, in case the user poped several popup buffers
+  ;; (e.g. help and then occur), so all used popup buffers are buried
+  (mapc #'bury-buffer (purpose-buffers-with-purpose 'popup)))
+
+;; additional hooks we might want to use: `post-command-hook',
+;; `post-self-insert-hook', `window-configuration-change-hook',
+;; `buffer-list-update-hook'
+(defun purpose-x-popwin-add-hooks ()
+  "Set hooks for closing popup window automatically."
+  (global-set-key [remap keyboard-quit]
+                  ;; using anonymous command so it's hidden from the user
+                  (lambda ()
+                    (interactive)
+                    (purpose-x-popwin-closer-1 t)))
+  (add-hook 'purpose-select-buffer-hook #'purpose-x-popwin-closer-1))
+
+(defun purpose-x-popwin-remove-hooks ()
+  "Remove hooks for closing popup window automatically.
+This basically is an undo for `purpose-x-popwin-add-hooks'."
+  (global-set-key [remap keyboard-quit] nil)
+  (remove-hook 'purpose-select-buffer-hook #'purpose-x-popwin-closer-1))
+
+(defun purpose-x-popwin-stick ()
+  "Prevent current popup window from being automatically closed.
+To cancel, use `purpose-x-popwin-unstick'."
+  (interactive)
+  (if (purpose-windows-with-purpose 'popup)
+      (purpose-x-popwin-remove-hooks)
+    (user-error "There is no popup window")))
+
+(defun purpose-x-popwin-unstick ()
+  "Allow current popup window to close automatically.
+This is the opposite of `purpose-x-popwin-stick'."
+  (interactive)
+  (if (purpose-windows-with-purpose 'popup)
+      (purpose-x-popwin-add-hooks)
+    (user-error "There is no popup window")))
+
+(defun purpose-x-popwin-closer-1 (&optional force)
+  "Close popup window if appropriate, and remove hooks.
+Closes the popup window if the selected window is not a popup window, a
+helm window, or a minibuffer window.
+If FORCE is non-nil, close popup window regardless to other conditions.
+After closing the popup window, the relevant hooks are removed with
+`purpose-x-popwin-remove-hooks'.  Note that the hooks are not removed if
+the popup window doesn't need to close."
+  (unless (and (not force)
+               (or (member (purpose-window-purpose) '(helm popup))
+                   (window-minibuffer-p)))
+    (unwind-protect
+        (purpose-x-popwin-close-windows)
+      (purpose-x-popwin-remove-hooks))))
+
+;;;###autoload
+(defun purpose-x-popwin-setup ()
+  "Activate `popwin' emulation.
+This extension treats certain buffers as \"popup\" buffers and displays
+them in a special popup window.
+The window is closed automatically when selecting another buffer (via
+`switch-to-buffer' and the like), or by pressing \\[keyboard-quit].
+You can control which buffers are treated as popup buffers by changing
+the variables `purpose-x-popwin-major-modes',
+`purpose-x-popwin-buffer-names' and
+`purpose-x-popwin-buffer-name-regexps'.
+Look at `purpose-x-popwin-*' variables and functions to learn more."
+  (interactive)
+  (purpose-x-popwin-update-conf)
+  (setq purpose-special-action-sequences
+        (cl-delete 'popup purpose-special-action-sequences :key #'car))
+  (purpose-x-popupify-purpose 'popup #'purpose-x-popwin-display-buffer))
+
+(defun purpose-x-popwin-unset ()
+  "Deactivate `popwin' emulation."
+  (interactive)
+  (purpose-del-extension-configuration :popwin)
+  (purpose-x-unpopupify-purpose 'popup)
+  (purpose-x-popwin-remove-hooks))
+
+;;; --- purpose-x-popup ends here ---
+
+
+
+;;; --- purpose-x-persp ---
+;;; An extension for associating purpose configurations with perspectives.
+;;; It activates and deactivates a :perspective purpose-conf extension
+;;; automatically when switching perspectives or toggling `persp-mode'. It also
+;;; provides switch-buffer commands for switching to a buffer with the same
+;;; purpose and perspective as the current buffer
+;;; (`purpose-x-persp-switch-buffer', `*-other-windw', `*-other-frame').
+
+(defvar purpose-x-persp-confs (make-hash-table :test 'equal)
+  "Hash table holding perspectives' purpose configurations.
+The table maps a perspective's name to its purpose configuration.  A
+perspective's name is a string (obviously), and its purpose
+configuration is a `purpose-conf' object.
+To add/remove entries, use:
+  (puthash <name> <conf> purpose-x-persp-confs)
+  (remhash <name> purpose-x-persp-confs)")
+
+(defun purpose-x-persp-activate ()
+  "Activate current perspective's purpose configuration."
+  (let ((conf (gethash (persp-name persp-curr) purpose-x-persp-confs)))
+    (if conf
+        (purpose-set-extension-configuration :perspective conf)
+      (purpose-x-persp-remove))))
+
+(defun purpose-x-persp-remove ()
+  "Remove current perspective's purpose configuration."
+  (purpose-del-extension-configuration :perspective))
+
+(defun purpose-x-persp-activate-or-remove ()
+  "Activate/remove current perspective's purpose configuration.
+Should be hooked to `persp-mode-hook'."
+  (if persp-mode
+      (purpose-x-persp-activate)
+    (purpose-x-persp-remove)))
+
+;;;###autoload
+(defun purpose-x-persp-setup ()
+  "Activate purpose-x-persp extension.
+This extension automatically activates a purpose configuration for the
+current perspective.  The configuration changes automatically when
+switching perspectives or when toggling `persp-mode'.
+The variable `purpose-x-persp-confs' matches between perspectives and
+purpose configurations."
+  (interactive)
+  (unless (fboundp 'persp-mode)
+    (user-error "Can't load purpose-x-persp: perspective not available"))
+  (add-hook 'persp-switch-hook #'purpose-x-persp-activate)
+  (add-hook 'persp-mode-hook #'purpose-x-persp-activate-or-remove)
+  (when persp-mode
+    (purpose-x-persp-activate)))
+
+(defun purpose-x-persp-unset ()
+  "Deactivate purpose-x-persp extension."
+  (interactive)
+  (remove-hook 'persp-switch-hook #'purpose-x-persp-activate)
+  (remove-hook 'persp-mode-hook #'purpose-x-persp-activate-or-remove)
+  (purpose-x-persp-remove))
+
+(defun purpose-x-persp-get-buffer-names ()
+  "Get names of all buffers with same purpose and perspective as current buffer.
+The returned list doesn't contain the current buffer."
+  (let ((persp-buffers (persp-buffers persp-curr)))
+    (mapcar #'buffer-name
+            (cl-delete-if-not (lambda (buffer) (member buffer persp-buffers))
+                              (delete (current-buffer)
+                                      (purpose-buffers-with-purpose
+                                       (purpose-buffer-purpose
+                                        (current-buffer))))))))
+
+;;;###autoload
+(defun purpose-x-persp-switch-buffer (buffer &optional norecord force-same-window)
+  "Switch to BUFFER, limited by purpose and perspective.
+BUFFER is chosen from buffers with the same purpose as the current
+buffer that are also part of the current perspective.
+NORECORD and FORCE-SAME-WINDOW have the same meaning as in
+`switch-to-buffer'."
+  (interactive
+   (list (completing-read "Switch to buffer: "
+                          (purpose-x-persp-get-buffer-names)
+                          nil
+                          'confirm)))
+  (switch-to-buffer buffer norecord force-same-window))
+
+;;;###autoload
+(defun purpose-x-persp-switch-buffer-other-window (buffer &optional norecord)
+  "Switch to BUFFER in other window, limited by purpose and perspective.
+NORECORD has the same meaning as in `switch-to-buffer-other-window'.
+The relation between `purpose-x-persp-switch-buffer-other-window' and
+`switch-to-buffer-other-window' is the same as the relation between
+`purpose-x-persp-switch-buffer' and `switch-to-buffer'."
+  (interactive
+   (list (completing-read "Switch to buffer in other window: "
+                          (purpose-x-persp-get-buffer-names)
+                          nil
+                          'confirm)))
+  (switch-to-buffer-other-window buffer norecord))
+
+;;;###autoload
+(defun purpose-x-persp-switch-buffer-other-frame (buffer &optional norecord)
+  "Switch to BUFFER in other frame, limited by purpose and perspective.
+NORECORD has the same meaning as in `switch-to-buffer-other-frame'.
+The relation between `purpose-x-persp-switch-buffer-other-frame' and
+`switch-to-buffer-other-frame' is the same as the relation between
+`purpose-x-persp-switch-buffer' and `switch-to-buffer'."
+  (interactive
+   (list (completing-read "Switch to buffer in other frame: "
+                          (purpose-x-persp-get-buffer-names)
+                          nil
+                          'confirm)))
+  (switch-to-buffer-other-frame buffer norecord))
+
+;;; --- purpose-x-persp ends here ---
 
 (provide 'window-purpose-x)
 ;;; window-purpose-x.el ends here
