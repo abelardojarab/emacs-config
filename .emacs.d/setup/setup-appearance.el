@@ -173,7 +173,7 @@ non-nil."
 (defun hi-lock-overlay-p (overlay)
   "Return the overlay if overlay is a hi-lock overlay."
   (if (and (overlayp overlay)
-         (eq (overlay-get overlay 'hi-lock-overlay) t))
+           (eq (overlay-get overlay 'hi-lock-overlay) t))
       overlay
     nil))
 
@@ -276,6 +276,12 @@ non-nil."
 
     ;; hook for setting up UI when not running in daemon mode
     (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil)))))
+
+;; Fixed pitched for html/nxml
+(defun fixed-pitch-mode ()
+  (buffer-face-mode -1))
+(add-hook 'html-mode-hook 'fixed-pitch-mode)
+(add-hook 'nxml-mode-hook 'fixed-pitch-mode)
 
 ;; Pretty lambdas
 (defun pretty-lambdas ()
