@@ -527,7 +527,7 @@ Defaults to `error'."
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-             (eq 'not-yanks search-upper-case))
+               (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message
@@ -731,16 +731,9 @@ not need to be wrapped, move point to the next line and return t."
 ;; windows handling
 (add-to-list 'load-path "~/.emacs.d/window-purpose")
 (require 'window-purpose)
-(setq pop-up-frames nil)
-(setq display-buffer-reuse-frames t)
+(purpose-mode)
+(setq purpose-preferred-prompt 'helm)
 (setq menu-bar-select-buffer-function 'switch-to-buffer)
-(add-to-list 'display-buffer-alist
-             `(,(rx bos "*Flycheck errors*" eos)
-               (display-buffer-reuse-window
-                display-buffer-in-side-window)
-               (reusable-frames . visible)
-               (side            . bottom)
-               (window-height   . 0.4)))
 
 ;; IMenu list
 (add-to-list 'load-path "~/.emacs.d/imenu-list")
