@@ -19,6 +19,7 @@
 
 (require 'cl-lib)
 (require 'helm)
+(require 'helm-help)
 
 (defvar helm-ucs-map
   (let ((map (make-sparse-keymap)))
@@ -27,7 +28,6 @@
     (define-key map (kbd "<C-left>")      'helm-ucs-persistent-backward)
     (define-key map (kbd "<C-right>")     'helm-ucs-persistent-forward)
     (define-key map (kbd "<C-return>")    'helm-ucs-persistent-insert)
-    (define-key map (kbd "C-c ?")         'helm-ucs-help)
     map)
   "Keymap for `helm-ucs'.")
 
@@ -150,17 +150,16 @@ Only math* symbols are collected."
     (helm-execute-persistent-action 'action-delete)))
 
 (defvar helm-source-ucs
-  '((name . "Ucs names")
-    (init . helm-ucs-init)
-    (candidate-number-limit . 9999)
-    (candidates-in-buffer)
-    (mode-line . helm-ucs-mode-line-string)
-    (action . (("Insert character" . helm-ucs-insert-char)
-               ("Insert character name" . helm-ucs-insert-name)
-               ("Insert character code in hex" . helm-ucs-insert-code)
-               ("Forward char" . helm-ucs-forward-char)
-               ("Backward char" . helm-ucs-backward-char)
-               ("Delete char backward" . helm-ucs-delete-backward))))
+  (helm-build-in-buffer-source "Ucs names"
+    :init #'helm-ucs-init
+    :candidate-number-limit 9999
+    :help-message 'helm-ucs-help-message
+    :action '(("Insert character" . helm-ucs-insert-char)
+              ("Insert character name" . helm-ucs-insert-name)
+              ("Insert character code in hex" . helm-ucs-insert-code)
+              ("Forward char" . helm-ucs-forward-char)
+              ("Backward char" . helm-ucs-backward-char)
+              ("Delete char backward" . helm-ucs-delete-backward)))
   "Source for collecting `ucs-names' math symbols.")
 
 ;;;###autoload

@@ -115,8 +115,6 @@
 (make-obsolete 'helm-c-bookmark-run-delete 'helm-bookmark-run-delete "1.5.1")
 (defalias 'helm-c-uniq-list 'helm-uniq-list)
 (make-obsolete 'helm-c-uniq-list 'helm-uniq-list "1.5.1")
-(defalias 'helm-c-pp-bookmarks 'helm-pp-bookmarks)
-(make-obsolete 'helm-c-pp-bookmarks 'helm-pp-bookmarks "1.5.1")
 (defalias 'helm-c-top-sh-persistent-action 'helm-top-sh-persistent-action)
 (make-obsolete 'helm-c-top-sh-persistent-action 'helm-top-sh-persistent-action "1.5.1")
 (defalias 'helm-c-grep-action 'helm-grep-action)
@@ -769,8 +767,6 @@
 (make-obsolete-variable 'helm-c-grep-default-directory-fn 'helm-grep-default-directory-fn "1.5.1")
 (defvaralias 'helm-c-apt-input-history 'helm-apt-input-history)
 (make-obsolete-variable 'helm-c-apt-input-history 'helm-apt-input-history "1.5.1")
-(defvaralias 'helm-async-be-async 'dired-async-be-async)
-(make-obsolete-variable 'helm-async-be-async 'dired-async-be-async "1.5.9")
 
 
 (provide 'helm-aliases)
