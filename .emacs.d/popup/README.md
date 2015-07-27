@@ -15,15 +15,15 @@ Screenshots
 
 **Tooltip**
 
-![](http://cx4a.org/software/popup/popup1.png)
+![](https://raw.githubusercontent.com/auto-complete/popup-el/master/etc/images/popup1.png)
 
 **Popup Menu**
 
-![](http://cx4a.org/software/popup/popup2.png)
+![](https://raw.githubusercontent.com/auto-complete/popup-el/master/etc/images/popup2.png)
 
 **Popup Cascade Menu**
 
-![](http://cx4a.org/software/popup/popup3.png)
+![](https://raw.githubusercontent.com/auto-complete/popup-el/master/etc/images/popup3.png)
 
 Installation
 ------------
@@ -273,13 +273,14 @@ select an item of a list.
 
     popup-menu* list &key point around width height margin margin-left
     margin-right scroll-bar symbol parent parent-offset keymap
-    fallback help-delay nowait prompt isearch isearch-cursor-color
+    fallback help-delay nowait prompt isearch isearch-filter isearch-cursor-color
     isearch-keymap isearch-callback initial-index => selected-value
 
 Show a popup menu of `LIST` at `POINT`. This function returns the value
 of the selected item. Almost all arguments are same as `popup-create`
 except for `KEYMAP`, `FALLBACK`, `HELP-DELAY`, `PROMPT`, `ISEARCH`,
-`ISEARCH-CURSOR-COLOR`, `ISEARCH-KEYMAP`, and `ISEARCH-CALLBACK`.
+`ISEARCH-FILTER`, `ISEARCH-CURSOR-COLOR`, `ISEARCH-KEYMAP`
+and `ISEARCH-CALLBACK`.
 
 If `KEYMAP` is provided, it is a keymap which is used when processing
 events during event loop.
@@ -298,6 +299,9 @@ instance without entering event loop.
 
 If `ISEARCH` is non-nil, do isearch as soon as displaying the popup
 menu.
+
+`ISEARCH-FILTER` is a filtering function taking two arguments:
+search pattern and list of items. Returns a list of matching items.
 
 `ISEARCH-CURSOR-COLOR` is a cursor color during isearch. The default
 value is `popup-isearch-cursor-color'.
@@ -332,9 +336,9 @@ Here is an example:
 
 ----
 
-Copyright (C) 2011  Tomohiro Matsuyama <<tomo@cx4a.org>>
+Copyright (C) 2011-2015  Tomohiro Matsuyama <<m2ym.pub@gmail.com>>
 
 [melpa-link]: http://melpa.org/#/popup
-[melpa-stable-link]: http://melpa.org/#/popup
+[melpa-stable-link]: http://stable.melpa.org/#/popup
 [melpa-badge]: http://melpa.org/packages/popup-badge.svg
 [melpa-stable-badge]: http://stable.melpa.org/packages/popup-badge.svg
