@@ -78,6 +78,8 @@
 (setq org-confirm-babel-evaluate nil)
 (setq org-use-speed-commands t)
 (setq org-completion-use-ido t)
+(setq org-hide-leading-stars t)
+(setq  org-enforce-todo-dependencies t)
 (setq org-indent-mode nil) ;; this causes problem in other modes
 (setq org-blank-before-new-entry ;; Insert blank line before new
       '((heading . t)            ;; headings/list items.
@@ -234,8 +236,8 @@
        '(progn
           (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
             (if (and cua-mode
-                     org-support-shift-select
-                     (not (use-region-p)))
+                   org-support-shift-select
+                   (not (use-region-p)))
                 (cua-set-mark)))))))
 
 ;; Fix on the keys
@@ -260,24 +262,6 @@
         ("HOLD" . 'font-lock-keyword-face)
         ("WAITING" . 'font-lock-builtin-face)
         ("CANCELLED" . 'font-lock-doc-face)))
-
-;; Abbrev mode
-(add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
-(define-skeleton skel-org-block-elisp
-  "Insert an emacs-lisp block"
-  ""
-  "#+begin_src emacs-lisp\n"
-  _ - \n
-  "#+end_src\n")
-(define-abbrev org-mode-abbrev-table "elsrc" "" 'skel-org-block-elisp)
-
-(define-skeleton skel-org-block-js
-  "Insert a JavaScript block"
-  ""
-  "#+begin_src js\n"
-  _ - \n
-  "#+end_src\n")
-(define-abbrev org-mode-abbrev-table "jssrc" "" 'skel-org-block-js)
 
 ;; Images
 (add-to-list 'load-path "~/.emacs.d/image+")
@@ -618,11 +602,6 @@ a link to this file."
 (defun org-reverse-string (string)
   (apply 'string (reverse (string-to-list string))))
 
-;; Nice bulleted lists
-(add-to-list 'load-path "~/.emacs.d/org-bullets")
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
 ;; CSS for the HTML
 (setq org-html-style-include-scripts nil
       org-html-style-include-default nil)
@@ -674,13 +653,12 @@ a link to this file."
                                    (wl . wl-other-frame))))
 
 ;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
-(defun iy-ac-tab-noconflict ()
+(defun ac-tab-noconflict ()
   (let ((command (key-binding [tab]))) ;; remember command
     (local-unset-key [tab]) ;; unset from (kbd "<tab>")
     (local-set-key (kbd "TAB") command))) ;; bind to (kbd "TAB")
-(add-hook 'ruby-mode-hook 'iy-ac-tab-noconflict)
-(add-hook 'markdown-mode-hook 'iy-ac-tab-noconflict)
-(add-hook 'org-mode-hook 'iy-ac-tab-noconflict)
+(add-hook 'markdown-mode-hook 'ac-tab-noconflict)
+(add-hook 'org-mode-hook 'ac-tab-noconflict)
 
 ;; Org Table of Contents
 (add-to-list 'load-path "~/.emacs.d/org-toc")
@@ -710,5 +688,16 @@ a link to this file."
 (add-hook 'org-mode-hook 'pandoc-load-default-settings)
 (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
 
+;; Nice bulleted lists
+(add-to-list 'load-path "~/.emacs.d/org-bullets")
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(setq org-bullets-bullet-list
+      '("⚫"
+        "•"
+        "⚪"
+        "○"
+        "▸"))
 (provide 'setup-org)
+
 ;;; setup-org.el ends here
