@@ -725,9 +725,9 @@ a link to this file."
   "Creates my default header"
   ""
   "#+TITLE: " str "\n"
-  "#+AUTHOR: Aaron Bedra\n"
+  "#+AUTHOR: Abelardo Jara-Berrocal\n"
   "#+EMAIL: abelardojarabj@gmail.com\n"
-  "#+OPTIONS: toc:3 num:nil\n"
+  "#+OPTIONS: toc:2 num:nil\n"
   "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
 (define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
 
@@ -744,7 +744,6 @@ a link to this file."
       '(
         "•"
         "⚪"
-        "▸"
         "⚫"
         "○"
         ))
