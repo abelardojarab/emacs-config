@@ -359,10 +359,17 @@ non-nil."
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
 (require 'highlight-blocks)
 
-;; Indentation guide
+;; Context indentation guide
 (add-to-list 'load-path "~/.emacs.d/indent-guide")
 (require 'indent-guide)
 (indent-guide-global-mode)
+(setq indent-guide-char ":")
+
+;; Permanent indentation guide
+(add-to-list 'load-path "~/.emacs.d/indent-hint")
+(require 'indent-hint)
+(add-hook 'prog-mode-hook 'indent-hint-mode)
+(add-hook 'lisp-mode-hook 'indent-hint-lisp)
 
 ;; Highlight symbol
 (add-to-list 'load-path "~/.emacs.d/highlight-symbol")
