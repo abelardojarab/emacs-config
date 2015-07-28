@@ -25,19 +25,22 @@
 ;;; Code:
 
 ;; Enable Semantic
+(require 'semantic/lex-spp)
 (require 'semantic/ia)
 (require 'semantic/wisent)
 (setq semantic-default-submodes
-      '(global-semantic-tag-folding-mode))
+      '(global-semantic-tag-folding-mode
+        global-semantic-idle-completions-mode
+        global-semantic-idle-local-symbol-highlight-mode
+        global-semantic-idle-scheduler-mode))
 (semantic-mode 1)
-(set-default 'semantic-case-fold t)
 (semantic-load-enable-minimum-features)
 
 ;; Faster parsing
 (setq semantic-idle-work-parse-neighboring-files-flag nil)
 (setq semantic-idle-work-update-headers-flag nil)
 (setq semantic-idle-scheduler-idle-time 180000)
-(setq semantic-idle-scheduler-work-idle-time 1800)
+(setq semantic-idle-scheduler-work-idle-time 180000)
 (setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Default directory
@@ -52,6 +55,7 @@
 (when (cedet-ectag-version-check t)
   (semantic-load-enable-primary-ectags-support))
 
+;; Auto-complete support
 (require 'semantic/analyze/refs)
 (defun ac-complete-semantic-self-insert (arg)
   (interactive "p")
@@ -63,16 +67,27 @@
   (local-set-key ">" 'ac-complete-semantic-self-insert)
   (local-set-key ":" 'ac-complete-semantic-self-insert))
 (add-hook 'c-mode-common-hook 'cc-mode-ac-key-bindings)
+(add-hook 'lisp-mode-hook 'cc-mode-ac-key-bindings)
+(add-hook 'python-mode-hook 'cc-mode-ac-key-bindings)
 
 ;; smart completions
+(setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
+                 '())
 (setq-mode-local c-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
                  '(project))
+(setq-mode-local lisp-mode semanticdb-find-default-throttle
+                 '(project))
+(setq-mode-local js2-mode semanticdb-find-default-throttle
+                 '(project))
+(setq-mode-local python-mode semanticdb-find-default-throttle
+                 '(project unloaded system recursive))
 
 ;; working with tags
-(semanticdb-enable-gnu-global-databases 'c-mode)
-(semanticdb-enable-gnu-global-databases 'c++-mode)
+(when (cedet-gnu-global-version-check t)
+  (semanticdb-enable-gnu-global-databases 'c-mode)
+  (semanticdb-enable-gnu-global-databases 'c++-mode))
 
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
