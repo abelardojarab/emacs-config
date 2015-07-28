@@ -243,24 +243,38 @@
 ;; Fix on the keys
 (add-hook 'org-mode-hook
           (lambda ()
-            (define-key org-mode-map [kp-enter] 'org-return)
+            (define-key org-mode-map [kp-enter] 'org-meta-return)
             (define-key org-mode-map [enter] 'org-return)
+            (define-key org-mode-map (kbd "<return>") 'org-return)
             (define-key org-mode-map (kbd "RET") 'org-return)))
+
+;; Custom commands
+(setq org-agenda-custom-commands
+      '(("h" "Work todos" tags-todo
+         "-personal-doat={.+}-dowith={.+}/!-TASK"
+         ((org-agenda-todo-ignore-scheduled t)))
+        ("H" "All work todos" tags-todo "-personal/!-TASK-MAYBE"
+         ((org-agenda-todo-ignore-scheduled nil)))
+        ("A" "Work todos with doat or dowith" tags-todo
+         "-personal+doat={.+}|dowith={.+}/!-TASK"
+         ((org-agenda-todo-ignore-scheduled nil)))
+        ("j" "TODO dowith and TASK with"
+         ((org-sec-with-view "TODO dowith")
+          (org-sec-where-view "TODO doat")
+          (org-sec-assigned-with-view "TASK with")
+          (org-sec-stuck-with-view "STUCK with")))
+        ("J" "Interactive TODO dowith and TASK with"
+         ((org-sec-who-view "TODO dowith")))))
 
 ;; define todo states: set time stamps one waiting, delegated and done
 (setq org-todo-keywords
-      '((sequence
-         "TODO(t)"
-         "IN PROGRESS(p!)"
-         "HOLD(h!)"
-         "WAITING(w)"
-         "|"
-         "DONE(d!)"
-         "CANCELLED(c)")))
+      '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)" "HOLD(h)")
+        (sequence "TASK(f)" "|" "DONE(d)" "IN PROGRESS(p)" "CANCELLED(c)")
+        (sequence "MAYBE(m)" "|" "CANCELLED(c)")))
 (setq org-todo-keyword-faces
       '(("IN PROGRESS" . 'warning)
         ("HOLD" . 'font-lock-keyword-face)
-        ("WAITING" . 'font-lock-builtin-face)
+        ("TASK" . 'font-lock-builtin-face)
         ("CANCELLED" . 'font-lock-doc-face)))
 
 ;; Images
@@ -687,6 +701,39 @@ a link to this file."
 (add-hook 'markdown-mode-hook 'turn-on-pandoc)
 (add-hook 'org-mode-hook 'pandoc-load-default-settings)
 (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+
+;; Abbrev
+(add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
+(define-skeleton skel-org-block-elisp
+  "Insert an emacs-lisp block"
+  ""
+  "#+begin_src emacs-lisp\n"
+  _ - \n
+  "#+end_src\n")
+(define-abbrev org-mode-abbrev-table "elsrc" "" 'skel-org-block-elisp)
+
+(define-skeleton skel-org-block-js
+  "Insert a JavaScript block"
+  ""
+  "#+begin_src js\n"
+  _ - \n
+  "#+end_src\n")
+(define-abbrev org-mode-abbrev-table "jssrc" "" 'skel-org-block-js)
+
+(define-skeleton skel-header-block
+  "Creates my default header"
+  ""
+  "#+TITLE: " str "\n"
+  "#+AUTHOR: Aaron Bedra\n"
+  "#+EMAIL: abelardojarabj@gmail.com\n"
+  "#+OPTIONS: toc:3 num:nil\n"
+  "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
+(define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
+
+;; Nice bulleted lists
+(add-to-list 'load-path "~/.emacs.d/org-autolist")
+(require 'org-autolist)
+(add-hook 'org-mode-hook (lambda () (org-autolist-mode)))
 
 ;; Nice bulleted lists
 (add-to-list 'load-path "~/.emacs.d/org-bullets")
