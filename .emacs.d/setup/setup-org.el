@@ -70,6 +70,7 @@
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (setq org-startup-folded 'nofold)
 (setq org-startup-indented t)
+(setq org-cycle-separator-lines 1)
 (setq org-startup-with-inline-images t)
 (setq org-startup-truncated t)
 (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
@@ -79,7 +80,7 @@
 (setq org-use-speed-commands t)
 (setq org-completion-use-ido t)
 (setq org-hide-leading-stars t)
-(setq  org-enforce-todo-dependencies t)
+(setq org-enforce-todo-dependencies t)
 (setq org-indent-mode nil) ;; this causes problem in other modes
 (setq org-blank-before-new-entry ;; Insert blank line before new
       '((heading . t)            ;; headings/list items.
