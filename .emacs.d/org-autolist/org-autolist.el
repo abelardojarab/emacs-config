@@ -1,6 +1,6 @@
 ;;; org-autolist.el --- Improved list management in org-mode
 
-;; Copyright (C) 2014 Calvin Young
+;; Copyright (C) 2014, 2015 Calvin Young
 
 ;; Author: Calvin Young
 ;; Keywords: lists, checklists, org-mode
@@ -83,7 +83,7 @@ automatically insert new list items.
       ;; it. If it can't be outdented (b/c it's already at the outermost
       ;; indentation level), then delete it.
       (if (and (eolp)
-               (<= (point) (org-autolist-beginning-of-item-after-bullet)))
+             (<= (point) (org-autolist-beginning-of-item-after-bullet)))
           (condition-case nil
               (call-interactively 'org-outdent-item)
             ('error (delete-region (line-beginning-position)
@@ -102,10 +102,10 @@ automatically insert new list items.
          ;; w/ the UX for other list types, but we do this b/c `org-meta-return'
          ;; has some very strange behavior when executed in the middle of a
          ;; description list.
-         ((and (org-at-item-description-p)
-               (> (point) (org-autolist-beginning-of-item-after-bullet))
-               (< (point) (line-end-position)))
-          (newline))
+         ;; ((and (org-at-item-description-p)
+         ;;     (> (point) (org-autolist-beginning-of-item-after-bullet))
+         ;;     (< (point) (line-end-position)))
+         ;;  (newline))
 
          ;; Otherwise just let org-mode figure it out it.
          (t
@@ -123,7 +123,7 @@ key to automatically delete list prefixes.
   ;; We should only invoke our custom logic if we're at the beginning of a list
   ;; item right after the bullet character.
   (if (and (org-at-item-p)
-           (<= (point) (org-autolist-beginning-of-item-after-bullet)))
+         (<= (point) (org-autolist-beginning-of-item-after-bullet)))
       ;; If the previous line is empty, then just delete the previous line (i.e.,
       ;; shift the list up by one line).
       (if (org-previous-line-empty-p)
