@@ -1,6 +1,6 @@
 ;;; ecb-symboldef.el --- ECB window for symbol-definition or documentation
 
-;;; Copyright (C) 2005 Hauke Jans
+;;; Copyright (C) 2005, 2015 Hauke Jans
 
 ;; Author: Hauke Jans, <hauke.jans@sesa.de>, <hauke.jans@t-online.de>
 ;; Maintainer: Hauke Jans, <hauke.jans@sesa.de>, <hauke.jans@t-online.de>
@@ -167,7 +167,7 @@ IMPORTANT NOTE: Every time the synchronization is done the hook
                 (const :tag "Never" nil)
                 (repeat :tag "Not with these modes"
                         (symbol :tag "mode"))))
-    
+
 
 (defcustom ecb-symboldef-buffer-sync-delay 'basic
   "*Time Emacs must be idle before the symboldef-buffer is synchronized.
@@ -189,7 +189,7 @@ If the special value 'basic is set then ECB uses the setting of the option
                        (ecb-activate-ecb-autocontrol-function
                         value 'ecb-analyse-buffer-sync))))
   :initialize 'custom-initialize-default)
-  
+
 (defcustom ecb-symboldef-buffer-sync-hook nil
   "Hook run at the end of the function `ecb-symboldef-buffer-sync'.
 See documentation of `ecb-symboldef-buffer-sync' for conditions when
@@ -227,13 +227,13 @@ could slow down dramatically!"
 (defun ecb-symboldef-get-find-function ()
   "Returns the symbol find function to use according to major-mode"
   (let ((mode-function (cdr (assoc major-mode ecb-symboldef-find-functions)))
-	(default-function (cdr (assoc 'default ecb-symboldef-find-functions))))
+    (default-function (cdr (assoc 'default ecb-symboldef-find-functions))))
     (or mode-function
         default-function
         'ecb-symboldef-find-null)))
 
 (defun ecb-symboldef-find-null (symbol-name edit-buffer)
-  "Empty symbol-definition find function. 
+  "Empty symbol-definition find function.
 Only prints mode and info but does not find any symbol-definition."
   (let ((symboldef-window-height (ecb-window-full-height
                                   (get-buffer-window (current-buffer)))))
@@ -245,14 +245,14 @@ Only prints mode and info but does not find any symbol-definition."
 
 (defconst ecb-symboldef-temp-buffer-name " *ecb-symboldef-temp-buffer")
 
-;; currently not used 
+;; currently not used
 (defun ecb-symboldef-get-doc-for-fsymbol (fsymbol edit-buffer)
   "Returns the full output of `describe-function' as string without any
 sideeffect to the help-system of Emacs.
 FSYMBOL is the symbol for which the doc-string should be returned and
 EDIT-BUFFER is that buffer FSYMBOL is used."
   ;; by binding standard-output to a special buffer we can force
-  ;; describe-function-1 to print all its output to this buffer. 
+  ;; describe-function-1 to print all its output to this buffer.
   (let ((standard-output (get-buffer-create ecb-symboldef-temp-buffer-name))
         (doc-string nil))
     (with-current-buffer standard-output
@@ -305,32 +305,32 @@ EDIT-BUFFER is that buffer VSYMBOL is used."
 If that gives no function, return the function which is called by the
 list containing point.  If that doesn't give a function, return nil."
   (or (ignore-errors
-	(with-syntax-table emacs-lisp-mode-syntax-table
-	  (save-excursion
-	    (or (not (zerop (skip-syntax-backward "_w")))
-		(eq (char-syntax (char-after (point))) ?w)
-		(eq (char-syntax (char-after (point))) ?_)
-		(forward-sexp -1))
-	    (skip-chars-forward "`'")
-	    (let ((obj (read (current-buffer))))
-	      (and (symbolp obj) (fboundp obj) obj)))))
+    (with-syntax-table emacs-lisp-mode-syntax-table
+      (save-excursion
+        (or (not (zerop (skip-syntax-backward "_w")))
+        (eq (char-syntax (char-after (point))) ?w)
+        (eq (char-syntax (char-after (point))) ?_)
+        (forward-sexp -1))
+        (skip-chars-forward "`'")
+        (let ((obj (read (current-buffer))))
+          (and (symbolp obj) (fboundp obj) obj)))))
       (ignore-errors
-	(save-excursion
-	  (save-restriction
-	    (narrow-to-region (max (point-min) (- (point) 1000))
-			      (point-max))
-	    (backward-up-list 1)
-	    (forward-char 1)
-	    (let (obj)
-	      (setq obj (read (current-buffer)))
-	      (and (symbolp obj) (fboundp obj) obj)))))))
+    (save-excursion
+      (save-restriction
+        (narrow-to-region (max (point-min) (- (point) 1000))
+                  (point-max))
+        (backward-up-list 1)
+        (forward-char 1)
+        (let (obj)
+          (setq obj (read (current-buffer)))
+          (and (symbolp obj) (fboundp obj) obj)))))))
 
 (defun ecb-symboldef-function-at-point ()
   "Returns the function around point or nil if there is no function around."
   (if ecb-running-xemacs
       (function-at-point)
     (function-called-at-point)))
-    
+
 (defun ecb-symboldef-find-lisp-doc (symbol-name edit-buffer)
   "Insert the lisp-documentation of symbol with name SYMBOL-NAME."
   (setq truncate-lines nil)
@@ -367,7 +367,7 @@ list containing point.  If that doesn't give a function, return nil."
              ecb-symboldef-symbol-face)
            beg end)
           (goto-char end))
-        
+
         (when (and ecb-symboldef-prototype-face
                    (re-search-forward  (regexp-quote (concat "(" (symbol-name fsymbol))) nil t))
           (setq beg (match-beginning 0))
@@ -429,12 +429,12 @@ list containing point.  If that doesn't give a function, return nil."
 ;;   "Display the code-level documentation for the symbol at POINT."
 ;;   (interactive "d")
 ;;   (let* ((ctxt (semantic-analyze-current-context point))
-;; 	 (pf (reverse (oref ctxt prefix)))
-;; 	 )
+;;   (pf (reverse (oref ctxt prefix)))
+;;   )
 ;;     ;; If PF, the prefix is non-nil, then the last element is either
 ;;     ;; a string (incomplete type), or a semantic TAG.  If it is a TAG
 ;;     ;; then we should be able to find DOC for it.
-;;     (cond 
+;;     (cond
 ;;      ((stringp (car pf))
 ;;       (message "Incomplete symbol name."))
 ;;      ((semantic-tag-p (car pf))
@@ -445,18 +445,18 @@ list containing point.  If that doesn't give a function, return nil."
 ;;       ;; The default tries to find a comment in front of the tag
 ;;       ;; and then strings off comment prefixes.
 ;;       (let ((doc (semantic-documentation-for-tag (car pf))))
-;; 	(with-output-to-temp-buffer "*TAG DOCUMENTATION*"
-;; 	  (princ "Tag: ")
-;; 	  (princ (semantic-format-tag-prototype (car pf)))
-;; 	  (princ "\n")
-;; 	  (princ "\n")
-;; 	  (princ "Snarfed Documentation: ")
-;; 	  (princ "\n")
-;; 	  (princ "\n")
-;; 	  (if doc
-;; 	      (princ doc)
-;; 	    (princ "  Documentation unavailable."))
-;; 	  )))
+;;  (with-output-to-temp-buffer "*TAG DOCUMENTATION*"
+;;    (princ "Tag: ")
+;;    (princ (semantic-format-tag-prototype (car pf)))
+;;    (princ "\n")
+;;    (princ "\n")
+;;    (princ "Snarfed Documentation: ")
+;;    (princ "\n")
+;;    (princ "\n")
+;;    (if doc
+;;        (princ doc)
+;;      (princ "  Documentation unavailable."))
+;;    )))
 ;;      (t
 ;;       (message "Unknown tag.")))
 ;;     ))
@@ -471,7 +471,7 @@ list containing point.  If that doesn't give a function, return nil."
 ;;   ;; When looking for a tag of any name there are a couple ways to do
 ;;   ;; it.  The simple `semanticdb-find-tag-by-...' are simple, and
 ;;   ;; you need to pass it the exact name you want.
-;;   ;; 
+;;   ;;
 ;;   ;; The analyzer function `semantic-analyze-tag-name' will take
 ;;   ;; more complex names, such as the cpp symbol foo::bar::baz,
 ;;   ;; and break it up, and dive through the namespaces.
@@ -491,12 +491,12 @@ list containing point.  If that doesn't give a function, return nil."
 ;;       ;; the inheritance tree, and find all the pieces that
 ;;       ;; are inherited.
 ;;       (let ((parts (semantic-analyze-scoped-type-parts class)))
-;; 	(while parts
-;; 	  (princ "    ")
-;; 	  (princ (semantic-format-tag-summarize (car parts)))
-;; 	  (princ "\n")
-;; 	  (setq parts (cdr parts)))
-;; 	)
+;;  (while parts
+;;    (princ "    ")
+;;    (princ (semantic-format-tag-summarize (car parts)))
+;;    (princ "\n")
+;;    (setq parts (cdr parts)))
+;;  )
 ;;       )))
 
 
@@ -506,14 +506,14 @@ Returns nil if not found otherwise a list \(tag-buffer tag-begin tag-end)"
   (with-current-buffer edit-buffer
     (let* ((mytag-list (ecb--semanticdb-brute-deep-find-tags-by-name symbol-name
                                                                      nil t))
-	   (mytag (if mytag-list 
+       (mytag (if mytag-list
                       (car (ecb--semanticdb-find-result-nth
                             mytag-list
                             (1- (ecb--semanticdb-find-result-length mytag-list))))))
-	   (mytag-ovr (if mytag (ecb--semantic-tag-bounds mytag)))
-	   (mytag-min (if mytag-ovr (car mytag-ovr)))
-	   (mytag-max (if mytag-ovr (car (cdr mytag-ovr))))
-	   (mytag-buf (if mytag (ecb--semantic-tag-buffer mytag))))
+       (mytag-ovr (if mytag (ecb--semantic-tag-bounds mytag)))
+       (mytag-min (if mytag-ovr (car mytag-ovr)))
+       (mytag-max (if mytag-ovr (car (cdr mytag-ovr))))
+       (mytag-buf (if mytag (ecb--semantic-tag-buffer mytag))))
       (if mytag-buf
           (list mytag-buf mytag-min mytag-max)))))
 
@@ -523,15 +523,15 @@ Returns nil if not found otherwise a list \(tag-buffer tag-begin tag-end)
 whereas tag-end is currently always nil."
   (if ecb-running-xemacs
       (let ((result (ignore-errors (find-tag-internal (list symbol-name)))))
-	(if result
-	    (list (car result) (cdr result) nil)))
+    (if result
+        (list (car result) (cdr result) nil)))
     ;; else gnu emacs:
     (let* ((result-buf (ignore-errors (find-tag-noselect symbol-name)))
-	   (result-point (if result-buf 
+       (result-point (if result-buf
                              (with-current-buffer result-buf
                                (point)))))
       (if result-buf
-	  (list result-buf result-point nil)))))
+      (list result-buf result-point nil)))))
 
 (defun ecb-symboldef-find-definition (symbol-name edit-buffer)
   "Inserts the definition of symbol with name SYMBOL-NAME.
@@ -565,7 +565,7 @@ with semanticdb and then - if no success - with current etags-file."
       (insert (ecb-buffer-substring extend-point-min extend-point-max tag-buf))
       (goto-char (+ (- tag-point extend-point-min) 1))
       (setq hilight-point-min (point))
-      (if tag-point-max 
+      (if tag-point-max
           (goto-char (+ (- tag-point-max extend-point-min) 1))
         (end-of-line))
       (setq hilight-point-max (point))
@@ -583,39 +583,40 @@ it will be called by internal idle-mechanism'.
 Runs the finder of `ecb-symboldef-find-functions' for current
 symbol. Displays the found text in the buffer of
 `ecb-symboldef-buffer-name' if it is displayed in a window of the ecb-frame."
-  (save-excursion
-    (let ((modeline-display nil)
-          (edit-buffer (current-buffer))
-          (current-symbol (ignore-errors (ecb-thing-at-point 'symbol)))
-          ;; find tag search function according to mode:
-          (find-func (ecb-symboldef-get-find-function)))
-      ;; only use tags with a minimal length:
-      (setq current-symbol (if (>= (length current-symbol)
-                                   ecb-symboldef-minimum-symbol-length)
-                               current-symbol))
-      ;; buggy thingatpt returns whole buffer if on empty line:
-      (setq current-symbol (if (< (length current-symbol) 80)
-                               current-symbol))
-      ;; research tag only if different from last and not empty: 
-      (when (and current-symbol
+  (ignore-errors
+    (save-excursion
+      (let ((modeline-display nil)
+            (edit-buffer (current-buffer))
+            (current-symbol (ignore-errors (ecb-thing-at-point 'symbol)))
+            ;; find tag search function according to mode:
+            (find-func (ecb-symboldef-get-find-function)))
+        ;; only use tags with a minimal length:
+        (setq current-symbol (if (>= (length current-symbol)
+                                    ecb-symboldef-minimum-symbol-length)
+                                 current-symbol))
+        ;; buggy thingatpt returns whole buffer if on empty line:
+        (setq current-symbol (if (< (length current-symbol) 80)
+                                 current-symbol))
+        ;; research tag only if different from last and not empty:
+        (when (and current-symbol
                  (not (equal current-symbol ecb-symboldef-last-symbol)))
-        (ecb-with-readonly-buffer visible-buffer
-          (setq ecb-symboldef-last-symbol current-symbol)
-          (erase-buffer)
-          (setq fill-column (1- (window-width visible-window)))
-          (setq modeline-display
-                (or (funcall find-func
-                             current-symbol
-                             edit-buffer)
-                    ""))
-          ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: replace this by
-          ;; a ecb-mode-line-format - if possible?!
-          (ecb-mode-line-set (buffer-name visible-buffer)
-                             (selected-frame)
-                             (format "* Def %s <<%s>> *"
-                                     modeline-display current-symbol)
-                             nil t)
-          ))))
+          (ecb-with-readonly-buffer visible-buffer
+            (setq ecb-symboldef-last-symbol current-symbol)
+            (erase-buffer)
+            (setq fill-column (1- (window-width visible-window)))
+            (setq modeline-display
+                  (or (funcall find-func
+                              current-symbol
+                              edit-buffer)
+                     ""))
+            ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: replace this by
+            ;; a ecb-mode-line-format - if possible?!
+            (ecb-mode-line-set (buffer-name visible-buffer)
+                               (selected-frame)
+                               (format "* Def %s <<%s>> *"
+                                       modeline-display current-symbol)
+                               nil t)
+            )))))
   (run-hooks 'ecb-symboldef-buffer-sync-hook))
 
 
