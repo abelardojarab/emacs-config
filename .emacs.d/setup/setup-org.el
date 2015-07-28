@@ -244,10 +244,19 @@
 ;; Fix on the keys
 (add-hook 'org-mode-hook
           (lambda ()
-            (define-key org-mode-map [kp-enter] 'org-meta-return)
+            (define-key org-mode-map [kp-enter] 'my-org-meta-return)
             (define-key org-mode-map [enter] 'org-return)
             (define-key org-mode-map (kbd "<return>") 'org-return)
             (define-key org-mode-map (kbd "RET") 'org-return)))
+
+(defun my-org-meta-return(&optional arg)
+  (interactive "P")
+  (if (org-in-item-p)
+      (progn
+        (org-meta-return)
+        (forward-line -1)
+        (org-end-of-line))
+    (org-meta-return)))
 
 ;; Custom commands
 (setq org-agenda-custom-commands
