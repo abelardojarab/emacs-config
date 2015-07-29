@@ -676,8 +676,8 @@ a link to this file."
 
 ;; Org Table of Contents
 (add-to-list 'load-path "~/.emacs.d/org-toc")
-(when (require 'org-toc nil t)
-  (add-hook 'org-mode-hook 'org-toc-enable))
+(require 'org-toc)
+(add-hook 'org-mode-hook 'org-toc-enable)
 
 ;; Strike thru headlines for DONE task
 ;; Stolen from http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
