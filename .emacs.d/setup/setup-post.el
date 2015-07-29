@@ -47,5 +47,11 @@
 (setq org-ref-insert-cite-key "C-c )")
 (setq org-ref-default-citation-link "autocite")
 
+;; Spice mode
+(add-to-list 'load-path "~/.emacs.d/spice-mode")
+(require 'spice-mode)
+(add-to-list 'auto-mode-alist '("\\.sp\\'" . spice-mode))
+(add-to-list 'auto-mode-alist '("\\.scs\\'" . spice-mode))
+
 (provide 'setup-post)
 ;;; setup-post.el ends here
