@@ -57,8 +57,8 @@
 
 ;; Helm etags plus
 (add-to-list 'load-path "~/.emacs.d/helm-etags+")
-(require 'helm-etags+ nil 'noerror)
-(require 'ctags-update nil 'noerror)
+(require 'helm-etags+)
+(require 'ctags-update)
 
 ;; Locate the helm-swoop folder to your path
 (add-to-list 'load-path "~/.emacs.d/helm-swoop")
@@ -72,10 +72,9 @@
 
 ;; When doing isearch, hand the word over to helm-swoop
 (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+
 ;; From helm-swoop to helm-multi-swoop-all
 (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-;; When doing evil-search, hand the word over to helm-swoop
-;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
 
 ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
 (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
@@ -131,6 +130,8 @@
 (setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode
                                          c-mode c++-mode makefile-mode sh-mode))
 (which-function-mode t)
+(add-hook 'python-mode-hook
+          (lambda () (which-function-mode t)))
 (add-hook 'js2-mode-hook
           (lambda () (which-function-mode t)))
 (add-hook 'c-mode-common-hook
@@ -176,7 +177,6 @@
 ;; cmake IDE
 (add-to-list 'load-path "~/.emacs.d/helm-dash")
 (require 'helm-dash)
-
 (setq helm-dash-min-length 2)
 (setq helm-dash-docsets-path (format "%s/.emacs.d/docsets" (getenv "HOME")))
 (setq helm-dash-common-docsets '("C" "C++"))

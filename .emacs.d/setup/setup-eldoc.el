@@ -35,6 +35,9 @@
 (add-hook 'lisp-mode-hook
           '(lambda ()
              (turn-on-eldoc-mode)))
+(add-hook 'python-mode-hook
+          '(lambda ()
+             (turn-on-eldoc-mode)))
 (eldoc-add-command
  'paredit-backward-delete
  'paredit-close-round)
