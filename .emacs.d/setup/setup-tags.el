@@ -42,16 +42,6 @@
 (require 'gtags)
 (require 'ggtags)
 
-;; Get the path of gtags root directory.
-(defun gtags-update ()
-  (interactive)
-  (let (buffer)
-    (save-excursion
-      (setq buffer (generate-new-buffer (generate-new-buffer-name "*rootdir*")))
-      (set-buffer buffer)
-      (call-process "global" nil t nil "-u")
-      (kill-buffer buffer))))
-
 ;; Use ggtags instead of gtags
 (mapc (lambda (mode)
         (add-hook mode 'gtags-mode)
@@ -76,7 +66,7 @@
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-,") (if (and (fboundp 'ggtags-find-tag-dwim)
-                                     (executable-find "global"))
+                                   (executable-find "global"))
                                 'ggtags-find-tag-dwim
                               'etags-select-find-tag))
 
@@ -84,6 +74,7 @@
 (global-set-key (kbd "M-.") 'helm-etags-select)
 
 ;; Tags table
+(setq tags-revert-without-query t)
 (setq tags-always-build-completion-table t)
 (setq tags-file-name "~/workspace/TAGS")
 
@@ -100,7 +91,16 @@
   (eshell-command
    (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
-(defun djcb-gtags-create-or-update ()
+(defun gtags-update ()
+  (interactive)
+  (let (buffer)
+    (save-excursion
+      (setq buffer (generate-new-buffer (generate-new-buffer-name "*rootdir*")))
+      (set-buffer buffer)
+      (call-process "global" nil t nil "-u")
+      (kill-buffer buffer))))
+
+(defun gtags-create-or-update ()
   "Create or update the GNU-Global tag file"
   (interactive
    (if (zerop (call-process "global" nil nil nil "-p"))
@@ -120,12 +120,11 @@
 (add-hook 'prog-mode-hook
           (lambda ()
             ;; ggtags
-            (when (require 'ggtags nil 'noerror) ;; enable gnu-global
-              (ggtags-mode t)
-              (local-set-key (kbd "C-c .") 'ggtags-grep)
-              (local-set-key (kbd "M-,")   'ggtags-find-reference)
-              (when (fboundp 'djcb-gtags-create-or-update)
-                (djcb-gtags-create-or-update))))) ;; auto-update tags
+            (ggtags-mode t)
+            (local-set-key (kbd "C-c .") 'ggtags-grep)
+            (local-set-key (kbd "M-,")   'ggtags-find-reference)
+            (when (fboundp 'gtags-create-or-update)
+              (gtags-create-or-update)))) ;; auto-update tags
 
 (provide 'setup-tags)
 ;;; setup-tags.el ends here
