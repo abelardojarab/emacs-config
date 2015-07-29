@@ -195,8 +195,9 @@ Otherwise consider the current directory the project root."
   "A function used to filter the buffers in `projectile-project-buffers'.
 
 The function should accept and return a list of Emacs buffers.
-Two example filter functions are shipped by default - `projectile-buffers-with-file'
-and `projectile-buffers-with-file-or-process'."
+Two example filter functions are shipped by default -
+`projectile-buffers-with-file' and
+`projectile-buffers-with-file-or-process'."
   :group 'projectile
   :type 'symbol)
 
@@ -394,6 +395,9 @@ The saved data can be restored with `projectile-unserialize'."
 (defvar projectile-project-root-cache (make-hash-table :test 'equal)
   "Cached value of function `projectile-project-root`.")
 
+(defvar projectile-project-type-cache (make-hash-table :test 'equal)
+  "A hashmap used to cache project type to speed up related operations.")
+
 (defvar projectile-known-projects nil
   "List of locations where we have previously seen projects.
 The list of projects is ordered by the time they have been accessed.")
@@ -525,6 +529,7 @@ to invalidate."
                               (projectile-hash-keys projectile-projects-cache))
            (projectile-project-root))))
     (setq projectile-project-root-cache (make-hash-table :test 'equal))
+    (remhash project-root projectile-project-type-cache)
     (remhash project-root projectile-projects-cache)
     (projectile-serialize-cache)
     (when projectile-verbose
@@ -795,7 +800,7 @@ Files are returned as relative paths to the project root."
   :group 'projectile
   :type 'string)
 
-(defcustom projectile-generic-command "find . \\! -perm +444 -prune -o \\( -type f -print0 \\)"
+(defcustom projectile-generic-command "find . \\! -perm /444 -prune -o \\( -type f -print0 \\)"
   "Command used by projectile to get the files in a generic project."
   :group 'projectile
   :type 'string)
@@ -1550,18 +1555,24 @@ a COMPILE-COMMAND and a TEST-COMMAND."
 Normally you'd set this from .dir-locals.el.")
 
 (defun projectile-detect-project-type ()
-  (-first (lambda (project-type)
-            (let ((marker (plist-get (gethash project-type projectile-project-types) 'marker-files)))
-              (if (listp marker)
-                  (and (projectile-verify-files marker) project-type)
-                (and (funcall marker) project-type))))
-          (projectile-hash-keys projectile-project-types)))
+  "Detect the type of the current project."
+  (let ((project-type (-first (lambda (project-type)
+                                (let ((marker (plist-get (gethash project-type projectile-project-types) 'marker-files)))
+                                  (if (listp marker)
+                                      (and (projectile-verify-files marker) project-type)
+                                    (and (funcall marker) project-type))))
+                              (projectile-hash-keys projectile-project-types))))
+    (when project-type
+      (puthash (projectile-project-root) project-type projectile-project-type-cache))
+    project-type))
 
 (defun projectile-project-type ()
   "Determine the project's type based on its structure."
   (if projectile-project-type
       projectile-project-type
-    (or (projectile-detect-project-type) 'generic)))
+    (or (gethash (projectile-project-root) projectile-project-type-cache)
+        (projectile-detect-project-type)
+        'generic)))
 
 (defun projectile-project-info ()
   "Display info for current project."

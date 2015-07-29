@@ -662,8 +662,8 @@ If it is nil, or ack/ack-grep not found then use default grep command."
          (follow (and helm-follow-mode-persistent
                       (assoc-default 'follow helm-source-grep)))
          (helm-grep-in-recurse t)
-         (grep-find-ignored-files (-union (projectile-ignored-files-rel)  grep-find-ignored-files))
-         (grep-find-ignored-directories (-union (projectile-ignored-directories-rel) grep-find-ignored-directories))
+         (helm-grep-ignored-files (-union (projectile-ignored-files-rel)  grep-find-ignored-files))
+         (helm-grep-ignored-directories (-union (projectile-ignored-directories-rel) grep-find-ignored-directories))
          (helm-grep-default-command (if use-ack-p
                                         (concat ack-executable " -H --no-group --no-color " ack-ignored-pattern " %p %f")
                                       "grep -a -r %e -n%cH -e %p %f ."))
@@ -765,7 +765,8 @@ If it is nil, or ack/ack-grep not found then use default grep command."
                                      (append grep-find-ignored-files grep-find-ignored-directories)
                                      " "))
                  (helm-ag-command-option options)
-                 (helm-ag-base-command (concat helm-ag-base-command " " ignored)))
+                 (helm-ag-base-command (concat helm-ag-base-command " " ignored))
+                 (current-prefix-arg nil))
             (helm-do-ag (projectile-project-root)))
         (error "You're not in a project"))
     (error "helm-ag not available")))
