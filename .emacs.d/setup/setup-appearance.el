@@ -253,10 +253,10 @@ non-nil."
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
                           (setq main-programming-font "Consolas-15:antialias=subpixel")
-                          (setq main-writing-font (concat main-writing-font "-20")))
+                          (setq main-writing-font (concat main-writing-font "-18")))
                       (progn ;; HD monitor
                         (setq main-programming-font "Consolas-13:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-18")))))
+                        (setq main-writing-font (concat main-writing-font "-16")))))
                 (progn ;; Small display
                   (if (equal system-type 'darwin)
                       (progn
