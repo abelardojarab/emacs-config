@@ -25,7 +25,6 @@
 ;;; Code:
 
 ;; Enable Semantic
-(require 'semantic/lex-spp)
 (require 'semantic/ia)
 (require 'semantic/wisent)
 (setq semantic-default-submodes
@@ -95,7 +94,7 @@
 (require 'semantic/bovine/clang)
 
 ;; Eassist header switches
-(require 'eassist nil 'noerror)
+(require 'eassist)
 (setq eassist-header-switches
       '(("h" . ("cpp" "cxx" "c++" "CC" "cc" "C" "c" "mm" "m"))
         ("hh" . ("cc" "CC" "cpp" "cxx" "c++" "C"))

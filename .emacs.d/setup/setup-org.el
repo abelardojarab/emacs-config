@@ -346,7 +346,6 @@
 (setq org-latex-create-formula-image-program 'imagemagick)
 
 ;; Equations in Org
-;; Use C-c C-x C-l to regenerate the images
 (defvar text-scale-mode-hook nil
   "Hook run at end of command `text-scale-mode'.")
 

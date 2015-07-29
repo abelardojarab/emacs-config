@@ -40,8 +40,8 @@
 
 ;; Smart tab
 (add-to-list 'load-path "~/.emacs.d/smart-tab")
-(when (require 'smart-tab nil 'noerror)
-  (global-smart-tab-mode))
+(require 'smart-tab)
+(global-smart-tab-mode)
 
 ;; Treat 'y' or <CR> as yes, 'n' as no.
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -100,7 +100,7 @@
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
-       (executable-find "kdialog"))
+     (executable-find "kdialog"))
   (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
   ) ;; if
@@ -132,7 +132,6 @@
                   (interactive "e")
                   (goto-char (posn-point (event-start event)))
                   (highlight-symbol-at-point)))
-
 
 ;; search forward with Ctrl-f
 (global-set-key [(control f)] 'isearch-forward)
@@ -311,7 +310,6 @@
 (global-set-key (kbd "C-S-<right>") 'popup-select-window)
 
 ;; Jump between windows
-(require 'eassist)
 (define-key c-mode-base-map [f4] 'eassist-switch-h-cpp)
 (define-key c-mode-base-map [C-f4] 'dts-switch-between-header-and-source)
 (global-set-key (kbd "C-0") 'psw-switch-buffer)

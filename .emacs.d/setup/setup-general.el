@@ -30,9 +30,6 @@
 ;; Disable tool-bar
 (tool-bar-mode -1)
 
-;; Disable editing of compressed files
-(auto-compression-mode 0)
-
 ;; Undefined function
 (require 'let-alist)
 
@@ -61,7 +58,7 @@ Defaults to `error'."
                       (mapcar (lambda (parent)
                                 (cons parent
                                       (or (get parent 'error-conditions)
-                                          (error "Unknown signal `%s'" parent))))
+                                         (error "Unknown signal `%s'" parent))))
                               parent))
              (cons parent (get parent 'error-conditions)))))
       (put name 'error-conditions
@@ -246,8 +243,8 @@ Defaults to `error'."
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; Assure window is splitted horizontally (for compilation buffer)
 (setq split-width-threshold nil)
@@ -358,8 +355,8 @@ Defaults to `error'."
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                             (char-equal (char-syntax cb) ?\) )
-                             (blink-matching-open))))
+                           (char-equal (char-syntax cb) ?\) )
+                           (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;; Opening bracket to be highlighted when the point is on the closing bracket
@@ -504,11 +501,11 @@ Defaults to `error'."
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-       (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
-           (dolist (regexp regexps)
-             (when (string-match regexp string)
-               (throw 'matched t)))))))
+     (catch 'matched
+       (let ((inhibit-changing-match-data t)) ; small optimization
+         (dolist (regexp regexps)
+           (when (string-match regexp string)
+             (throw 'matched t)))))))
 
 ;; Better search, similar to vim
 (require 'isearch+)
@@ -524,7 +521,7 @@ Defaults to `error'."
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-               (eq 'not-yanks search-upper-case))
+             (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message
@@ -589,12 +586,12 @@ Defaults to `error'."
 (add-hook 'write-file-hooks 'time-stamp) ;; update when saving
 
 ;; Uniquify-buffers
-(when (require 'uniquify nil 'noerror)  ;; make buffer names more unique
-  (setq
-   uniquify-buffer-name-style 'post-forward
-   uniquify-separator ":"
-   uniquify-after-kill-buffer-p t       ;; rename after killing uniquified
-   uniquify-ignore-buffers-re "^\\*"))  ;; don't muck with special buffers
+(require 'uniquify)  ;; make buffer names more unique
+(setq
+ uniquify-buffer-name-style 'post-forward
+ uniquify-separator ":"
+ uniquify-after-kill-buffer-p t       ;; rename after killing uniquified
+ uniquify-ignore-buffers-re "^\\*")  ;; don't muck with special buffers
 
 ;; Ethan whitepsace, the remove trailing whitespace causes problem with buffer-modified-p
 (add-to-list 'load-path "~/.emacs.d/whitespace-cleanup-mode")
@@ -637,14 +634,14 @@ compatibility with `format-alist', and is ignored."
 If wrapping is performed, point remains on the line. If the line does
 not need to be wrapped, move point to the next line and return t."
   (if (and (bound-and-true-p latex-extra-mode)
-           (null (latex/do-auto-fill-p)))
+         (null (latex/do-auto-fill-p)))
       (progn (forward-line 1) t)
     ;; The conditional above was added for latex equations. It relies
     ;; on the latex-extra package (on Melpa).
     (if (and (longlines-set-breakpoint)
-             ;; Make sure we don't break comments.
-             (null (nth 4 (parse-partial-sexp
-                           (line-beginning-position) (point)))))
+           ;; Make sure we don't break comments.
+           (null (nth 4 (parse-partial-sexp
+                         (line-beginning-position) (point)))))
         (progn
           ;; This `let' and the `when' below add indentation to the
           ;; wrapped line.
