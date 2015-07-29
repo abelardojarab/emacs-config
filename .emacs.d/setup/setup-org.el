@@ -59,36 +59,60 @@
 (let ((todo "~/workspace/Documents/Org/notes.org"))
   (when (file-readable-p todo)
     (setq org-default-notes-file "~/workspace/Documents/Org/notes.org")))
-
 (add-hook 'org-mode-hook
           (lambda ()
             (progn
               (flyspell-mode t)
               (writegood-mode t)
               (indent-guide-mode -1))))
-
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(setq org-startup-folded 'nofold)
-(setq org-startup-indented t)
-(setq org-cycle-separator-lines 1)
-(setq org-startup-with-inline-images t)
-(setq org-startup-truncated t)
-(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
-(setq org-src-fontify-natively t)
-(setq org-src-tab-acts-natively t)
-(setq org-confirm-babel-evaluate nil)
-(setq org-use-speed-commands t)
-(setq org-completion-use-ido t)
-(setq org-hide-leading-stars t)
-(setq org-enforce-todo-dependencies t)
+
+;; Miscellanenous settings
+(setq org-startup-folded 'nofold
+      org-startup-indented t
+      org-cycle-separator-lines 1
+      org-startup-with-inline-images t
+      org-startup-truncated t
+      org-refile-targets '((org-agenda-files :maxlevel . 3))
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t
+      org-confirm-babel-evaluate nil
+      org-use-speed-commands t
+      org-completion-use-ido t
+      org-hide-leading-stars t
+      org-enforce-todo-dependencies)
+
 (setq org-indent-mode nil) ;; this causes problem in other modes
-(setq org-blank-before-new-entry ;; Insert blank line before new
-      '((heading . t)            ;; headings/list items.
-        (plain-list-item . t)))
-(global-set-key (kbd "C-c a") 'org-agenda)
+(setq org-blank-before-new-entry ;; Insert blank line before new heading
+      '((heading . t)))
+
+;; Agenda settings
 (setq org-agenda-show-log t
       org-agenda-todo-ignore-scheduled t
-      org-agenda-todo-ignore-deadlines t)
+      org-agenda-todo-ignore-deadlines t
+      org-agenda-start-on-weekday nil
+      org-agenda-span 14
+      org-agenda-include-diary t
+      org-agenda-window-setup 'current-window)
+
+;;
+(eval-after-load 'org
+  '(progn
+     (require 'org-clock)
+     ;; @see http://irreal.org/blog/?p=671
+     (setq org-src-fontify-natively t)
+     ;; (require 'org-fstree)
+     (defun soft-wrap-lines ()
+       "Make lines wrap at window edge and on word boundary,
+        in current buffer."
+       (interactive)
+       ;; display wrapped lines instead of truncated lines
+       (setq truncate-lines nil)
+       (setq word-wrap t))
+     (add-hook 'org-mode-hook '(lambda ()
+                                 (setq evil-auto-indent nil)
+                                 (soft-wrap-lines)
+                                 ))))
 
 ;; Org Capture
 (defun org-capture-todo (note)
