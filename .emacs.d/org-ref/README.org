@@ -1,0 +1,60 @@
+# -*- org-edit-src-content-indentation: 0; -*-
+#+TITLE: org-ref: citations, cross-references, indexes, glossaries and bibtex utilities for org-mode
+
+#+BEGIN_HTML
+<a href="https://travis-ci.org/jkitchin/org-ref"><img src="https://travis-ci.org/jkitchin/org-ref.svg?branch=master"></a>
+#+END_HTML
+
+See http://www.youtube.com/watch?v=Zya8SfmCtFA and https://www.youtube.com/watch?v=JyvpSVl4_dg for examples of org-ref in action.
+
+[[./org-ref.org]] contains all documentation and installation instructions.
+
+
+* Installation
+We are slowly moving towards getting org-ref in MELPA. Until then, here are some directions that will probably help install org-ref.
+
+You should clone this repository somewhere.
+
+You should set these variables. Here is an example of how mine are set in an init.el file.
+#+BEGIN_SRC emacs-lisp
+(setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib"))
+
+;; see org-ref for use of these variables
+(setq org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
+      org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
+      org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/")
+#+END_SRC
+
+You may want to set some convenient keys for working in your bibtex file:
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key [f10] 'org-ref-open-bibtex-notes)
+(global-set-key [f11] 'org-ref-open-bibtex-pdf)
+(global-set-key [f12] 'org-ref-open-in-browser)
+#+END_SRC
+
+Add the directory you cloned org-ref into to your load-path, and require the features you want.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "path-to-org-ref")
+;; make sure you have dash, helm, helm-bibtex, ebib, s, f, hydra and key-chord
+;; in your load-path
+(require 'org-ref)
+
+;; optional but very useful libraries in org-ref
+(require 'doi-utils)
+(require 'jmax-bibtex)
+(require 'pubmed)
+(require 'arxiv)
+(require 'sci-id)
+#+END_SRC
+
+Please report errors here:  [[https://github.com/jkitchin/org-ref/issues][issue]]s.
+
+* Contributors
+I would like to thank the following [[https://github.com/jkitchin/org-ref/graphs/contributors][contributors]] to org-ref
+
+- https://github.com/divinenephron
+- https://github.com/OlafMerkert
+- https://github.com/prtkm
+
+And everyone who has filed an [[https://github.com/jkitchin/org-ref/issues][issue]], or asked about org-ref on the [[http://orgmode.org/community.html][org-mode Mailing list]].

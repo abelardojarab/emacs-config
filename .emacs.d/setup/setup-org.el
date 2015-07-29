@@ -487,15 +487,6 @@ a link to this file."
   (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
 (add-hook 'org-mode-hook 'org-mode-reftex-setup)
 
-;; Org-Ref
-(add-to-list 'load-path "~/.emacs.d/org-ref")
-(require 'org-ref)
-(setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
-      org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
-      org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs")
-(setq org-ref-insert-cite-key "C-c )")
-(setq org-ref-default-citation-link "autocite")
-
 ;; Add defaults packages to include when exporting.
 (setq org-latex-hyperref-template
       "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=blue}\n")

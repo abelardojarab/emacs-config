@@ -174,11 +174,11 @@
 ;; Setup recent
 (require 'setup-recentf)
 
-;; Setup project support
-(require 'setup-project)
-
 ;; Setup tabbar
 (require 'setup-tabbar)
+
+;; Setup project support
+(require 'setup-project)
 
 ;; Setup utilities
 (require 'setup-utilities)
@@ -194,6 +194,9 @@
 
 ;; Setup keys
 (require 'setup-keys)
+
+;; Setup post
+(require 'setup-post)
 
 ;; Setup gnus and Newsticker
 ;; (require 'setup-gnus)
