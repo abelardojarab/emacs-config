@@ -131,11 +131,11 @@
 
 (defvar semanticdb-find-throttle-custom-list
   '(set (const local)
-    (const project)
-    (const unloaded)
-    (const system)
-    (const recursive)
-    (const omniscience))
+        (const project)
+        (const unloaded)
+        (const system)
+        (const recursive)
+        (const omniscience))
   "Customization values for semanticdb find throttle.
 See `semanticdb-find-throttle' for details.")
 
@@ -173,10 +173,10 @@ the following keys:
 (defun semanticdb-find-throttle-active-p (access-type)
   "Non-nil if ACCESS-TYPE is an active throttle type."
   (or (memq access-type semanticdb-find-default-throttle)
-      (eq access-type 'file)
-      (and (eq access-type 'local)
-       (memq 'project semanticdb-find-default-throttle))
-      ))
+     (eq access-type 'file)
+     (and (eq access-type 'local)
+        (memq 'project semanticdb-find-default-throttle))
+     ))
 
 ;;; Index Class
 ;;
@@ -185,11 +185,11 @@ the following keys:
 ;; This should allow searches to start running faster.
 (defclass semanticdb-find-search-index (semanticdb-abstract-search-index)
   ((include-path :initform nil
-         :documentation
-         "List of semanticdb tables from the include path.")
+                 :documentation
+                 "List of semanticdb tables from the include path.")
    (type-cache :initform nil
-           :documentation
-           "Cache of all the data types accessible from this file.
+               :documentation
+               "Cache of all the data types accessible from this file.
 Includes all types from all included files, merged namespaces, and
 expunge duplicates.")
    )
@@ -209,7 +209,7 @@ This class will cache data derived during various searches.")
   )
 
 (defmethod semanticdb-synchronize ((idx semanticdb-find-search-index)
-                   new-tags)
+                                   new-tags)
   "Synchronize the search index IDX with some NEW-TAGS."
   ;; Reset our parts.
   (semantic-reset idx)
@@ -221,35 +221,35 @@ This class will cache data derived during various searches.")
   )
 
 (defmethod semanticdb-partial-synchronize ((idx semanticdb-find-search-index)
-                       new-tags)
+                                           new-tags)
   "Synchronize the search index IDX with some changed NEW-TAGS."
   ;; Only reset if include statements changed.
   (if (semantic-find-tags-by-class 'include new-tags)
       (progn
-    (semantic-reset idx)
-    ;; Notify dependants by clearing their indices.
-    (semanticdb-notify-references
-     (oref idx table)
-     (lambda (tab me)
-       (semantic-reset (semanticdb-get-table-index tab))))
-    )
+        (semantic-reset idx)
+        ;; Notify dependants by clearing their indices.
+        (semanticdb-notify-references
+         (oref idx table)
+         (lambda (tab me)
+           (semantic-reset (semanticdb-get-table-index tab))))
+        )
     ;; Else, not an include, by just a type.
     (when (oref idx type-cache)
       (when (semanticdb-partial-synchronize (oref idx type-cache) new-tags)
-    ;; If the synchronize returns true, we need to notify.
-    ;; Notify dependants by clearing their indices.
-    (semanticdb-notify-references
-     (oref idx table)
-     (lambda (tab me)
-       (let ((tab-idx (semanticdb-get-table-index tab)))
-         ;; Not a full reset?
-         (when (oref tab-idx type-cache)
-           (require 'semantic/db-typecache)
-           (semanticdb-typecache-notify-reset
-        (oref tab-idx type-cache)))
-         )))
+        ;; If the synchronize returns true, we need to notify.
+        ;; Notify dependants by clearing their indices.
+        (semanticdb-notify-references
+         (oref idx table)
+         (lambda (tab me)
+           (let ((tab-idx (semanticdb-get-table-index tab)))
+             ;; Not a full reset?
+             (when (oref tab-idx type-cache)
+               (require 'semantic/db-typecache)
+               (semanticdb-typecache-notify-reset
+                (oref tab-idx type-cache)))
+             )))
+        ))
     ))
-  ))
 
 
 ;;; Path Translations
@@ -310,7 +310,7 @@ Default action as described in `semanticdb-find-translate-path'."
       ;; nil means perform the search over these results.
       nil
     (if brutish
-    (semanticdb-find-translate-path-brutish-default path)
+        (semanticdb-find-translate-path-brutish-default path)
       (semanticdb-find-translate-path-includes-default path))))
 
 ;;;###autoload
@@ -397,31 +397,31 @@ Default action as described in `semanticdb-find-translate-path'."
   "Translate PATH into a list of semantic tables.
 Default action as described in `semanticdb-find-translate-path'."
   (let ((table (cond ((null path)
-              semanticdb-current-table)
-             ((bufferp path)
-              (semantic-buffer-local-value 'semanticdb-current-table path))
-             ((and (stringp path) (file-exists-p path))
-              (semanticdb-file-table-object path t))
-             ((semanticdb-abstract-table-child-p path)
-              path)
-             (t nil))))
+                      semanticdb-current-table)
+                     ((bufferp path)
+                      (semantic-buffer-local-value 'semanticdb-current-table path))
+                     ((and (stringp path) (file-exists-p path))
+                      (semanticdb-file-table-object path t))
+                     ((semanticdb-abstract-table-child-p path)
+                      path)
+                     (t nil))))
     (if table
-    ;; If we were passed in something related to a TABLE,
-    ;; do a caching lookup.
-    (let ((index (semanticdb-get-table-index table)))
-      (if (semanticdb-find-need-cache-update-p table)
-          ;; Let's go look up our indices.
-          (let ((ans (semanticdb-find-translate-path-includes--internal path)))
-        (oset index include-path ans)
-        ;; Once we have our new indices set up, notify those
-        ;; who depend on us if we found something for them to
-        ;; depend on.
-        (when ans (semanticdb-refresh-references table))
-        ans)
-        ;; ELSE
-        ;;
-        ;; Just return the cache.
-        (oref index include-path)))
+        ;; If we were passed in something related to a TABLE,
+        ;; do a caching lookup.
+        (let ((index (semanticdb-get-table-index table)))
+          (if (semanticdb-find-need-cache-update-p table)
+              ;; Let's go look up our indices.
+              (let ((ans (semanticdb-find-translate-path-includes--internal path)))
+                (oset index include-path ans)
+                ;; Once we have our new indices set up, notify those
+                ;; who depend on us if we found something for them to
+                ;; depend on.
+                (when ans (semanticdb-refresh-references table))
+                ans)
+            ;; ELSE
+            ;;
+            ;; Just return the cache.
+            (oref index include-path)))
       ;; If we were passed in something like a tag list, or other boring
       ;; searchable item, then instead do the regular thing without caching.
       (semanticdb-find-translate-path-includes--internal path))))
@@ -649,30 +649,30 @@ Included databases are filtered based on `semanticdb-find-default-throttle'."
       (setq ans (semanticdb-find-load-unloaded
                  (expand-file-name name originfiledir)))
       )
-     ;; Step 2: System or Project level includes
+     ;; Step 2: System or Project level includes, disabled by Abelardo
      ;;
-     ((or
-       ;; First, if it a system include, we can investigate that tags
-       ;; dependency file
-       (and nil (semanticdb-find-throttle-active-p 'system)
+     ;; ((or
+     ;;   ;; First, if it a system include, we can investigate that tags
+     ;;   ;; dependency file
+     ;;   (and (semanticdb-find-throttle-active-p 'system)
 
-          ;; Sadly, not all languages make this distinction.
-          ;;(semantic-tag-include-system-p includetag)
+     ;;      ;; Sadly, not all languages make this distinction.
+     ;;      ;;(semantic-tag-include-system-p includetag)
 
-          ;; Here, we get local and system files.
-          (setq tmp (semantic-dependency-tag-file includetag))
-          )
-       ;; Second, project files are active, we and we have EDE,
-       ;; we can find it using the same tool.
-       (and (semanticdb-find-throttle-active-p 'project)
-          ;; Make sure EDE is available, and we have a project
-          (featurep 'ede) (ede-current-project originfiledir)
-          ;; The EDE query is hidden in this call.
-          (setq tmp (semantic-dependency-tag-file includetag))
-          )
-       )
-      (setq ans (semanticdb-find-load-unloaded tmp))
-      )
+     ;;      ;; Here, we get local and system files.
+     ;;      (setq tmp (semantic-dependency-tag-file includetag))
+     ;;      )
+     ;;   ;; Second, project files are active, we and we have EDE,
+     ;;   ;; we can find it using the same tool.
+     ;;   (and (semanticdb-find-throttle-active-p 'project)
+     ;;      ;; Make sure EDE is available, and we have a project
+     ;;      (featurep 'ede) (ede-current-project originfiledir)
+     ;;      ;; The EDE query is hidden in this call.
+     ;;      (setq tmp (semantic-dependency-tag-file includetag))
+     ;;      )
+     ;;   )
+     ;;  (setq ans (semanticdb-find-load-unloaded tmp))
+     ;;  )
      ;; Somewhere in our project hierarchy
      ;;
      ;; Remember: Roots includes system databases which can create
@@ -732,12 +732,12 @@ for details on how this list is derived."
   (semantic-fetch-tags)
   (require 'data-debug)
   (let ((start (current-time))
-    (p (semanticdb-find-translate-path nil arg))
-    (end (current-time))
-    )
+        (p (semanticdb-find-translate-path nil arg))
+        (end (current-time))
+        )
     (data-debug-new-buffer "*SEMANTICDB FTP ADEBUG*")
     (message "Search of tags took %.2f seconds."
-         (semantic-elapsed-time start end))
+             (semantic-elapsed-time start end))
 
     (data-debug-insert-stuff-list p "*")))
 
@@ -750,16 +750,16 @@ for details on how this list is derived."
   (semantic-fetch-tags)
   (require 'data-debug)
   (let* ((semanticdb-find-default-throttle
-      (if (featurep 'semantic/db-find)
-          (remq 'unloaded semanticdb-find-default-throttle)
-        nil))
-     (start (current-time))
-     (p (semanticdb-find-translate-path nil arg))
-     (end (current-time))
-     )
+          (if (featurep 'semantic/db-find)
+              (remq 'unloaded semanticdb-find-default-throttle)
+            nil))
+         (start (current-time))
+         (p (semanticdb-find-translate-path nil arg))
+         (end (current-time))
+         )
     (data-debug-new-buffer "*SEMANTICDB FTP ADEBUG*")
     (message "Search of tags took %.2f seconds."
-         (semantic-elapsed-time start end))
+             (semantic-elapsed-time start end))
 
     (data-debug-insert-stuff-list p "*")))
 
@@ -786,32 +786,32 @@ Examines the variable `semanticdb-find-lost-includes'."
 PREFIX is the text that precedes the button.
 PREBUTTONTEXT is some text between prefix and the overlay button."
   (let* ((start (point))
-     (end nil)
-     (mode (car consdata))
-     (tag (cdr consdata))
-     (name (semantic-tag-name tag))
-     (file (semantic-tag-file-name tag))
-     (str1 (format "%S %s" mode name))
-     (str2 (format " : %s" file))
-     (tip nil))
+         (end nil)
+         (mode (car consdata))
+         (tag (cdr consdata))
+         (name (semantic-tag-name tag))
+         (file (semantic-tag-file-name tag))
+         (str1 (format "%S %s" mode name))
+         (str2 (format " : %s" file))
+         (tip nil))
     (insert prefix prebuttontext str1)
     (setq end (point))
     (insert str2)
     (put-text-property start end 'face
-               (cond ((eq mode 'scanned)
-                  'font-lock-function-name-face)
-                 ((eq mode 'duplicate)
-                  'font-lock-comment-face)
-                 ((eq mode 'lost)
-                  'font-lock-variable-name-face)
-                 ((eq mode 'scanned-no-recurse)
-                  'font-lock-type-face)))
+                       (cond ((eq mode 'scanned)
+                              'font-lock-function-name-face)
+                             ((eq mode 'duplicate)
+                              'font-lock-comment-face)
+                             ((eq mode 'lost)
+                              'font-lock-variable-name-face)
+                             ((eq mode 'scanned-no-recurse)
+                              'font-lock-type-face)))
     (put-text-property start end 'ddebug (cdr consdata))
     (put-text-property start end 'ddebug-indent(length prefix))
     (put-text-property start end 'ddebug-prefix prefix)
     (put-text-property start end 'help-echo tip)
     (put-text-property start end 'ddebug-function
-               'data-debug-insert-tag-parts-from-point)
+                       'data-debug-insert-tag-parts-from-point)
     (insert "\n")
     )
   )
@@ -823,20 +823,20 @@ Examines the variable `semanticdb-find-lost-includes'."
   (require 'data-debug)
   (semanticdb-find-translate-path nil nil)
   (let ((scanned semanticdb-find-scanned-include-tags)
-    (data-debug-thing-alist
-     (cons
-      '((lambda (thing) (and (consp thing)
-                 (symbolp (car thing))
-                 (memq (car thing)
-                       '(scanned scanned-no-recurse
-                         lost duplicate))))
-        . semanticdb-find-adebug-insert-scanned-tag-cons)
-      data-debug-thing-alist))
-    )
+        (data-debug-thing-alist
+         (cons
+          '((lambda (thing) (and (consp thing)
+                          (symbolp (car thing))
+                          (memq (car thing)
+                                '(scanned scanned-no-recurse
+                                          lost duplicate))))
+            . semanticdb-find-adebug-insert-scanned-tag-cons)
+          data-debug-thing-alist))
+        )
 
     (if (not scanned)
-    (message "There are no includes scanned %s"
-         (buffer-name))
+        (message "There are no includes scanned %s"
+                 (buffer-name))
 
       (data-debug-new-buffer "*SEMANTICDB scanned-includes ADEBUG*")
       (data-debug-insert-stuff-list scanned "*")
@@ -862,36 +862,36 @@ instead."
   (if find-file-match
       ;; Load all files associated with RESULTS.
       (let ((tmp results)
-        (output nil))
-    (while tmp
-      (let ((tab (car (car tmp)))
-        (tags (cdr (car tmp))))
-        (dolist (T tags)
-          ;; Normalization gives specialty database tables a chance
-          ;; to convert into a more stable tag format.
-          (let* ((norm (semanticdb-normalize-one-tag tab T))
-             (ntab (car norm))
-             (ntag (cdr norm))
-             (nametable ntab))
+            (output nil))
+        (while tmp
+          (let ((tab (car (car tmp)))
+                (tags (cdr (car tmp))))
+            (dolist (T tags)
+              ;; Normalization gives specialty database tables a chance
+              ;; to convert into a more stable tag format.
+              (let* ((norm (semanticdb-normalize-one-tag tab T))
+                     (ntab (car norm))
+                     (ntag (cdr norm))
+                     (nametable ntab))
 
-        ;; If it didn't normalize, use what we had.
-        (if (not norm)
-            (setq nametable tab)
-          (setq output (append output (list ntag))))
+                ;; If it didn't normalize, use what we had.
+                (if (not norm)
+                    (setq nametable tab)
+                  (setq output (append output (list ntag))))
 
-        ;; Find-file-match allows a tool to make sure the tag is
-        ;; 'live', somewhere in a buffer.
-        (cond ((eq find-file-match 'name)
-               (or (semantic--tag-get-property ntag :filename)
-               (let ((f (semanticdb-full-filename nametable)))
-                 (semantic--tag-put-property ntag :filename f))))
-              ((and find-file-match ntab)
-               (semanticdb-get-buffer ntab))
-              )
-        ))
-        )
-      (setq tmp (cdr tmp)))
-    output)
+                ;; Find-file-match allows a tool to make sure the tag is
+                ;; 'live', somewhere in a buffer.
+                (cond ((eq find-file-match 'name)
+                       (or (semantic--tag-get-property ntag :filename)
+                          (let ((f (semanticdb-full-filename nametable)))
+                            (semantic--tag-put-property ntag :filename f))))
+                      ((and find-file-match ntab)
+                       (semanticdb-get-buffer ntab))
+                      )
+                ))
+            )
+          (setq tmp (cdr tmp)))
+        output)
     ;; @todo - I could use nconc, but I don't know what the caller may do with
     ;;         RESULTS after this is called.  Right now semantic-complete will
     ;;         recycling the input after calling this routine.
@@ -909,25 +909,25 @@ will be changed."
 This query only really tests the first entry in the list that is RESULTP,
 but should be good enough for debugging assertions."
   (and (listp resultp)
-       (listp (car resultp))
-       (semanticdb-abstract-table-child-p (car (car resultp)))
-       (or (semantic-tag-p (car (cdr (car resultp))))
-       (null (car (cdr (car resultp)))))))
+     (listp (car resultp))
+     (semanticdb-abstract-table-child-p (car (car resultp)))
+     (or (semantic-tag-p (car (cdr (car resultp))))
+        (null (car (cdr (car resultp)))))))
 
 (defun semanticdb-find-result-prin1-to-string (result)
   "Presuming RESULT satisfies `semanticdb-find-results-p', provide a short PRIN1 output."
   (if (< (length result) 2)
       (concat "#<FIND RESULT "
-          (mapconcat (lambda (a)
-               (concat "(" (eieio-object-name (car a) ) " . "
-                   "#<TAG LIST " (number-to-string (length (cdr a))) ">)"))
-             result
-             " ")
-          ">")
+              (mapconcat (lambda (a)
+                           (concat "(" (eieio-object-name (car a) ) " . "
+                                   "#<TAG LIST " (number-to-string (length (cdr a))) ">)"))
+                         result
+                         " ")
+              ">")
     ;; Longer results should have an abbreviated form.
     (format "#<FIND RESULT %d TAGS in %d FILES>"
-        (semanticdb-find-result-length result)
-        (length result))))
+            (semanticdb-find-result-length result)
+            (length result))))
 
 (defun semanticdb-find-result-with-nil-p (resultp)
   "Non-nil of RESULTP is in the form of a semanticdb search result.
@@ -936,23 +936,23 @@ results include overlays.
 This query only really tests the first entry in the list that is RESULTP,
 but should be good enough for debugging assertions."
   (and (listp resultp)
-       (listp (car resultp))
-       (let ((tag-to-test (car-safe (cdr (car resultp)))))
-     (or (and (semanticdb-abstract-table-child-p (car (car resultp)))
-          (or (semantic-tag-p tag-to-test)
-              (null tag-to-test)))
-         (and (null (car (car resultp)))
-          (or (semantic-tag-with-position-p tag-to-test)
-              (null tag-to-test))))
-     )))
+     (listp (car resultp))
+     (let ((tag-to-test (car-safe (cdr (car resultp)))))
+       (or (and (semanticdb-abstract-table-child-p (car (car resultp)))
+             (or (semantic-tag-p tag-to-test)
+                (null tag-to-test)))
+          (and (null (car (car resultp)))
+             (or (semantic-tag-with-position-p tag-to-test)
+                (null tag-to-test))))
+       )))
 
 ;;;###autoload
 (defun semanticdb-find-result-length (result)
   "Number of tags found in RESULT."
   (let ((count 0))
     (mapc (lambda (onetable)
-        (setq count (+ count (1- (length onetable)))))
-      result)
+            (setq count (+ count (1- (length onetable)))))
+          result)
     count))
 
 ;;;###autoload
@@ -964,18 +964,18 @@ The returned value is a cons cell: (TAG . TABLE) where TAG
 is the tag at the Nth position.  TABLE is the semanticdb table where
 the TAG was found.  Sometimes TABLE can be nil."
   (let ((ans nil)
-    (anstable nil))
+        (anstable nil))
     ;; Loop over each single table hit.
     (while (and (not ans) result)
       ;; For each table result, get local length, and modify
       ;; N to be that much less.
       (let ((ll (length (cdr (car result))))) ;; local length
-    (if (> ll n)
-        ;; We have a local match.
-        (setq ans (nth n (cdr (car result)))
-          anstable (car (car result)))
-      ;; More to go.  Decrement N.
-      (setq n (- n ll))))
+        (if (> ll n)
+            ;; We have a local match.
+            (setq ans (nth n (cdr (car result)))
+                  anstable (car (car result)))
+          ;; More to go.  Decrement N.
+          (setq n (- n ll))))
       ;; Keep moving.
       (setq result (cdr result)))
     (cons ans anstable)))
@@ -985,11 +985,11 @@ the TAG was found.  Sometimes TABLE can be nil."
   (if (not (semanticdb-find-results-p result))
       (error "Does not pass `semanticdb-find-results-p.\n"))
   (let ((len (semanticdb-find-result-length result))
-    (i 0))
+        (i 0))
     (while (< i len)
       (let ((tag (semanticdb-find-result-nth result i)))
-    (if (not (semantic-tag-p (car tag)))
-        (error "%d entry is not a tag" i)))
+        (if (not (semantic-tag-p (car tag)))
+            (error "%d entry is not a tag" i)))
       (setq i (1+ i)))))
 
 ;;;###autoload
@@ -1000,26 +1000,26 @@ is returned, and the buffer it is found it will be made current.
 If the result tag has no position information, the originating buffer
 is still made current."
   (let* ((ret (semanticdb-find-result-nth result n))
-     (ans (car ret))
-     (anstable (cdr ret)))
+         (ans (car ret))
+         (anstable (cdr ret)))
     ;; If we have a hit, double-check the find-file
     ;; entry.  If the file must be loaded, then gat that table's
     ;; source file into a buffer.
 
     (if anstable
-    (let ((norm (semanticdb-normalize-one-tag anstable ans)))
-      (when norm
-        ;; The normalized tags can now be found based on that
-        ;; tags table.
-        (condition-case foo
-        (progn
-          (semanticdb-set-buffer (car norm))
-          ;; Now reset ans
-          (setq ans (cdr norm)))
-          ;; Don't error for this case, but don't store
-          ;; the thing either.
-          (no-method-definition nil))
-        ))
+        (let ((norm (semanticdb-normalize-one-tag anstable ans)))
+          (when norm
+            ;; The normalized tags can now be found based on that
+            ;; tags table.
+            (condition-case foo
+                (progn
+                  (semanticdb-set-buffer (car norm))
+                  ;; Now reset ans
+                  (setq ans (cdr norm)))
+              ;; Don't error for this case, but don't store
+              ;; the thing either.
+              (no-method-definition nil))
+            ))
       )
     ;; Return the tag.
     ans))
@@ -1030,10 +1030,10 @@ FCN takes two arguments.  The first is a TAG, and the
 second is a DB from whence TAG originated.
 Returns result."
   (mapc (lambda (sublst-icky)
-      (mapc (lambda (tag-icky)
-          (funcall fcn tag-icky (car sublst-icky)))
-        (cdr sublst-icky)))
-    result)
+          (mapc (lambda (tag-icky)
+                  (funcall fcn tag-icky (car sublst-icky)))
+                (cdr sublst-icky)))
+        result)
   result)
 
 ;;; Search Logging
@@ -1050,7 +1050,7 @@ Returns result."
   (interactive)
   (setq semanticdb-find-log-flag (null semanticdb-find-log-flag))
   (message "Semanticdb find logging is %sabled"
-       (if semanticdb-find-log-flag "en" "dis")))
+           (if semanticdb-find-log-flag "en" "dis")))
 
 (defun semanticdb-reset-log ()
   "Reset the log buffer."
@@ -1063,13 +1063,13 @@ Returns result."
 (defun semanticdb-find-log-move-to-end ()
   "Move to the end of the semantic log."
   (let ((cb (current-buffer))
-    (cw (selected-window)))
+        (cw (selected-window)))
     (unwind-protect
-    (progn
-      (set-buffer semanticdb-find-log-buffer-name)
-      (if (get-buffer-window (current-buffer) 'visible)
-          (select-window (get-buffer-window (current-buffer) 'visible)))
-      (goto-char (point-max)))
+        (progn
+          (set-buffer semanticdb-find-log-buffer-name)
+          (if (get-buffer-window (current-buffer) 'visible)
+              (select-window (get-buffer-window (current-buffer) 'visible)))
+          (goto-char (point-max)))
       (if cw (select-window cw))
       (set-buffer cb))))
 
@@ -1086,8 +1086,8 @@ Returns result."
   (when semanticdb-find-log-flag
     (with-current-buffer semanticdb-find-log-buffer-name
       (insert "Table: " (object-print table)
-          " Result: " (int-to-string (length result)) " tags"
-          "\n")
+              " Result: " (int-to-string (length result)) " tags"
+              "\n")
       )
     (semanticdb-find-log-move-to-end)))
 
@@ -1095,7 +1095,7 @@ Returns result."
 ;; These are the routines actually used to perform searches.
 ;;
 (defun semanticdb-find-tags-collector (function &optional path find-file-match
-                        brutish)
+                                                brutish)
   "Collect all tags returned by FUNCTION over PATH.
 The FUNCTION must take two arguments.  The first is TABLE,
 which is a semanticdb table containing tags.  The second argument
@@ -1119,37 +1119,37 @@ and search all tables in this project tree."
       ;; so that the override methods work correctly.
       (when (bufferp path) (set-buffer path))
       (if (semanticdb-find-results-p path)
-      ;; When we get find results, loop over that.
-      (dolist (tableandtags path)
-        (semantic-throw-on-input 'semantic-find-translate-path)
-        ;; If FIND-FILE-MATCH is non-nil, skip tables of class
-        ;; `semanticdb-search-results-table', since those are system
-        ;; databases and not associated with a file.
-        (unless (and find-file-match
-             (obj-of-class-p
-              (car tableandtags) semanticdb-search-results-table))
-          (when (setq match (funcall function
-                     (car tableandtags) (cdr tableandtags)))
-        (when find-file-match
-          (save-excursion (semanticdb-set-buffer (car tableandtags))))
-        (push (cons (car tableandtags) match) found)))
+          ;; When we get find results, loop over that.
+          (dolist (tableandtags path)
+            (semantic-throw-on-input 'semantic-find-translate-path)
+            ;; If FIND-FILE-MATCH is non-nil, skip tables of class
+            ;; `semanticdb-search-results-table', since those are system
+            ;; databases and not associated with a file.
+            (unless (and find-file-match
+                       (obj-of-class-p
+                        (car tableandtags) semanticdb-search-results-table))
+              (when (setq match (funcall function
+                                         (car tableandtags) (cdr tableandtags)))
+                (when find-file-match
+                  (save-excursion (semanticdb-set-buffer (car tableandtags))))
+                (push (cons (car tableandtags) match) found)))
             )
-    ;; Only log searches across data bases.
-    (semanticdb-find-log-new-search nil)
-    ;; If we get something else, scan the list of tables resulting
-    ;; from translating it into a list of objects.
-    (dolist (table (semanticdb-find-translate-path path brutish))
-      (semantic-throw-on-input 'semantic-find-translate-path)
-      ;; If FIND-FILE-MATCH is non-nil, skip tables of class
-      ;; `semanticdb-search-results-table', since those are system
-      ;; databases and not associated with a file.
-      (unless (and find-file-match
-               (obj-of-class-p table semanticdb-search-results-table))
-        (when (and table (setq match (funcall function table nil)))
-          (semanticdb-find-log-activity table match)
-          (when find-file-match
-        (save-excursion (semanticdb-set-buffer table)))
-          (push (cons table match) found))))))
+        ;; Only log searches across data bases.
+        (semanticdb-find-log-new-search nil)
+        ;; If we get something else, scan the list of tables resulting
+        ;; from translating it into a list of objects.
+        (dolist (table (semanticdb-find-translate-path path brutish))
+          (semantic-throw-on-input 'semantic-find-translate-path)
+          ;; If FIND-FILE-MATCH is non-nil, skip tables of class
+          ;; `semanticdb-search-results-table', since those are system
+          ;; databases and not associated with a file.
+          (unless (and find-file-match
+                     (obj-of-class-p table semanticdb-search-results-table))
+            (when (and table (setq match (funcall function table nil)))
+              (semanticdb-find-log-activity table match)
+              (when find-file-match
+                (save-excursion (semanticdb-set-buffer table)))
+              (push (cons table match) found))))))
     ;; At this point, FOUND has had items pushed onto it.
     ;; This means items are being returned in REVERSE order
     ;; of the tables searched, so if you just get th CAR, then
@@ -1277,7 +1277,7 @@ associated with that tag should be loaded into a buffer."
 
 ;;; Specialty Search Routines
 (defun semanticdb-find-tags-external-children-of-type
-  (type &optional path find-file-match)
+    (type &optional path find-file-match)
   "Search for all tags defined outside of TYPE w/ TYPE as a parent.
 See `semanticdb-find-translate-path' for details on PATH.
 FIND-FILE-MATCH indicates that any time a match is found, the file
@@ -1288,7 +1288,7 @@ associated with that tag should be loaded into a buffer."
    path find-file-match t))
 
 (defun semanticdb-find-tags-subclasses-of-type
-  (type &optional path find-file-match)
+    (type &optional path find-file-match)
   "Search for all tags of class type defined that subclass TYPE.
 See `semanticdb-find-translate-path' for details on PATH.
 FIND-FILE-MATCH indicates that any time a match is found, the file
@@ -1334,18 +1334,18 @@ Returns a table of all matching tags."
     (semantic-find-tags-by-class class (or tags (semanticdb-get-tags table)))))
 
 (defmethod semanticdb-find-tags-external-children-of-type-method ((table semanticdb-abstract-table) parent &optional tags)
-   "In TABLE, find all occurrences of tags whose parent is the PARENT type.
+  "In TABLE, find all occurrences of tags whose parent is the PARENT type.
 Optional argument TAGS is a list of tags to search.
 Returns a table of all matching tags."
-   (require 'semantic/find)
-   (semantic-find-tags-external-children-of-type parent (or tags (semanticdb-get-tags table))))
+  (require 'semantic/find)
+  (semantic-find-tags-external-children-of-type parent (or tags (semanticdb-get-tags table))))
 
 (defmethod semanticdb-find-tags-subclasses-of-type-method ((table semanticdb-abstract-table) parent &optional tags)
-   "In TABLE, find all occurrences of tags whose parent is the PARENT type.
+  "In TABLE, find all occurrences of tags whose parent is the PARENT type.
 Optional argument TAGS is a list of tags to search.
 Returns a table of all matching tags."
-   (require 'semantic/find)
-   (semantic-find-tags-subclasses-of-type parent (or tags (semanticdb-get-tags table))))
+  (require 'semantic/find)
+  (semantic-find-tags-subclasses-of-type parent (or tags (semanticdb-get-tags table))))
 
 ;;; Deep Searches
 (defmethod semanticdb-deep-find-tags-by-name-method ((table semanticdb-abstract-table) name &optional tags)
