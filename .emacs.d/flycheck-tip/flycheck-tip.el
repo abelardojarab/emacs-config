@@ -4,7 +4,7 @@
 
 ;; Author: Yuta Yamada <cokesboy"at"gmail.com>
 ;; URL: https://github.com/yuutayamada/flycheck-tip
-;; Version: 0.0.1
+;; Version: 0.5.0
 ;; Package-Requires: ((flycheck "0.13") (emacs "24.1") (popup "0.5.0"))
 ;; Keywords: flycheck
 
@@ -105,6 +105,17 @@ or flycheck-tip-cycle-reverse."
     ;; do not use timer
     (t (setq flycheck-tip-avoid-show-func t
              error-tip-timer-delay nil))))
+
+(defun flycheck-tip-display-current-line-error-message (errors)
+  "Show current line's ERRORS by popup.
+This function is used to replace ‘flycheck-display-errors-function’."
+  (error-tip-delete-popup)
+  (let ((current-line-errors (mapcar #'flycheck-error-message errors))
+        ;; prevents frequently notification update
+        (error-tip-notify-keep-messages nil))
+    (when current-line-errors
+      (setq error-tip-current-errors current-line-errors)
+      (error-tip-popup-error-message current-line-errors (point)))))
 
 (provide 'flycheck-tip)
 

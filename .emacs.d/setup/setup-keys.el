@@ -312,10 +312,12 @@
 ;; Jump between windows
 (define-key c-mode-base-map [f4] 'eassist-switch-h-cpp)
 (define-key c-mode-base-map [C-f4] 'dts-switch-between-header-and-source)
-(global-set-key (kbd "C-0") 'psw-switch-buffer)
-(global-set-key (kbd "C-1") 'psw-switch-function)
-(global-set-key [(meta left)] 'psw-switch-function)
-(global-set-key [(meta right)] 'psw-switch-buffer)
+(global-set-key (kbd "C-1") 'psw-switch-buffer)
+(global-set-key (kbd "C-2") 'psw-switch-function)
+
+;; Flycheck tips
+(define-key global-map (kbd "C-0") 'error-tip-cycle-dwim)
+(define-key global-map (kbd "C-9") 'error-tip-cycle-dwim-reverse)
 
 ;; Drag stuff
 (add-to-list 'load-path "~/.emacs.d/drag-stuff")

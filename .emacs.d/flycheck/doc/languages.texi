@@ -121,6 +121,9 @@ check for the @option{--enable} option.
 @flycoption flycheck-cppcheck-inconclusive
 Whether to enable inconclusive checks in cppcheck.  These checks may
 yield more false positives than normal checks.
+@flycoption flycheck-cppcheck-include-path
+A list of include directories for cppcheck.  Relative paths are relative to
+the file being checked.
 @end table
 
 @flyclanguage{CFEngine}
@@ -241,6 +244,9 @@ effect if @code{flycheck-emacs-lisp-initialize-packages} is nil.
 @table @asis
 @flycoption flycheck-erlang-include-path
 A list of include directories for Erlang.
+
+@flycoption flycheck-erlang-library-path
+A list of library directories for Erlang.
 @end table
 
 @end itemize
@@ -337,7 +343,24 @@ functions for format string problems.
 
 @item
 @flyc{haskell-hlint} (style checker with
-@uref{https://github.com/ndmitchell/hlint,hlint})
+@uref{https://github.com/ndmitchell/hlint,hlint}), with the
+following options:
+
+@table @asis
+@flycoption flycheck-hlint-language-extensions
+Extensions list.
+
+@flycoption flycheck-hlint-ignore-rules
+Ignore rules list.
+
+@flycoption flycheck-hlint-hint-packages
+Hint packages to include.
+@end table
+
+@table @asis
+@flycconfigfile{flycheck-hlintrc,hlint}
+@end table
+
 @end enumerate
 
 @smallindentedblock
@@ -381,6 +404,13 @@ with the following option:
 @flycconfigfile{flycheck-tidyrc,Tidy}
 @end table
 
+@end itemize
+
+@flyclanguage{Jade}
+
+@itemize
+@item
+@flyc{jade} (using @uref{http://jade-lang.com/,Jade})
 @end itemize
 
 @flyclanguage{Javascript}
@@ -759,6 +789,13 @@ A list of excluded warnings for ShellCheck.
 @flyc{slim} (using @uref{http://slim-lang.com/,Slim})
 @end itemize
 
+@flyclanguage{SQL}
+
+@itemize
+@item
+@flyc{sql-sqlint} (using @uref{https://github.com/purcell/sqlint,Sqlint})
+@end itemize
+
 @flyclanguage{TeX/LaTeX}
 
 @itemize
@@ -791,6 +828,14 @@ A list of excluded warnings for ShellCheck.
 @flyc{verilog-verilator} (using
 @uref{http://www.veripool.org/wiki/verilator,Verilator})
 @end itemize
+
+@flyc{verilog-verilator} provides the following options:
+
+@table @asis
+@flycoption flycheck-verilator-include-path
+A list of include directories for Verilator.  Relative paths are relative to
+the file being checked.
+@end table
 
 @flyclanguage{XML}
 

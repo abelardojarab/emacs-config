@@ -1,6 +1,6 @@
 ;;; setup-flycheck.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -26,10 +26,8 @@
 
 ;; Flycheck
 (add-to-list 'load-path "~/.emacs.d/flycheck")
-(add-to-list 'load-path "~/.emacs.d/flycheck-tip")
 (require 'f)
 (require 'flycheck)
-(require 'flycheck-tip)
 (add-hook 'after-init-hook 'global-flycheck-mode)
 (add-hook 'js2-mode-hook
           (lambda () (flycheck-mode t)))
@@ -37,9 +35,6 @@
           (lambda () (flycheck-mode t)))
 (add-hook 'python-mode-hook
           (lambda () (flycheck-mode t)))
-
-;; Show tip both in echo area and popup
-(setq flycheck-tip-avoid-show-func nil)
 
 ;; Configuration
 (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
@@ -79,6 +74,11 @@
         (insert (s-join "\n\n" messages))))))
 (setq flycheck-display-errors-function
       'flycheck-diplay-error-messages-one-line)
+
+;; Tooltips
+(add-to-list 'load-path "~/.emacs.d/flycheck-tip")
+(require 'flycheck-tip)
+(setq flycheck-tip-avoid-show-func nil)
 
 (provide 'setup-flycheck)
 ;;; setup-flycheck.el ends here

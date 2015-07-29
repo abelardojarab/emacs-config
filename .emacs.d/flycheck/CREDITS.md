@@ -8,10 +8,13 @@ The following people—listed in alphabetical order—contributed
 substantial code to Flycheck:
 
 - [Alain Kalker](https://github.com/ackalker) (fix quoting for flycheck-compile)
+- [Alex Reed](https://github.com/acr4) (include paths for Verilator and
+  Cppcheck)
 - [Atila Neves](https://github.com/atilaneves) (include paths and arguments for
   DMD)
 - [Bozhidar Batsov](https://github.com/bbatsov) (improved Flycheck menu, RuboCop
   syntax checker, improvements to Ruby)
+- [Clément Pit--Claudel](https://github.com/cpitclaudel) (custom error levels)
 - [Cristian Capdevila](https://github.com/capdevc) (enabled warnings in Rust)
 - [Damon Haley](https://github.com/dhaley) (PHPCS syntax checker)
 - [David Holm](https://github.com/dholm) (Clang, Cppcheck, lintr and Verilator
@@ -54,6 +57,7 @@ substantial code to Flycheck:
 - [Peter Eisentraut](https://github.com/petere) (improvements to foodcritic)
 - [Peter Vasil](https://github.com/ptrv) (Lua, Luacheck and Go build/test
   syntax checkers)
+- [Robert O'Connor](https://github.com/robbyoconnor) (Jade)
 - [Robert Zaremba](https://github.com/robert-zaremba) (gofmt syntax checker)
 - [Robert Dallas Gray](https://github.com/rdallasgray) (configurable error display)
 - [Sean Gillespie](https://github.com/swgillespie) (help messages in Rust)
@@ -64,8 +68,8 @@ substantial code to Flycheck:
 - [Stephen Lewis](https://github.com/stephenjlewis) (pedantic flags for Clang
   and GCC)
 - [Steve Purcell](https://github.com/purcell) (various bug fixes, syntax
-  checkers for HAML, csslint, jslint, SASS, SCSS, jsonlint, LESS, GHC, hdevtools
-  and hlint)
+  checkers for HAML, csslint, jslint, SASS, SCSS, SQL, jsonlint, LESS, GHC,
+  hdevtools and hlint)
 - [Sylvain Benner](https://github.com/syl20bnr) (Elixir and Erlang syntax
   checkers)
 - [Sylvain Rousseau](https://github.com/thisirs) (Bash syntax checkers)
@@ -74,12 +78,13 @@ substantial code to Flycheck:
 - [Tom Jakubowski](https://github.com/tomjakubowski) (test support in Rust)
 - [Tomoya Tanjo](https://github.com/tom-tan) (DMD syntax checker)
 - [Victor Deryagin](https://github.com/vderyagin) (Rust syntax checker)
+- [Vlatko Basic](https://github.com/vlatkoB) (options for hlint)
 - [Yannick Roehlly](https://github.com/yannick1974) (PEP8 naming support in
   Python)
 - [Yasuyuki Oka](https://github.com/yasuyk) (syntax checkers for phpmd, Slim,
   js-yaml, ruby-lint, Handlebars, Foodcritic, AsciiDoc, Racket, ESLint, erubis,
   POSIX Make, Golint and go vet)
-- [Zhuo Yuan](https://github.com/yzprofile) (include directories for Erlang)
+- [Zhuo Yuan](https://github.com/yzprofile) (options for Erlang)
 
 For a complete list of all code contributors see the [Contributor Graph][] or
 `git shortlog --summary`.

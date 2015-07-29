@@ -4,10 +4,13 @@ master (in development)
 - **Breaking changes**:
 
   - Remove Elixir syntax checker due to code execution [GH-630]
+  - Drop support for Emacs 24.1 and 24.2
 
 - New syntax checkers:
 
   - Javascript with `jscs` [GH-634] and `standard` [GH-644]
+  - Jade [GH-686]
+  - SQL with `sqllint` [GH-691]
 
 - New features:
 
@@ -15,8 +18,21 @@ master (in development)
     [GH-621]
   - Add `flycheck-rust-args` to pass additional arguments to `rustc`
   - Add `flycheck-dmd-args` to pass additional arguments to `dmd` [GH-655]
-  - Add `flycheck-erlang-include-path` to set include directories for Erlang
-    [GH-668]
+  - Add `flycheck-erlang-include-path` [GH-668] and
+    `flycheck-erlang-library-path` [GH-696] for Erlang
+  - Add `flycheck-verilator-include-path` to set include directories for
+    Verilator [GH-684]
+  - Add `flycheck-cppcheck-include-path` to set include directories for cppcheck
+    [GH-687]
+  - Add support for Hlint configuration file [GH-682]
+  - Add Hlint options for ignore rules, language extensions and hint packages
+    [GH-682]
+
+- Improvements:
+
+  - Show chained checkers in Help buffers for syntax checkers [GH-571]
+  - Map custom error levels to compilation mode levels [GH-700]
+  - `flycheck-verify-checker` now includes the manually selected checker if any
 
 - Bug fixes:
 
@@ -27,6 +43,10 @@ master (in development)
   - Fix duplicate checkdoc errors on Emacs 25
   - Fix level of `info` messages in `flycheck-compile` [GH-669]
   - Allow custom `:verify` functions for command checkers [GH-672]
+  - Fix error when `flycheck-scalastylerc` was set to a non-existing file
+  - Fix error column offsets in `scala-scalastyle`
+  - Do not use `r-lintr` in non-R buffers [GH-607]
+  - Enforce output format of `flake8` [GH-704]
 
 0.23 (Apr 6, 2015)
 ==================

@@ -4,9 +4,8 @@
 
 ;; Author: Yuta Yamada <cokesboy"at"gmail.com>
 ;; URL: https://github.com/yuutayamada/flycheck-tip
-;; Version: 0.0.1
+;; Version: 0.5.0
 ;; Package-Requires: ((emacs "24.1") (popup "0.5.0"))
-;; Keywords: keyword
 
 ;;; License:
 ;; This program is free software: you can redistribute it and/or modify
@@ -29,10 +28,6 @@
 (require 'popup)
 (require 'notifications) ; this introduced from Emacs 24
 
-(autoload 'flycheck-tip-cycle "flycheck-tip")
-(autoload 'flymake-tip-cycle "flymake-tip")
-(autoload 'eclim-tip-cycle "eclim-tip")
-
 (defvar error-tip-notify-keep-messages nil
   "If the value is non-nil, keep error messages to notification area.
 This feature only activates when you leave from popup's message.")
@@ -42,6 +37,17 @@ This feature only activates when you leave from popup's message.")
 
 (defvar error-tip-notify-timeout (* 60 1000)
   "Value for time out.  The default value is 1 minute.")
+
+(defvar error-tip-notify-parametors
+  '(:title "flycheck-tip" :category "im.error")
+  "Parameters for ‘error-tip-notify’.
+You can add ‘notifications-notify’s parametors without :body, :replaces-id and
+:timeout.
+
+Example:
+
+  (setq error-tip-notify-parametors
+        (append error-tip-notify-parametors '(:app-icon \"/path/to/icon-file\")))")
 
 ;; INTERNAL VARIABLE
 (defvar error-tip-popup-object nil)
@@ -106,12 +112,12 @@ If you set nil to this variable, then do not use delay timer.")
                                   (cons :previous     previous)
                                   (cons :current-line current-line)))))
 
-(defun error-tip-popup-error-message (errors)
+(defun error-tip-popup-error-message (errors &optional point)
   "Popup error message(s) from ERRORS.
 If there are multiple errors on current line, all current line's errors are
-appeared."
+appeared.  The POINT arg is a point to show up error(s)."
   (setq error-tip-popup-object
-        (popup-tip (error-tip-format errors) :nowait t :point (error-tip-get-point)))
+        (popup-tip (error-tip-format errors) :nowait t :point (or point (error-tip-get-point))))
   (add-hook 'pre-command-hook 'error-tip-delete-popup))
 
 (defun error-tip-get-point ()
@@ -169,17 +175,25 @@ This function can catch error against flycheck, flymake and emcas-eclim."
       (and (fboundp 'eclim--problems-filtered)
            (eclim--problems-filtered))))
 
+;;;###autoload
 (defun error-tip-cycle-dwim (&optional reverse)
+  "Showing error function.
+This function switches proper error showing function by context.
+ (whether flycheck or flymake) The REVERSE option jumps by inverse if
+the value is non-nil."
   (interactive)
-  (cond
-   ((bound-and-true-p flycheck-mode)
-    (flycheck-tip-cycle reverse))
-   ((bound-and-true-p eclim-mode)
-    (eclim-tip-cycle reverse))
-   ((bound-and-true-p flymake-mode)
-    (flymake-tip-cycle reverse))))
+  (let ((func (cond
+               ((bound-and-true-p flycheck-mode)
+                'flycheck-tip-cycle)
+               ((bound-and-true-p eclim-mode)
+                'eclim-tip-cycle)
+               ((bound-and-true-p flymake-mode)
+                'flymake-tip-cycle))))
+    (funcall func reverse)))
 
+;;;###autoload
 (defun error-tip-cycle-dwim-reverse ()
+  "Same as ‘error-tip-cycle-dwim’, but it jumps to inverse direction."
   (interactive)
   (error-tip-cycle-dwim t))
 
@@ -188,12 +202,15 @@ This function can catch error against flycheck, flymake and emcas-eclim."
   "Keep ERROR-MESSAGES on notification area.
 See also ‘error-tip-notify-keep-messages’"
   (setq error-tip-notify-last-notification
-        (notifications-notify
-         :title "flycheck-tip"
-         :body  (format "%s" (error-tip-format (error-tip-get-errors)))
-         :category "im.error"
-         :replaces-id error-tip-notify-last-notification
-         :timeout error-tip-notify-timeout)))
+        (apply `((lambda ()
+                   (notifications-notify
+                    ,@(and error-tip-notify-parametors)
+                    :body ,(format "%s" (error-tip-format
+                                         (if (cl-struct-p (car error-tip-current-errors))
+                                             (error-tip-get-errors)
+                                           error-tip-current-errors)))
+                    :replaces-id error-tip-notify-last-notification
+                    :timeout error-tip-notify-timeout))))))
 
 (provide 'error-tip)
 
