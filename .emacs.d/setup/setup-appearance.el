@@ -128,7 +128,8 @@ non-nil."
 (setq solarized-scale-org-headlines nil)
 
 ;; Load Atom dark theme
-(load-theme 'atom-dark t)
+;; (load-theme 'atom-dark t)
+(load-theme 'zenburn t)
 (set-face-attribute 'region nil :background "#666")
 
 ;; Syntax coloring
