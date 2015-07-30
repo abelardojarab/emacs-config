@@ -35,6 +35,7 @@
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
 (add-hook 'python-mode-hook 'hideshowvis-enable)
+(add-hook 'python-mode-hook 'hs-minor-mode)
 
 ;; Update imenu
 (defun python-reset-imenu ()

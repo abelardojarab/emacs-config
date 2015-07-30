@@ -132,8 +132,6 @@ def foo():
   (py-test-with-temp-buffer-point-min
       "print(\"I'm the py-execute-line-test\")"
     (let ((py-shell-name "python"))
-      (when py-debug-p (switch-to-buffer (current-buffer))
-	    (font-lock-fontify-buffer))
       (sit-for 0.1 t)
       (py-execute-line)
       (sit-for 0.1 t)
@@ -308,3 +306,34 @@ print()"
       (sit-for 0.1 t)
       (should (not (one-window-p))))))
 
+(ert-deftest py-ert-py-execute-section-test ()
+  (py-test-with-temp-buffer
+      "# {{
+print(3+3)
+# }}"
+    (search-backward "print")
+    (py-execute-section)
+    (sleep-for 1)
+    (should (string= py-result "6"))))
+
+(ert-deftest py-ert-match-paren-test-3 ()
+    (py-test-with-temp-buffer
+	"if __name__ == \"__main__\":
+    main()
+"
+      (skip-chars-backward " \t\r\n\f")
+      (back-to-indentation)
+      (py-match-paren)
+      (should (eq 4 (current-column)))))
+
+(ert-deftest py-ert-match-paren-test-6 ()
+  (py-test-with-temp-buffer
+      py-def-and-class-test-string
+    (search-backward "(treffer)")
+    (skip-chars-backward "^\"")
+    (forward-char -1)
+    (py-match-paren)
+    (should (eq (char-after) ?#))
+    (py-match-paren)
+    (should (eq (char-before) ?\)))
+    (should (eolp))))

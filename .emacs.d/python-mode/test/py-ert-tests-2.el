@@ -66,7 +66,7 @@
       ;; (when py-debug-p (switch-to-buffer (current-buffer)))
       (should (eq 'py-builtins-face (get-char-property (point) 'face))))))
 
-(ert-deftest py-ert-py-pseudo-keyword-face-lp-1294742 ()
+(ert-deftest py-ert-pseudo-keyword-face-lp-1294742 ()
   (py-test-with-temp-buffer-point-min
       "  Ellipsis True False None  __debug__ NotImplemented"
     (font-lock-fontify-buffer)
@@ -74,7 +74,7 @@
       (should (eq 'py-pseudo-keyword-face (get-char-property (point) 'face)))
       (skip-chars-forward "^ \n"))))
 
-(ert-deftest py-ert-py-object-reference-face-lp-1294742 ()
+(ert-deftest py-ert-object-reference-face-lp-1294742 ()
   (py-test-with-temp-buffer-point-min
       " self cls"
     (font-lock-fontify-buffer)
@@ -264,7 +264,7 @@ by the
     (py-backward-same-level)
     (should (eq (char-after) ?e))))
 
-(ert-deftest py-ert-py-up-level-test ()
+(ert-deftest py-ert-up-level-test ()
   (py-test-with-temp-buffer-point-min
       "def foo():
     if True:
@@ -298,8 +298,6 @@ by the
         finally:
             pass
 "
-    (when py-debug-p (switch-to-buffer (current-buffer))
-	  (font-lock-fontify-buffer))
     (goto-char 632)
     (py-up)
     (should (eq (char-after) ?p))
@@ -378,8 +376,6 @@ x = {'abc':'def',
   (py-test-with-temp-buffer
       "assert pycompletions('TestClass.test' , name) == \
           ['testclassmeth', 'testmeth', 'testprop', 'teststaticmeth']"
-    (when py-debug-p (switch-to-buffer (current-buffer))
-	  (font-lock-fontify-buffer))
     (forward-char -1)
     (py-mark-expression)
     (should (eq 119 (mark)))
@@ -437,8 +433,6 @@ x = {'abc':'def',
     if True:
 pass
 "
-    (when py-debug-p (switch-to-buffer (current-buffer))
-	  (font-lock-fontify-buffer))
     (forward-line -1)
     (call-interactively 'py-indent-or-complete)
     (sit-for 0.1 t)
@@ -489,7 +483,7 @@ pass
       (sit-for 0.1 t)
       (should (buffer-live-p (get-buffer "*Python2*"))))))
 
-(ert-deftest py-beginning-of-statement-test-1 ()
+(ert-deftest py-backward-statement-test-1 ()
   (py-test-with-temp-buffer
       (let ((py-return-result-p t)
 	    py-result py-store-result-p)
@@ -506,28 +500,26 @@ def foo(*args):2
     # ABD
     args = \"asdf\"
 ")
-    (when py-debug-p (switch-to-buffer (current-buffer))
-	  (font-lock-fontify-buffer))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (eq (char-after) ?a))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (eq (char-after) ?\"))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (eq (char-after) ?d))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (eq (char-after) ?o))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (eq (char-after) ?i))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (eq (char-after) ?c))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (eq (char-after) ?c))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (eq (char-after) ?p))
-    (py-beginning-of-statement)
+    (py-backward-statement)
     (should (bobp))))
 
-(ert-deftest py-ert-beginning-of-except-block-test ()
+(ert-deftest py-ert-backward-except-block-test ()
   (py-test-with-temp-buffer
       "
 # -*- coding: utf-8 -*-
@@ -539,13 +531,11 @@ class bar:
                     pass
         except:
             block2
-"
-    (when py-debug-p (switch-to-buffer (current-buffer))
-          (font-lock-fontify-buffer))
-    (py-beginning-of-except-block)
+        "
+    (py-backward-except-block)
     (should (eq (char-after) ?e))))
 
-(ert-deftest py-ert-beginning-of-except-block-bol-test ()
+(ert-deftest py-ert-backward-except-block-bol-test ()
   (py-test-with-temp-buffer
       "
 # -*- coding: utf-8 -*-
@@ -557,10 +547,8 @@ class bar:
                     pass
         except:
             block2
-"
-    (when py-debug-p (switch-to-buffer (current-buffer))
-          (font-lock-fontify-buffer))
-    (py-beginning-of-except-block-bol)
+        "
+    (py-backward-except-block-bol)
     (should (eq (char-after) ?\ ))))
 
   ;; (and (bufferp (get-buffer "*Python*"))(buffer-live-p (get-buffer "*Python*"))(py-kill-buffer-unconditional "*Python*"))
@@ -645,8 +633,6 @@ data = {
 }
 
 "
-    (when py-debug-p (switch-to-buffer (current-buffer))
-	  (font-lock-fontify-buffer))
     (let ((py-indent-honors-multiline-listing t)
 	  py-closing-list-dedents-bos)
       (search-forward "'a':{")
@@ -684,9 +670,7 @@ that, needs, to_be, wrapped)
     that, needs, to_be, wrapped) = input_list
 "
     (let ((py-indent-honors-multiline-listing t))
-      (when py-debug-p (switch-to-buffer (current-buffer))
-	  (font-lock-fontify-buffer))
-      (search-forward "(long")
+        (search-forward "(long")
       (forward-char -1)
       ;; (goto-char 6)
       (should (eq nil (get-char-property (point) 'face)))
@@ -702,21 +686,8 @@ that, needs, to_be, wrapped)
       "def foo (a,
 
 ):"
-    (when py-debug-p (switch-to-buffer (current-buffer))
-	  (font-lock-fontify-buffer))
     (beginning-of-line)
     (should (eq 9 (py-compute-indentation)))))
-
-(ert-deftest py-complete-in-ipython-shell-test ()
-  (let ((py-shell-name "ipython")
-	(py-switch-buffers-on-execute-p t))
-    (py-kill-buffer-unconditional "*IPython*")
-    (ipython)
-    (goto-char (point-max))
-    (insert "pri")
-    (py-indent-or-complete)
-    (forward-word -1)
-    (should (eq ?p (char-after)))))
 
 (ert-deftest py-complete-in-python-shell-test ()
   (let ((py-shell-name "python")
@@ -761,8 +732,6 @@ def main():
 if __name__==\"__main__\":
     main()
 "
-    (when py-debug-p (switch-to-buffer (current-buffer))
-          (font-lock-fontify-buffer))
     (search-forward "exit()")
     (should (eq 4 (py-close-block)))))
 
@@ -777,8 +746,6 @@ def main():
 if __name__==\"__main__\":
     main()
 "
-    (when py-debug-p (switch-to-buffer (current-buffer))
-          (font-lock-fontify-buffer))
     (search-forward "exit()")
     (should (eq 4 (py-close-clause)))))
 
@@ -793,8 +760,6 @@ def main():
 if __name__==\"__main__\":
     main()
 "
-    (when py-debug-p (switch-to-buffer (current-buffer))
-          (font-lock-fontify-buffer))
     (search-forward "exit()")
     (should (eq 4 (py-close-block-or-clause)))))
 
@@ -809,8 +774,6 @@ def main():
 if __name__==\"__main__\":
     main()
 "
-    (when py-debug-p (switch-to-buffer (current-buffer))
-          (font-lock-fontify-buffer))
     (search-forward "exit()")
     (should (eq 0 (py-close-def-or-class)))))
 
@@ -825,8 +788,6 @@ def main():
 if __name__==\"__main__\":
     main()
 "
-    (when py-debug-p (switch-to-buffer (current-buffer))
-          (font-lock-fontify-buffer))
     (search-forward "exit()")
     (should (eq 0 (py-close-def)))))
 
@@ -856,19 +817,6 @@ class asdf:
    (forward-line -1)
    (should (eq 4 (current-indentation)))))
 
-;; (ert-deftest py-builtins-face-lp-1454858-1-test ()
-;;   (py-test-with-temp-buffer
-;;       "#! /usr/bin/env python2
-;; file.close()"
-;;     (beginning-of-line)
-;;     (should (eq (face-at-point) 'py-builtins-face))))
-
-;; (ert-deftest py-builtins-face-lp-1454858-2-test ()
-;;   (py-test-with-temp-buffer
-;;       "#! /usr/bin/env python3
-;; file.close()"
-;;     (beginning-of-line)
-;;     (should-not (eq (face-at-point) 'py-builtins-face))))
 
 (ert-deftest py-face-lp-1454858-python2-1-test ()
   (let ((py-python-edit-version ""))
@@ -934,6 +882,132 @@ print()")
     (py-electric-delete)
     (should (eq (char-after) ?{))))
 
+(ert-deftest py-ert-end-of-def-or-class-test ()
+  (py-test-with-temp-buffer-point-min
+      "class MyTest(unittest.TestCase):
+    def test(self):
+        self.assertEqual(fun(3), 4)"
+    (skip-chars-forward "^(")
+    (py-end-of-def-or-class))
+  (should (eobp)))
+
+(ert-deftest py-ert-narrow-to-block-test ()
+  (py-test-with-temp-buffer
+      "with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
+    for i in range(anzahl):
+        klauf.pylauf()
+        "
+      (py-narrow-to-block)
+      (should (eq 50 (length (buffer-substring-no-properties (point-min)(point-max)))))))
+
+(ert-deftest py-ert-narrow-to-block-or-clause-test ()
+  (py-test-with-temp-buffer
+      "if treffer in gruen:
+    # print \"0, Gruen\"
+    ausgabe[1] = treffer
+    ausgabe[2] = treffer
+
+elif treffer in schwarz:
+    # print \"%i, Schwarz\" % (treffer)
+    ausgabe[1] = treffer
+"
+    (py-narrow-to-block-or-clause)
+    (should (eq 87 (length (buffer-substring-no-properties (point-min)(point-max)))))))
+
+(ert-deftest py-ert-narrow-to-clause-test ()
+  (py-test-with-temp-buffer
+      "if treffer in gruen:
+    # print \"0, Gruen\"
+    ausgabe[1] = treffer
+    ausgabe[2] = treffer
+
+elif treffer in schwarz:
+    # print \"%i, Schwarz\" % (treffer)
+    ausgabe[1] = treffer
+"
+    (py-narrow-to-clause)
+    (should (eq 87 (length (buffer-substring-no-properties (point-min)(point-max)))))))
+
+(ert-deftest py-ert-narrow-to-class-test ()
+  (py-test-with-temp-buffer
+      py-def-and-class-test-string
+    (search-backward "treffer")
+    (py-narrow-to-class)
+    (should (eq 710 (length (buffer-substring-no-properties (point-min)(point-max)))))))
+
+(ert-deftest py-ert-narrow-to-def-test ()
+  (py-test-with-temp-buffer
+      py-def-and-class-test-string
+    (search-backward "treffer")
+    (py-narrow-to-def)
+    (should (eq 485 (length (buffer-substring-no-properties (point-min)(point-max)))))))
+
+(ert-deftest py-ert-narrow-to-def-or-class-test ()
+  (py-test-with-temp-buffer
+      py-def-and-class-test-string
+    (search-backward "treffer")
+    (py-narrow-to-def-or-class)
+    (should (eq 485 (length (buffer-substring-no-properties (point-min)(point-max)))))))
+
+(ert-deftest py-ert-narrow-to-statement-test ()
+  (py-test-with-temp-buffer
+      py-def-and-class-test-string
+    (search-backward "treffer")
+    (py-narrow-to-statement)
+    (should (eq 32 (length (buffer-substring-no-properties (point-min)(point-max)))))))
+
+(ert-deftest py-ert-section-backward-test ()
+  (py-test-with-temp-buffer
+      "# {{
+print('%(language)s has %(number)03d quote types.' %
+       {'language': \"Python\", \"number\": 2})
+# }}
+# {{
+print(\"%(language)s has %(number)03d quote types.\" %
+       {'language': \"Python\", \"number\": 2})
+# }}
+"
+    (py-backward-section)
+    (should (eq (char-after) ?#))
+    (py-backward-section)
+    (should (eq (char-after) ?#))))
+
+(ert-deftest py-ert-section-forward-test ()
+  (py-test-with-temp-buffer-point-min
+      "# {{
+print('%(language)s has %(number)03d quote types.' %
+       {'language': \"Python\", \"number\": 2})
+# }}
+# {{
+print(\"%(language)s has %(number)03d quote types.\" %
+       {'language': \"Python\", \"number\": 2})
+# }}
+"
+    (py-forward-section)
+    (should (eq (char-before) ?}))
+    (py-forward-section)
+    (should (eq (char-before) ?}))))
+
+(ert-deftest py-ert-sectionize-test ()
+  (py-test-with-temp-buffer-point-min
+      "print('%(language)s has %(number)03d quote types.' %
+       {'language': \"Python\", \"number\": 2})
+"
+    (end-of-line)
+    (py-sectionize-region (point-min) (point-max))
+    (goto-char (point-min))
+    (should (eq (char-after) ?#))
+    (py-forward-section)
+    (should (eq (char-before) ?}))))
+
+(ert-deftest py-ert-jump-matching-indent-test ()
+  (py-test-with-temp-buffer
+      py-def-and-class-test-string
+    (search-backward "if ")
+    (forward-line -1)
+    (indent-to 12)
+    (py-backward-block)
+    (should (eq (current-column) 8))))
 
 (provide 'py-ert-tests-2)
 ;;; py-ert-tests-2.el ends here

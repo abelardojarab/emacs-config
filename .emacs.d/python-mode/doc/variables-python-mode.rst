@@ -1,4 +1,4 @@
-python-mode.el variables
+Variables
 
 ====================
 
@@ -30,6 +30,13 @@ Commands prefixed "py-fast-..." suitable for large output
 See: large output makes Emacs freeze, lp:1253907
 
 Results arrive in output buffer, which is not in comint-mode
+
+py-sexp-use-expression-p
+------------------------
+If non-nil, C-M-s call py-forward-expression. 
+
+Respective C-M-b will call py-backward-expression
+Default is t
 
 py-shell-unfontify-p
 --------------------
@@ -368,13 +375,17 @@ result = some_function_that_takes_arguments(
 
 Examples from PEP8
 
+py-imenu-max-items
+------------------
+Python-mode specific `imenu-max-items'
+
 py-closing-list-space
 ---------------------
 Number of chars, closing parenthesis outdent from opening, default is 1 
 
 py-max-specpdl-size
 -------------------
-Heuristic exit. Limiting number of recursive calls by py-end-of-statement and related functions. Default is max-specpdl-size.
+Heuristic exit. Limiting number of recursive calls by py-forward-statement and related functions. Default is max-specpdl-size.
 
 This threshold is just an approximation. It might set far higher maybe.
 
@@ -676,7 +687,7 @@ Shell command used to run Pychecker.
 
 py-pychecker-command-args
 -------------------------
-List of string arguments to be passed to pychecker.
+String arguments to be passed to pychecker.
 
 py-pyflakes-command
 -------------------
@@ -684,7 +695,7 @@ Shell command used to run Pyflakes.
 
 py-pyflakes-command-args
 ------------------------
-List of string arguments to be passed to pyflakes.
+String arguments to be passed to pyflakes.
 
 Default is ""
 
@@ -694,7 +705,7 @@ Shell command used to run pep8.
 
 py-pep8-command-args
 --------------------
-List of string arguments to be passed to pylint.
+String arguments to be passed to pylint.
 
 Default is "" 
 
@@ -704,7 +715,7 @@ Shell command used to run `pyflakespep8'.
 
 py-pyflakespep8-command-args
 ----------------------------
-List of string arguments to be passed to pyflakespep8.
+string arguments to be passed to pyflakespep8.
 
 Default is "" 
 
@@ -714,7 +725,7 @@ Shell command used to run Pylint.
 
 py-pylint-command-args
 ----------------------
-List of string arguments to be passed to pylint.
+String arguments to be passed to pylint.
 
 Default is "--errors-only" 
 
@@ -826,7 +837,7 @@ Else /usr/bin/python
 
 py-python-command-args
 ----------------------
-List of string arguments to be used when starting a Python shell.
+String arguments to be used when starting a Python shell.
 
 py-python2-command
 ------------------
@@ -840,7 +851,7 @@ Else /usr/bin/python
 
 py-python2-command-args
 -----------------------
-List of string arguments to be used when starting a Python shell.
+String arguments to be used when starting a Python shell.
 
 py-python3-command
 ------------------
@@ -854,7 +865,7 @@ At GNU systems see /usr/bin/python3
 
 py-python3-command-args
 -----------------------
-List of string arguments to be used when starting a Python3 shell.
+String arguments to be used when starting a Python3 shell.
 
 py-ipython-command
 ------------------
@@ -868,7 +879,7 @@ Else /usr/bin/ipython
 
 py-ipython-command-args
 -----------------------
-List of string arguments to be used when starting a Python shell.
+String arguments to be used when starting a Python shell.
 At Windows make sure ipython-script.py is PATH. Also setting PATH/TO/SCRIPT here should work, for example;
 C:\Python27\Scripts\ipython-script.py
 With Anaconda the following is known to work:
@@ -884,7 +895,7 @@ Default /usr/bin/jython
 
 py-jython-command-args
 ----------------------
-List of string arguments to be used when starting a Python shell.
+String arguments to be used when starting a Python shell.
 
 py-shell-toggle-1
 -----------------
@@ -988,6 +999,14 @@ without the user's realization (e.g. to perform completion).
 py-shell-local-path
 -------------------
 If `py-use-local-default' is non-nil, `py-shell' will use EXECUTABLE indicated here incl. path. 
+
+py-python-edit-version
+----------------------
+When not empty, fontify according to Python version specified.
+
+Default is the empty string, a useful value "python3" maybe.
+
+When empty, version is guessed via `py-choose-shell'. 
 
 py-ipython-execute-delay
 ------------------------
@@ -1116,6 +1135,18 @@ When non-nil, keep resp. store information useful for debugging.
 
 Temporary files are not deleted. Other functions might implement
 some logging etc. 
+
+py-section-start
+----------------
+Delimit arbitrary chunks of code. 
+
+py-section-end
+--------------
+Delimit arbitrary chunks of code. 
+
+py-paragraph-re
+---------------
+An empty line followed by a non-whitespace at column 1
 
 py-compilation-regexp-alist
 ---------------------------
