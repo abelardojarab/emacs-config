@@ -44,6 +44,10 @@
 (standard-display-ascii ?\226 "---")
 (standard-display-ascii ?\227 "--")
 
+;; Fit frame
+(require 'autofit-frame)
+(add-hook 'after-make-frame-functions 'fit-frame)
+
 ;; Non-nil means no need to redraw entire frame after suspending.
 (setq no-redraw-on-reenter nil)
 
