@@ -29,13 +29,24 @@
 
 ;; Load python-mode
 (add-to-list 'load-path "~/.emacs.d/python-mode")
+(setq py-install-directory  "~/.emacs.d/el-get/python-mode")
 (require 'python-mode)
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'hideshowvis-enable)
-(add-hook 'python-mode-hook 'hs-minor-mode)
+
+;; Extra
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+(setq interpreter-mode-alist
+      (cons '("python" . python-mode)
+            interpreter-mode-alist)
+      python-mode-hook
+      '(lambda () (progn
+               (set-variable 'python-indent-offset 4)
+               (set-variable 'py-indent-offset 4)
+               (set-variable 'indent-tabs-mode nil))))
 
 ;; Update imenu
 (defun python-reset-imenu ()
@@ -74,21 +85,17 @@
 ;; Jedi settings
 (add-to-list 'load-path "~/.emacs.d/ctable")
 (add-to-list 'load-path "~/.emacs.d/deferred")
+(add-to-list 'load-path "~/.emacs.d/python-environment")
 (add-to-list 'load-path "~/.emacs.d/epc")
 (add-to-list 'load-path "~/.emacs.d/jedi")
-(add-to-list 'load-path "~/.emacs.d/python-environment")
 (require 'python-environment)
 (require 'epc)
 (require 'jedi)
-(add-hook 'python-mode-hook
-          (lambda ()
-            (jedi:setup)
-            (jedi:ac-setup)
-            (local-set-key "\C-cd" 'jedi:show-doc)
-            (local-set-key (kbd "M-SPC") 'jedi:complete)
-            (local-set-key (kbd "M-.") 'jedi:goto-definition)))
-(setq jedi:setup-keys t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:setup-keys nil)
 (setq jedi:complete-on-dot t)
+(setq jedi:tooltip-method nil)
+(add-hook 'python-mode-hook 'jedi-mode)
 
 (defun jedi:ac-direct-matches ()
   (mapcar
