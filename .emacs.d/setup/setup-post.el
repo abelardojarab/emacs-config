@@ -53,5 +53,11 @@
 (add-to-list 'auto-mode-alist '("\\.sp\\'" . spice-mode))
 (add-to-list 'auto-mode-alist '("\\.scs\\'" . spice-mode))
 
+;; Ergoemacs
+(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
+(setq ergoemacs-ignore-prev-global nil)
+(require 'ergoemacs-mode)
+(ergoemacs-mode 1)
+
 (provide 'setup-post)
 ;;; setup-post.el ends here
