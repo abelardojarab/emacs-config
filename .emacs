@@ -20,6 +20,57 @@
 (add-to-list 'load-path "~/.emacs.d/fringe-helper")
 (add-to-list 'load-path "~/.emacs.d/tabbar")
 
+(defun pop-to-buffer (buffer-or-name &optional other-window norecord)
+  "Select buffer BUFFER-OR-NAME in some window, preferably a different one...."
+  (let ((buffer
+         ;; FIXME: This behavior is carried over from the previous C version
+         ;; of pop-to-buffer, but really we should use just
+         ;; `get-buffer' here.
+         (if (null buffer-or-name) (other-buffer (current-buffer))
+           (or (get-buffer buffer-or-name)
+               (let ((buf (get-buffer-create buffer-or-name)))
+                 (set-buffer-major-mode buf)
+                 buf))))
+        (old-window (selected-window))
+        (old-frame (selected-frame))
+        new-window new-frame)
+    (set-buffer buffer)
+    (setq new-window (display-buffer buffer other-window) norecord)
+    (unless (eq new-window old-window)
+      ;; `display-buffer' has chosen another window.
+      (setq new-frame (window-frame new-window))
+      (unless (eq new-frame old-frame)
+        ;; `display-buffer' has chosen another frame, make sure it gets
+        ;; input focus and is risen.
+        (select-frame-set-input-focus new-frame))
+      ;; Make sure the window chosen by `display-buffer' gets selected.
+      (select-window new-window))
+    buffer))
+
+;; Backported function
+(defun define-error (name message &optional parent)
+    "Define NAME as a new error signal.
+MESSAGE is a string that will be output to the echo area if such an error
+is signaled without being caught by a `condition-case'.
+PARENT is either a signal or a list of signals from which it inherits.
+Defaults to `error'."
+    (unless parent (setq parent 'error))
+    (let ((conditions
+           (if (consp parent)
+               (apply #'nconc
+                      (mapcar (lambda (parent)
+                                (cons parent
+                                      (or (get parent 'error-conditions)
+                                         (error "Unknown signal `%s'" parent))))
+                              parent))
+             (cons parent (get parent 'error-conditions)))))
+      (put name 'error-conditions
+           (delete-dups (copy-sequence (cons name conditions))))
+      (when message (put name 'error-message message))))
+
+(require 'autofit-frame)
+(add-hook 'after-make-frame-functions 'fit-frame)
+
 ;; CEDET
 (add-to-list 'load-path "~/.emacs.d/cedet")
 (add-to-list 'load-path "~/.emacs/cedet/contrib")
@@ -92,6 +143,28 @@
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
 
+;; Backported function
+(defun define-error (name message &optional parent)
+    "Define NAME as a new error signal.
+MESSAGE is a string that will be output to the echo area if such an error
+is signaled without being caught by a `condition-case'.
+PARENT is either a signal or a list of signals from which it inherits.
+Defaults to `error'."
+    (unless parent (setq parent 'error))
+    (let ((conditions
+           (if (consp parent)
+               (apply #'nconc
+                      (mapcar (lambda (parent)
+                                (cons parent
+                                      (or (get parent 'error-conditions)
+                                         (error "Unknown signal `%s'" parent))))
+                              parent))
+             (cons parent (get parent 'error-conditions)))))
+      (put name 'error-conditions
+           (delete-dups (copy-sequence (cons name conditions))))
+      (when message (put name 'error-message message))))
+
+
 ;; Setup general
 (require 'setup-general)
 
@@ -107,6 +180,9 @@
   (let ((p plist))
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
+
+;; gv
+(require 'gv)
 
 ;; Setup Org and LaTeX
 (require 'setup-org)

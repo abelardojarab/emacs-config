@@ -114,7 +114,7 @@ Each element has the form (WHERE BYTECODE STACK) where:
            (usage (help-split-fundoc origdoc function)))
       (setq usage (if (null usage)
                       (let ((arglist (help-function-arglist flist)))
-                        (format "%S" (help-make-usage function arglist)))
+                        (help--make-usage-docstring function arglist))
                     (setq origdoc (cdr usage)) (car usage)))
       (help-add-fundoc-usage (concat docstring origdoc) usage))))
 
@@ -184,12 +184,12 @@ WHERE is a symbol to select an entry in `advice--where-alist'."
   (let ((found nil))
     (while (and (not found) (advice--p definition))
       (if (if (eq use-name :use-both)
-              (or (equal function
-                         (cdr (assq 'name (advice--props definition))))
-                  (equal function (advice--car definition)))
-            (equal function (if use-name
-                                (cdr (assq 'name (advice--props definition)))
-                              (advice--car definition))))
+          (or (equal function
+             (cdr (assq 'name (advice--props definition))))
+          (equal function (advice--car definition)))
+        (equal function (if use-name
+                (cdr (assq 'name (advice--props definition)))
+                  (advice--car definition))))
           (setq found definition)
         (setq definition (advice--cdr definition))))
     found))
@@ -295,15 +295,16 @@ is also interactive.  There are 3 cases:
 
 ;;;###autoload
 (defun advice--add-function (where ref function props)
-  (let* ((name (cdr (assq 'name props)))
-         (a (advice--member-p (or name function) (if name t) (gv-deref ref))))
-    (when a
-      ;; The advice is already present.  Remove the old one, first.
+  (ignore-errors
+    (let* ((name (cdr (assq 'name props)))
+           (a (advice--member-p (or name function) (if name t) (gv-deref ref))))
+      (when a
+        ;; The advice is already present.  Remove the old one, first.
+        (setf (gv-deref ref)
+              (advice--remove-function (gv-deref ref)
+                                       (or name (advice--car a)))))
       (setf (gv-deref ref)
-            (advice--remove-function (gv-deref ref)
-                                     (or name (advice--car a)))))
-    (setf (gv-deref ref)
-          (advice--make where function (gv-deref ref) props))))
+            (advice--make where function (gv-deref ref) props)))))
 
 ;;;###autoload
 (defmacro remove-function (place function)
@@ -337,19 +338,20 @@ of the piece of advice."
                  (lambda (first _rest _props) (if (not first) new))))
 
 (defun advice--normalize (symbol def)
-  (cond
-   ((special-form-p def)
-    ;; Not worth the trouble trying to handle this, I think.
-    (error "Advice impossible: %S is a special form" symbol))
-   ((and (symbolp def) (macrop def))
-    (let ((newval `(macro . ,(lambda (&rest r) (macroexpand `(,def . ,r))))))
-      (put symbol 'advice--saved-rewrite (cons def (cdr newval)))
-      newval))
-   ;; `f' might be a pure (hence read-only) cons!
-   ((and (eq 'macro (car-safe def))
-         (not (ignore-errors (setcdr def (cdr def)) t)))
-    (cons 'macro (cdr def)))
-   (t def)))
+  (ignore-errors
+    (cond
+     ((special-form-p def)
+      ;; Not worth the trouble trying to handle this, I think.
+      (error "Advice impossible: %S is a special form" symbol))
+     ((and (symbolp def) (macrop def))
+      (let ((newval `(macro . ,(lambda (&rest r) (macroexpand `(,def . ,r))))))
+        (put symbol 'advice--saved-rewrite (cons def (cdr newval)))
+        newval))
+     ;; `f' might be a pure (hence read-only) cons!
+     ((and (eq 'macro (car-safe def))
+           (not (ignore-errors (setcdr def (cdr def)) t)))
+      (cons 'macro (cdr def)))
+     (t def))))
 
 (defsubst advice--strip-macro (x)
   (if (eq 'macro (car-safe x)) (cdr x) x))
@@ -398,7 +400,7 @@ is defined as a macro, alias, command, ..."
   ;; - change all defadvice in lisp/**/*.el.
   ;; - obsolete advice.el.
   (let* ((f (symbol-function symbol))
-         (nf (advice--normalize symbol f)))
+     (nf (advice--normalize symbol f)))
     (unless (eq f nf) (fset symbol nf))
     (add-function where (cond
                          ((eq (car-safe nf) 'macro) (cdr nf))
@@ -522,8 +524,9 @@ of the piece of advice."
             (while
                 (progn
                   (funcall get-next-frame)
-                  (not (and (eq (nth 1 frame2) 'apply)
-                            (eq (nth 3 frame2) inneradvice)))))
+                  (and frame2
+                       (not (and (eq (nth 1 frame2) 'apply)
+                                 (eq (nth 3 frame2) inneradvice))))))
             (funcall get-next-frame)
             (funcall get-next-frame))))
       (- i origi 1))))
