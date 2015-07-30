@@ -131,8 +131,8 @@
 
 ;; Project management
 (add-to-list 'load-path "~/.emacs.d/ack-and-a-half")
-(add-to-list 'load-path "~/.emacs.d/projectile")
 (add-to-list 'load-path "~/.emacs.d/perspective")
+(add-to-list 'load-path "~/.emacs.d/projectile")
 (require 'ack-and-a-half)
 (require 'projectile)
 (setq projectile-cache-file "~/.emacs.cache/projectile.cache")
@@ -141,9 +141,12 @@
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
 (setq projectile-remember-window-configs t)
 (unless (string-equal system-type "windows-nt")
-  (setq projectile-indexing-method 'git)
-  ) ;; unless
+  (setq projectile-indexing-method 'git)) ;; unless
 (projectile-global-mode t)
+
+;; Projectile integration with speedbar
+(add-to-list 'load-path "~/.emacs.d/projectile-speedbar")
+(require 'projectile-speedbar)
 
 ;; Org projectile
 (add-to-list 'load-path "~/.emacs.d/org-projectile")
