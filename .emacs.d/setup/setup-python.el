@@ -25,17 +25,10 @@
 ;;; Code:
 
 ;; Assure correct Python
-(when (featurep 'python)
-  (unload-feature 'python t))
-(when (featurep 'python-mode)
-  (unload-feature 'python-mode t))
 (add-to-list 'load-path "~/.emacs.d/python-mode")
 (autoload 'python-mode "python-mode" "Python Mode." t)
-(require 'python-mode)
 
 ;; Python configuration
-(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
 (add-hook 'python-mode-hook 'hideshowvis-enable)
