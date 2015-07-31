@@ -1,6 +1,6 @@
 ;;; ecb-file-browser.el --- the file-browser of Emacs
 
-;; Copyright (C) 2000 - 2005 Jesper Nordenberg,
+;; Copyright (C) 2000 - 2005, 2015 Jesper Nordenberg,
 ;;                           Klaus Berndl,
 ;;                           Free Software Foundation, Inc.
 
@@ -99,14 +99,14 @@ is either
                    (set symbol value)
                    (if (and (boundp 'ecb-minor-mode)
                             ecb-minor-mode
-			    (functionp 'ecb-update-directories-buffer))
-		       (ecb-update-directories-buffer))))
+                (functionp 'ecb-update-directories-buffer))
+               (ecb-update-directories-buffer))))
   :type '(repeat (choice :tag "Display type"
                          :menu-tag "Display type"
-			 (directory :tag "Path")
-			 (list :tag "Path with alias"
-			       (directory :tag "Path")
-			       (string :tag "Alias")))))
+             (directory :tag "Path")
+             (list :tag "Path with alias"
+                   (directory :tag "Path")
+                   (string :tag "Alias")))))
 
 (defcustom ecb-add-path-for-not-matching-files '(t . nil)
   "*Add path of a file to `ecb-source-path' if not already contained.
@@ -168,11 +168,11 @@ layouts sources should be displayed in the directories window."
   :group 'ecb-directories
   :initialize 'custom-initialize-default
   :set (function (lambda (symbol value)
-		   (set symbol value)
-		   (if (and ecb-minor-mode
-			    (functionp 'ecb-set-selected-directory)
+           (set symbol value)
+           (if (and ecb-minor-mode
+                (functionp 'ecb-set-selected-directory)
                             ecb-path-selected-directory)
-		       (ecb-set-selected-directory ecb-path-selected-directory t))))
+               (ecb-set-selected-directory ecb-path-selected-directory t))))
   :type '(radio (const :tag "Always" :value always)
                 (const :tag "Never" :value never)
                 (repeat :tag "With these layouts"
@@ -809,7 +809,7 @@ The default value is 'directory."
   :group 'ecb-history
   :initialize 'custom-initialize-default
   :set (function (lambda (symbol value)
-		   (set symbol value)
+           (set symbol value)
                    (when (and (boundp 'ecb-minor-mode)
                               ecb-minor-mode)
                      (ecb-exec-in-window ecb-history-buffer-name
@@ -838,7 +838,7 @@ as children-nodes, so the history looks like:
   :group 'ecb-history
   :initialize 'custom-initialize-default
   :set (function (lambda (symbol value)
-		   (set symbol value)
+           (set symbol value)
                    (when (and (boundp 'ecb-minor-mode)
                               ecb-minor-mode)
                      (ecb-exec-in-window ecb-history-buffer-name
@@ -858,7 +858,7 @@ sorting applies to the sorting within each bucket."
   :group 'ecb-history
   :initialize 'custom-initialize-default
   :set (function (lambda (symbol value)
-		   (set symbol value)
+           (set symbol value)
                    (when (and (boundp 'ecb-minor-mode)
                               ecb-minor-mode)
                      (ecb-exec-in-window ecb-history-buffer-name
@@ -876,7 +876,7 @@ See also `ecb-history-sort-method'."
   :group 'ecb-history
   :initialize 'custom-initialize-default
   :set (function (lambda (symbol value)
-		   (set symbol value)
+           (set symbol value)
                    (when (and (boundp 'ecb-minor-mode)
                               ecb-minor-mode)
                      (ecb-exec-in-window ecb-history-buffer-name
@@ -1238,7 +1238,7 @@ state-values of `ecb-vc-state', `vc-state' and `vc-recompute-state' \(both GNU
 Emacs) and `vc-cvs-status' \(Xemacs) to the ECB-VC-state-values."
   :group 'ecb-version-control
   :group 'ecb-sources
-  :initialize 'custom-initialize-default  
+  :initialize 'custom-initialize-default
   :set (function (lambda (sym val)
                    (set sym val)
                    (ecb-vc-cache-clear)))
@@ -1341,7 +1341,7 @@ and `ecb-vc-state' for all other backends then an element
 beginning of this option."
   :group 'ecb-version-control
   :group 'ecb-sources
-  :initialize 'custom-initialize-default  
+  :initialize 'custom-initialize-default
   :set (function (lambda (sym val)
                    (set sym val)
                    (ecb-vc-cache-clear)))
@@ -1417,7 +1417,7 @@ intended for end-users of ECB."
   (ecb-multicache-print-subcache 'ecb-filename-cache
                                  'FILES-AND-SUBDIRS
                                  no-nil-value))
-  
+
 ;; accessors for the EMPTY-DIR-P-cache
 
 (defun ecb-directory-empty-cache-add (dir cached-value)
@@ -1637,7 +1637,7 @@ then the caches used by the file-browser will not be initialized."
         ecb-path-selected-source nil)
   (unless no-caches
     (ecb-file-browser-initialize-caches)))
-  
+
 (defun ecb-goto-window-directories ()
   "Make the ECB-directories window the current window.
 If `ecb-use-speedbar-instead-native-tree-buffer' is 'dir then goto to the
@@ -1768,7 +1768,7 @@ At the end the hooks in `ecb-basic-buffer-sync-hook' run."
                   (or force
                       (not (equal (ecb-source-make filename (buffer-name))
                                   (ecb-path-selected-source)))))
-             
+
              ;; * KB: Problem: seems this little sleep is necessary because
              ;; otherwise jumping to certain markers in new opened files (e.g.
              ;; with next-error etc. ) doesn´t work correct. Can´t debug down
@@ -1779,7 +1779,7 @@ At the end the hooks in `ecb-basic-buffer-sync-hook' run."
              ;;   Therefore i comment out the sit-for until this error occurs
              ;;   again.
              ;; (sit-for 0.1)
-             
+
              ;; if the file is not located in any of the paths in
              ;; `ecb-source-path' or in the paths returned from
              ;; `ecb-source-path-functions' we must at least add the new
@@ -1811,9 +1811,9 @@ At the end the hooks in `ecb-basic-buffer-sync-hook' run."
                                        (ecb-file-name-directory norm-filename))))
                    (ecb-add-source-path source-path (ecb-fix-filename source-path)
                                         (not (cdr ecb-add-path-for-not-matching-files)))))
-             
+
              ;; now we can be sure that a matching source-path exists
-             
+
              ;; Klaus: The explicit update of the directories buffer is not
              ;; necessary because the sync with the current source is done by
              ;; `ecb-select-source'!
@@ -1822,16 +1822,16 @@ At the end the hooks in `ecb-basic-buffer-sync-hook' run."
              (ecb-select-source force)
              (ecb-update-methods-buffer--internal 'scroll-to-begin)
              (setq ecb-major-mode-selected-source major-mode)
-             
+
              ;; Klaus Berndl <klaus.berndl@sdm.de>: is now be done at the
              ;; end of `ecb-rebuild-methods-buffer-with-tagcache' which is
              ;; called by `ecb-update-methods-buffer--internal'!
-             
+
              ;; selected source has changed, therefore we must initialize
              ;; ecb-selected-tag again.
              (ecb-tag-sync 'force)
              )
-            
+
             ( ;; synchronizing for dired-mode
              (eq major-mode 'dired-mode)
              (ecb-set-selected-directory
@@ -1844,7 +1844,7 @@ At the end the hooks in `ecb-basic-buffer-sync-hook' run."
     (run-hooks 'ecb-basic-buffer-sync-hook)
     ))
 
-  
+
 (defun ecb-expand-directory-tree (path node)
   "Expands the directory part so the node representing PATH is visible.
 Start with the childrens of NODE. Return not nil when an expansion has been
@@ -1942,41 +1942,41 @@ cdr is a list of all subdirs to display in DIR. Both lists are sorted
 according to `ecb-sources-sort-method'."
   (when (file-accessible-directory-p dir)
       (or (ecb-files-and-subdirs-cache-get dir)
-	  ;; dir is not cached
-	  (let ((files (ecb-directory-files dir nil nil t))
-		(source-regexps (or (ecb-check-directory-for-source-regexps
-				     (ecb-fix-filename dir))
-				    '(("") (""))))
-		(cvsignore-files (if (ecb-check-directory-for-cvsignore-exclude dir)
-				     (ecb-files-from-cvsignore dir)))
-		sorted-files source-files subdirs cached-value)
-	    ;; if necessary sort FILES
-	    (setq sorted-files
-		  (if ecb-sources-sort-method
-		      (sort files (ecb-get-sources-sort-function
-				   ecb-sources-sort-method))
-		    files))
-	    ;; divide real files and subdirs. For really large directories (~ >=
-	    ;; 2000 entries) this is the performance-bottleneck in the
-	    ;; file-browser of ECB.
-	    (dolist (file sorted-files)
-	      (if (ecb-file-directory-p (ecb-fix-filename dir file))
-		  (when (not (ecb-check-dir-exclude file))
-		    ;;                 (when (not (ecb-file-accessible-directory-p file))
-		    ;;                   (ecb-merge-face-into-text file
-		    ;;                                             ecb-directory-not-accessible-face))
-		    (setq subdirs (append subdirs (list file))))
-		(when (and (not (member file cvsignore-files))
-			   (or (ecb-match-regexp-list file (cadr source-regexps))
-			       (not (ecb-match-regexp-list file (car source-regexps)))))
-		  (setq source-files (append source-files (list file))))))
-	    
-	    (setq cached-value (cons source-files subdirs))
-	    ;; check if this directory must be cached
-	    (if (ecb-check-directory-for-caching dir (length sorted-files))
-		(ecb-files-and-subdirs-cache-add dir cached-value))
-	    ;; return the result
-	    cached-value))))
+      ;; dir is not cached
+      (let ((files (ecb-directory-files dir nil nil t))
+        (source-regexps (or (ecb-check-directory-for-source-regexps
+                     (ecb-fix-filename dir))
+                    '(("") (""))))
+        (cvsignore-files (if (ecb-check-directory-for-cvsignore-exclude dir)
+                     (ecb-files-from-cvsignore dir)))
+        sorted-files source-files subdirs cached-value)
+        ;; if necessary sort FILES
+        (setq sorted-files
+          (if ecb-sources-sort-method
+              (sort files (ecb-get-sources-sort-function
+                   ecb-sources-sort-method))
+            files))
+        ;; divide real files and subdirs. For really large directories (~ >=
+        ;; 2000 entries) this is the performance-bottleneck in the
+        ;; file-browser of ECB.
+        (dolist (file sorted-files)
+          (if (ecb-file-directory-p (ecb-fix-filename dir file))
+          (when (not (ecb-check-dir-exclude file))
+            ;;                 (when (not (ecb-file-accessible-directory-p file))
+            ;;                   (ecb-merge-face-into-text file
+            ;;                                             ecb-directory-not-accessible-face))
+            (setq subdirs (append subdirs (list file))))
+        (when (and (not (member file cvsignore-files))
+               (or (ecb-match-regexp-list file (cadr source-regexps))
+                   (not (ecb-match-regexp-list file (car source-regexps)))))
+          (setq source-files (append source-files (list file))))))
+
+        (setq cached-value (cons source-files subdirs))
+        ;; check if this directory must be cached
+        (if (ecb-check-directory-for-caching dir (length sorted-files))
+        (ecb-files-and-subdirs-cache-add dir cached-value))
+        ;; return the result
+        cached-value))))
 
 
 (defun ecb-update-sources-buffer (dir-before-update)
@@ -1994,7 +1994,7 @@ selected before this update."
   ;; comment in `ecb-rebuild-methods-buffer-with-tagcache'). If we would
   ;; make the nodes in the Sources-buffer "expandable" this caching would not
   ;; work!
-  
+
   (ecb-exec-in-window ecb-sources-buffer-name
     ;; if we have a filtered cache we must display it - otherwise we use the
     ;; full cache if there is any
@@ -2031,7 +2031,7 @@ selected before this update."
                                                              (point-max))))
             (ecb-sources-cache-add-full ecb-path-selected-directory
                                         new-cache-elem))))
-           
+
       (when (not (ecb-string= dir-before-update ecb-path-selected-directory))
         (ecb-scroll-window (point-min) (point-min))))))
 
@@ -2060,15 +2060,15 @@ regexp-filter. Otherwise the regexp itself."
   (let ((regexp-str (or regexp (read-string "Insert the filter-regexp: "))))
     (if (> (length regexp-str) 0)
         (ecb-apply-filter-to-sources-buffer regexp-str filter-display))))
-  
+
 (tree-buffer-defpopup-command ecb-popup-sources-filter-by-regexp
   "Filter the sources by regexp by popup."
   (ecb-sources-filter-by-regexp))
-  
+
 (tree-buffer-defpopup-command ecb-popup-sources-filter-none
   "Remove any filter from the sources by popup."
   (ecb-apply-filter-to-sources-buffer nil))
-  
+
 
 (defun ecb-sources-filter ()
   "Apply a filter to the sources-buffer to reduce the number of entries.
@@ -2171,7 +2171,7 @@ nil. Returns 'window-not-visible if the ECB-sources-buffer is not visible."
 ;;               '("c:/Programme/emacs-23.1/site-lisp/package-development/ecb"
 ;;                 "c:/Programme/emacs-22.3"
 ;;                 "c:/Programme/emacs-23.1/site-lisp/package-development"))))
-      
+
 ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: should we add an option for
 ;; ignore-case for the duplicate-removing?!
 (defun ecb-normed-source-paths (&optional no-duplicates)
@@ -2204,7 +2204,7 @@ matches exactly the car of another element."
                      ))
          nil nil t t)
       res)))
-  
+
 (defun ecb-matching-source-paths (path-to-match &optional sorted)
   "Return all source-paths of `ecb-source-path' which match PATH-TO-MATCH. If
 SORTED is not nil then the paths are sorted by descending length, means the
@@ -2307,7 +2307,7 @@ then nothing is done unless first optional argument FORCE is not nil."
       (run-hook-with-args 'ecb-after-directory-change-hook
                           last-dir ecb-path-selected-directory)
       ))
-  
+
   ;; set the default-directory of each tree-buffer to current selected
   ;; directory so we can open files via find-file from each tree-buffer.
   ;; is this necessary if neither dir.- nor sources-buffer-contents have been
@@ -2338,16 +2338,16 @@ given. If FORCE is not nil then the update of the directories buffer is done
 even if current directory is equal to `ecb-path-selected-directory'."
   (ecb-set-selected-directory (ecb-file-name-directory
                                (ecb-path-selected-source 'file)) force)
-    
+
   ;; Update directory buffer
   (when (ecb-show-sources-in-directories-buffer-p)
     (ecb-exec-in-window ecb-directories-buffer-name
       (tree-buffer-highlight-node-by-data/name (ecb-path-selected-source 'file))))
-  
+
   ;; Update source buffer
   (ecb-exec-in-window ecb-sources-buffer-name
     (tree-buffer-highlight-node-by-data/name (ecb-path-selected-source 'file)))
-  
+
   (ecb-add-buffers-to-history-new))
 
 
@@ -2458,7 +2458,7 @@ unless optional argument NO-DEAD-BUFFERS is not nil.
 If second optional argument IGNORE-BUFFERNAME-LIST is not nil, then it must be a
 list of buffer-names which should be ignored for the history-rebuild.
 
-It takes into account the values of the options `ecb-history-make-buckets' and 
+It takes into account the values of the options `ecb-history-make-buckets' and
 `ecb-history-stick-indirect-buffers-to-basebuffer'.
 
 It calls at the end `ecb-mode-line-format'.
@@ -2467,45 +2467,46 @@ If the current history-filter leads to an empty history-buffer it will not be
 applied but an unfiltered history will be build.
 
 Returns t if the current history filter has been applied otherwise nil."
-  (let* ((never-bucket-string "No_hist_bucketizing")
-         (aggr-sort-fcn (function
-                         (lambda (l r)
-                           ;; l and r are conses like:
-                           ;; (<bucket-string> . (<buffername> . <filename>))
-                           (if (ecb-string= (car l) (car r) ecb-history-sort-ignore-case)
-                               (case ecb-history-sort-method
-                                 (extension
-                                  (let ((ext-l (file-name-extension (cdr (cdr l)) t))
-                                        (ext-r (file-name-extension (cdr (cdr r)) t)))
-                                    (if (ecb-string= ext-l ext-r ecb-history-sort-ignore-case)
-                                        (ecb-string< (car (cdr l)) (car (cdr r))
-                                                     ecb-history-sort-ignore-case)
-                                      (ecb-string< ext-l ext-r ecb-history-sort-ignore-case))))
-                                 (name
-                                  (ecb-string< (car (cdr l)) (car (cdr r))
-                                               ecb-history-sort-ignore-case))
-                                 (otherwise nil))
-                             (ecb-string< (car l) (car r) ecb-history-sort-ignore-case)))))
-         (aggr-same-fcn (function
-                         (lambda (l r)
-                           ;; l and r are strings (= the car of an item of base-alist)
-                           (ecb-string= l r ecb-history-sort-ignore-case))))
-         (indirect-buffer-base nil)
-         ;; lets build an alist where each item is a cons like
-         ;; (<buffer-name> . <filename>) and only items are contained which are:
-         ;; - based on file-buffers (indirect-file-buffers too)
-         ;; - not excluded by `ecb-check-filename-for-history-exclude'
-         ;; - not filtered out by the current history-filter
-         ;; if indirect-buffers should be sticked to the base-buffer then we
-         ;; are sorting out them here and add them all to indirect-buffer-base
-         (buf-file-alist
-          (delq nil
-                (mapcar (function
-                         (lambda (buf)
-                           (let ((file-name (ecb-fix-filename
-                                             (ecb-buffer-file-name buf)))
-                                 (base-buf (buffer-base-buffer buf)))
-                             (if (and file-name
+  (ignore-errors
+    (let* ((never-bucket-string "No_hist_bucketizing")
+           (aggr-sort-fcn (function
+                           (lambda (l r)
+                             ;; l and r are conses like:
+                             ;; (<bucket-string> . (<buffername> . <filename>))
+                             (if (ecb-string= (car l) (car r) ecb-history-sort-ignore-case)
+                                 (case ecb-history-sort-method
+                                   (extension
+                                    (let ((ext-l (file-name-extension (cdr (cdr l)) t))
+                                          (ext-r (file-name-extension (cdr (cdr r)) t)))
+                                      (if (ecb-string= ext-l ext-r ecb-history-sort-ignore-case)
+                                          (ecb-string< (car (cdr l)) (car (cdr r))
+                                                       ecb-history-sort-ignore-case)
+                                        (ecb-string< ext-l ext-r ecb-history-sort-ignore-case))))
+                                   (name
+                                    (ecb-string< (car (cdr l)) (car (cdr r))
+                                                 ecb-history-sort-ignore-case))
+                                   (otherwise nil))
+                               (ecb-string< (car l) (car r) ecb-history-sort-ignore-case)))))
+           (aggr-same-fcn (function
+                           (lambda (l r)
+                             ;; l and r are strings (= the car of an item of base-alist)
+                             (ecb-string= l r ecb-history-sort-ignore-case))))
+           (indirect-buffer-base nil)
+           ;; lets build an alist where each item is a cons like
+           ;; (<buffer-name> . <filename>) and only items are contained which are:
+           ;; - based on file-buffers (indirect-file-buffers too)
+           ;; - not excluded by `ecb-check-filename-for-history-exclude'
+           ;; - not filtered out by the current history-filter
+           ;; if indirect-buffers should be sticked to the base-buffer then we
+           ;; are sorting out them here and add them all to indirect-buffer-base
+           (buf-file-alist
+            (delq nil
+                  (mapcar (function
+                           (lambda (buf)
+                             (let ((file-name (ecb-fix-filename
+                                               (ecb-buffer-file-name buf)))
+                                   (base-buf (buffer-base-buffer buf)))
+                               (if (and file-name
                                       ;; needed for revision-files temporally
                                       ;; checked out (e.g. by ediff-revision)
                                       ;; these not longer existing files
@@ -2514,262 +2515,262 @@ Returns t if the current history filter has been applied otherwise nil."
                                       ;; into a buffer
                                       (ecb-buffer-or-file-readable-p file-name)
                                       (not (member (buffer-name buf)
-                                                   ignore-buffername-list))
+                                                 ignore-buffername-list))
                                       (not (ecb-check-filename-for-history-exclude file-name))
                                       (funcall (car ecb-history-filter)
                                                (buffer-name buf)
                                                file-name))
-                                 (if (and ecb-history-stick-indirect-buffers-to-basebuffer
+                                   (if (and ecb-history-stick-indirect-buffers-to-basebuffer
                                           base-buf)
-                                     ;; if indirect-buffers should be sticked
-                                     ;; to the base-buffer then we are sorting
-                                     ;; out them here and add them all to
-                                     ;; indirect-buffer-base
-                                     (progn
-                                       (push (cons (buffer-name base-buf)
-                                                   (cons (buffer-name buf) file-name))
-                                             indirect-buffer-base)
-                                       nil)
-                                   (cons (buffer-name buf) file-name))))))
-                        ;; we call reverse to get the most recently used
-                        ;; buffers first; usefull when no sorting takes place
-                        (reverse (buffer-list)))))
-         (additonal-dead-history-buffer-alist
-          (if no-dead-buffers
-              nil
-            ;; we need these entries of the history-buffer which are marked as
-            ;; dead. If all is working fine the set-difference would not be
-            ;; necessary because dead-items are dead because no buffer exists
-            ;; for them - so both lists should be disjunct - but who knows, to
-            ;; get sure we make the difference so we have no duplicates.
-            (ecb-set-difference (ecb-history-content-all-dead-buffers-alist)
-                                buf-file-alist
-                                'member)))
-         (base-alist (mapcar (function
-                              (lambda (elem)
-                                ;; an elem is a cons (<buffername> . <filename>)
-                                (cons (case ecb-history-make-buckets
-                                        (never never-bucket-string)
-                                        ((directory directory-with-source-path)
-                                         (ecb-substring-no-properties
-                                          (ecb-fix-filename
-                                           (ecb-file-name-directory
-                                            (cdr elem)))
-                                          (if ecb-running-xemacs 0)))
-                                        (mode (symbol-name
-                                               (if (ecb-buffer-obj (car elem))
-                                                   (with-current-buffer (ecb-buffer-obj (car elem))
-                                                     major-mode)
-                                                 ;; for dead buffers of the
-                                                 ;; history we use auto-mode-alist
-                                                 (or (ecb-match-regexp-list (car elem)
-                                                                            auto-mode-alist
-                                                                            'car 'cdr)
-                                                     'no-major-mode-avail))))
-                                        (extension (file-name-extension (cdr elem) t))
-                                        (otherwise (or (ecb-match-regexp-list
-                                                        (car elem)
-                                                        ecb-history-make-buckets)
-                                                       "No matchings")))
-                                      elem)))
-                             (append buf-file-alist
-                                     additonal-dead-history-buffer-alist)))
-         (aggregated-alist-with-buckets (ecb-aggregate-alist base-alist
-                                                             aggr-same-fcn
-                                                             aggr-sort-fcn))
-         (aggregated-indirect-buffers-alist (ecb-aggregate-alist indirect-buffer-base
-                                                                 'string=
-                                                                 (function
-                                                                  (lambda (l r)
-                                                                    (string< (car l)
-                                                                             (car r))))))
-         ;; an alist with items like (<bucket-name> . <expand-state>) for each
-         ;; toplevel bucket of the history-buffer. This is the state before
-         ;; rebuilding the history!
-         (curr-bucket-expand-status-alist
-          (with-current-buffer ecb-history-buffer-name
-            (delq nil (mapcar (function
+                                       ;; if indirect-buffers should be sticked
+                                       ;; to the base-buffer then we are sorting
+                                       ;; out them here and add them all to
+                                       ;; indirect-buffer-base
+                                       (progn
+                                         (push (cons (buffer-name base-buf)
+                                                     (cons (buffer-name buf) file-name))
+                                               indirect-buffer-base)
+                                         nil)
+                                     (cons (buffer-name buf) file-name))))))
+                          ;; we call reverse to get the most recently used
+                          ;; buffers first; usefull when no sorting takes place
+                          (reverse (buffer-list)))))
+           (additonal-dead-history-buffer-alist
+            (if no-dead-buffers
+                nil
+              ;; we need these entries of the history-buffer which are marked as
+              ;; dead. If all is working fine the set-difference would not be
+              ;; necessary because dead-items are dead because no buffer exists
+              ;; for them - so both lists should be disjunct - but who knows, to
+              ;; get sure we make the difference so we have no duplicates.
+              (ecb-set-difference (ecb-history-content-all-dead-buffers-alist)
+                                  buf-file-alist
+                                  'member)))
+           (base-alist (mapcar (function
+                                (lambda (elem)
+                                  ;; an elem is a cons (<buffername> . <filename>)
+                                  (cons (case ecb-history-make-buckets
+                                          (never never-bucket-string)
+                                          ((directory directory-with-source-path)
+                                           (ecb-substring-no-properties
+                                            (ecb-fix-filename
+                                             (ecb-file-name-directory
+                                              (cdr elem)))
+                                            (if ecb-running-xemacs 0)))
+                                          (mode (symbol-name
+                                                 (if (ecb-buffer-obj (car elem))
+                                                     (with-current-buffer (ecb-buffer-obj (car elem))
+                                                       major-mode)
+                                                   ;; for dead buffers of the
+                                                   ;; history we use auto-mode-alist
+                                                   (or (ecb-match-regexp-list (car elem)
+                                                                             auto-mode-alist
+                                                                             'car 'cdr)
+                                                      'no-major-mode-avail))))
+                                          (extension (file-name-extension (cdr elem) t))
+                                          (otherwise (or (ecb-match-regexp-list
+                                                         (car elem)
+                                                         ecb-history-make-buckets)
+                                                        "No matchings")))
+                                        elem)))
+                               (append buf-file-alist
+                                       additonal-dead-history-buffer-alist)))
+           (aggregated-alist-with-buckets (ecb-aggregate-alist base-alist
+                                                               aggr-same-fcn
+                                                               aggr-sort-fcn))
+           (aggregated-indirect-buffers-alist (ecb-aggregate-alist indirect-buffer-base
+                                                                   'string=
+                                                                   (function
+                                                                    (lambda (l r)
+                                                                      (string< (car l)
+                                                                               (car r))))))
+           ;; an alist with items like (<bucket-name> . <expand-state>) for each
+           ;; toplevel bucket of the history-buffer. This is the state before
+           ;; rebuilding the history!
+           (curr-bucket-expand-status-alist
+            (with-current-buffer ecb-history-buffer-name
+              (delq nil (mapcar (function
                                (lambda (node)
                                  (when (= (tree-node->type node)
                                           ecb-history-nodetype-bucket)
                                    (cons (tree-node->name node)
                                          (and (tree-node->expandable node)
-                                              (tree-node->expanded node))))))
+                                            (tree-node->expanded node))))))
                               (tree-node->children (tree-buffer-get-root))))))
-         )
-;; just for debugging:    
-;;     (list buf-file-alist
-;;           aggregated-alist-with-buckets
-;;           additonal-dead-history-buffer-alist
-;;           indirect-buffer-base
-;;           aggregated-indirect-buffers-alist)
-    (with-current-buffer ecb-history-buffer-name
-      (tree-buffer-clear-tree)
-      (dolist (bucket-elem aggregated-alist-with-buckets)
-        (let* ((best-matching-sp (if (eq ecb-history-make-buckets 'directory-with-source-path)
-                                    (ecb-get-best-matching-source-path (car bucket-elem))))
-               ;; we use concat to get a new string to avoid side-effect in
-               ;; facing source-paths in the directory-buffer
-               (best-matching-path (concat (car best-matching-sp)))
-               (best-matching-alias (concat (cdr best-matching-sp)))
-               (bucket-name-formated nil)
-               (bucket-name-formated-shrink-start-pos (length (nth 0 ecb-bucket-node-display)))
-               (bucket-node nil))
-          (if (or (null best-matching-sp)
-                  ;; if the alias is not smaller then the path
-                  ;; itself we use the path
-                  ;; with this condition we adress also the case that the alias
-                  ;; isn't an alias but only the duplicated path...
-                  (>= (length best-matching-alias)
+           )
+      ;; just for debugging:
+      ;;     (list buf-file-alist
+      ;;           aggregated-alist-with-buckets
+      ;;           additonal-dead-history-buffer-alist
+      ;;           indirect-buffer-base
+      ;;           aggregated-indirect-buffers-alist)
+      (with-current-buffer ecb-history-buffer-name
+        (tree-buffer-clear-tree)
+        (dolist (bucket-elem aggregated-alist-with-buckets)
+          (let* ((best-matching-sp (if (eq ecb-history-make-buckets 'directory-with-source-path)
+                                       (ecb-get-best-matching-source-path (car bucket-elem))))
+                 ;; we use concat to get a new string to avoid side-effect in
+                 ;; facing source-paths in the directory-buffer
+                 (best-matching-path (concat (car best-matching-sp)))
+                 (best-matching-alias (concat (cdr best-matching-sp)))
+                 (bucket-name-formated nil)
+                 (bucket-name-formated-shrink-start-pos (length (nth 0 ecb-bucket-node-display)))
+                 (bucket-node nil))
+            (if (or (null best-matching-sp)
+                   ;; if the alias is not smaller then the path
+                   ;; itself we use the path
+                   ;; with this condition we adress also the case that the alias
+                   ;; isn't an alias but only the duplicated path...
+                   (>= (length best-matching-alias)
                       (length best-matching-path)))
+                (setq bucket-name-formated
+                      (ecb-format-bucket-name
+                       ;; we use concat only to get a new string-object
+                       (ecb-merge-face-into-text (concat (car bucket-elem))
+                                                 ecb-history-bucket-node-face)
+                       nil 'only-name))
               (setq bucket-name-formated
                     (ecb-format-bucket-name
-                     ;; we use concat only to get a new string-object
-                     (ecb-merge-face-into-text (concat (car bucket-elem))
-                                               ecb-history-bucket-node-face)
+                     (concat (ecb-merge-face-into-text
+                              (ecb-merge-face-into-text
+                               best-matching-alias ecb-history-bucket-node-face)
+                              ecb-history-bucket-node-dir-soure-path-face)
+                             (unless (string= best-matching-path
+                                              (car bucket-elem))
+                               (ecb-merge-face-into-text
+                                (ecb-substring-no-properties
+                                 (car bucket-elem)
+                                 (length best-matching-path))
+                                ecb-history-bucket-node-face)))
                      nil 'only-name))
-            (setq bucket-name-formated
-                  (ecb-format-bucket-name
-                   (concat (ecb-merge-face-into-text
-                            (ecb-merge-face-into-text
-                             best-matching-alias ecb-history-bucket-node-face)
-                            ecb-history-bucket-node-dir-soure-path-face)
-                           (unless (string= best-matching-path
-                                            (car bucket-elem))
-                             (ecb-merge-face-into-text
-                              (ecb-substring-no-properties
-                               (car bucket-elem)
-                               (length best-matching-path))
-                              ecb-history-bucket-node-face)))
-                   nil 'only-name))
-            ;; now we add the length of the source-path-alias as start-position
-            ;; for name shrinking
-            (setq bucket-name-formated-shrink-start-pos
-                  (+ bucket-name-formated-shrink-start-pos
-                     (length best-matching-alias)))
-            )
-          (setq bucket-node (if (string= never-bucket-string (car bucket-elem))
-                                (tree-buffer-get-root)
-                              (tree-node-new bucket-name-formated
-                                             ecb-history-nodetype-bucket
-                                             (car bucket-elem)
-                                             nil
-                                             (tree-buffer-get-root)
-                                             'beginning
-                                             (list bucket-name-formated-shrink-start-pos
-                                                   nil
-                                                   5))))
-          (unless (string= never-bucket-string (car bucket-elem))
-            ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: maybe we can make
-            ;; this even smarter...depending if now a bucket contains more
-            ;; items than before - for this we have to store not onlxy the
-            ;; expand-state but also the number of children of a bucket
-            (setf (tree-node->expanded bucket-node)
-                  (if (assoc bucket-name-formated
-                             curr-bucket-expand-status-alist)
-                      (cdr (assoc bucket-name-formated
-                                  curr-bucket-expand-status-alist))
-                    t)))
-          (dolist (elem (cdr bucket-elem))
-            (let* ((buf-name (car elem))
-                   ;; can only be not nil if the option
-                   ;; `ecb-history-stick-indirect-buffers-to-basebuffer' is not
-                   ;; nil --> see above the mechanism how indirect-buffer-base
-                   ;; is build
-                   (indirect-buffer-p (buffer-base-buffer (ecb-buffer-obj buf-name)))
-                   ;; Note: indirect-buffer elems can not be dead-buffer
-                   ;; elems, because indirect-buffer-items are *always*
-                   ;; removed immediately from the history-buffer when such a
-                   ;; buffer is killed!
-                   (buf-name-formatted (cond (indirect-buffer-p
-                                              (ecb-merge-face-into-text
-                                               buf-name
-                                               ecb-history-indirect-buffer-face))
-                                             ((member elem
-                                                      additonal-dead-history-buffer-alist)
-                                              (ecb-merge-face-into-text
-                                               buf-name
-                                               ecb-history-dead-buffer-face))
-                                             (t buf-name)))
-                   (file-name (cdr elem))
-                   (dir (ecb-file-name-directory file-name))
-                   (vc-p (and (ecb-vc-directory-should-be-checked-p dir)
+              ;; now we add the length of the source-path-alias as start-position
+              ;; for name shrinking
+              (setq bucket-name-formated-shrink-start-pos
+                    (+ bucket-name-formated-shrink-start-pos
+                       (length best-matching-alias)))
+              )
+            (setq bucket-node (if (string= never-bucket-string (car bucket-elem))
+                                  (tree-buffer-get-root)
+                                (tree-node-new bucket-name-formated
+                                               ecb-history-nodetype-bucket
+                                               (car bucket-elem)
+                                               nil
+                                               (tree-buffer-get-root)
+                                               'beginning
+                                               (list bucket-name-formated-shrink-start-pos
+                                                     nil
+                                                     5))))
+            (unless (string= never-bucket-string (car bucket-elem))
+              ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: maybe we can make
+              ;; this even smarter...depending if now a bucket contains more
+              ;; items than before - for this we have to store not onlxy the
+              ;; expand-state but also the number of children of a bucket
+              (setf (tree-node->expanded bucket-node)
+                    (if (assoc bucket-name-formated
+                               curr-bucket-expand-status-alist)
+                        (cdr (assoc bucket-name-formated
+                                    curr-bucket-expand-status-alist))
+                      t)))
+            (dolist (elem (cdr bucket-elem))
+              (let* ((buf-name (car elem))
+                     ;; can only be not nil if the option
+                     ;; `ecb-history-stick-indirect-buffers-to-basebuffer' is not
+                     ;; nil --> see above the mechanism how indirect-buffer-base
+                     ;; is build
+                     (indirect-buffer-p (buffer-base-buffer (ecb-buffer-obj buf-name)))
+                     ;; Note: indirect-buffer elems can not be dead-buffer
+                     ;; elems, because indirect-buffer-items are *always*
+                     ;; removed immediately from the history-buffer when such a
+                     ;; buffer is killed!
+                     (buf-name-formatted (cond (indirect-buffer-p
+                                                (ecb-merge-face-into-text
+                                                 buf-name
+                                                 ecb-history-indirect-buffer-face))
+                                               ((member elem
+                                                        additonal-dead-history-buffer-alist)
+                                                (ecb-merge-face-into-text
+                                                 buf-name
+                                                 ecb-history-dead-buffer-face))
+                                               (t buf-name)))
+                     (file-name (cdr elem))
+                     (dir (ecb-file-name-directory file-name))
+                     (vc-p (and (ecb-vc-directory-should-be-checked-p dir)
                               (ecb-vc-managed-dir-p dir)))
-                   (node-name (if vc-p
-                                  (ecb-vc-generate-node-name buf-name-formatted
-                                                             (nth 0 (ecb-vc-cache-get file-name)))
-                                (ecb-generate-node-name buf-name-formatted -1 "leaf"
-                                                        ;; here ecb-sources-buffer-name is
-                                                        ;; also correct for history
-                                                        ;; because we want the same
-                                                        ;; icon-stuff as in the sources buffer
-                                                        ecb-sources-buffer-name)))
-                   (node (tree-node-new
-                          node-name
-                          (if indirect-buffer-p
-                              ecb-history-nodetype-indirect-filebuffer
-                            ecb-history-nodetype-filebuffer)
-                          (ecb-source-make file-name buf-name)
-                          t
-                          bucket-node)))
-              ;; if `ecb-history-stick-indirect-buffers-to-basebuffer' is nil
-              ;; then this dolist does nothing because then the list is always
-              ;; nil, because aggregated-indirect-buffers-alist is nil in this
-              ;; case 
-              (dolist (indirect-elem (ecb-find-assoc-value buf-name
-                                                           aggregated-indirect-buffers-alist))
-                (let* ((ind-buf-name (car indirect-elem))
-                       ;; here we have no need to deal with dead-buffers
-                       ;; because indirect-buffers can not dead-buffer-items -
-                       ;; s.a.
-                       (ind-buf-name-formatted (ecb-merge-face-into-text
-                                                ind-buf-name
-                                                ecb-history-indirect-buffer-face))
-                       (ind-node-name (if vc-p
-                                          (ecb-vc-generate-node-name ind-buf-name-formatted
-                                                                     (nth 0 (ecb-vc-cache-get file-name)))
-                                        (ecb-generate-node-name ind-buf-name-formatted -1 "leaf"
-                                                                ;; here ecb-sources-buffer-name is
-                                                                ;; also correct for history
-                                                                ;; because we want the same
-                                                                ;; icon-stuff as in the sources buffer
-                                                                ecb-sources-buffer-name))))
-                  (setf (tree-node->expandable node) t)
-                  (setf (tree-node->expanded node) t)
-                  (tree-node-new
-                   ;; indirect buffers have the same vc-state as the file
-                   ;; associated with the base-buffer ==> we use the same
-                   ind-node-name
-                   ecb-history-nodetype-indirect-filebuffer
-                   (ecb-source-make file-name ind-buf-name)
-                   t
-                   node)))
-              )))))
-    (ecb-exec-in-window ecb-history-buffer-name
-      (tree-buffer-update)
-      (tree-buffer-highlight-node-by-data/name (ecb-path-selected-source)))
-    (prog1
-        (if (and (with-current-buffer ecb-history-buffer-name
+                     (node-name (if vc-p
+                                    (ecb-vc-generate-node-name buf-name-formatted
+                                                               (nth 0 (ecb-vc-cache-get file-name)))
+                                  (ecb-generate-node-name buf-name-formatted -1 "leaf"
+                                                          ;; here ecb-sources-buffer-name is
+                                                          ;; also correct for history
+                                                          ;; because we want the same
+                                                          ;; icon-stuff as in the sources buffer
+                                                          ecb-sources-buffer-name)))
+                     (node (tree-node-new
+                            node-name
+                            (if indirect-buffer-p
+                                ecb-history-nodetype-indirect-filebuffer
+                              ecb-history-nodetype-filebuffer)
+                            (ecb-source-make file-name buf-name)
+                            t
+                            bucket-node)))
+                ;; if `ecb-history-stick-indirect-buffers-to-basebuffer' is nil
+                ;; then this dolist does nothing because then the list is always
+                ;; nil, because aggregated-indirect-buffers-alist is nil in this
+                ;; case
+                (dolist (indirect-elem (ecb-find-assoc-value buf-name
+                                                             aggregated-indirect-buffers-alist))
+                  (let* ((ind-buf-name (car indirect-elem))
+                         ;; here we have no need to deal with dead-buffers
+                         ;; because indirect-buffers can not dead-buffer-items -
+                         ;; s.a.
+                         (ind-buf-name-formatted (ecb-merge-face-into-text
+                                                  ind-buf-name
+                                                  ecb-history-indirect-buffer-face))
+                         (ind-node-name (if vc-p
+                                            (ecb-vc-generate-node-name ind-buf-name-formatted
+                                                                       (nth 0 (ecb-vc-cache-get file-name)))
+                                          (ecb-generate-node-name ind-buf-name-formatted -1 "leaf"
+                                                                  ;; here ecb-sources-buffer-name is
+                                                                  ;; also correct for history
+                                                                  ;; because we want the same
+                                                                  ;; icon-stuff as in the sources buffer
+                                                                  ecb-sources-buffer-name))))
+                    (setf (tree-node->expandable node) t)
+                    (setf (tree-node->expanded node) t)
+                    (tree-node-new
+                     ;; indirect buffers have the same vc-state as the file
+                     ;; associated with the base-buffer ==> we use the same
+                     ind-node-name
+                     ecb-history-nodetype-indirect-filebuffer
+                     (ecb-source-make file-name ind-buf-name)
+                     t
+                     node)))
+                )))))
+      (ecb-exec-in-window ecb-history-buffer-name
+        (tree-buffer-update)
+        (tree-buffer-highlight-node-by-data/name (ecb-path-selected-source)))
+      (prog1
+          (if (and (with-current-buffer ecb-history-buffer-name
                    (tree-buffer-empty-p))
                  (not (ecb-history-filter-reset-p)))
-            (progn
-              (ecb-add-all-buffers-to-history)
-              (message "ECB has not applied this filter because it would filter out all entries!")
-              nil)
-          t)
-      ;; now the modeline has to display the current filter
-      (ecb-mode-line-format))
-  ))
+              (progn
+                (ecb-add-all-buffers-to-history)
+                (message "ECB has not applied this filter because it would filter out all entries!")
+                nil)
+            t)
+        ;; now the modeline has to display the current filter
+        (ecb-mode-line-format))
+      )))
 
 ;;(insert (pp (ecb-klaus-add-buffers-to-history)))
 
 ;;(ecb-add-buffers-to-history-new)
 
-(defun ecb-history-filter-modeline-prefix (buffer-name sel-dir sel-source)
-  "Compute a mode-line prefix for the History-buffer so the current filter
+  (defun ecb-history-filter-modeline-prefix (buffer-name sel-dir sel-source)
+    "Compute a mode-line prefix for the History-buffer so the current filter
 applied to the history-entries is displayed. This function is only for using
 by the option `ecb-mode-line-prefixes'."
-  (and (cdr ecb-history-filter)
+    (and (cdr ecb-history-filter)
        (format "[Filter: %s]" (cdr ecb-history-filter))))
 
 
@@ -2837,14 +2838,14 @@ Subnodes can be directories or sources."
 (defun ecb-get-source-paths-from-functions ()
   "Return a list of paths found by querying `ecb-source-path-functions'."
   (let ((func ecb-source-path-functions)
-	(paths nil)
-	(rpaths nil))
+    (paths nil)
+    (rpaths nil))
     (while func
       (setq paths (append paths (funcall (car func)))
-	    func (cdr func)))
+        func (cdr func)))
     (while paths
       (setq rpaths (cons (ecb-fix-filename (car paths)) rpaths)
-	    paths (cdr paths)))
+        paths (cdr paths)))
     rpaths))
 
 
@@ -2882,7 +2883,7 @@ Subnodes can be directories or sources."
     ))
 
 
-;; remote-path stuff 
+;; remote-path stuff
 ;; (ecb-host-accessible-valid-time "ecb.sourceforge.net")
 ;; (ecb-host-accessible-cache-get "ecb.sourceforge.net" 60)
 (defsubst ecb-host-accessible-valid-time (host)
@@ -3145,7 +3146,7 @@ is writable or not."
 
 ;; version control support
 
-(defecb-advice-set ecb-vc-advices 
+(defecb-advice-set ecb-vc-advices
   "All advices needed for the builtin VC-support of ECB.")
 
 ;; We use a cache which stores for
@@ -3180,7 +3181,7 @@ ascii-string which should be dislayed if Emacs doesn't support image-display.")
   "Return the associated image-name for the vc-state STATE."
   (or (nth 0 (cdr (assq state ecb-vc-state-icon-alist)))
       "vc-unknown"))
-  
+
 (defsubst ecb-vc-get-ascii-icon-for-vc-state (state)
   "Return the associated texual icon for the vc-state STATE."
   (or (nth 1 (cdr (assq state ecb-vc-state-icon-alist)))
@@ -3234,7 +3235,7 @@ new state."
 
       ;; FILE was modified since our last vc-state-check, so we have to check
       ;; the state again
-      
+
       ;; set the list of the buffer-names for which the check will be performed
       ;; and then cached to TREE-BUFFER-NAME ==> Only for this buffer-name the
       ;; cache is valid.
@@ -3256,7 +3257,7 @@ new state."
                         ;; ECB would eventually call this backend - but this
                         ;; would fail because the needed program is not
                         ;; installed - so we ignore this and handle this as
-                        ;; unknown-state. 
+                        ;; unknown-state.
                         (ignore-errors (funcall vc-state-fcn file))))
       ;; now we map the backend-state to one of the ECB-VC-state-values
       (setq result (or (cdr (assoc result ecb-vc-state-mapping)) 'unknown)))
@@ -3362,11 +3363,11 @@ the SOURCES-cache."
        (require 'vc)
        (require 'vc-sccs)
        'SCCS))
-       
+
 ;; Bazaar support
 
-(defun ecb-vc-dir-managed-by-BZR (directory) 
-  "Return 'BZR if DIRECTORY is managed by Bazaar. nil if not." 
+(defun ecb-vc-dir-managed-by-BZR (directory)
+  "Return 'BZR if DIRECTORY is managed by Bazaar. nil if not."
   (and (locate-library "vc-bzr")
        (ecb-file-exists-p (concat directory "/" ".bzr"))
        (require 'vc)
@@ -3617,7 +3618,7 @@ state-value."
                                                (tree-node->data curr-node))
                                               (buffer-name (current-buffer))
                                               vc-state-fcn))
-                    ;; we update the node only if the state has changed 
+                    ;; we update the node only if the state has changed
                     (when (not (equal 'unchanged new-state))
                       (setq new-name (ecb-vc-generate-node-name new-name new-state))
                       (tree-buffer-update-node
@@ -3665,7 +3666,7 @@ stealthy-function has when called. Return the new state-value."
                             (ecb-vc-check-state (tree-node->data curr-node)
                                                 (buffer-name (current-buffer))
                                                 vc-state-fcn))
-                      ;; we update the node only if the state has changed 
+                      ;; we update the node only if the state has changed
                       (when (not (equal 'unchanged new-state))
                         (setq new-name (ecb-vc-generate-node-name new-name new-state))
                         (or update-performed-for-dir
@@ -3675,9 +3676,9 @@ stealthy-function has when called. Return the new state-value."
                          'use-old-value 'use-old-value 'use-old-value
                          'use-old-value t))
                       (setq state (1+ state)))
-                
+
                   ;; file does no longer exist
-                
+
                   ;; reduce the number of lines/files
                   (setq lines-of-buffer (1- lines-of-buffer))
                   ;; remove the node from the tree and the tree-display
@@ -3755,7 +3756,7 @@ display an appropriate icon in front of the file."
   ;; because otherwise a file will never be written - see documentation of
   ;; `write-file-hooks'!
   nil)
-  
+
 ;; we have to add a smart piece of code to `vc-checkin-hook' which is able to
 ;; clear the cache entry for exactly that file checked-in with vc-checkin!
 ;; Problems to solve:
@@ -3933,7 +3934,7 @@ is created."
 (defun ecb-delete-s (child children sources)
   (when children
     (if (eq child (car children))
-	(cdr sources)
+    (cdr sources)
       (cons (car sources) (ecb-delete-s child (cdr children) (cdr sources))))))
 
 
@@ -3993,7 +3994,7 @@ Directory- and sources nodes are handled appropriately."
                 (ecb-exec-in-window ecb-directories-buffer-name
                   ;; Update the tree-buffer with optimized display of NODE
                   (tree-buffer-update node)))
-            
+
             ;; Removing the element from the sources-cache, the
             ;; files-and-subdirs-cache and the empty-dirs-cache (incl. all
             ;; subdirs)
@@ -4009,7 +4010,7 @@ Directory- and sources nodes are handled appropriately."
             ;; contained in current layout then we have to redraw the full
             ;; layout first so the contents of the clicked directory can be
             ;; displayed in the sources-buffer.
-            
+
             ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: we should also check
             ;; if the source-buffer is not visible because in left-right
             ;; layouts we can maximize 2 buffers or in general: a maximized
@@ -4026,12 +4027,12 @@ Directory- and sources nodes are handled appropriately."
                     (ecb-maximize-ecb-buffer ecb-sources-buffer-name)
                     (ecb-window-select ecb-sources-buffer-name))
                 (ecb-undo-maximize-ecb-buffer t)))
-            
+
             (ecb-set-selected-directory (tree-node->data node) shift-mode)
             ;; if we have running an integrated speedbar we must update the
-            ;; speedbar 
+            ;; speedbar
             (ecb-directory-update-speedbar (tree-node->data node))))
-      
+
       (ecb-source-item-clicked node ecb-button edit-window-nr shift-mode meta-mode)
       )))
 
@@ -4055,7 +4056,7 @@ Directory- and sources nodes are handled appropriately."
       (ecb-undo-maximize-ecb-buffer t)))
   (ecb-set-selected-source (tree-node->data node)
                            (ecb-combine-ecb-button/edit-win-nr ecb-button edit-window-nr)
-			   shift-mode)
+               shift-mode)
   )
 
 (defecb-tree-buffer-callback ecb-source-clicked ecb-sources-buffer-name select nil
@@ -4073,7 +4074,7 @@ Directory- and sources nodes are handled appropriately."
       (progn
         (tree-node-toggle-expanded node)
         ;; Update the tree-buffer with optimized display of NODE
-        (tree-buffer-update node))      
+        (tree-buffer-update node))
     (ecb-source-item-clicked node ecb-button edit-window-nr shift-mode meta-mode)))
 
 (defun ecb-expand-directory-nodes (level)
@@ -4094,11 +4095,11 @@ can last a long time - depending of machine- and disk-performance."
   "Return a file-info string for a file in the ECB sources buffer"
   (let ((attrs (ecb-file-attributes file)))
     (format "%s %8s %4d %10d %s %s"
-	    (nth 8 attrs)
-	    (user-login-name (nth 2 attrs))
-	    (nth 3 attrs)
-	    (nth 7 attrs)
-	    (format-time-string "%Y/%m/%d %H:%M" (nth 5 attrs))
+        (nth 8 attrs)
+        (user-login-name (nth 2 attrs))
+        (nth 3 attrs)
+        (nth 7 attrs)
+        (format-time-string "%Y/%m/%d %H:%M" (nth 5 attrs))
             (if (equal (cdr ecb-sources-show-node-info) 'file-info-full)
                 file
               (ecb-file-name-nondirectory file)))
@@ -4296,11 +4297,11 @@ the help-text should be printed here."
          (ecb-dired-directory "Open in Dired")
          (ecb-dired-directory-other-window "Open in Dired other window"))
         ("---")
-	(ecb-create-source "Create Sourcefile")
-	(ecb-create-directory "Create Child Directory")
-	(ecb-delete-directory "Delete Directory")
+    (ecb-create-source "Create Sourcefile")
+    (ecb-create-directory "Create Child Directory")
+    (ecb-delete-directory "Delete Directory")
         ("---")
-	(ecb-add-source-path-node "Add Source Path")))
+    (ecb-add-source-path-node "Add Source Path")))
 
 
 (defvar ecb-directories-menu nil
@@ -4484,8 +4485,8 @@ edit-windows. Otherwise return nil."
          (ecb-popup-sources-filter-by-ext "Filter by extension")
          (ecb-popup-sources-filter-by-regexp "Filter by a regexp")
          (ecb-popup-sources-filter-none "No filter"))
-        ("---")        
-	(ecb-create-source "Create Sourcefile")
+        ("---")
+    (ecb-create-source "Create Sourcefile")
         (ecb-delete-source "Delete Sourcefile")
         ("---")
         (ecb-maximize-ecb-window-menu-wrapper "Maximize window")))
@@ -4572,11 +4573,11 @@ applied otherwise nil."
 (tree-buffer-defpopup-command ecb-popup-history-filter-by-regexp
   "Filter history entries by regexp by popup."
   (ecb-history-filter-by-regexp))
-  
+
 (tree-buffer-defpopup-command ecb-popup-history-filter-all-existing
   "No history filter, i.e. add all existing file-buffers to the history."
   (ecb-add-all-buffers-to-history))
-  
+
 (tree-buffer-defpopup-command ecb-file-popup-vc-refresh-all-files
   "Recompute the VC-state for the whole history."
   (when (equal (buffer-name) ecb-history-buffer-name)
@@ -4660,7 +4661,7 @@ So you get a better overlooking. There are three choices:
          (ecb-popup-history-bucketize-by-ext "by file-extension")
          (ecb-popup-history-bucketize-by-reg "by reg. expr."))
         ("---")
-        (ecb-maximize-ecb-window-menu-wrapper "Maximize window")))        
+        (ecb-maximize-ecb-window-menu-wrapper "Maximize window")))
 
 
 (defvar ecb-history-menu nil

@@ -16,6 +16,7 @@
 (add-to-list 'load-path "~/.emacs.d/f")
 (add-to-list 'load-path "~/.emacs.d/dash")
 (add-to-list 'load-path "~/.emacs.d/tabbar")
+(add-to-list 'load-path "~/.emacs.d/python-mode")
 
 ;; cl-lib
 (require 'cl-lib)
