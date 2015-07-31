@@ -38,3 +38,4 @@ ergoemacs-theme-engine.elc
 .sx
 Cask
 %backup%~
+.nfs*
