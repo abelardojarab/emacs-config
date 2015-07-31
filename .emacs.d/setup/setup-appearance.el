@@ -109,6 +109,10 @@ non-nil."
 (add-hook 'visual-line-mode-hook 'toggle-truncate-lines)
 (setq adaptive-wrap-extra-indent 4)
 
+;; Fringe helper
+(add-to-list 'load-path "~/.emacs.d/fringe-helper")
+(require 'fringe-helper)
+
 ;; Monokai theme
 (add-to-list 'load-path "~/.emacs.d/monokai-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")

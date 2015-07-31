@@ -31,6 +31,11 @@
  '("melpa" . "http://melpa.org/packages/")
  t)
 
+;; Use Package
+(add-to-list 'load-path "~/.emacs.d/pkg-info")
+(add-to-list 'load-path "~/.emacs.d/use-package")
+(require 'use-package)
+
 ;; Paradox
 (add-to-list 'load-path "~/.emacs.d/seq")
 (add-to-list 'load-path "~/.emacs.d/spinner")

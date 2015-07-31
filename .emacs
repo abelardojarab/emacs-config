@@ -12,13 +12,17 @@
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/setup")
 (add-to-list 'load-path "~/.emacs.d/elp")
-(add-to-list 'load-path "~/.emacs.d/pkg-info")
-(add-to-list 'load-path "~/.emacs.d/use-package")
 (add-to-list 'load-path "~/.emacs.d/s")
 (add-to-list 'load-path "~/.emacs.d/f")
 (add-to-list 'load-path "~/.emacs.d/dash")
-(add-to-list 'load-path "~/.emacs.d/fringe-helper")
 (add-to-list 'load-path "~/.emacs.d/tabbar")
+
+;; cl-lib
+(require 'cl-lib)
+(defun cl--set-getf (plist tag val)
+  (let ((p plist))
+    (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
+    (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
 ;; Backported function
 (unless (fboundp 'pop-to-buffer)
@@ -128,6 +132,9 @@ Defaults to `error'."
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
 
+;; Setup package
+(require 'setup-package)
+
 ;; Setup general
 (require 'setup-general)
 
@@ -136,16 +143,6 @@ Defaults to `error'."
 
 ;; Setup Cedet
 (require 'setup-cedet)
-
-;; cl-lib
-(require 'cl-lib)
-(defun cl--set-getf (plist tag val)
-  (let ((p plist))
-    (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
-    (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
-
-;; Setup package
-(require 'setup-package)
 
 ;; Setup Org and LaTeX
 (require 'setup-org)
