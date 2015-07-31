@@ -24,7 +24,9 @@
 
 ;;; Code:
 
-;; Assure correct Python
+;; by default, the function 'python-mode is associated with
+;; the package python.el. The following changes that to python-mode.el:
+(autoload 'python-mode "python-mode" "Python Mode." t)
 (add-to-list 'load-path "~/.emacs.d/python-mode")
 (autoload 'python-mode "python-mode" "Python Mode." t)
 
