@@ -105,24 +105,24 @@ On the Package Menu, you can always manually star packages with \\[paradox-menu-
   "Check that the user has either set or refused the github token.
 If neither has happened, ask the user now whether he'd like to
 configure or refuse the token."
-  (if (stringp paradox-github-token) t
-    (if paradox-github-token
-        t
-      (if (not (y-or-n-p "Would you like to set up GitHub integration?
+  (ignore-errors
+    (if (stringp paradox-github-token) t
+      (if paradox-github-token
+          t
+        (if (not (y-or-n-p "Would you like to set up GitHub integration?
 This will allow you to star/unstar packages from the Package Menu. "))
-          (customize-save-variable 'paradox-github-token t)
-        (describe-variable 'paradox-github-token)
-        (when (get-buffer "*Help*")
-          (switch-to-buffer "*Help*")
-          (delete-other-windows))
-        (if (y-or-n-p "Follow the instructions on the `paradox-github-token' variable.
+            (customize-save-variable 'paradox-github-token t)
+          (describe-variable 'paradox-github-token)
+          (when (get-buffer "*Help*")
+            (switch-to-buffer "*Help*")
+            (delete-other-windows))
+          (if (y-or-n-p "Follow the instructions on the `paradox-github-token' variable.
 May I take you to the token generation page? ")
-            (browse-url "https://github.com/settings/tokens/new"))
-        (message "Once you're finished, simply call `paradox-list-packages' again.")
-        nil))))
+              (browse-url "https://github.com/settings/tokens/new"))
+          (message "Once you're finished, simply call `paradox-list-packages' again.")
+          nil)))))
 
-
-;;; Starring
+;;; Starring
 (defun paradox-star-all-installed-packages ()
   "Star all of your currently installed packages.
 No questions asked."
