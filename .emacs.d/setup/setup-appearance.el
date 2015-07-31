@@ -433,43 +433,44 @@ non-nil."
 (modify-all-frames-parameters (list (cons 'vertical-scroll-bars nil)))
 
 (defun lawlist-scroll-bar ()
-  (when (window-live-p (get-buffer-window (current-buffer)))
-    (redisplay t)
-    (cond
-     ;; not regexp matches | not narrow-to-region
-     ((and
-       (not (regexp-match-p regexp-always-scroll-bar (buffer-name)))
-       (not (regexp-match-p regexp-never-scroll-bar (buffer-name)))
-       (equal (- (point-max) (point-min)) (buffer-size)))
+  (ignore-errors
+    (when (window-live-p (get-buffer-window (current-buffer)))
+      (redisplay t)
       (cond
-       ;; Lines of text are less-than or equal-to window height,
-       ;; and scroll bars are present (which need to be removed).
+       ;; not regexp matches | not narrow-to-region
        ((and
-         (<= (- (point-max) (point-min)) (- (window-end) (window-start)))
+         (not (regexp-match-p regexp-always-scroll-bar (buffer-name)))
+         (not (regexp-match-p regexp-never-scroll-bar (buffer-name)))
+         (equal (- (point-max) (point-min)) (buffer-size)))
+        (cond
+         ;; Lines of text are less-than or equal-to window height,
+         ;; and scroll bars are present (which need to be removed).
+         ((and
+           (<= (- (point-max) (point-min)) (- (window-end) (window-start)))
+           (equal (window-scroll-bars) `(15 2 right nil)))
+          (set-window-scroll-bars (selected-window) 0 'right nil))
+         ;; Lines of text are greater-than window height, and
+         ;; scroll bars are not present and need to be added.
+         ((and
+           (> (- (point-max) (point-min)) (- (window-end) (window-start)))
+           (not (equal (window-scroll-bars) `(15 2 right nil))))
+          (set-window-scroll-bars (selected-window) 15 'right nil))))
+       ;; Narrow-to-region is active, and scroll bars are present
+       ;; (which need to be removed).
+       ((and
+         (not (equal (- (point-max) (point-min)) (buffer-size)))
          (equal (window-scroll-bars) `(15 2 right nil)))
         (set-window-scroll-bars (selected-window) 0 'right nil))
-       ;; Lines of text are greater-than window height, and
-       ;; scroll bars are not present and need to be added.
+       ;; not narrow-to-region | regexp always scroll-bars
        ((and
-         (> (- (point-max) (point-min)) (- (window-end) (window-start)))
-         (not (equal (window-scroll-bars) `(15 2 right nil))))
-        (set-window-scroll-bars (selected-window) 15 'right nil))))
-     ;; Narrow-to-region is active, and scroll bars are present
-     ;; (which need to be removed).
-     ((and
-       (not (equal (- (point-max) (point-min)) (buffer-size)))
-       (equal (window-scroll-bars) `(15 2 right nil)))
-      (set-window-scroll-bars (selected-window) 0 'right nil))
-     ;; not narrow-to-region | regexp always scroll-bars
-     ((and
-       (equal (- (point-max) (point-min)) (buffer-size))
-       (regexp-match-p regexp-always-scroll-bar (buffer-name)))
-      (set-window-scroll-bars (selected-window) 15 'right nil))
-     ;; not narrow-to-region | regexp never scroll-bars
-     ((and
-       (equal (- (point-max) (point-min)) (buffer-size))
-       (regexp-match-p regexp-never-scroll-bar (buffer-name)))
-      (set-window-scroll-bars (selected-window) 0 'right nil)))))
+         (equal (- (point-max) (point-min)) (buffer-size))
+         (regexp-match-p regexp-always-scroll-bar (buffer-name)))
+        (set-window-scroll-bars (selected-window) 15 'right nil))
+       ;; not narrow-to-region | regexp never scroll-bars
+       ((and
+         (equal (- (point-max) (point-min)) (buffer-size))
+         (regexp-match-p regexp-never-scroll-bar (buffer-name)))
+        (set-window-scroll-bars (selected-window) 0 'right nil))))))
 
 (define-minor-mode lawlist-scroll-bar-mode
   "This is a custom scroll bar mode."
