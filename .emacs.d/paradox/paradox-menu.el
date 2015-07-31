@@ -342,15 +342,16 @@ automatically decides whether to download asynchronously based on
 (defun paradox--refresh-star-count ()
   "Download the star-count file and populate the respective variable."
   (interactive)
-  (when (boundp 'package--downloads-in-progress)
-    (add-to-list 'package--downloads-in-progress 'paradox--data))
-  (condition-case-unless-debug nil
-      (paradox--with-work-buffer paradox--data-url "data-hashtables"
-        (setq paradox--star-count (read (current-buffer)))
-        (setq paradox--package-repo-list (read (current-buffer)))
-        (setq paradox--download-count (read (current-buffer)))
-        (setq paradox--wiki-packages (read (current-buffer))))
-    (error (paradox--handle-failed-download))))
+  (ignore-errors
+    (when (boundp 'package--downloads-in-progress)
+      (add-to-list 'package--downloads-in-progress 'paradox--data))
+    (condition-case-unless-debug nil
+        (paradox--with-work-buffer paradox--data-url "data-hashtables"
+          (setq paradox--star-count (read (current-buffer)))
+          (setq paradox--package-repo-list (read (current-buffer)))
+          (setq paradox--download-count (read (current-buffer)))
+          (setq paradox--wiki-packages (read (current-buffer))))
+      (error (paradox--handle-failed-download)))))
 
 (defun paradox--package-star-count (package)
   "Get the star count of PACKAGE."
