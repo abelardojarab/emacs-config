@@ -86,22 +86,9 @@ Defaults to `error'."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ac-ispell-fuzzy-limit 2)
- '(ac-ispell-requires 4)
- '(comint-buffer-maximum-size 20000)
- '(comint-completion-addsuffix t)
- '(comint-get-old-input (lambda nil "") t)
- '(comint-input-ignoredups t)
- '(comint-input-ring-size 5000)
- '(comint-move-point-for-output nil)
- '(comint-prompt-read-only nil)
- '(comint-scroll-show-maximum-output t)
- '(comint-scroll-to-bottom-on-input t)
- '(cua-enable-cua-keys nil)
  '(custom-safe-themes
    (quote
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
- '(delete-selection-mode t)
  '(ecb-display-image-icons-for-semantic-tags t)
  '(ecb-grep-find-function (quote if))
  '(ecb-grep-recursive-function (quote rgrep))
@@ -130,14 +117,7 @@ Defaults to `error'."
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(ede-project-directories (quote ("~/workspace/frametools")))
  '(ergoemacs-mode t)
- '(initial-scratch-message ";; scratch buffer created -- start typing...")
- '(org-CUA-compatible nil)
- '(org-support-shift-select (quote always))
- '(protect-buffer-bury-p nil)
- '(recentf-mode t)
- '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
- '(semantic-self-insert-show-completion-function (lambda nil (semantic-ia-complete-symbol-menu (point))))
- '(shift-select-mode nil))
+ '(initial-scratch-message ";; scratch buffer created -- start typing..."))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -164,8 +144,8 @@ Defaults to `error'."
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
-;; gv
-(require 'gv)
+;; Setup package
+(require 'setup-package)
 
 ;; Setup Org and LaTeX
 (require 'setup-org)

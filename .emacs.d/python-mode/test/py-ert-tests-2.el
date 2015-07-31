@@ -1,5 +1,6 @@
 ;; py-ert-tests.el --- Tests, some adapted from python.el
 
+;; Copyright (C) 2013 Free Software Foundation, Inc.
 ;; Copyright (C) 2014 Andreas Roehler, <andreas.roehler@online.de>
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
@@ -19,12 +20,15 @@
 
 ;;; Code:
 
+
+
 ;; tests are expected to run from directory test
 
 (add-to-list 'load-path default-directory)
 (load "py-ert-tests-1.el" nil t)
 
 ;; (require 'python-mode-test)
+
 
 ;;; fast-process
 (ert-deftest py-shell-complete-in-dedicated-shell ()
@@ -33,19 +37,70 @@
 	py-switch-buffers-on-execute-p)
     (with-temp-buffer
       (python-mode)
+      (when py-debug-p (switch-to-buffer (current-buffer)))
       (setq erg (python-dedicated))
-      (with-current-buffer erg
-	(goto-char (point-max))
-	(when py-debug-p (switch-to-buffer (current-buffer)))
-	(switch-to-buffer (current-buffer))
-	(insert "pri")
-	(sit-for 1 t)
-	(call-interactively 'py-indent-or-complete)
-	(sit-for 0.1 t)
-	(should (or (eq 40 (char-before))
-		    ;; python may just offer print(
-		    (buffer-live-p (get-buffer  "*Python Completions*"))))
-      (py-kill-buffer-unconditional erg)))))
+      ;; (switch-to-buffer (current-buffer))
+      (insert "pri")
+      (call-interactively 'py-indent-or-complete)
+      (sit-for 0.3 t)
+      (should (eq 40 (char-before)))
+      (py-kill-buffer-unconditional erg))))
+
+(ert-deftest py-ert-fast-complete-1 ()
+  (py-test-with-temp-buffer
+      "pri"
+    (let ((py-return-result-p t)
+	  py-result py-store-result-p)
+      (py-fast-complete)
+      (should (eq (char-before) 40)))))
+
+(ert-deftest py-ert-execute-statement-fast-1 ()
+  (py-test-with-temp-buffer-point-min
+      "print(1)"
+    (let ((py-fast-process-p t)
+	  (py-return-result-p t)
+	  py-result py-store-result-p)
+      (py-execute-statement)
+      (should (string= "1" py-result)))))
+
+(ert-deftest py-ert-execute-statement-fast-2 ()
+  (py-test-with-temp-buffer-point-min
+      "print(2)"
+    (let ((py-fast-process-p t)
+	  (py-return-result-p t)
+	  py-result py-store-result-p)
+      (py-execute-statement-fast)
+      (should (string= "2" py-result)))))
+
+(ert-deftest py-ert-execute-block-fast ()
+  (py-test-with-temp-buffer-point-min
+      "if True:
+    a = 1
+    print(a)"
+    (let ((py-fast-process-p t)
+	  (py-return-result-p t)
+	  (py-debug-p t)
+	  py-result)
+      (py-execute-block)
+      (when py-debug-p (message "py-ert-execute-block-fast, py-result: %s" py-result))
+      (should (string= "1" py-result)))))
+
+(ert-deftest py-ert-execute-block-fast-2 ()
+  (py-test-with-temp-buffer-point-min
+      "try:
+    a
+except NameError:
+    a=1
+finally:
+    a+=1
+    print(a)"
+    (let ((py-fast-process-p t)
+	  (py-return-result-p t)
+	  (py-debug-p t)
+	  py-result)
+      (py-execute-block)
+      (when py-debug-p (message "py-ert-execute-block-fast, py-result: %s" py-result))
+      (should (numberp (string-to-number (car (split-string py-result))))))))
 
 ;;;
 (ert-deftest py-ert-keyword-face-lp-1294742 ()
@@ -56,17 +111,24 @@
       (should (eq 'font-lock-keyword-face (get-char-property (point) 'face)))
       (skip-chars-forward "^ \n"))))
 
+(ert-deftest py-ert-exception-name-face-lp-1294742 ()
+  (py-test-with-temp-buffer-point-min
+      " ArithmeticError AssertionError AttributeError BaseException BufferError BytesWarning DeprecationWarning EOFError EnvironmentError Exception FloatingPointError FutureWarning GeneratorExit IOError ImportError ImportWarning IndentationError IndexError KeyError KeyboardInterrupt LookupError MemoryError NameError NoResultFound NotImplementedError OSError OverflowError PendingDeprecationWarning ReferenceError RuntimeError RuntimeWarning StandardError StopIteration SyntaxError SyntaxWarning SystemError SystemExit TabError TypeError UnboundLocalError UnicodeDecodeError UnicodeEncodeError UnicodeError UnicodeTranslateError UnicodeWarning UserWarning ValueError Warning ZeroDivisionError"
+    (font-lock-fontify-buffer)
+    (while (and (not (eobp))(< 0 (skip-chars-forward " ")))
+      (should (eq 'py-exception-name-face (get-char-property (point) 'face)))
+      (skip-chars-forward "^ \n"))))
+
 (ert-deftest py-ert-builtins-face-lp-1294742 ()
   (let ((py-shell-name "python3"))
     (py-test-with-temp-buffer-point-min
-	"_ __doc__ __import__ __name__ __package__ abs all any apply basestring bin bool buffer bytearray bytes callable chr classmethod cmp coerce compile complex delattr dict dir divmod enumerate eval execfile file filter float format frozenset getattr globals hasattr hash help hex id input int intern isinstance issubclass iter len list locals long map max min next object oct open ord pow print property range raw_input reduce reload repr reversed round set setattr slice sorted staticmethod str sum super tuple type unichr unicode vars xrange zip"
+	" _ __doc__ __import__ __name__ __package__ abs all any apply basestring bin bool buffer bytearray bytes callable chr classmethod cmp coerce compile complex delattr dict dir divmod enumerate eval execfile file filter float format frozenset getattr globals hasattr hash help hex id input int intern isinstance issubclass iter len list locals long map max min next object oct open ord pow print property range raw_input reduce reload repr reversed round set setattr slice sorted staticmethod str sum super tuple type unichr unicode vars xrange zip"
       (font-lock-fontify-buffer)
-      (when py-debug-p (switch-to-buffer (current-buffer)))
-
       ;; (when py-debug-p (switch-to-buffer (current-buffer)))
       (should (eq 'py-builtins-face (get-char-property (point) 'face))))))
 
-(ert-deftest py-ert-pseudo-keyword-face-lp-1294742 ()
+
+(ert-deftest py-ert-py-pseudo-keyword-face-lp-1294742 ()
   (py-test-with-temp-buffer-point-min
       "  Ellipsis True False None  __debug__ NotImplemented"
     (font-lock-fontify-buffer)
@@ -74,7 +136,7 @@
       (should (eq 'py-pseudo-keyword-face (get-char-property (point) 'face)))
       (skip-chars-forward "^ \n"))))
 
-(ert-deftest py-ert-object-reference-face-lp-1294742 ()
+(ert-deftest py-ert-py-object-reference-face-lp-1294742 ()
   (py-test-with-temp-buffer-point-min
       " self cls"
     (font-lock-fontify-buffer)
@@ -264,7 +326,7 @@ by the
     (py-backward-same-level)
     (should (eq (char-after) ?e))))
 
-(ert-deftest py-ert-up-level-test ()
+(ert-deftest py-ert-py-up-level-test ()
   (py-test-with-temp-buffer-point-min
       "def foo():
     if True:
@@ -298,6 +360,7 @@ by the
         finally:
             pass
 "
+    (font-lock-fontify-buffer)
     (goto-char 632)
     (py-up)
     (should (eq (char-after) ?p))
@@ -375,10 +438,10 @@ x = {'abc':'def',
     "Avoid infinite loop"
   (py-test-with-temp-buffer
       "assert pycompletions('TestClass.test' , name) == \
-          ['testclassmeth', 'testmeth', 'testprop', 'teststaticmeth']"
-    (forward-char -1)
+          ['testclassmeth', 'testmeth', 'testprop', 'teststaticmeth']
+"
     (py-mark-expression)
-    (should (eq 119 (mark)))
+    (should (eq 120 (mark)))
     (goto-char 44)
     (py-mark-expression)
     (should (eq 46 (mark)))))
@@ -427,587 +490,4 @@ x = {'abc':'def',
     (when py-debug-p (switch-to-buffer (current-buffer)))
     (should (eq 0 (py-compute-indentation)))))
 
-(ert-deftest py-indentation-lp-1375122-test ()
-  (py-test-with-temp-buffer
-      "def foo():
-    if True:
-pass
-"
-    (forward-line -1)
-    (call-interactively 'py-indent-or-complete)
-    (sit-for 0.1 t)
-    (should (eq 8 (current-column)))
-    ;; FixMe, last-command seems not set
-    ;; (call-interactively 'py-indent-or-complete)
-    ;; (py-indent-or-complete)
-    ;; (sit-for 0.1 t)
-    ;; (should (eq 4 (current-column)))
-    (beginning-of-line)
-    (delete-horizontal-space)
-    (indent-to 4)
-    (py-indent-or-complete)
-    (sit-for 0.1 t)
-    (should (eq 0 (current-column)))
-    ;; (py-indent-or-complete)
-    ;; (sit-for 0.1 t)
-    ;; (should (eq 8 (current-column)))
-    ))
-
-(ert-deftest py-shell-python-lp-1398530-test ()
-  (when (buffer-live-p (get-buffer "*Python*"))(py-kill-buffer-unconditional "*Python*"))
-  (py-test-with-temp-buffer
-      ""
-    (when py-debug-p (switch-to-buffer (current-buffer)))
-    (let ((py-shell-name "python"))
-      (py-shell)
-      (sit-for 0.1 t)
-      (should (buffer-live-p (get-buffer "*Python*"))))))
-
-(ert-deftest py-shell-python3-lp-1398530-test ()
-  (when (buffer-live-p (get-buffer "*Python3*"))(py-kill-buffer-unconditional "*Python3*"))
-  (py-test-with-temp-buffer
-      ""
-    (when py-debug-p (switch-to-buffer (current-buffer)))
-    (let ((py-shell-name "python3"))
-      (py-shell)
-      (sit-for 0.1 t)
-      (should (buffer-live-p (get-buffer "*Python3*"))))))
-
-(ert-deftest py-shell-python2-lp-1398530-test ()
-  (when (buffer-live-p (get-buffer "*Python2*"))(py-kill-buffer-unconditional "*Python2*"))
-  (py-test-with-temp-buffer
-      ""
-    (when py-debug-p (switch-to-buffer (current-buffer)))
-    (let ((py-shell-name "python2"))
-      (py-shell)
-      (sit-for 0.1 t)
-      (should (buffer-live-p (get-buffer "*Python2*"))))))
-
-(ert-deftest py-backward-statement-test-1 ()
-  (py-test-with-temp-buffer
-      (let ((py-return-result-p t)
-	    py-result py-store-result-p)
-	"# -*- coding: utf-8 -*-
-print dir()
-c = Cat()
-c.hello() #causes error, but emacs tracking fails
-import sys, os; os.remove('do/something/nasty') # lp:1025000
-
-def foo(*args):2
-    \"\"\"
-    ASDF
-    \"\"\"
-    # ABD
-    args = \"asdf\"
-")
-    (py-backward-statement)
-    (should (eq (char-after) ?a))
-    (py-backward-statement)
-    (should (eq (char-after) ?\"))
-    (py-backward-statement)
-    (should (eq (char-after) ?d))
-    (py-backward-statement)
-    (should (eq (char-after) ?o))
-    (py-backward-statement)
-    (should (eq (char-after) ?i))
-    (py-backward-statement)
-    (should (eq (char-after) ?c))
-    (py-backward-statement)
-    (should (eq (char-after) ?c))
-    (py-backward-statement)
-    (should (eq (char-after) ?p))
-    (py-backward-statement)
-    (should (bobp))))
-
-(ert-deftest py-ert-backward-except-block-test ()
-  (py-test-with-temp-buffer
-      "
-# -*- coding: utf-8 -*-
-class bar:
-    def foo ():
-        try:
-            if True:
-                for a in range(anzahl):
-                    pass
-        except:
-            block2
-        "
-    (py-backward-except-block)
-    (should (eq (char-after) ?e))))
-
-(ert-deftest py-ert-backward-except-block-bol-test ()
-  (py-test-with-temp-buffer
-      "
-# -*- coding: utf-8 -*-
-class bar:
-    def foo ():
-        try:
-            if True:
-                for a in range(anzahl):
-                    pass
-        except:
-            block2
-        "
-    (py-backward-except-block-bol)
-    (should (eq (char-after) ?\ ))))
-
-  ;; (and (bufferp (get-buffer "*Python*"))(buffer-live-p (get-buffer "*Python*"))(py-kill-buffer-unconditional "*Python*"))
-  ;; (and (bufferp (get-buffer "*IPython*"))(buffer-live-p (get-buffer "*IPython*"))(py-kill-buffer-unconditional "*IPython*")))
-
-(defun nested-dictionaries-indent-lp:328791-test (&optional arg)
-  "With ARG greater 1 keep test buffer open.
-
-If no `load-branch-function' is specified, make sure the appropriate branch is loaded. Otherwise default python-mode will be checked. "
-  (interactive "p")
-  (let ((teststring "
-
-# hanging
-asdf = {
-    'a':{
-         'b':3,
-         'c':4
-        }
-    }
-
-# closing
-asdf = {
-    'a':{
-        'b':3,
-        'c':4
-    }
-}
-
-data = {
-    'key':
-    {
-        'objlist': [
-            {
-                'pk': 1,
-                'name': 'first',
-            },
-            {
-                'pk': 2,
-                'name': 'second',
-            }
-        ]
-    }
-}
-
-"))
-    (py-bug-tests-intern 'nested-dictionaries-indent-lp:328791-base arg teststring)))
-
-(ert-deftest py-ert-nested-dictionaries-indent-lp:328791-test ()
-  (py-test-with-temp-buffer-point-min
-      "
-
-# hanging
-asdf = {
-    'a':{
-         'b':3,
-         'c':4
-        }
-    }
-
-# closing
-asdf = {
-    'a':{
-        'b':3,
-        'c':4
-    }
-}
-
-data = {
-    'key':
-    {
-        'objlist': [
-            {
-                'pk': 1,
-                'name': 'first',
-            },
-            {
-                'pk': 2,
-                'name': 'second',
-            }
-        ]
-    }
-}
-
-"
-    (let ((py-indent-honors-multiline-listing t)
-	  py-closing-list-dedents-bos)
-      (search-forward "'a':{")
-      (should (eq 4 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 8 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 4 (py-compute-indentation)))
-      ;; py-closing-list-dedents-bos
-      (setq py-closing-list-dedents-bos t)
-      (search-forward "'a':{")
-      (should (eq 4 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 4 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 0 (py-compute-indentation)))
-      (search-forward "}" nil nil 2)
-      (should (eq 12 (py-compute-indentation)))
-      (search-forward "]")
-      (should (eq 8 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 4 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 0 (py-compute-indentation))))))
-
-(ert-deftest py-ert-flexible-indentation-lp-328842-test ()
-  (py-test-with-temp-buffer-point-min
-      "\(long, sequence, of_items,
- that, needs, to_be, wrapped) = input_list
-
-packed_entry = (long, sequence, of_items,
-that, needs, to_be, wrapped)
-
-\( whitespaced, long, sequence, of_items,
-    that, needs, to_be, wrapped) = input_list
-"
-    (let ((py-indent-honors-multiline-listing t))
-        (search-forward "(long")
-      (forward-char -1)
-      ;; (goto-char 6)
-      (should (eq nil (get-char-property (point) 'face)))
-      (goto-char 33)
-      (assert (eq 1 (py-compute-indentation)) nil "flexible-indentation-lp-328842-test failed")
-      (goto-char 115)
-      (assert (eq 16 (py-compute-indentation)) nil "flexible-indentation-lp-328842-test failed")
-      (goto-char 202)
-      (assert (eq 2 (py-compute-indentation)) nil "flexible-indentation-lp-328842-test failed"))))
-
-(ert-deftest py-ert-indent-in-arglist-test ()
-  (py-test-with-temp-buffer
-      "def foo (a,
-
-):"
-    (beginning-of-line)
-    (should (eq 9 (py-compute-indentation)))))
-
-(ert-deftest py-complete-in-python-shell-test ()
-  (let ((py-shell-name "python")
-	(py-switch-buffers-on-execute-p t))
-    (py-kill-buffer-unconditional "*Python*")
-    (python)
-    (goto-char (point-max))
-    (insert "pri")
-    (py-indent-or-complete)
-    (forward-word -1)
-    (should (eq ?p (char-after)))))
-
-(ert-deftest py-complete-in-python3-shell-test ()
-  (let ((py-shell-name "python3")
-	(py-switch-buffers-on-execute-p t))
-    (py-kill-buffer-unconditional "*Python3*")
-    (python3)
-    (goto-char (point-max))
-    (insert "pri")
-    (py-indent-or-complete)
-    (forward-word -1)
-    (should (eq ?p (char-after)))))
-
-(ert-deftest py-complete-empty-string-result-test ()
-  (let ((py-shell-name "python3")
-	(py-switch-buffers-on-execute-p t))
-    (py-kill-buffer-unconditional "*Python3*")
-    (python3)
-    (goto-char (point-max))
-    (insert "foo")
-    (py-indent-or-complete)
-    (should (looking-back "foo"))))
-
-(ert-deftest py-ert-close-block-test ()
-  (py-test-with-temp-buffer-point-min
-      "# -*- coding: utf-8 -*-
-
-def main():
-    if len(sys.argv)==1:
-        usage()
-        sys.exit()
-if __name__==\"__main__\":
-    main()
-"
-    (search-forward "exit()")
-    (should (eq 4 (py-close-block)))))
-
-(ert-deftest py-ert-close-clause-test ()
-  (py-test-with-temp-buffer-point-min
-      "# -*- coding: utf-8 -*-
-
-def main():
-    if len(sys.argv)==1:
-        usage()
-        sys.exit()
-if __name__==\"__main__\":
-    main()
-"
-    (search-forward "exit()")
-    (should (eq 4 (py-close-clause)))))
-
-(ert-deftest py-ert-close-block-or-clause-test ()
-  (py-test-with-temp-buffer-point-min
-      "# -*- coding: utf-8 -*-
-
-def main():
-    if len(sys.argv)==1:
-        usage()
-        sys.exit()
-if __name__==\"__main__\":
-    main()
-"
-    (search-forward "exit()")
-    (should (eq 4 (py-close-block-or-clause)))))
-
-(ert-deftest py-ert-close-def-or-class-test ()
-  (py-test-with-temp-buffer-point-min
-      "# -*- coding: utf-8 -*-
-
-def main():
-    if len(sys.argv)==1:
-        usage()
-        sys.exit()
-if __name__==\"__main__\":
-    main()
-"
-    (search-forward "exit()")
-    (should (eq 0 (py-close-def-or-class)))))
-
-(ert-deftest py-ert-close-def-test ()
-  (py-test-with-temp-buffer-point-min
-      "# -*- coding: utf-8 -*-
-
-def main():
-    if len(sys.argv)==1:
-        usage()
-        sys.exit()
-if __name__==\"__main__\":
-    main()
-"
-    (search-forward "exit()")
-    (should (eq 0 (py-close-def)))))
-
-(ert-deftest py-ert-close-class-test ()
-  (py-test-with-temp-buffer-point-min
-      "# -*- coding: utf-8 -*-
-class asdf:
-    def main():
-        if len(sys.argv)==1:
-            usage()
-            sys.exit()
-    if __name__==\"__main__\":
-        main()
-"
-    (search-forward "exit()")
-    (should (eq 0 (py-close-class)))))
-
-(ert-deftest py-ert-dedent-forward-test ()
-  (py-test-with-temp-buffer
-   "with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
-    for i in range(anzahl):
-        klauf.pylauf()
-        datei.write(str(spiel[i]) + \"\\n\")"
-   (skip-chars-backward " \t\r\n\f")
-   (py-dedent-forward-line)
-   (should (empty-line-p))
-   (forward-line -1)
-   (should (eq 4 (current-indentation)))))
-
-
-(ert-deftest py-face-lp-1454858-python2-1-test ()
-  (let ((py-python-edit-version ""))
-    (py-test-with-temp-buffer
-	"#! /usr/bin/env python2
-file.close()"
-      (beginning-of-line)
-      (font-lock-fontify-buffer)
-      (sit-for 0.1)
-      (should (eq (face-at-point) 'py-builtins-face)))))
-
-;; Setting of py-python-edit-version should precede
-(ert-deftest py-face-lp-1454858-python2-2-test ()
-  (let ((py-python-edit-version "python2"))
-    (py-test-with-temp-buffer
-	"#! /usr/bin/env python3
-file.close()"
-      (beginning-of-line)
-      (font-lock-fontify-buffer)
-      (sit-for 0.1)
-      (should (eq (face-at-point) 'py-builtins-face)))))
-
-(ert-deftest py-face-lp-1454858-python2-3-test ()
-  (let ((py-python-edit-version ""))
-    (with-temp-buffer
-      (insert "#! /usr/bin/env python2
-print()")
-      (switch-to-buffer (current-buffer))
-      (beginning-of-line)
-      (python-mode)
-      (font-lock-fontify-buffer)
-      (sit-for 0.1)
-      (should (eq (face-at-point) 'font-lock-keyword-face)))))
-
-(ert-deftest py-ert-in-comment-p-test ()
-  (py-test-with-temp-buffer
-      "# "
-    (should (py--in-comment-p))))
-
-(ert-deftest py-ert-in-sq-string-p-test ()
-  (py-test-with-temp-buffer
-      "' "
-    (should (py-in-string-p))))
-
-(ert-deftest py-ert-in-dq-string-p-test ()
-  (py-test-with-temp-buffer
-      "\" "
-    (should (py-in-string-p))))
-
-(ert-deftest py-ert-in-sq-tqs-string-p-test ()
-  (py-test-with-temp-buffer
-      "''' "
-    (should (py-in-string-p))))
-
-(ert-deftest py-ert-in-dq-tqs-string-p-test ()
-  (py-test-with-temp-buffer
-      "\"\"\" "
-    (should (py-in-string-p))))
-
-(ert-deftest py-ert-electric-delete-test ()
-  (py-test-with-temp-buffer-point-min
-      "  {}"
-    (py-electric-delete)
-    (should (eq (char-after) ?{))))
-
-(ert-deftest py-ert-end-of-def-or-class-test ()
-  (py-test-with-temp-buffer-point-min
-      "class MyTest(unittest.TestCase):
-    def test(self):
-        self.assertEqual(fun(3), 4)"
-    (skip-chars-forward "^(")
-    (py-end-of-def-or-class))
-  (should (eobp)))
-
-(ert-deftest py-ert-narrow-to-block-test ()
-  (py-test-with-temp-buffer
-      "with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
-    for i in range(anzahl):
-        klauf.pylauf()
-        "
-      (py-narrow-to-block)
-      (should (eq 50 (length (buffer-substring-no-properties (point-min)(point-max)))))))
-
-(ert-deftest py-ert-narrow-to-block-or-clause-test ()
-  (py-test-with-temp-buffer
-      "if treffer in gruen:
-    # print \"0, Gruen\"
-    ausgabe[1] = treffer
-    ausgabe[2] = treffer
-
-elif treffer in schwarz:
-    # print \"%i, Schwarz\" % (treffer)
-    ausgabe[1] = treffer
-"
-    (py-narrow-to-block-or-clause)
-    (should (eq 87 (length (buffer-substring-no-properties (point-min)(point-max)))))))
-
-(ert-deftest py-ert-narrow-to-clause-test ()
-  (py-test-with-temp-buffer
-      "if treffer in gruen:
-    # print \"0, Gruen\"
-    ausgabe[1] = treffer
-    ausgabe[2] = treffer
-
-elif treffer in schwarz:
-    # print \"%i, Schwarz\" % (treffer)
-    ausgabe[1] = treffer
-"
-    (py-narrow-to-clause)
-    (should (eq 87 (length (buffer-substring-no-properties (point-min)(point-max)))))))
-
-(ert-deftest py-ert-narrow-to-class-test ()
-  (py-test-with-temp-buffer
-      py-def-and-class-test-string
-    (search-backward "treffer")
-    (py-narrow-to-class)
-    (should (eq 710 (length (buffer-substring-no-properties (point-min)(point-max)))))))
-
-(ert-deftest py-ert-narrow-to-def-test ()
-  (py-test-with-temp-buffer
-      py-def-and-class-test-string
-    (search-backward "treffer")
-    (py-narrow-to-def)
-    (should (eq 485 (length (buffer-substring-no-properties (point-min)(point-max)))))))
-
-(ert-deftest py-ert-narrow-to-def-or-class-test ()
-  (py-test-with-temp-buffer
-      py-def-and-class-test-string
-    (search-backward "treffer")
-    (py-narrow-to-def-or-class)
-    (should (eq 485 (length (buffer-substring-no-properties (point-min)(point-max)))))))
-
-(ert-deftest py-ert-narrow-to-statement-test ()
-  (py-test-with-temp-buffer
-      py-def-and-class-test-string
-    (search-backward "treffer")
-    (py-narrow-to-statement)
-    (should (eq 32 (length (buffer-substring-no-properties (point-min)(point-max)))))))
-
-(ert-deftest py-ert-section-backward-test ()
-  (py-test-with-temp-buffer
-      "# {{
-print('%(language)s has %(number)03d quote types.' %
-       {'language': \"Python\", \"number\": 2})
-# }}
-# {{
-print(\"%(language)s has %(number)03d quote types.\" %
-       {'language': \"Python\", \"number\": 2})
-# }}
-"
-    (py-backward-section)
-    (should (eq (char-after) ?#))
-    (py-backward-section)
-    (should (eq (char-after) ?#))))
-
-(ert-deftest py-ert-section-forward-test ()
-  (py-test-with-temp-buffer-point-min
-      "# {{
-print('%(language)s has %(number)03d quote types.' %
-       {'language': \"Python\", \"number\": 2})
-# }}
-# {{
-print(\"%(language)s has %(number)03d quote types.\" %
-       {'language': \"Python\", \"number\": 2})
-# }}
-"
-    (py-forward-section)
-    (should (eq (char-before) ?}))
-    (py-forward-section)
-    (should (eq (char-before) ?}))))
-
-(ert-deftest py-ert-sectionize-test ()
-  (py-test-with-temp-buffer-point-min
-      "print('%(language)s has %(number)03d quote types.' %
-       {'language': \"Python\", \"number\": 2})
-"
-    (end-of-line)
-    (py-sectionize-region (point-min) (point-max))
-    (goto-char (point-min))
-    (should (eq (char-after) ?#))
-    (py-forward-section)
-    (should (eq (char-before) ?}))))
-
-(ert-deftest py-ert-jump-matching-indent-test ()
-  (py-test-with-temp-buffer
-      py-def-and-class-test-string
-    (search-backward "if ")
-    (forward-line -1)
-    (indent-to 12)
-    (py-backward-block)
-    (should (eq (current-column) 8))))
-
 (provide 'py-ert-tests-2)
-;;; py-ert-tests-2.el ends here

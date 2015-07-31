@@ -80,7 +80,7 @@ parsed. If limit is given, it limits the size of the returned alist."
         (variable-assignment-re (concat "^[ \t]+\\(\\w+\\)[ \t]*\\(?:=\\|+=\\|*=\\|%=\\|&=\\|^=\\|<<=\\|-=\\|/=\\|**=\\||=\\|>>=\\|//=\\)[ \t]*\\([({[]\\|[rRuU]*['\"]\\|[+\\-]?[[:word:].]+(?\\)")))
     (save-excursion
       ;; First get the current def and its parameters
-      (py-backward-def)
+      (py-beginning-of-def)
       (when (looking-at (concat py-def-re " *\\([^( ]+\\) *\\(([^:]+\\) *:"))
         (setq beg (match-end 0))
         (let ((params (replace-regexp-in-string
@@ -146,7 +146,7 @@ If no class name is found, return nil."
   (let (classname)
     (save-excursion
       (save-restriction
-        (py-backward-class)
+        (py-beginning-of-class)
         (when (looking-at (concat py-class-re " *\\([^( ]+\\)"))
           (setq classname (match-string-no-properties 2))
           (if (interactive-p)

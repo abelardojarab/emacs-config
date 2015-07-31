@@ -27,7 +27,11 @@
 
 (setq python-mode-interactive-tests
       (list
-       'opening-brace-on-builtins-lp-1400951-test
+       'py-split-just-two-window-on-execute-lp-1361531-python-test
+       'py-split-just-two-window-on-execute-lp-1361531-ipython-test
+       'py-split-just-two-window-on-execute-lp-1361531-python2-test
+       'py-split-just-two-window-on-execute-lp-1361531-jython-test
+       'py-split-just-two-window-on-execute-lp-1361531-python3-test
        'more-docstring-filling-woes-lp-1102296-nil-test
        'more-docstring-filling-woes-lp-1102296-onetwo-test
        'more-docstring-filling-woes-lp-1102296-django-test
@@ -48,6 +52,16 @@
        'autopair-mode-test
        'py-execute-block-python-test
        'py-execute-statement-error-test
+       'py-multi-split-window-on-execute-lp-1361531-python-test
+       'py-multi-split-window-on-execute-lp-1361531-ipython-test
+       'py-multi-split-window-on-execute-lp-1361531-python2-test
+       'py-multi-split-window-on-execute-lp-1361531-jython-test
+       'py-multi-split-window-on-execute-lp-1361531-python3-test
+       'py-always-split-window-on-execute-lp-1361531-python-test
+       'py-always-split-window-on-execute-lp-1361531-ipython-test
+       'py-always-split-window-on-execute-lp-1361531-python2-test
+       'py-always-split-window-on-execute-lp-1361531-jython-test
+       'py-always-split-window-on-execute-lp-1361531-python3-test
        'py-shell-complete-test
        'py-shell-invoking-ipython-lp-835151-test
        'py-execute-def-ipython-test
@@ -178,6 +192,7 @@
        'python-dedicated-test
        'tqs-list-error-test
        'py-mark-def-commandp-test
+       'split-windows-on-execute-p-test
        'switch-windows-on-execute-p-test
        'py-install-directory-path-test
        'UnicodeEncodeError-python3-test
@@ -922,6 +937,23 @@ print u'\\xA9'
     (assert (window-full-height-p) "no-switch-no-split-test failed")
     (assert (eq (current-buffer) oldbuf))))
 
+(defun close-block-test (&optional arg load-branch-function)
+  (interactive "p")
+  (let ((teststring (concat py-test-shebang "
+# -*- coding: utf-8 -*-
+
+def main():
+    if len(sys.argv)==1:
+        usage()
+        sys.exit()
+if __name__==\"__main__\":
+    main()
+")))
+    (py-bug-tests-intern 'close-block-base arg teststring)))
+
+(defun close-block-base (arg)
+  (goto-char 102)
+  (assert (eq 4 (py-close-block)) nil "close-block-test failed"))
 
 (defun py-shift-block-test (&optional arg load-branch-function)
   (interactive "p")
@@ -1157,6 +1189,23 @@ print(\"I'm the switch-windows-on-execute-p-test\")
      (string-match "*Python*" (buffer-name (current-buffer)))
      nil "switch-windows-on-execute-p-test failed")))
 
+(defun split-windows-on-execute-p-test (&optional arg load-branch-function)
+  (interactive "p")
+  (let ((teststring (concat py-test-shebang "
+# -*- coding: utf-8 -*-
+print(\"I'm the `split-windows-on-execute-p-test'\")
+")))
+    (py-bug-tests-intern 'split-windows-on-execute-p-base arg teststring)))
+
+(defun split-windows-on-execute-p-base (arg)
+  (delete-other-windows)
+  (let ((py-split-window-on-execute t)
+        (py-split-windows-on-execute-function 'split-window-vertically)
+        (py-switch-buffers-on-execute-p t)
+        (erg (current-window-configuration)))
+    (py-execute-buffer)
+    (assert (not (window-full-height-p)) nil "split-windows-on-execute-p-test failed")))
+
 ;; this test is not valable, as python-mode-map often changes
 (defun py-menu-pyshell-test (&optional arg load-branch-function)
   (interactive "p")
@@ -1296,16 +1345,36 @@ aus.write(result + \"\\n\")
   (py-end-of-statement)
   (assert (eq 225 (point)) nil "py-end-of-statement-test-2 #1 failed"))
 
+(defun py-beginning-of-statement-test-1 (&optional arg)
+  (interactive "p")
+  (let ((teststring "#! /usr/bin/python
+# -*- coding: utf-8 -*-
+print dir()
+c = Cat()
+c.hello() #causes error, but emacs tracking fails
+import sys, os; os.remove('do/something/nasty') # lp:1025000
+"))
+    (py-bug-tests-intern 'py-beginning-of-statement-1-base arg teststring)))
+
+(defun py-beginning-of-statement-1-base (arg)
+  (py-beginning-of-statement)
+  (assert (eq 132 (point)) nil "py-beginning-of-statement-test-1 #1 failed")
+  (assert (eq 116 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #2 failed")
+  (assert (eq 66 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #3 failed")
+  (assert (eq 56 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #4 failed")
+  (assert (eq 44 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #5 failed"))
 
 (defun key-binding-tests (&optional arg)
   (interactive "p")
-  (let ((teststring ""))
+  (let ((teststring "#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+"))
     (py-bug-tests-intern 'key-binding-base arg teststring)))
 
 (defun key-binding-base (arg)
-  (python-mode)
   (when py-debug-p (switch-to-buffer (current-buffer)))
   (assert (eq (key-binding [(:)]) 'py-electric-colon) nil "py-electric-colon key-binding test failed")
+
   (assert (eq (key-binding [(\#)]) 'py-electric-comment) nil "py-electric-comment key-binding test failed")
   (assert (eq (key-binding [(delete)]) 'py-electric-delete) nil "py-electric-delete key-binding test failed")
   (assert (eq (key-binding [(backspace)]) 'py-electric-backspace) nil "py-electric-backspace key-binding test failed")
@@ -1348,8 +1417,7 @@ aus.write(result + \"\\n\")
   (assert (eq (key-binding [(control c)(control p)]) 'py-beginning-of-statement) nil "py-beginning-of-statement key-binding test failed")
   (assert (eq (key-binding [(control c)(control n)]) 'py-end-of-statement) nil "py-end-of-statement key-binding test failed")
   (assert (eq (key-binding [(control j)]) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed")
-  ;; (assert (eq (key-binding (kbd "RET")) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed")
-  )
+  (assert (eq (key-binding (kbd "RET")) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed"))
 
 (defun py-smart-operator-test (&optional arg)
   (interactive "p")
@@ -1795,7 +1863,7 @@ def foo()
     (py-bug-tests-intern 'py-fill-string-django-base arg teststring)))
 
 (defun py-fill-string-django-base (arg)
-  (when py-debug-p (switch-to-buffer (current-buffer)))
+  (when py-debug-p (switch-to-buffer (current-buffer))) 
   (font-lock-fontify-buffer)
   (sit-for 0.1)
   (goto-char 99)
@@ -2113,12 +2181,11 @@ else:
 
 (defun py-execute-region-error-base (arg)
   (when py-debug-p (switch-to-buffer (current-buffer)))
-  (let (py-exception-buffer (buffer-name (current-buffer)))
-    (goto-char 152)
-    (push-mark)
-    (end-of-line)
-    (setq erg (py-execute-region (line-beginning-position) (line-end-position)))
-    (message "erg: %s" erg)))
+  (goto-char 152)
+  (push-mark)
+  (end-of-line)
+  (setq erg (py-execute-region (line-beginning-position) (line-end-position)))
+  (message "erg: %s" erg))
 
 (defun py-execute-statement-error-test (&optional arg)
   (interactive "p")
@@ -2188,6 +2255,9 @@ impo")))
   (py-shell-complete)
   (sit-for 2 t)
   (assert (looking-back "import") nil "py-shell-complete-test failed"))
+
+(defvar py-variables (list 'py-version 'py-indent-offset 'pdb-path 'py-verbose-p 'py-load-pymacs-p 'py-smart-operator-mode-p 'py-sexp-function 'py-autopair-mode 'py-no-completion-calls-dabbrev-expand-p 'py-indent-no-completion-p 'py-fontify-shell-buffer-p 'py-modeline-display-full-path-p 'py-modeline-acronym-display-home-p 'py-install-directory 'py-guess-py-install-directory-p 'py-extensions 'py-hide-show-minor-mode-p 'empty-comment-line-separates-paragraph-p 'py-org-cycle-p 'py-outline-minor-mode-p 'py-outline-mode-keywords 'py-start-run-py-shell 'py-start-run-ipython-shell 'py-close-provides-newline 'py-dedent-keep-relative-column 'py-indent-honors-inline-comment 'py-closing-list-dedents-bos 'py-electric-colon-active-p 'py-electric-colon-greedy-p 'py-electric-colon-newline-and-indent-p 'py-electric-comment-p 'py-electric-comment-add-space-p 'py-mark-decorators 'py-tab-indent 'py-complete-function 'py-encoding-string 'py-shebang-startstring 'py-python-command-args 'py-jython-command-args 'py-lhs-inbound-indent 'py-continuation-offset 'py-indent-tabs-mode 'py-smart-indentation 'py-block-comment-prefix 'py-indent-comments 'py-separator-char 'py-custom-temp-directory 'py-jump-on-exception 'py-ask-about-save 'py-pdbtrack-do-tracking-p 'py-pdbtrack-filename-mapping 'py-pdbtrack-minor-mode-string 'py-import-check-point-max 'py-jython-packages 'py-current-defun-show 'py-current-defun-delay 'py-honor-IPYTHONDIR-p 'py-ipython-history 'py-honor-PYTHONHISTORY-p 'py-master-file 'py-pychecker-command 'py-pychecker-command-args 'py-pep8-command 'py-pep8-command-args 'py-pyflakespep8-command 'py-pep8-command 'py-pep8-command-args 'py-pyflakespep8-command-args 'py-pyflakes-command 'py-pyflakes-command-args 'py-pep8-command-args 'py-pylint-command 'py-pylint-command-args 'py-shell-input-prompt-1-regexp 'py-shell-input-prompt-2-regexp 'py-shell-prompt-read-only 'py-switch-buffers-on-execute-p 'py-split-window-on-execute 'py-max-split-windows 'py-split-windows-on-execute-function 'py-hide-show-keywords 'py-hide-show-hide-docstrings 'python-mode-hook 'py--imenu-create-index-p 'py-imenu-create-index-function 'py-shell-name 'py-shell-toggle-1 'py-shell-toggle-2 'py-match-paren-mode 'py-kill-empty-line 'py-remove-cwd-from-path 'py-imenu-show-method-args-p 'py-history-filter-regexp 'py-use-local-default 'py-shell-local-path 'py-underscore-word-syntax-p 'py-edit-only-p 'py-force-py-shell-name-p 'python-mode-v5-behavior-p 'py-trailing-whitespace-smart-delete-p 'py--warn-tmp-files-left-p 'py-ipython-execute-delay 'strip-chars-before 'strip-chars-after 'py-fill-docstring-style 'py-number-face 'py-XXX-tag-face 'py-pseudo-keyword-face 'py-variable-name-face 'py-decorators-face 'py-builtins-face 'py-class-name-face 'py-exception-name-face 'python-mode-message-string 'py-local-command 'py-local-versioned-command 'py-shell-complete-debug 'py-encoding-string-re 'symbol-definition-start-re 'symbol-definition-start-re 'py-shebang-regexp 'py-separator-char 'py-temp-directory 'py-exec-command 'py-exec-string-command 'py-which-bufname 'py-pychecker-history 'py-pep8-history 'py-pyflakespep8-history 'py-pyflakes-history 'py-pylint-history 'ipython-de-input-prompt-regexp 'ipython-de-input-prompt-regexp 'py-force-local-shell-p 'py-bol-forms-last-indent 'python-mode-syntax-table 'outline-heading-end-regexp 'eldoc-documentation-function 'py-completion-last-window-configuration 'ipython-version 'py-shell-template 'py-execute-directory 'py-use-current-dir-when-execute-p 'py-exception-buffer 'py-output-buffer 'py-string-delim-re 'py-labelled-re 'py-expression-skip-regexp 'py-expression-skip-chars 'py-expression-looking-re 'py-not-expression-regexp 'py-not-expression-chars 'py-not-expression-chars 'py-partial-expression-skip-chars 'py-partial-expression-forward-regexp 'py-partial-expression-skip-backward-chars 'py-not-partial-expression-skip-chars 'py-partial-expression-looking-regexp 'py-not-partial-expression-regexp 'py-operator-regexp 'py-assignment-regexp 'py-delimiter-regexp 'py-line-number-offset 'match-paren-no-use-syntax-pps 'py-traceback-line-re 'py-traceback-line-re 'py-mode-syntax-table 'py-file-queue 'python-mode-abbrev-table 'py-pdbtrack-input-prompt 'py-pydbtrack-input-prompt 'py-pdbtrack-is-tracking-p 'py-shell-map 'py-font-lock-keywords 'py-dotted-expression-syntax-table 'jython-mode-hook 'py-shell-hook 'ipython-completion-command-string 'ipython0.10-completion-command-string 'ipython0.11-completion-command-string 'py-last-exeption-buffer 'python-preoutput-result 'py-imenu-class-regexp 'py-imenu-method-regexp 'py-imenu-method-no-arg-parens 'py-imenu-method-arg-parens 'py-imenu-generic-expression 'py-imenu-generic-regexp 'py-imenu-generic-parens 'py-mode-output-map 'py-menu 'py-already-guessed-indent-offset 'python-mode-map 'skeleton-further-elements 'virtualenv-workon-home 'virtualenv-name 'python-mode-syntax-table 'python-dotty-syntax-table 'py-shell-template 'py-block-closing-keywords-re 'py-finally-re 'py-except-re 'py-else-re 'py-no-outdent-re 'py-assignment-re 'py-block-re 'py-minor-block-re 'py-try-block-re 'py-class-re 'py-def-or-class-re 'py-def-re 'py-block-or-clause-re 'py-extended-block-or-clause-re 'py-clause-re 'py-elif-re 'py-if-re 'py-try-re 'py-mode-syntax-table 'py-pdbtrack-stack-entry-regexp 'py-pdbtrack-input-prompt 'py-pydbtrack-input-prompt 'py-pdbtrack-marker-regexp-file-group 'py-pdbtrack-marker-regexp-line-group 'py-pdbtrack-marker-regexp-funcname-group 'py-pdbtrack-track-range 'py-compilation-regexp-alist 'py-font-lock-syntactic-keywords 'virtualenv-name )
+  "Used for bug-tracking by `py-list-settings'")
 
 (defun py-list-settings ()
   "List py-variables with it's current value.
