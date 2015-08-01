@@ -49,7 +49,7 @@
 (add-hook 'after-make-frame-functions 'fit-frame)
 
 ;; Non-nil means no need to redraw entire frame after suspending.
-(setq no-redraw-on-reenter nil)
+(setq no-redraw-on-reenter t)
 
 ;; Improve Emacs display engine
 (setq redisplay-dont-pause t)
