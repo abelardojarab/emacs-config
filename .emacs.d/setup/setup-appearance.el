@@ -132,8 +132,8 @@ non-nil."
 (setq solarized-scale-org-headlines nil)
 
 ;; Load Atom dark theme
-;; (load-theme 'atom-dark t)
-(load-theme 'zenburn t)
+(load-theme 'atom-dark t)
+;; (load-theme 'zenburn t)
 (set-face-attribute 'region nil :background "#666")
 
 ;; Syntax coloring
@@ -142,17 +142,26 @@ non-nil."
 (global-font-lock-mode t)
 (global-hi-lock-mode nil)
 (setq font-lock-maximum-decoration t)
-(setq font-lock-maximum-size (* 1024 1024))
+(setq font-lock-maximum-size (* 512 512))
 (setq font-lock-support-mode 'jit-lock-mode ;; lazy-lock-mode
       fast-lock-cache-directories '("~/.emacs.cache"))
 (setq font-lock-support-mode 'jit-lock-mode)
 (setq jit-lock-stealth-time 20.0
       jit-lock-stealth-load 300
       jit-lock-chunk-size 20
-      jit-lock-defer-time 0.1
+      jit-lock-defer-time 0.05
       jit-lock-stealth-nice 0.5
       jit-lock-contextually t
       jit-lock-stealth-verbose nil)
+
+;; Do not fontify large files
+(defun my-find-file-check-make-large-file-read-only-hook ()
+  "If a file is over a given size, make the buffer read only."
+  (when (> (buffer-size) (* 512 256))
+    (setq buffer-read-only t)
+    (buffer-disable-undo)
+    (fundamental-mode)))
+(add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
 
 ;; hl-line overrides the background of hi-lock’ed text, this will provide a fix
 (defadvice hi-lock-set-pattern (around use-overlays activate)
