@@ -587,6 +587,7 @@
 ;; Fix longlines in Org
 (require 'longlines nil t)
 (setq longlines-wrap-follows-window-size t)
+(add-hook 'org-mode-hook 'longlines-mode)
 
 (defun longlines-encode-region (beg end &optional _buffer)
   "Replace each soft newline between BEG and END with exactly one space.
