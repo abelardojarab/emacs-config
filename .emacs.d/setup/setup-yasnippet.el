@@ -29,7 +29,15 @@
 (require 'yasnippet)
 (setq yas-snippet-dirs
       '("~/.emacs.d/snippets"))
+(yas-initialize)
 (yas-global-mode 1)
+
+;; Do not activate for read only and non-existent snippets
+(set-default 'yas--dont-activate
+             #'(lambda ()
+                 (or buffer-read-only
+                    (and yas-snippet-dirs
+                       (null (yas--get-snippet-tables))))))
 
 ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
 (define-key yas-minor-mode-map (kbd "<tab>") nil)
