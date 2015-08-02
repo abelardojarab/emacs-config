@@ -48,7 +48,7 @@
 (require 'auto-complete-config)
 (require 'auto-complete)
 (ac-config-default)
-(setq-default ac-sources '(ac-source-semantic-raw))
+(setq-default ac-sources '(ac-source-words-in-same-mode-buffers))
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
 (ac-set-trigger-key "TAB")
 (ac-set-trigger-key "<tab>")
@@ -93,11 +93,10 @@
 ;; Let's have snippets and TAGS in the auto-complete dropdown
 (defun ac-common-setup ()
   (setq ac-sources (append ac-sources '(ac-source-yasnippet
+                                        ac-source-abbrev
                                         ac-source-etags
                                         ac-source-gtags
                                         ac-source-semantic
-                                        ac-source-semantic-raw
-                                        ac-source-abbrev
                                         ;; ac-source-ispell-fuzzy
                                         ac-source-dictionary
                                         ac-source-words-in-same-mode-buffers))))

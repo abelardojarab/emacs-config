@@ -77,20 +77,20 @@
 (define-auto-insert "\\.cpp$" ["c++-auto-insert" autoinsert-yas-expand])
 (define-auto-insert "\\.cs$" ["csharp-auto-insert" autoinsert-yas-expand])
 (define-auto-insert "\\.org$" ["org-auto-insert" autoinsert-yas-expand])
+(define-auto-insert "\\.py$" ["py-auto-insert" autoinsert-yas-expand])
 
 (defadvice auto-insert (around yasnippet-expand-after-auto-insert activate)
   "Expand Content Auto-inserted as yasnippet Templete,
   so That WE could use yasnippet in autoinsert mode "
   (let ((is-new-File (and (not buffer-read-only)
-                          (or (eq this-command 'auto-insert)
-                              (and auto-insert (bobp) (eobp))))))
+                        (or (eq this-command 'auto-insert)
+                           (and auto-insert (bobp) (eobp))))))
     ad-do-it
     (let ((old-point-max (point-max)))
       (when is-new-File
         (goto-char old-point-max)
         (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
-        (delete-region (point-min) old-point-max)
-        ))))
+        (delete-region (point-min) old-point-max)))))
 
 ;; Get email from Magit if available
 (defun yas--magit-email-or-default ()
@@ -98,30 +98,6 @@
   (if (magit-get-top-dir ".")
       (magit-get "user.email")
     user-mail-address))
-
-;; Fast creation of snippets
-(defvaralias 'yas/init-snippet-template 'yas-new-snippet-default)
-(defun yas-new-snippet-with-content (s e)
-  "Create snippet from region to speed-up snippet development."
-  (interactive "r")
-  (let ((initial-text (buffer-substring s e))
-        (default-directory (file-name-as-directory (car (yas-snippet-dirs)))))
-    (yas-new-snippet t)
-    (save-excursion
-      (when initial-text
-        (insert initial-text)
-        (goto-char (point-min))
-        (while (re-search-forward "[\\$]" nil t)
-          (replace-match "\\\\\\&"))))
-    (yas-expand-snippet yas/init-snippet-template)))
-
-;; Make snippet placeholders
-(defun yas/make-placeholder (s e)
-  "Make yasnippet placeholder from region."
-  (interactive "r")
-  (let ((text (buffer-substring s e)))
-    (yas-expand-snippet "\\${$1:`text`}" s e)))
-(define-key snippet-mode-map "\C-c\C-n" 'yas/make-placeholder)
 
 ;; Auto-complete enhancement
 (defun yas/set-ac-modes ()
