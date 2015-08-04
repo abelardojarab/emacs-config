@@ -84,7 +84,7 @@ Defaults to `error'."
 (load-file "~/.emacs.d/cedet/cedet-devel-load.el")
 (load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
 (global-ede-mode 1)
-(ede-enable-generic-projects)
+;; (ede-enable-generic-projects)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
