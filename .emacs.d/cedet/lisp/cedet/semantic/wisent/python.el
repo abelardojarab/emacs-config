@@ -1,6 +1,6 @@
 ;;; semantic/wisent/python.el --- Semantic support for Python
 
-;; Copyright (C) 2002, 2004, 2006-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2002, 2004, 2006-2015 Free Software Foundation, Inc.
 
 ;; Author: Richard Kim  <emacs18@gmail.com>
 ;; Maintainer: Richard Kim  <emacs18@gmail.com>
@@ -44,6 +44,17 @@
 (eval-when-compile
   (require 'cl))
 
+(defun python-proc ()
+  "Return the current Python process.
+See variable `python-buffer'.  Starts a new process if necessary."
+  ;; Fixme: Maybe should look for another active process if there
+  ;; isn't one for `python-buffer'.
+  (unless (comint-check-proc python-buffer)
+    (run-python nil t))
+  (get-buffer-process (if (derived-mode-p 'inferior-python-mode)
+                          (current-buffer)
+                        python-buffer)))
+
 ;;; Customization
 ;;
 
@@ -51,41 +62,41 @@
   "Evaluate some Python code that determines the system include path."
   (if (fboundp 'python-shell-internal-send-string)
       (delq nil
-	    (mapcar
-	     (lambda (dir)
-	       (when (file-directory-p dir)
-		 dir))
-	     (split-string
-	      (python-shell-internal-send-string
-	       "import sys;print ('\\n'.join(sys.path))")
-	      "\n" t)))
+            (mapcar
+             (lambda (dir)
+               (when (file-directory-p dir)
+                 dir))
+             (split-string
+              (python-shell-internal-send-string
+               "import sys;print ('\\n'.join(sys.path))")
+              "\n" t)))
     ;; Old code, kept for compatibility.  This will be removed
     ;; eventually; until then, compile this without warnings.
     (with-no-warnings
       (python-proc)
       (if python-buffer
-	  (with-current-buffer python-buffer
-	    (set (make-local-variable 'python-preoutput-result) nil)
-	    (python-send-string
-	     "import sys; print '_emacs_out ' + '\\0'.join(sys.path)")
-	    (accept-process-output (python-proc) 2)
-	    (if python-preoutput-result
-		(split-string python-preoutput-result "[\0\n]" t)
-	      ;; Try a second, Python3k compatible shot
-	      (python-send-string
-	       "import sys; print('_emacs_out ' + '\\0'.join(sys.path))")
-	      (accept-process-output (python-proc) 2)
-	      (if python-preoutput-result
-		  (split-string python-preoutput-result "[\0\n]" t)
-		(message "Timeout while querying Python for system include path.")
-		nil)))
-	(message "Python seems to be unavailable on this system.")))))
+          (with-current-buffer python-buffer
+            (set (make-local-variable 'python-preoutput-result) nil)
+            (python-send-string
+             "import sys; print '_emacs_out ' + '\\0'.join(sys.path)")
+            (accept-process-output (python-proc) 2)
+            (if python-preoutput-result
+                (split-string python-preoutput-result "[\0\n]" t)
+              ;; Try a second, Python3k compatible shot
+              (python-send-string
+               "import sys; print('_emacs_out ' + '\\0'.join(sys.path))")
+              (accept-process-output (python-proc) 2)
+              (if python-preoutput-result
+                  (split-string python-preoutput-result "[\0\n]" t)
+                (message "Timeout while querying Python for system include path.")
+                nil)))
+        (message "Python seems to be unavailable on this system.")))))
 
 (defcustom-mode-local-semantic-dependency-system-include-path
   python-mode semantic-python-dependency-system-include-path
   (when (and (featurep 'python)
-	     ;; python-mode and batch somehow often hangs.
-	     (not noninteractive))
+         ;; python-mode and batch somehow often hangs.
+         (not noninteractive))
     (semantic-python-get-system-include-path))
   "The system include path used by Python language.")
 
@@ -293,14 +304,14 @@ the indentation of the current line."
        t)
       ;; Indentation decreased
       ((progn
-	 ;; Pop items from indentation stack
-	 (while (< curr-indent last-indent)
-	   (pop wisent-python-indent-stack)
-	   (setq semantic-lex-current-depth (1- semantic-lex-current-depth)
-		 last-indent (car wisent-python-indent-stack))
-	   (semantic-lex-push-token
-	    (semantic-lex-token 'DEDENT last-pos (point))))
-	 (= last-pos (point)))
+     ;; Pop items from indentation stack
+     (while (< curr-indent last-indent)
+       (pop wisent-python-indent-stack)
+       (setq semantic-lex-current-depth (1- semantic-lex-current-depth)
+         last-indent (car wisent-python-indent-stack))
+       (semantic-lex-push-token
+        (semantic-lex-token 'DEDENT last-pos (point))))
+     (= last-pos (point)))
        ;; If pos did not change, then we must return nil so that
        ;; other lexical analyzers can be run.
        nil))))
@@ -379,9 +390,9 @@ Set attributes for constructors, special, private and static methods."
   ;; + at least one argument
   ;; + first argument is self
   (when (and (> (length (semantic-tag-function-arguments tag)) 0)
-	     (string= (semantic-tag-name
-		       (first (semantic-tag-function-arguments tag)))
-		      "self"))
+         (string= (semantic-tag-name
+               (first (semantic-tag-function-arguments tag)))
+              "self"))
     (semantic-tag-put-attribute tag :parent "dummy"))
 
   ;; Identify constructors, special and private functions
@@ -400,12 +411,12 @@ Set attributes for constructors, special, private and static methods."
   ;; If there is a staticmethod decorator, add a static typemodifier
   ;; for the function.
   (when (semantic-find-tags-by-name
-	 "staticmethod"
-	 (semantic-tag-get-attribute tag :decorators))
+     "staticmethod"
+     (semantic-tag-get-attribute tag :decorators))
     (semantic-tag-put-attribute
      tag :typemodifiers
      (cons "static"
-	   (semantic-tag-get-attribute tag :typemodifiers))))
+       (semantic-tag-get-attribute tag :typemodifiers))))
 
   ;; TODO
   ;; + check for decorators classmethod
@@ -432,16 +443,16 @@ Set attributes for constructors, special, private and static methods."
   (dolist (member (semantic-tag-type-members tag))
     (when (semantic-tag-function-constructor-p member)
       (let ((self (semantic-tag-name
-		   (car (semantic-tag-function-arguments member)))))
-	(dolist (statement (semantic-tag-get-attribute member :suite))
-	  (when (semantic-python-instance-variable-p statement self)
-	    (let ((variable (semantic-tag-clone
-			     statement
-			     (substring (semantic-tag-name statement) 5)))
-		  (members  (semantic-tag-get-attribute tag :members)))
-	      (when (semantic-python-private-p variable)
-		(semantic-tag-put-attribute variable :protection "private"))
-	      (setcdr (last members) (list variable))))))))
+           (car (semantic-tag-function-arguments member)))))
+    (dolist (statement (semantic-tag-get-attribute member :suite))
+      (when (semantic-python-instance-variable-p statement self)
+        (let ((variable (semantic-tag-clone
+                 statement
+                 (substring (semantic-tag-name statement) 5)))
+          (members  (semantic-tag-get-attribute tag :members)))
+          (when (semantic-python-private-p variable)
+        (semantic-tag-put-attribute variable :protection "private"))
+          (setcdr (last members) (list variable))))))))
 
   ;; TODO remove the :suite attribute
   tag)
@@ -451,12 +462,12 @@ Set attributes for constructors, special, private and static methods."
 TAG contains compound declaration if the NAME part of the tag is
 a list.  In python, this can happen with `import' statements."
   (let ((class (semantic-tag-class tag))
-	(elts (semantic-tag-name tag))
-	(expand nil))
+    (elts (semantic-tag-name tag))
+    (expand nil))
     (cond
      ((and (eq class 'include) (listp elts))
       (dolist (E elts)
-	(setq expand (cons (semantic-tag-clone tag E) expand)))
+    (setq expand (cons (semantic-tag-clone tag E) expand)))
       (setq expand (nreverse expand)))
      )))
 
@@ -514,13 +525,13 @@ Return nil if there is nothing relevant."
   "Format an abbreviated tag for python.
 Shortens 'code' tags, but passes through for others."
   (cond ((semantic-tag-of-class-p tag 'code)
-	 ;; Just take the first line.
-	 (let ((name (semantic-tag-name tag)))
-	   (when (string-match "\n" name)
-	     (setq name (substring name 0 (match-beginning 0))))
-	   name))
-	(t
-	 (semantic-format-tag-abbreviate-default tag parent color))))
+     ;; Just take the first line.
+     (let ((name (semantic-tag-name tag)))
+       (when (string-match "\n" name)
+         (setq name (substring name 0 (match-beginning 0))))
+       name))
+    (t
+     (semantic-format-tag-abbreviate-default tag parent color))))
 
 ;;; Enable Semantic in `python-mode'.
 ;;
@@ -551,13 +562,13 @@ Shortens 'code' tags, but passes through for others."
 
    ;; I need a python guru to update this list:
    semantic-symbol->name-assoc-list-for-type-parts '((variable . "Variables")
-						     (function . "Methods"))
+                             (function . "Methods"))
    semantic-symbol->name-assoc-list '((type . "Classes")
-				      (variable . "Variables")
-				      (function . "Functions")
-				      (include  . "Imports")
-				      (package  . "Package")
-				      (code . "Code")))
+                      (variable . "Variables")
+                      (function . "Functions")
+                      (include  . "Imports")
+                      (package  . "Package")
+                      (code . "Code")))
    )
 
 ;;;###autoload
@@ -592,10 +603,10 @@ SELF or the instance name \"self\" if SELF is nil."
   (when (semantic-tag-of-class-p tag 'variable)
     (let ((name (semantic-tag-name tag)))
       (when (string-match
-	     (rx-to-string
-	      `(seq string-start ,(or self "self") "."))
-	     name)
-	(not (string-match "\\." (substring name 5)))))))
+         (rx-to-string
+          `(seq string-start ,(or self "self") "."))
+         name)
+    (not (string-match "\\." (substring name 5)))))))
 
 (defun semantic-python-docstring-p (tag)
   "Return non-nil, when TAG is a Python documentation string."
@@ -603,11 +614,11 @@ SELF or the instance name \"self\" if SELF is nil."
   ;; member is of class 'code and its name looks like a documentation
   ;; string.
   (let ((class (semantic-tag-class tag))
-	(name  (semantic-tag-name  tag)))
+    (name  (semantic-tag-name  tag)))
     (and (eq class 'code)
-	 (string-match
-	  (rx (seq string-start "\"\"\"" (0+ anything) "\"\"\"" string-end))
-	  name))))
+     (string-match
+      (rx (seq string-start "\"\"\"" (0+ anything) "\"\"\"" string-end))
+      name))))
 
 (defun semantic-python-extract-docstring (tag)
   "Return the Python documentation string contained in TAG."

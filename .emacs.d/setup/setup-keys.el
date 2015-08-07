@@ -258,8 +258,8 @@
 
 ;; Redo
 (require 'redo+)
-(global-set-key (kbd "C-S-z") 'redo) ; Mac style
-(global-set-key (kbd "C-y") 'redo) ; Microsoft Windows style
+(global-set-key (kbd "C-S-z") 'redo) ;; Mac style
+(global-set-key (kbd "C-y") 'redo) ;; Microsoft Windows style
 (setq undo-no-redo t)
 
 ;; Better undo
@@ -349,7 +349,7 @@
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
 (define-key my-keys-minor-mode-map (kbd "<f10>") 'toggle-selective-display)
-(define-key my-keys-minor-mode-map (kbd "<f11>") 'ibuffer)
+(define-key my-keys-minor-mode-map (kbd "<f4>") 'ibuffer)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'magit-status)
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
 (define-key my-keys-minor-mode-map (kbd "C-S-<left>") 'popup-select-window)

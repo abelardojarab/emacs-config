@@ -124,12 +124,6 @@
         (folding-mode))
     ad-do-it))
 
-;; Keys
-(global-set-key (kbd "M-s <SPC>") 'fold-dwim-toggle)
-(global-set-key (kbd "M-s M-<SPC>") 'fold-dwim-toggle)
-(global-set-key (kbd "M-s C-<SPC>") 'fold-dwim-hide-all)
-(global-set-key (kbd "M-s M-<SPC>") 'fold-dwim-show-all)
-
 ;; Extra syntax for nxml
 (add-to-list 'hs-special-modes-alist
              '(nxml-mode
@@ -177,6 +171,11 @@
 
   ;; Add the following to your .emacs and uncomment it in order to get a + symbol
   (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
+
+  (defface hideshowvis-hidable-face
+    '((t (:foreground "#444" :box t)))
+    "Face to highlight foldable regions"
+    :group 'hideshow)
 
   (defcustom hs-fringe-face 'hs-fringe-face
     "*Specify face used to highlight the fringe on hidden regions."
