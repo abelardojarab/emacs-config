@@ -36,25 +36,25 @@
 
 (defclass ede-project-autoload-dirmatch ()
   ((fromconfig :initarg :fromconfig
-           :initform nil
-           :documentation
-           "A config file within which the match pattern lives.")
+	       :initform nil
+	       :documentation
+	       "A config file within which the match pattern lives.")
    (configregex :initarg :configregex
-        :initform nil
-        :documentation
-        "A regexp to identify the dirmatch pattern.")
+		:initform nil
+		:documentation
+		"A regexp to identify the dirmatch pattern.")
    (configregexidx :initarg :configregexidx
-           :initform nil
-           :documentation
-           "An index into the match-data of `configregex'.")
+		   :initform nil
+		   :documentation
+		   "An index into the match-data of `configregex'.")
    (subdir-only :initarg :subdir-only
-        :initform t
-        :documentation
-        "Non-nil means an exact match to the found directory is a non-match.
+		:initform t
+		:documentation
+		"Non-nil means an exact match to the found directory is a non-match.
 This implies projects exist only in subdirectories of the configuration path.
 If `:subdir-only' is nil, then the directory from the configuration file is the project.")
    (configdatastash :documentation
-            "Save discovered match string.")
+		    "Save discovered match string.")
    )
   "Support complex matches for projects that live in named directories.
 For most cases, a simple string is sufficient.  If, however, a project
@@ -66,8 +66,8 @@ into memory.")
   "Calculate the value of :fromconfig from DIRMATCH."
   (let ((fc (oref dirmatch fromconfig)))
     (cond ((stringp fc) fc)
-      ((functionp fc) (funcall fc))
-      (t (error "Unknown dirmatch object match style.")))
+	  ((functionp fc) (funcall fc))
+	  (t (error "Unknown dirmatch object match style.")))
     ))
 
 
@@ -80,43 +80,43 @@ into memory.")
   (let ((fc (ede-calc-fromconfig dirmatch)))
 
     (when (file-exists-p fc)
-      (let ((matchstring
-         (if (slot-boundp dirmatch 'configdatastash)
-         (oref dirmatch configdatastash)
-           nil)))
-    (when (and (not matchstring) (not (slot-boundp dirmatch 'configdatastash)))
-      (save-current-buffer
-        (let* ((buff (get-file-buffer fc))
-           (readbuff
-            (let ((find-file-hook nil)) ;; Disable ede from recursing
-              (find-file-noselect fc))))
-          (set-buffer readbuff)
-          (save-excursion
-        (goto-char (point-min))
-        (when (re-search-forward (oref dirmatch configregex) nil t)
-          (setq matchstring
-            (match-string (or (oref dirmatch configregexidx) 0)))))
-          (if (not buff) (kill-buffer readbuff))))
-      (when matchstring
-        ;; If this dirmatch only finds subdirs of matchstring, then
-        ;; force matchstring to be a directory.
-        (when (oref dirmatch subdir-only)
-          (setq matchstring (file-name-as-directory matchstring)))
-        ;; Convert matchstring to a regexp
-        (setq matchstring (concat "^" (regexp-quote matchstring)))
-        ;; Stash it for later.
-        (oset dirmatch configdatastash matchstring))
-      ;; Debug
-      ;;(message "Stashing config data for dirmatch %S as %S" (eieio-object-name dirmatch) matchstring)
-      )
-    ;;(message "dirmatch %s against %s" matchstring (expand-file-name file))
-    ;; Match against our discovered string
-    (setq file (file-name-as-directory (expand-file-name file)))
-    (and matchstring (string-match matchstring (expand-file-name file))
-         (or (not (oref dirmatch subdir-only))
-         (not (= (match-end 0) (length file))))
-         )
-    ))
+      (let ((matchstring 
+	     (if (slot-boundp dirmatch 'configdatastash)
+		 (oref dirmatch configdatastash)
+	       nil)))
+	(when (and (not matchstring) (not (slot-boundp dirmatch 'configdatastash)))
+	  (save-current-buffer
+	    (let* ((buff (get-file-buffer fc))
+		   (readbuff
+		    (let ((find-file-hook nil)) ;; Disable ede from recursing
+		      (find-file-noselect fc))))
+	      (set-buffer readbuff)
+	      (save-excursion
+		(goto-char (point-min))
+		(when (re-search-forward (oref dirmatch configregex) nil t)
+		  (setq matchstring
+			(match-string (or (oref dirmatch configregexidx) 0)))))
+	      (if (not buff) (kill-buffer readbuff))))
+	  (when matchstring
+	    ;; If this dirmatch only finds subdirs of matchstring, then
+	    ;; force matchstring to be a directory.
+	    (when (oref dirmatch subdir-only)
+	      (setq matchstring (file-name-as-directory matchstring)))
+	    ;; Convert matchstring to a regexp
+	    (setq matchstring (concat "^" (regexp-quote matchstring)))
+	    ;; Stash it for later.
+	    (oset dirmatch configdatastash matchstring))
+	  ;; Debug
+	  ;;(message "Stashing config data for dirmatch %S as %S" (eieio-object-name dirmatch) matchstring)
+	  )
+	;;(message "dirmatch %s against %s" matchstring (expand-file-name file))
+	;; Match against our discovered string
+	(setq file (file-name-as-directory (expand-file-name file)))
+	(and matchstring (string-match matchstring (expand-file-name file))
+	     (or (not (oref dirmatch subdir-only))
+		 (not (= (match-end 0) (length file))))
+	     )
+	))
     ))
 
 (declare-function ede-directory-safe-p "ede")
@@ -124,55 +124,55 @@ into memory.")
 
 (defclass ede-project-autoload ()
   ((name :initarg :name
-     :documentation "Name of this project type")
+	 :documentation "Name of this project type")
    (file :initarg :file
-     :documentation "The lisp file belonging to this class.")
+	 :documentation "The lisp file belonging to this class.")
    (proj-file :initarg :proj-file
-          :documentation "Name of a project file of this type.")
+	      :documentation "Name of a project file of this type.")
    (root-only :initarg :root-only
-          :initform t ;; Default - majority case.
-          :documentation
-          "Non-nil if project detection only finds proj-file @ project root.")
+	      :initform t ;; Default - majority case.
+	      :documentation
+	      "Non-nil if project detection only finds proj-file @ project root.")
    (proj-root-dirmatch :initarg :proj-root-dirmatch
-               :initform nil
-               :type (or null string ede-project-autoload-dirmatch)
-               :documentation
-               "To avoid loading a project, check if the directory matches this.
+		       :initform nil
+		       :type (or null string ede-project-autoload-dirmatch)
+		       :documentation
+		       "To avoid loading a project, check if the directory matches this.
 Specifying this matcher object will allow EDE to perform a complex
 check without loading the project.
 
 NOTE: If you use dirmatch, you may need to set :root-only to `nil'.
 While it may be a root based project, all subdirs will happen to return
-true for the dirmatch, so for scanning purposes, set it to `nil'.")
+true for the dirmatch, so for scanning purposes, set it to `nil'.") 
    (proj-root :initarg :proj-root
-          :type function
-          :documentation "A function symbol to call for the project root.
+	      :type function
+	      :documentation "A function symbol to call for the project root.
 This function takes no arguments, and returns the current directories
 root, if available.  Leave blank to use the EDE directory walking
 routine instead.")
    (initializers :initarg :initializers
-         :initform nil
-         :documentation
-         "Initializers passed to the project object.
+		 :initform nil
+		 :documentation
+		 "Initializers passed to the project object.
 These are used so there can be multiple types of projects
 associated with a single object class, based on the initializers used.")
    (load-type :initarg :load-type
-          :documentation "Fn symbol used to load this project file.")
+	      :documentation "Fn symbol used to load this project file.")
    (class-sym :initarg :class-sym
-          :documentation "Symbol representing the project class to use.")
+	      :documentation "Symbol representing the project class to use.")
    (generic-p :initform nil
-          :documentation
-          "Generic projects are added to the project list at the end.
+	      :documentation
+	      "Generic projects are added to the project list at the end.
 The add routine will set this to non-nil so that future non-generic placement will
 be successful.")
    (new-p :initarg :new-p
-      :initform t
-      :documentation
-      "Non-nil if this is an option when a user creates a project.")
+	  :initform t
+	  :documentation
+	  "Non-nil if this is an option when a user creates a project.")
    (safe-p :initarg :safe-p
-       :initform t
-       :documentation
-       "Non-nil if the project load files are \"safe\".
+	   :initform t
+	   :documentation
+	   "Non-nil if the project load files are \"safe\".
 An unsafe project is one that loads project variables via Emacs
 Lisp code.  A safe project is one that loads project variables by
 scanning files without loading Lisp code from them.")
@@ -184,28 +184,28 @@ type is required and the load function used.")
 (defvar ede-project-class-files
   (list
    (ede-project-autoload "edeproject-makefile"
-             :name "Make" :file 'ede/proj
-             :proj-file "Project.ede"
-             :root-only nil
-             :load-type 'ede-proj-load
-             :class-sym 'ede-proj-project
-             :safe-p nil)
+			 :name "Make" :file 'ede/proj
+			 :proj-file "Project.ede"
+			 :root-only nil
+			 :load-type 'ede-proj-load
+			 :class-sym 'ede-proj-project
+			 :safe-p nil)
    (ede-project-autoload "edeproject-automake"
-             :name "Automake" :file 'ede/proj
-             :proj-file "Project.ede"
-             :root-only nil
-             :initializers '(:makefile-type Makefile.am)
-             :load-type 'ede-proj-load
-             :class-sym 'ede-proj-project
-             :safe-p nil)
+			 :name "Automake" :file 'ede/proj
+			 :proj-file "Project.ede"
+			 :root-only nil
+			 :initializers '(:makefile-type Makefile.am)
+			 :load-type 'ede-proj-load
+			 :class-sym 'ede-proj-project
+			 :safe-p nil)
    (ede-project-autoload "automake"
-             :name "automake" :file 'ede/project-am
-             :proj-file "Makefile.am"
-             :root-only nil
-             :load-type 'project-am-load
-             :class-sym 'project-am-makefile
-             :new-p nil
-             :safe-p t)
+			 :name "automake" :file 'ede/project-am
+			 :proj-file "Makefile.am"
+			 :root-only nil
+			 :load-type 'project-am-load
+			 :class-sym 'project-am-makefile
+			 :new-p nil
+			 :safe-p t)
    )
   "List of vectors defining how to determine what type of projects exist.")
 
@@ -220,39 +220,39 @@ added.  Possible values are:
             front of the list so more generic projects don't get priority."
   ;; First, can we identify PROJAUTO as already in the list?  If so, replace.
   (let ((projlist ede-project-class-files)
-    (projname (oref projauto :name)))
+	(projname (oref projauto :name)))
     (while (and projlist (not (string= (oref (car projlist) :name) projname)))
       (setq projlist (cdr projlist)))
 
     (if projlist
-    ;; Stick the new one into the old slot.
-    (setcar projlist projauto)
+	;; Stick the new one into the old slot.
+	(setcar projlist projauto)
 
       ;; Else, see where to insert it.
       (cond ((and flag (eq flag 'unique))
-         ;; Unique items get stuck right onto the front.
-         (setq ede-project-class-files
-           (cons projauto ede-project-class-files)))
+	     ;; Unique items get stuck right onto the front.
+	     (setq ede-project-class-files
+		   (cons projauto ede-project-class-files)))
 
-        ;; Generic Projects go at the very end of the list.
-        ((and flag (eq flag 'generic))
-         (oset projauto generic-p t)
-         (setq ede-project-class-files
-           (append ede-project-class-files
-               (list projauto))))
+	    ;; Generic Projects go at the very end of the list.
+	    ((and flag (eq flag 'generic))
+	     (oset projauto generic-p t)
+	     (setq ede-project-class-files
+		   (append ede-project-class-files
+			   (list projauto))))
 
-        ;; Normal projects go at the end of the list, but
-        ;; before the generic projects.
-        (t
-         (let ((prev nil)
-           (next ede-project-class-files))
-           (while (and next (not (oref (car next) generic-p)))
-         (setq prev next
-               next (cdr next)))
-           (when (not prev)
-         (error "ede-project-class-files not initialized"))
-           ;; Splice into the list.
-           (setcdr prev (cons projauto next))))))))
+	    ;; Normal projects go at the end of the list, but
+	    ;; before the generic projects.
+	    (t
+	     (let ((prev nil)
+		   (next ede-project-class-files))
+	       (while (and next (not (oref (car next) generic-p)))
+		 (setq prev next
+		       next (cdr next)))
+	       (when (not prev)
+		 (error "ede-project-class-files not initialized"))
+	       ;; Splice into the list.
+	       (setcdr prev (cons projauto next))))))))
 
 ;;; Project Autoload Methods
 ;;
@@ -260,21 +260,20 @@ added.  Possible values are:
 ;; New method using detect.el
 (defmethod ede-auto-detect-in-dir ((this ede-project-autoload) dir)
   "Return non-nil if THIS project autoload is found in DIR."
-  (ignore-errors
-    (let* ((d (file-name-as-directory dir))
-           (pf (oref this proj-file))
-           (f (when (stringp pf) (expand-file-name pf d))))
-      (if f
-          (and f (file-exists-p f))
-        (let ((dirmatch (oref this proj-root-dirmatch)))
-          (cond
-           ((stringp dirmatch)
-            nil) ; <- do something here - maybe obsolete the option?
-           ((ede-project-autoload-dirmatch-p dirmatch)
-            (if (and dirmatch (ede-dirmatch-installed dirmatch))
-                (ede-do-dirmatch dirmatch dir)
-                                        ;(message "Dirmatch %S not installed." dirmatch)
-              ))))))))
+  (let* ((d (file-name-as-directory dir))
+	 (pf (oref this proj-file))
+	 (f (when (stringp pf) (expand-file-name pf d))))
+    (if f
+	(and f (file-exists-p f))
+      (let ((dirmatch (oref this proj-root-dirmatch)))
+	(cond 
+	 ((stringp dirmatch)
+	  nil) ; <- do something here - maybe obsolete the option?
+	 ((ede-project-autoload-dirmatch-p dirmatch)
+	  (if (and dirmatch (ede-dirmatch-installed dirmatch))
+	      (ede-do-dirmatch dirmatch dir)
+	    ;(message "Dirmatch %S not installed." dirmatch)
+	    )))))))
 
 (defmethod ede-auto-load-project ((this ede-project-autoload) dir)
   "Load in the project associated with THIS project autoload description.
@@ -284,7 +283,7 @@ be loaded.
 NOTE: Do not call this - it should only be called from `ede-load-project-file'."
   ;; Last line of defense: don't load unsafe projects.
   (when (not (or (oref this :safe-p)
-         (ede-directory-safe-p dir)))
+		 (ede-directory-safe-p dir)))
     (error "Attempt to load an unsafe project (bug elsewhere in EDE)"))
   ;; Things are good - so load the project.
   (let ((o (funcall (oref this load-type) dir)))
@@ -299,7 +298,7 @@ NOTE: Do not call this - it should only be called from `ede-load-project-file'."
 
 
 
-;;; -------- Old Methods
+;;; -------- Old Methods 
 ;; See if we can do without them.
 
 ;; @FIXME - delete from loaddefs to remove this.

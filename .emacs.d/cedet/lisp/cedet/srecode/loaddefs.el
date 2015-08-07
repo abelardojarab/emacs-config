@@ -3,8 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads (srecode-semantic-handle-:android) "android" "android.el"
-;;;;;;  (21522 31081 235974 900000))
+;;;### (autoloads nil "android" "android.el" (21957 7220 519 0))
 ;;; Generated autoloads from android.el
 
 (autoload 'srecode-semantic-handle-:android "android" "\
@@ -14,8 +13,8 @@ Add android specific symbols into DICT based on the current project.
 
 ;;;***
 
-;;;### (autoloads (srecode-compile-templates) "srecode/compile" "compile.el"
-;;;;;;  (21522 31081 236974 900000))
+;;;### (autoloads nil "srecode/compile" "compile.el" (21957 7220
+;;;;;;  550 0))
 ;;; Generated autoloads from compile.el
 
 (autoload 'srecode-compile-templates "srecode/compile" "\
@@ -25,8 +24,7 @@ Compile a semantic recode template file into a mode-local variable.
 
 ;;;***
 
-;;;### (autoloads (srecode-semantic-handle-:cpp srecode-semantic-handle-:c)
-;;;;;;  "srecode/cpp" "cpp.el" (21522 31081 237974 900000))
+;;;### (autoloads nil "srecode/cpp" "cpp.el" (21957 7220 567 0))
 ;;; Generated autoloads from cpp.el
 
 (autoload 'srecode-semantic-handle-:c "srecode/cpp" "\
@@ -47,9 +45,8 @@ Also adds the following:
 
 ;;;***
 
-;;;### (autoloads (srecode-document-insert-group-comments srecode-document-insert-variable-one-line-comment
-;;;;;;  srecode-document-insert-function-comment srecode-document-insert-comment)
-;;;;;;  "srecode/document" "document.el" (21522 31081 240974 900000))
+;;;### (autoloads nil "srecode/document" "document.el" (21957 7220
+;;;;;;  615 0))
 ;;; Generated autoloads from document.el
 
 (autoload 'srecode-document-insert-comment "srecode/document" "\
@@ -89,8 +86,7 @@ If there is only one tag in the region, complain.
 
 ;;;***
 
-;;;### (autoloads (srecode-semantic-handle-:el-custom srecode-semantic-handle-:el)
-;;;;;;  "srecode/el" "el.el" (21522 31081 241974 900000))
+;;;### (autoloads nil "srecode/el" "el.el" (21957 7220 635 0))
 ;;; Generated autoloads from el.el
 
 (autoload 'srecode-semantic-handle-:el "srecode/el" "\
@@ -110,8 +106,8 @@ Adds the following:
 
 ;;;***
 
-;;;### (autoloads (srecode-insert-prototype-expansion) "srecode/expandproto"
-;;;;;;  "expandproto.el" (21522 31081 242974 900000))
+;;;### (autoloads nil "srecode/expandproto" "expandproto.el" (21957
+;;;;;;  7220 646 0))
 ;;; Generated autoloads from expandproto.el
 
 (autoload 'srecode-insert-prototype-expansion "srecode/expandproto" "\
@@ -121,8 +117,8 @@ Insert get/set methods for the current class.
 
 ;;;***
 
-;;;### (autoloads (srecode-insert-getset) "srecode/getset" "getset.el"
-;;;;;;  (21522 31081 245974 800000))
+;;;### (autoloads nil "srecode/getset" "getset.el" (21957 7220 714
+;;;;;;  0))
 ;;; Generated autoloads from getset.el
 
 (autoload 'srecode-insert-getset "srecode/getset" "\
@@ -136,8 +132,8 @@ will be derived.
 
 ;;;***
 
-;;;### (autoloads (srecode-insert) "srecode/insert" "insert.el" (21522
-;;;;;;  31081 247974 800000))
+;;;### (autoloads nil "srecode/insert" "insert.el" (21957 7220 732
+;;;;;;  0))
 ;;; Generated autoloads from insert.el
 
 (autoload 'srecode-insert "srecode/insert" "\
@@ -148,8 +144,7 @@ DICT-ENTRIES are additional dictionary values to add.
 
 ;;;***
 
-;;;### (autoloads (srecode-semantic-handle-:java) "srecode/java"
-;;;;;;  "java.el" (21522 31081 248974 800000))
+;;;### (autoloads nil "srecode/java" "java.el" (21957 7220 755 0))
 ;;; Generated autoloads from java.el
 
 (autoload 'srecode-semantic-handle-:java "srecode/java" "\
@@ -162,8 +157,7 @@ FILENAME_AS_CLASS - file converted to a Java class name.
 
 ;;;***
 
-;;;### (autoloads (srecode-m3-items) "srecode/m3" "m3.el" (21522
-;;;;;;  31081 248974 800000))
+;;;### (autoloads nil "srecode/m3" "m3.el" (21957 7220 766 0))
 ;;; Generated autoloads from m3.el
 
 (autoload 'srecode-m3-items "srecode/m3" "\
@@ -173,8 +167,7 @@ Return a list of menu items based on SRecode features.
 
 ;;;***
 
-;;;### (autoloads (srecode-get-maps) "srecode/map" "map.el" (21604
-;;;;;;  64785 867405 100000))
+;;;### (autoloads nil "srecode/map" "map.el" (21957 7220 778 0))
 ;;; Generated autoloads from map.el
 
 (autoload 'srecode-get-maps "srecode/map" "\
@@ -185,8 +178,7 @@ Optional argument RESET forces a reset of the current map.
 
 ;;;***
 
-;;;### (autoloads (global-srecode-minor-mode srecode-minor-mode)
-;;;;;;  "srecode/mode" "mode.el" (21522 31081 250974 800000))
+;;;### (autoloads nil "srecode/mode" "mode.el" (21957 7220 793 0))
 ;;; Generated autoloads from mode.el
 
 (autoload 'srecode-minor-mode "srecode/mode" "\
@@ -219,8 +211,7 @@ If ARG is positive or nil, enable, if it is negative, disable.
 
 ;;;***
 
-;;;### (autoloads (srecode-semantic-handle-:srt) "srecode/srt" "srt.el"
-;;;;;;  (21522 31081 254974 700000))
+;;;### (autoloads nil "srecode/srt" "srt.el" (21957 7220 822 0))
 ;;; Generated autoloads from srt.el
 
 (autoload 'srecode-semantic-handle-:srt "srecode/srt" "\
@@ -234,8 +225,8 @@ MODE - The mode of this buffer.  If not declared yet, guess.
 
 ;;;***
 
-;;;### (autoloads (srecode-template-mode) "srecode/srt-mode" "srt-mode.el"
-;;;;;;  (21909 31527 947240 400000))
+;;;### (autoloads nil "srecode/srt-mode" "srt-mode.el" (21957 7220
+;;;;;;  1304 0))
 ;;; Generated autoloads from srt-mode.el
 
 (autoload 'srecode-template-mode "srecode/srt-mode" "\
@@ -247,8 +238,8 @@ Major-mode for writing SRecode macros.
 
 ;;;***
 
-;;;### (autoloads (srecode-template-setup-parser) "srecode/template"
-;;;;;;  "template.el" (21522 31081 256974 700000))
+;;;### (autoloads nil "srecode/template" "template.el" (21957 7220
+;;;;;;  859 0))
 ;;; Generated autoloads from template.el
 
 (autoload 'srecode-template-setup-parser "srecode/template" "\
@@ -258,8 +249,7 @@ Setup buffer for parse.
 
 ;;;***
 
-;;;### (autoloads (srecode-semantic-handle-:texitag srecode-semantic-handle-:texi)
-;;;;;;  "srecode/texi" "texi.el" (21522 31081 256974 700000))
+;;;### (autoloads nil "srecode/texi" "texi.el" (21957 7220 871 0))
 ;;; Generated autoloads from texi.el
 
 (autoload 'srecode-semantic-handle-:texi "srecode/texi" "\
@@ -281,7 +271,7 @@ Adds the following:
 
 ;;;### (autoloads nil nil ("args.el" "ctxt.el" "dictionary.el" "extract.el"
 ;;;;;;  "fields.el" "filters.el" "find.el" "semantic.el" "srt-wy.el"
-;;;;;;  "table.el") (21920 12877 432448 902000))
+;;;;;;  "table.el") (21957 7239 615590 855000))
 
 ;;;***
 

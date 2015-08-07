@@ -1,6 +1,6 @@
 ;;; semantic/bovine/el.el --- Semantic details for Emacs Lisp
 
-;; Copyright (C) 1999-2005, 2007-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2005, 2007-2014 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -59,21 +59,21 @@ syntax as specified by the syntax table."
      (semantic-list
       ,(lambda (vals start end)
          (let ((tag (semantic-elisp-use-read (car vals))))
-           (cond
-            ((and (listp tag) (semantic-tag-p (car tag)))
-             ;; We got a list of tags back.  This list is
-             ;; returned here in the correct order, but this
-             ;; list gets reversed later, putting the correctly ordered
-             ;; items into reverse order later.
-             (nreverse tag))
-            ((semantic--tag-expanded-p tag)
-             ;; At this point, if `semantic-elisp-use-read' returned an
-             ;; already expanded tag (from definitions parsed inside an
-             ;; eval and compile wrapper), just pass it!
-             tag)
-            (t
-             ;; We got the basics of a single tag.
-             (append tag (list start end))))))))
+	   (cond
+	    ((and (listp tag) (semantic-tag-p (car tag)))
+	     ;; We got a list of tags back.  This list is
+	     ;; returned here in the correct order, but this
+	     ;; list gets reversed later, putting the correctly ordered
+	     ;; items into reverse order later.
+	     (nreverse tag))
+	    ((semantic--tag-expanded-p tag)
+	     ;; At this point, if `semantic-elisp-use-read' returned an
+	     ;; already expanded tag (from definitions parsed inside an
+	     ;; eval and compile wrapper), just pass it!
+	     tag)
+	    (t
+	     ;; We got the basics of a single tag.
+	     (append tag (list start end))))))))
     )
   "Top level bovination table for elisp.")
 
@@ -82,39 +82,39 @@ syntax as specified by the syntax table."
   (let ((out nil))
     (while arglist
       (setq out
-            (cons
-             (if (symbolp (car arglist))
-                 (symbol-name (car arglist))
-               (if (and (listp (car arglist))
-                      (symbolp (car (car arglist))))
-                   (symbol-name (car (car arglist)))
-                 (format "%S" (car arglist))))
-             out)
-            arglist (cdr arglist)))
+	    (cons
+	     (if (symbolp (car arglist))
+		 (symbol-name (car arglist))
+	       (if (and (listp (car arglist))
+			(symbolp (car (car arglist))))
+		   (symbol-name (car (car arglist)))
+		 (format "%S" (car arglist))))
+	     out)
+	    arglist (cdr arglist)))
     (nreverse out)))
 
 (defun semantic-elisp-desymbolify-args (arglist)
   "Convert symbols to strings for ARGLIST."
   (let ((in (semantic-elisp-desymbolify arglist))
-        (out nil))
+	(out nil))
     (dolist (T in)
       (when (not (string-match "^&" T))
-        (push T out)))
+	(push T out)))
     (nreverse out)))
 
 (defun semantic-elisp-clos-slot-property-string (slot property)
   "For SLOT, a string representing PROPERTY."
   (let ((p (member property slot)))
     (if (not p)
-        nil
+	nil
       (setq p (cdr p))
       (cond
        ((stringp (car p))
-        (car p))
+	(car p))
        ((or (symbolp (car p))
-           (listp (car p))
-           (numberp (car p)))
-        (format "%S" (car p)))
+	    (listp (car p))
+	    (numberp (car p)))
+	(format "%S" (car p)))
        (t nil)))))
 
 (defun semantic-elisp-clos-args-to-semantic (partlist)
@@ -144,10 +144,10 @@ For Emacs Lisp, sometimes that string is non-existent.
 Sometimes it is a form which is evaluated at compile time, permitting
 compound strings."
   (cond ((stringp form) form)
-        ((and (listp form) (eq (car form) 'concat)
-            (stringp (nth 1 form)))
-         (nth 1 form))
-        (t nil)))
+	((and (listp form) (eq (car form) 'concat)
+	      (stringp (nth 1 form)))
+	 (nth 1 form))
+	(t nil)))
 
 (defvar semantic-elisp-store-documentation-in-tag nil
   "*When non-nil, store documentation strings in the created tags.")
@@ -179,8 +179,8 @@ See also `semantic-elisp-setup-form-parser'."
         (sym (make-symbol "sym")))
     `(let ((,parser (get ',symbol 'semantic-elisp-form-parser)))
        (or ,parser
-          (signal 'wrong-type-argument
-                  '(semantic-elisp-form-parser ,symbol)))
+           (signal 'wrong-type-argument
+                   '(semantic-elisp-form-parser ,symbol)))
        (dolist (,sym ',symbols)
          (put ,sym 'semantic-elisp-form-parser ,parser)))))
 
@@ -197,7 +197,7 @@ Return a bovination list to use."
       )
      ;; A special form parser is provided, use it.
      ((and (car form) (symbolp (car form))
-         (get (car form) 'semantic-elisp-form-parser))
+           (get (car form) 'semantic-elisp-form-parser))
       (funcall (get (car form) 'semantic-elisp-form-parser)
                form start end))
      ;; Produce a generic code tag by default.
@@ -240,7 +240,7 @@ Return a bovination list to use."
        :user-visible-flag (eq (car-safe (nth 4 form)) 'interactive)
        :documentation (semantic-elisp-do-doc (nth 3 form))
        :overloadable (or (eq (car form) 'define-overload)
-                        (eq (car form) 'define-overloadable-function))
+			 (eq (car form) 'define-overloadable-function))
        ))
   defun
   defun*
@@ -258,8 +258,8 @@ Return a bovination list to use."
          nil
          (nth 2 form)
          :user-visible-flag (and doc
-                               (> (length doc) 0)
-                               (= (aref doc 0) ?*))
+                                 (> (length doc) 0)
+                                 (= (aref doc 0) ?*))
          :constant-flag (eq (car form) 'defconst)
          :documentation (semantic-elisp-do-doc doc)
          )))
@@ -276,8 +276,8 @@ Return a bovination list to use."
          "face"
          (nth 2 form)
          :user-visible-flag (and doc
-                               (> (length doc) 0)
-                               (= (aref doc 0) ?*))
+                                 (> (length doc) 0)
+                                 (= (aref doc 0) ?*))
          :documentation (semantic-elisp-do-doc doc)
          )))
   defface
@@ -292,8 +292,8 @@ Return a bovination list to use."
          "image"
          (nth 2 form)
          :user-visible-flag (and doc
-                               (> (length doc) 0)
-                               (= (aref doc 0) ?*))
+                                 (> (length doc) 0)
+                                 (= (aref doc 0) ?*))
          :documentation (semantic-elisp-do-doc doc)
          )))
   defimage
@@ -321,7 +321,7 @@ Return a bovination list to use."
        (symbol-name (cadr (cadr form)))
        nil nil
        :user-visible-flag (and (nth 4 form)
-                             (not (eq (nth 4 form) 'nil)))
+                               (not (eq (nth 4 form) 'nil)))
        :prototype-flag t
        :documentation (semantic-elisp-do-doc (nth 3 form))))
   autoload
@@ -360,18 +360,18 @@ Return a bovination list to use."
 (semantic-elisp-setup-form-parser
     (lambda (form start end)
       (let ((docpart (nthcdr 4 form)))
-        (semantic-tag-new-type
-         (symbol-name (nth 1 form))
+	(semantic-tag-new-type
+	 (symbol-name (nth 1 form))
          "class"
-         (semantic-elisp-clos-args-to-semantic (nth 3 form))
-         (semantic-elisp-desymbolify (nth 2 form))
-         :typemodifiers (semantic-elisp-desymbolify
-                         (unless (stringp (car docpart)) docpart))
-         :documentation (semantic-elisp-do-doc
+	 (semantic-elisp-clos-args-to-semantic (nth 3 form))
+	 (semantic-elisp-desymbolify (nth 2 form))
+	 :typemodifiers (semantic-elisp-desymbolify
+			 (unless (stringp (car docpart)) docpart))
+	 :documentation (semantic-elisp-do-doc
                          (if (stringp (car docpart))
                              (car docpart)
                            (cadr (member :documentation docpart))))
-         )))
+	 )))
   defclass
   )
 
@@ -380,7 +380,7 @@ Return a bovination list to use."
       (let ((slots (nthcdr 2 form)))
         ;; Skip doc string if present.
         (and (stringp (car slots))
-           (setq slots (cdr slots)))
+             (setq slots (cdr slots)))
         (semantic-tag-new-type
          (symbol-name (if (consp (nth 1 form))
                           (car (nth 1 form))
@@ -406,14 +406,14 @@ Return a bovination list to use."
 (semantic-elisp-setup-form-parser
     (lambda (form start end)
       (let ((args (nth 3 form)))
-        (semantic-tag-new-function
-         (symbol-name (nth 1 form))
+	(semantic-tag-new-function
+	 (symbol-name (nth 1 form))
          nil
-         (and (listp args) (semantic-elisp-desymbolify args))
-         :override-function-flag t
-         :parent (symbol-name (nth 2 form))
-         :documentation (semantic-elisp-do-doc (nth 4 form))
-         )))
+	 (and (listp args) (semantic-elisp-desymbolify args))
+	 :override-function-flag t
+	 :parent (symbol-name (nth 2 form))
+	 :documentation (semantic-elisp-do-doc (nth 4 form))
+	 )))
   define-mode-overload-implementation ;; obsoleted
   define-mode-local-override
   )
@@ -461,23 +461,25 @@ Return a bovination list to use."
   "Find the file BUFFER depends on described by TAG."
   (if (fboundp 'find-library-name)
       (condition-case nil
-          ;; Try an Emacs 22 fcn.  This throws errors.
-          (find-library-name (semantic-tag-name tag))
-        (error
-         (message "semantic: cannot find source file %s"
-                  (semantic-tag-name tag))))
+	  ;; Try an Emacs 22 fcn.  This throws errors.
+	  (find-library-name (semantic-tag-name tag))
+	(error
+	 (message "semantic: cannot find source file %s"
+		  (semantic-tag-name tag))))
     ;; No handy function available.  (Older Emacsen)
     (let* ((lib (locate-library (semantic-tag-name tag)))
-           (name (if lib (file-name-sans-extension lib) nil))
-           (nameel (concat name ".el")))
+	   (name (if lib (file-name-sans-extension lib) nil))
+	   (nameel (concat name ".el")))
       (cond
        ((and name (file-exists-p nameel)) nameel)
        ((and name (file-exists-p (concat name ".el.gz")))
-        ;; This is the linux distro case.
-        (concat name ".el.gz"))
+	;; This is the linux distro case.
+	(concat name ".el.gz"))
        ;; Source file does not exist.
+       (name
+	(message "semantic: cannot find source file %s" (concat name ".el")))
        (t
-        nil)))))
+	nil)))))
 
 ;;; DOC Strings
 ;;
@@ -486,7 +488,7 @@ Return a bovination list to use."
 Fetch the item for TAG.  Only returns info about what symbols can be
 used to perform the override."
   (if (and (eq (semantic-tag-class tag) 'function)
-         (semantic-tag-get-attribute tag :overloadable))
+	   (semantic-tag-get-attribute tag :overloadable))
       ;; Calc the doc to use for the overloadable symbols.
       (overload-docstring-extension (intern (semantic-tag-name tag)))
     ""))
@@ -496,16 +498,16 @@ used to perform the override."
 Unfortunately, this requires that the tag in question has been loaded
 into Emacs Lisp's memory."
   (let ((obsoletethis (intern-soft (semantic-tag-name tag)))
-        (obsoleter nil))
+	(obsoleter nil))
     ;; This asks if our tag is available in the Emacs name space for querying.
     (when obsoletethis
       (mapatoms (lambda (a)
-                  (let ((oi (get a 'byte-obsolete-info)))
-                    (if (and oi (eq (car oi) obsoletethis))
-                        (setq obsoleter a)))))
+		  (let ((oi (get a 'byte-obsolete-info)))
+		    (if (and oi (eq (car oi) obsoletethis))
+			(setq obsoleter a)))))
       (if obsoleter
-          (format "\n@obsolete{%s,%s}" obsoleter (semantic-tag-name tag))
-        ""))))
+	  (format "\n@obsolete{%s,%s}" obsoleter (semantic-tag-name tag))
+	""))))
 
 (define-mode-local-override semantic-documentation-for-tag
   emacs-lisp-mode (tag &optional nosnarf)
@@ -514,29 +516,29 @@ Optional argument NOSNARF is ignored."
   (let ((d (semantic-tag-docstring tag)))
     (when (not d)
       (cond ((semantic-tag-with-position-p tag)
-             ;; Doc isn't in the tag itself.  Let's pull it out of the
-             ;; sources.
-             (let ((semantic-elisp-store-documentation-in-tag t))
-               (setq tag (with-current-buffer (semantic-tag-buffer tag)
-                           (goto-char (semantic-tag-start tag))
-                           (semantic-elisp-use-read
-                            ;; concoct a lexical token.
-                            (cons (semantic-tag-start tag)
-                                  (semantic-tag-end tag))))
-                     d (semantic-tag-docstring tag))))
-            ;; The tag may be the result of a system search.
-            ((intern-soft (semantic-tag-name tag))
-             (let ((sym (intern-soft (semantic-tag-name tag))))
-               ;; Query into the global table o stuff.
-               (cond ((eq (semantic-tag-class tag) 'function)
-                      (setq d (documentation sym)))
-                     (t
-                      (setq d (documentation-property
-                               sym 'variable-documentation)))))
-             ;; Label it as system doc. perhaps just for debugging
-             ;; purposes.
-             (if d (setq d (concat "System Doc: \n" d)))
-             ))
+	     ;; Doc isn't in the tag itself.  Let's pull it out of the
+	     ;; sources.
+	     (let ((semantic-elisp-store-documentation-in-tag t))
+	       (setq tag (with-current-buffer (semantic-tag-buffer tag)
+			   (goto-char (semantic-tag-start tag))
+			   (semantic-elisp-use-read
+			    ;; concoct a lexical token.
+			    (cons (semantic-tag-start tag)
+				  (semantic-tag-end tag))))
+		     d (semantic-tag-docstring tag))))
+	    ;; The tag may be the result of a system search.
+	    ((intern-soft (semantic-tag-name tag))
+	     (let ((sym (intern-soft (semantic-tag-name tag))))
+	       ;; Query into the global table o stuff.
+	       (cond ((eq (semantic-tag-class tag) 'function)
+		      (setq d (documentation sym)))
+		     (t
+		      (setq d (documentation-property
+			       sym 'variable-documentation)))))
+	     ;; Label it as system doc. perhaps just for debugging
+	     ;; purposes.
+	     (if d (setq d (concat "System Doc: \n" d)))
+	     ))
       )
 
     (when d
@@ -555,7 +557,7 @@ Optional argument NOSNARF is ignored."
   "Return the name of the tag with .el appended.
 If there is a detail, prepend that directory."
   (let ((name (semantic-tag-name tag))
-        (detail (semantic-tag-get-attribute tag :directory)))
+	(detail (semantic-tag-get-attribute tag :directory)))
     (concat (expand-file-name name detail) ".el")))
 
 (define-mode-local-override semantic-insert-foreign-tag
@@ -563,10 +565,10 @@ If there is a detail, prepend that directory."
   "Insert TAG at point.
 Attempts a simple prototype for calling or using TAG."
   (cond ((semantic-tag-of-class-p tag 'function)
-         (insert "(" (semantic-tag-name tag) " )")
-         (forward-char -1))
-        (t
-         (insert (semantic-tag-name tag)))))
+	 (insert "(" (semantic-tag-name tag) " )")
+	 (forward-char -1))
+	(t
+	 (insert (semantic-tag-name tag)))))
 
 (define-mode-local-override semantic-tag-protection
   emacs-lisp-mode (tag &optional parent)
@@ -604,14 +606,14 @@ the following context specifiers:
   `let', `let*', `defun', `with-slots'
 Returns non-nil it is not possible to go up a context."
   (let ((last-up (semantic-up-context-default)))
-    (while
-        (and (not (looking-at
-               "(\\(let\\*?\\|def\\(un\\|method\\|generic\\|\
+  (while
+      (and (not (looking-at
+		 "(\\(let\\*?\\|def\\(un\\|method\\|generic\\|\
 define-mode-overload\\)\
 \\|with-slots\\)"))
-           (not last-up))
-      (setq last-up (semantic-up-context-default)))
-    last-up))
+	   (not last-up))
+    (setq last-up (semantic-up-context-default)))
+  last-up))
 
 
 (define-mode-local-override semantic-ctxt-current-function emacs-lisp-mode
@@ -621,41 +623,41 @@ define-mode-overload\\)\
     (if point (goto-char point) (setq point (point)))
     ;; (semantic-beginning-of-command)
     (if (condition-case nil
-            (and (save-excursion
-                 (up-list -2)
-                 (looking-at "(("))
-               (save-excursion
-                 (up-list -3)
-                 (looking-at "(let")))
-          (error nil))
-        ;; This is really a let statement, not a function.
-        nil
+	    (and (save-excursion
+		   (up-list -2)
+		   (looking-at "(("))
+		 (save-excursion
+		   (up-list -3)
+		   (looking-at "(let")))
+	  (error nil))
+	;; This is really a let statement, not a function.
+	nil
       (let ((fun (condition-case nil
-                     (save-excursion
-                       (up-list -1)
-                       (forward-char 1)
-                       (buffer-substring-no-properties
-                        (point) (progn (forward-sexp 1)
-                                       (point))))
-                   (error nil))
-                 ))
-        (when fun
-          ;; Do not return FUN IFF the cursor is on FUN.
-          ;; Huh?  Thats because if cursor is on fun, it is
-          ;; the current symbol, and not the current function.
-          (if (save-excursion
-                (condition-case nil
-                    (progn (forward-sexp -1)
-                           (and
-                            (looking-at (regexp-quote fun))
-                            (<= point (+ (point) (length fun))))
-                           )
-                  (error t)))
-              ;; Go up and try again.
-              same-as-symbol-return
-            ;; We are ok, so get it.
-            (list fun))
-          ))
+		     (save-excursion
+		       (up-list -1)
+		       (forward-char 1)
+		       (buffer-substring-no-properties
+			(point) (progn (forward-sexp 1)
+				       (point))))
+		   (error nil))
+		 ))
+	(when fun
+	  ;; Do not return FUN IFF the cursor is on FUN.
+	  ;; Huh?  Thats because if cursor is on fun, it is
+	  ;; the current symbol, and not the current function.
+	  (if (save-excursion
+		(condition-case nil
+		    (progn (forward-sexp -1)
+			   (and
+			    (looking-at (regexp-quote fun))
+			    (<= point (+ (point) (length fun))))
+			   )
+		  (error t)))
+	      ;; Go up and try again.
+	      same-as-symbol-return
+	    ;; We are ok, so get it.
+	    (list fun))
+	  ))
       )))
 
 
@@ -665,57 +667,57 @@ define-mode-overload\\)\
 Scan backwards from point at each successive function.  For all occurrences
 of `let' or `let*', grab those variable names."
   (let* ((vars nil)
-         (fn nil))
+	 (fn nil))
     (save-excursion
       (while (setq fn (car (semantic-ctxt-current-function-emacs-lisp-mode
-                            (point) (list t))))
-        (cond
-         ((eq fn t)
-          nil)
-         ((member fn '("let" "let*" "with-slots"))
-          ;; Snarf variables
-          (up-list -1)
-          (forward-char 1)
-          (forward-symbol 1)
-          (skip-chars-forward "* \t\n")
-          (let ((varlst (read (buffer-substring-no-properties
-                               (point)
-                               (save-excursion
-                                 (forward-sexp 1)
-                                 (point))))))
-            (while varlst
-              (let* ((oneelt (car varlst))
-                     (name (if (symbolp oneelt)
-                               oneelt
-                             (car oneelt))))
-                (setq vars (cons (semantic-tag-new-variable
-                                  (symbol-name name)
-                                  nil nil)
-                                 vars)))
-              (setq varlst (cdr varlst)))
-            ))
-         ((string= fn "lambda")
-          ;; Snart args...
-          (up-list -1)
-          (forward-char 1)
-          (forward-word 1)
-          (skip-chars-forward "* \t\n")
-          (let ((arglst (read (buffer-substring-no-properties
-                               (point)
-                               (save-excursion
-                                 (forward-sexp 1)
-                                 (point))))))
-            (while arglst
-              (let* ((name (car arglst)))
-                (when (/= ?& (aref (symbol-name name) 0))
-                  (setq vars (cons (semantic-tag-new-variable
-                                    (symbol-name name)
-                                    nil nil)
-                                   vars))))
-              (setq arglst (cdr arglst)))
-            ))
-         )
-        (up-list -1)))
+			    (point) (list t))))
+	(cond
+	 ((eq fn t)
+	  nil)
+	 ((member fn '("let" "let*" "with-slots"))
+	  ;; Snarf variables
+	  (up-list -1)
+	  (forward-char 1)
+	  (forward-symbol 1)
+	  (skip-chars-forward "* \t\n")
+	  (let ((varlst (read (buffer-substring-no-properties
+			       (point)
+			       (save-excursion
+				 (forward-sexp 1)
+				 (point))))))
+	    (while varlst
+	      (let* ((oneelt (car varlst))
+		     (name (if (symbolp oneelt)
+			       oneelt
+			     (car oneelt))))
+		(setq vars (cons (semantic-tag-new-variable
+				  (symbol-name name)
+				  nil nil)
+				 vars)))
+	      (setq varlst (cdr varlst)))
+	    ))
+	 ((string= fn "lambda")
+	  ;; Snart args...
+	  (up-list -1)
+	  (forward-char 1)
+	  (forward-word 1)
+	  (skip-chars-forward "* \t\n")
+	  (let ((arglst (read (buffer-substring-no-properties
+			       (point)
+			       (save-excursion
+				 (forward-sexp 1)
+				 (point))))))
+	    (while arglst
+	      (let* ((name (car arglst)))
+		(when (/= ?& (aref (symbol-name name) 0))
+		  (setq vars (cons (semantic-tag-new-variable
+				    (symbol-name name)
+				    nil nil)
+				   vars))))
+	      (setq arglst (cdr arglst)))
+	    ))
+	 )
+	(up-list -1)))
     (nreverse vars)))
 
 (define-mode-local-override semantic-end-of-command emacs-lisp-mode
@@ -753,47 +755,47 @@ In Emacs Lisp this is easily defined by parenthesis bounding."
   (save-excursion
     (if point (goto-char point))
     (let ((fn (semantic-ctxt-current-function point))
-          (point (point)))
+	  (point (point)))
       ;; We should never get lists from here.
       (if fn (setq fn (car fn)))
       (cond
        ;; SETQ
        ((and fn (or (string= fn "setq") (string= fn "set")))
-        (save-excursion
-          (condition-case nil
-              (let ((count 0)
-                    (lastodd nil)
-                    (start nil))
-                (up-list -1)
-                (down-list 1)
-                (forward-sexp 1)
-                ;; Skip over sexp until we pass point.
-                (while (< (point) point)
-                  (setq count (1+ count))
-                  (forward-comment 1)
-                  (setq start (point))
-                  (forward-sexp 1)
-                  (if (= (% count 2) 1)
-                      (setq lastodd
-                            (buffer-substring-no-properties start (point))))
-                  )
-                (if lastodd (list lastodd))
-                )
-            (error nil))))
+	(save-excursion
+	  (condition-case nil
+	      (let ((count 0)
+		    (lastodd nil)
+		    (start nil))
+		(up-list -1)
+		(down-list 1)
+		(forward-sexp 1)
+		;; Skip over sexp until we pass point.
+		(while (< (point) point)
+		  (setq count (1+ count))
+		  (forward-comment 1)
+		  (setq start (point))
+		  (forward-sexp 1)
+		  (if (= (% count 2) 1)
+		      (setq lastodd
+			    (buffer-substring-no-properties start (point))))
+		  )
+		(if lastodd (list lastodd))
+		)
+	    (error nil))))
        ;; This obscure thing finds let statements.
        ((condition-case nil
-            (and
-             (save-excursion
-               (up-list -2)
-               (looking-at "(("))
-             (save-excursion
-               (up-list -3)
-               (looking-at "(let")))
-          (error nil))
-        (save-excursion
-          (semantic-beginning-of-command)
-          ;; Use func finding code, since it is the same format.
-          (semantic-ctxt-current-symbol)))
+	    (and
+	     (save-excursion
+	       (up-list -2)
+	       (looking-at "(("))
+	     (save-excursion
+	       (up-list -3)
+	       (looking-at "(let")))
+	  (error nil))
+	(save-excursion
+	  (semantic-beginning-of-command)
+	  ;; Use func finding code, since it is the same format.
+	  (semantic-ctxt-current-symbol)))
        ;;
        ;; DEFAULT- nothing
        (t nil))
@@ -805,17 +807,17 @@ In Emacs Lisp this is easily defined by parenthesis bounding."
   (save-excursion
     (if point (goto-char point))
     (if (looking-at "\\<\\w")
-        (forward-char 1))
+	(forward-char 1))
     (let ((count 0))
       (while (condition-case nil
-                 (progn
-                   (forward-sexp -1)
-                   t)
-               (error nil))
-        (setq count (1+ count)))
+		 (progn
+		   (forward-sexp -1)
+		   t)
+	       (error nil))
+	(setq count (1+ count)))
       (cond ((= count 0)
-             0)
-            (t (1- count))))
+	     0)
+	    (t (1- count))))
     ))
 
 (define-mode-local-override semantic-ctxt-current-class-list emacs-lisp-mode
@@ -829,16 +831,16 @@ fields and such to, but that is for some other day."
     (if point (goto-char point))
     (setq point (point))
     (condition-case nil
-        (let ((count 0))
-          (up-list -1)
-          (forward-char 1)
-          (while (< (point) point)
-            (setq count (1+ count))
-            (forward-sexp 1))
-          (if (= count 1)
-              '(function)
-            '(variable))
-          )
+	(let ((count 0))
+	  (up-list -1)
+	  (forward-char 1)
+	  (while (< (point) point)
+	    (setq count (1+ count))
+	    (forward-sexp 1))
+	  (if (= count 1)
+	      '(function)
+	    '(variable))
+	  )
       (error '(variable)))
     ))
 
@@ -848,8 +850,8 @@ fields and such to, but that is for some other day."
   (tag &optional parent color)
   "Return an abbreviated string describing tag."
   (let ((class (semantic-tag-class tag))
-        (name (semantic-format-tag-name tag parent color))
-        )
+	(name (semantic-format-tag-name tag parent color))
+	)
     (cond
      ((eq class 'function)
       (concat "(" name ")"))
@@ -864,17 +866,17 @@ This is certainly not expected if this is used to display a summary.
 Make up something else.  When we go to write something that needs
 a real Emacs Lisp prototype, we can fix it then."
   (let ((class (semantic-tag-class tag))
-        (name (semantic-format-tag-name tag parent color))
-        )
+	(name (semantic-format-tag-name tag parent color))
+	)
     (cond
      ((eq class 'function)
       (let* ((args  (semantic-tag-function-arguments tag))
-             (argstr (semantic--format-tag-arguments args
-                                                     #'identity
-                                                     color)))
-        (concat "(" name (if args " " "")
-                argstr
-                ")")))
+	     (argstr (semantic--format-tag-arguments args
+						     #'identity
+						     color)))
+	(concat "(" name (if args " " "")
+		argstr
+		")")))
      (t
       (semantic-format-tag-prototype-default tag parent color)))))
 
@@ -898,12 +900,12 @@ See `semantic-format-tag-prototype' for Emacs Lisp for more details."
   ;; This function by David <de_bb@...> is a tweaked version of the original.
   (insert (semantic-tag-name tag))
   (let ((tt (semantic-tag-class tag))
-        (args (semantic-tag-function-arguments tag)))
+	(args (semantic-tag-function-arguments tag)))
     (cond ((eq tt 'function)
-           (if args
-               (insert " ")
-             (insert ")")))
-          (t nil))))
+	   (if args
+	       (insert " ")
+	     (insert ")")))
+	  (t nil))))
 
 ;;; Lexical features and setup
 ;;
