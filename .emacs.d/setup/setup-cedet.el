@@ -54,6 +54,14 @@
 (when (cedet-ectag-version-check t)
   (semantic-load-enable-primary-ectags-support))
 
+;; Disable Semantics for large files
+(add-hook 'semantic--before-fetch-tags-hook
+          (lambda ()
+            (if (and (> (point-max) 10000)
+                   (not (semantic-parse-tree-needs-rebuild-p)))
+                nil
+              t)))
+
 ;; Auto-complete support
 (require 'semantic/analyze/refs)
 (defun ac-complete-semantic-self-insert (arg)
