@@ -334,8 +334,7 @@ for the JavaScript code in this tag.
   td.org-left   { text-align: left;   }
   td.org-center { text-align: center; }
   dt { font-weight: bold; }
-  .footpara:nth-child(2) { display: inline; }
-  .footpara { display: block; }
+  .footpara { display: inline; }
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
@@ -628,7 +627,7 @@ The function must accept two parameters:
 The function should return the string to be exported.
 
 For example, the variable could be set to the following function
-in order to mimic default behaviour:
+in order to mimic default behavior:
 
 The default value simply returns the value of CONTENTS."
   :group 'org-export-html
@@ -762,7 +761,7 @@ t              Synonym for `mathjax'."
 When `org-mode' is exporting an `org-mode' file to HTML, links to
 non-html files are directly put into a href tag in HTML.
 However, links to other Org-mode files (recognized by the
-extension `.org.) should become links to the corresponding html
+extension `.org') should become links to the corresponding html
 file, assuming that the linked `org-mode' file will also be
 converted to HTML.
 When nil, the links still point to the plain `.org' file."
@@ -1436,28 +1435,29 @@ https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag"
   :group 'org-export-html
   :version "25.1"
   :package-version '(Org . "8.3")
-  :type '(list :greedy t
-	       (list :tag "Width of viewport"
-		     (const :format "             " width)
-		     (choice (const :tag "unset" "")
-			     (string)))
-	       (list :tag "Initial scale"
-		     (const :format "             " initial-scale)
-		     (choice (const :tag "unset" "")
-			     (string)))
-	       (list :tag "Minimum scale/zoom"
-		     (const :format "             " minimum-scale)
-		     (choice (const :tag "unset" "")
-			     (string)))
-	       (list :tag "Maximum scale/zoom"
-		     (const :format "             " maximum-scale)
-		     (choice (const :tag "unset" "")
-			     (string)))
-	       (list :tag "User scalable/zoomable"
-		     (const :format "             " user-scalable)
-		     (choice (const :tag "unset" "")
-			     (const "true")
-			     (const "false")))))
+  :type '(choice (const :tag "Disable" nil)
+		 (list :tag "Enable"
+		       (list :tag "Width of viewport"
+			     (const :format "             " width)
+			     (choice (const :tag "unset" "")
+				     (string)))
+		       (list :tag "Initial scale"
+			     (const :format "             " initial-scale)
+			     (choice (const :tag "unset" "")
+				     (string)))
+		       (list :tag "Minimum scale/zoom"
+			     (const :format "             " minimum-scale)
+			     (choice (const :tag "unset" "")
+				     (string)))
+		       (list :tag "Maximum scale/zoom"
+			     (const :format "             " maximum-scale)
+			     (choice (const :tag "unset" "")
+				     (string)))
+		       (list :tag "User scalable/zoomable"
+			     (const :format "             " user-scalable)
+			     (choice (const :tag "unset" "")
+				     (const "true")
+				     (const "false"))))))
 
 ;;;; Todos
 
@@ -1649,7 +1649,7 @@ INFO is a plist used as a communication channel."
 	  (loop for (n type raw) in fn-alist collect
 		(cons n (if (eq (org-element-type raw) 'org-data)
 			    (org-trim (org-export-data raw info))
-			  (format "<p class=\"footpara\">%s</p>"
+			  (format "<div class=\"footpara\">%s</div>"
 				  (org-trim (org-export-data raw info))))))))
     (when fn-alist
       (format
@@ -1809,7 +1809,7 @@ used in the preamble or postamble."
     (?C . ,(let ((file (plist-get info :input-file)))
 	     (format-time-string
 	      (plist-get info :html-metadata-timestamp-format)
-	      (if file (nth 5 (file-attributes file)) (current-time)))))
+	      (when file (nth 5 (file-attributes file))))))
     (?v . ,(or (plist-get info :html-validation-link) ""))))
 
 (defun org-html--build-pre/postamble (type info)
@@ -2041,25 +2041,30 @@ is the language used for CODE, as a string, or nil."
 	 ;; Case 2: Default.  Fontify code.
 	 (t
 	  ;; htmlize
-	  (setq code (with-temp-buffer
-		       ;; Switch to language-specific mode.
-		       (funcall lang-mode)
-		       (insert code)
-		       ;; Fontify buffer.
-		       (font-lock-ensure)
-		       ;; Remove formatting on newline characters.
-		       (save-excursion
-			 (let ((beg (point-min))
-			       (end (point-max)))
-			   (goto-char beg)
-			   (while (progn (end-of-line) (< (point) end))
-			     (put-text-property (point) (1+ (point)) 'face nil)
-			     (forward-char 1))))
-		       (org-src-mode)
-		       (set-buffer-modified-p nil)
-		       ;; Htmlize region.
-		       (org-html-htmlize-region-for-paste
-			(point-min) (point-max))))
+	  (setq code
+		(let ((output-type org-html-htmlize-output-type)
+		      (font-prefix org-html-htmlize-font-prefix))
+		  (with-temp-buffer
+		    ;; Switch to language-specific mode.
+		    (funcall lang-mode)
+		    (insert code)
+		    ;; Fontify buffer.
+		    (font-lock-ensure)
+		    ;; Remove formatting on newline characters.
+		    (save-excursion
+		      (let ((beg (point-min))
+			    (end (point-max)))
+			(goto-char beg)
+			(while (progn (end-of-line) (< (point) end))
+			  (put-text-property (point) (1+ (point)) 'face nil)
+			  (forward-char 1))))
+		    (org-src-mode)
+		    (set-buffer-modified-p nil)
+		    ;; Htmlize region.
+		    (let ((org-html-htmlize-output-type output-type)
+			  (org-html-htmlize-font-prefix font-prefix))
+		      (org-html-htmlize-region-for-paste
+		       (point-min) (point-max))))))
 	  ;; Strip any enclosing <pre></pre> tags.
 	  (let* ((beg (and (string-match "\\`<pre[^>]*>\n*" code) (match-end 0)))
 		 (end (and beg (string-match "</pre>\\'" code))))
@@ -2200,7 +2205,8 @@ INFO is a plist used as a communication channel."
 		    (org-export-get-tags headline info))))
     (format "<a href=\"#%s\">%s</a>"
 	    ;; Label.
-	    (org-export-get-reference headline info)
+	    (or (org-element-property :CUSTOM_ID headline)
+		(org-export-get-reference headline info))
 	    ;; Body.
 	    (concat
 	     (and (not (org-export-low-level-p headline info))

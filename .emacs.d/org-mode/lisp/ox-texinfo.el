@@ -133,7 +133,7 @@
 (defcustom org-texinfo-coding-system nil
   "Default document encoding for Texinfo output.
 
-If `nil' it will default to `buffer-file-coding-system'."
+If nil it will default to `buffer-file-coding-system'."
   :group 'org-export-texinfo
   :type 'coding-system)
 
@@ -1589,7 +1589,7 @@ Return INFO file name or an error if it couldn't be produced."
 				(file-name-directory full-name)
 			      default-directory))
 	 errors)
-    (message (format "Processing Texinfo file %s..." file))
+    (message "Processing Texinfo file %s..." file)
     (save-window-excursion
       ;; Replace %b, %f and %o with appropriate values in each command
       ;; before applying it.  Output is redirected to "*Org INFO

@@ -204,13 +204,27 @@ then the opening will be implicitly set as the headline title."
 
 (defcustom org-koma-letter-closing ""
   "Letter's closing, as a string.
-This option can also be set with the CLOSING keyword."
+This option can also be set with the CLOSING keyword.  Moreover,
+when:
+  (1) there's no CLOSING keyword or it is empty;
+  (2) `org-koma-letter-headline-is-opening-maybe' is non-nil;
+  (3) the letter contains a headline with the special
+      tag closing;
+then the opening will be set as the title of the closing special
+heading."
   :group 'org-export-koma-letter
   :type 'string)
 
 (defcustom org-koma-letter-signature ""
   "Signature, as a string.
-This option can also be set with the SIGNATURE keyword."
+This option can also be set with the SIGNATURE keyword.
+Moreover, when:
+  (1) there's no CLOSING keyword or it is empty;
+  (2) `org-koma-letter-headline-is-opening-maybe' is non-nil;
+  (3) the letter contains a headline with the special
+      tag closing;
+then the signature will be  set as the content of the
+closing special heading."
   :group 'org-export-koma-letter
   :type 'string)
 
@@ -358,7 +372,7 @@ e.g. \"title-subject:t\"."
     :group 'org-export-koma-letter
     :type 'boolean)
 
-(defconst org-koma-letter-special-tags-in-letter '(to from)
+(defconst org-koma-letter-special-tags-in-letter '(to from closing)
   "Header tags related to the letter itself.")
 
 (defconst org-koma-letter-special-tags-after-closing '(ps encl cc)
@@ -381,7 +395,7 @@ e.g. \"title-subject:t\"."
   :options-alist
   '((:latex-class "LATEX_CLASS" nil org-koma-letter-default-class t)
     (:lco "LCO" nil org-koma-letter-class-option-file)
-    (:author "AUTHOR" nil (org-koma-letter--get-value org-koma-letter-author) t)
+    (:author "AUTHOR" nil (org-koma-letter--get-value org-koma-letter-author) parse)
     (:author-changed-in-buffer-p "AUTHOR" nil nil t)
     (:from-address "FROM_ADDRESS" nil org-koma-letter-from-address newline)
     (:phone-number "PHONE_NUMBER" nil org-koma-letter-phone-number)
@@ -389,8 +403,8 @@ e.g. \"title-subject:t\"."
     (:to-address "TO_ADDRESS" nil nil newline)
     (:place "PLACE" nil org-koma-letter-place)
     (:subject "SUBJECT" nil nil parse)
-    (:opening "OPENING" nil org-koma-letter-opening)
-    (:closing "CLOSING" nil org-koma-letter-closing)
+    (:opening "OPENING" nil org-koma-letter-opening parse)
+    (:closing "CLOSING" nil org-koma-letter-closing parse)
     (:signature "SIGNATURE" nil org-koma-letter-signature newline)
     (:special-headings nil "special-headings"
 		       org-koma-letter-prefer-special-headings)
@@ -578,27 +592,7 @@ holding export options."
    (and (plist-get info :time-stamp-file)
         (format-time-string "%% Created %Y-%m-%d %a %H:%M\n"))
    ;; Document class and packages.
-   (let* ((class (plist-get info :latex-class))
-	  (class-options (plist-get info :latex-class-options))
-	  (header (nth 1 (assoc class org-latex-classes)))
-	  (document-class-string
-	   (and (stringp header)
-		(if (not class-options) header
-		  (replace-regexp-in-string
-		   "^[ \t]*\\\\documentclass\\(\\(\\[[^]]*\\]\\)?\\)"
-		   class-options header t nil 1)))))
-     (if (not document-class-string)
-	 (user-error "Unknown LaTeX class `%s'" class)
-       (org-latex-guess-babel-language
-	(org-latex-guess-inputenc
-	 (org-element-normalize-string
-	  (org-splice-latex-header
-	   document-class-string
-	   org-latex-default-packages-alist ; Defined in org.el.
-	   org-latex-packages-alist nil     ; Defined in org.el.
-	   (concat (org-element-normalize-string (plist-get info :latex-header))
-		   (plist-get info :latex-header-extra)))))
-	info)))
+   (org-latex--make-header info)
    ;; Settings.  They can come from three locations, in increasing
    ;; order of precedence: global variables, LCO files and in-buffer
    ;; settings.  Thus, we first insert settings coming from global
@@ -665,7 +659,17 @@ holding export options."
    ;; Letter body.
    contents
    ;; Closing.
-   (format "\n\\closing{%s}\n" (plist-get info :closing))
+   (format "\n\\closing{%s}\n"
+	   (org-export-data
+	    (or (org-string-nw-p (plist-get info :closing))
+		(when (plist-get info :with-headline-opening)
+		  (org-element-map (plist-get info :parse-tree) 'headline
+		    (lambda (head)
+		      (when (eq (org-koma-letter--special-tag head info)
+				'closing)
+			(org-element-property :title head)))
+		    info t)))
+	    info))
    (org-koma-letter--special-contents-as-macro
     (plist-get info :with-after-closing))
    ;; Letter end.
@@ -711,10 +715,20 @@ a communication channel."
           (format "\\KOMAoption{fromphone}{%s}\n"
                   (if (plist-get info :with-phone) "true" "false")))
      ;; Signature.
-     (let ((signature (plist-get info :signature)))
-       (and (org-string-nw-p signature)
-            (funcall check-scope 'signature)
-            (format "\\setkomavar{signature}{%s}\n" signature)))
+     (let* ((heading-val
+	     (and (plist-get info :with-headline-opening)
+		  (org-string-nw-p
+		   (org-trim
+		    (org-export-data
+		     (org-koma-letter--get-tagged-contents 'closing)
+		     info)))))
+	    (signature (org-string-nw-p (plist-get info :signature)))
+	    (signature-scope (funcall check-scope 'signature)))
+       (and (or (and signature signature-scope)
+		heading-val)
+	    (not (and (eq scope 'global) heading-val))
+	    (format "\\setkomavar{signature}{%s}\n"
+		    (if signature-scope signature heading-val))))
      ;; Back address.
      (and (funcall check-scope 'with-backaddress)
           (format "\\KOMAoption{backaddress}{%s}\n"

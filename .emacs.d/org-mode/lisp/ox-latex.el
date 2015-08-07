@@ -204,6 +204,94 @@
     ("uk" . "ukrainian"))
   "Alist between language code and corresponding Babel option.")
 
+(defconst org-latex-polyglossia-language-alist
+  '(("am" "amharic")
+    ("ast" "asturian")
+    ("ar" "arabic")
+    ("bo" "tibetan")
+    ("bn" "bengali")
+    ("bg" "bulgarian")
+    ("br" "breton")
+    ("bt-br" "brazilian")
+    ("ca" "catalan")
+    ("cop" "coptic")
+    ("cs" "czech")
+    ("cy" "welsh")
+    ("da" "danish")
+    ("de" "german" "german")
+    ("de-at" "german" "austrian")
+    ("de-de" "german" "german")
+    ("dv" "divehi")
+    ("el" "greek")
+    ("en" "english" "usmax")
+    ("en-au" "english" "australian")
+    ("en-gb" "english" "uk")
+    ("en-nz" "english" "newzealand")
+    ("en-us" "english" "usmax")
+    ("eo" "esperanto")
+    ("es" "spanish")
+    ("et" "estonian")
+    ("eu" "basque")
+    ("fa" "farsi")
+    ("fi" "finnish")
+    ("fr" "french")
+    ("fu" "friulan")
+    ("ga" "irish")
+    ("gd" "scottish")
+    ("gl" "galician")
+    ("he" "hebrew")
+    ("hi" "hindi")
+    ("hr" "croatian")
+    ("hu" "magyar")
+    ("hy" "armenian")
+    ("id" "bahasai")
+    ("ia" "interlingua")
+    ("is" "icelandic")
+    ("it" "italian")
+    ("kn" "kannada")
+    ("la" "latin" "modern")
+    ("la-modern" "latin" "modern")
+    ("la-classic" "latin" "classic")
+    ("la-medieval" "latin" "medieval")
+    ("lo" "lao")
+    ("lt" "lithuanian")
+    ("lv" "latvian")
+    ("mr" "maranthi")
+    ("ml" "malayalam")
+    ("nl" "dutch")
+    ("nb" "norsk")
+    ("nn" "nynorsk")
+    ("nko" "nko")
+    ("no" "norsk")
+    ("oc" "occitan")
+    ("pl" "polish")
+    ("pms" "piedmontese")
+    ("pt" "portuges")
+    ("rm" "romansh")
+    ("ro" "romanian")
+    ("ru" "russian")
+    ("sa" "sanskrit")
+    ("hsb" "usorbian")
+    ("dsb" "lsorbian")
+    ("sk" "slovak")
+    ("sl" "slovenian")
+    ("se" "samin")
+    ("sq" "albanian")
+    ("sr" "serbian")
+    ("sv" "swedish")
+    ("syr" "syriac")
+    ("ta" "tamil")
+    ("te" "telugu")
+    ("th" "thai")
+    ("tk" "turkmen")
+    ("tr" "turkish")
+    ("uk" "ukrainian")
+    ("ur" "urdu")
+    ("vi" "vietnamese"))
+  "Alist between language code and corresponding Polyglossia option")
+
+
+
 (defconst org-latex-table-matrix-macros '(("bordermatrix" . "\\cr")
 					  ("qbordermatrix" . "\\cr")
 					  ("kbordermatrix" . "\\\\"))
@@ -390,11 +478,15 @@ AUTO will automatically be replaced with a coding system derived
 from `buffer-file-coding-system'.  See also the variable
 `org-latex-inputenc-alist' for a way to influence this mechanism.
 
-Likewise, if your header contains \"\\usepackage[AUTO]{babel}\",
-AUTO will be replaced with the language related to the language
-code specified by `org-export-default-language', which see.  Note
-that constructions such as \"\\usepackage[french,AUTO,english]{babel}\"
-are permitted.
+Likewise, if your header contains \"\\usepackage[AUTO]{babel}\"
+or \"\\usepackage[AUTO]{polyglossia}\", AUTO will be replaced
+with the language related to the language code specified by
+`org-export-default-language'.  Note that constructions such as
+\"\\usepackage[french,AUTO,english]{babel}\" are permitted.  For
+Polyglossia the language will be set via the macros
+\"\\setmainlanguage\" and \"\\setotherlanguage\".  See also
+`org-latex-guess-babel-language' and
+`org-latex-guess-polyglossia-language'.
 
 The sectioning structure
 ------------------------
@@ -795,7 +887,7 @@ the minted package to `org-latex-packages-alist', for example
 using customize, or with
 
   \(require 'ox-latex)
-  \(add-to-list 'org-latex-packages-alist '(\"\" \"minted\"))
+  \(add-to-list 'org-latex-packages-alist '(\"newfloat\" \"minted\"))
 
 In addition, it is necessary to install pygments
 \(http://pygments.org), and to configure the variable
@@ -1109,21 +1201,37 @@ caption nor label, return the empty string.
 For non-floats, see `org-latex--wrap-label'."
   (let* ((label (org-latex--label element info nil t))
 	 (main (org-export-get-caption element))
+	 (attr (org-export-read-attribute :attr_latex element))
+	 (type (org-element-type element))
+	 (nonfloat (or (and (plist-member attr :float)
+			    (not (plist-get attr :float))
+			    main)
+		       (and (eq type 'src-block)
+			    (not (plist-get attr :float))
+			    (memq (plist-get info :latex-listings)
+				  '(nil minted)))))
 	 (short (org-export-get-caption element t))
-	 (caption-from-attr-latex
-	  (org-export-read-attribute :attr_latex element :caption)))
+	 (caption-from-attr-latex (plist-get attr :caption)))
     (cond
      ((org-string-nw-p caption-from-attr-latex)
       (concat caption-from-attr-latex "\n"))
      ((and (not main) (equal label "")) "")
      ((not main) (concat label "\n"))
      ;; Option caption format with short name.
-     (short (format "\\caption[%s]{%s%s}\n"
-		    (org-export-data short info)
-		    label
-		    (org-export-data main info)))
-     ;; Standard caption format.
-     (t (format "\\caption{%s%s}\n" label (org-export-data main info))))))
+     (t
+      (format (if nonfloat "\\captionof{%s}%s{%s%s}\n"
+		"\\caption%s%s{%s%s}\n")
+	      (if nonfloat
+		  (case type
+		    (paragraph "figure")
+		    (src-block (if (plist-get info :latex-listings)
+				   "listing"
+				 "figure"))
+		    (t (symbol-name type)))
+		"")
+	      (if short (format "[%s]" (org-export-data short info)) "")
+	      label
+	      (org-export-data main info))))))
 
 (defun org-latex-guess-inputenc (header)
   "Set the coding system in inputenc to what the buffer is.
@@ -1178,6 +1286,59 @@ Return the new header."
 			  (t (append options (list language))))
 		    ", ")
 	 t nil header 1)))))
+
+(defun org-latex-guess-polyglossia-language (header info)
+  "Set the Polyglossia language according to the LANGUAGE keyword.
+
+HEADER is the LaTeX header string.  INFO is the plist used as
+a communication channel.
+
+Insertion of guessed language only happens when the Polyglossia
+package has been explicitly loaded.
+
+The argument to Polyglossia may be \"AUTO\" which is then
+replaced with the language of the document or
+`org-export-default-language'.  Note, the language is really set
+using \setdefaultlanguage and not as an option to the package.
+
+Return the new header."
+  (let ((language (plist-get info :language)))
+    ;; If no language is set or Polyglossia is not loaded, return
+    ;; HEADER as-is.
+    (if (or (not (stringp language))
+	    (not (string-match
+		  "\\\\usepackage\\(?:\\[\\([^]]+?\\)\\]\\){polyglossia}\n"
+		  header)))
+	header
+      (let* ((options (org-string-nw-p (match-string 1 header)))
+	     (languages (and options
+			     ;; Reverse as the last loaded language is
+			     ;; the main language.
+			     (nreverse
+			      (delete-dups
+			       (save-match-data
+				 (org-split-string
+				  (replace-regexp-in-string
+				   "AUTO" language options t)
+				  ",[ \t]*"))))))
+	     (main-language-set
+	      (string-match-p "\\\\setmainlanguage{.*?}" header)))
+	(replace-match
+	 (concat "\\usepackage{polyglossia}\n"
+		 (mapconcat
+		  (lambda (l)
+		    (let ((l (or (assoc l org-latex-polyglossia-language-alist)
+				 l)))
+		      (format (if main-language-set "\\setotherlanguage%s{%s}\n"
+				(setq main-language-set t)
+				"\\setmainlanguage%s{%s}\n")
+			      (if (and (consp l) (= (length l) 3))
+				  (format "[variant=%s]" (nth 2 l))
+				"")
+			      (nth 1 l))))
+		  languages
+		  ""))
+	 t t header 0)))))
 
 (defun org-latex--find-verb-separator (s)
   "Return a character not used in string S.
@@ -1308,6 +1469,34 @@ INFO is a plist used as a communication channel."
       (?L . ,(capitalize language))
       (?D . ,(org-export-get-date info)))))
 
+(defun org-latex--make-header (info)
+  "Return a formatted LaTeX header.
+INFO is a plist used as a communication channel."
+  (let* ((class (plist-get info :latex-class))
+	    (class-options (plist-get info :latex-class-options))
+	    (header (nth 1 (assoc class (plist-get info :latex-classes))))
+	    (document-class-string
+	     (and (stringp header)
+		  (if (not class-options) header
+		    (replace-regexp-in-string
+		     "^[ \t]*\\\\documentclass\\(\\(\\[[^]]*\\]\\)?\\)"
+		     class-options header t nil 1)))))
+       (if (not document-class-string)
+	   (user-error "Unknown LaTeX class `%s'" class)
+	 (org-latex-guess-polyglossia-language
+	  (org-latex-guess-babel-language
+	   (org-latex-guess-inputenc
+	    (org-element-normalize-string
+	     (org-splice-latex-header
+	      document-class-string
+	      org-latex-default-packages-alist
+	      org-latex-packages-alist nil
+	      (concat (org-element-normalize-string
+		       (plist-get info :latex-header))
+		      (plist-get info :latex-header-extra)))))
+	   info)
+	  info))))
+
 
 ;;; Template
 
@@ -1322,28 +1511,7 @@ holding export options."
      (and (plist-get info :time-stamp-file)
 	  (format-time-string "%% Created %Y-%m-%d %a %H:%M\n"))
      ;; Document class and packages.
-     (let* ((class (plist-get info :latex-class))
-	    (class-options (plist-get info :latex-class-options))
-	    (header (nth 1 (assoc class (plist-get info :latex-classes))))
-	    (document-class-string
-	     (and (stringp header)
-		  (if (not class-options) header
-		    (replace-regexp-in-string
-		     "^[ \t]*\\\\documentclass\\(\\(\\[[^]]*\\]\\)?\\)"
-		     class-options header t nil 1)))))
-       (if (not document-class-string)
-	   (user-error "Unknown LaTeX class `%s'" class)
-	 (org-latex-guess-babel-language
-	  (org-latex-guess-inputenc
-	   (org-element-normalize-string
-	    (org-splice-latex-header
-	     document-class-string
-	     org-latex-default-packages-alist
-	     org-latex-packages-alist nil
-	     (concat (org-element-normalize-string
-		      (plist-get info :latex-header))
-		     (plist-get info :latex-header-extra)))))
-	  info)))
+     (org-latex--make-header info)
      ;; Possibly limit depth for headline numbering.
      (let ((sec-num (plist-get info :section-numbers)))
        (when (integerp sec-num)
@@ -1488,11 +1656,16 @@ contextual information."
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
   (when (org-string-nw-p (org-element-property :value example-block))
-    (org-latex--wrap-label
-     example-block
-     (format "\\begin{verbatim}\n%s\\end{verbatim}"
-	     (org-export-format-code-default example-block info))
-     info)))
+    (let ((environment (or (org-export-read-attribute
+			    :attr_latex example-block :environment)
+			   "verbatim")))
+      (org-latex--wrap-label
+       example-block
+       (format "\\begin{%s}\n%s\\end{%s}"
+	       environment
+	       (org-export-format-code-default example-block info)
+	       environment)
+       info))))
 
 
 ;;;; Export Block
@@ -1548,8 +1721,7 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
      "\\footnotemark")
     ;; Otherwise, define it with \footnote command.
     (t
-     (let ((def (org-latex--wrap-latex-math-block
-		 (org-export-get-footnote-definition footnote-reference info) info)))
+     (let ((def (org-export-get-footnote-definition footnote-reference info)))
        (concat
 	(format "\\footnote{%s}" (org-trim (org-export-data def info)))
 	;; Retrieve all footnote references within the footnote and
@@ -1971,14 +2143,16 @@ used as a communication channel."
 	 ;; Retrieve latex attributes from the element around.
 	 (attr (org-export-read-attribute :attr_latex parent))
 	 (float (let ((float (plist-get attr :float)))
-		  (cond ((and (not float) (plist-member attr :float)) nil)
-			((string= float "wrap") 'wrap)
+		  (cond ((string= float "wrap") 'wrap)
 			((string= float "sideways") 'sideways)
 			((string= float "multicolumn") 'multicolumn)
 			((or float
 			     (org-element-property :caption parent)
 			     (org-string-nw-p (plist-get attr :caption)))
-			 'figure))))
+			 (if (and (plist-member attr :float) (not float))
+			     'nonfloat
+			   'figure))
+			((and (not float) (plist-member attr :float)) nil))))
 	 (placement
 	  (let ((place (plist-get attr :placement)))
 	    (cond
@@ -2083,6 +2257,13 @@ used as a communication channel."
 		      (if caption-above-p caption "")
 		      comment-include image-code
 		      (if caption-above-p "" caption)))
+      (nonfloat
+       (format "\\begin{center}
+%s%s
+%s\\end{center}"
+	       (if caption-above-p caption "")
+	       image-code
+	       (if caption-above-p "" caption)))
       (otherwise image-code))))
 
 (defun org-latex-link (link desc info)
@@ -2224,10 +2405,10 @@ contextual information."
 	     ;; However, if special strings are used, be careful not
 	     ;; to protect "\" in "\-" constructs.
 	     (replace-regexp-in-string
-	      (concat "[%$#&{}_~^]\\|\\\\" (and specialp "\\(?:[^-]\\|$\\)"))
+	      (concat "[%$#&{}_~^]\\|\\\\" (and specialp "\\([^-]\\|$\\)"))
 	      (lambda (m)
-		(case (aref m 0)
-		  (?\\ "$\\\\backslash$")
+		(case (string-to-char m)
+		  (?\\ "$\\\\backslash$\\1")
 		  (?~ "\\\\textasciitilde{}")
 		  (?^ "\\\\^{}")
 		  (t "\\\\\\&")))
@@ -2497,15 +2678,15 @@ contextual information."
        ((not listings)
 	(let* ((caption-str (org-latex--caption/label-string src-block info))
 	       (float-env
-		(cond ((and (not float) (plist-member attributes :float)) "%s")
-		      ((string= "multicolumn" float)
+		(cond ((string= "multicolumn" float)
 		       (format "\\begin{figure*}[%s]\n%s%%s\n%s\\end{figure*}"
 			       (plist-get info :latex-default-figure-position)
 			       (if caption-above-p caption-str "")
 			       (if caption-above-p "" caption-str)))
-		      ((or caption float)
-		       (format "\\begin{figure}[H]\n%%s\n%s\\end{figure}"
-			       caption-str))
+		      (caption (concat
+				(if caption-above-p caption-str "")
+				"%s"
+				(if caption-above-p "" (concat "\n" caption-str))))
 		      (t "%s"))))
 	  (format
 	   float-env
@@ -2525,23 +2706,14 @@ contextual information."
 	(let* ((caption-str (org-latex--caption/label-string src-block info))
 	       (float-env
 		(cond
-		 ((and (not float) (plist-member attributes :float) caption)
-		  (let ((caption
-			 (replace-regexp-in-string
-			  "\\\\caption" "\\captionof{listing}" caption-str
-			  t t)))
-		    (concat (and caption-above-p caption)
-			    "%%s"
-			    (and (not caption-above-p) (concat "\n" caption)))))
-		 ((and (not float) (plist-member attributes :float)) "%s")
 		 ((string= "multicolumn" float)
 		  (format "\\begin{listing*}\n%s%%s\n%s\\end{listing*}"
 			  (if caption-above-p caption-str "")
 			  (if caption-above-p "" caption-str)))
-		 ((or caption float)
-		  (format "\\begin{listing}[H]\n%s%%s\n%s\\end{listing}"
-			  (if caption-above-p caption-str "")
-			  (if caption-above-p "" caption-str)))
+		 (caption
+		  (concat (if caption-above-p caption-str "")
+			  "%s"
+			  (if caption-above-p "" (concat "\n" caption-str))))
 		 (t "%s")))
 	       (options (plist-get info :latex-minted-options))
 	       (body
@@ -2863,6 +3035,12 @@ This function assumes TABLE has `org' as its `:type' property and
 			  (if caption-above-p caption "")
 			  (when centerp "\\centering\n")
 			  fontsize))
+		 ((and (not float-env) caption)
+		  (concat
+		   (and centerp "\\begin{center}\n" )
+		   (if caption-above-p caption "")
+		   (cond ((and fontsize centerp) fontsize)
+			 (fontsize (concat "{" fontsize)))))
 		 (centerp (concat "\\begin{center}\n" fontsize))
 		 (fontsize (concat "{" fontsize)))
 		(cond ((equal "tabu" table-env)
@@ -2880,8 +3058,13 @@ This function assumes TABLE has `org' as its `:type' property and
 				 table-env)))
 		(cond
 		 (float-env
-		  (concat (if caption-above-p "" caption)
+		  (concat (if caption-above-p "" (concat "\n" caption))
 			  (format "\n\\end{%s}" float-env)))
+		 ((and (not float-env) caption)
+		  (concat
+		   (if caption-above-p "" (concat "\n" caption))
+		   (and centerp "\n\\end{center}")
+		   (and fontsize (not centerp) "}")))
 		 (centerp "\n\\end{center}")
 		 (fontsize "}")))))))
 
@@ -3250,7 +3433,7 @@ Return PDF file name or an error if it couldn't be produced."
 			      default-directory))
 	 (time (current-time))
 	 warnings)
-    (unless snippet (message (format "Processing LaTeX file %s..." texfile)))
+    (unless snippet (message "Processing LaTeX file %s..." texfile))
     (save-window-excursion
       (cond
        ;; A function is provided: Apply it.

@@ -158,7 +158,8 @@ specially in `org-element--object-lex'.")
 		;; Empty lines.
 		"$" "\\|"
 		;; Tables (any type).
-		"\\(?:|\\|\\+-[-+]\\)" "\\|"
+		"|" "\\|"
+		"\\+\\(?:-+\\+\\)+[ \t]*$" "\\|"
 		;; Comments, keyword-like or block-like constructs.
 		;; Blocks and keywords with dual values need to be
 		;; double-checked.
@@ -489,18 +490,18 @@ objects, or a strings.
 
 The function takes care of setting `:parent' property for CHILD.
 Return parent element."
-  ;; Link every child to PARENT. If PARENT is nil, it is a secondary
-  ;; string: parent is the list itself.
-  (mapc (lambda (child)
-	  (org-element-put-property child :parent (or parent children)))
-	children)
-  ;; Add CHILDREN at the end of PARENT contents.
-  (when parent
-    (apply 'org-element-set-contents
-	   parent
-	   (nconc (org-element-contents parent) children)))
-  ;; Return modified PARENT element.
-  (or parent children))
+  (if (not children) parent
+    ;; Link every child to PARENT. If PARENT is nil, it is a secondary
+    ;; string: parent is the list itself.
+    (dolist (child children)
+      (org-element-put-property child :parent (or parent children)))
+    ;; Add CHILDREN at the end of PARENT contents.
+    (when parent
+      (apply #'org-element-set-contents
+	     parent
+	     (nconc (org-element-contents parent) children)))
+    ;; Return modified PARENT element.
+    (or parent children)))
 
 (defun org-element-extract-element (element)
   "Extract ELEMENT from parse tree.
@@ -572,6 +573,13 @@ The function takes care of setting `:parent' property for NEW."
     (setcar (cdr old) (nth 1 new))
     ;; Transfer type.
     (setcar old (car new))))
+
+(defun org-element-create (type &optional props &rest children)
+  "Create a new element of type TYPE.
+Optional argument PROPS, when non-nil, is a plist defining the
+properties of the element.  CHILDREN can be elements, objects or
+strings."
+  (apply #'org-element-adopt-elements (list type props) children))
 
 (defun org-element-copy (datum)
   "Return a copy of DATUM.
@@ -1625,7 +1633,7 @@ containing `:call', `:inside-header', `:arguments',
 		       (if (eobp) (point) (line-beginning-position))))
 	   (valid-value
 	    (string-match
-	     "\\([^()\n]+?\\)\\(?:\\[\\(.*?\\)\\]\\)?(\\(.*?\\))[ \t]*\\(.*\\)"
+	     "\\([^()\n]+?\\)\\(?:\\[\\(.*?\\)\\]\\)?(\\(.*\\))[ \t]*\\(.*\\)"
 	     value)))
       (list 'babel-call
 	    (nconc
@@ -2485,10 +2493,12 @@ Assume point is at the beginning of the table."
   (save-excursion
     (let* ((case-fold-search t)
 	   (table-begin (point))
-	   (type (if (org-at-table.el-p) 'table.el 'org))
+	   (type (if (looking-at "[ \t]*|") 'org 'table.el))
+           (end-re (format "^[ \t]*\\($\\|[^| \t%s]\\)"
+			   (if (eq type 'org) "" "+")))
 	   (begin (car affiliated))
 	   (table-end
-	    (if (re-search-forward org-table-any-border-regexp limit 'm)
+	    (if (re-search-forward end-re limit 'move)
 		(goto-char (match-beginning 0))
 	      (point)))
 	   (tblfm (let (acc)
@@ -2553,7 +2563,7 @@ containing `:begin', `:end', `:contents-begin', `:contents-end',
 				(end-of-line)
 				(skip-chars-backward " \t")
 				(point))))
-	   (end (progn (forward-line) (point))))
+	   (end (line-beginning-position 2)))
       (list 'table-row
 	    (list :type type
 		  :begin begin
@@ -3035,53 +3045,73 @@ Assume point is at the beginning of the link."
 	      contents-end (match-end 1)))
        ;; Type 2: Standard link, i.e. [[http://orgmode.org][homepage]]
        ((looking-at org-bracket-link-regexp)
-	(setq contents-begin (match-beginning 3)
-	      contents-end (match-end 3)
-	      link-end (match-end 0)
-	      ;; RAW-LINK is the original link.  Expand any
-	      ;; abbreviation in it.
-	      raw-link (org-translate-link
+	(setq contents-begin (match-beginning 3))
+	(setq contents-end (match-end 3))
+	(setq link-end (match-end 0))
+	;; RAW-LINK is the original link.  Expand any
+	;; abbreviation in it.
+	;;
+	;; Also treat any newline character and associated
+	;; indentation as a single space character.  This is not
+	;; compatible with RFC 3986, which requires to ignore
+	;; them altogether.  However, doing so would require
+	;; users to encode spaces on the fly when writing links
+	;; (e.g., insert [[shell:ls%20*.org]] instead of
+	;; [[shell:ls *.org]], which defeats Org's focus on
+	;; simplicity.
+	(setq raw-link (org-translate-link
 			(org-link-expand-abbrev
-			 (org-match-string-no-properties 1))))
-	;; Determine TYPE of link and set PATH accordingly.
+			 (replace-regexp-in-string
+			  "[ \t]*\n[ \t]*" " "
+			  (org-match-string-no-properties 1)))))
+	;; Determine TYPE of link and set PATH accordingly.  According
+	;; to RFC 3986, remove whitespaces from URI in external links.
+	;; In internal ones, treat indentation as a single space.
 	(cond
 	 ;; File type.
 	 ((or (file-name-absolute-p raw-link)
 	      (string-match "\\`\\.\\.?/" raw-link))
-	  (setq type "file" path raw-link))
+	  (setq type "file")
+	  (setq path raw-link))
 	 ;; Explicit type (http, irc, bbdb...).  See `org-link-types'.
 	 ((string-match org-link-types-re raw-link)
-	  (setq type (match-string 1 raw-link)
-		;; According to RFC 3986, extra whitespace should be
-		;; ignored when a URI is extracted.
-		path (replace-regexp-in-string
-		      "[ \t]*\n[ \t]*" "" (substring raw-link (match-end 0)))))
+	  (setq type (match-string 1 raw-link))
+	  (setq path (substring raw-link (match-end 0))))
 	 ;; Id type: PATH is the id.
-	 ((string-match "\\`id:\\([-a-f0-9]+\\)" raw-link)
+	 ((string-match "\\`id:\\([-a-f0-9]+\\)\\'" raw-link)
 	  (setq type "id" path (match-string 1 raw-link)))
 	 ;; Code-ref type: PATH is the name of the reference.
-	 ((string-match "\\`(\\(.*\\))\\'" raw-link)
-	  (setq type "coderef" path (match-string 1 raw-link)))
+	 ((and (org-string-match-p "\\`(" raw-link)
+	       (org-string-match-p ")\\'" raw-link))
+	  (setq type "coderef")
+	  (setq path (substring raw-link 1 -1)))
 	 ;; Custom-id type: PATH is the name of the custom id.
 	 ((= (string-to-char raw-link) ?#)
-	  (setq type "custom-id" path (substring raw-link 1)))
+	  (setq type "custom-id")
+	  (setq path (substring raw-link 1)))
 	 ;; Fuzzy type: Internal link either matches a target, an
 	 ;; headline name or nothing.  PATH is the target or
 	 ;; headline's name.
-	 (t (setq type "fuzzy" path raw-link))))
+	 (t
+	  (setq type "fuzzy")
+	  (setq path raw-link))))
        ;; Type 3: Plain link, e.g., http://orgmode.org
        ((looking-at org-plain-link-re)
 	(setq raw-link (org-match-string-no-properties 0)
 	      type (org-match-string-no-properties 1)
 	      link-end (match-end 0)
 	      path (org-match-string-no-properties 2)))
-       ;; Type 4: Angular link, e.g., <http://orgmode.org>
+       ;; Type 4: Angular link, e.g., <http://orgmode.org>.  Unlike to
+       ;; bracket links, follow RFC 3986 and remove any extra
+       ;; whitespace in URI.
        ((looking-at org-angle-link-re)
-	(setq raw-link (buffer-substring-no-properties
-			(match-beginning 1) (match-end 2))
-	      type (org-match-string-no-properties 1)
-	      link-end (match-end 0)
-	      path (org-match-string-no-properties 2)))
+	(setq type (org-match-string-no-properties 1))
+	(setq link-end (match-end 0))
+	(setq raw-link
+	      (buffer-substring-no-properties
+	       (match-beginning 1) (match-end 2)))
+	(setq path (replace-regexp-in-string
+		    "[ \t]*\n[ \t]*" "" (org-match-string-no-properties 2))))
        (t (throw 'no-object nil)))
       ;; In any case, deduce end point after trailing white space from
       ;; LINK-END variable.
@@ -3780,7 +3810,8 @@ element it has to parse."
 	     ((looking-at "%%(")
 	      (org-element-diary-sexp-parser limit affiliated))
 	     ;; Table.
-	     ((org-at-table-p t) (org-element-table-parser limit affiliated))
+	     ((looking-at "[ \t]*\\(|\\|\\+\\(-+\\+\\)+[ \t]*$\\)")
+	      (org-element-table-parser limit affiliated))
 	     ;; List.
 	     ((looking-at (org-item-re))
 	      (org-element-plain-list-parser
