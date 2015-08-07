@@ -85,10 +85,19 @@
 (global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key "\C-a" 'mark-whole-buffer)
-(global-set-key (kbd "<f7>") 'toggle-line-spacing)
+(global-set-key (kbd "<C-f8>") 'toggle-line-spacing)
 (global-set-key (kbd "<f8>") 'toggle-truncate-lines)
-(global-set-key (kbd "<f11>") 'ibuffer)
+(global-set-key (kbd "<f4>") 'ibuffer)
+
+;; Hint: customize `magit-repo-dirs' so that you can use C-u M-F12 to
+;; quickly open magit on any one of your projects.
 (global-set-key (kbd "<f12>") 'magit-status)
+(global-set-key (kbd "<C-f12>") 'magit-status)
+(global-set-key (kbd "<f11>") #'git-messenger:popup-message)
+
+;; Code folding
+(global-set-key (kbd "<f7>") 'hs-hide-block)
+(global-set-key (kbd "S-<f7>") 'hs-show-block)
 
 ;; Native file opening
 (cond

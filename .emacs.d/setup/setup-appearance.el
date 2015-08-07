@@ -125,6 +125,14 @@ non-nil."
 (add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
 
+;; Zenburn theme
+(add-to-list 'load-path "~/.emacs.d/emacs-faff-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-faff-theme")
+
+;; Leuven theme
+(add-to-list 'load-path "~/.emacs.d/emacs-leuven-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-leuven-theme")
+
 ;; Solarized theme
 (add-to-list 'load-path "~/.emacs.d/solarized-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-emacs")
@@ -132,9 +140,13 @@ non-nil."
 (setq solarized-scale-org-headlines nil)
 
 ;; Load Atom dark theme
-(load-theme 'atom-dark t)
+;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
-(set-face-attribute 'region nil :background "#666")
+;; (load-theme 'leuven t)
+(load-theme 'faff t)
+
+;; Use for dark themes only
+(set-face-attribute 'region nil :background "#999")
 
 ;; Syntax coloring
 (require 'font-lock+)
@@ -330,7 +342,7 @@ non-nil."
 (setq djcb-read-only-cursor-type 'hbar)
 (setq djcb-overwrite-color "red")
 (setq djcb-overwrite-cursor-type 'box)
-(setq djcb-normal-color "yellow")
+(setq djcb-normal-color "black")
 (setq djcb-normal-cursor-type 'bar)
 (defun djcb-set-cursor-according-to-mode ()
   "change cursor color and type according to some minor modes."

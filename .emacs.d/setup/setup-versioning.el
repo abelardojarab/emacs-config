@@ -62,9 +62,10 @@
 (require 'setup-magit)
 (require 'git-gutter-fringe+)
 (require 'git-timemachine)
+
 (global-git-gutter+-mode t)
-(set-face-foreground 'git-gutter-fr+-modified "orange")
-(set-face-foreground 'git-gutter-fr+-added    "green")
+(set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
+(set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
 (set-face-foreground 'git-gutter-fr+-deleted  "red")
 
 ;; Please adjust fringe width if your own sign is too big.

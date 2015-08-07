@@ -33,11 +33,11 @@
       (goto-char (point-min))
       ;;  If we found both, we assume file is folded
       (and (assq major-mode folding-mode-marks-alist)
-           (< (point-max) 10000)
-           (re-search-forward folding-re1 nil t)
-           ;; if file is folded, there are \r's
-           (re-search-forward "[\r\n]" nil t)
-           (re-search-forward folding-re2 nil t)))))
+         (< (point-max) 10000)
+         (re-search-forward folding-re1 nil t)
+         ;; if file is folded, there are \r's
+         (re-search-forward "[\r\n]" nil t)
+         (re-search-forward folding-re2 nil t)))))
 (setq folding-check-folded-file-function 'iy-folding-check-folded)
 (folding-mode-add-find-file-hook)
 (global-set-key (kbd "M-s i") folding-mode-prefix-map)
@@ -57,16 +57,16 @@
       ((open-fold nil
                   (let ((data (folding-show-current-entry noerror t)))
                     (and data
-                         (progn
-                           (when folding-narrow-by-default
-                             (setq folding-stack
-                                   (if folding-stack
-                                       (cons (cons (point-min-marker)
-                                                   (point-max-marker))
-                                             folding-stack)
-                                     '(folded)))
-                             (folding-set-mode-line))
-                           (folding-narrow-to-region (car data) (nth 1 data)))))))
+                       (progn
+                         (when folding-narrow-by-default
+                           (setq folding-stack
+                                 (if folding-stack
+                                     (cons (cons (point-min-marker)
+                                                 (point-max-marker))
+                                           folding-stack)
+                                   '(folded)))
+                           (folding-set-mode-line))
+                         (folding-narrow-to-region (car data) (nth 1 data)))))))
     (let ((goal (point)))
       (while (folding-skip-ellipsis-backward)
         (beginning-of-line)
@@ -152,9 +152,6 @@
                     'nxml-mode
                     'c-mode-common-hook))
   (add-hook hook 'hideshowvis-enable))
-(global-set-key (kbd "<f7>") 'hs-hide-block)
-(global-set-key (kbd "S-<f7>") 'hs-show-block)
-(global-set-key (kbd "C-c @ SPC") 'hs-show-block) ; second binding
 
 ;; enable `hs-minor-mode' at startup
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
@@ -187,7 +184,7 @@
     :group 'hideshow)
 
   (defface hs-fringe-face
-    '((t (:foreground "#999" :box (:line-width 2 :color "grey75" :style released-button))))
+    '((t (:foreground "#444" :box (:line-width 2 :color "grey25" :style released-button))))
     "Face used to highlight the fringe on folded regions"
     :group 'hideshow)
 
@@ -197,7 +194,7 @@
     :group 'hideshow)
 
   (defface hs-face
-    '((t (:background "#558" :box t)))
+    '((t (:background "#888" :box t)))
     "Face to hightlight the ... area of hidden regions"
     :group 'hideshow)
 

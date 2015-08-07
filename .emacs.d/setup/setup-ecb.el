@@ -191,13 +191,13 @@ little more place. "
                ;; semantic idle mode refresh doesn't seem to work all that     well.
                (semantic-force-refresh))))
 
-;; Fonts
-(set-face-attribute 'ecb-default-general-face nil
-                    :inherit 'default)
-(set-face-attribute 'ecb-default-highlight-face nil
-                    :background "#464646")
-(set-face-attribute 'ecb-tag-header-face nil
-                    :background "#464646")
+;; Redefine fonts, not needed
+;; (set-face-attribute 'ecb-default-general-face nil
+;;                     :inherit 'default)
+;; (set-face-attribute 'ecb-default-highlight-face nil
+;;                     :background "#464646")
+;; (set-face-attribute 'ecb-tag-header-face nil
+;;                     :background "#464646")
 
 ;; Speedbar
 (require 'sr-speedbar)

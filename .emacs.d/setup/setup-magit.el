@@ -145,10 +145,5 @@
 ;; Show blame for current line
 (add-to-list 'load-path "~/.emacs.d/git-messenger")
 (require 'git-messenger)
-(global-set-key (kbd "C-x v p") #'git-messenger:popup-message)
-
-;; Hint: customize `magit-repo-dirs' so that you can use C-u M-F12 to
-;; quickly open magit on any one of your projects.
-(global-set-key (kbd "<C-f12>") 'magit-status)
 
 (provide 'setup-magit)
