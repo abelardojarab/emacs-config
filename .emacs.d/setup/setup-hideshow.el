@@ -142,8 +142,8 @@
 (dolist (hook (list 'lisp-mode-hook
                     'js2-mode-hook
                     'emacs-lisp-mode-hook
-                    'python-mode
-                    'nxml-mode
+                    'python-mode-hook
+                    'nxml-mode-hook
                     'c-mode-common-hook))
   (add-hook hook 'hideshowvis-enable))
 
