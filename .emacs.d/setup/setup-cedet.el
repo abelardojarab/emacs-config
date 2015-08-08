@@ -64,6 +64,8 @@
 ;; This prevents Emacs to become uresponsive
 (defun semanticdb-kill-hook ()
   nil)
+(defun semanticdb-create-table-for-file-not-in-buffer ()
+  nil)
 
 ;; Auto-complete support
 (require 'semantic/analyze/refs)

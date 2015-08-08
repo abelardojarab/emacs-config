@@ -64,15 +64,6 @@
               tags-completion-table)
     (find-tag (replace-regexp-in-string "\\\\" "" (ido-completing-read "Tag: " tag-names)))))
 
-;; Use GNU global instead of normal find-tag, fall back to etags-select
-(global-set-key (kbd "C-,") (if (and (fboundp 'ggtags-find-tag-dwim)
-                                   (executable-find "global"))
-                                'ggtags-find-tag-dwim
-                              'etags-select-find-tag))
-
-;; Use Helm instead of 'etags-select-find-tag
-(global-set-key (kbd "M-.") 'helm-etags-select)
-
 ;; Tags table
 (setq tags-revert-without-query t)
 (setq tags-always-build-completion-table t)

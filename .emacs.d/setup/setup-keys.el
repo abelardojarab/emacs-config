@@ -99,6 +99,15 @@
 (global-set-key (kbd "<f7>") 'hs-hide-block)
 (global-set-key (kbd "S-<f7>") 'hs-show-block)
 
+;; Use GNU global instead of normal find-tag, fall back to etags-select
+(global-set-key (kbd "C-,") (if (and (fboundp 'ggtags-find-tag-dwim)
+                                   (executable-find "global"))
+                                'ggtags-find-tag-dwim
+                              'etags-select-find-tag))
+
+;; Use Helm instead of 'etags-select-find-tag
+(global-set-key (kbd "M-.") 'helm-etags-select)
+
 ;; Native file opening
 (cond
  ;; Windows
@@ -315,6 +324,7 @@
   (let ((i 0))
     (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
       (setq i (1+ i)) (previous-buffer))))
+
 (global-set-key (kbd "C-S-<left>") 'popup-select-window)
 (global-set-key (kbd "C-S-<right>") 'popup-select-window)
 
@@ -323,10 +333,14 @@
 (define-key c-mode-base-map [C-f4] 'dts-switch-between-header-and-source)
 (global-set-key (kbd "C-1") 'psw-switch-buffer)
 (global-set-key (kbd "C-2") 'psw-switch-function)
+(global-set-key (kbd "<A-up>") 'psw-switch-buffer)
+(global-set-key (kbd "<A-down>") 'psw-switch-function)
 
 ;; Flycheck tips
 (define-key global-map (kbd "C-0") 'error-tip-cycle-dwim)
 (define-key global-map (kbd "C-9") 'error-tip-cycle-dwim-reverse)
+(define-key global-map (kbd "<A-right>") 'error-tip-cycle-dwim)
+(define-key global-map (kbd "<A-left>") 'error-tip-cycle-dwim-reverse)
 
 ;; Drag stuff
 (add-to-list 'load-path "~/.emacs.d/drag-stuff")

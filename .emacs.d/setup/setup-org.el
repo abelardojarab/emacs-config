@@ -27,12 +27,12 @@
 ;; write good mode
 (add-to-list 'load-path "~/.emacs.d/writegood-mode")
 (require 'writegood-mode)
-(set-face-attribute 'writegood-weasels-face nil
-                    :background "#464646")
-(set-face-attribute 'writegood-passive-voice-face nil
-                    :background "#464646")
-(set-face-attribute 'writegood-duplicates-face nil
-                    :background "#464646")
+;; (set-face-attribute 'writegood-weasels-face nil
+;;                     :background "#464646")
+;; (set-face-attribute 'writegood-passive-voice-face nil
+;;                     :background "#464646")
+;; (set-face-attribute 'writegood-duplicates-face nil
+;;                     :background "#464646")
 
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))

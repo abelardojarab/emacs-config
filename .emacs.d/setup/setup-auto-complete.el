@@ -54,6 +54,7 @@
 (ac-set-trigger-key "<tab>")
 (define-key ac-completing-map (kbd "<tab>") 'ac-complete)
 (define-key ac-completing-map (kbd "RET") 'ac-complete)
+(define-key ac-completing-map  (kbd "ESC") 'ac-stop)
 (global-auto-complete-mode t)
 (auto-complete-mode 1)
 (setq ac-show-menu-immediately-on-auto-complete t)
