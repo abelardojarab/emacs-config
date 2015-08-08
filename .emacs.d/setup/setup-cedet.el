@@ -56,11 +56,14 @@
 
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
-          (lambda ()
-            (if (and (> (point-max) 10000)
-                   (not (semantic-parse-tree-needs-rebuild-p)))
-                nil
-              t)))
+          (lambda () (if (and (> (point-max) 5000)
+                       (not (semantic-parse-tree-needs-rebuild-p)))
+                    nil
+                  t)))
+
+;; This prevents Emacs to become uresponsive
+(defun semanticdb-kill-hook ()
+  nil)
 
 ;; Auto-complete support
 (require 'semantic/analyze/refs)
