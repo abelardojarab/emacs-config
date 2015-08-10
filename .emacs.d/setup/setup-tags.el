@@ -28,6 +28,7 @@
 ;; semantic-ia-fast-jump but this function is not defined in etags.el
 ;; of GNU emacs
 (add-to-list 'load-path "~/.emacs.d/etags-select")
+(require 'ctags)
 (require 'etags)
 (require 'etags-select)
 (unless (fboundp 'push-tag-mark)
@@ -36,6 +37,40 @@
     \\[pop-tag-mark] can be used to come back to current position."
     (interactive)
     (ring-insert find-tag-marker-ring (point-marker))))
+
+;; Tags table
+(setq tags-revert-without-query t)
+(setq tags-always-build-completion-table t)
+(setq tags-file-name "/tmp/TAGS")
+(setq tags-table-list '("/tmp/TAGS"))
+(setq tags-add-tables t)
+
+;; Etags table
+(require 'etags-table)
+(setq etags-table-alist
+      (list
+       `(,(concat user-emacs-directory "/.*") ,(concat user-emacs-directory "/TAGS"))
+       ))
+(setq etags-table-search-up-depth 15) ;; Max depth to search up for a tags file.  nil means don't search.
+
+;; Below function comes useful when you change the project-root symbol to a
+;; different value (when switching projects)
+(defun update-etags-table-then-find-tag ()
+  "Update etags-table based on the current value of project-root and then do
+tag find"
+  (interactive)
+  (when (boundp 'project-root) ;; add-to-list if project-root symbol is defined
+    (add-to-list 'etags-table-alist
+                 `(,(concat project-root "/.*") ,(concat project-root "/TAGS")) t))
+  (etags-select-find-tag-at-point))
+
+;; Ctags update
+(when (executable-find "ctags")
+  (require 'ctags-update)
+  (setq ctags-update-delay-seconds (* 30 60)) ;; every 1/2 hour
+  (autoload 'turn-on-ctags-auto-update-mode "ctags-update" "turn on `ctags-auto-update-mode'." t)
+  (add-hook 'verilog-mode-hook    'turn-on-ctags-auto-update-mode)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode))
 
 ;; better searching of tags
 (add-to-list 'load-path "~/.emacs.d/ggtags")
@@ -63,11 +98,6 @@
                 (push (prin1-to-string x t) tag-names))
               tags-completion-table)
     (find-tag (replace-regexp-in-string "\\\\" "" (ido-completing-read "Tag: " tag-names)))))
-
-;; Tags table
-(setq tags-revert-without-query t)
-(setq tags-always-build-completion-table t)
-(setq tags-file-name "~/workspace/TAGS")
 
 ;; Helper functions for etags/ctags
 (defun create-ctags (dir-name)
