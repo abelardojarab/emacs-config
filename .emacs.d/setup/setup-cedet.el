@@ -103,6 +103,7 @@
 
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
+(require 'semantic/ia)
 (require 'semantic/bovine/c)
 (require 'semantic/bovine/clang)
 
