@@ -38,6 +38,7 @@
   (ecb-rebuild-methods-buffer-for-non-semantic))
 
 (defconst initial-frame-width (frame-width)
+
   "The width of frame will be changed ,remember the init value.")
 (setq ecb-compile-window-height nil
       ecb-compile-window-width 'edit-window
@@ -45,7 +46,7 @@
       ecb-create-layout-file "~/.emacs.cache/auto-save-list/.ecb-user-layouts.el"
       ecb-windows-width 30
       ecb-fix-window-size 'width
-      ecb-layout-name "leftright-sa-m"
+      ecb-layout-name "left-speedbar-right"
       ecb-history-make-buckets 'mode
       ecb-kill-buffer-clears-history 'auto
       ecb-tip-of-the-day nil
@@ -172,6 +173,41 @@ the layout contains no persistent compilation window and the other windows get a
 little more place. "
   (ecb-set-speedbar-buffer)
   (select-window (next-window)))
+
+(ecb-layout-define "left-speedbar-right" left-right
+  "This function creates the following layout:
+
+   -------------------------------------------------------
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |   Speedbar   |                 Edit                 |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   -------------------------------------------------------
+   |                                                     |
+   |                    Compilation                      |
+   |                                                     |
+   -------------------------------------------------------
+
+If you have not set a compilation-window in `ecb-compile-window-height' then
+the layout contains no persistent compilation window and the other windows get a
+little more place. "
+  (ecb-set-speedbar-buffer)
+  (ecb-split-ver 0.5)
+  (ecb-set-sources-buffer)
+  (select-window (next-window (next-window)))
+  (ecb-set-methods-buffer)
+  (select-window (previous-window (selected-window) 0)))
 
 ;; disable global semantic idle scheduler.
 ;; it doesn't really seem to work all that well in automatically

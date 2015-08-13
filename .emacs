@@ -112,7 +112,6 @@ Defaults to `error'."
  '(ecb-grep-recursive-function (quote rgrep))
  '(ecb-highlight-tag-with-point (quote highlight-scroll))
  '(ecb-kill-buffer-clears-history (quote auto))
- '(ecb-layout-name "leftright-sa-m")
  '(ecb-methods-menu-sorter
    (lambda
      (entries)
