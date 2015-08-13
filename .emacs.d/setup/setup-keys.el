@@ -151,6 +151,13 @@
                   (goto-char (posn-point (event-start event)))
                   (highlight-symbol-at-point)))
 
+;; Beautify buffer
+(global-unset-key "\C-b")
+(global-set-key "\C-b" 'beautify-buffer)
+
+;; Find matching parenthesis
+(global-set-key [(control %)] 'goto-match-paren-or-up)
+
 ;; search forward with Ctrl-f
 (global-set-key [(control f)] 'isearch-forward)
 (define-key isearch-mode-map [(control f)] (lookup-key isearch-mode-map "\C-s"))

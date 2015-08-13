@@ -68,7 +68,7 @@
  ac-auto-start 2
  ac-override-local-map nil
  ac-use-menu-map t
- ac-candidate-limit 30
+ ac-candidate-limit 10
  ac-quick-help-height 30)
 
 ;; Make it a bit faster
@@ -137,9 +137,8 @@
 ;; Autocomplete using Aspell
 (add-to-list 'load-path "~/.emacs.d/ac-ispell")
 (require 'ac-ispell)
-(custom-set-variables
- '(ac-ispell-requires 4)
- '(ac-ispell-fuzzy-limit 2))
+(setq ac-ispell-requires 3)
+(setq ac-ispell-fuzzy-limit 2)
 
 (eval-after-load "auto-complete"
   '(progn
@@ -173,6 +172,8 @@
 (set-face-underline 'ac-candidate-face "darkgray")
 (set-face-background 'ac-selection-face "steelblue")
 (when (find-font (font-spec :name "Consolas"))
+  (set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch)
+  (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch)
   (set-face-font 'ac-candidate-face "Consolas-11")
   (set-face-font 'ac-selection-face "Consolas-11"))
 
@@ -185,5 +186,7 @@
   (if (eq window-system 'x)
       (apply 'popup-pos-tip string args)
     ad-do-it))
+
+
 
 (provide 'setup-auto-complete)

@@ -27,12 +27,6 @@
 ;; write good mode
 (add-to-list 'load-path "~/.emacs.d/writegood-mode")
 (require 'writegood-mode)
-;; (set-face-attribute 'writegood-weasels-face nil
-;;                     :background "#464646")
-;; (set-face-attribute 'writegood-passive-voice-face nil
-;;                     :background "#464646")
-;; (set-face-attribute 'writegood-duplicates-face nil
-;;                     :background "#464646")
 
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
@@ -315,7 +309,7 @@
 (autoload 'turn-on-iimage-mode "iimage" "Turn on Inline image minor mode." t)
 (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
 (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
-(setq org-image-actual-width '(400))
+(setq org-image-actual-width '(100))
 
 ;; Rendering ditaa
 (setq org-ditaa-jar-path (expand-file-name "~/.emacs.d/jar/ditaa.jar"))

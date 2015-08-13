@@ -120,29 +120,6 @@ When there is a text selection, act on the region."
 
       (put this-command 'stateIsCompact-p (if currentStateIsCompact nil t)) ) ) )
 
-(defun number-rectangle (start end format-string from)
-  "Delete (don't save) text in the region-rectangle, then number it."
-  (interactive
-   (list (region-beginning) (region-end)
-         (read-string "Number rectangle: "
-                      (if (looking-back "^ *") "%d. " "%d"))
-         (read-number "From: " 1)))
-  (save-excursion
-    (goto-char start)
-    (setq start (point-marker))
-    (goto-char end)
-    (setq end (point-marker))
-    (delete-rectangle start end)
-    (goto-char start)
-    (loop with column = (current-column)
-          while (and (<= (point) end) (not (eobp)))
-          for i from from   do
-          (move-to-column column t)
-          (insert (format format-string i))
-          (forward-line 1)))
-  (goto-char start))
-(global-set-key (kbd "C-x r N") 'number-rectangle)
-
 ;; Beautify buffer in C/C++
 (defun beautify-region (beg end)
   (interactive "r")
@@ -156,19 +133,33 @@ buffer."
   (interactive)
   (beautify-region (point-min) (point-max))
   (when noninteractive (save-buffer)))
-(global-unset-key "\C-b")
-(global-set-key "\C-b" 'beautify-buffer)
 
-;; Use % to match various kinds of brackets...
-;; See: http://www.lifl.fr/~hodique/uploads/Perso/patches.el
-(defun match-paren (arg)
-  "Go to the matchin paren if on a paren; otherwise insert %."
+;; Match parentheses
+(defun goto-match-paren-or-up (arg)
+  "Go to the matching parenthesis if on parenthesis. Else go to
+   the opening parenthesis one level up."
   (interactive "p")
-  (let ((prev-char (char-to-string (preceding-char)))
-        (next-char (char-to-string (following-char))))
-    (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
-          ((string-match "[\]})>]" prev-char) (backward-sexp 1))
-          (t (self-insert-command (or arg 1))))))
+  (cond ((looking-at "\\s\(") (forward-list 1))
+        (t
+         (backward-char 1)
+         (cond ((looking-at "\\s\)")
+                (forward-char 1) (backward-list 1))
+               (t
+                (while (not (looking-at "\\s("))
+                  (backward-char 1)
+                  (cond ((looking-at "\\s\)")
+                         (message "->> )")
+                         (forward-char 1)
+                         (backward-list 1)
+                         (backward-char 1)))))))))
+
+(defun goto-match-paren (arg)
+  "Go to the matching parenthesis if on parenthesis, otherwise
+   insert the character typed."
+  (interactive "p")
+  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
+        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
+        (t                    (self-insert-command (or arg 1)))))
 
 ;; Help to determine who modifies buffer
 (defvar my-debug-set-buffer-modified-p-buffers nil)

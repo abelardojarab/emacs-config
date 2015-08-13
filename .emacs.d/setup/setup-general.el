@@ -242,6 +242,21 @@
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
 (require 'popup)
+(defvar sanityinc/longlines-mode-suppressed nil)
+(defadvice popup-create (before longlines-mode activate)
+  "Suspend longlines-mode while popups are visible"
+  (let ((longlines-enabled (and (boundp 'longlines-mode) longlines-mode)))
+    (set (make-local-variable 'sanityinc/longlines-mode-suppressed) longlines-mode)
+    (when longlines-enabled
+      (longlines-mode-off))))
+(defadvice popup-delete (after longlines-mode activate)
+  "Restore longlines-mode when all popups have closed"
+  (let ((longlines-enabled (and (boundp 'longlines-mode) longlines-mode)))
+    (when (and (not popup-instances) sanityinc/longlines-mode-suppressed)
+      (setq sanityinc/longlines-mode-suppressed nil)
+      (longlines-mode 1))))
+
+;; Fix fci related issues
 (defvar sanityinc/fci-mode-suppressed nil)
 (defadvice popup-create (before suppress-fci-mode activate)
   "Suspend fci-mode while popups are visible"
@@ -367,8 +382,8 @@
 (show-smartparens-global-mode 1)
 
 ;; Enable tooltips
-(tooltip-mode nil)
-(setq tooltip-use-echo-area t)
+(tooltip-mode t)
+(setq tooltip-use-echo-area nil)
 
 ;; deleting files goes to OS's trash folder
 (setq delete-by-moving-to-trash t)
