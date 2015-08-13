@@ -236,6 +236,9 @@
       (split-window-horizontally)))
 (add-hook 'temp-buffer-setup-hook 'split-horizontally-not-vertically)
 
+;; Better help
+(require 'help-fns+)
+
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
 (require 'popup)
@@ -533,6 +536,10 @@
 ;; Search at point
 (require 'thingatpt)
 (require 'thingatpt+)
+
+;; iSearch Plus
+(require 'isearch-prop)
+(require 'isearch+)
 
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
