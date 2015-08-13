@@ -587,7 +587,7 @@ symbol. Displays the found text in the buffer of
     (save-excursion
       (let ((modeline-display nil)
             (edit-buffer (current-buffer))
-            (current-symbol (ignore-errors (ecb-thing-at-point 'symbol)))
+            (current-symbol (ecb-thing-at-point 'symbol))
             ;; find tag search function according to mode:
             (find-func (ecb-symboldef-get-find-function)))
         ;; only use tags with a minimal length:
@@ -616,9 +616,10 @@ symbol. Displays the found text in the buffer of
                                (format "* Def %s <<%s>> *"
                                        modeline-display current-symbol)
                                nil t)
-            )))))
+            ))
+        (switch-to-buffer edit-buffer)
+        )))
   (run-hooks 'ecb-symboldef-buffer-sync-hook))
-
 
 (defecb-window-dedicator-to-ecb-buffer ecb-set-symboldef-buffer
     ecb-symboldef-buffer-name nil

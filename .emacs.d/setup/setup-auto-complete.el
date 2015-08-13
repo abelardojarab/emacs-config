@@ -58,7 +58,7 @@
 (global-auto-complete-mode t)
 (auto-complete-mode 1)
 (setq ac-show-menu-immediately-on-auto-complete t)
-(setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+(setq ac-dwim nil) ;; To get pop-ups with docs even if a word is uniquely completed
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)

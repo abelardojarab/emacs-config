@@ -134,7 +134,6 @@ If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
   (ecb-set-speedbar-buffer)
-  ;; (ecb-set-sources-buffer)
   (ecb-split-ver 0.5)
   (ecb-set-methods-buffer)
   (select-window (next-window (next-window)))
@@ -192,12 +191,8 @@ little more place. "
                (semantic-force-refresh))))
 
 ;; Redefine fonts, not needed
-;; (set-face-attribute 'ecb-default-general-face nil
-;;                     :inherit 'default)
-;; (set-face-attribute 'ecb-default-highlight-face nil
-;;                     :background "#464646")
-;; (set-face-attribute 'ecb-tag-header-face nil
-;;                     :background "#464646")
+(set-face-attribute 'ecb-default-general-face nil
+                    :inherit 'default)
 
 ;; Speedbar
 (require 'sr-speedbar)

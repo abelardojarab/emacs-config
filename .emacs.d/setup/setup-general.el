@@ -239,7 +239,6 @@
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
 (require 'popup)
-(setq popup-use-optimized-column-computation nil)
 (defvar sanityinc/fci-mode-suppressed nil)
 (defadvice popup-create (before suppress-fci-mode activate)
   "Suspend fci-mode while popups are visible"
@@ -364,8 +363,9 @@
 (require 'smartparens-config)
 (show-smartparens-global-mode 1)
 
-;; Disable tooltips
+;; Enable tooltips
 (tooltip-mode nil)
+(setq tooltip-use-echo-area t)
 
 ;; deleting files goes to OS's trash folder
 (setq delete-by-moving-to-trash t)
@@ -592,9 +592,6 @@
 
 ;; Make URLs in comments/strings clickable, (emacs > v22)
 (add-hook 'find-file-hooks 'goto-address-prog-mode)
-
-;; Better help
-(require 'help-fns+)
 
 ;; Fix longlines in Org
 (require 'longlines nil t)
