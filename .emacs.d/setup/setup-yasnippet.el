@@ -87,10 +87,10 @@
   "#+LATEX_HEADER: \\usepackage[T1]{fontenc}\n"
   "#+OPTIONS:  toc:nil num:0\n")
 ;; This is how to tell auto-insert what to use for .org files
-(define-auto-insert "\\.org\\'" 'my-org-defaults)
-(define-auto-insert "\\.R\\"
+(define-auto-insert "\\.org'" 'my-org-defaults)
+(define-auto-insert "\\.R"
   '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
-(define-auto-insert "\\.py\\"
+(define-auto-insert "\\.py"
   '(lambda () (yas--expand-by-uuid 'python-mode "class")))
 
 (defun autoinsert-yas-expand()
