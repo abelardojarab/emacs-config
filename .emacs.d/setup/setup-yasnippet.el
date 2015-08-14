@@ -70,12 +70,28 @@
 
 ;; Yasnippet templates used in auto-insert mode
 (require 'autoinsert)
-(auto-insert-mode)
+(auto-insert-mode t)
+
+;; This turns off the prompt that auto-insert-mode asks before
+;; it actually inserts text/code for you
 (setq auto-insert-query nil)
-(define-auto-insert "\.R"
+
+;; This is what you'll have inserted for a new .org file
+(define-skeleton my-org-defaults
+  "Org defaults I use"
+  nil
+  "#+AUTHOR:   Your name\n"
+  "#+EMAIL:    your.email@gmail.com\n"
+  "#+LANGUAGE: en\n"
+  "#+LATEX_HEADER: \\usepackage{lmodern}\n"
+  "#+LATEX_HEADER: \\usepackage[T1]{fontenc}\n"
+  "#+OPTIONS:  toc:nil num:0\n")
+;; This is how to tell auto-insert what to use for .org files
+(define-auto-insert "\\.org\\'" 'my-org-defaults)
+(define-auto-insert "\\.R\\"
   '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
-(define-auto-insert "\.py"
-  '(lambda () (yas--expand-by-uuid 'python-mode "header")))
+(define-auto-insert "\\.py\\"
+  '(lambda () (yas--expand-by-uuid 'python-mode "class")))
 
 (defun autoinsert-yas-expand()
   "Replace text in yasnippet template."
@@ -84,7 +100,6 @@
 (define-auto-insert "\\.c$"  ["c-auto-insert" autoinsert-yas-expand])
 (define-auto-insert "\\.cpp$" ["c++-auto-insert" autoinsert-yas-expand])
 (define-auto-insert "\\.cs$" ["csharp-auto-insert" autoinsert-yas-expand])
-(define-auto-insert "\\.org$" ["org-auto-insert" autoinsert-yas-expand])
 (define-auto-insert "\\.py$" ["py-auto-insert" autoinsert-yas-expand])
 
 (defadvice auto-insert (around yasnippet-expand-after-auto-insert activate)
