@@ -428,12 +428,6 @@ non-nil."
       (set-buffer-modified-p nil))))
 (ad-activate 'highlight-changes-rotate-faces)
 
-;; toggle visibility
-(global-set-key (kbd "<f6>") 'highlight-changes-visible-mode) ;; changes
-
-;; remove the change-highlight in region
-(global-set-key (kbd "S-<f6>") 'highlight-changes-remove-highlight)
-
 ;; If you're not already using it for something else...
 (set-face-foreground 'highlight-changes nil)
 (set-face-background 'highlight-changes "#882020")

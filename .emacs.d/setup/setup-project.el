@@ -31,13 +31,10 @@
 ;; Helm ls git
 (add-to-list 'load-path "~/.emacs.d/helm-ls-git")
 (require 'helm-ls-git)
-(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
-(global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
 ;; Helm bm support
 (add-to-list 'load-path "~/.emacs.d/helm-bm")
 (require 'helm-bm) ;; Not necessary if using ELPA package
-(global-set-key (kbd "C-c b") 'helm-bm)
 
 ;; Helm themes
 (add-to-list 'load-path "~/.emacs.d/helm-themes")
@@ -150,11 +147,9 @@
 
 ;; Org projectile
 (add-to-list 'load-path "~/.emacs.d/org-projectile")
-(when (require 'org-projectile nil 'noerror)
-  (setq org-projectile:projects-file "~/workspace/Documents/projects.org")
-  (add-to-list 'org-capture-templates (org-projectile:project-todo-entry))
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c n p") 'org-projectile:project-todo-completing-read))
+(require 'org-projectile)
+(setq org-projectile:projects-file "~/workspace/Documents/projects.org")
+(add-to-list 'org-capture-templates (org-projectile:project-todo-entry))
 
 ;; cmake autocomplete/flycheck
 (add-to-list 'load-path "~/.emacs.d/cpputils-cmake")

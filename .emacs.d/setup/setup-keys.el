@@ -48,15 +48,6 @@
 (define-key query-replace-map [return] 'act)
 (define-key query-replace-map [?\C-m] 'act)
 
-(defadvice yes-or-no-p (around prevent-dialog activate)
-  "Prevent yes-or-no-p from activating a dialog"
-  (let ((use-dialog-box nil))
-    ad-do-it))
-(defadvice y-or-n-p (around prevent-dialog-yorn activate)
-  "Prevent y-or-n-p from activating a dialog"
-  (let ((use-dialog-box nil))
-    ad-do-it))
-
 ;; Zoom in/out like feature, without mouse wheel
 (global-set-key '[C-kp-add] 'text-scale-increase)
 (global-set-key '[C-kp-subtract] 'text-scale-decrease)
@@ -85,19 +76,39 @@
 (global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key "\C-a" 'mark-whole-buffer)
-(global-set-key (kbd "<C-f8>") 'toggle-line-spacing)
-(global-set-key (kbd "<f8>") 'toggle-truncate-lines)
-(global-set-key (kbd "<f4>") 'ibuffer)
+(global-set-key (kbd "<f4>") 'toggle-line-spacing)
+(global-set-key (kbd "C-<f4>") 'toggle-truncate-lines)
+(global-set-key (kbd "<f8>") 'ibuffer)
+
+;; toggle visibility
+(global-set-key (kbd "C-<f6>") 'ispell-word)
+(global-set-key (kbd "C-S-<f6>") 'flyspell-mode)
+(global-set-key (kbd "C-M-<f6>") 'flyspell-buffer)
+(global-set-key (kbd "C-<f6>") 'flyspell-check-previous-highlighted-word)
+(defun flyspell-check-next-highlighted-word ()
+  "Custom function to spell check next highlighted word"
+  (interactive)
+  (flyspell-goto-next-error)
+  (ispell-word))
+(global-set-key (kbd "<f6>") 'flyspell-check-next-highlighted-word)
+
+;; Org capture
+(global-set-key (kbd "<f9>") 'org-capture)
+(global-set-key (kbd "C-<f9>") 'org-projectile:project-todo-completing-read)
+
+;; Helm related
+(global-set-key (kbd "<f11>") 'helm-ls-git-ls)
+(global-set-key (kbd "S-<f11>") 'helm-browse-project)
+(global-set-key (kbd "C-<f11>") #'git-messenger:popup-message)
 
 ;; Hint: customize `magit-repo-dirs' so that you can use C-u M-F12 to
 ;; quickly open magit on any one of your projects.
 (global-set-key (kbd "<f12>") 'magit-status)
-(global-set-key (kbd "<C-f12>") 'magit-status)
-(global-set-key (kbd "<f11>") #'git-messenger:popup-message)
+(global-set-key (kbd "C-<f12>") 'magit-status)
+(global-set-key (kbd "S-<f12>") 'highlight-changes-visible-mode)
 
 ;; Code folding
-(global-set-key (kbd "<f7>") 'hs-hide-block)
-(global-set-key (kbd "S-<f7>") 'hs-show-block)
+(global-set-key (kbd "<f7>") 'fold-dwim-toggle)
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-,") (if (and (fboundp 'ggtags-find-tag-dwim)
@@ -260,11 +271,10 @@
 ;; Mac Key mode
 (require 'mac-key-mode)
 
-;; Refresh file on F9
+;; Refresh file
 (defun refresh-file ()
   (interactive)
   (revert-buffer t t t))
-(global-set-key [f9] 'refresh-file)
 
 ;; Code folding
 (defun toggle-selective-display ()
@@ -300,7 +310,10 @@
 ;; Show guide for shortcuts
 (add-to-list 'load-path "~/.emacs.d/guide-key")
 (require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+(setq guide-key/guide-key-sequence t) ;; show guide key for all key combos. but you can configure it for specific combos also.
+(setq guide-key/recursive-key-sequence-flag t) ;; recurse into all key combos.
+(setq guide-key/popup-window-position 'bottom) ;; I want the help-pop up to be at the bottom like most buffer popups.
+(setq guide-key/guide-key-sequence '("C-h"))
 (guide-key-mode 1) ;; Enable guide-key-mode
 
 ;; Guide key tooltips
@@ -312,26 +325,6 @@
 (add-to-list 'load-path "~/.emacs.d/popup-switcher")
 (require 'popup-switcher)
 (require 'popup-select-window)
-
-;; Jump between buffers
-(defun xah-next-user-buffer ()
-  "Switch to the next user buffer.
- (buffer name does not start with *.)"
-  (interactive)
-  (next-buffer)
-  (let ((i 0))
-    (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
-      (setq i (1+ i)) (next-buffer))))
-
-(defun xah-previous-user-buffer ()
-  "Switch to the previous user buffer.
- (buffer name does not start with *.)"
-  (interactive)
-  (previous-buffer)
-  (let ((i 0))
-    (while (and (string-equal "*" (substring (buffer-name) 0 1)) (< i 20))
-      (setq i (1+ i)) (previous-buffer))))
-
 (global-set-key (kbd "C-S-<left>") 'popup-select-window)
 (global-set-key (kbd "C-S-<right>") 'popup-select-window)
 
@@ -353,6 +346,12 @@
 (add-to-list 'load-path "~/.emacs.d/drag-stuff")
 (require 'drag-stuff)
 (drag-stuff-global-mode t)
+
+;; Unindent keys
+(if (not (eq  major-mode 'org-mode))
+    (progn
+      (define-key global-map [S-tab] 'my-unindent)
+      (define-key global-map [C-S-tab] 'my-unindent)))
 
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
@@ -378,8 +377,8 @@
 (define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
 (define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-buffer)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "<f2>")   'bm-next)
-(define-key my-keys-minor-mode-map (kbd "<S-f2>") 'bm-previous)
+(define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
+(define-key my-keys-minor-mode-map (kbd "<S-f2>") 'bm-next)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
 
 (define-minor-mode my-keys-minor-mode
