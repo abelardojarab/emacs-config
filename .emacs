@@ -246,11 +246,11 @@ Defaults to `error'."
 ;; Setup ECB
 (require 'setup-ecb)
 
-;; Setup keys
-(require 'setup-keys)
-
 ;; Setup post
 (require 'setup-post)
+
+;; Setup keys
+(require 'setup-keys)
 
 ;; Setup gnus and Newsticker
 ;; (require 'setup-gnus)

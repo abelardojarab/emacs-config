@@ -28,6 +28,14 @@
 (add-to-list 'load-path "~/.emacs.d/helm")
 (require 'helm-config)
 
+;; Helm-flyspell
+(add-to-list 'load-path "~/.emacs.d/helm-flyspell")
+(require 'helm-flyspell)
+
+;; Helm-flycheck
+(add-to-list 'load-path "~/.emacs.d/helm-flycheck")
+(require 'helm-flycheck)
+
 ;; Helm ls git
 (add-to-list 'load-path "~/.emacs.d/helm-ls-git")
 (require 'helm-ls-git)
@@ -45,7 +53,7 @@
 (require 'helm-etags+)
 (require 'ctags-update)
 
-;; Locate the helm-swoop folder to your path
+;; Helm swoop
 (add-to-list 'load-path "~/.emacs.d/helm-swoop")
 (require 'helm-swoop)
 

@@ -24,15 +24,15 @@
 
 ;;; Code:
 
-;; Windows-like mouse/arrow movement & selection
-(transient-mark-mode t)
-(setq shift-select-mode t)
-(cua-mode 1)
-
 ;; As in Windows, replace after typing a letter
 (require 'delsel)
 (delete-selection-mode 1)
 (setq mouse-drag-copy-region nil)
+
+;; Windows-like mouse/arrow movement & selection
+(transient-mark-mode t)
+(setq shift-select-mode t)
+(cua-mode 1)
 
 ;; Multiple cursors
 (add-to-list 'load-path "~/.emacs.d/multiple-cursors")
@@ -78,40 +78,53 @@
 (global-set-key "\C-a" 'mark-whole-buffer)
 (global-set-key (kbd "<f4>") 'toggle-line-spacing)
 (global-set-key (kbd "C-<f4>") 'toggle-truncate-lines)
-(global-set-key (kbd "<f8>") 'ibuffer)
+(global-set-key (kbd "A-<f4>") 'toggle-truncate-lines)
 
 ;; toggle visibility
-(global-set-key (kbd "C-<f6>") 'ispell-word)
-(global-set-key (kbd "C-S-<f6>") 'flyspell-mode)
-(global-set-key (kbd "C-M-<f6>") 'flyspell-buffer)
-(global-set-key (kbd "C-<f6>") 'flyspell-check-previous-highlighted-word)
 (defun flyspell-check-next-highlighted-word ()
   "Custom function to spell check next highlighted word"
   (interactive)
   (flyspell-goto-next-error)
   (ispell-word))
 (global-set-key (kbd "<f6>") 'flyspell-check-next-highlighted-word)
+(global-set-key (kbd "C-<f6>") 'helm-flyspell-correct)
+(global-set-key (kbd "A-<f6>") 'helm-flyspell-correct)
+
+;; Flycheck
+(global-set-key (kbd "<f7>") 'flycheck-next-error)
+(global-set-key (kbd "C-<f7>") 'helm-flycheck)
+(global-set-key (kbd "A-<f7>") 'helm-flycheck)
+
+;; Code folding
+(defun toggle-selective-display ()
+  (interactive)
+  (set-selective-display (if selective-display nil 1)))
+(global-set-key (kbd "<f8>") 'toggle-selective-display)
+(global-set-key (kbd "C-<f8>") 'fold-dwim-toggle)
+(global-set-key (kbd "A-<f8>") 'fold-dwim-toggle)
 
 ;; Org capture
 (global-set-key (kbd "<f9>") 'org-capture)
 (global-set-key (kbd "C-<f9>") 'org-projectile:project-todo-completing-read)
+(global-set-key (kbd "A-<f9>") 'org-projectile:project-todo-completing-read)
+
+;; Hint: customize `magit-repo-dirs' so that you can
+;; quickly open magit on any one of your projects.
+(global-set-key (kbd "<f10>") 'magit-status)
+(global-set-key (kbd "C-<f10>") 'highlight-changes-visible-mode)
+(global-set-key (kbd "A-<f10>") 'highlight-changes-visible-mode)
 
 ;; Helm related
-(global-set-key (kbd "<f11>") 'helm-ls-git-ls)
-(global-set-key (kbd "S-<f11>") 'helm-browse-project)
-(global-set-key (kbd "C-<f11>") #'git-messenger:popup-message)
+(global-set-key (kbd "<f11>") 'helm-browse-project)
+(global-set-key (kbd "C-<f11>") 'helm-ls-git-ls)
+(global-set-key (kbd "A-<f11>") 'helm-ls-git-ls)
+(global-set-key (kbd "S-<f11>") #'git-messenger:popup-message)
 
-;; Hint: customize `magit-repo-dirs' so that you can use C-u M-F12 to
-;; quickly open magit on any one of your projects.
-(global-set-key (kbd "<f12>") 'magit-status)
-(global-set-key (kbd "C-<f12>") 'magit-status)
-(global-set-key (kbd "S-<f12>") 'highlight-changes-visible-mode)
-
-;; Code folding
-(global-set-key (kbd "<f7>") 'fold-dwim-toggle)
+;; iBuffer
+(global-set-key (kbd "<f12>") 'ibuffer)
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
-(global-set-key (kbd "C-,") (if (and (fboundp 'ggtags-find-tag-dwim)
+(global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)
                                    (executable-find "global"))
                                 'ggtags-find-tag-dwim
                               'etags-select-find-tag))
@@ -276,12 +289,6 @@
   (interactive)
   (revert-buffer t t t))
 
-;; Code folding
-(defun toggle-selective-display ()
-  (interactive)
-  (set-selective-display (if selective-display nil 1)))
-(global-set-key [f10] 'toggle-selective-display)
-
 ;; Redo
 (require 'redo+)
 (global-set-key (kbd "C-S-z") 'redo) ;; Mac style
@@ -347,12 +354,6 @@
 (require 'drag-stuff)
 (drag-stuff-global-mode t)
 
-;; Unindent keys
-(if (not (eq  major-mode 'org-mode))
-    (progn
-      (define-key global-map [S-tab] 'my-unindent)
-      (define-key global-map [C-S-tab] 'my-unindent)))
-
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
 (require 'region-bindings-mode)
@@ -368,18 +369,18 @@
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
-(define-key my-keys-minor-mode-map (kbd "<f10>") 'toggle-selective-display)
-(define-key my-keys-minor-mode-map (kbd "<f4>") 'ibuffer)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'magit-status)
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
 (define-key my-keys-minor-mode-map (kbd "C-S-<left>") 'popup-select-window)
 (define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
 (define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
 (define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-buffer)
-(define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
+(define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
+(define-key my-keys-minor-mode-map (kbd "<A-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<S-f2>") 'bm-next)
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'ibuffer)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
+(define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
