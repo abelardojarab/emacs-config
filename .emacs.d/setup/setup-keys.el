@@ -320,7 +320,7 @@
 (setq guide-key/guide-key-sequence t) ;; show guide key for all key combos. but you can configure it for specific combos also.
 (setq guide-key/recursive-key-sequence-flag t) ;; recurse into all key combos.
 (setq guide-key/popup-window-position 'bottom) ;; I want the help-pop up to be at the bottom like most buffer popups.
-(setq guide-key/guide-key-sequence '("C-h"))
+(setq guide-key/guide-key-sequence '("C-h" "C-x" "C-c"))
 (guide-key-mode 1) ;; Enable guide-key-mode
 
 ;; Guide key tooltips
