@@ -1,6 +1,6 @@
 ;;; setup-bookmarks.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -51,12 +51,6 @@
 (add-hook 'kill-emacs-hook '(lambda nil
                               (bm-buffer-save-all)
                               (bm-repository-save)))
-
-;; Bookmark keys
-(global-set-key (kbd "<C-f2>") 'bm-toggle)
-(global-set-key (kbd "<f2>")   'bm-next)
-(global-set-key (kbd "<S-f2>") 'bm-previous)
-(global-set-key (kbd "<left-margin> <mouse-3>") 'bm-toggle)
 
 (provide 'setup-bookmarks)
 ;;; setup-bookmarks.el ends here

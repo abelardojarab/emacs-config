@@ -198,9 +198,8 @@
 (setq search-exit-option t)
 
 ;; Search at point
-(global-set-key (kbd "C-*") 'my-isearch-word-at-point)
-(global-set-key [(control kp-multiply)] 'my-isearch-word-at-point)
-(define-key isearch-mode-map (kbd "C-*")
+(global-set-key (kbd "C-=") 'my-isearch-word-at-point)
+(define-key isearch-mode-map (kbd "C-=")
   (lambda ()
     "Reset current isearch to a word-mode search of the word under point."
     (interactive)
@@ -208,6 +207,16 @@
           isearch-string ""
           isearch-message "")
     (isearch-yank-string (word-at-point))))
+
+;; Helm-swoop extension
+(global-set-key (kbd "C-*") 'helm-swoop)
+(global-set-key [(control kp-multiply)] 'helm-swoop)
+(global-set-key (kbd "C-c C-*") 'helm-multi-swoop)
+(global-set-key (kbd "C-x C-*") 'helm-multi-swoop-all)
+
+;; When doing isearch, hand the word over to helm-swoop
+(define-key isearch-mode-map (kbd "C-*") 'helm-swoop-from-isearch)
+(define-key isearch-mode-map [(control kp-multiply)] 'helm-swoop-from-isearch)
 
 ;; Cancel minibuffer operation if you click outside
 (defun stop-using-minibuffer ()
@@ -328,12 +337,16 @@
 (require 'guide-key-tip)
 (setq guide-key-tip/enabled t)
 
+;; Tabbar
+(global-set-key [C-prior] 'tabbar-backward-tab)
+(global-set-key [C-next] 'tabbar-forward-tab)
+
 ;; Faster buffer switching
 (add-to-list 'load-path "~/.emacs.d/popup-switcher")
 (require 'popup-switcher)
 (require 'popup-select-window)
-(global-set-key (kbd "C-S-<left>") 'popup-select-window)
-(global-set-key (kbd "C-S-<right>") 'popup-select-window)
+(global-set-key [C-S-prior] 'popup-select-window)
+(global-set-key [C-S-next] 'popup-select-window)
 
 ;; Jump between windows
 (define-key c-mode-base-map [f4] 'eassist-switch-h-cpp)
