@@ -206,10 +206,6 @@
 (set-face-background 'ac-candidate-face "darkgray")
 (set-face-underline 'ac-candidate-face "gray")
 (set-face-background 'ac-selection-face "steelblue")
-(defface ac-yasnippet-selection-face
-  '((t (:background "coral3" :foreground "white")))
-  "Face for the yasnippet selected candidate."
-  :group 'auto-complete)
 (when (find-font (font-spec :name "Consolas"))
   (set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch)
   (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch))
