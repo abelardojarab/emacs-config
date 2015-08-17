@@ -140,10 +140,10 @@ non-nil."
 (setq solarized-scale-org-headlines nil)
 
 ;; Load Atom dark theme
-;; (load-theme 'atom-dark t)
+(load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
-(load-theme 'faff t)
+;; (load-theme 'faff t)
 
 ;; Use for dark themes only
 (set-face-attribute 'region nil :background "#999")
@@ -342,7 +342,7 @@ non-nil."
 (setq djcb-read-only-cursor-type 'hbar)
 (setq djcb-overwrite-color "red")
 (setq djcb-overwrite-cursor-type 'box)
-(setq djcb-normal-color "black")
+(setq djcb-normal-color "yellow")
 (setq djcb-normal-cursor-type 'bar)
 (defun djcb-set-cursor-according-to-mode ()
   "change cursor color and type according to some minor modes."

@@ -123,7 +123,7 @@
 
 ;; Hint: customize `magit-repo-dirs' so that you can
 ;; quickly open magit on any one of your projects.
-(global-set-key (kbd "<f10>") 'helm-ls-git)
+(global-set-key (kbd "<f10>") 'helm-ls-git-ls)
 (global-set-key (kbd "C-<f10>") 'magit-status)
 (global-set-key (kbd "A-<f10>") 'magit-status)
 (global-set-key (kbd "S-<f10>") #'git-messenger:popup-message)

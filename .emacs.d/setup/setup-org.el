@@ -89,25 +89,6 @@
       org-agenda-include-diary t
       org-agenda-window-setup 'current-window)
 
-;;
-(eval-after-load 'org
-  '(progn
-     (require 'org-clock)
-     ;; @see http://irreal.org/blog/?p=671
-     (setq org-src-fontify-natively t)
-     ;; (require 'org-fstree)
-     (defun soft-wrap-lines ()
-       "Make lines wrap at window edge and on word boundary,
-        in current buffer."
-       (interactive)
-       ;; display wrapped lines instead of truncated lines
-       (setq truncate-lines nil)
-       (setq word-wrap t))
-     (add-hook 'org-mode-hook '(lambda ()
-                                 (setq evil-auto-indent nil)
-                                 (soft-wrap-lines)
-                                 ))))
-
 ;; Org Capture
 (defun org-capture-todo (note)
   (let* ((org-file org-default-notes-file)
@@ -262,10 +243,13 @@
 ;; Fix on the keys
 (add-hook 'org-mode-hook
           (lambda ()
+            (define-key org-mode-map [(control t)] 'org-time-stamp)
             (define-key org-mode-map [kp-enter] 'org-meta-return)
             (define-key org-mode-map [enter] 'org-return)
             (define-key org-mode-map (kbd "<return>") 'org-return)
-            (define-key org-mode-map (kbd "RET") 'org-return)))
+            (define-key org-mode-map (kbd "RET") 'org-return)
+            (define-key org-mode-map [C-M-return] 'org-insert-todo-heading)
+            (define-key org-mode-map [S-return] 'org-insert-subheading)))
 
 ;; Custom commands
 (setq org-agenda-custom-commands
@@ -397,7 +381,9 @@
     (unless (= (plist-get org-format-latex-options :scale) relwidth)
       (plist-put org-format-latex-options :scale relwidth))))
 
-;; Insert images from files #+BEGIN: image :file "~/Documents/personal/foo.png"
+;; Insert images from files like this:
+;; #+BEGIN: image :file "~/Documents/personal/foo.png"
+;; #+END
 (defun org-dblock-write:image (params)
   (let ((file (plist-get params :file)))
     (clear-image-cache file)
@@ -456,8 +442,8 @@ a link to this file."
       '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
 
 ;; Reftex
-(require 'reftex-cite)
 (require 'dash)
+(require 'reftex-cite)
 (setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in Org-mode knows bibliography
 (defun org-mode-reftex-setup ()
   (interactive)
