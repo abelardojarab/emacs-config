@@ -242,6 +242,24 @@
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
 (require 'popup)
+(setq popup-use-optimized-column-computation nil)
+
+;; Fix indent guide issue
+(defvar sanityinc/indent-guide-mode-suppressed nil)
+(defadvice popup-create (before indent-guide-mode activate)
+  "Suspend indent-guide-mode while popups are visible"
+  (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
+    (set (make-local-variable 'sanityinc/indent-guide-mode-suppressed) indent-guide-mode)
+    (when indent-guide-enabled
+      (indent-guide-mode nil))))
+(defadvice popup-delete (after indent-guide-mode activate)
+  "Restore indent-guide-mode when all popups have closed"
+  (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
+    (when (and (not popup-instances) sanityinc/indent-guide-mode-suppressed)
+      (setq sanityinc/indent-guide-mode-suppressed nil)
+      (indent-guide-mode 1))))
+
+;; Fix longlines issue
 (defvar sanityinc/longlines-mode-suppressed nil)
 (defadvice popup-create (before longlines-mode activate)
   "Suspend longlines-mode while popups are visible"

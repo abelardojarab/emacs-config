@@ -110,5 +110,9 @@
 ;; Speed up find file
 (remove-hook 'find-file-hooks 'vc-find-file-hook)
 
+;; ibuffer VC
+(add-to-list 'load-path "~/.emacs.d/ibuffer-vc")
+(require 'ibuffer-vc)
+
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here

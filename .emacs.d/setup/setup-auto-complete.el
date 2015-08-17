@@ -48,8 +48,6 @@
 (require 'auto-complete-config)
 (require 'auto-complete)
 (ac-config-default)
-(setq-default ac-sources '(ac-source-words-in-same-mode-buffers))
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
 (ac-set-trigger-key "TAB")
 (ac-set-trigger-key "<tab>")
 (define-key ac-completing-map (kbd "<tab>") 'ac-complete)
@@ -80,11 +78,48 @@
 ;; this is used for trigger ac actions from org-mode also
 (add-to-list 'ac-trigger-commands 'org-self-insert-command)
 
+;; imenu
+(defvar ac-imenu-index nil)
+(ac-clear-variable-every-10-minutes 'ac-imenu-index)
+(defun ac-imenu-candidates ()
+  (loop with i = 0
+        with stack = (progn
+                       (unless (local-variable-p 'ac-imenu-index)
+                         (make-local-variable 'ac-imenu-index))
+                       (or ac-imenu-index
+                          (setq ac-imenu-index (ignore-errors (imenu--make-index-alist)))))
+        with result
+        while (and stack (or (not (integerp ac-limit))
+                          (< i ac-limit)))
+        for node = (pop stack)
+        if (consp node)
+        do
+        (let ((car (car node))
+              (cdr (cdr node)))
+          (if (consp cdr)
+              (mapc (lambda (child)
+                      (push child stack))
+                    cdr)
+            (when (and (stringp car)
+                     (string-match (concat "^" (regexp-quote ac-prefix)) car))
+              ;; Remove extra characters
+              (if (string-match "^.*\\(()\\|=\\|<>\\)$" car)
+                  (setq car (substring car 0 (match-beginning 1))))
+              (push car result)
+              (incf i))))
+        finally return (nreverse result)))
+(ac-define-source imenu
+  '((depends imenu)
+    (candidates . ac-imenu-candidates)
+    (symbol . "s")))
+
 ;; create and add new words to the dictionary on the fly
-(when (require 'auto-complete-config nil 'noerror)
-  (add-to-list 'ac-dictionary-directories "~/.emacs.cache/ac-dict")
-  (setq ac-comphist-file  "~/.emacs.cache/ac-comphist.dat")
-  (ac-config-default))
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
+(add-to-list 'ac-dictionary-directories "~/.emacs.cache/ac-dict")
+(setq ac-comphist-file  "~/.emacs.cache/ac-comphist.dat")
+(ac-config-default)
+(setq-default ac-sources '(ac-source-words-in-same-mode-buffers ac-source-imenu))
 
 ;; Autocomplete with TAGS
 (add-to-list 'load-path "~/.emacs.d/auto-complete-etags")
@@ -94,11 +129,11 @@
 ;; Let's have snippets and TAGS in the auto-complete dropdown
 (defun ac-common-setup ()
   (setq ac-sources (append ac-sources '(ac-source-yasnippet
+                                        ac-source-imenu
                                         ac-source-abbrev
                                         ac-source-etags
                                         ac-source-gtags
                                         ac-source-semantic
-                                        ;; ac-source-ispell-fuzzy
                                         ac-source-dictionary
                                         ac-source-words-in-same-mode-buffers))))
 (add-hook 'auto-complete-mode-hook 'ac-common-setup)
@@ -168,14 +203,16 @@
 (org-ac/config-default)
 
 ;; font face setting
-(set-face-background 'ac-candidate-face "lightgray")
-(set-face-underline 'ac-candidate-face "darkgray")
+(set-face-background 'ac-candidate-face "darkgray")
+(set-face-underline 'ac-candidate-face "gray")
 (set-face-background 'ac-selection-face "steelblue")
+(defface ac-yasnippet-selection-face
+  '((t (:background "coral3" :foreground "white")))
+  "Face for the yasnippet selected candidate."
+  :group 'auto-complete)
 (when (find-font (font-spec :name "Consolas"))
   (set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch)
-  (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch)
-  (set-face-font 'ac-candidate-face "Consolas-11")
-  (set-face-font 'ac-selection-face "Consolas-11"))
+  (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch))
 
 ;; Tips for auto-complete
 (add-to-list 'load-path "~/.emacs.d/pos-tip")
@@ -183,10 +220,8 @@
 (require 'popup-pos-tip)
 (defadvice popup-tip
     (around popup-pos-tip-wrapper (string &rest args) activate)
-  (if (eq window-system 'x)
+  (if (display-graphic-p)
       (apply 'popup-pos-tip string args)
     ad-do-it))
-
-
 
 (provide 'setup-auto-complete)
