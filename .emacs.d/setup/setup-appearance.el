@@ -389,6 +389,9 @@ non-nil."
               (add-to-list 'initial-frame-alist (cons 'height ty))
               t)))
 
+;; Works for Emacs 24.4 and above
+(add-to-list 'default-frame-alist '(fullscreen . fullheight))
+
 ;; Highlight blocks
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
 (require 'highlight-blocks)

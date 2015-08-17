@@ -76,11 +76,24 @@
 (global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key "\C-a" 'mark-whole-buffer)
-(global-set-key (kbd "<f4>") 'toggle-line-spacing)
+
+;; Highlight symbol at point
+(global-set-key [f3] 'highlight-symbol-at-point)
+(global-set-key [(control f3)] 'highlight-symbol-next)
+(global-set-key [(shift f3)] 'highlight-symbol-prev)
+(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
+(global-set-key [(control shift mouse-1)]
+                (lambda (event)
+                  (interactive "e")
+                  (goto-char (posn-point (event-start event)))
+                  (highlight-symbol-at-point)))
+
+;; Longlines
+(global-set-key (kbd "<f4>") 'longlines-mode)
 (global-set-key (kbd "C-<f4>") 'toggle-truncate-lines)
 (global-set-key (kbd "A-<f4>") 'toggle-truncate-lines)
 
-;; toggle visibility
+;; Flyspell
 (defun flyspell-check-next-highlighted-word ()
   "Custom function to spell check next highlighted word"
   (interactive)
@@ -110,15 +123,13 @@
 
 ;; Hint: customize `magit-repo-dirs' so that you can
 ;; quickly open magit on any one of your projects.
-(global-set-key (kbd "<f10>") 'magit-status)
-(global-set-key (kbd "C-<f10>") 'highlight-changes-visible-mode)
-(global-set-key (kbd "A-<f10>") 'highlight-changes-visible-mode)
+(global-set-key (kbd "<f10>") 'helm-ls-git)
+(global-set-key (kbd "C-<f10>") 'magit-status)
+(global-set-key (kbd "A-<f10>") 'magit-status)
+(global-set-key (kbd "S-<f10>") #'git-messenger:popup-message)
 
 ;; Helm related
-(global-set-key (kbd "<f11>") 'helm-browse-project)
-(global-set-key (kbd "C-<f11>") 'helm-ls-git-ls)
-(global-set-key (kbd "A-<f11>") 'helm-ls-git-ls)
-(global-set-key (kbd "S-<f11>") #'git-messenger:popup-message)
+(global-set-key (kbd "<f11>") 'toggle-frame-maximized)
 
 ;; iBuffer
 (global-set-key (kbd "<f12>") 'ibuffer)
@@ -163,17 +174,6 @@
 (global-set-key "\C-cy" '(lambda ()
                            (interactive)
                            (popup-menu 'yank-menu)))
-
-;; Highlight symbol at point
-(global-set-key [f3] 'highlight-symbol-at-point)
-(global-set-key [(control f3)] 'highlight-symbol-next)
-(global-set-key [(shift f3)] 'highlight-symbol-prev)
-(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
-(global-set-key [(control shift mouse-1)]
-                (lambda (event)
-                  (interactive "e")
-                  (goto-char (posn-point (event-start event)))
-                  (highlight-symbol-at-point)))
 
 ;; Beautify buffer
 (global-unset-key "\C-b")
