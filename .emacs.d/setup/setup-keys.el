@@ -93,6 +93,9 @@
 (global-set-key (kbd "C-<f4>") 'toggle-truncate-lines)
 (global-set-key (kbd "A-<f4>") 'toggle-truncate-lines)
 
+;; iBuffer
+(global-set-key (kbd "<f5>") 'ibuffer)
+
 ;; Flyspell
 (defun flyspell-check-next-highlighted-word ()
   "Custom function to spell check next highlighted word"
@@ -132,7 +135,8 @@
 (global-set-key (kbd "<f11>") 'toggle-frame-maximized)
 
 ;; iBuffer
-(global-set-key (kbd "<f12>") 'ibuffer)
+(global-set-key (kbd "<f12>") 'helm-semantic-or-imenu)
+(global-set-key (kbd "C-<f12>") 'psw-switch-function)
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)
@@ -353,8 +357,6 @@
 (define-key c-mode-base-map [C-f4] 'dts-switch-between-header-and-source)
 (global-set-key (kbd "C-1") 'psw-switch-buffer)
 (global-set-key (kbd "C-2") 'psw-switch-function)
-(global-set-key (kbd "<A-up>") 'psw-switch-buffer)
-(global-set-key (kbd "<A-down>") 'psw-switch-function)
 
 ;; Flycheck tips
 (define-key global-map (kbd "C-0") 'error-tip-cycle-dwim)
@@ -391,8 +393,9 @@
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<A-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<S-f2>") 'bm-next)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'ibuffer)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
+(define-key my-keys-minor-mode-map (kbd "<f5>") 'ibuffer)
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
 
 (define-minor-mode my-keys-minor-mode
