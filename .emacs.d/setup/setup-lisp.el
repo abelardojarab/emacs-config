@@ -1,6 +1,6 @@
 ;;; setup-lisp.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -29,9 +29,6 @@
 (when (require 'rainbow-delimiters nil 'noerror)
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
-;; Quack
-(require 'quack)
 
 ;; Loads Lisp auto-complete
 (add-to-list 'ac-modes 'lisp-mode)
