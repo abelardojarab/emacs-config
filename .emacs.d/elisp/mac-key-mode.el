@@ -1,6 +1,6 @@
 ;;; mac-key-mode.el --- provide mac-style key bindings on Carbon Emacs
 
-;; Copyright (C) 2004-2010, 2014  Seiji Zenitani
+;; Copyright (C) 2004-2010, 2014, 2015  Seiji Zenitani
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
 ;; $Id$
@@ -94,13 +94,11 @@ when `mac-key-mode' is on.")
 (defvar mac-key-backup-command-modifier nil
   "Internal variable.  Do not use this.")
 
-
 ;; process objects
 (defvar mac-key-speech-process nil
   "The process object for text-to-speech subprocess.")
 (defvar mac-key-ql-process nil
   "The process object for Quick Look subprocess.")
-
 
 (defvar mac-key-mode-map
   (let ((map (make-sparse-keymap)))
@@ -178,7 +176,7 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
             '(menu-item "Show In Finder" mac-key-show-in-finder
                         :help "Display current file/directory in a Finder window"
                         :enable (or (and (boundp 'buffer-file-name) buffer-file-name)
-                                    (and (boundp 'dired-directory) dired-directory)))
+                                   (and (boundp 'dired-directory) dired-directory)))
             'mac-key-file-separator)
           (define-key-after menu-bar-file-menu [mac-key-open-terminal]
             '(menu-item "Open Terminal" mac-key-open-terminal
@@ -188,11 +186,11 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
             '(menu-item "Redo" redo
                         :help "Redo the most recent undo"
                         :enable (not (or (eq buffer-undo-list t)
-                                         (eq last-buffer-undo-list nil)
-                                         ;; ** one more thing here **
-                                         (eq buffer-undo-list pending-undo-list)
-                                         (eq (cdr buffer-undo-list) pending-undo-list)
-                                         )))
+                                      (eq last-buffer-undo-list nil)
+                                      ;; ** one more thing here **
+                                      (eq buffer-undo-list pending-undo-list)
+                                      (eq (cdr buffer-undo-list) pending-undo-list)
+                                      )))
             'undo)
           (define-key-after menu-bar-edit-menu [mac-key-edit-separator]
             '("--" . nil) 'redo)
@@ -202,12 +200,8 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
               (define-key dired-mode-map " " 'mac-key-quick-look)
             (add-hook 'dired-mode-hook
                       (lambda () (interactive)
-                        (define-key dired-mode-map " " 'mac-key-quick-look)))
-            )
-
-          ))
+                        (define-key dired-mode-map " " 'mac-key-quick-look))))))
     (progn
-
       (setq mac-command-modifier mac-key-backup-command-modifier)
       (if (boundp 'mac-key-mode-internal)
           (setq mac-key-mode-internal nil))
@@ -227,22 +221,17 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
             (define-key dired-mode-map " " 'dired-next-line))
         (remove-hook 'dired-mode-hook
                      (lambda () (interactive)
-                       (define-key dired-mode-map " " 'mac-key-quick-look)))
-
-        ))
-    ))
-
+                       (define-key dired-mode-map " " 'mac-key-quick-look)))))))
 
 ;; close window (command + W)
 (defun mac-key-close-window ()
   "Close the Quick Look window or kill the current buffer."
   (interactive)
   (let ((mybuffer (and mac-key-ql-process
-                       (process-buffer mac-key-ql-process))))
+                     (process-buffer mac-key-ql-process))))
     (if (buffer-live-p mybuffer)
         (kill-buffer mybuffer)
-      (kill-this-buffer))
-    ))
+      (kill-this-buffer))))
 
 ;; save as.. dialog (shift + command + S)
 (defun mac-key-save-as (filename &optional wildcards)
@@ -251,7 +240,6 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
    (let (last-nonmenu-event)
      (find-file-read-args "Write file: " nil)))
   (write-file filename))
-
 
 ;; utf8 code by Ando-san
 (defun mac-key-applescript-utf8data (str)
@@ -279,8 +267,8 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
   "Display current file/directory in a Finder window"
   (interactive)
   (let ((item (or path
-                  (and (boundp 'buffer-file-name) buffer-file-name)
-                  (and (eq major-mode 'dired-mode) default-directory)) ))
+                 (and (boundp 'buffer-file-name) buffer-file-name)
+                 (and (eq major-mode 'dired-mode) default-directory)) ))
 
     (cond
      ((not (stringp item)))
@@ -297,15 +285,10 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
               " as POSIX file)"))
             (if (fboundp 'mac-process-activate)
                 (mac-process-activate "com.apple.finder")
-              (do-applescript "tell application \"Finder\" to activate"))
-            )
-        (error err)))
-
-     )))
-
+              (do-applescript "tell application \"Finder\" to activate")))
+        (error err))))))
 
 ;; Open Terminal.app
-
 (defun mac-key-open-terminal (&optional path)
   "Launch Terminal and go to the relevant directory"
   (interactive)
@@ -334,7 +317,6 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
 
 
 ;; Text-to-Speech functions
-
 (defun mac-key-speak-buffer ()
   "Speak buffer contents."
   (interactive)
@@ -350,23 +332,19 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
     (message "Invoking text-to-speech...")
     (setq mac-key-speech-process
           (start-process "text-to-speech" "*Text-to-Speech Output*"
-                         "/usr/bin/say" "-f" tmp-file))
-    ))
+                         "/usr/bin/say" "-f" tmp-file))))
 
 (defun mac-key-stop-speaking ()
   "Terminate the text-to-speech subprocess, if it is running."
   (interactive)
   (let ((mybuffer (and mac-key-speech-process
-                       (process-buffer mac-key-speech-process))))
+                     (process-buffer mac-key-speech-process))))
     (when (buffer-live-p mybuffer)
       (kill-buffer mybuffer)
-      (beep))
-    ))
-
+      (beep))))
 
 ;; Quick Look
 ;; inspired by http://journal.mycom.co.jp/column/osx/263/index.html
-
 (defun mac-key-quick-look ()
   "Display the Quick Look information for the current line's file.
 You might use dired-mode-hook to use this function in dired mode,
@@ -376,15 +354,12 @@ like this:
        (lambda() (local-set-key \" \" 'mac-key-quick-look)))
 "
   (interactive)
-
   (let ((mybuffer (and mac-key-ql-process
-                       (process-buffer mac-key-ql-process)))
+                     (process-buffer mac-key-ql-process)))
         (item default-directory))
     (cond
      ((buffer-live-p mybuffer)
       (kill-buffer mybuffer))
-     ;;       (eq (process-status mac-key-ql-process) 'run)
-     ;;       (kill-process mac-key-ql-process))
      ((file-remote-p item)
       (error "This item is located on a remote system."))
      (t
@@ -397,12 +372,10 @@ like this:
                 (start-process "quicklook" "*QuickLook Output*"
                                "/usr/bin/qlmanage" "-p"
                                (shell-quote-argument item)))
-        (error err)))
-     )))
+        (error err))))))
 
 ;; shift+click
 ;; Contributed by Dave Peck
-
 (defun mac-key-shift-mouse-select (event)
   "Set the mark and then move point to the position clicked on with
 the mouse.  This should be bound to a mouse click event type."
@@ -414,21 +387,18 @@ the mouse.  This should be bound to a mouse click event type."
   ;; If EVENT is a click, event-end and event-start give same value.
   (posn-set-point (event-end event)))
 
-
 ;; Contextual menu
-
 (defun mac-key-context-menu (event)
   "Pop up a contextual menu."
   (interactive "e")
 
   (let ((editable (not buffer-read-only))
         (pt (save-excursion (mouse-set-point last-nonmenu-event)))
-        beg end
-        )
+        beg end)
 
     ;; getting word boundaries
     (if (and mark-active
-             (<= (region-beginning) pt) (<= pt (region-end)) )
+           (<= (region-beginning) pt) (<= pt (region-end)) )
         (setq beg (region-beginning)
               end (region-end))
       (save-excursion
@@ -488,13 +458,13 @@ the mouse.  This should be bound to a mouse click event type."
        ("Speech"
         ["Start Speaking"
          (if (and mark-active
-                  (<= (region-beginning) pt) (<= pt (region-end)) )
+                (<= (region-beginning) pt) (<= pt (region-end)) )
              (mac-key-speak-region beg end)
            (mac-key-speak-buffer) )
          :help "Speak text through the sound output"]
         ["Stop Speaking" (mac-key-stop-speaking)
          :active (and mac-key-speech-process
-                      (eq (process-status mac-key-speech-process) 'run))
+                    (eq (process-status mac-key-speech-process) 'run))
          :help "Stop speaking"]
         )
        ["--" nil]
