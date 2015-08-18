@@ -42,9 +42,22 @@
 (require 'cl-lib)
 (require 'async)
 
+(defcustom async-bytecomp-allowed-packages
+  '(async helm helm-core helm-ls-git helm-ls-hg magit)
+  "Packages in this list will be compiled asynchronously by `package--compile'.
+All the dependencies of these packages will be compiled async too,
+so no need to add dependencies to this list.
+The value of this variable can also be a list with a single element,
+the symbol `all', in this case packages are always compiled asynchronously."
+  :group 'async
+  :type '(repeat (choice symbol)))
+
 (defvar async-byte-compile-log-file "~/.emacs.d/async-bytecomp.log")
 
-(defun async-byte-recompile-directory (directory &optional arg force quiet)
+;;;###autoload
+(defun async-byte-recompile-directory (directory &optional quiet)
+  "Compile all *.el files in DIRECTORY asynchronously.
+All *.elc files are systematically deleted before proceeding."
   (cl-loop with dir = (directory-files directory t "\\.elc\\'")
            unless dir return nil
            for f in dir
@@ -68,7 +81,7 @@
                       (save-excursion
                         (goto-char (point-min))
                         (while (re-search-forward "^.*:Error:" nil t)
-                          (incf n)))
+                          (cl-incf n)))
                       (if (> n 0)
                           (message "Failed to compile %d files in directory `%s'" n ,directory)
                           (message "Directory `%s' compiled asynchronously with warnings" ,directory)))))
@@ -77,11 +90,11 @@
     (async-start
      `(lambda ()
         (require 'bytecomp)
-        ,(async-inject-variables "\\`load-path\\'")
+        ,(async-inject-variables "\\`\\(load-path\\)\\|byte\\'")
         (let ((default-directory (file-name-as-directory ,directory))
               error-data)
           (add-to-list 'load-path default-directory)
-          (byte-recompile-directory ,directory ,arg ,force)
+          (byte-recompile-directory ,directory 0 t)
           (when (get-buffer byte-compile-log-buffer)
             (setq error-data (with-current-buffer byte-compile-log-buffer
                                (buffer-substring-no-properties (point-min) (point-max))))
@@ -90,16 +103,63 @@
                 (erase-buffer)
                 (insert error-data))))))
      call-back)
-    (message "Started compiling asynchronously directory %s..." directory)))
+    (unless quiet (message "Started compiling asynchronously directory %s" directory))))
 
-(defadvice package--compile (around byte-compile-async activate)
-  ;; FIXME this seems redundant and unneeded, the only thing it
-  ;; does is loading the autoload file to update load-path but
-  ;; async-byte-recompile-directory is already doing this.
-  ;; for the rest (i.e installing info) it is done anyway after
-  ;; compilation in package-activate (force arg).
-  (package-activate-1 pkg-desc)
-  (async-byte-recompile-directory (package-desc-dir pkg-desc) 0 t t))
+(defvar package-archive-contents)
+(declare-function package-desc-reqs "package.el" (cl-x))
+
+(defun async-bytecomp--get-package-deps (pkg &optional only)
+  ;; Same as `package--get-deps' but parse instead `package-archive-contents'
+  ;; because PKG is not already installed and not present in `package-alist'.
+  (let* ((pkg-desc (cadr (assq pkg package-archive-contents)))
+         (direct-deps (cl-loop for p in (package-desc-reqs pkg-desc)
+                               for name = (car p)
+                               when (assq name package-archive-contents)
+                               collect name))
+         (indirect-deps (unless (eq only 'direct)
+                          (delete-dups
+                           (cl-loop for p in direct-deps append
+                                    (async-bytecomp--get-package-deps p))))))
+    (cl-case only
+      (direct   direct-deps)
+      (separate (list direct-deps indirect-deps))
+      (indirect indirect-deps)
+      (t        (delete-dups (append direct-deps indirect-deps))))))
+
+(defun async-bytecomp-get-allowed-pkgs ()
+  (when (and async-bytecomp-allowed-packages
+             (listp async-bytecomp-allowed-packages))
+    (if package-archive-contents
+        (cl-loop for p in async-bytecomp-allowed-packages
+                 when (assq p package-archive-contents)
+                 append (async-bytecomp--get-package-deps p) into reqs
+                 finally return
+                 (delete-dups
+                  (append async-bytecomp-allowed-packages reqs)))
+        async-bytecomp-allowed-packages)))
+
+(defadvice package--compile (around byte-compile-async)
+  (let ((cur-package (package-desc-name pkg-desc)))
+    (if (or (equal async-bytecomp-allowed-packages '(all))
+            (memq cur-package (async-bytecomp-get-allowed-pkgs)))
+        (progn
+          (when (eq cur-package 'async)
+            (fmakunbound 'async-byte-recompile-directory))
+          (package-activate-1 pkg-desc)
+          (load "async-bytecomp") ; emacs-24.3 don't reload new files.
+          (async-byte-recompile-directory (package-desc-dir pkg-desc) t))
+        ad-do-it)))
+
+;;;###autoload
+(define-minor-mode async-bytecomp-package-mode
+    "Byte compile asynchronously packages installed with package.el.
+Async compilation of packages can be controlled by
+`async-bytecomp-allowed-packages'."
+  :group 'async
+  :global t
+  (if async-bytecomp-package-mode
+      (ad-activate 'package--compile)
+      (ad-deactivate 'package--compile)))
 
 (provide 'async-bytecomp)
 

@@ -1,5 +1,3 @@
-(require 'smartparens-test-env)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; basic pairs
 
@@ -97,9 +95,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; latex pairs
 
-(defvar sp--test-latex-pairs
-  (sp-test-merge-pairs '((:open "$"   :close "$" :actions (insert wrap autoskip navigate)))))
-
 (defvar sp-test-get-stringlike-expression-latex
   '(("foo $bar$ baz $quux$ bux" 1 5 10 "$" "$" "" "")
     ("foo $bar$ baz $quux$ bux" 5 5 10 "$" "$" "" "")
@@ -121,6 +116,15 @@
    (--each sp-test-get-stringlike-expression-latex
      (sp-test-stringlike-sexp (car it) (apply 'sp-test-make-pair (cddr it)) (cadr it) nil nil))))
 
+(ert-deftest sp-test-get-textmode-stringlike-expression-latex ()
+  "Test basic stringlike expressions in `latex-mode'."
+  (sp-test-setup-stringlike-expression-env-latex
+   (--each sp-test-get-stringlike-expression
+     (when (sp-get-pair (nth 4 it))
+       (sp-test-stringlike-sexp (car it) (apply 'sp-test-make-pair (cddr it)) (cadr it) nil nil)))
+   (--each sp-test-get-stringlike-expression-latex
+     (sp-test-textmode-stringlike-sexp (car it) (apply 'sp-test-make-pair (cddr it)) (cadr it) nil nil))))
+
 (defvar sp-test-get-stringlike-expression-latex-backward
   '(("foo $bar$ baz $quux$ bux" 14 5 10 "$" "$" "" "")
     ("foo $bar$ baz $quux$ bux" 10 5 10 "$" "$" "" "")
@@ -136,6 +140,13 @@
      (sp-test-stringlike-sexp (car it) (apply 'sp-test-make-pair (cddr it)) (cadr it) t nil))
    (--each sp-test-get-stringlike-expression-latex-backward
      (sp-test-stringlike-sexp (car it) (apply 'sp-test-make-pair (cddr it)) (cadr it) t nil))))
+
+(ert-deftest sp-test-get-textmode-stringlike-expression-latex-backward ()
+  (sp-test-setup-stringlike-expression-env-latex
+   (--each sp-test-get-stringlike-expression-backward
+     (sp-test-textmode-stringlike-sexp (car it) (apply 'sp-test-make-pair (cddr it)) (cadr it) t nil))
+   (--each sp-test-get-stringlike-expression-latex-backward
+     (sp-test-textmode-stringlike-sexp (car it) (apply 'sp-test-make-pair (cddr it)) (cadr it) t nil))))
 
 (defvar sp-test-get-stringlike-expression-latex-fail
   '(("foo $bar$ baz $ boo" 14)
@@ -168,5 +179,43 @@
      ,@forms))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test the combination of string and regular pairs
 
-(provide 'smartparens-test-get-stringlike-expression)
+(defun sp-test-sexp-parse-in-org (initial result)
+  (sp-test-with-temp-buffer initial
+      (org-mode)
+    (should (equal (sp-get-sexp) result))))
+
+(ert-deftest sp-test-sexp-parse nil
+  (let ((sp-navigate-consider-stringlike-sexp '(org-mode))
+        (sp-pairs '((t . ((:open "=" :close "=" :actions (insert wrap autoskip navigate))
+                          (:open "'" :close "'" :actions (insert wrap autoskip navigate))
+                          (:open "/" :close "/" :actions (insert wrap autoskip navigate))
+                          (:open "[" :close "]" :actions (insert wrap autoskip navigate)))))))
+    (sp-test-sexp-parse-in-org "foo /bar/ |n'est pas [asd] asd /baz/" '(:beg 21 :end 26 :op "[" :cl "]" :prefix "" :suffix ""))
+    (sp-test-sexp-parse-in-org "foo /bar/ n'est pas [a|sd] asd /baz/" '(:beg 21 :end 26 :op "[" :cl "]" :prefix "" :suffix ""))
+    (sp-test-sexp-parse-in-org "foo /bar/ n'est pas [asd] |asd /baz/" '(:beg 31 :end 36 :op "/" :cl "/" :prefix "" :suffix ""))
+    (sp-test-sexp-parse-in-org "|foo [bar /baz/ asd" '(:beg 10 :end 15 :op "/" :cl "/" :prefix "" :suffix ""))))
+
+(defun sp-test-get-textmode-stringlike-expression-in-org (initial result &optional back)
+  (sp-test-with-temp-buffer initial
+      (org-mode)
+    (should (equal (sp-get-textmode-stringlike-expression back) result))))
+
+
+(ert-deftest sp-test-get-textmode-stringlike-expression nil
+  (let ((sp-navigate-consider-stringlike-sexp '(org-mode))
+        (sp-pairs '((t . ((:open "=" :close "=" :actions (insert wrap autoskip navigate))
+                          (:open "'" :close "'" :actions (insert wrap autoskip navigate))
+                          (:open "/" :close "/" :actions (insert wrap autoskip navigate))
+                          (:open "~" :close "~" :actions (insert wrap autoskip navigate)))))))
+    (sp-test-get-textmode-stringlike-expression-in-org "|/bar/ asd /baz/" '(:beg 1 :end 6 :op "/" :cl "/" :prefix "" :suffix ""))
+    (sp-test-get-textmode-stringlike-expression-in-org "/b|ar/ asd /baz/" '(:beg 1 :end 6 :op "/" :cl "/" :prefix "" :suffix ""))
+    (sp-test-get-textmode-stringlike-expression-in-org "/bar|/ asd /baz/" '(:beg 1 :end 6 :op "/" :cl "/" :prefix "" :suffix ""))
+    (sp-test-get-textmode-stringlike-expression-in-org "/bar/| asd /baz/" '(:beg 1 :end 6 :op "/" :cl "/" :prefix "" :suffix "") t)
+    (sp-test-get-textmode-stringlike-expression-in-org "/bar/ asd |/baz/" '(:beg 11 :end 16 :op "/" :cl "/" :prefix "" :suffix ""))
+    (sp-test-get-textmode-stringlike-expression-in-org "/bar/ asd /b|az/" '(:beg 11 :end 16 :op "/" :cl "/" :prefix "" :suffix ""))
+    (sp-test-get-textmode-stringlike-expression-in-org "/bar/ asd /baz|/" '(:beg 11 :end 16 :op "/" :cl "/" :prefix "" :suffix ""))
+    (sp-test-get-textmode-stringlike-expression-in-org "/bar/ asd /baz/|" '(:beg 11 :end 16 :op "/" :cl "/" :prefix "" :suffix "") t)
+    (sp-test-get-textmode-stringlike-expression-in-org "/bar/ asd ~a|sd~" '(:beg 11 :end 16 :op "~" :cl "~" :prefix "" :suffix ""))))

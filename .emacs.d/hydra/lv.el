@@ -33,6 +33,24 @@
 
 ;;; Code:
 
+(defgroup lv nil
+  "The other echo area."
+  :group 'minibuffer
+  :group 'hydra)
+
+(defcustom lv-use-separator nil
+  "Whether to draw a line between the LV window and the Echo Area."
+  :group 'lv
+  :type 'boolean)
+
+(defface lv-separator
+  '((((class color) (background light)) :background "grey80")
+    (((class color) (background  dark)) :background "grey30"))
+  "Face used to draw line between the lv window and the echo area.
+This is only used if option `lv-use-separator' is non-nil.
+Only the background color is significant."
+  :group 'lv)
+
 (defvar lv-wnd nil
   "Holds the current LV window.")
 
@@ -44,34 +62,55 @@
           buf)
       (prog1 (setq lv-wnd
                    (select-window
-                    (split-window
-                     (frame-root-window) -1 'below)))
+                    (let ((ignore-window-parameters t))
+                      (split-window
+                       (frame-root-window) -1 'below))))
         (if (setq buf (get-buffer "*LV*"))
             (switch-to-buffer buf)
           (switch-to-buffer "*LV*")
           (set-window-hscroll lv-wnd 0)
+          (setq window-size-fixed t)
           (setq mode-line-format nil)
           (setq cursor-type nil)
           (set-window-dedicated-p lv-wnd t)
           (set-window-parameter lv-wnd 'no-other-window t))
         (select-window ori)))))
 
+(defvar golden-ratio-mode)
+
+(defvar lv-force-update nil
+  "When non-nil, `lv-message' will refresh even for the same string.")
+
 (defun lv-message (format-string &rest args)
   "Set LV window contents to (`format' FORMAT-STRING ARGS)."
-  (let* ((ori (selected-window))
-         (str (apply #'format format-string args))
+  (let* ((str (apply #'format format-string args))
          (n-lines (cl-count ?\n str))
          deactivate-mark
          golden-ratio-mode)
-    (select-window (lv-window))
-    (unless (string= (buffer-string) str)
-      (delete-region (point-min) (point-max))
-      (insert str)
-      (setq-local window-min-height n-lines)
-      (setq truncate-lines (> n-lines 1))
-      (fit-window-to-buffer nil nil 1))
-    (goto-char (point-min))
-    (select-window ori)))
+    (with-selected-window (lv-window)
+      (unless (and (string= (buffer-string) str)
+                   (null lv-force-update))
+        (delete-region (point-min) (point-max))
+        (insert str)
+        (when (and (window-system) lv-use-separator)
+          (unless (looking-back "\n" nil)
+            (insert "\n"))
+          (insert
+           (propertize "__" 'face 'lv-separator 'display '(space :height (1)))
+           (propertize "\n" 'face 'lv-separator 'line-height t)))
+        (setq-local window-min-height n-lines)
+        (setq truncate-lines (> n-lines 1))
+        (let ((window-resize-pixelwise t)
+              (window-size-fixed nil))
+          (fit-window-to-buffer nil nil 1)))
+      (goto-char (point-min)))))
+
+(defun lv-delete-window ()
+  "Delete LV window and kill its buffer."
+  (when (window-live-p lv-wnd)
+    (let ((buf (window-buffer lv-wnd)))
+      (delete-window lv-wnd)
+      (kill-buffer buf))))
 
 (provide 'lv)
 

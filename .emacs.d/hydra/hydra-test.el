@@ -38,37 +38,71 @@
        ("k" previous-error "prev")
        ("SPC" hydra-repeat "rep" :bind nil)))
     '(progn
-      (set (defvar hydra-error/keymap nil "Keymap for hydra-error.")
-       (quote (keymap (7 . hydra-keyboard-quit)
-                      (32 . hydra-repeat)
-                      (107 . hydra-error/previous-error)
-                      (106 . hydra-error/next-error)
-                      (104 . hydra-error/first-error)
-                      (switch-frame . hydra--handle-switch-frame)
-                      (kp-subtract . hydra--negative-argument)
-                      (kp-9 . hydra--digit-argument)
-                      (kp-8 . hydra--digit-argument)
-                      (kp-7 . hydra--digit-argument)
-                      (kp-6 . hydra--digit-argument)
-                      (kp-5 . hydra--digit-argument)
-                      (kp-4 . hydra--digit-argument)
-                      (kp-3 . hydra--digit-argument)
-                      (kp-2 . hydra--digit-argument)
-                      (kp-1 . hydra--digit-argument)
-                      (kp-0 . hydra--digit-argument)
-                      (57 . hydra--digit-argument)
-                      (56 . hydra--digit-argument)
-                      (55 . hydra--digit-argument)
-                      (54 . hydra--digit-argument)
-                      (53 . hydra--digit-argument)
-                      (52 . hydra--digit-argument)
-                      (51 . hydra--digit-argument)
-                      (50 . hydra--digit-argument)
-                      (49 . hydra--digit-argument)
-                      (48 . hydra--digit-argument)
-                      (45 . hydra--negative-argument)
-                      (21 . hydra--universal-argument))))
-      (defun hydra-error/first-error nil "Create a hydra with a \"M-g\" body and the heads:
+      (set
+       (defvar hydra-error/keymap nil
+         "Keymap for hydra-error.")
+       (quote
+        (keymap
+         (32 . hydra-repeat)
+         (107 . hydra-error/previous-error)
+         (106 . hydra-error/next-error)
+         (104 . hydra-error/first-error)
+         (kp-subtract . hydra--negative-argument)
+         (kp-9 . hydra--digit-argument)
+         (kp-8 . hydra--digit-argument)
+         (kp-7 . hydra--digit-argument)
+         (kp-6 . hydra--digit-argument)
+         (kp-5 . hydra--digit-argument)
+         (kp-4 . hydra--digit-argument)
+         (kp-3 . hydra--digit-argument)
+         (kp-2 . hydra--digit-argument)
+         (kp-1 . hydra--digit-argument)
+         (kp-0 . hydra--digit-argument)
+         (57 . hydra--digit-argument)
+         (56 . hydra--digit-argument)
+         (55 . hydra--digit-argument)
+         (54 . hydra--digit-argument)
+         (53 . hydra--digit-argument)
+         (52 . hydra--digit-argument)
+         (51 . hydra--digit-argument)
+         (50 . hydra--digit-argument)
+         (49 . hydra--digit-argument)
+         (48 . hydra--digit-argument)
+         (45 . hydra--negative-argument)
+         (21 . hydra--universal-argument))))
+      (set
+       (defvar hydra-error/heads nil
+         "Heads for hydra-error.")
+       (quote
+        (("h"
+          first-error
+          "first"
+          :exit nil)
+         ("j"
+          next-error
+          "next"
+          :exit nil)
+         ("k"
+          previous-error
+          "prev"
+          :exit nil)
+         ("SPC"
+          hydra-repeat
+          "rep"
+          :bind nil
+          :exit nil))))
+      (set
+       (defvar hydra-error/hint nil
+         "Dynamic hint for hydra-error.")
+       (quote
+        (format
+         #("error: [h]: first, [j]: next, [k]: prev, [SPC]: rep."
+           8 9 (face hydra-face-red)
+           20 21 (face hydra-face-red)
+           31 32 (face hydra-face-red)
+           42 45 (face hydra-face-red)))))
+      (defun hydra-error/first-error nil
+        "Create a hydra with a \"M-g\" body and the heads:
 
 \"h\":    `first-error',
 \"j\":    `next-error',
@@ -78,18 +112,35 @@
 The body can be accessed via `hydra-error/body'.
 
 Call the head: `first-error'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (condition-case err (call-interactively (function first-error))
-                 ((quit error)
-                  (message "%S" err)
-                  (unless hydra-lv (sit-for 0.8))))
-               (when hydra-is-helpful (hydra-error/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-error/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))))
-      (defun hydra-error/next-error nil "Create a hydra with a \"M-g\" body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore t))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-error/body)))
+        (condition-case err
+                        (progn
+                          (setq this-command
+                                (quote first-error))
+                          (call-interactively
+                           (function first-error)))
+                        ((quit error)
+                         (message "%S" err)
+                         (unless hydra-lv (sit-for 0.8))))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-error/hint))
+            (message
+             (eval hydra-error/hint))))
+        (hydra-set-transient-map
+         hydra-error/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil))
+      (defun hydra-error/next-error nil
+        "Create a hydra with a \"M-g\" body and the heads:
 
 \"h\":    `first-error',
 \"j\":    `next-error',
@@ -99,18 +150,35 @@ Call the head: `first-error'."
 The body can be accessed via `hydra-error/body'.
 
 Call the head: `next-error'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (condition-case err (call-interactively (function next-error))
-                 ((quit error)
-                  (message "%S" err)
-                  (unless hydra-lv (sit-for 0.8))))
-               (when hydra-is-helpful (hydra-error/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-error/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))))
-      (defun hydra-error/previous-error nil "Create a hydra with a \"M-g\" body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore t))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-error/body)))
+        (condition-case err
+                        (progn
+                          (setq this-command
+                                (quote next-error))
+                          (call-interactively
+                           (function next-error)))
+                        ((quit error)
+                         (message "%S" err)
+                         (unless hydra-lv (sit-for 0.8))))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-error/hint))
+            (message
+             (eval hydra-error/hint))))
+        (hydra-set-transient-map
+         hydra-error/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil))
+      (defun hydra-error/previous-error nil
+        "Create a hydra with a \"M-g\" body and the heads:
 
 \"h\":    `first-error',
 \"j\":    `next-error',
@@ -120,36 +188,48 @@ Call the head: `next-error'."
 The body can be accessed via `hydra-error/body'.
 
 Call the head: `previous-error'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (condition-case err (call-interactively (function previous-error))
-                 ((quit error)
-                  (message "%S" err)
-                  (unless hydra-lv (sit-for 0.8))))
-               (when hydra-is-helpful (hydra-error/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-error/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))))
-      (unless (keymapp (lookup-key global-map (kbd "M-g")))
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore t))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-error/body)))
+        (condition-case err
+                        (progn
+                          (setq this-command
+                                (quote previous-error))
+                          (call-interactively
+                           (function previous-error)))
+                        ((quit error)
+                         (message "%S" err)
+                         (unless hydra-lv (sit-for 0.8))))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-error/hint))
+            (message
+             (eval hydra-error/hint))))
+        (hydra-set-transient-map
+         hydra-error/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil))
+      (unless (keymapp
+               (lookup-key
+                global-map
+                (kbd "M-g")))
         (define-key global-map (kbd "M-g")
           nil))
       (define-key global-map [134217831 104]
-       (function hydra-error/first-error))
+        (quote hydra-error/first-error))
       (define-key global-map [134217831 106]
-       (function hydra-error/next-error))
+        (quote hydra-error/next-error))
       (define-key global-map [134217831 107]
-       (function hydra-error/previous-error))
-      (defun hydra-error/hint nil
-        (if hydra-lv (lv-message (format #("error: [h]: first, [j]: next, [k]: prev, [SPC]: rep." 8 9 (face hydra-face-red)
-                                           20 21 (face hydra-face-red)
-                                           31 32 (face hydra-face-red)
-                                           42 45 (face hydra-face-red))))
-          (message (format #("error: [h]: first, [j]: next, [k]: prev, [SPC]: rep." 8 9 (face hydra-face-red)
-                             20 21 (face hydra-face-red)
-                             31 32 (face hydra-face-red)
-                             42 45 (face hydra-face-red))))))
-      (defun hydra-error/body nil "Create a hydra with a \"M-g\" body and the heads:
+        (quote
+         hydra-error/previous-error))
+      (defun hydra-error/body nil
+        "Create a hydra with a \"M-g\" body and the heads:
 
 \"h\":    `first-error',
 \"j\":    `next-error',
@@ -157,14 +237,26 @@ Call the head: `previous-error'."
 \"SPC\":    `hydra-repeat'
 
 The body can be accessed via `hydra-error/body'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (when hydra-is-helpful (hydra-error/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-error/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))
-               (setq prefix-arg current-prefix-arg)))))))
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore nil))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-error/body)))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-error/hint))
+            (message
+             (eval hydra-error/hint))))
+        (hydra-set-transient-map
+         hydra-error/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil)
+        (setq prefix-arg
+              current-prefix-arg))))))
 
 (ert-deftest hydra-blue-toggle ()
   (should
@@ -177,37 +269,67 @@ The body can be accessed via `hydra-error/body'."
        ("a" abbrev-mode "abbrev")
        ("q" nil "cancel")))
     '(progn
-      (set (defvar hydra-toggle/keymap nil "Keymap for hydra-toggle.")
-       (quote (keymap (7 . hydra-keyboard-quit)
-                      (113 . hydra-toggle/nil)
-                      (97 . hydra-toggle/abbrev-mode-and-exit)
-                      (102 . hydra-toggle/auto-fill-mode-and-exit)
-                      (116 . hydra-toggle/toggle-truncate-lines-and-exit)
-                      (switch-frame . hydra--handle-switch-frame)
-                      (kp-subtract . hydra--negative-argument)
-                      (kp-9 . hydra--digit-argument)
-                      (kp-8 . hydra--digit-argument)
-                      (kp-7 . hydra--digit-argument)
-                      (kp-6 . hydra--digit-argument)
-                      (kp-5 . hydra--digit-argument)
-                      (kp-4 . hydra--digit-argument)
-                      (kp-3 . hydra--digit-argument)
-                      (kp-2 . hydra--digit-argument)
-                      (kp-1 . hydra--digit-argument)
-                      (kp-0 . hydra--digit-argument)
-                      (57 . hydra--digit-argument)
-                      (56 . hydra--digit-argument)
-                      (55 . hydra--digit-argument)
-                      (54 . hydra--digit-argument)
-                      (53 . hydra--digit-argument)
-                      (52 . hydra--digit-argument)
-                      (51 . hydra--digit-argument)
-                      (50 . hydra--digit-argument)
-                      (49 . hydra--digit-argument)
-                      (48 . hydra--digit-argument)
-                      (45 . hydra--negative-argument)
-                      (21 . hydra--universal-argument))))
-      (defun hydra-toggle/toggle-truncate-lines-and-exit nil "Create a hydra with no body and the heads:
+      (set
+       (defvar hydra-toggle/keymap nil
+         "Keymap for hydra-toggle.")
+       (quote
+        (keymap
+         (113 . hydra-toggle/nil)
+         (97 . hydra-toggle/abbrev-mode-and-exit)
+         (102 . hydra-toggle/auto-fill-mode-and-exit)
+         (116 . hydra-toggle/toggle-truncate-lines-and-exit)
+         (kp-subtract . hydra--negative-argument)
+         (kp-9 . hydra--digit-argument)
+         (kp-8 . hydra--digit-argument)
+         (kp-7 . hydra--digit-argument)
+         (kp-6 . hydra--digit-argument)
+         (kp-5 . hydra--digit-argument)
+         (kp-4 . hydra--digit-argument)
+         (kp-3 . hydra--digit-argument)
+         (kp-2 . hydra--digit-argument)
+         (kp-1 . hydra--digit-argument)
+         (kp-0 . hydra--digit-argument)
+         (57 . hydra--digit-argument)
+         (56 . hydra--digit-argument)
+         (55 . hydra--digit-argument)
+         (54 . hydra--digit-argument)
+         (53 . hydra--digit-argument)
+         (52 . hydra--digit-argument)
+         (51 . hydra--digit-argument)
+         (50 . hydra--digit-argument)
+         (49 . hydra--digit-argument)
+         (48 . hydra--digit-argument)
+         (45 . hydra--negative-argument)
+         (21 . hydra--universal-argument))))
+      (set
+       (defvar hydra-toggle/heads nil
+         "Heads for hydra-toggle.")
+       (quote
+        (("t"
+          toggle-truncate-lines
+          "truncate"
+          :exit t)
+         ("f"
+          auto-fill-mode
+          "fill"
+          :exit t)
+         ("a"
+          abbrev-mode
+          "abbrev"
+          :exit t)
+         ("q" nil "cancel" :exit t))))
+      (set
+       (defvar hydra-toggle/hint nil
+         "Dynamic hint for hydra-toggle.")
+       (quote
+        (format
+         #("toggle: [t]: truncate, [f]: fill, [a]: abbrev, [q]: cancel."
+           9 10 (face hydra-face-blue)
+           24 25 (face hydra-face-blue)
+           35 36 (face hydra-face-blue)
+           48 49 (face hydra-face-blue)))))
+      (defun hydra-toggle/toggle-truncate-lines-and-exit nil
+        "Create a hydra with no body and the heads:
 
 \"t\":    `toggle-truncate-lines',
 \"f\":    `auto-fill-mode',
@@ -217,13 +339,19 @@ The body can be accessed via `hydra-error/body'."
 The body can be accessed via `hydra-toggle/body'.
 
 Call the head: `toggle-truncate-lines'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (hydra-keyboard-quit)
-             (catch (quote hydra-disable)
-               (call-interactively (function toggle-truncate-lines))))
-      (defun hydra-toggle/auto-fill-mode-and-exit nil "Create a hydra with no body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (hydra-keyboard-quit)
+        (setq hydra-curr-body-fn
+              (quote hydra-toggle/body))
+        (progn
+          (setq this-command
+                (quote toggle-truncate-lines))
+          (call-interactively
+           (function
+            toggle-truncate-lines))))
+      (defun hydra-toggle/auto-fill-mode-and-exit nil
+        "Create a hydra with no body and the heads:
 
 \"t\":    `toggle-truncate-lines',
 \"f\":    `auto-fill-mode',
@@ -233,13 +361,18 @@ Call the head: `toggle-truncate-lines'."
 The body can be accessed via `hydra-toggle/body'.
 
 Call the head: `auto-fill-mode'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (hydra-keyboard-quit)
-             (catch (quote hydra-disable)
-               (call-interactively (function auto-fill-mode))))
-      (defun hydra-toggle/abbrev-mode-and-exit nil "Create a hydra with no body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (hydra-keyboard-quit)
+        (setq hydra-curr-body-fn
+              (quote hydra-toggle/body))
+        (progn
+          (setq this-command
+                (quote auto-fill-mode))
+          (call-interactively
+           (function auto-fill-mode))))
+      (defun hydra-toggle/abbrev-mode-and-exit nil
+        "Create a hydra with no body and the heads:
 
 \"t\":    `toggle-truncate-lines',
 \"f\":    `auto-fill-mode',
@@ -249,13 +382,18 @@ Call the head: `auto-fill-mode'."
 The body can be accessed via `hydra-toggle/body'.
 
 Call the head: `abbrev-mode'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (hydra-keyboard-quit)
-             (catch (quote hydra-disable)
-               (call-interactively (function abbrev-mode))))
-      (defun hydra-toggle/nil nil "Create a hydra with no body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (hydra-keyboard-quit)
+        (setq hydra-curr-body-fn
+              (quote hydra-toggle/body))
+        (progn
+          (setq this-command
+                (quote abbrev-mode))
+          (call-interactively
+           (function abbrev-mode))))
+      (defun hydra-toggle/nil nil
+        "Create a hydra with no body and the heads:
 
 \"t\":    `toggle-truncate-lines',
 \"f\":    `auto-fill-mode',
@@ -265,21 +403,13 @@ Call the head: `abbrev-mode'."
 The body can be accessed via `hydra-toggle/body'.
 
 Call the head: `nil'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (hydra-keyboard-quit)
-             (catch (quote hydra-disable)))
-      (defun hydra-toggle/hint nil
-        (if hydra-lv (lv-message (format #("toggle: [t]: truncate, [f]: fill, [a]: abbrev, [q]: cancel." 9 10 (face hydra-face-blue)
-                                           24 25 (face hydra-face-blue)
-                                           35 36 (face hydra-face-blue)
-                                           48 49 (face hydra-face-blue))))
-          (message (format #("toggle: [t]: truncate, [f]: fill, [a]: abbrev, [q]: cancel." 9 10 (face hydra-face-blue)
-                             24 25 (face hydra-face-blue)
-                             35 36 (face hydra-face-blue)
-                             48 49 (face hydra-face-blue))))))
-      (defun hydra-toggle/body nil "Create a hydra with no body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (hydra-keyboard-quit)
+        (setq hydra-curr-body-fn
+              (quote hydra-toggle/body)))
+      (defun hydra-toggle/body nil
+        "Create a hydra with no body and the heads:
 
 \"t\":    `toggle-truncate-lines',
 \"f\":    `auto-fill-mode',
@@ -287,14 +417,26 @@ Call the head: `nil'."
 \"q\":    `nil'
 
 The body can be accessed via `hydra-toggle/body'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (when hydra-is-helpful (hydra-toggle/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-toggle/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))
-               (setq prefix-arg current-prefix-arg)))))))
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore nil))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-toggle/body)))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-toggle/hint))
+            (message
+             (eval hydra-toggle/hint))))
+        (hydra-set-transient-map
+         hydra-toggle/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil)
+        (setq prefix-arg
+              current-prefix-arg))))))
 
 (ert-deftest hydra-amaranth-vi ()
   (should
@@ -311,61 +453,59 @@ The body can be accessed via `hydra-toggle/body'."
        ("k" previous-line)
        ("q" nil "quit")))
     '(progn
-      (set (defvar hydra-vi/keymap nil "Keymap for hydra-vi.")
-       (quote (keymap (t lambda nil (interactive)
-                         (message "An amaranth Hydra can only exit through a blue head")
-                         (hydra-set-transient-map hydra-curr-map t)
-                         (when hydra-is-helpful (unless hydra-lv (sit-for 0.8))
-                               (hydra-vi/hint)))
-                      (113 . hydra-vi/nil)
-                      (107 . hydra-vi/previous-line)
-                      (106 . hydra-vi/next-line)
-                      (7 . hydra-vi/hydra-keyboard-quit-and-exit)
-                      (switch-frame . hydra--handle-switch-frame)
-                      (kp-subtract . hydra--negative-argument)
-                      (kp-9 . hydra--digit-argument)
-                      (kp-8 . hydra--digit-argument)
-                      (kp-7 . hydra--digit-argument)
-                      (kp-6 . hydra--digit-argument)
-                      (kp-5 . hydra--digit-argument)
-                      (kp-4 . hydra--digit-argument)
-                      (kp-3 . hydra--digit-argument)
-                      (kp-2 . hydra--digit-argument)
-                      (kp-1 . hydra--digit-argument)
-                      (kp-0 . hydra--digit-argument)
-                      (57 . hydra--digit-argument)
-                      (56 . hydra--digit-argument)
-                      (55 . hydra--digit-argument)
-                      (54 . hydra--digit-argument)
-                      (53 . hydra--digit-argument)
-                      (52 . hydra--digit-argument)
-                      (51 . hydra--digit-argument)
-                      (50 . hydra--digit-argument)
-                      (49 . hydra--digit-argument)
-                      (48 . hydra--digit-argument)
-                      (45 . hydra--negative-argument)
-                      (21 . hydra--universal-argument))))
-      (defun hydra-vi/hydra-keyboard-quit-and-exit nil "Create a hydra with no body and the heads:
+      (set
+       (defvar hydra-vi/keymap nil
+         "Keymap for hydra-vi.")
+       (quote
+        (keymap
+         (113 . hydra-vi/nil)
+         (107 . hydra-vi/previous-line)
+         (106 . hydra-vi/next-line)
+         (kp-subtract . hydra--negative-argument)
+         (kp-9 . hydra--digit-argument)
+         (kp-8 . hydra--digit-argument)
+         (kp-7 . hydra--digit-argument)
+         (kp-6 . hydra--digit-argument)
+         (kp-5 . hydra--digit-argument)
+         (kp-4 . hydra--digit-argument)
+         (kp-3 . hydra--digit-argument)
+         (kp-2 . hydra--digit-argument)
+         (kp-1 . hydra--digit-argument)
+         (kp-0 . hydra--digit-argument)
+         (57 . hydra--digit-argument)
+         (56 . hydra--digit-argument)
+         (55 . hydra--digit-argument)
+         (54 . hydra--digit-argument)
+         (53 . hydra--digit-argument)
+         (52 . hydra--digit-argument)
+         (51 . hydra--digit-argument)
+         (50 . hydra--digit-argument)
+         (49 . hydra--digit-argument)
+         (48 . hydra--digit-argument)
+         (45 . hydra--negative-argument)
+         (21 . hydra--universal-argument))))
+      (set
+       (defvar hydra-vi/heads nil
+         "Heads for hydra-vi.")
+       (quote
+        (("j" next-line "" :exit nil)
+         ("k"
+          previous-line
+          ""
+          :exit nil)
+         ("q" nil "quit" :exit t))))
+      (set
+       (defvar hydra-vi/hint nil
+         "Dynamic hint for hydra-vi.")
+       (quote
+        (format
+         #("vi: j, k, [q]: quit."
+           4 5 (face hydra-face-amaranth)
+           7 8 (face hydra-face-amaranth)
+           11 12 (face hydra-face-teal)))))
+      (defun hydra-vi/next-line nil
+        "Create a hydra with no body and the heads:
 
-\"\":    `hydra-keyboard-quit',
-\"j\":    `next-line',
-\"k\":    `previous-line',
-\"q\":    `nil'
-
-The body can be accessed via `hydra-vi/body'.
-
-Call the head: `hydra-keyboard-quit'."
-             (interactive)
-             (hydra-default-pre)
-             (set-cursor-color "#e52b50")
-             (hydra-disable)
-             (hydra-keyboard-quit)
-             (catch (quote hydra-disable)
-               (call-interactively (function hydra-keyboard-quit))
-               (set-cursor-color "#ffffff")))
-      (defun hydra-vi/next-line nil "Create a hydra with no body and the heads:
-
-\"\":    `hydra-keyboard-quit',
 \"j\":    `next-line',
 \"k\":    `previous-line',
 \"q\":    `nil'
@@ -373,21 +513,36 @@ Call the head: `hydra-keyboard-quit'."
 The body can be accessed via `hydra-vi/body'.
 
 Call the head: `next-line'."
-             (interactive)
-             (hydra-default-pre)
-             (set-cursor-color "#e52b50")
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (condition-case err (call-interactively (function next-line))
-                 ((quit error)
-                  (message "%S" err)
-                  (unless hydra-lv (sit-for 0.8))))
-               (when hydra-is-helpful (hydra-vi/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-vi/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))))
-      (defun hydra-vi/previous-line nil "Create a hydra with no body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (set-cursor-color "#e52b50")
+        (let ((hydra--ignore t))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-vi/body)))
+        (condition-case err
+            (progn
+              (setq this-command
+                    (quote next-line))
+              (call-interactively
+               (function next-line)))
+          ((quit error)
+           (message "%S" err)
+           (unless hydra-lv (sit-for 0.8))))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-vi/hint))
+            (message (eval hydra-vi/hint))))
+        (hydra-set-transient-map
+         hydra-vi/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           (set-cursor-color "#ffffff"))
+         (quote warn)))
+      (defun hydra-vi/previous-line nil
+        "Create a hydra with no body and the heads:
 
-\"\":    `hydra-keyboard-quit',
 \"j\":    `next-line',
 \"k\":    `previous-line',
 \"q\":    `nil'
@@ -395,21 +550,36 @@ Call the head: `next-line'."
 The body can be accessed via `hydra-vi/body'.
 
 Call the head: `previous-line'."
-             (interactive)
-             (hydra-default-pre)
-             (set-cursor-color "#e52b50")
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (condition-case err (call-interactively (function previous-line))
-                 ((quit error)
-                  (message "%S" err)
-                  (unless hydra-lv (sit-for 0.8))))
-               (when hydra-is-helpful (hydra-vi/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-vi/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))))
-      (defun hydra-vi/nil nil "Create a hydra with no body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (set-cursor-color "#e52b50")
+        (let ((hydra--ignore t))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-vi/body)))
+        (condition-case err
+            (progn
+              (setq this-command
+                    (quote previous-line))
+              (call-interactively
+               (function previous-line)))
+          ((quit error)
+           (message "%S" err)
+           (unless hydra-lv (sit-for 0.8))))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-vi/hint))
+            (message (eval hydra-vi/hint))))
+        (hydra-set-transient-map
+         hydra-vi/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           (set-cursor-color "#ffffff"))
+         (quote warn)))
+      (defun hydra-vi/nil nil
+        "Create a hydra with no body and the heads:
 
-\"\":    `hydra-keyboard-quit',
 \"j\":    `next-line',
 \"k\":    `previous-line',
 \"q\":    `nil'
@@ -417,37 +587,342 @@ Call the head: `previous-line'."
 The body can be accessed via `hydra-vi/body'.
 
 Call the head: `nil'."
-             (interactive)
-             (hydra-default-pre)
-             (set-cursor-color "#e52b50")
-             (hydra-disable)
-             (hydra-keyboard-quit)
-             (catch (quote hydra-disable)
-               (set-cursor-color "#ffffff")))
-      (defun hydra-vi/hint nil
-        (if hydra-lv (lv-message (format #("vi: j, k, [q]: quit." 4 5 (face hydra-face-amaranth)
-                                           7 8 (face hydra-face-amaranth)
-                                           11 12 (face hydra-face-blue))))
-          (message (format #("vi: j, k, [q]: quit." 4 5 (face hydra-face-amaranth)
-                             7 8 (face hydra-face-amaranth)
-                             11 12 (face hydra-face-blue))))))
-      (defun hydra-vi/body nil "Create a hydra with no body and the heads:
+        (interactive)
+        (hydra-default-pre)
+        (set-cursor-color "#e52b50")
+        (hydra-keyboard-quit)
+        (setq hydra-curr-body-fn
+              (quote hydra-vi/body)))
+      (defun hydra-vi/body nil
+        "Create a hydra with no body and the heads:
 
-\"\":    `hydra-keyboard-quit',
 \"j\":    `next-line',
 \"k\":    `previous-line',
 \"q\":    `nil'
 
 The body can be accessed via `hydra-vi/body'."
-             (interactive)
-             (hydra-default-pre)
-             (set-cursor-color "#e52b50")
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (when hydra-is-helpful (hydra-vi/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-vi/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))
-               (setq prefix-arg current-prefix-arg)))))))
+        (interactive)
+        (hydra-default-pre)
+        (set-cursor-color "#e52b50")
+        (let ((hydra--ignore nil))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-vi/body)))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-vi/hint))
+            (message (eval hydra-vi/hint))))
+        (hydra-set-transient-map
+         hydra-vi/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           (set-cursor-color "#ffffff"))
+         (quote warn))
+        (setq prefix-arg
+              current-prefix-arg))))))
+
+(ert-deftest hydra-zoom-duplicate-1 ()
+  (should
+   (equal
+    (macroexpand
+     '(defhydra hydra-zoom ()
+       "zoom"
+       ("r" (text-scale-set 0) "reset")
+       ("0" (text-scale-set 0) :bind nil :exit t)
+       ("1" (text-scale-set 0) nil :bind nil :exit t)))
+    '(progn
+      (set
+       (defvar hydra-zoom/keymap nil
+         "Keymap for hydra-zoom.")
+       (quote
+        (keymap
+         (114 . hydra-zoom/lambda-r)
+         (kp-subtract . hydra--negative-argument)
+         (kp-9 . hydra--digit-argument)
+         (kp-8 . hydra--digit-argument)
+         (kp-7 . hydra--digit-argument)
+         (kp-6 . hydra--digit-argument)
+         (kp-5 . hydra--digit-argument)
+         (kp-4 . hydra--digit-argument)
+         (kp-3 . hydra--digit-argument)
+         (kp-2 . hydra--digit-argument)
+         (kp-1 . hydra--digit-argument)
+         (kp-0 . hydra--digit-argument)
+         (57 . hydra--digit-argument)
+         (56 . hydra--digit-argument)
+         (55 . hydra--digit-argument)
+         (54 . hydra--digit-argument)
+         (53 . hydra--digit-argument)
+         (52 . hydra--digit-argument)
+         (51 . hydra--digit-argument)
+         (50 . hydra--digit-argument)
+         (49 . hydra-zoom/lambda-0-and-exit)
+         (48 . hydra-zoom/lambda-0-and-exit)
+         (45 . hydra--negative-argument)
+         (21 . hydra--universal-argument))))
+      (set
+       (defvar hydra-zoom/heads nil
+         "Heads for hydra-zoom.")
+       (quote
+        (("r"
+          (text-scale-set 0)
+          "reset"
+          :exit nil)
+         ("0"
+          (text-scale-set 0)
+          ""
+          :bind nil
+          :exit t)
+         ("1"
+          (text-scale-set 0)
+          nil
+          :bind nil
+          :exit t))))
+      (set
+       (defvar hydra-zoom/hint nil
+         "Dynamic hint for hydra-zoom.")
+       (quote
+        (format
+         #("zoom: [r 0]: reset."
+           7 8 (face hydra-face-red)
+           9 10 (face hydra-face-blue)))))
+      (defun hydra-zoom/lambda-r nil
+        "Create a hydra with no body and the heads:
+
+\"r\":    `(text-scale-set 0)',
+\"0\":    `(text-scale-set 0)',
+\"1\":    `(text-scale-set 0)'
+
+The body can be accessed via `hydra-zoom/body'.
+
+Call the head: `(text-scale-set 0)'."
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore t))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-zoom/body)))
+        (condition-case err
+            (call-interactively
+             (function
+              (lambda nil
+               (interactive)
+               (text-scale-set 0))))
+          ((quit error)
+           (message "%S" err)
+           (unless hydra-lv (sit-for 0.8))))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-zoom/hint))
+            (message
+             (eval hydra-zoom/hint))))
+        (hydra-set-transient-map
+         hydra-zoom/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil))
+      (defun hydra-zoom/lambda-0-and-exit nil
+        "Create a hydra with no body and the heads:
+
+\"r\":    `(text-scale-set 0)',
+\"0\":    `(text-scale-set 0)',
+\"1\":    `(text-scale-set 0)'
+
+The body can be accessed via `hydra-zoom/body'.
+
+Call the head: `(text-scale-set 0)'."
+        (interactive)
+        (hydra-default-pre)
+        (hydra-keyboard-quit)
+        (setq hydra-curr-body-fn
+              (quote hydra-zoom/body))
+        (call-interactively
+         (function
+          (lambda nil
+           (interactive)
+           (text-scale-set 0)))))
+      (defun hydra-zoom/body nil
+        "Create a hydra with no body and the heads:
+
+\"r\":    `(text-scale-set 0)',
+\"0\":    `(text-scale-set 0)',
+\"1\":    `(text-scale-set 0)'
+
+The body can be accessed via `hydra-zoom/body'."
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore nil))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-zoom/body)))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-zoom/hint))
+            (message
+             (eval hydra-zoom/hint))))
+        (hydra-set-transient-map
+         hydra-zoom/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil)
+        (setq prefix-arg
+              current-prefix-arg))))))
+
+(ert-deftest hydra-zoom-duplicate-2 ()
+  (should
+   (equal
+    (macroexpand
+     '(defhydra hydra-zoom ()
+       "zoom"
+       ("r" (text-scale-set 0) "reset")
+       ("0" (text-scale-set 0) :bind nil :exit t)
+       ("1" (text-scale-set 0) nil :bind nil)))
+    '(progn
+      (set
+       (defvar hydra-zoom/keymap nil
+         "Keymap for hydra-zoom.")
+       (quote
+        (keymap
+         (114 . hydra-zoom/lambda-r)
+         (kp-subtract . hydra--negative-argument)
+         (kp-9 . hydra--digit-argument)
+         (kp-8 . hydra--digit-argument)
+         (kp-7 . hydra--digit-argument)
+         (kp-6 . hydra--digit-argument)
+         (kp-5 . hydra--digit-argument)
+         (kp-4 . hydra--digit-argument)
+         (kp-3 . hydra--digit-argument)
+         (kp-2 . hydra--digit-argument)
+         (kp-1 . hydra--digit-argument)
+         (kp-0 . hydra--digit-argument)
+         (57 . hydra--digit-argument)
+         (56 . hydra--digit-argument)
+         (55 . hydra--digit-argument)
+         (54 . hydra--digit-argument)
+         (53 . hydra--digit-argument)
+         (52 . hydra--digit-argument)
+         (51 . hydra--digit-argument)
+         (50 . hydra--digit-argument)
+         (49 . hydra-zoom/lambda-r)
+         (48 . hydra-zoom/lambda-0-and-exit)
+         (45 . hydra--negative-argument)
+         (21 . hydra--universal-argument))))
+      (set
+       (defvar hydra-zoom/heads nil
+         "Heads for hydra-zoom.")
+       (quote
+        (("r"
+          (text-scale-set 0)
+          "reset"
+          :exit nil)
+         ("0"
+          (text-scale-set 0)
+          ""
+          :bind nil
+          :exit t)
+         ("1"
+          (text-scale-set 0)
+          nil
+          :bind nil
+          :exit nil))))
+      (set
+       (defvar hydra-zoom/hint nil
+         "Dynamic hint for hydra-zoom.")
+       (quote
+        (format
+         #("zoom: [r 0]: reset."
+           7 8 (face hydra-face-red)
+           9 10 (face hydra-face-blue)))))
+      (defun hydra-zoom/lambda-r nil
+        "Create a hydra with no body and the heads:
+
+\"r\":    `(text-scale-set 0)',
+\"0\":    `(text-scale-set 0)',
+\"1\":    `(text-scale-set 0)'
+
+The body can be accessed via `hydra-zoom/body'.
+
+Call the head: `(text-scale-set 0)'."
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore t))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-zoom/body)))
+        (condition-case err
+            (call-interactively
+             (function
+              (lambda nil
+               (interactive)
+               (text-scale-set 0))))
+          ((quit error)
+           (message "%S" err)
+           (unless hydra-lv (sit-for 0.8))))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-zoom/hint))
+            (message
+             (eval hydra-zoom/hint))))
+        (hydra-set-transient-map
+         hydra-zoom/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil))
+      (defun hydra-zoom/lambda-0-and-exit nil
+        "Create a hydra with no body and the heads:
+
+\"r\":    `(text-scale-set 0)',
+\"0\":    `(text-scale-set 0)',
+\"1\":    `(text-scale-set 0)'
+
+The body can be accessed via `hydra-zoom/body'.
+
+Call the head: `(text-scale-set 0)'."
+        (interactive)
+        (hydra-default-pre)
+        (hydra-keyboard-quit)
+        (setq hydra-curr-body-fn
+              (quote hydra-zoom/body))
+        (call-interactively
+         (function
+          (lambda nil
+           (interactive)
+           (text-scale-set 0)))))
+      (defun hydra-zoom/body nil
+        "Create a hydra with no body and the heads:
+
+\"r\":    `(text-scale-set 0)',
+\"0\":    `(text-scale-set 0)',
+\"1\":    `(text-scale-set 0)'
+
+The body can be accessed via `hydra-zoom/body'."
+        (interactive)
+        (hydra-default-pre)
+        (let ((hydra--ignore nil))
+          (hydra-keyboard-quit)
+          (setq hydra-curr-body-fn
+                (quote hydra-zoom/body)))
+        (when hydra-is-helpful
+          (if hydra-lv
+              (lv-message
+               (eval hydra-zoom/hint))
+            (message
+             (eval hydra-zoom/hint))))
+        (hydra-set-transient-map
+         hydra-zoom/keymap
+         (lambda nil
+           (hydra-keyboard-quit)
+           nil)
+         nil)
+        (setq prefix-arg
+              current-prefix-arg))))))
 
 (ert-deftest defhydradio ()
   (should (equal
@@ -570,7 +1045,7 @@ _f_ auto-fill-mode:    %`auto-fill-function
            '(concat (format "%s abbrev-mode:       %S
 %s debug-on-error:    %S
 %s auto-fill-mode:    %S
-" "{a}" abbrev-mode "{d}" debug-on-error "{f}" auto-fill-function) "[[q]]: quit"))))
+" "{a}" abbrev-mode "{d}" debug-on-error "{f}" auto-fill-function) "[{q}]: quit."))))
 
 (ert-deftest hydra-format-2 ()
   (should (equal
@@ -580,9 +1055,9 @@ _f_ auto-fill-mode:    %`auto-fill-function
               'bar
               nil
               "\n  bar %s`foo\n"
-              '(("a" (quote t) "" :cmd-name bar/lambda-a)
-                ("q" nil "" :cmd-name bar/nil))))
-           '(concat (format "  bar %s\n" foo) "{a}, [q]"))))
+              '(("a" (quote t) "" :cmd-name bar/lambda-a :exit nil)
+                ("q" nil "" :cmd-name bar/nil :exit t))))
+           '(concat (format "  bar %s\n" foo) "{a}, [q]."))))
 
 (ert-deftest hydra-format-3 ()
   (should (equal
@@ -601,10 +1076,64 @@ _f_ auto-fill-mode:    %`auto-fill-function
            nil
            '(nil nil :hint nil)
            "\n_j_,_k_"
-           '(("j" nil) ("k" nil)))
+           '(("j" nil nil :exit t) ("k" nil nil :exit t)))
           '(concat (format "%s,%s"
                     #("j" 0 1 (face hydra-face-blue))
                     #("k" 0 1 (face hydra-face-blue))) ""))))
+
+(ert-deftest hydra-format-5 ()
+  (should
+   (equal (hydra--format
+           nil nil "\n_-_: mark          _u_: unmark\n"
+           '(("-" Buffer-menu-mark)
+             ("u" Buffer-menu-unmark)))
+          '(concat
+           (format
+            "%s: mark          %s: unmark\n"
+            #("-" 0 1 (face hydra-face-red))
+            #("u" 0 1 (face hydra-face-red)))
+            ""))))
+
+(ert-deftest hydra-format-6 ()
+  (should
+   (equal (hydra--format
+           nil nil "\n[_]_] forward [_[_] backward\n"
+           '(("]" forward-char)
+             ("[" backward-char)))
+          '(concat
+            (format
+             "[%s] forward [%s] backward\n"
+             #("]"
+               0 1 (face
+                    hydra-face-red))
+             #("["
+               0 1 (face
+                    hydra-face-red)))
+            ""))))
+
+(ert-deftest hydra-format-7 ()
+  (should
+   (equal
+    (hydra--format nil nil "test"
+                   '(("%" forward-char "" :exit nil)
+                     ("b" backward-char "" :exit nil)))
+    '(format
+      #("test: %%%%, b."
+        6 7 (face hydra-face-red)
+        7 8 (face hydra-face-red)
+        8 9 (face hydra-face-red)
+        9 10 (face hydra-face-red)
+        12 13 (face hydra-face-red)))))
+  (should
+   (equal
+    (hydra--format nil nil "\n_%_ forward\n"
+                   '(("%" forward-char nil :exit nil)))
+    '(concat
+      (format
+       "%s forward\n"
+       #("%%"
+         0 2 (face hydra-face-red)))
+      ""))))
 
 (ert-deftest hydra-format-with-sexp-1 ()
   (should (equal
@@ -613,13 +1142,13 @@ _f_ auto-fill-mode:    %`auto-fill-function
              (hydra--format
               'hydra-toggle nil
               "\n_n_ narrow-or-widen-dwim %(progn (message \"checking\")(buffer-narrowed-p))asdf\n"
-              '(("n" narrow-to-region nil) ("q" nil "cancel"))))
+              '(("n" narrow-to-region nil) ("q" nil "cancel" :exit t))))
            '(concat (format "%s narrow-or-widen-dwim %Sasdf\n"
                      "{n}"
                      (progn
                        (message "checking")
                        (buffer-narrowed-p)))
-             "[[q]]: cancel"))))
+             "[[q]]: cancel."))))
 
 (ert-deftest hydra-format-with-sexp-2 ()
   (should (equal
@@ -628,43 +1157,13 @@ _f_ auto-fill-mode:    %`auto-fill-function
              (hydra--format
               'hydra-toggle nil
               "\n_n_ narrow-or-widen-dwim %s(progn (message \"checking\")(buffer-narrowed-p))asdf\n"
-              '(("n" narrow-to-region nil) ("q" nil "cancel"))))
+              '(("n" narrow-to-region nil) ("q" nil "cancel" :exit t))))
            '(concat (format "%s narrow-or-widen-dwim %sasdf\n"
                      "{n}"
                      (progn
                        (message "checking")
                        (buffer-narrowed-p)))
-             "[[q]]: cancel"))))
-
-(ert-deftest hydra-compat-colors-1 ()
-  (should (equal (hydra--head-color
-                  '("e" (message "Exiting now") "blue")
-                  '(nil nil :color blue))
-                 'blue))
-  (should (equal (hydra--head-color
-                  '("c" (message "Continuing") "red" :color red)
-                  '(nil nil :color blue))
-                 'red))
-  (should (equal (hydra--head-color
-                  '("e" (message "Exiting now") "blue")
-                  '(nil nil :exit t))
-                 'blue))
-  (should (equal (hydra--head-color
-                  '("j" next-line "" :exit t)
-                  '(nil nil))
-                 'blue))
-  (should (equal (hydra--head-color
-                  '("c" (message "Continuing") "red" :exit nil)
-                  '(nil nil :exit t))
-                 'red))
-  (equal (hydra--head-color
-          '("a" abbrev-mode nil)
-          '(nil nil :color teal))
-         'teal)
-  (equal (hydra--head-color
-          '("a" abbrev-mode :exit nil)
-          '(nil nil :color teal))
-         'amaranth))
+             "[[q]]: cancel."))))
 
 (ert-deftest hydra-compat-colors-2 ()
   (should
@@ -726,196 +1225,6 @@ _f_ auto-fill-mode:    %`auto-fill-function
        ("e" fun-e)
        ("f" fun-f))))))
 
-(ert-deftest hydra-zoom-duplicate-1 ()
-  (should
-   (equal
-    (macroexpand
-     '(defhydra hydra-zoom ()
-       "zoom"
-       ("r" (text-scale-set 0) "reset")
-       ("0" (text-scale-set 0) :bind nil :exit t)
-       ("1" (text-scale-set 0) nil :bind nil :exit t)))
-    '(progn
-      (set (defvar hydra-zoom/keymap nil "Keymap for hydra-zoom.")
-       (quote (keymap (7 . hydra-keyboard-quit)
-                      (114 . hydra-zoom/lambda-r)
-                      (switch-frame . hydra--handle-switch-frame)
-                      (kp-subtract . hydra--negative-argument)
-                      (kp-9 . hydra--digit-argument)
-                      (kp-8 . hydra--digit-argument)
-                      (kp-7 . hydra--digit-argument)
-                      (kp-6 . hydra--digit-argument)
-                      (kp-5 . hydra--digit-argument)
-                      (kp-4 . hydra--digit-argument)
-                      (kp-3 . hydra--digit-argument)
-                      (kp-2 . hydra--digit-argument)
-                      (kp-1 . hydra--digit-argument)
-                      (kp-0 . hydra--digit-argument)
-                      (57 . hydra--digit-argument)
-                      (56 . hydra--digit-argument)
-                      (55 . hydra--digit-argument)
-                      (54 . hydra--digit-argument)
-                      (53 . hydra--digit-argument)
-                      (52 . hydra--digit-argument)
-                      (51 . hydra--digit-argument)
-                      (50 . hydra--digit-argument)
-                      (49 . hydra-zoom/lambda-0-and-exit)
-                      (48 . hydra-zoom/lambda-0-and-exit)
-                      (45 . hydra--negative-argument)
-                      (21 . hydra--universal-argument))))
-      (defun hydra-zoom/lambda-r nil "Create a hydra with no body and the heads:
-
-\"r\":    `(text-scale-set 0)',
-\"0\":    `(text-scale-set 0)',
-\"1\":    `(text-scale-set 0)'
-
-The body can be accessed via `hydra-zoom/body'.
-
-Call the head: `(text-scale-set 0)'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (condition-case err (call-interactively (function (lambda nil (interactive)
-                                                                         (text-scale-set 0))))
-                 ((quit error)
-                  (message "%S" err)
-                  (unless hydra-lv (sit-for 0.8))))
-               (when hydra-is-helpful (hydra-zoom/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-zoom/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))))
-      (defun hydra-zoom/lambda-0-and-exit nil "Create a hydra with no body and the heads:
-
-\"r\":    `(text-scale-set 0)',
-\"0\":    `(text-scale-set 0)',
-\"1\":    `(text-scale-set 0)'
-
-The body can be accessed via `hydra-zoom/body'.
-
-Call the head: `(text-scale-set 0)'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (hydra-keyboard-quit)
-             (catch (quote hydra-disable)
-               (call-interactively (function (lambda nil (interactive)
-                                                     (text-scale-set 0))))))
-      (defun hydra-zoom/hint nil
-        (if hydra-lv (lv-message (format #("zoom: [r 0]: reset." 7 8 (face hydra-face-red)
-                                           9 10 (face hydra-face-blue))))
-          (message (format #("zoom: [r 0]: reset." 7 8 (face hydra-face-red)
-                             9 10 (face hydra-face-blue))))))
-      (defun hydra-zoom/body nil "Create a hydra with no body and the heads:
-
-\"r\":    `(text-scale-set 0)',
-\"0\":    `(text-scale-set 0)',
-\"1\":    `(text-scale-set 0)'
-
-The body can be accessed via `hydra-zoom/body'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (when hydra-is-helpful (hydra-zoom/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-zoom/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))
-               (setq prefix-arg current-prefix-arg)))))))
-
-(ert-deftest hydra-zoom-duplicate-2 ()
-  (should
-   (equal
-    (macroexpand
-     '(defhydra hydra-zoom ()
-       "zoom"
-       ("r" (text-scale-set 0) "reset")
-       ("0" (text-scale-set 0) :bind nil :exit t)
-       ("1" (text-scale-set 0) nil :bind nil)))
-    '(progn
-      (set (defvar hydra-zoom/keymap nil "Keymap for hydra-zoom.")
-       (quote (keymap (7 . hydra-keyboard-quit)
-                      (114 . hydra-zoom/lambda-r)
-                      (switch-frame . hydra--handle-switch-frame)
-                      (kp-subtract . hydra--negative-argument)
-                      (kp-9 . hydra--digit-argument)
-                      (kp-8 . hydra--digit-argument)
-                      (kp-7 . hydra--digit-argument)
-                      (kp-6 . hydra--digit-argument)
-                      (kp-5 . hydra--digit-argument)
-                      (kp-4 . hydra--digit-argument)
-                      (kp-3 . hydra--digit-argument)
-                      (kp-2 . hydra--digit-argument)
-                      (kp-1 . hydra--digit-argument)
-                      (kp-0 . hydra--digit-argument)
-                      (57 . hydra--digit-argument)
-                      (56 . hydra--digit-argument)
-                      (55 . hydra--digit-argument)
-                      (54 . hydra--digit-argument)
-                      (53 . hydra--digit-argument)
-                      (52 . hydra--digit-argument)
-                      (51 . hydra--digit-argument)
-                      (50 . hydra--digit-argument)
-                      (49 . hydra-zoom/lambda-r)
-                      (48 . hydra-zoom/lambda-0-and-exit)
-                      (45 . hydra--negative-argument)
-                      (21 . hydra--universal-argument))))
-      (defun hydra-zoom/lambda-r nil "Create a hydra with no body and the heads:
-
-\"r\":    `(text-scale-set 0)',
-\"0\":    `(text-scale-set 0)',
-\"1\":    `(text-scale-set 0)'
-
-The body can be accessed via `hydra-zoom/body'.
-
-Call the head: `(text-scale-set 0)'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (condition-case err (call-interactively (function (lambda nil (interactive)
-                                                                         (text-scale-set 0))))
-                 ((quit error)
-                  (message "%S" err)
-                  (unless hydra-lv (sit-for 0.8))))
-               (when hydra-is-helpful (hydra-zoom/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-zoom/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))))
-      (defun hydra-zoom/lambda-0-and-exit nil "Create a hydra with no body and the heads:
-
-\"r\":    `(text-scale-set 0)',
-\"0\":    `(text-scale-set 0)',
-\"1\":    `(text-scale-set 0)'
-
-The body can be accessed via `hydra-zoom/body'.
-
-Call the head: `(text-scale-set 0)'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (hydra-keyboard-quit)
-             (catch (quote hydra-disable)
-               (call-interactively (function (lambda nil (interactive)
-                                                     (text-scale-set 0))))))
-      (defun hydra-zoom/hint nil
-        (if hydra-lv (lv-message (format #("zoom: [r 0]: reset." 7 8 (face hydra-face-red)
-                                           9 10 (face hydra-face-blue))))
-          (message (format #("zoom: [r 0]: reset." 7 8 (face hydra-face-red)
-                             9 10 (face hydra-face-blue))))))
-      (defun hydra-zoom/body nil "Create a hydra with no body and the heads:
-
-\"r\":    `(text-scale-set 0)',
-\"0\":    `(text-scale-set 0)',
-\"1\":    `(text-scale-set 0)'
-
-The body can be accessed via `hydra-zoom/body'."
-             (interactive)
-             (hydra-default-pre)
-             (hydra-disable)
-             (catch (quote hydra-disable)
-               (when hydra-is-helpful (hydra-zoom/hint))
-               (setq hydra-last (hydra-set-transient-map (setq hydra-curr-map hydra-zoom/keymap)
-                                                         t (lambda nil (hydra-keyboard-quit))))
-               (setq prefix-arg current-prefix-arg)))))))
-
 (ert-deftest hydra--pad ()
   (should (equal (hydra--pad '(a b c) 3)
                  '(a b c)))
@@ -969,9 +1278,19 @@ _w_ Worf:                      % -8`hydra-tng/worf^^    _h_ Set phasers to      
                    body-pre)
                  '(funcall (function foo)))))
 
-(defhydra hydra-simple (global-map "C-c")
+(defhydra hydra-simple-1 (global-map "C-c")
   ("a" (insert "j"))
   ("b" (insert "k"))
+  ("q" nil))
+
+(defhydra hydra-simple-2 (global-map "C-c" :color amaranth)
+  ("c" self-insert-command)
+  ("d" self-insert-command)
+  ("q" nil))
+
+(defhydra hydra-simple-3 (global-map "C-c")
+  ("g" goto-line)
+  ("1" find-file)
   ("q" nil))
 
 (defmacro hydra-with (in &rest body)
@@ -1007,9 +1326,91 @@ _w_ Worf:                      % -8`hydra-tng/worf^^    _h_ Set phasers to      
                                 (kbd "C-c aabbaaqaabbaa")))
                    "jjkkjjaabbaa|"))
   (should (string= (hydra-with "|"
-                               (execute-kbd-macro
-                                (kbd "C-c aabb C-g aaqaabbaa")))
+                               (condition-case nil
+                                   (execute-kbd-macro
+                                    (kbd "C-c aabb C-g"))
+                                 (quit nil))
+                               (execute-kbd-macro "aaqaabbaa"))
                    "jjkkaaqaabbaa|")))
+
+(ert-deftest hydra-integration-2 ()
+  (should (string= (hydra-with "|"
+                               (execute-kbd-macro
+                                (kbd "C-c c 1 c 2 d 4 c q")))
+                   "ccddcccc|"))
+  (should (string= (hydra-with "|"
+                               (execute-kbd-macro
+                                (kbd "C-c c 1 c C-u d C-u 10 c q")))
+                   "ccddddcccccccccc|")))
+
+(ert-deftest hydra-integration-3 ()
+  (should (string= (hydra-with "foo\nbar|"
+                               (execute-kbd-macro
+                                (kbd "C-c g 1 RET q")))
+                   "|foo\nbar")))
+
+(ert-deftest hydra-columns-1 ()
+  (should (equal (eval
+                  (cadr
+                   (nth 2
+                        (nth 3
+                             (macroexpand
+                              '(defhydra hydra-info (:color blue
+                                                     :columns 3)
+                                "Info-mode"
+                                ("?" Info-summary "summary")
+                                ("]" Info-forward-node "forward")
+                                ("[" Info-backward-node "backward")
+                                ("<" Info-top-node "top node")
+                                (">" Info-final-node "final node")
+                                ("h" Info-help "help")
+                                ("d" Info-directory "info dir")
+                                ("f" Info-follow-reference "follow ref")
+                                ("g" Info-goto-node "goto node")
+                                ("l" Info-history-back "hist back")
+                                ("r" Info-history-forward "hist forward")
+                                ("i" Info-index "index")
+                                ("I" Info-virtual-index "virtual index")
+                                ("L" Info-history "hist")
+                                ("n" Info-next "next")
+                                ("p" Info-prev "previous")
+                                ("s" Info-search "search")
+                                ("S" Info-search-case-sensitively "case-search")
+                                ("T" Info-toc "TOC")
+                                ("u" Info-up "up")
+                                ("m" Info-menu "menu")
+                                ("t" hydra-info-to/body "info-to")))))))
+                 #("Info-mode:
+?: summary       ]: forward       [: backward
+<: top node      >: final node    h: help
+d: info dir      f: follow ref    g: goto node
+l: hist back     r: hist forward  i: index
+I: virtual index L: hist          n: next
+p: previous      s: search        S: case-search
+T: TOC           u: up            m: menu
+t: info-to"
+                   11 12 (face hydra-face-blue)
+                   28 29 (face hydra-face-blue)
+                   45 46 (face hydra-face-blue)
+                   57 58 (face hydra-face-blue)
+                   74 75 (face hydra-face-blue)
+                   91 92 (face hydra-face-blue)
+                   99 100 (face hydra-face-blue)
+                   116 117 (face hydra-face-blue)
+                   133 134 (face hydra-face-blue)
+                   146 147 (face hydra-face-blue)
+                   163 164 (face hydra-face-blue)
+                   180 181 (face hydra-face-blue)
+                   189 190 (face hydra-face-blue)
+                   206 207 (face hydra-face-blue)
+                   223 224 (face hydra-face-blue)
+                   231 232 (face hydra-face-blue)
+                   248 249 (face hydra-face-blue)
+                   265 266 (face hydra-face-blue)
+                   280 281 (face hydra-face-blue)
+                   297 298 (face hydra-face-blue)
+                   314 315 (face hydra-face-blue)
+                   322 323 (face hydra-face-blue)))))
 
 (provide 'hydra-test)
 

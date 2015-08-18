@@ -320,6 +320,14 @@ A list of print-like functions for go vet.  Go vet will check these
 functions for format string problems.
 @end table
 
+@flyclanguage{Groovy}
+
+@itemize
+@item
+@flyc{groovy} (syntax check using groovy compiler API (@uref{http://www.groovy-lang.org/}))
+
+@end itemize
+
 @flyclanguage{Haml}
 
 @itemize
@@ -338,11 +346,18 @@ functions for format string problems.
 
 @enumerate
 @item
+@itemize @bullet
+@item
+@flyc{haskell-stack-ghc} (syntax and type checker using
+@uref{https://github.com/commercialhaskell/stack, Stack}) in Stack
+projects, or
+@item
 @flyc{haskell-ghc} (syntax and type checker with
-@uref{http://www.haskell.org/ghc/,GHC}), and
+@uref{http://www.haskell.org/ghc/,GHC}),
+@end itemize
 
 @item
-@flyc{haskell-hlint} (style checker with
+and @flyc{haskell-hlint} (style checker with
 @uref{https://github.com/ndmitchell/hlint,hlint}), with the
 following options:
 
@@ -419,11 +434,11 @@ with the following option:
 @item
 @itemize
 @item
-@flyc{javascript-jshint} (@uref{http://jshint.com/,JSHint})
+@flyc{javascript-jshint} (@uref{http://jshint.com/,JSHint}),
 @item
-Or @flyc{javascript-eslint} (@uref{http://eslint.org/,ESLint})
+or @flyc{javascript-eslint} (@uref{http://eslint.org/,ESLint}),
 @item
-Or @flyc{javascript-gjslint}
+or @flyc{javascript-gjslint}
 (@uref{https://developers.google.com/closure/utilities,Closure Linter})
 @end itemize
 @item

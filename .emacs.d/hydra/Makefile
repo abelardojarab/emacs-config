@@ -11,9 +11,12 @@ test:
 	@echo "Using $(shell which $(emacs))..."
 	$(emacs) -batch $(LOAD) -f ert-run-tests-batch-and-exit
 
-compile:
-	$(emacs) -q $(LOAD) -l hydra-init.el
+run:
+	$(emacs) -q $(LOAD) -l targets/hydra-init.el
 	make clean
+
+compile:
+	$(emacs) -batch $(LOAD) -l targets/hydra-init.el
 
 clean:
 	rm -f *.elc

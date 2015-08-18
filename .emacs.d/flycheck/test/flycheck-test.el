@@ -1280,12 +1280,9 @@ and extension, as in `file-name-base'."
   (flycheck-ert-with-temp-buffer
     (emacs-lisp-mode)
     (flycheck-mode)
-    (let* ((flycheck-checker 'sh-bash)
-           (err (should-error (flycheck-buffer)
-                              :type flycheck-ert-user-error-type)))
+    (let* ((flycheck-checker 'sh-bash))
+      (should-error (flycheck-buffer))
       (should (eq flycheck-checker 'sh-bash))
-      (should (string= (cadr err)
-                       "Selected syntax checker sh-bash cannot be used"))
       (should (string= flycheck-last-status-change 'errored)))))
 
 (ert-deftest flycheck-checker/usable-checker-is-used ()
@@ -1308,12 +1305,9 @@ and extension, as in `file-name-base'."
     (flycheck-mode)
     (let ((flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc)))
       (should-not (flycheck-get-checker-for-buffer))
-      (let* ((flycheck-checker 'emacs-lisp)
-             (err (should-error (flycheck-buffer)
-                                :type flycheck-ert-user-error-type)))
+      (let* ((flycheck-checker 'emacs-lisp))
+        (should-error (flycheck-buffer))
         (should (eq flycheck-checker 'emacs-lisp))
-        (should (string= (cadr err)
-                         "Selected syntax checker emacs-lisp cannot be used"))
         (should (string= flycheck-last-status-change 'errored))))))
 
 (ert-deftest flycheck-checker/unregistered-checker-is-used ()
@@ -1924,6 +1918,19 @@ and extension, as in `file-name-base'."
     (should (equal (error-message-string data)
                    "Wrong type argument: flycheck-error-p, \"foo\""))))
 
+
+;;; Errors in the current buffer
+
+(ert-deftest flycheck-expand-error-file-names ()
+  :tags '(errors)
+  (flycheck-ert-with-resource-buffer "global-mode-dummy.el"
+    (let* ((absolute-fn (flycheck-ert-resource-filename "substitute-dummy"))
+           (errors (list (flycheck-error-new :filename "foo")
+                         (flycheck-error-new :filename absolute-fn))))
+      (should (equal (mapcar #'flycheck-error-filename
+                             (flycheck-expand-error-file-names errors))
+                     (list (flycheck-ert-resource-filename "foo")
+                           absolute-fn))))))
 
 
 ;;; Status reporting for the current buffer
@@ -2962,6 +2969,35 @@ evaluating BODY."
                    (list "(coq)"
                          'type 'flycheck-error-list
                          'face 'flycheck-error-list-checker-name)))))
+
+(ert-deftest flycheck-error-list-mode-line-filter-indicator/no-filter ()
+  :tags '(error-list)
+  (let ((flycheck-error-list-minimum-level nil))
+    (should (string= (flycheck-error-list-mode-line-filter-indicator) ""))))
+
+(ert-deftest flycheck-error-list-mode-line-filter-indicator/with-filter ()
+  :tags '(error-list)
+  (let ((flycheck-error-list-minimum-level 'error))
+    (should (string= (flycheck-error-list-mode-line-filter-indicator)
+                     " [>= error]"))))
+
+(ert-deftest flycheck-error-list-reset-filter/kills-local-variable ()
+  :tags '(error-list)
+  (with-temp-buffer
+    (setq-local flycheck-error-list-minimum-level 'error)
+    (should (local-variable-p 'flycheck-error-list-minimum-level))
+    (flycheck-error-list-reset-filter)
+    (should-not (local-variable-p 'flycheck-error-list-minimum-level))))
+
+(ert-deftest flycheck-error-list-apply-filter/filters-lower-levels ()
+  :tags '(error-list)
+  (let ((flycheck-error-list-minimum-level 'warning)
+        (errors (list (flycheck-error-new-at 10 10 'error)
+                      (flycheck-error-new-at 20 20 'warning)
+                      (flycheck-error-new-at 30 30 'info))))
+    (should (equal (flycheck-error-list-apply-filter errors)
+                   (list (flycheck-error-new-at 10 10 'error)
+                         (flycheck-error-new-at 20 20 'warning))))))
 
 
 ;;; Displaying errors in buffers
@@ -4240,6 +4276,12 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
      '(9 9 warning "Ignored `error` returned from `os.Stat(\"enoent\")`"
          :checker go-errcheck))))
 
+(flycheck-ert-def-checker-test groovy groovy syntax-error
+  (require 'cl) ; workaround https://github.com/Groovy-Emacs-Modes/groovy-emacs-modes/issues/11
+  (flycheck-ert-should-syntax-check
+   "checkers/groovy_error.groovy" 'groovy-mode
+   '(2 14 error "unexpected token: {" :checker groovy)))
+
 (flycheck-ert-def-checker-test haml haml nil
   (flycheck-ert-should-syntax-check
    "checkers/haml-error.haml" 'haml-mode
@@ -4263,29 +4305,30 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
   (should-not (string-match-p flycheck-haskell-module-re
                               "-- | module Foo.Bar where")))
 
-(flycheck-ert-def-checker-test haskell-ghc haskell syntax-error
+(flycheck-ert-def-checker-test haskell-stack-ghc haskell syntax-error
   (flycheck-ert-should-syntax-check
    "checkers/Haskell/SyntaxError.hs" 'haskell-mode
-   '(3 1 error "parse error on input ‘module’" :checker haskell-ghc)))
+   '(3 1 error "parse error on input ‘module’" :checker haskell-stack-ghc)))
 
-(flycheck-ert-def-checker-test haskell-ghc haskell type-error
+(flycheck-ert-def-checker-test haskell-stack-ghc haskell type-error
   (flycheck-ert-should-syntax-check
    "checkers/Haskell/Error.hs" 'haskell-mode
    '(4 16 error "Couldn't match type ‘Bool’ with ‘[Char]’
 Expected type: String
   Actual type: Bool
 In the first argument of ‘putStrLn’, namely ‘True’
-In the expression: putStrLn True" :checker haskell-ghc)))
+In the expression: putStrLn True" :checker haskell-stack-ghc)))
 
-(flycheck-ert-def-checker-test haskell-ghc haskell search-path
+(flycheck-ert-def-checker-test haskell-stack-ghc haskell search-path
   (let* ((lib-dir (flycheck-ert-resource-filename "checkers/Haskell/lib"))
          (flycheck-ghc-search-path (list lib-dir)))
     (flycheck-ert-should-syntax-check
      "checkers/Haskell/SearchPath.hs" 'haskell-mode
      '(5 1 warning "Top-level binding with no type signature: helloYou :: IO ()"
-         :checker haskell-ghc))))
+         :checker haskell-stack-ghc))))
 
-(flycheck-ert-def-checker-test haskell-ghc haskell missing-language-extension
+(flycheck-ert-def-checker-test haskell-stack-ghc haskell
+                               missing-language-extension
   (flycheck-ert-should-syntax-check
    "checkers/Haskell/LanguageExtension.hs" 'haskell-mode
    '(4 18 error "Couldn't match expected type ‘BS.ByteString’
@@ -4293,25 +4336,25 @@ In the expression: putStrLn True" :checker haskell-ghc)))
 In the first argument of ‘BS.putStr’, namely ‘\"Hello World\"’
 In the expression: BS.putStr \"Hello World\"
 In an equation for ‘main’: main = BS.putStr \"Hello World\""
-       :checker haskell-ghc)))
+       :checker haskell-stack-ghc)))
 
-(flycheck-ert-def-checker-test haskell-ghc haskell language-extensions
+(flycheck-ert-def-checker-test haskell-stack-ghc haskell language-extensions
   (let ((flycheck-ghc-language-extensions '("OverloadedStrings")))
     (flycheck-ert-should-syntax-check
      "checkers/Haskell/LanguageExtension.hs" 'haskell-mode)))
 
-(flycheck-ert-def-checker-test (haskell-ghc haskell-hlint) haskell literate
+(flycheck-ert-def-checker-test (haskell-stack-ghc haskell-hlint) haskell literate
   (flycheck-ert-should-syntax-check
    "checkers/Haskell/Literate.lhs" 'literate-haskell-mode
    '(6 1 warning "Top-level binding with no type signature: foo :: forall t. t"
-       :checker haskell-ghc)))
+       :checker haskell-stack-ghc)))
 
-(flycheck-ert-def-checker-test (haskell-ghc haskell-hlint) haskell
+(flycheck-ert-def-checker-test (haskell-stack-ghc haskell-hlint) haskell
                                complete-chain
   (flycheck-ert-should-syntax-check
    "checkers/Haskell/Warnings.hs" 'haskell-mode
    '(6 1 warning "Top-level binding with no type signature: foo :: Integer"
-       :checker haskell-ghc)
+       :checker haskell-stack-ghc)
    '(9 1 error "Eta reduce
 Found:
   spam eggs = map lines eggs
@@ -4322,6 +4365,73 @@ Found:
   (putStrLn bar)
 Why not:
   putStrLn bar" :checker haskell-hlint)))
+
+(flycheck-ert-def-checker-test haskell-ghc haskell syntax-error
+  (let ((flycheck-disabled-checkers '(haskell-stack-ghc)))
+    (flycheck-ert-should-syntax-check
+     "checkers/Haskell/SyntaxError.hs" 'haskell-mode
+     '(3 1 error "parse error on input ‘module’" :checker haskell-ghc))))
+
+(flycheck-ert-def-checker-test haskell-ghc haskell type-error
+  (let ((flycheck-disabled-checkers '(haskell-stack-ghc)))
+    (flycheck-ert-should-syntax-check
+     "checkers/Haskell/Error.hs" 'haskell-mode
+     '(4 16 error "Couldn't match type ‘Bool’ with ‘[Char]’
+Expected type: String
+  Actual type: Bool
+In the first argument of ‘putStrLn’, namely ‘True’
+In the expression: putStrLn True" :checker haskell-ghc))))
+
+(flycheck-ert-def-checker-test haskell-ghc haskell search-path
+  (let* ((lib-dir (flycheck-ert-resource-filename "checkers/Haskell/lib"))
+         (flycheck-ghc-search-path (list lib-dir))
+         (flycheck-disabled-checkers '(haskell-stack-ghc)))
+    (flycheck-ert-should-syntax-check
+     "checkers/Haskell/SearchPath.hs" 'haskell-mode
+     '(5 1 warning "Top-level binding with no type signature: helloYou :: IO ()"
+         :checker haskell-ghc))))
+
+(flycheck-ert-def-checker-test haskell-ghc haskell missing-language-extension
+  (let ((flycheck-disabled-checkers '(haskell-stack-ghc)))
+    (flycheck-ert-should-syntax-check
+     "checkers/Haskell/LanguageExtension.hs" 'haskell-mode
+     '(4 18 error "Couldn't match expected type ‘BS.ByteString’
+            with actual type ‘[Char]’
+In the first argument of ‘BS.putStr’, namely ‘\"Hello World\"’
+In the expression: BS.putStr \"Hello World\"
+In an equation for ‘main’: main = BS.putStr \"Hello World\""
+         :checker haskell-ghc))))
+
+(flycheck-ert-def-checker-test haskell-ghc haskell language-extensions
+  (let ((flycheck-ghc-language-extensions '("OverloadedStrings"))
+        (flycheck-disabled-checkers '(haskell-stack-ghc)))
+    (flycheck-ert-should-syntax-check
+     "checkers/Haskell/LanguageExtension.hs" 'haskell-mode)))
+
+(flycheck-ert-def-checker-test (haskell-ghc haskell-hlint) haskell literate
+  (let ((flycheck-disabled-checkers '(haskell-stack-ghc)))
+    (flycheck-ert-should-syntax-check
+     "checkers/Haskell/Literate.lhs" 'literate-haskell-mode
+     '(6 1 warning "Top-level binding with no type signature: foo :: forall t. t"
+         :checker haskell-ghc))))
+
+(flycheck-ert-def-checker-test (haskell-ghc haskell-hlint) haskell
+                               complete-chain
+  (let ((flycheck-disabled-checkers '(haskell-stack-ghc)))
+    (flycheck-ert-should-syntax-check
+     "checkers/Haskell/Warnings.hs" 'haskell-mode
+     '(6 1 warning "Top-level binding with no type signature: foo :: Integer"
+         :checker haskell-ghc)
+     '(9 1 error "Eta reduce
+Found:
+  spam eggs = map lines eggs
+Why not:
+  spam = map lines" :checker haskell-hlint)
+     '(12 8 warning "Redundant bracket
+Found:
+  (putStrLn bar)
+Why not:
+  putStrLn bar" :checker haskell-hlint))))
 
 (flycheck-ert-def-checker-test html-tidy html nil
   (flycheck-ert-should-syntax-check
@@ -4367,6 +4477,12 @@ Why not:
      '(4 9 warning "'foo' is defined but never used." :id "W098"
          :checker javascript-jshint))))
 
+(flycheck-ert-def-checker-test javascript-jshint javascript ignored
+  :tags '(checkstyle-xml)
+  (let ((flycheck-disabled-checkers '(javascript-jscs)))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript/ignored/warnings.js" '(js-mode js2-mode js3-mode))))
+
 (flycheck-ert-def-checker-test javascript-eslint javascript error
   :tags '(checkstyle-xml)
   (let ((flycheck-disabled-checkers '(javascript-jshint)))
@@ -4380,7 +4496,7 @@ Why not:
         (flycheck-disabled-checkers '(javascript-jshint javascript-jscs)))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)
-     '(3 2 warning "Missing \"use strict\" statement." :id "strict"
+     '(3 2 warning "Use the function form of \"use strict\"." :id "strict"
          :checker javascript-eslint)
      '(4 9 warning "foo is defined but never used" :id "no-unused-vars"
          :checker javascript-eslint))))
@@ -4414,6 +4530,13 @@ Why not:
      '(1 nil warning "No JSCS configuration found.  Set `flycheck-jscsrc' for JSCS"
          :checker javascript-jscs))))
 
+(flycheck-ert-def-checker-test javascript-jscs javascript ignored
+  :tags '(checkstyle-xml)
+  (let ((flycheck-disabled-checkers
+         '(javascript-jshint javascript-eslint javascript-gjslint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/javascript/ignored/style.js" '(js-mode js2-mode js3-mode))))
+
 (flycheck-ert-def-checker-test (javascript-jshint javascript-jscs)
     javascript complete-chain
   :tags '(checkstyle-xml)
@@ -4434,7 +4557,7 @@ Why not:
         (flycheck-disabled-checkers '(javascript-jshint)))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-warnings.js" '(js-mode js2-mode js3-mode)
-     '(3 2 warning "Missing \"use strict\" statement." :id "strict"
+     '(3 2 warning "Use the function form of \"use strict\"." :id "strict"
          :checker javascript-eslint)
      '(4 3 error "Expected indentation of 2 characters"
          :checker javascript-jscs)
@@ -4459,17 +4582,17 @@ Why not:
   (let ((flycheck-checker 'javascript-standard))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-style.js" '(js-mode js2-mode js3-mode)
-     '(3 9 error "Missing space before function parentheses."
+     '(3 10 error "Missing space before function parentheses."
          :checker javascript-standard)
-     '(4 2 error "Expected indentation of 2 characters."
+     '(4 2 error "Expected indentation of 2 characters but found 0."
          :checker javascript-standard)
-     '(4 5 error "foo is defined but never used"
+     '(4 6 error "foo is defined but never used"
          :checker javascript-standard)
-     '(4 12 error "Strings must use singlequote."
+     '(4 13 error "Strings must use singlequote."
          :checker javascript-standard)
-     '(4 27 error "Extra semicolon."
+     '(4 28 error "Extra semicolon."
          :checker javascript-standard)
-     '(5 5 error "Extra semicolon."
+     '(5 6 error "Extra semicolon."
          :checker javascript-standard))))
 
 (flycheck-ert-def-checker-test javascript-standard javascript semistandard
@@ -4477,13 +4600,13 @@ Why not:
         (flycheck-javascript-standard-executable "semistandard"))
     (flycheck-ert-should-syntax-check
      "checkers/javascript-style.js" '(js-mode js2-mode js3-mode)
-     '(3 9 error "Missing space before function parentheses."
+     '(3 10 error "Missing space before function parentheses."
          :checker javascript-standard)
-     '(4 2 error "Expected indentation of 2 characters."
+     '(4 2 error "Expected indentation of 2 characters but found 0."
          :checker javascript-standard)
-     '(4 5 error "foo is defined but never used"
+     '(4 6 error "foo is defined but never used"
          :checker javascript-standard)
-     '(4 12 error "Strings must use singlequote."
+     '(4 13 error "Strings must use singlequote."
          :checker javascript-standard))))
 
 (flycheck-ert-def-checker-test json-jsonlint json nil
@@ -4510,8 +4633,7 @@ Why not:
 (flycheck-ert-def-checker-test luacheck lua syntax-error
   (flycheck-ert-should-syntax-check
    "checkers/lua-syntax-error.lua" 'lua-mode
-   '(5 7 error "unfinished string"
-       :checker luacheck)))
+   '(5 7 error "unfinished string" :id "E011" :checker luacheck)))
 
 (flycheck-ert-def-checker-test luacheck lua warnings
   (flycheck-ert-should-syntax-check
@@ -5009,7 +5131,9 @@ Why not:
    "checkers/rust-multiple-error.rs" 'rust-mode
    '(7 9 error "mismatched types:
  expected `u8`,\n    found `i8`
-(expected u8,\n    found i8)" :checker rust :id "E0308")))
+(expected u8,\n    found i8)" :checker rust :id "E0308")
+   '(7 9 info "run `rustc --explain E0308` to see a detailed explanation"
+     :checker rust)))
 
 (flycheck-ert-def-checker-test rust rust test-check-tests-disabled
   (let ((flycheck-rust-check-tests nil))
@@ -5046,7 +5170,7 @@ Why not:
    '(11 9 info "`x` moved here because it has type `NonPOD`, which is moved by default"
         :checker rust)
    '(11 9 info "use `ref` to override" :checker rust)
-   '(12 9 error "use of moved value: `x`" :checker rust)))
+   '(12 9 error "use of moved value: `x`" :checker rust :id "E0382")))
 
 (flycheck-ert-def-checker-test rust rust crate-root-not-set
   (flycheck-ert-should-syntax-check

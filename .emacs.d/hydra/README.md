@@ -5,6 +5,8 @@ bindings with a common prefix - a Hydra.
 
 ![hydra](http://oremacs.com/download/Hydra.jpg)
 
+## Description for Poets
+
 Once you summon the Hydra through the prefixed binding (the body + any one head), all heads can be
 called in succession with only a short extension.
 
@@ -12,6 +14,22 @@ The Hydra is vanquished once Hercules, any binding that isn't the Hydra's head, 
 Hercules, besides vanquishing the Hydra, will still serve his original purpose, calling his proper
 command.  This makes the Hydra very seamless, it's like a minor mode that disables itself
 auto-magically.
+
+## Description for Pragmatics
+
+Imagine that you have bound <kbd>C-c j</kbd> and <kbd>C-c k</kbd> in your
+config.  You want to call <kbd>C-c j</kbd> and <kbd>C-c k</kbd> in some
+(arbitrary) sequence. Hydra allows you to:
+
+- Bind your functions in a way that pressing <kbd>C-c jjkk3j5k</kbd> is
+equivalent to pressing <kbd>C-c j C-c j C-c k C-c k M-3 C-c j M-5 C-c
+k</kbd>. Any key other than <kbd>j</kbd> or <kbd>k</kbd> exits this state.
+
+- Assign a custom hint to this group of functions, so that you know immediately
+after pressing <kbd>C-c</kbd> that you can follow up with <kbd>j</kbd> or
+<kbd>k</kbd>.
+
+If you want to quickly understand the concept, see [the video demo](https://www.youtube.com/watch?v=_qZliI1BKzI).
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc/generate-toc again -->
 **Table of Contents**
@@ -158,41 +176,21 @@ Here's what `hydra-zoom/body` looks like, if you're interested:
 
 The body can be accessed via `hydra-zoom/body'."
   (interactive)
-  (hydra-disable)
-  (catch (quote hydra-disable)
-    (when hydra-is-helpful (hydra-zoom/hint))
-    (setq hydra-last
-          (hydra-set-transient-map
-           (setq hydra-curr-map
-                 (quote
-                  (keymap (7 . hydra-keyboard-quit)
-                          (108 . hydra-zoom/text-scale-decrease)
-                          (103 . hydra-zoom/text-scale-increase)
-                          (kp-subtract . hydra--negative-argument)
-                          (kp-9 . hydra--digit-argument)
-                          (kp-8 . hydra--digit-argument)
-                          (kp-7 . hydra--digit-argument)
-                          (kp-6 . hydra--digit-argument)
-                          (kp-5 . hydra--digit-argument)
-                          (kp-4 . hydra--digit-argument)
-                          (kp-3 . hydra--digit-argument)
-                          (kp-2 . hydra--digit-argument)
-                          (kp-1 . hydra--digit-argument)
-                          (kp-0 . hydra--digit-argument)
-                          (57 . hydra--digit-argument)
-                          (56 . hydra--digit-argument)
-                          (55 . hydra--digit-argument)
-                          (54 . hydra--digit-argument)
-                          (53 . hydra--digit-argument)
-                          (52 . hydra--digit-argument)
-                          (51 . hydra--digit-argument)
-                          (50 . hydra--digit-argument)
-                          (49 . hydra--digit-argument)
-                          (48 . hydra--digit-argument)
-                          (45 . hydra--negative-argument)
-                          (21 . hydra--universal-argument))))
-           t (lambda nil (hydra-cleanup))))
-    (setq prefix-arg current-prefix-arg)))
+  (hydra-default-pre)
+  (when hydra-is-helpful
+    (if hydra-lv
+        (lv-message
+         (eval hydra-zoom/hint))
+      (message
+       (eval hydra-zoom/hint))))
+  (hydra-set-transient-map
+   hydra-zoom/keymap
+   (lambda nil
+     (hydra-keyboard-quit)
+     nil)
+   nil)
+  (setq prefix-arg
+        current-prefix-arg))
 ```
 
 ## `awesome-map` and `awesome-binding`

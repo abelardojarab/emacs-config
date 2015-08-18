@@ -128,12 +128,13 @@ as follows:
     (eval sexp)))
 
 (defun async--insert-sexp (sexp)
-  (prin1 sexp (current-buffer))
-  ;; Just in case the string we're sending might contain EOF
-  (encode-coding-region (point-min) (point-max) 'utf-8-unix)
-  (base64-encode-region (point-min) (point-max) t)
-  (goto-char (point-min)) (insert ?\")
-  (goto-char (point-max)) (insert ?\" ?\n))
+  (let (print-level print-length)
+    (prin1 sexp (current-buffer))
+    ;; Just in case the string we're sending might contain EOF
+    (encode-coding-region (point-min) (point-max) 'utf-8-unix)
+    (base64-encode-region (point-min) (point-max) t)
+    (goto-char (point-min)) (insert ?\")
+    (goto-char (point-max)) (insert ?\" ?\n)))
 
 (defun async--transmit-sexp (process sexp)
   (with-temp-buffer
@@ -200,7 +201,8 @@ its FINISH-FUNC is nil."
 PROGRAM is passed PROGRAM-ARGS, calling FINISH-FUNC with the
 process object when done.  If FINISH-FUNC is nil, the future
 object will return the process object when the program is
-finished."
+finished.  Set DEFAULT-DIRECTORY to change PROGRAM's current
+working directory."
   (let* ((buf (generate-new-buffer (concat "*" name "*")))
          (proc (let ((process-connection-type nil))
                  (apply #'start-process name buf program program-args))))

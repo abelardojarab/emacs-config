@@ -125,13 +125,21 @@ non-nil."
 (add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
 
-;; Zenburn theme
+;; Faff theme
 (add-to-list 'load-path "~/.emacs.d/emacs-faff-theme")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-faff-theme")
+
+;; Material theme
+(add-to-list 'load-path "~/.emacs.d/emacs-matherial-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-matherial-theme")
 
 ;; Leuven theme
 (add-to-list 'load-path "~/.emacs.d/emacs-leuven-theme")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-leuven-theme")
+
+;; Zerodark
+(add-to-list 'load-path "~/.emacs.d/zerodark-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/zerodark-theme")
 
 ;; Solarized theme
 (add-to-list 'load-path "~/.emacs.d/solarized-emacs")
@@ -143,6 +151,9 @@ non-nil."
 ;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
+;; (load-theme 'zerodark t)
+;; (load-theme 'material t)
+;; (load-theme 'material-light t)
 (load-theme 'faff t)
 
 ;; Use for dark themes only

@@ -4,7 +4,7 @@
 
 ;; Author: Artur Malabarba <emacs@endlessparentheses.com>
 ;; URL: http://github.com/Malabarba/smart-mode-line
-;; Version: 2.8
+;; Version: 2.10
 ;; Package-Requires: ((emacs "24.3") (rich-minority "0.1.1"))
 ;; Keywords: mode-line faces themes
 ;; Prefix: sml
@@ -310,7 +310,7 @@
 (require 'cus-face)
 (require 'rich-minority)
 
-(defconst sml/version "2.8" "Version of the smart-mode-line.el package.")
+(defconst sml/version "2.10" "Version of the smart-mode-line.el package.")
 (defun sml/bug-report ()
   "Opens github issues page in a web browser. Please send me any bugs you find, and please inclue your Emacs and sml versions."
   (interactive)
@@ -1690,6 +1690,14 @@ regexp in `sml/prefix-regexp'."
 ML isn't used."
   (sml/strip-prefix dir))
 
+(defcustom sml/directory-truncation-string (if (char-displayable-p ?…) "…/" ".../")
+  "String used when trucating part of the file path.
+Set this to nil or an empty string if you don't want any
+indication of a truncated path."
+  :type 'string
+  :group 'smart-mode-line
+  :package-version '(smart-mode-line . "2.10"))
+
 (defun sml/do-shorten-directory (dir max-length)
   "Show up to MAX-LENGTH characters of a directory name DIR."
   (let ((longname (sml/strip-prefix dir)))
@@ -1700,13 +1708,15 @@ ML isn't used."
             (output ""))
         (when (and path (equal "" (car path)))
           (setq path (cdr path)))
-        ;; Concat as many levels as possible, leaving 4 chars for safety.
-        (while (and path (< (length (concat (car path) "/" output)) (- max-length 3)))
-          (setq output (concat (car path) "/" output))
-          (setq path (cdr path)))
+        (let ((max (- max-length (string-width sml/directory-truncation-string))))
+          ;; Concat as many levels as possible, leaving 4 chars for safety.
+          (while (and path (<= (length (concat (car path) "/" output))
+                               max))
+            (setq output (concat (car path) "/" output))
+            (setq path (cdr path))))
         ;; If we had to shorten, prepend .../
         (when path
-          (setq output (concat ".../" output)))
+          (setq output (concat sml/directory-truncation-string output)))
         output))))
 
 (provide 'smart-mode-line)

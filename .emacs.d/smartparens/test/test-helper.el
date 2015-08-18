@@ -1,5 +1,25 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; pair tests
+;;; test-helper.el --- Helper for tests.
+
+;; Copyright (C) 2015 Matus Goljer
+
+;; Author: Matus Goljer <matus.goljer@gmail.com>
+;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
+;; Created: 4 Aug 2015
+
+;;; Commentary:
+
+;; Grab bag of utilities for running smartparens tests.
+
+;;; Code:
+
+(require 'ert)
+(require 'dash)
+(require 'f)
+(require 'cl-lib)
+
+(let ((sp-dir (f-parent (f-dirname (f-this-file)))))
+  (add-to-list 'load-path sp-dir))
+(require 'smartparens)
 
 (defvar sp--test-basic-pairs
   '((t
@@ -13,6 +33,14 @@
       (:open "\\langle"  :close "\\rangle"  :actions (insert wrap autoskip navigate))
       (:open "OPEN"  :close "CLOSE"  :actions (insert wrap autoskip navigate))
       (:open "\\big("  :close "\\big)"  :actions (insert wrap autoskip navigate) :trigger "\\b")))))
+
+(defun sp-test-merge-pairs (extra)
+  (list (cons t (append (-map 'identity (cdar sp--test-basic-pairs)) extra))))
+
+(defvar sp--test-latex-pairs
+  (sp-test-merge-pairs '((:open "``"   :close "''" :actions (insert wrap autoskip navigate))
+                         (:open "`"   :close "'" :actions (insert wrap autoskip navigate))
+                         (:open "$"   :close "$" :actions (insert wrap autoskip navigate)))))
 
 (defmacro sp-test-setup-paired-expression-env (pairs mode mode-hook &rest forms)
   (declare (indent 0))
@@ -46,11 +74,17 @@
           (should (equal pair expected))))
     (erase-buffer)))
 
+(defun sp-test-textmode-stringlike-sexp (string expected start back fail)
+  (unwind-protect
+      (progn
+        (insert string)
+        (goto-char start)
+        (let ((pair (sp-get-textmode-stringlike-expression back)))
+          (should (equal pair expected))))
+    (erase-buffer)))
+
 (defun sp-test-make-pair (b e o c p s)
   (list :beg b :end e :op o :cl c :prefix p :suffix s))
-
-(defun sp-test-merge-pairs (extra)
-  (list (cons t (append (-map 'identity (cdar sp--test-basic-pairs)) extra))))
 
 (defmacro sp-test-with-temp-buffer (initial initform &rest forms)
   "Setup a new buffer, then run FORMS.
@@ -93,4 +127,5 @@ See `sp-test-with-temp-buffer'."
        (emacs-lisp-mode)
      ,@forms))
 
-(provide 'smartparens-test-env)
+(provide 'test-helper)
+;;; test-helper.el ends here

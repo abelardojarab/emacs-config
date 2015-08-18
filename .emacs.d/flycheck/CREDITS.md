@@ -14,7 +14,8 @@ substantial code to Flycheck:
   DMD)
 - [Bozhidar Batsov](https://github.com/bbatsov) (improved Flycheck menu, RuboCop
   syntax checker, improvements to Ruby)
-- [Clément Pit--Claudel](https://github.com/cpitclaudel) (custom error levels)
+- [Clément Pit--Claudel](https://github.com/cpitclaudel) (custom error levels,
+  error level filtering in the error list)
 - [Cristian Capdevila](https://github.com/capdevc) (enabled warnings in Rust)
 - [Damon Haley](https://github.com/dhaley) (PHPCS syntax checker)
 - [David Holm](https://github.com/dholm) (Clang, Cppcheck, lintr and Verilator
@@ -48,10 +49,12 @@ substantial code to Flycheck:
   syntax checkers)
 - [Matthias Dahl](https://github.com/BinaryKhaos) (performance improvements in
   temporary file handling)
+- [Miro Bezjak](https://github.com/mbezjak) (Groovy)
 - [Mitch Tishmack](https://github.com/mitchty) (Microsoft extensions in C/C++)
 - [Moritz Bunkus](https://github.com/mbunkus) (Include path for Perl)
 - [Omair Majid](https://github.com/omajid) (syntax checker for RPM spec)
-- [papaeye](https://github.com/papaeye) (JSCS syntax checker)
+- [papaeye](https://github.com/papaeye) (JSCS syntax checker, bug fixes for
+  Javascript checkers)
 - [Per Nordlöw](https://github.com/nordlow) (syntax checkers for Ada, Fortran
   and Python, syntax checker name in error list)
 - [Peter Eisentraut](https://github.com/petere) (improvements to foodcritic)
@@ -115,7 +118,7 @@ and projects:
   the author's life back when he was using Vim, and served as
   inspiration for Flycheck and many of its syntax checkers.
 - Pavel Kobyakov for his work on GNU Flymake, which is a great work on
-  its own, despite its flaws and weaknesses
+  its own, despite its flaws and weaknesses.
 - [Steve Purcell](https://github.com/purcell) for his valuable feedback, the
   fruitful discussions and his important ideas about the shape and design of
   Flycheck, and his indispensible and dedicated work on MELPA, which drives the

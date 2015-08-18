@@ -1,6 +1,9 @@
 master (in development)
 =======================
 
+0.24 (Aug 15, 2015)
+===================
+
 - **Breaking changes**:
 
   - Remove Elixir syntax checker due to code execution [GH-630]
@@ -11,9 +14,14 @@ master (in development)
   - Javascript with `jscs` [GH-634] and `standard` [GH-644]
   - Jade [GH-686]
   - SQL with `sqllint` [GH-691]
+  - Groovy [GH-716]
+  - Haskell with `stack ghc` [GH-711]
 
 - New features:
 
+  - The error list can now be filtered by error level by pressing <kbd>f</kbd>
+  - Add `flycheck-error-list-minimum-level` to restrict error levels displayed
+    in the error list [GH-698] [GH-701]
   - Add `flycheck-perl-include-path` to set include directories for Perl
     [GH-621]
   - Add `flycheck-rust-args` to pass additional arguments to `rustc`
@@ -32,7 +40,12 @@ master (in development)
 
   - Show chained checkers in Help buffers for syntax checkers [GH-571]
   - Map custom error levels to compilation mode levels [GH-700]
-  - `flycheck-verify-checker` now includes the manually selected checker if any
+  - `flycheck-verify-setup` now includes the manually selected checker if any
+    [GH-705]
+  - `flycheck-select-checker` now shows a verification buffer if the selected
+    checker cannot be used [GH-705]
+  - Add `flycheck-verify-checker` to check whether a specific syntax checker can
+    be used in a buffer [GH-705]
 
 - Bug fixes:
 
@@ -47,6 +60,10 @@ master (in development)
   - Fix error column offsets in `scala-scalastyle`
   - Do not use `r-lintr` in non-R buffers [GH-607]
   - Enforce output format of `flake8` [GH-704]
+  - Parse error ids from luacheck 0.11
+  - Fix patterns for Puppet environment names [GH-694]
+  - Properly locate configuration files from jshint and jscs [GH-703]
+  - Fix column offsets in eslint 1.0 [GH-718]
 
 0.23 (Apr 6, 2015)
 ==================

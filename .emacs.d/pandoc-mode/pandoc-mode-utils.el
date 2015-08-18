@@ -5,7 +5,7 @@
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 31 Oct 2009
-;; Version: 2.10
+;; Version: 2.13
 ;; Keywords: text, pandoc
 ;; Package-Requires: ((hydra "0.10.0") (dash "2.10.0"))
 
@@ -44,6 +44,7 @@
 ;;; Code:
 
 (require 'dash)
+(require 'cl-lib)
 
 (defun nonempty (string)
   "Return STRING, unless it is \"\", in which case return NIL."
@@ -55,10 +56,18 @@
 (defcustom pandoc-binary "pandoc"
   "The name of the pandoc binary.
 You can specify a full path here or a relative path (the
-default). In the latter case, the value of `exec-path` is used to
-search the binary."
+default).  In the latter case, the value of `exec-path` is used
+to search the binary."
   :group 'pandoc
   :type 'file)
+
+(defcustom pandoc-use-async t
+  "If non-NIL, use an asynchronous process to run pandoc.
+Using an asynchronous subprocess avoids freezing Emacs, but can
+cause problems sometimes.  Setting this option to nil runs pandoc
+in a synchronous subprocess."
+  :group 'pandoc
+  :type 'boolean)
 
 (defcustom pandoc-data-dir "~/.emacs.d/pandoc-mode/"
   "Default `pandoc-mode' data dir.
@@ -74,7 +83,7 @@ return a string that will replace the directive and its
 argument (if any).
 
 The directives are processed in the order in which they appear in
-this list. If a directive produces output that contains another
+this list.  If a directive produces output that contains another
 directive, the new directive will only be processed if it is of
 the same type (i.e., an @@include directive loading a text that
 also contains @@include directives) or if it is lower on the
@@ -114,7 +123,8 @@ list, not if it appears higher on the list."
   :type '(repeat (cons (symbol :tag "Major mode") (string :tag "Input format"))))
 
 (defvar pandoc--input-formats
-  '(("haddock"           "Haddock Markup"      "k")
+  '(("commonmark"        "CommonMark"          "c")
+    ("haddock"           "Haddock Markup"      "k")
     ("html"              "HTML"                "h")
     ("json"              "JSON"                "j")
     ("latex"             "LaTeX"               "l")
@@ -142,6 +152,7 @@ list, not if it appears higher on the list."
 (defvar pandoc--output-formats
   '(("asciidoc"          "AsciiDoc"                 "a")
     ("beamer"            "Beamer Slide Show"        "B")
+    ("commonmark"        "CommonMark"               "C")
     ("context"           "ConTeXt"                  "c")
     ("docbook"           "DocBook XML"              "D")
     ("dokuwiki"          "DokuWiki"                 "W")
@@ -219,9 +230,9 @@ list, not if it appears higher on the list."
     ("textile"           ".textile"))
   "List of Pandoc output formats and their associated file extensions.
 These extensions are used when pandoc-mode creates an output
-file. The file extension should include a dot. Note that it does
+file.  The file extension should include a dot.  Note that it does
 not make sense to change the names of the output formats, since
-Pandoc only recognizes the ones listed here. However, it is
+Pandoc only recognizes the ones listed here.  However, it is
 possible to customize the extensions."
   :group 'pandoc
   :type '(repeat :tag "Output Format" (list (string :tag "Format") (string :tag "Extension"))))
@@ -274,7 +285,8 @@ possible to customize the extensions."
     ("ignore_line_breaks"                  ())
     ("yaml_metadata_block"                 ("markdown"))
     ("ascii_identifiers"                   ("markdown_github"))
-    ("lists_without_preceding_blankline"   ("markdown_github")))
+    ("lists_without_preceding_blankline"   ("markdown_github"))
+    ("shortcut_reference_links"            ("markdown" "markdown_strict" "markdown_github" "markdown_php")))
   "List of Markdown extensions supported by Pandoc.")
 
 (defvar pandoc--cli-options nil
@@ -287,9 +299,9 @@ options, because they need to be handled separately in
   '(data-dir
     extract-media)
   "List of options that have a file path as value.
-These file paths are expanded before they are sent to pandoc. For
-relative paths, the file's working directory is used as base
-directory. two options are preset, others are added by
+These file paths are expanded before they are sent to Pandoc.
+For relative paths, the file's working directory is used as base
+directory.  Two options are preset, others are added by
 `define-pandoc-file-option'.")
 
 (defvar pandoc--switches nil
@@ -317,9 +329,9 @@ These are set by `define-pandoc-alist-option'.")
     (output-dir)
     (master-file))                      ; the last two are not actually pandoc options
   "Pandoc option alist.
-List of options and their default values. For each buffer in
+List of options and their default values.  For each buffer in
 which pandoc-mode is activated, a buffer-local copy of this list
-is made that stores the local values of the options. The
+is made that stores the local values of the options.  The
 `define-pandoc-*-option' functions add their options to this list
 with the default value NIL.")
 
@@ -345,19 +357,19 @@ Make sure that `pandoc--output-buffer' really exists."
      (with-current-buffer pandoc--output-buffer
        ,@body)))
 
-(defun pandoc--pp-switch (option)
-  "Return a pretty-printed representation of a switch."
-  (if (pandoc--get option)
+(defun pandoc--pp-switch (switch)
+  "Return a pretty-printed representation of SWITCH."
+  (if (pandoc--get switch)
       "yes"
     "no"))
 
 (defun pandoc--pp-option (option)
-  "Return an pretty-printed representation of an option."
+  "Return an pretty-printed representation of OPTION."
   (or (pandoc--get option)
       ""))
 
 (defun pandoc--get (option &optional buffer)
-  "Returns the value of OPTION.
+  "Return the value of OPTION.
 Optional argument BUFFER is the buffer from which the value is to
 be retrieved."
   (or buffer (setq buffer (current-buffer)))
@@ -368,7 +380,7 @@ be retrieved."
 
 ;; TODO list options aren't set correctly.
 (defun pandoc--set (option value)
-  "Sets the local value of OPTION to VALUE.
+  "Set the local value of OPTION to VALUE.
 If OPTION is 'variable, VALUE should be a cons of the
 form (variable-name . value), which is then added to the
 variables already stored, or just (variable-name), in which case
@@ -392,9 +404,9 @@ the named variable is deleted from the list."
     (setq pandoc--settings-modified-flag t)))
 
 (defun pandoc--set-alist-option (option new-elem)
-  "Set an alist option.
+  "Set an alist OPTION.
 NEW-ELEM is a cons (<name> . <value>), which is added to the alist
-for OPTION in `pandoc--local-settings'. If an element with <name>
+for OPTION in `pandoc--local-settings'.  If an element with <name>
 already exists, it is replaced, or removed if <value> is NIL."
   (let* ((value (cdr new-elem))
          (items (pandoc--get option))
@@ -420,9 +432,9 @@ already exists, it is replaced, or removed if <value> is NIL."
          (new-values (remove value values)))
     (setcdr (assoc option pandoc--local-settings) new-values)))
 
-(defun pandoc--toggle (option)
-  "Toggles the value of a switch."
-  (pandoc--set option (not (pandoc--get option))))
+(defun pandoc--toggle (switch)
+  "Toggle the value of SWITCH."
+  (pandoc--set switch (not (pandoc--get switch))))
 
 ;; Note: the extensions appear to be binary options, but they are not:
 ;; they're really (balanced) ternary options. They can be on or off, but
@@ -507,7 +519,7 @@ description of the option as it will appear in the menu."
      (push (cons ,description (quote ,option)) pandoc--switches)
      (push (quote ,option) pandoc--cli-options)
      (push (list (quote ,option)) pandoc--options)
-     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (caddr hydra) description) (format " [%%s(pandoc--pp-switch '%s)]" option))
+     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (cl-caddr hydra) description) (format " [%%s(pandoc--pp-switch '%s)]" option))
                          (cadr hydra)
                          `(pandoc--toggle (quote ,option))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-hydra-list")))))
@@ -556,7 +568,7 @@ the option can have a default value."
                                        :style 'radio
                                        :selected `(stringp (pandoc--get (quote ,option)))))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-menu-list")))
-     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (caddr hydra) prompt) (format " [%%s(pandoc--pp-option '%s)]" option))
+     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (cl-caddr hydra) prompt) (format " [%%s(pandoc--pp-option '%s)]" option))
                          (cadr hydra)
                          (intern (concat "pandoc-set-" (symbol-name option)))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-hydra-list")))
@@ -600,7 +612,7 @@ formulated in such a way that the strings \"Default \" and \"Set
                           :style 'radio
                           :selected `(pandoc--get (quote ,option))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-menu-list")))
-     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (caddr hydra) prompt) (format " [%%s(pandoc--pp-option '%s)]" option))
+     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (cl-caddr hydra) prompt) (format " [%%s(pandoc--pp-option '%s)]" option))
                          (cadr hydra)
                          (intern (concat "pandoc-set-" (symbol-name option)))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-hydra-list")))
@@ -649,7 +661,7 @@ or T and indicates whether the option can have a default value."
                                        :style 'radio
                                        :selected `(stringp (pandoc--get (quote ,option)))))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-menu-list")))
-     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (caddr hydra) prompt) (format " [%%s(pandoc--pp-option '%s)]" option))
+     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (cl-caddr hydra) prompt) (format " [%%s(pandoc--pp-option '%s)]" option))
                          (cadr hydra)
                          (intern (concat "pandoc-set-" (symbol-name option)))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-hydra-list")))
@@ -686,7 +698,7 @@ it."
                  ,(vector (concat "Remove " prompt) (list (intern (concat "pandoc-set-" (symbol-name option))) `(quote -))
                           :active `(pandoc--get (quote ,option))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-menu-list")))
-     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (caddr hydra) description) (format " [%%s(pandoc--pp-option '%s)]" option))
+     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (cl-caddr hydra) description) (format " [%%s(pandoc--pp-option '%s)]" option))
                          (cadr hydra)
                          (intern (concat "pandoc-set-" (symbol-name option)))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-hydra-list")))
@@ -729,7 +741,7 @@ before it."
                  ,(vector (concat "Unset " prompt) (list (intern (concat "pandoc-set-" (symbol-name option))) `(quote -))
                           :active t))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-menu-list")))
-     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (caddr hydra) description) (format " [%%s(pandoc--pp-option '%s)]" option))
+     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (cl-caddr hydra) description) (format " [%%s(pandoc--pp-option '%s)]" option))
                          (cadr hydra)
                          (intern (concat "pandoc-set-" (symbol-name option)))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-hydra-list")))
@@ -781,7 +793,7 @@ menu."
                                      :selected `(string= (pandoc--get (quote ,option)) ,choice)))
                            (cdr choices)))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-menu-list")))
-     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (caddr hydra) prompt) (format " [%%s(pandoc--pp-option '%s)]" option))
+     (push (quote ,(list (concat "_" (cadr hydra) "_: " (format (cl-caddr hydra) prompt) (format " [%%s(pandoc--pp-option '%s)]" option))
                          (cadr hydra)
                          (intern (concat "pandoc-set-" (symbol-name option)))))
            ,(intern (concat "pandoc--" (symbol-name (car hydra)) "-hydra-list")))
@@ -836,7 +848,9 @@ If TRIM is `t', each row is trimmed to its widest member."
   (or fmt-str (setq fmt-str (format "%%-%ds" colwidth)))
   (or colsep (setq colsep "  "))
   (let* ((n-cols (/ width (+ (length colsep) colwidth)))
-         (n-rows (ceiling (/ (length strings) (float n-cols))))
+         (n-rows (if (= n-cols 0) ; happens when `width' is too small to hold `strings'.
+                     (length strings)
+                   (ceiling (/ (length strings) (float n-cols)))))
          (cols (-partition-all n-rows (--map (format fmt-str it) strings))))
     (if trim
         (setq cols (-map #'pandoc--trim-right-padding cols)))
@@ -867,12 +881,12 @@ insert."
 
 (defun pandoc--tabulate-input-formats ()
   "Tabulate input formats for `pandoc-input-format-hydra'."
-  (let ((strings (--map (concat "_" (caddr it) "_: " (cadr it)) pandoc--input-formats)))
+  (let ((strings (--map (concat "_" (cl-caddr it) "_: " (cadr it)) pandoc--input-formats)))
     (pandoc--tabulate strings t nil 70)))
 
 (defun pandoc--tabulate-output-formats ()
   "Tabulate output formats for `pandoc-output-format-hydra'."
-  (let ((strings (--map (concat "_" (caddr it) "_: " (cadr it)) pandoc--output-formats)))
+  (let ((strings (--map (concat "_" (cl-caddr it) "_: " (cadr it)) pandoc--output-formats)))
     (pandoc--tabulate strings t nil 150)))
 
 (defmacro define-pandoc-hydra (name body docstring hexpr &rest extra-heads)
@@ -937,21 +951,23 @@ evaluated."
 (define-pandoc-switch         reference-links (specific "r" "%-21s") "Reference Links")
 
 ;; html-based
-(define-pandoc-string-option  id-prefix         (html "i" "%-31s") "ID prefix")
-(define-pandoc-file-option    css               (html "c" "%-31s") "CSS Style Sheet")
+(define-pandoc-string-option     id-prefix    (html "i" "%-31s") "ID prefix")
+(define-pandoc-list-option file  css          (html "c" "%-31s") "CSS Style Sheet" "CSS")
+
 (define-pandoc-string-option  title-prefix      (html "t" "%-31s") "Title prefix")
 (define-pandoc-choice-option  email-obfuscation (html "e" "%-31s") "Email Obfuscation" ("none" "javascript" "references") ("html" "html5" "s5" "slidy" "slideous" "dzslides" "revealjs"))
 (define-pandoc-switch         section-divs      (html "d" "%-31s") "Wrap Sections in <div> Tags")
 (define-pandoc-string-option  number-offset     (html "o" "%-31s") "Number Offsets")
 (define-pandoc-switch         ascii             (html "a" "%-31s") "Use Only ASCII in HTML")
-(define-pandoc-switch         html-q-tags       (html "q" "%-31s") "Use <q> Tags for Quotes in HTML")
+(define-pandoc-switch         html-q-tags       (html "Q" "%-31s") "Use <q> Tags for Quotes in HTML")
 (define-pandoc-switch         self-contained    (html "s" "%-31s") "Self-contained Document")
 
 ;; TeX-based (LaTeX, ConTeXt)
-(define-pandoc-choice-option  latex-engine     (tex "e" "%-30s") "LaTeX Engine" ("pdflatex" "xelatex" "lualatex") ("latex" "beamer" "context"))
-(define-pandoc-switch         listings         (tex "L" "%-30s") "Use LaTeX listings Package")
-(define-pandoc-switch         no-tex-ligatures (tex "l" "%-30s") "Do Not Use TeX Ligatures")
-(define-pandoc-switch         chapters         (tex "c" "%-30s") "Top-level Headers Are Chapters")
+(define-pandoc-list-option string latex-engine-opt (tex "o" "%-30s") "Options for LaTeX command" "LaTeX Options")
+(define-pandoc-choice-option      latex-engine     (tex "e" "%-30s") "LaTeX Engine" ("pdflatex" "xelatex" "lualatex") ("latex" "beamer" "context"))
+(define-pandoc-switch             listings         (tex "L" "%-30s") "Use LaTeX listings Package")
+(define-pandoc-switch             no-tex-ligatures (tex "l" "%-30s") "Do Not Use TeX Ligatures")
+(define-pandoc-switch             chapters         (tex "c" "%-30s") "Top-level Headers Are Chapters")
 
 ;; epub
 (define-pandoc-number-option     epub-chapter-level (epub "c" "%-18s") "EPub Chapter Level")
