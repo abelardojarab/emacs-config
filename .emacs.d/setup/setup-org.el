@@ -66,7 +66,7 @@
 (setq org-startup-folded 'nofold
       org-startup-indented t
       org-cycle-separator-lines 1
-      org-startup-with-inline-images t
+      org-startup-with-inline-images nil
       org-startup-truncated t
       org-refile-targets '((org-agenda-files :maxlevel . 3))
       org-src-fontify-natively t
@@ -90,6 +90,27 @@
       org-agenda-include-diary t
       org-agenda-window-setup 'current-window)
 
+;; Export options
+(setq org-export-time-stamp-file nil)
+(setq org-export-with-smart-quotes t) ;; curly quotes in HTML
+(setq org-export-with-sub-superscripts '{})
+(setq org-export-allow-bind-keywords t)
+
+;; Stop Org splitting window
+(setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
+                                   (vm-imap . vm-visit-imap-folder-other-frame)
+                                   (gnus . org-gnus-no-new-news)
+                                   (file . find-file)
+                                   (wl . wl-other-frame))))
+
+;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
+(defun ac-tab-noconflict ()
+  (let ((command (key-binding [tab]))) ;; remember command
+    (local-unset-key [tab]) ;; unset from (kbd "<tab>")
+    (local-set-key (kbd "TAB") command))) ;; bind to (kbd "TAB")
+(add-hook 'markdown-mode-hook 'ac-tab-noconflict)
+(add-hook 'org-mode-hook 'ac-tab-noconflict)
+
 ;; Mouse in Org
 (require 'org-mouse)
 
@@ -108,19 +129,6 @@
   '((t (:inherit org-meta-line
                  :underline "light grey" :foreground "#008ED1")))
   "Face used for the line delimiting the end of source blocks.")
-
-;; Export options
-;; don't insert a time stamp into the exported file
-(setq org-export-time-stamp-file nil)
-
-;; activate smart quotes during export (convert " to \og, \fg in French)
-(setq org-export-with-smart-quotes t) ;; curly quotes in HTML
-
-;; interpret "_" and "^" for export when braces are used
-(setq org-export-with-sub-superscripts '{})
-
-;; allow #+BIND to define local variable values for export
-(setq org-export-allow-bind-keywords t)
 
 ;; Beamer/ODT/Markdown support
 (require 'ox-beamer)
@@ -567,21 +575,6 @@ a link to this file."
        (interactive)
        (org-text-wrapper "="))
 
-;; Stop Org splitting window vertically
-(setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
-                                   (vm-imap . vm-visit-imap-folder-other-frame)
-                                   (gnus . org-gnus-no-new-news)
-                                   (file . find-file)
-                                   (wl . wl-other-frame))))
-
-;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
-(defun ac-tab-noconflict ()
-  (let ((command (key-binding [tab]))) ;; remember command
-    (local-unset-key [tab]) ;; unset from (kbd "<tab>")
-    (local-set-key (kbd "TAB") command))) ;; bind to (kbd "TAB")
-(add-hook 'markdown-mode-hook 'ac-tab-noconflict)
-(add-hook 'org-mode-hook 'ac-tab-noconflict)
-
 ;; Org Table of Contents
 (add-to-list 'load-path "~/.emacs.d/org-toc")
 (require 'org-toc)
@@ -632,11 +625,22 @@ a link to this file."
   "Creates my default header"
   ""
   "#+TITLE: " str "\n"
-  "#+AUTHOR: Abelardo Jara-Berrocal\n"
-  "#+EMAIL: abelardojarabj@gmail.com\n"
-  "#+OPTIONS: toc:2 num:nil\n"
+  "#+AUTHOR:\n"
+  "#+EMAIL:\n"
+  "#+LANGUAGE: en\n"
+  "#+OPTIONS:  toc:nil num:0\n"
+  "#+OPTIONS: author:t email:nil  date:t\n"
+  "#+OPTIONS: c:nil d:(not LOGBOOK) e:t f:t inline:t p:nil pri:nil stat:t tags:t\n"
+  "#+OPTIONS: tasks:t tex:t timestamp:t todo:t\n"
+  "#+DESCRIPTION:\n"
+  "#+EXCLUDE_TAGS: noexport\n"
+  "#+KEYWORDS:\n"
+  "#+SELECT_TAGS: export\n"
   "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
 (define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
+
+;; Tell auto-insert what to use for .org files
+(define-auto-insert "\\.org" 'skel-header-block)
 
 ;; Nice bulleted lists
 (add-to-list 'load-path "~/.emacs.d/org-autolist")
@@ -679,25 +683,6 @@ a link to this file."
   (require 'typopunct)
   (typopunct-change-language 'english)
   (typopunct-mode 1))
-
-;; Default header for Org files
-(define-skeleton my-org-defaults
-  "Org defaults"
-  nil
-  "#+AUTHOR:
-  #+EMAIL:
-  #+LANGUAGE: en
-  #+OPTIONS:  toc:nil num:0
-  #+OPTIONS: author:t email:nil  date:t
-  #+OPTIONS: c:nil d:(not LOGBOOK) e:t f:t inline:t p:nil pri:nil stat:t tags:t
-  #+OPTIONS: tasks:t tex:t timestamp:t todo:t
-  #+DESCRIPTION:
-  #+EXCLUDE_TAGS: noexport
-  #+KEYWORDS:
-  #+SELECT_TAGS: export")
-
-;; Tell auto-insert what to use for .org files
-(define-auto-insert "\\.org" 'my-org-defaults)
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
