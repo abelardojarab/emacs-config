@@ -1,24 +1,6 @@
-;; Subtler highlight
-(set-face-background 'magit-item-highlight "#121212")
-(set-face-background 'diff-file-header "#121212")
-(set-face-foreground 'diff-context "#666666")
-(set-face-foreground 'diff-added "#00cc33")
-(set-face-foreground 'diff-removed "#ff0000")
-
+;; Do not ask to confirm all
 (set-default 'magit-stage-all-confirm nil)
 (set-default 'magit-unstage-all-confirm nil)
-
-(eval-after-load 'ediff
-  '(progn
-     (set-face-foreground 'ediff-odd-diff-B "#ffffff")
-     (set-face-background 'ediff-odd-diff-B "#292521")
-     (set-face-foreground 'ediff-even-diff-B "#ffffff")
-     (set-face-background 'ediff-even-diff-B "#292527")
-
-     (set-face-foreground 'ediff-odd-diff-A "#ffffff")
-     (set-face-background 'ediff-odd-diff-A "#292521")
-     (set-face-foreground 'ediff-even-diff-A "#ffffff")
-     (set-face-background 'ediff-even-diff-A "#292527")))
 
 ;; Load git configurations
 (add-hook 'magit-mode-hook 'magit-load-config-extensions)
@@ -85,7 +67,6 @@
   (interactive)
   (kill-buffer)
   (jump-to-register :magit-fullscreen))
-
 (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
 
 ;; full screen vc-annotate
@@ -101,7 +82,6 @@
        (window-configuration-to-register :vc-annotate-fullscreen)
        ad-do-it
        (delete-other-windows))
-
      (define-key vc-annotate-mode-map (kbd "q") 'vc-annotate-quit)))
 
 ;; ignore whitespace
@@ -120,7 +100,6 @@
   (interactive)
   (setq magit-diff-options (remove "-w" magit-diff-options))
   (magit-refresh))
-
 (define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
 
 ;; magit settings

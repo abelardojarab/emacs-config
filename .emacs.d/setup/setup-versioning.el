@@ -70,8 +70,6 @@
 
 ;; Please adjust fringe width if your own sign is too big.
 (setq-default left-fringe-width 20)
-;; (setq-default right-fringe-width 20)
-;; (setq git-gutter-fr+-side 'right-fringe)
 
 (fringe-helper-define 'git-gutter-fr+-added nil
   ".XXXXXX."
@@ -103,6 +101,7 @@
   "Xx.XX.xX"
   "Xx.XX.xX")
 
+;; Fringe fix in Windows
 (unless (string-equal system-type "windows-nt")
   (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
     (ad-set-arg 0 (file-truename (ad-get-arg 0)))))
@@ -110,7 +109,7 @@
 ;; Speed up find file
 (remove-hook 'find-file-hooks 'vc-find-file-hook)
 
-;; ibuffer VC
+;; ibuffer versioning-based groups
 (add-to-list 'load-path "~/.emacs.d/ibuffer-vc")
 (require 'ibuffer-vc)
 
