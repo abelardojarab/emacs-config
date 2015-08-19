@@ -139,6 +139,7 @@ Defaults to `error'."
  '(org-support-shift-select (quote always))
  '(protect-buffer-bury-p nil)
  '(recentf-mode t)
+ '(safe-local-variable-values (quote ((encoding . utf-8-unix))))
  '(shift-select-mode nil))
 
 (custom-set-faces

@@ -1,7 +1,7 @@
 ;; -*- encoding: utf-8-unix; -*-
 ;; File-name:    <20_indent-vline.el>
 ;; Create:       <2012-01-18 00:53:10 ran9er>
-;; Time-stamp:   <2015-07-28 09:14:20 (ajaraber)>
+;; Time-stamp:   <2015-08-19 10:18:34 (ajaraber)>
 ;; Mail:         <2999am@gmail.com>
 
 (require 'cl)
@@ -42,7 +42,7 @@
   (let* ((p 'indent-hint-overlay-pool)
          (q (eval p))
          (ov (or (car (prog1 q (set p (cdr q))))
-                 (make-overlay b e))))
+                (make-overlay b e))))
     (move-overlay ov b e)
     ov))
 (defun indent-hint-delete-overlay (o)
@@ -58,8 +58,8 @@
     (dolist (x indent-hint-list)
       (if (null (eval x))
           (and (setq indent-hint-list
-                     (delq x indent-hint-list))
-               (unintern x))))))
+                   (delq x indent-hint-list))
+             (unintern x))))))
 
 ;; * indent-hint
 (defun make-indent-hint-xpm (width height color &optional lor)
@@ -95,14 +95,14 @@ s1 ",\n" s2 "};"
   (let ((n (or n (1+ m))))
     (mapc
      (lambda(x)(let ((i (overlay-get x indent-hint-key)))
-             (if i
-                 (progn
-                   (mapc
-                    (lambda(y)(indent-hint-delete-overlay y))
-                    (eval i))
-                   (setq indent-hint-list
-                         (delq i indent-hint-list))
-                   (unintern i)))))
+            (if i
+                (progn
+                  (mapc
+                   (lambda(y)(indent-hint-delete-overlay y))
+                   (eval i))
+                  (setq indent-hint-list
+                        (delq i indent-hint-list))
+                  (unintern i)))))
      (overlays-in m n))))
 (defun erase-indent-hint (overlay after? beg end &optional length)
   (let ((inhibit-modification-hooks t)
@@ -126,11 +126,11 @@ s1 ",\n" s2 "};"
      (cons (cons pt (current-column))
            (mapcar
             (lambda(x) (remove-if
-                    nil
-                    `(,x
-                      ,(overlay-get x indent-hint-key)
-                      ,(if (overlay-get x indent-hint-bg) 'bg)
-                      ,(if (eq (overlay-get x 'face) 'hl-line) 'hl-line))))
+                   nil
+                   `(,x
+                     ,(overlay-get x indent-hint-key)
+                     ,(if (overlay-get x indent-hint-bg) 'bg)
+                     ,(if (eq (overlay-get x 'face) 'hl-line) 'hl-line))))
             (overlays-at pt))))))
 (defun erase-indent-hint-0 (overlay after? beg end &optional length)
   (let ((inhibit-modification-hooks t)
@@ -177,10 +177,10 @@ s1 ",\n" s2 "};"
 (defun indent-hint-overlay-exist (p k)
   (let (r (l (overlays-at p)))
     (while (and l
-                (null
-                 (if (overlay-get (car l) k)
-                     (setq r t)
-                   nil)))
+              (null
+               (if (overlay-get (car l) k)
+                   (setq r t)
+                 nil)))
       (setq l (cdr l)))
     r))
 (defun indent-hint-white-line (&optional n)
@@ -222,7 +222,7 @@ s1 ",\n" s2 "};"
   (let* ((b (line-beginning-position))
          (e (+ b (current-indentation)))
          o)
-    (setq r (or r 'indent-hint-background-overlay))
+    (setq r (or r indent-hint-background-overlay))
     (make-local-variable r)
     (setq o (make-overlay b e))
     (overlay-put o indent-hint-bg t)
@@ -243,7 +243,7 @@ s1 ",\n" s2 "};"
   (let ((x (or regexp "^")))
     (font-lock-add-keywords
      nil `((,x
-            (0 (draw-indent-hint-line ,column ,img ,color)))))))
+          (0 (draw-indent-hint-line ,column ,img ,color)))))))
 
 (defun indent-hint-current-column ()
   (save-excursion
@@ -290,19 +290,19 @@ s1 ",\n" s2 "};"
   (indent-hint-init))
 
 (when
-nil
-(what-overlays)
-(length indent-hint-list)
-(dolist (x indent-hint-list)
-  (if (null (eval x))
-      (and (unintern x)
+    nil
+  (what-overlays)
+  (length indent-hint-list)
+  (dolist (x indent-hint-list)
+    (if (null (eval x))
+        (and (unintern x)
            (setq indent-hint-list
                  (delq x indent-hint-list)))))
-(setq overlay-no-buffer nil)
-(dolist (x indent-hint-list)
-  (dolist (y (eval x))
-    (if (null (overlay-buffer y))
-        (setq overlay-no-buffer
-              (cons y overlay-no-buffer))))))
+  (setq overlay-no-buffer nil)
+  (dolist (x indent-hint-list)
+    (dolist (y (eval x))
+      (if (null (overlay-buffer y))
+          (setq overlay-no-buffer
+                (cons y overlay-no-buffer))))))
 
 (provide 'indent-hint)

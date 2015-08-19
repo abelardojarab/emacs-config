@@ -80,18 +80,27 @@
 (define-skeleton my-org-defaults
   "Org defaults"
   nil
-  "#+AUTHOR:   Your name\n"
-  "#+EMAIL:    your.email@gmail.com\n"
-  "#+LANGUAGE: en\n"
-  "#+LATEX_HEADER: \\usepackage{lmodern}\n"
-  "#+LATEX_HEADER: \\usepackage[T1]{fontenc}\n"
-  "#+OPTIONS:  toc:nil num:0\n")
+  "#+AUTHOR:   Your name\r"
+  "#+EMAIL:    your.email@gmail.com\r"
+  "#+LANGUAGE: en\r"
+  "#+LATEX_HEADER: \\usepackage{lmodern}\r"
+  "#+LATEX_HEADER: \\usepackage[T1]{fontenc}\r"
+  "#+OPTIONS:  toc:nil num:0\r"
+  "#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \r:nil ^:t arch:headline\r"
+  "#+OPTIONS: author:t c:nil creator:comment d:(not LOGBOOK) date:t e:t\r"
+  "#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil stat:t tags:t\r"
+  "#+OPTIONS: tasks:t tex:t timestamp:t toc:t todo:t |:t\r"
+  "#+DESCRIPTION:\r"
+  "#+EXCLUDE_TAGS: noexport\r"
+  "#+KEYWORDS:\r"
+  "#+LANGUAGE: en\r"
+  "#+SELECT_TAGS: export\r")
 ;; This is how to tell auto-insert what to use for .org files
 (define-auto-insert "\\.org" 'my-org-defaults)
 (define-auto-insert "\\.R"
   '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
 (define-auto-insert "\\.py"
-  '(lambda () (yas--expand-by-uuid 'python-mode "class")))
+  '(lambda () (yas--expand-by-uuid 'python-mode "import")))
 
 (defun autoinsert-yas-expand()
   "Replace text in yasnippet template."

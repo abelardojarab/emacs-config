@@ -776,6 +776,11 @@ a link to this file."
 ;; Typopunct
 (require 'typopunct)
 (typopunct-change-language 'english t)
+(add-hook 'org-mode-hook 'my-org-init)
+(defun my-org-init ()
+  (require 'typopunct)
+  (typopunct-change-language 'english)
+  (typopunct-mode 1))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here

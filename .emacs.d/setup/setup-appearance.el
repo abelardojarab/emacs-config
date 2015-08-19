@@ -415,6 +415,7 @@ non-nil."
 
 ;; Permanent indentation guide
 (add-to-list 'load-path "~/.emacs.d/indent-hint")
+(setq indent-hint-background-overlay t)
 (require 'indent-hint)
 (add-hook 'prog-mode-hook 'indent-hint-mode)
 (add-hook 'lisp-mode-hook 'indent-hint-lisp)
