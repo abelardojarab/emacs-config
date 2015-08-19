@@ -36,8 +36,8 @@
 (set-default 'yas--dont-activate
              #'(lambda ()
                  (or buffer-read-only
-                    (and yas-snippet-dirs
-                       (null (yas--get-snippet-tables))))))
+                     (and yas-snippet-dirs
+                          (null (yas--get-snippet-tables))))))
 
 ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
 (define-key yas-minor-mode-map (kbd "<tab>") nil)
@@ -69,34 +69,6 @@
     (yas--get-template-by-uuid mode uuid))))
 
 ;; Yasnippet templates used in auto-insert mode
-(require 'autoinsert)
-(auto-insert-mode t)
-
-;; This turns off the prompt that auto-insert-mode asks before
-;; it actually inserts text/code for you
-(setq auto-insert-query nil)
-
-;; This is what you'll have inserted for a new .org file
-(define-skeleton my-org-defaults
-  "Org defaults"
-  nil
-  "#+AUTHOR:   Your name\r"
-  "#+EMAIL:    your.email@gmail.com\r"
-  "#+LANGUAGE: en\r"
-  "#+LATEX_HEADER: \\usepackage{lmodern}\r"
-  "#+LATEX_HEADER: \\usepackage[T1]{fontenc}\r"
-  "#+OPTIONS:  toc:nil num:0\r"
-  "#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \r:nil ^:t arch:headline\r"
-  "#+OPTIONS: author:t c:nil creator:comment d:(not LOGBOOK) date:t e:t\r"
-  "#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil stat:t tags:t\r"
-  "#+OPTIONS: tasks:t tex:t timestamp:t toc:t todo:t |:t\r"
-  "#+DESCRIPTION:\r"
-  "#+EXCLUDE_TAGS: noexport\r"
-  "#+KEYWORDS:\r"
-  "#+LANGUAGE: en\r"
-  "#+SELECT_TAGS: export\r")
-;; This is how to tell auto-insert what to use for .org files
-(define-auto-insert "\\.org" 'my-org-defaults)
 (define-auto-insert "\\.R"
   '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
 (define-auto-insert "\\.py"
@@ -115,8 +87,8 @@
   "Expand Content Auto-inserted as yasnippet Templete,
   so That WE could use yasnippet in autoinsert mode "
   (let ((is-new-File (and (not buffer-read-only)
-                        (or (eq this-command 'auto-insert)
-                           (and auto-insert (bobp) (eobp))))))
+                          (or (eq this-command 'auto-insert)
+                              (and auto-insert (bobp) (eobp))))))
     ad-do-it
     (let ((old-point-max (point-max)))
       (when is-new-File

@@ -29,8 +29,8 @@
 (require 'writegood-mode)
 
 ;; Org mode
+(setq load-path (cons "~/.emacs.d/org-mode/contrib/lisp" load-path))
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
-(add-to-list 'load-path "~/.emacs.d/org-mode/contrib/lisp")
 
 (defvar org-list-allow-alphabetical t)
 (defun org-element-bold-successor           (arg))
@@ -49,15 +49,16 @@
 
 (let ((todo "~/workspace/Documents/Org/agenda.org"))
   (when (file-readable-p todo)
-    (setq org-agenda-files '("~/workspace/Documents/Org/agenda.org"))))
-(let ((todo "~/workspace/Documents/Org/notes.org"))
-  (when (file-readable-p todo)
-    (setq org-default-notes-file "~/workspace/Documents/Org/notes.org")))
+    ;; set org directory
+    (setq org-directory (expand-file-name "~/workspace/Documents/Org"))
+    (setq org-default-notes-file (concat org-directory "/notes.org"))
+    (setq org-agenda-files (list (concat org-directory "/agenda.org")))))
 (add-hook 'org-mode-hook
           (lambda ()
             (progn
               (flyspell-mode t)
               (writegood-mode t)
+              (yas-minor-mode t)
               (indent-guide-mode -1))))
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
@@ -88,108 +89,6 @@
       org-agenda-span 14
       org-agenda-include-diary t
       org-agenda-window-setup 'current-window)
-
-;; Org Capture
-(defun org-capture-todo (note)
-  (let* ((org-file org-default-notes-file)
-         (type 'entry)
-         (headline nil)
-         (template (concat "** " note
-                           "\n   SCHEDULED: %t\n")))
-    (org-capture-entry org-file headline template)))
-
-(defun org-capture-note (note)
-  (let* ((org-file org-default-notes-file)
-         (type 'entry)
-         (headline nil)
-         (template (concat "** %U " note "\n")))
-    (org-capture-entry org-file headline template)))
-
-(defun org-capture-entry (org-file headline template)
-  (let* ((type 'entry)
-         (org-capture-entry
-          (if (headline)
-              `(entry
-                (file+headline ,org-file ,headline)
-                ,template :clock-keep t :immediate-finish t)
-            `(entry
-              (file ,org-file)
-              ,template :clock-keep t :immediate-finish t))))
-    (require 'org-capture)
-    (org-capture-noninteractively)))
-
-;; See http://stackoverflow.com/questions/22411626/generate-org-mode-objects-programmatically
-(defun org-capture-noninteractively ()
-  (let* ((orig-buf (current-buffer))
-         (annotation (if (and (boundp 'org-capture-link-is-already-stored)
-                            org-capture-link-is-already-stored)
-                         (plist-get org-store-link-plist :annotation)
-                       (ignore-errors (org-store-link nil))))
-         (entry org-capture-entry)
-         initial)
-    (setq initial (or org-capture-initial
-                     (and (org-region-active-p)
-                        (buffer-substring (point) (mark)))))
-    (when (stringp initial)
-      (remove-text-properties 0 (length initial) '(read-only t) initial))
-    (when (stringp annotation)
-      (remove-text-properties 0 (length annotation)
-                              '(read-only t) annotation))
-    (setq org-capture-plist (copy-sequence (nthcdr 3 entry)))
-    (org-capture-put :target (nth 1 entry))
-    (let ((txt (nth 2 entry)) (type (or (nth 0 entry) 'entry)))
-      (when (or (not txt) (and (stringp txt) (not (string-match "\\S-" txt))))
-        (cond
-         ((eq type 'item) (setq txt "- %?"))
-         ((eq type 'checkitem) (setq txt "- [ ] %?"))
-         ((eq type 'table-line) (setq txt "| %? |"))
-         ((member type '(nil entry)) (setq txt "* %?\n  %a"))))
-      (org-capture-put :template txt :type type))
-    (org-capture-get-template)
-    (org-capture-put :original-buffer orig-buf
-                     :original-file (or (buffer-file-name orig-buf)
-                                       (and (featurep 'dired)
-                                          (car (rassq orig-buf
-                                                      dired-buffers))))
-                     :original-file-nondirectory
-                     (and (buffer-file-name orig-buf)
-                        (file-name-nondirectory
-                         (buffer-file-name orig-buf)))
-                     :annotation annotation
-                     :initial initial
-                     :return-to-wconf (current-window-configuration)
-                     :default-time
-                     (or org-overriding-default-time
-                        (org-current-time)))
-    (org-capture-set-target-location)
-    (condition-case error
-        (org-capture-put :template (org-capture-fill-template))
-      ((error quit)
-       (if (get-buffer "*Capture*") (kill-buffer "*Capture*"))
-       (error "Capture abort: %s" error)))
-    (setq org-capture-clock-keep (org-capture-get :clock-keep))
-    (condition-case error
-        (org-capture-place-template
-         (equal (car (org-capture-get :target)) 'function))
-      ((error quit)
-       (if (and (buffer-base-buffer (current-buffer))
-              (string-match "\\`CAPTURE-" (buffer-name)))
-           (kill-buffer (current-buffer)))
-       (set-window-configuration (org-capture-get :return-to-wconf))
-       (error "Error.")))
-    (if (and (derived-mode-p 'org-mode)
-           (org-capture-get :clock-in))
-        (condition-case nil
-            (progn
-              (if (org-clock-is-active)
-                  (org-capture-put :interrupted-clock
-                                   (copy-marker org-clock-marker)))
-              (org-clock-in)
-              (org-set-local 'org-capture-clock-was-started t))
-          (error
-           "Could not start the clock in this capture buffer")))
-    (if (org-capture-get :immediate-finish)
-        (org-capture-finalize))))
 
 ;; Mouse in Org
 (require 'org-mouse)
@@ -249,8 +148,8 @@
        '(progn
           (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
             (if (and cua-mode
-                   org-support-shift-select
-                   (not (use-region-p)))
+                     org-support-shift-select
+                     (not (use-region-p)))
                 (cua-set-mark)))))))
 
 ;; Fix on the keys
@@ -265,22 +164,23 @@
             (define-key org-mode-map [S-return] 'org-insert-subheading)))
 
 ;; Custom commands
+(defun my-agenda-prefix ()
+  (format "%s" (my-agenda-indent-string (org-current-level))))
+
+(defun my-agenda-indent-string (level)
+  (if (= level 1)
+      ""
+    (let ((str ""))
+      (while (> level 2)
+        (setq level (1- level)
+              str (concat str "──")))
+      (concat str "►"))))
+
 (setq org-agenda-custom-commands
-      '(("h" "Work todos" tags-todo
-         "-personal-doat={.+}-dowith={.+}/!-TASK"
-         ((org-agenda-todo-ignore-scheduled t)))
-        ("H" "All work todos" tags-todo "-personal/!-TASK-MAYBE"
-         ((org-agenda-todo-ignore-scheduled nil)))
-        ("A" "Work todos with doat or dowith" tags-todo
-         "-personal+doat={.+}|dowith={.+}/!-TASK"
-         ((org-agenda-todo-ignore-scheduled nil)))
-        ("j" "TODO dowith and TASK with"
-         ((org-sec-with-view "TODO dowith")
-          (org-sec-where-view "TODO doat")
-          (org-sec-assigned-with-view "TASK with")
-          (org-sec-stuck-with-view "STUCK with")))
-        ("J" "Interactive TODO dowith and TASK with"
-         ((org-sec-who-view "TODO dowith")))))
+      '(("c" "My TODOs"
+         ((tags-todo "mytag"
+                     ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
+                      (org-tags-match-list-sublevels t)))))))
 
 ;; define todo states: set time stamps one waiting, delegated and done
 (setq org-todo-keywords
@@ -424,7 +324,7 @@ a link to this file."
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                "/clippaste /convert=" filename))
+                                                                                      "/clippaste /convert=" filename))
 
       (if (equal system-type 'darwin)
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
@@ -461,21 +361,21 @@ a link to this file."
 (defun org-mode-reftex-setup ()
   (interactive)
   (and (buffer-file-name) (file-exists-p (buffer-file-name))
-     (progn
-       ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
-       (setq TeX-master t)
-       (turn-on-reftex)
-       ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-       (global-auto-revert-mode t) ; careful: this can kill the undo
-       ;; history when you change the file
-       ;; on-disk.
-       (reftex-parse-all)
-       ;; add a custom reftex cite format to insert links
-       ;; This also changes any call to org-citation!
-       (reftex-set-cite-format
-        '((?c . "\\citet{%l}") ; natbib inline text
-          (?i . "\\citep{%l}") ; natbib with parens
-          ))))
+       (progn
+         ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
+         (setq TeX-master t)
+         (turn-on-reftex)
+         ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
+         (global-auto-revert-mode t) ; careful: this can kill the undo
+         ;; history when you change the file
+         ;; on-disk.
+         (reftex-parse-all)
+         ;; add a custom reftex cite format to insert links
+         ;; This also changes any call to org-citation!
+         (reftex-set-cite-format
+          '((?c . "\\citet{%l}") ; natbib inline text
+            (?i . "\\citep{%l}") ; natbib with parens
+            ))))
   (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
   (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
 (add-hook 'org-mode-hook 'org-mode-reftex-setup)
@@ -503,15 +403,12 @@ a link to this file."
 \\usepackage{color}
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
-
 \\usepackage{tikz}
 \\usepackage{csquotes}
 \\usepackage[backend=biber,sorting=none]{biblatex}
 \\addbibresource[datatype=bibtex]{~/workspace/Documents/Bibliography/biblio.bib}
-
 \\usepackage[]{xkeyval}
 \\usepackage{paralist}
-
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
 \\renewcommand{\\rmdefault}{ptm}
@@ -529,6 +426,7 @@ a link to this file."
              '("pdflatex"
                "\\documentclass[11pt,a4paper]{article}
 \\usepackage[T1]{fontenc}
+\\usepackage{lmodern}
 \\usepackage{graphicx}
 \\usepackage{geometry}
 \\usepackage{listings}
@@ -776,11 +674,30 @@ a link to this file."
 ;; Typopunct
 (require 'typopunct)
 (typopunct-change-language 'english t)
-(add-hook 'org-mode-hook 'my-org-init)
-(defun my-org-init ()
+(add-hook 'org-mode-hook 'typo-init)
+(defun typo-init ()
   (require 'typopunct)
   (typopunct-change-language 'english)
   (typopunct-mode 1))
+
+;; Default header for Org files
+(define-skeleton my-org-defaults
+  "Org defaults"
+  nil
+  "#+AUTHOR:
+  #+EMAIL:
+  #+LANGUAGE: en
+  #+OPTIONS:  toc:nil num:0
+  #+OPTIONS: author:t email:nil  date:t
+  #+OPTIONS: c:nil d:(not LOGBOOK) e:t f:t inline:t p:nil pri:nil stat:t tags:t
+  #+OPTIONS: tasks:t tex:t timestamp:t todo:t
+  #+DESCRIPTION:
+  #+EXCLUDE_TAGS: noexport
+  #+KEYWORDS:
+  #+SELECT_TAGS: export")
+
+;; Tell auto-insert what to use for .org files
+(define-auto-insert "\\.org" 'my-org-defaults)
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
