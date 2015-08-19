@@ -77,6 +77,12 @@
 (global-set-key [(control r)] 'replace-string)
 (global-set-key "\C-a" 'mark-whole-buffer)
 
+;; Bookmarks
+(global-set-key (kbd "<f2>")   'helm-bm)
+(global-set-key (kbd "<C-f2>") 'bm-toggle)
+(global-set-key (kbd "<A-f2>") 'bm-toggle)
+(global-set-key (kbd "<S-f2>") 'bm-next)
+
 ;; Highlight symbol at point
 (global-set-key [f3] 'highlight-symbol-at-point)
 (global-set-key [(control f3)] 'highlight-symbol-next)

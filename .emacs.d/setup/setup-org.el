@@ -210,6 +210,19 @@
                  :underline "light grey" :foreground "#008ED1")))
   "Face used for the line delimiting the end of source blocks.")
 
+;; Export options
+;; don't insert a time stamp into the exported file
+(setq org-export-time-stamp-file nil)
+
+;; activate smart quotes during export (convert " to \og, \fg in French)
+(setq org-export-with-smart-quotes t) ;; curly quotes in HTML
+
+;; interpret "_" and "^" for export when braces are used
+(setq org-export-with-sub-superscripts '{})
+
+;; allow #+BIND to define local variable values for export
+(setq org-export-allow-bind-keywords t)
+
 ;; Beamer/ODT/Markdown support
 (require 'ox-beamer)
 (require 'ox-odt)
@@ -271,9 +284,9 @@
 
 ;; define todo states: set time stamps one waiting, delegated and done
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)" "HOLD(h)")
-        (sequence "TASK(f)" "|" "DONE(d)" "IN PROGRESS(p)" "CANCELLED(c)")
-        (sequence "MAYBE(m)" "|" "CANCELLED(c)")))
+      '((sequence "TODO(t!)" "|" "DONE(d!)" "CANCELLED(c@/!)" "HOLD(h!)")
+        (sequence "TASK(t!)" "|" "DONE(d!)" "IN PROGRESS(p@/!)" "CANCELLED(c@/!)")
+        (sequence "IDEA(i!)" "MAYBE(y!)" "STAGED(s!)" "WORKING(k!)" "|" "USED(u!/@)")))
 (setq org-todo-keyword-faces
       '(("IN PROGRESS" . 'warning)
         ("HOLD" . 'font-lock-keyword-face)
@@ -746,5 +759,29 @@ a link to this file."
         "⚫"
         "○"
         ))
+
+;; Smart quotes
+(add-to-list 'load-path "~/.emacs.d/smart-quotes")
+(require 'smart-quotes)
+(defun smart-quotes-strip (rStart rEnd)
+  "Replace smart quotes with plain quotes in text"
+  (interactive "r")
+  (save-restriction
+    (narrow-to-region rStart rEnd)
+    (goto-char (point-min))
+    (while (re-search-forward "[“”]" nil t) (replace-match "\"" nil t))
+    (goto-char (point-min))
+    (while (re-search-forward "[‘’]" nil t) (replace-match "'" nil t))))
+
+;; Typopunct
+(require 'typopunct)
+(typopunct-change-language 'english t)
+(add-hook 'org-mode-hook 'my-org-init)
+(defun my-org-init ()
+  (require 'typopunct)
+  (typopunct-change-language 'english)
+  (smart-quotes-mode 1)
+  (typopunct-mode 1))
+
 (provide 'setup-org)
 ;;; setup-org.el ends here
