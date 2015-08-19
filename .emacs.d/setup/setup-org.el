@@ -650,11 +650,11 @@ a link to this file."
 (setq org-bullets-bullet-list
       '(
         "•"
-        "⚪"
+        "o"
         "*"
         "+"
         "-"
-        "⚫"
+        "•"
         "○"
         ))
 
