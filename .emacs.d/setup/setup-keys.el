@@ -43,6 +43,14 @@
 (require 'smart-tab)
 (global-smart-tab-mode)
 
+;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
+(defun ac-tab-noconflict ()
+  (let ((command (key-binding [tab]))) ;; remember command
+    (local-unset-key [tab]) ;; unset from (kbd "<tab>")
+    (local-set-key (kbd "TAB") command))) ;; bind to (kbd "TAB")
+(add-hook 'markdown-mode-hook 'ac-tab-noconflict)
+(add-hook 'org-mode-hook 'ac-tab-noconflict)
+
 ;; Treat 'y' or <CR> as yes, 'n' as no.
 (fset 'yes-or-no-p 'y-or-n-p)
 (define-key query-replace-map [return] 'act)
@@ -146,7 +154,7 @@
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)
-                                   (executable-find "global"))
+                                     (executable-find "global"))
                                 'ggtags-find-tag-dwim
                               'etags-select-find-tag))
 
@@ -163,7 +171,7 @@
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
-     (executable-find "kdialog"))
+       (executable-find "kdialog"))
   (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
   ) ;; if

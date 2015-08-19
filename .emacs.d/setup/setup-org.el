@@ -28,6 +28,10 @@
 (add-to-list 'load-path "~/.emacs.d/writegood-mode")
 (require 'writegood-mode)
 
+;; Typopunct
+(require 'typopunct)
+(typopunct-change-language 'english t)
+
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org-mode/contrib/lisp" load-path))
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
@@ -102,14 +106,6 @@
                                    (gnus . org-gnus-no-new-news)
                                    (file . find-file)
                                    (wl . wl-other-frame))))
-
-;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
-(defun ac-tab-noconflict ()
-  (let ((command (key-binding [tab]))) ;; remember command
-    (local-unset-key [tab]) ;; unset from (kbd "<tab>")
-    (local-set-key (kbd "TAB") command))) ;; bind to (kbd "TAB")
-(add-hook 'markdown-mode-hook 'ac-tab-noconflict)
-(add-hook 'org-mode-hook 'ac-tab-noconflict)
 
 ;; Mouse in Org
 (require 'org-mouse)
@@ -674,15 +670,6 @@ a link to this file."
     (while (re-search-forward "[“”]" nil t) (replace-match "\"" nil t))
     (goto-char (point-min))
     (while (re-search-forward "[‘’]" nil t) (replace-match "'" nil t))))
-
-;; Typopunct
-(require 'typopunct)
-(typopunct-change-language 'english t)
-(add-hook 'org-mode-hook 'typo-init)
-(defun typo-init ()
-  (require 'typopunct)
-  (typopunct-change-language 'english)
-  (typopunct-mode 1))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
