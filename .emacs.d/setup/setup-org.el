@@ -28,10 +28,6 @@
 (add-to-list 'load-path "~/.emacs.d/writegood-mode")
 (require 'writegood-mode)
 
-;; Typopunct
-(require 'typopunct)
-(typopunct-change-language 'english t)
-
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org-mode/contrib/lisp" load-path))
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
@@ -657,19 +653,6 @@ a link to this file."
         "•"
         "○"
         ))
-
-;; Smart quotes
-(add-to-list 'load-path "~/.emacs.d/smart-quotes")
-(require 'smart-quotes)
-(defun smart-quotes-strip (rStart rEnd)
-  "Replace smart quotes with plain quotes in text"
-  (interactive "r")
-  (save-restriction
-    (narrow-to-region rStart rEnd)
-    (goto-char (point-min))
-    (while (re-search-forward "[“”]" nil t) (replace-match "\"" nil t))
-    (goto-char (point-min))
-    (while (re-search-forward "[‘’]" nil t) (replace-match "'" nil t))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
