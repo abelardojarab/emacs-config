@@ -33,19 +33,26 @@
 ;; Python configuration
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'hideshowvis-enable)
+(add-hook 'python-mode-hook 'hideshowvis-minor-mode)
+(add-hook 'python-mode-hook 'indent-hint-mode)
 
 ;; Extra
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 (setq interpreter-mode-alist
       (cons '("python" . python-mode)
-            interpreter-mode-alist)
-      python-mode-hook
-      '(lambda () (progn
-               (set-variable 'python-indent-offset 4)
-               (set-variable 'py-indent-offset 4)
-               (set-variable 'indent-tabs-mode nil))))
+            interpreter-mode-alist))
+
+;; Python hook
+(add-hook 'python-mode-hook
+          (function (lambda ()
+                      (progn
+                        (set-variable 'python-indent-offset 4)
+                        (set-variable 'py-indent-offset 4)
+                        (set-variable 'indent-tabs-mode nil))
+                      (setq indent-tabs-mode nil
+                            python-indent 4
+                            tab-width 4))))
 
 ;; Update imenu
 (defun python-reset-imenu ()
@@ -73,13 +80,6 @@
 
 ;; Add Wisent
 (add-hook 'python-mode-hook 'wisent-python-default-setup)
-
-;; Python hook
-(add-hook 'python-mode-hook
-          (function (lambda ()
-                      (setq indent-tabs-mode nil
-                            python-indent 4
-                            tab-width 4))))
 
 ;; Jedi settings
 (add-to-list 'load-path "~/.emacs.d/ctable")
