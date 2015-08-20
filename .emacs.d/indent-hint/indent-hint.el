@@ -1,7 +1,7 @@
 ;; -*- encoding: utf-8-unix; -*-
 ;; File-name:    <20_indent-vline.el>
 ;; Create:       <2012-01-18 00:53:10 ran9er>
-;; Time-stamp:   <2015-08-20 12:11:27 (abelardojara)>
+;; Time-stamp:   <2015-08-20 12:21:17 (abelardojara)>
 ;; Mail:         <2999am@gmail.com>
 
 (require 'cl)
@@ -239,8 +239,8 @@ s1 ",\n" s2 "};"
   (let* (;; (o (or o indent-hint-background-overlay)) ;; by Abe
          (b (line-beginning-position))
          (e (+ b (current-indentation))))
-    (if (not (equal o t))
-        (move-overlay o b e))))
+    (when (not (or (equal o t) (equal o nil)))
+      (move-overlay o b e))))
 
 (defun indent-hint (&optional regexp column img color)
   (interactive)
