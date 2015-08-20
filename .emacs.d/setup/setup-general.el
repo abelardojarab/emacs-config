@@ -221,8 +221,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; Assure window is splitted horizontally (for compilation buffer)
 (setq split-width-threshold nil)
@@ -304,16 +304,16 @@
       desktop-base-lock-name      "lock"
       desktop-path                (list desktop-dirname)
       desktop-save                t
-      desktop-files-not-to-save   "^$" ;reload tramp paths
+      desktop-files-not-to-save   "^$" ;; reload tramp paths
       desktop-load-locked-desktop t
       desktop-save 'ask-if-new
       desktop-file-name-format 'absolute
       desktop-restore-frames nil
       desktop-restore-in-current-display t
       desktop-restore-forces-onscreen nil
-      desktop-restore-eager t
+      desktop-restore-eager 5
       desktop-lazy-verbose t
-      desktop-lazy-idle-delay 5
+      desktop-lazy-idle-delay 15
       desktop-globals-to-save
       '((extended-command-history . 30)
         (file-name-history        . 100)
@@ -380,8 +380,8 @@
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                             (char-equal (char-syntax cb) ?\) )
-                             (blink-matching-open))))
+                           (char-equal (char-syntax cb) ?\) )
+                           (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;; Opening bracket to be highlighted when the point is on the closing bracket
@@ -527,11 +527,11 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-       (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
-           (dolist (regexp regexps)
-             (when (string-match regexp string)
-               (throw 'matched t)))))))
+     (catch 'matched
+       (let ((inhibit-changing-match-data t)) ; small optimization
+         (dolist (regexp regexps)
+           (when (string-match regexp string)
+             (throw 'matched t)))))))
 
 ;; Better search, similar to vim
 (require 'isearch+)
@@ -547,7 +547,7 @@
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-               (eq 'not-yanks search-upper-case))
+             (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message
@@ -661,14 +661,14 @@ compatibility with `format-alist', and is ignored."
 If wrapping is performed, point remains on the line. If the line does
 not need to be wrapped, move point to the next line and return t."
   (if (and (bound-and-true-p latex-extra-mode)
-           (null (latex/do-auto-fill-p)))
+         (null (latex/do-auto-fill-p)))
       (progn (forward-line 1) t)
     ;; The conditional above was added for latex equations. It relies
     ;; on the latex-extra package (on Melpa).
     (if (and (longlines-set-breakpoint)
-             ;; Make sure we don't break comments.
-             (null (nth 4 (parse-partial-sexp
-                           (line-beginning-position) (point)))))
+           ;; Make sure we don't break comments.
+           (null (nth 4 (parse-partial-sexp
+                         (line-beginning-position) (point)))))
         (progn
           ;; This `let' and the `when' below add indentation to the
           ;; wrapped line.
