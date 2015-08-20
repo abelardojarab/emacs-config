@@ -260,6 +260,11 @@ non-nil."
 (require 'line-num)
 (global-linum-mode t)
 
+;; Highlight line number
+(add-to-list 'load-path "~/.emacs.d/hlinum-mode")
+(require 'hlinum)
+(hlinum-activate)
+
 ;; Preset width nlinum
 (add-hook 'nlinum-mode-hook
           (lambda ()
@@ -418,6 +423,7 @@ non-nil."
 ;; Permanent indentation guide
 (add-to-list 'load-path "~/.emacs.d/indent-hint")
 (setq indent-hint-background-overlay t)
+(setq indent-hint-bg nil)
 (require 'indent-hint)
 (add-hook 'prog-mode-hook 'indent-hint-mode)
 (add-hook 'lisp-mode-hook 'indent-hint-lisp)

@@ -1,7 +1,7 @@
 ;; -*- encoding: utf-8-unix; -*-
 ;; File-name:    <20_indent-vline.el>
 ;; Create:       <2012-01-18 00:53:10 ran9er>
-;; Time-stamp:   <2015-08-19 10:18:34 (ajaraber)>
+;; Time-stamp:   <2015-08-20 12:00:25 (abelardojara)>
 ;; Mail:         <2999am@gmail.com>
 
 (require 'cl)
@@ -223,17 +223,19 @@ s1 ",\n" s2 "};"
          (e (+ b (current-indentation)))
          o)
     (setq r (or r indent-hint-background-overlay))
-    (make-local-variable r)
-    (setq o (make-overlay b e))
-    (overlay-put o indent-hint-bg t)
-    ;; debug
-    ;; (overlay-put o 'face '((t (:background "grey40"))))
-    (overlay-put o 'modification-hooks '(erase-indent-hint))
-    (overlay-put o 'insert-in-front-hooks '(erase-indent-hint))
-    (overlay-put o 'insert-behind-hooks '(erase-indent-hint))
-    (set r o)))
+    (ignore-errors
+      (make-local-variable r)
+      (setq o (make-overlay b e))
+      (overlay-put o indent-hint-bg t)
+      ;; debug
+      ;; (overlay-put o 'face '((t (:background "grey40"))))
+      (overlay-put o 'modification-hooks '(erase-indent-hint))
+      (overlay-put o 'insert-in-front-hooks '(erase-indent-hint))
+      (overlay-put o 'insert-behind-hooks '(erase-indent-hint))
+      (set r o))))
+
 (defun indent-hint-bgo-mv(&optional o)
-  (let* ((o (or o indent-hint-background-overlay))
+  (let* ((o (or o indent-hint-background-overlay)) ;; by Abe
          (b (line-beginning-position))
          (e (+ b (current-indentation))))
     (move-overlay o b e)))
