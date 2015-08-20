@@ -33,7 +33,6 @@
 ;; Python configuration
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'hideshowvis-minor-mode)
 (add-hook 'python-mode-hook 'indent-hint-mode)
 
 ;; Extra
