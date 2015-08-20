@@ -156,8 +156,8 @@ non-nil."
 ;; (load-theme 'material-light t)
 (load-theme 'faff t)
 
-;; Use for dark themes only
-(set-face-attribute 'region nil :background "#999")
+;; Use grey for marking region
+(set-face-attribute 'region nil :background "#aaa")
 
 ;; Syntax coloring
 (require 'font-lock+)
@@ -218,7 +218,7 @@ non-nil."
 (defun hi-lock-overlay-p (overlay)
   "Return the overlay if overlay is a hi-lock overlay."
   (if (and (overlayp overlay)
-         (eq (overlay-get overlay 'hi-lock-overlay) t))
+           (eq (overlay-get overlay 'hi-lock-overlay) t))
       overlay
     nil))
 
@@ -332,9 +332,9 @@ non-nil."
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 
@@ -443,12 +443,6 @@ non-nil."
       (set-buffer-modified-p nil))))
 (ad-activate 'highlight-changes-rotate-faces)
 
-;; If you're not already using it for something else...
-(set-face-foreground 'highlight-changes nil)
-(set-face-background 'highlight-changes "#882020")
-(set-face-foreground 'highlight-changes-delete nil)
-(set-face-background 'highlight-changes-delete "#916868")
-
 ;; Scrollbar
 (set-scroll-bar-mode 'right)
 
@@ -529,11 +523,11 @@ non-nil."
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-     (catch 'matched
-       (let ((inhibit-changing-match-data t)) ; small optimization
-         (dolist (regexp regexps)
-           (when (string-match regexp string)
-             (throw 'matched t)))))))
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

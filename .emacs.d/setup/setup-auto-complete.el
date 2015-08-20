@@ -87,10 +87,10 @@
                        (unless (local-variable-p 'ac-imenu-index)
                          (make-local-variable 'ac-imenu-index))
                        (or ac-imenu-index
-                          (setq ac-imenu-index (ignore-errors (imenu--make-index-alist)))))
+                           (setq ac-imenu-index (ignore-errors (imenu--make-index-alist)))))
         with result
         while (and stack (or (not (integerp ac-limit))
-                          (< i ac-limit)))
+                             (< i ac-limit)))
         for node = (pop stack)
         if (consp node)
         do
@@ -101,7 +101,7 @@
                       (push child stack))
                     cdr)
             (when (and (stringp car)
-                     (string-match (concat "^" (regexp-quote ac-prefix)) car))
+                       (string-match (concat "^" (regexp-quote ac-prefix)) car))
               ;; Remove extra characters
               (if (string-match "^.*\\(()\\|=\\|<>\\)$" car)
                   (setq car (substring car 0 (match-beginning 1))))
@@ -163,11 +163,10 @@
 (defun ac-latex-mode-setup ()
   (when (and (require 'auto-complete nil t) (require 'auto-complete-config nil t))
     (make-local-variable 'ac-sources)
-    (setq ac-sources (append '(ac-source-words-in-same-mode-buffers
-                               ac-source-dictionary
-                               ac-source-math-unicode
+    (setq ac-sources (append '(ac-source-math-unicode
                                ac-source-math-latex) ac-sources))))
 (add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
+(add-hook 'org-mode-hook 'ac-latex-mode-setup)
 
 ;; Autocomplete using Aspell
 (add-to-list 'load-path "~/.emacs.d/ac-ispell")
@@ -207,8 +206,8 @@
 (set-face-underline 'ac-candidate-face "gray")
 (set-face-background 'ac-selection-face "steelblue")
 (when (find-font (font-spec :name "Consolas"))
-  (set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch)
-  (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch))
+  (set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch :bold nil)
+  (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch :bold nil))
 
 ;; Tips for auto-complete
 (add-to-list 'load-path "~/.emacs.d/pos-tip")

@@ -78,32 +78,32 @@
 (defun ecb-enlarge-frame-width-before-show ()
   "Enlarge frame width before ecb shows layout."
   (if (and (ecb-windows-all-hidden)
-         (<= (+ (frame-pixel-width) (* (frame-char-width)
-                                      (+ ecb-windows-width 2)))
-            (display-pixel-width)))
+           (<= (+ (frame-pixel-width) (* (frame-char-width)
+                                         (+ ecb-windows-width 2)))
+               (display-pixel-width)))
       (set-frame-width (selected-frame) (+ (frame-width) (+ ecb-windows-width 2)))))
 (defun ecb-shrink-frame-width-before-hide ()
   "Shrink frame width before ecb hide layout."
   (if (and (not (ecb-windows-all-hidden))
 
-         (not (eq (frame-pixel-width)
-                (display-pixel-width))))
+           (not (eq (frame-pixel-width)
+                    (display-pixel-width))))
       (if (< (- (frame-width) (+ ecb-windows-width 2)) initial-frame-width)
           (set-frame-width (selected-frame) initial-frame-width)
         (set-frame-width (selected-frame) (- (frame-width) (+ ecb-windows-width 2))))))
 (defun ecb-enlarge-frame-width-before-activate ()
   "Enlarge frame width when ecb active and need it to."
   (let ((use-last-win-conf (and ecb-last-window-config-before-deactivation
-                              (equal ecb-split-edit-window-after-start
-                                     'before-deactivation)
-                              (not (ecb-window-configuration-invalidp
-                                  ecb-last-window-config-before-deactivation)))))
+                                (equal ecb-split-edit-window-after-start
+                                       'before-deactivation)
+                                (not (ecb-window-configuration-invalidp
+                                      ecb-last-window-config-before-deactivation)))))
     (unless (or (and use-last-win-conf
-                  (eq (nth 5 ecb-last-window-config-before-deactivation)
-                      ecb-windows-hidden-all-value))
-               (> (+ (frame-pixel-width) (* (frame-char-width)
-                                            (+ ecb-windows-width 2)))
-                  (display-pixel-width)))
+                     (eq (nth 5 ecb-last-window-config-before-deactivation)
+                         ecb-windows-hidden-all-value))
+                (> (+ (frame-pixel-width) (* (frame-char-width)
+                                             (+ ecb-windows-width 2)))
+                   (display-pixel-width)))
       (set-frame-width (selected-frame) (+ (frame-width) (+ ecb-windows-width 2))))))
 
 ;; reference path-to-ecb/ecb-layout-defs.el
@@ -340,20 +340,6 @@ little more place. "
              '("\\.js" . speedbar-parse-c-or-c++tag))
 (speedbar-add-supported-extension ".il")
 (speedbar-add-supported-extension ".ils")
-
-;; Nicer fonts for speedbar when in GUI
-(when (and (window-system)
-         (find-font (font-spec :name "Consolas")))
-  ;; keep monospace buttons, but smaller height
-  (set-face-attribute 'speedbar-button-face nil :height 100)
-
-  ;; change to system default UI font for entries
-  (dolist (face (list 'speedbar-file-face 'speedbar-directory-face
-                      'speedbar-tag-face  'speedbar-selected-face
-                      'speedbar-highlight-face))
-    (if (eq system-type 'windows-nt)
-        (set-face-attribute face nil :family "Consolas" :height 110))
-    (set-face-attribute face nil :family "Consolas" :height 135)))
 
 ;; Resize ECB at the end
 (add-hook 'window-setup-hook 'ecb-redraw-layout t)

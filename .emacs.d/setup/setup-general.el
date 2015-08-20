@@ -633,7 +633,7 @@
 ;; Make URLs in comments/strings clickable, (emacs > v22)
 (add-hook 'find-file-hooks 'goto-address-prog-mode)
 
-;; Fix longlines in Org
+;; Backport longlines
 (require 'longlines nil t)
 (setq longlines-wrap-follows-window-size t)
 
