@@ -257,6 +257,8 @@ non-nil."
 
 ;; Do not use linum, but nlinum instead
 (require 'nlinum)
+(require 'line-num)
+(global-linum-mode t)
 
 ;; Preset width nlinum
 (add-hook 'nlinum-mode-hook

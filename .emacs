@@ -10,6 +10,7 @@
   "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
 (add-to-list 'load-path "~/.emacs.d/elisp")
+(add-to-list 'load-path "~/.emacs.d/dadams")
 (add-to-list 'load-path "~/.emacs.d/setup")
 (add-to-list 'load-path "~/.emacs.d/elp")
 (add-to-list 'load-path "~/.emacs.d/s")
@@ -35,9 +36,9 @@
            ;; `get-buffer' here.
            (if (null buffer-or-name) (other-buffer (current-buffer))
              (or (get-buffer buffer-or-name)
-                (let ((buf (get-buffer-create buffer-or-name)))
-                  (set-buffer-major-mode buf)
-                  buf))))
+                 (let ((buf (get-buffer-create buffer-or-name)))
+                   (set-buffer-major-mode buf)
+                   buf))))
           (old-window (selected-window))
           (old-frame (selected-frame))
           new-window new-frame)
@@ -69,7 +70,7 @@ Defaults to `error'."
                       (mapcar (lambda (parent)
                                 (cons parent
                                       (or (get parent 'error-conditions)
-                                         (error "Unknown signal `%s'" parent))))
+                                          (error "Unknown signal `%s'" parent))))
                               parent))
              (cons parent (get parent 'error-conditions)))))
       (put name 'error-conditions
