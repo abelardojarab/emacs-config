@@ -38,9 +38,9 @@
 ;; Faster parsing
 (setq semantic-idle-work-parse-neighboring-files-flag nil)
 (setq semantic-idle-work-update-headers-flag nil)
-(setq semantic-idle-scheduler-idle-time 180000)
+(setq semantic-idle-scheduler-idle-time 3)
 (setq semantic-idle-scheduler-work-idle-time 180000)
-(setq semantic-idle-scheduler-max-buffer-size 1)
+(setq semantic-idle-scheduler-max-buffer-size 1000)
 
 ;; Default directory
 (setq semanticdb-default-system-save-directory
@@ -103,7 +103,6 @@
 
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
-(require 'semantic/ia)
 (require 'semantic/bovine/c)
 (require 'semantic/bovine/clang)
 

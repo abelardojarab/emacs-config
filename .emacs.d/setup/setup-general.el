@@ -345,14 +345,12 @@
 ;; buffer-display-time is changed when desktop is loaded
 (add-to-list 'desktop-locals-to-save 'buffer-display-time-1)
 (make-variable-buffer-local 'buffer-display-time-1)
-
 (defun save-buffer-display-time ()
   (mapc (lambda (buf)
           (with-current-buffer buf
             (setq buffer-display-time-1
                   (or buffer-display-time (current-time)))))
         (buffer-list)))
-
 (add-hook 'desktop-save-hook 'save-buffer-display-time)
 
 (defun set-buffer-display-time ()
@@ -360,7 +358,6 @@
           (with-current-buffer buf
             (setq buffer-display-time buffer-display-time-1)))
         (buffer-list)))
-
 (add-hook 'desktop-after-read-hook 'set-buffer-display-time)
 (desktop-save-mode 1)
 
@@ -434,10 +431,7 @@
 
 ;; Filladapt mode for text files
 (require 'filladapt)
-(add-hook 'tex-mode-hook 'turn-on-filladapt-mode)
 (add-hook 'text-mode-hook 'turn-on-filladapt-mode)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-(add-hook 'c-mode-hook 'turn-off-filladapt-mode)
 
 ;; Cut the lines at 80 characters; I dont like it but it is a convention
 (add-hook 'c++-mode-hook 'turn-on-auto-fill)
@@ -577,7 +571,6 @@
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
 (add-hook 'text-mode-hook 'text-mode-hook-identify)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'text-mode-hook (function
                            (lambda () (ispell-minor-mode))))
 
