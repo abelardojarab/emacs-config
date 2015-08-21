@@ -1,8 +1,8 @@
-;; Object ede-proj-project
-;; EDE project file.
+;; Object CEDET Documentation
+;; EDE Project Files are auto generated: Do Not Edit
 (ede-proj-project "CEDET Documentation"
-  :name "CEDET-doc"
   :file "Project.ede"
+  :name "CEDET-doc"
   :targets (list 
    (ede-proj-target-makefile-info "CEDET-overview"
     :name "CEDET-overview"
@@ -17,7 +17,7 @@
    (ede-proj-target-makefile-info "ede-doc"
     :name "ede-doc"
     :path ""
-    :source '("ede.texi")
+    :source '("ede.texi" "ede-manage.texi" "ede-compdb.texi" "ede-extend.texi")
     )
    (ede-proj-target-makefile-info "srecode-doc"
     :name "srecode-doc"

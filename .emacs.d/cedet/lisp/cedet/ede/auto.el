@@ -64,10 +64,11 @@ into memory.")
 
 (defmethod ede-calc-fromconfig ((dirmatch ede-project-autoload-dirmatch))
   "Calculate the value of :fromconfig from DIRMATCH."
-  (let ((fc (oref dirmatch fromconfig)))
-    (cond ((stringp fc) fc)
-	  ((functionp fc) (funcall fc))
-	  (t (error "Unknown dirmatch object match style.")))
+  (let* ((fc (oref dirmatch fromconfig))
+	 (found (cond ((stringp fc) fc)
+		      ((functionp fc) (funcall fc))
+		      (t (error "Unknown dirmatch object match style.")))))
+    (expand-file-name found)
     ))
 
 
@@ -210,6 +211,12 @@ type is required and the load function used.")
   "List of vectors defining how to determine what type of projects exist.")
 
 (put 'ede-project-class-files 'risky-local-variable t)
+
+(defun ede-show-supported-projects ()
+  "Display all the project types registered with EDE."
+  (interactive)
+  (data-debug-new-buffer (concat "*EDE Autodetect*"))
+  (data-debug-insert-stuff-list ede-project-class-files "* "))
 
 (defun ede-add-project-autoload (projauto &optional flag)
   "Add PROJAUTO, an EDE autoload definition to `ede-project-class-files'.

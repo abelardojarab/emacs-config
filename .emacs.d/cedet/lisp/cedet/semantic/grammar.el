@@ -1,6 +1,6 @@
 ;;; semantic/grammar.el --- Major mode framework for Semantic grammars
 
-;; Copyright (C) 2002-2005, 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2005, 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
@@ -1201,8 +1201,8 @@ END is the limit of the search."
 
     (define-key km "\t"       'semantic-grammar-indent)
     (define-key km "\C-c\C-c" 'semantic-grammar-create-package)
-    (define-key km "\C-cm"    'semantic-grammar-find-macro-expander)
-    (define-key km "\C-cik"    'semantic-grammar-insert-keyword)
+    (define-key km "\C-c\C-m"    'semantic-grammar-find-macro-expander)
+    (define-key km "\C-c\C-k"    'semantic-grammar-insert-keyword)
 ;;  (define-key km "\C-cc"    'semantic-grammar-generate-and-load)
 ;;  (define-key km "\C-cr"    'semantic-grammar-generate-one-rule)
 
@@ -1510,6 +1510,16 @@ Return the tag found or nil if not found."
             (and (featurep 'semantic/db)
                  semanticdb-current-database
                  (cdar (semanticdb-find-tags-by-name name nil t)))))))
+
+(defun semantic--grammar-find-macro-symbol-library (def)
+  "Return the library the macro defined by DEF is in."
+  (let ((lib (symbol-file (cdr def) 'defun)))
+    (if (not (string-match "\\.elc" lib))
+	lib
+      (setq lib2 (replace-match ".el" t t lib 0))
+      (if (file-exists-p lib2)
+	  lib2
+	lib))))
 
 (defsubst semantic--grammar-macro-lib-part (def)
   "Return the library part of the grammar macro defined by DEF."

@@ -25,7 +25,7 @@
 @copying
 This manual documents Grammar Development with Semantic.
 
-Copyright @copyright{} 2004, 2009 Eric M. Ludlam
+Copyright @copyright{} 2004, 2009, 2015 Eric M. Ludlam
 Copyright @copyright{} 2004 David Ponce
 Copyright @copyright{} 2004 Richard Y. Kim
 
@@ -1051,7 +1051,7 @@ semantic-appdev}.
 @end deffn
 
 You can run the command @command{semantic-grammar-find-macro-expander}
-with @w{@kbd{C-c m}}.
+with @w{@kbd{C-c C-m}}.
 
 The characters @w{@kbd{| ; % ( ) :}} are @dfn{electric punctuations}.
 Each time you type one, the line is re-indented after the character is
@@ -1064,7 +1064,7 @@ Assumes it is typed in with the correct casing.
 @end deffn
 
 You can run the command @command{semantic-grammar-insert-keyword}
-with @w{@kbd{C-c i k}}.
+with @w{@kbd{C-c C-k}}.
 
 @node Auto-generation of lexical rules
 @section Auto-generation of lexical rules
