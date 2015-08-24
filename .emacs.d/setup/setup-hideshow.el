@@ -139,17 +139,13 @@
   "hideshowvis"
   "Will indicate regions foldable with hideshow in the fringe."
   'interactive)
-(dolist (hook (list 'lisp-mode-hook
-                    'js2-mode-hook
-                    'emacs-lisp-mode-hook
-                    'python-mode-hook
-                    'nxml-mode-hook
+(dolist (hook (list 'prog-mode-hook
                     'c-mode-common-hook))
   (add-hook hook 'hideshowvis-enable))
 
 ;; enable `hs-minor-mode' at startup
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
-(dolist (x '(emacs-lisp lisp java perl sh python js2 nxml))
+(dolist (x '(prog emacs-lisp lisp java perl sh python js2 nxml))
   (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hs-minor-mode))
 
 (defun hs-minor-mode-settings ()

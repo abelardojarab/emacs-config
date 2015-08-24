@@ -218,7 +218,7 @@ non-nil."
 (defun hi-lock-overlay-p (overlay)
   "Return the overlay if overlay is a hi-lock overlay."
   (if (and (overlayp overlay)
-           (eq (overlay-get overlay 'hi-lock-overlay) t))
+         (eq (overlay-get overlay 'hi-lock-overlay) t))
       overlay
     nil))
 
@@ -339,9 +339,9 @@ non-nil."
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
+        (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                  ,(make-char 'greek-iso8859-7 107))
+                  nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 
@@ -525,17 +525,19 @@ non-nil."
     (lawlist-scroll-bar-mode 1)))
 
 (global-lawlist-scroll-bar-mode)
+(add-hook 'prog-mode-hook
+          (lambda () (lawlist-scroll-bar-mode -1)))
 
 ;; https://github.com/kentaro/auto-save-buffers-enhanced
 ;; `regexp-match-p` function modified by @sds on stackoverflow
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-       (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
-           (dolist (regexp regexps)
-             (when (string-match regexp string)
-               (throw 'matched t)))))))
+     (catch 'matched
+       (let ((inhibit-changing-match-data t)) ; small optimization
+         (dolist (regexp regexps)
+           (when (string-match regexp string)
+             (throw 'matched t)))))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
