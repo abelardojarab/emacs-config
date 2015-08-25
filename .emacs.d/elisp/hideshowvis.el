@@ -1,6 +1,6 @@
 ;;; hideshowvis.el --- Add markers to the fringe for regions foldable by hideshow.el
 ;;
-;; Copyright 2008-2012, 2014 Jan Rehders
+;; Copyright 2008-2012, 2014, 2015 Jan Rehders
 ;;
 ;; Author: Jan Rehders <cmdkeen@gmx.de>
 ;; Contributions by Bryan Waite and Michael Heerdegen
@@ -79,7 +79,7 @@
 (defconst hideshowvis-version "v0.4" "Version of hideshowvis minor mode")
 
 (defface hideshowvis-hidable-face
-  '((t (:foreground "#ccc" :box t)))
+  '((t (:foreground "#555" :box t)))
   "Face to highlight foldable regions"
   :group 'hideshow)
 

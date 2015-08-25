@@ -123,9 +123,8 @@
         (folding-mode))
     ad-do-it))
 
-;; Code folding
-(autoload 'hideshowvis-enable "hideshowvis" "Highlight foldable regions")
-(autoload 'hideshowvis-minor-mode "hideshowvis" "Will indicate regions foldable with hideshow in the fringe." 'interactive)
+;; Hideshow Visualization
+(require 'hideshowvis)
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
 (dolist (x '(prog emacs-lisp lisp java perl sh python js2 nxml))
   (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hs-minor-mode))

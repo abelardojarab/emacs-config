@@ -257,13 +257,10 @@ non-nil."
 
 ;; Do not use linum, but nlinum instead
 (require 'nlinum)
-(require 'line-num)
-(global-linum-mode t)
 
 ;; Highlight line number
 (add-to-list 'load-path "~/.emacs.d/hlinum-mode")
 (require 'hlinum)
-(hlinum-activate)
 
 ;; Preset width nlinum
 (add-hook 'nlinum-mode-hook
