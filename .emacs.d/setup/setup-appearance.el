@@ -148,13 +148,13 @@ non-nil."
 (setq solarized-scale-org-headlines nil)
 
 ;; Load Atom dark theme
-(load-theme 'atom-dark t)
+;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'material-light t)
-;; (load-theme 'faff t)
+(load-theme 'faff t)
 
 ;; Use grey for marking region
 (set-face-attribute 'region nil :background "#aaa")
