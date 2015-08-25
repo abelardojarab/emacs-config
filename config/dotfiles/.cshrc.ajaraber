@@ -5,9 +5,9 @@
     alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
 
     if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
-       setenv PATH ${HOME}/bin:${HOME}/bin/bin:${HOME}/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${PATH}
+       setenv PATH ${HOME}/bin:${HOME}/bin/bin:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/utils/nodejs/bin:${PATH}
     else
-       setenv PATH  ${HOME}/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/workspace/builds/nodejs/bin:${PATH}:${HOME}/bin:${HOME}/bin/bin
+       setenv PATH  ${HOME}/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/builds/nodejs/bin:${PATH}:${HOME}/bin:${HOME}/bin/bin
     endif
 
     setenv EC_DISABLE_VAL 1

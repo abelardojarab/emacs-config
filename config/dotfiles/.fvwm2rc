@@ -153,6 +153,7 @@ AddToMenu OfficeTextSubMenu "Office/Text" Title
 Mouse 0 R N Menu MainMenu
 
 AddToMenu MainMenu "Main Menu" Title
++ "Terminal" Exec exec gnome-terminal
 + "xterm" Exec exec xterm -fg green -bg black -vb
 + "Net" Popup NetSubMenu
 + "Graphics/CAD" Popup GraphicsCADSubMenu
