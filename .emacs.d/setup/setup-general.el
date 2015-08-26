@@ -707,5 +707,8 @@ not need to be wrapped, move point to the next line and return t."
 ;; it actually inserts text/code for you
 (setq auto-insert-query nil)
 
+;; Line numbers
+(global-linum-mode t)
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
