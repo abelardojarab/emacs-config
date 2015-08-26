@@ -92,37 +92,8 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:setup-keys nil)
 (setq jedi:complete-on-dot t)
-(setq jedi:tooltip-method nil)
+(setq jedi:tooltip-method t)
 (add-hook 'python-mode-hook 'jedi-mode)
-
-(defun jedi:ac-direct-matches ()
-  (mapcar
-   (lambda (x)
-     (destructuring-bind (&key word doc description symbol)
-         x
-       (popup-make-item word
-                        :symbol symbol
-                        :document (unless (equal doc "") doc))))
-   jedi:complete-reply))
-
-(defun jedi-eldoc-documentation-function ()
-  (deferred:nextc
-    (jedi:call-deferred 'get_in_function_call)
-    #'jedi-eldoc-show)
-  nil)
-
-(defun jedi-eldoc-show (args)
-  (when args
-    (let ((eldoc-documentation-function
-           (lambda ()
-             (apply #'jedi:get-in-function-call--construct-call-signature args))))
-      (eldoc-print-current-symbol-info))))
-
-;; Jedi Eldoc
-(require 'jedi-eldoc)
-(set-face-attribute 'jedi-eldoc:highlight-function-argument nil
-                    :foreground "green")
-(add-hook 'python-mode-hook 'jedi-eldoc-mode)
 
 (provide 'setup-python)
 ;;; setup-python.el ends here
