@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; Bookmark Plus
-(add-to-list 'load-path "~/.emacs.d/bookmark-plus")
+(add-to-list 'load-path "~/.emacs.d/bookmark+")
 (require 'bookmark+)
 
 ;; Bookmarks

@@ -524,7 +524,12 @@
            (when (string-match regexp string)
              (throw 'matched t)))))))
 
+;; Search at point
+(require 'thingatpt)
+(require 'thingatpt+)
+
 ;; Better search, similar to vim
+(require 'isearch-prop)
 (require 'isearch+)
 (defun my-isearch-word-at-point ()
   (interactive)
@@ -556,14 +561,6 @@
   (recenter))
 (ad-activate 'isearch-repeat-forward)
 (ad-activate 'isearch-repeat-backward)
-
-;; Search at point
-(require 'thingatpt)
-(require 'thingatpt+)
-
-;; iSearch Plus
-(require 'isearch-prop)
-(require 'isearch+)
 
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
@@ -704,7 +701,6 @@ not need to be wrapped, move point to the next line and return t."
 (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
 ;; Improved buffer menu
-(load "~/.emacs.d/elisp/buff-menu.el")
 (require 'buff-menu+)
 
 ;; Measure Emacs startup time

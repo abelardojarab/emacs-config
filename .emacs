@@ -36,9 +36,9 @@
            ;; `get-buffer' here.
            (if (null buffer-or-name) (other-buffer (current-buffer))
              (or (get-buffer buffer-or-name)
-                 (let ((buf (get-buffer-create buffer-or-name)))
-                   (set-buffer-major-mode buf)
-                   buf))))
+                (let ((buf (get-buffer-create buffer-or-name)))
+                  (set-buffer-major-mode buf)
+                  buf))))
           (old-window (selected-window))
           (old-frame (selected-frame))
           new-window new-frame)
@@ -70,7 +70,7 @@ Defaults to `error'."
                       (mapcar (lambda (parent)
                                 (cons parent
                                       (or (get parent 'error-conditions)
-                                          (error "Unknown signal `%s'" parent))))
+                                         (error "Unknown signal `%s'" parent))))
                               parent))
              (cons parent (get parent 'error-conditions)))))
       (put name 'error-conditions
@@ -134,9 +134,8 @@ Defaults to `error'."
  '(ecb-vc-enable-support t)
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(ede-project-directories (quote ("~/workspace/frametools")))
- '(ergoemacs-mode t)
  '(initial-scratch-message ";; scratch buffer created -- start typing...")
- '(org-CUA-compatible nil)
+ '(org-CUA-compatible t)
  '(org-support-shift-select (quote always))
  '(protect-buffer-bury-p nil)
  '(recentf-mode t)

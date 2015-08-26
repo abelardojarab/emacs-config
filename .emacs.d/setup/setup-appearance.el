@@ -151,8 +151,8 @@ non-nil."
 (set-face-attribute 'region nil :background "#aaa")
 
 ;; Syntax coloring
-(require 'font-lock+)
 (require 'jit-lock)
+(require 'font-lock+)
 (global-font-lock-mode t)
 (global-hi-lock-mode nil)
 (setq font-lock-maximum-decoration t)

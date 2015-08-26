@@ -42,7 +42,7 @@
 
 ;; Helm bm support
 (add-to-list 'load-path "~/.emacs.d/helm-bm")
-(require 'helm-bm) ;; Not necessary if using ELPA package
+(require 'helm-bm)
 
 ;; Helm themes
 (add-to-list 'load-path "~/.emacs.d/helm-themes")
@@ -166,7 +166,7 @@
 (setq helm-dash-docsets-path (format "%s/.emacs.d/docsets" (getenv "HOME")))
 (setq helm-dash-common-docsets '("C" "C++"))
 
-(defun jwintz/dash-path (docset)
+(defun my/dash-path (docset)
   (if (string= docset "OpenGL_2")
       (concat (concat helm-dash-docsets-path "/") "OpenGL2.docset")
     (if (string= docset "OpenGL_3")
@@ -181,8 +181,8 @@
              (concat helm-dash-docsets-path "/")
              (nth 0 (split-string docset "_")))) ".docset"))))))
 
-(defun jwintz/dash-install (docset)
-  (unless (file-exists-p (jwintz/dash-path docset))
+(defun my/dash-install (docset)
+  (unless (file-exists-p (my/dash-path docset))
     (helm-dash-install-docset docset)))
 
 (defun c-doc-hook ()
