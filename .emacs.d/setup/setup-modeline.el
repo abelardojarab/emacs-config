@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; Nyan cat
+(add-to-list 'load-path "~/.emacs.d/nyan-mode")
+(require 'nyan-mode)
+(nyan-mode t)
+
 (add-to-list 'load-path "~/.emacs.d/powerline")
 (require 'powerline)
 (powerline-center-theme)
@@ -42,11 +47,6 @@
 (require 'smex)
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
-
-;; Nyan cat
-(add-to-list 'load-path "~/.emacs.d/nyan-mode")
-(require 'nyan-mode)
-(nyan-mode t)
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here
