@@ -48,15 +48,6 @@
 (require 'autofit-frame)
 (add-hook 'after-make-frame-functions 'fit-frame)
 
-;; Non-nil means no need to redraw entire frame after suspending.
-(setq no-redraw-on-reenter t)
-
-;; Improve Emacs display engine
-(setq redisplay-dont-pause t)
-
-;; Disable bidirectional text support
-(setq-default bidi-display-reordering nil)
-
 ;; Enable GUI features
 (setq use-file-dialog t)
 (setq use-dialog-box t)

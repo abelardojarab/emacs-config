@@ -180,9 +180,6 @@
   (setq shell-file-name "bash")))
 (setq explicit-shell-file-name shell-file-name)
 
-;; reduce garbage collection (default is only 400k)
-(setq gc-cons-threshold (* 8192 8192))
-
 ;; try to improve slow performance on windows.
 (setq w32-get-true-file-attributes nil)
 
