@@ -82,7 +82,7 @@ non-nil."
 (global-visual-line-mode 1)
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
-(add-hook 'lisp-mode-hook
+(add-hook 'prog-mode-hook
           (lambda ()
             (visual-line-mode -1)
             (toggle-truncate-lines 1)))
@@ -246,20 +246,6 @@ non-nil."
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 
-;; Do not use linum, but nlinum instead
-(require 'nlinum)
-
-;; Highlight line number
-(add-to-list 'load-path "~/.emacs.d/hlinum-mode")
-(require 'hlinum)
-
-;; Preset width nlinum
-(add-hook 'nlinum-mode-hook
-          (lambda ()
-            (setq nlinum--width
-                  (+ 2 (length (number-to-string
-                                (count-lines (point-min) (point-max))))))))
-
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
   (let ()
@@ -322,16 +308,6 @@ non-nil."
   (buffer-face-mode -1))
 (add-hook 'html-mode-hook 'fixed-pitch-mode)
 (add-hook 'nxml-mode-hook 'fixed-pitch-mode)
-
-;; Pretty lambdas
-(defun pretty-lambdas ()
-  (font-lock-add-keywords
-   nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
-(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
-(add-hook 'lisp-mode-hook 'pretty-lambdas)
 
 ;; Pretty symbols mode
 (add-to-list 'load-path "~/.emacs.d/pretty-symbols")
