@@ -422,21 +422,6 @@
 ;; Makes final line always be a return
 (setq require-final-newline t)
 
-;; When in text (or related mode) break the lines at 80 chars
-(require 'fill-column-indicator)
-(setq fill-column 80)
-
-;; Filladapt mode for text files
-(require 'filladapt)
-(add-hook 'text-mode-hook 'turn-on-filladapt-mode)
-
-;; Cut the lines at 80 characters; I dont like it but it is a convention
-(add-hook 'c++-mode-hook 'turn-on-auto-fill)
-(add-hook 'c-mode-hook 'turn-on-auto-fill)
-(add-hook 'vhdl-mode-hook 'turn-on-auto-fill)
-(add-hook 'python-mode-hook 'turn-on-auto-fill)
-(add-hook 'js2-mode-hook 'turn-on-auto-fill)
-
 ;; Set indent to 4 instead of 2
 (setq standard-indent 4)
 

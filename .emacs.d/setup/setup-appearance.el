@@ -94,12 +94,6 @@ non-nil."
 ;; Make side by side buffers function the same as the main window
 (setq-default truncate-partial-width-windows nil)
 
-;; Fix for visual line mode
-(require 'adaptive-wrap)
-(add-hook 'visual-line-mode-hook 'adaptive-wrap-prefix-mode)
-(add-hook 'visual-line-mode-hook 'toggle-truncate-lines)
-(setq adaptive-wrap-extra-indent 4)
-
 ;; Fringe helper
 (add-to-list 'load-path "~/.emacs.d/fringe-helper")
 (require 'fringe-helper)
