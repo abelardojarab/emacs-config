@@ -685,9 +685,6 @@ not need to be wrapped, move point to the next line and return t."
 (global-aggressive-indent-mode 1)
 (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
-;; Improved buffer menu
-(require 'buff-menu+)
-
 ;; Measure Emacs startup time
 (defun show-startup-time ()
   "Show Emacs's startup time in the minibuffer"
