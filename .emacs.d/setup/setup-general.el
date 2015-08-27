@@ -195,9 +195,9 @@
 (set-keyboard-coding-system 'utf-8-unix)
 (set-selection-coding-system 'utf-8-unix)
 (set-default buffer-file-coding-system 'utf-8-unix)
+(set-default default-buffer-file-coding-system 'utf-8-unix)
 (set-default-coding-systems 'utf-8-unix)
 (prefer-coding-system 'utf-8-unix)
-(set-default default-buffer-file-coding-system 'utf-8-unix)
 
 ;; Even so, ansi-term doesn’t obey:
 (defadvice ansi-term (after advise-ansi-term-coding-system)
@@ -664,6 +664,23 @@ not need to be wrapped, move point to the next line and return t."
         (forward-line 1)
         t))))
 
+;; Truncate lines
+(set-default 'truncate-lines t)
+(toggle-truncate-lines 1)
+
+;; Marker if the line goes beyond the end of the screen (arrows)
+(global-visual-line-mode 1)
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+(setq visual-line-fringe-indicators '(nil right-curly-arrow))
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
+
 ;; Aggresive indent mode
 (add-to-list 'load-path "~/.emacs.d/names")
 (add-to-list 'load-path "~/.emacs.d/aggressive-indent-mode")
@@ -672,18 +689,6 @@ not need to be wrapped, move point to the next line and return t."
 (global-aggressive-indent-mode 1)
 (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
-;; Measure Emacs startup time
-(defun show-startup-time ()
-  "Show Emacs's startup time in the minibuffer"
-  (message "Startup time: %s seconds."
-           (emacs-uptime "%s")))
-(add-hook 'emacs-startup-hook 'show-startup-time 'append)
-
-;; Benchmark-init can give us a breakdown of time spent on require and load calls:
-(add-to-list 'load-path "~/.emacs.d/benchmark-init")
-(require 'benchmark-init)
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
-
 ;; windows handling
 (add-to-list 'load-path "~/.emacs.d/window-purpose")
 (require 'window-purpose)
@@ -691,7 +696,7 @@ not need to be wrapped, move point to the next line and return t."
 (setq purpose-preferred-prompt 'helm)
 (setq menu-bar-select-buffer-function 'switch-to-buffer)
 
-;; IMenu list
+;; imenu list
 (add-to-list 'load-path "~/.emacs.d/imenu-list")
 (require 'imenu-list)
 
@@ -709,6 +714,18 @@ not need to be wrapped, move point to the next line and return t."
 
 ;; Line numbers
 (global-linum-mode t)
+
+;; Measure Emacs startup time
+(defun show-startup-time ()
+  "Show Emacs's startup time in the minibuffer"
+  (message "Startup time: %s seconds."
+           (emacs-uptime "%s")))
+(add-hook 'emacs-startup-hook 'show-startup-time 'append)
+
+;; Benchmark-init can give us a breakdown of time spent on require and load calls:
+(add-to-list 'load-path "~/.emacs.d/benchmark-init")
+(require 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
