@@ -1,6 +1,6 @@
 ;;; setup-recentf.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -26,13 +26,12 @@
 
 ;; Recentf stuff
 (require 'recentf)
-(setq recentf-max-menu-items 25)
+(setq recentf-max-menu-items 8)
 (setq recentf-exclude (append recentf-exclude '("/usr*")))
-(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
+(setq recentf-auto-cleanup 'never)
 (setq recentf-filename-handlers '(abbreviate-file-name))
 (setq recentf-save-file "~/.emacs.cache/recentf")
 (recentf-mode 1)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 (provide 'setup-recentf)
 ;;; setup-recentf.el ends here

@@ -85,6 +85,9 @@
 (global-set-key [(control r)] 'replace-string)
 (global-set-key "\C-a" 'mark-whole-buffer)
 
+;; Recent files
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
 ;; Bookmarks
 (global-set-key (kbd "<f2>")   'helm-bm)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
