@@ -6,7 +6,7 @@
 
 <p><img src="https://avatars3.githubusercontent.com/u/1541688?v=3&amp;s=200" alt="Emacs-helm" title="" /></p>
 
-<p>You can  <a href="https://gratipay.com/thierryvolpiatto"><img src="https://cdn.rawgit.com/gratipay/gratipay-badge/2.1.3/dist/gratipay.png" alt="Support via Gratipay" title="" /></a> or <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=thierry.volpiatto@gmail.com&amp;lc=US&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate" title="" /></a> to help this project.</p>
+<p>You can <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=thierry.volpiatto@gmail.com&amp;lc=US&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate" title="" /></a> to help this project.</p>
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc/generate-toc again -->
 **Table of Contents**
@@ -254,7 +254,7 @@ You can customize the minimum and maximum height that Helm can resize with these
 
 By default, `helm-autoresize-max-height` is set to 40, which makes Helm candidate buffer has the maximum height of 40% of current frame height. Similarly, `helm-autoresize-min-height` specifies the minimum height that Helm candidate buffer cannot be smaller.
 
-If you don't want the Helm window to be resized, but a smaller Helm window, you can set `helm-autoresize-max-height` equal to `helm-autoresize-max-height`.
+If you don't want the Helm window to be resized, but a smaller Helm window, you can set `helm-autoresize-min-height` equal to `helm-autoresize-max-height`.
 
 # Features
 
@@ -264,14 +264,15 @@ If you don't want the Helm window to be resized, but a smaller Helm window, you 
 - `helm-find-files`: Replace in one command all the files related commands (Bind it to `C-x C-f`!).
 - `helm-buffers-list`: Enhanced buffers listing.
 - `helm-browse-project`: Show all buffers and files related to project or current directory (Usable everywhere with `helm-find-files`) you will want to install
-[helm-ls-git](https://github.com/emacs-helm/helm-ls-git) and [helm-ls-hg](https://github.com/emacs-helm/helm-ls-hg) for a better experience.
+[helm-ls-git](https://github.com/emacs-helm/helm-ls-git), [helm-ls-hg](https://github.com/emacs-helm/helm-ls-hg) and `helm-ls-svn` for a better experience.
 - `helm-dabbrev`: Enhanced dabbrev with helm completion (Own implementation of dabbrev for helm, don't reuse emacs code).
 - `helm-moccur`: Enhanced occur for one or more buffers, launch it from `helm-buffers-list` or `current-buffer`(Own implementation).
 - `helm-M-x`: Enhanced version of `execute-extended-command` (Bind it to `M-x`!).
 - `helm-imenu` and `helm-imenu-in-all-buffers`: Imenu in `current-buffer` or in all your buffers.
 - `helm-etags-select`: Enhanced version of etags with helm-completion (Usable everywhere with `helm-find-files`).
 - `helm-apropos`: Description of functions, variables, etc... Use it instead of Most `C-h` commands.
-- `Grep`: You can launch it (recursively or not) from any files related helm commands, support as backends `grep`, `ack-grep`, `git-grep` (Own implementation).
+- `Grep`: You can launch it (recursively or not) from any files related helm commands, support as backends `grep`, `ack-grep`, `git-grep`,
+`ag` and `pt` (Own implementation).
 - `helm-gid`: Helm interface to `gid` from [id-utils](https://www.gnu.org/software/idutils/).
 - `helm-show-kill-ring`: A kill ring browser for helm.
 - `helm-all-mark-rings`: A mark ring for helm, allow retrieving your last position(s) in a buffer.

@@ -3,6 +3,7 @@ Feature: Extract var
   Scenario: Inlining variable
     When I insert "var foo = bar(1,2,3); foo();"
     And I turn on js2-mode
+    And I turn on js2-refactor-mode
     And I go to the front of the word "foo"
     And I press "C-c C-m iv"
     Then I should see:
@@ -19,11 +20,109 @@ Feature: Extract var
     }
     """
     And I turn on js2-mode
+    And I turn on js2-refactor-mode
     And I go to the front of the word "foo"
     And I press "C-c C-m iv"
     Then I should see:
     """
     function hello() {
     	baz(bar());
+    }
+    """
+
+  Scenario: Inlining let with tab indentation
+    Given I insert:
+    """
+    function hello() {
+    	let foo = bar();
+    	baz(foo);
+    }
+    """
+    And I turn on js2-mode
+    And I turn on js2-refactor-mode
+    And I go to the front of the word "foo"
+    And I press "C-c C-m iv"
+    Then I should see:
+    """
+    function hello() {
+    	baz(bar());
+    }
+    """
+
+  Scenario: Inlining const with tab indentation
+    Given I insert:
+    """
+    function hello() {
+    	const foo = bar();
+    	baz(foo);
+    }
+    """
+    And I turn on js2-mode
+    And I turn on js2-refactor-mode
+    And I go to the front of the word "foo"
+    And I press "C-c C-m iv"
+    Then I should see:
+    """
+    function hello() {
+    	baz(bar());
+    }
+    """
+
+  Scenario: Inlining let, multiple statements
+    Given I insert:
+    """
+    function hello() {
+    	let foo = bar(), qux = 13;
+    	baz(foo);
+    }
+    """
+    And I turn on js2-mode
+    And I turn on js2-refactor-mode
+    And I go to the front of the word "foo"
+    And I press "C-c C-m iv"
+    Then I should see:
+    """
+    function hello() {
+    	let qux = 13;
+    	baz(bar());
+    }
+    """
+
+  Scenario: Inlining const, multiple statements
+    Given I insert:
+    """
+    function hello() {
+    	const foo = bar(), qux = 13;
+    	baz(foo);
+    }
+    """
+    And I turn on js2-mode
+    And I turn on js2-refactor-mode
+    And I go to the front of the word "foo"
+    And I press "C-c C-m iv"
+    Then I should see:
+    """
+    function hello() {
+    	const qux = 13;
+    	baz(bar());
+    }
+    """
+
+  Scenario: Inlining variable defined after the inlining
+    Given I insert:
+    """
+    function xxx() {
+        return asdfg;
+    }
+    var asdfg = 'x';
+    """
+    And I turn on js2-mode
+    And I turn on js2-refactor-mode
+    And I go to the front of the word "asdfg"
+    And I press "C-c C-m iv"
+    Then I should see:
+    """
+    function xxx() {
+        return 'x';
     }
     """

@@ -48,7 +48,7 @@
                                   '("~/Downloads/interesting-snippets")))
    #+end_src
 
-   Collections appearing earlier in the list shadow snippets with same names
+   Collections appearing earlier in the list override snippets with same names
    appearing in collections later in the list. [[sym:yas-new-snippet][=yas-new-snippet=]] always stores
    snippets in the first collection.
 
@@ -112,9 +112,16 @@
 
 ** TODO
 
-* TODO The =.yas-compiled-snippet.el= file
+* The =.yas-compiled-snippet.el= file
 
-** TODO
+   You may compile a top-level snippet directory with the
+   =yas-compile-directory= function, which will create a
+   =.yas-compiled-snippets.el= file under each mode subdirectory,
+   which contains definitions for all snippets in the subdirectory.
+   Compilation helps improve loading time.
+
+   Alternatively, you may compile all directories in the list
+   =yas-snippet-dirs= with the =yas-recompile-all= function.
 
 * TODO The =.yas-skip= file
 

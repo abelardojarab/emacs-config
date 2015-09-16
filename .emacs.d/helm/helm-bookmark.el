@@ -475,7 +475,9 @@ than `w3m-browse-url' use it."
       :init (lambda ()
               (bookmark-maybe-load-default-file)
               (helm-init-candidates-in-buffer
-                  'global (helm-bookmark-helm-find-files-setup-alist)))))
+                  'global (helm-bookmark-helm-find-files-setup-alist)))
+      :persistent-action (lambda (_candidate) (ignore))
+      :persistent-help "Do nothing"))
 
 ;;; Uncategorized bookmarks
 ;;
@@ -689,7 +691,7 @@ words from the buffer into the new bookmark name."
   "Run `helm-bookmark-edit-bookmark' from keyboard."
   (interactive)
   (with-helm-alive-p
-    (helm-quit-and-execute-action 'helm-bookmark-edit-bookmark)))
+    (helm-exit-and-execute-action 'helm-bookmark-edit-bookmark)))
 
 
 ;;; Bookmarks attributes
@@ -713,14 +715,14 @@ words from the buffer into the new bookmark name."
   "Jump to bookmark from keyboard."
   (interactive)
   (with-helm-alive-p
-    (helm-quit-and-execute-action 'bookmark-jump-other-window)))
+    (helm-exit-and-execute-action 'bookmark-jump-other-window)))
 
 (defun helm-bookmark-run-delete ()
   "Delete bookmark from keyboard."
   (interactive)
   (with-helm-alive-p
     (when (y-or-n-p "Delete bookmark(s)?")
-      (helm-quit-and-execute-action 'helm-delete-marked-bookmarks))))
+      (helm-exit-and-execute-action 'helm-delete-marked-bookmarks))))
 
 (defun helm-bookmark-get-bookmark-from-name (bmk)
   "Return bookmark name even if it is a bookmark with annotation.

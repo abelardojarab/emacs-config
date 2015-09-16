@@ -590,9 +590,14 @@ The maximum length of lines for Flake8.
 @flycconfigfile{flycheck-flake8rc,Flake8}
 @end table
 
-@flyc{python-pylint} reads a configuration file:
+@flyc{python-pylint} provides the following options:
 
 @table @asis
+@flycoption flycheck-pylint-use-symbolic-id
+A boolean indicating whether to report symbolic or numeric message identifiers.
+For example, whether to report a message type as no-name-in-module, or E0611.
+On by default.
+
 @flycconfigfile{flycheck-pylintrc,Pylint}
 @end table
 
@@ -634,10 +639,10 @@ selects the linters to use.
 
 @itemize
 @item
-@flyc{rst} (using @uref{http://docutils.sourceforge.net/,docutils}, for
-plain reStructuredFiles files), or
 @flyc{rst-sphinx} (using @uref{http://sphinx-doc.org/,Sphinx}, for Sphinx
-documentation files)
+documentation files), or
+@flyc{rst} (using @uref{http://docutils.sourceforge.net/,docutils}, for
+plain reStructuredFiles files)
 @end itemize
 
 @flyc{rst-sphinx} provides the following option:

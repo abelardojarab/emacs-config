@@ -19,7 +19,10 @@ ifneq ($(TRAVIS_TAG),)
 MANUAL_VERSION=--version $(TRAVIS_TAG)
 endif
 
-EMACSBUILDFLAGS = --with-x-toolkit=no --without-x --without-all --with-xml2
+# Build with as few features as possible to cut build times, but keep XML2 for
+# our XML-parser tests
+EMACSBUILDFLAGS = --quiet --enable-silent-rules \
+	--with-x-toolkit=no --without-x --without-all --with-xml2
 
 ifeq ($(origin EMACS_VERSION), undefined)
 $(error "No $$EMACS_VERSION in environment!")
@@ -53,16 +56,16 @@ checkout_emacs_trunk:
 # Build a small Emacs executable without anything for tests
 install_emacs: $(GETEMACS)
 	cd '/tmp/emacs' && ./configure $(EMACSBUILDFLAGS) --prefix="$(HOME)"
-	make -j2 -C '/tmp/emacs' install
+	make -j2 -C '/tmp/emacs' V=0 install
 
 install_cask: install_emacs
 	git clone https://github.com/cask/cask.git "$(HOME)/.cask"
 
 install_texinfo:
-	curl -o '/tmp/texinfo-5.2.tar.gz' 'http://ftp.gnu.org/gnu/texinfo/texinfo-5.2.tar.gz'
-	tar xzf '/tmp/texinfo-5.2.tar.gz' -C /tmp
-	cd '/tmp/texinfo-5.2' && ./configure --prefix="$(HOME)"
-	make -C '/tmp/texinfo-5.2' install
+	curl -o '/tmp/texinfo-6.0.tar.gz' 'http://ftp.gnu.org/gnu/texinfo/texinfo-6.0.tar.gz'
+	tar xzf '/tmp/texinfo-6.0.tar.gz' -C /tmp
+	cd '/tmp/texinfo-6.0' && ./configure --prefix="$(HOME)"
+	make -C '/tmp/texinfo-6.0' install
 
 deps:
 	make deps

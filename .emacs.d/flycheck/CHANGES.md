@@ -1,6 +1,27 @@
 master (in development)
 =======================
 
+- New features:
+
+  - Add `flycheck-help-echo-function` to customize the Help Echo of Flycheck
+    overlays [GH-730]
+  - Use symbolic error IDs in Pylint [GH-714]
+  - Add `flycheck-pylint-use-symbolic-id` to disable symbolic IDs for Pylint
+    [GH-714]
+
+- Improvements:
+
+  - Improve mode line display for buffers with only info messages [GH-733]
+  - Merge messages of all errors under cursor for Help Echo [GH-730]
+  - Align multi-line messages in error list [GH-732] [GH-731]
+  - Cache GHC output for faster syntax checking and better template haskell
+    support [GH-708]
+  - Fall back to `rst` if `rst-sphinx` is disabled [GH-745] [GH-746]
+
+- Bug fixes:
+
+  - Fix error patterns of `coq` [GH-742]
+
 0.24 (Aug 15, 2015)
 ===================
 
