@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Missing function
+(setq scheme-imenu-generic-expression "")
+
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 

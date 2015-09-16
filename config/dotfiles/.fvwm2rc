@@ -103,7 +103,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
-*FvwmButtons: Rows 13
+*FvwmButtons: Rows 14
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
@@ -115,6 +115,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title Wing, Icon wing.png, Action 'Exec "Wing" wing  &')
 *FvwmButtons(Title PyCharm, Icon pycharm.png, Action 'Exec "PyCharm" pycharms.sh &')
 *FvwmButtons(Title Sublime, Icon sublime.png, Action 'Exec "Sublime" sublime_text &')
+*FvwmButtons(Title Komodo, Icon komodo.png, Action 'Exec "Komodo" komodo &')
 *FvwmButtons(Title Geany, Icon kate.png, Action 'Exec "Geany" geany &')
 *FvwmButtons(Title Acrobat, Icon acroread.png, Action 'Exec "Acrobat" acroread &')
 *FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
