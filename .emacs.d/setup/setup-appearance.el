@@ -358,8 +358,6 @@ non-nil."
 ;; Context indentation guide
 (add-to-list 'load-path "~/.emacs.d/indent-guide")
 (require 'indent-guide)
-(indent-guide-global-mode)
-(setq indent-guide-char ":")
 
 ;; Permanent indentation guide
 (add-to-list 'load-path "~/.emacs.d/indent-hint")
