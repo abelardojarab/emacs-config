@@ -129,7 +129,6 @@ non-nil."
 
 ;; Syntax coloring
 (require 'jit-lock)
-(require 'font-lock+)
 (global-font-lock-mode t)
 (global-hi-lock-mode nil)
 (setq font-lock-maximum-decoration t)

@@ -224,8 +224,8 @@
                     (save-excursion
                       (untabify (point-min) (point-max)))) nil))
 
-;; Assure window is splitted horizontally (for compilation buffer)
-(setq split-width-threshold nil)
+;; Prevent window splitting
+(setq split-width-threshold 75)
 
 ;; Helper function for horizontal splitting
 (defun split-horizontally-not-vertically ()
@@ -646,6 +646,7 @@
 (add-to-list 'load-path "~/.emacs.d/async")
 (require 'dired-aux)
 (require 'dired-async)
+(require 'dired+)
 
 ;; Measure Emacs startup time
 (defun show-startup-time ()
