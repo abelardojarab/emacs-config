@@ -84,12 +84,6 @@
 ;; ;; Go to the opposite side of line from the end or beginning of line
 (setq helm-swoop-move-to-line-cycle t)
 
-;; Async
-(require 'dired+)
-(add-to-list 'load-path "~/.emacs.d/async")
-(when (require 'dired-aux)
-  (require 'dired-async))
-
 ;; iMenu
 (set-default 'imenu-auto-rescan t)
 (add-hook 'lisp-mode-hook

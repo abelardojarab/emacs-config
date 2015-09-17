@@ -642,6 +642,11 @@
 ;; Line numbers
 (global-linum-mode t)
 
+;; Dired async
+(add-to-list 'load-path "~/.emacs.d/async")
+(require 'dired-aux)
+(require 'dired-async)
+
 ;; Measure Emacs startup time
 (defun show-startup-time ()
   "Show Emacs's startup time in the minibuffer"
