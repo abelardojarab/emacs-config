@@ -236,6 +236,13 @@
       (split-window-horizontally)))
 (add-hook 'temp-buffer-setup-hook 'split-horizontally-not-vertically)
 
+;; windows handling
+(add-to-list 'load-path "~/.emacs.d/window-purpose")
+(require 'window-purpose)
+(purpose-mode)
+(setq purpose-preferred-prompt 'helm)
+(setq menu-bar-select-buffer-function 'switch-to-buffer)
+
 ;; Better help
 (require 'help-fns+)
 
@@ -600,13 +607,6 @@
 (require 'aggressive-indent)
 (global-aggressive-indent-mode 1)
 (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
-
-;; windows handling
-(add-to-list 'load-path "~/.emacs.d/window-purpose")
-(require 'window-purpose)
-(purpose-mode)
-(setq purpose-preferred-prompt 'helm)
-(setq menu-bar-select-buffer-function 'switch-to-buffer)
 
 ;; imenu list
 (add-to-list 'load-path "~/.emacs.d/imenu-list")
