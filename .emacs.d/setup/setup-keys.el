@@ -65,7 +65,6 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key "\C-l" 'goto-line)
 (global-set-key (kbd "") 'other-window)
-(global-set-key [f5] 'compile)
 (global-set-key [C-tab] 'comment-or-uncomment-region)
 (global-set-key [kp-prior] 'scroll-down)
 (global-set-key [prior] 'scroll-down)
@@ -105,13 +104,11 @@
                   (goto-char (posn-point (event-start event)))
                   (highlight-symbol-at-point)))
 
-;; Longlines
-(global-set-key (kbd "<f4>") 'longlines-mode)
-(global-set-key (kbd "C-<f4>") 'toggle-truncate-lines)
-(global-set-key (kbd "A-<f4>") 'toggle-truncate-lines)
-
 ;; iBuffer
-(global-set-key (kbd "<f5>") 'ibuffer)
+(global-set-key (kbd "<f4>") 'ibuffer)
+
+;; Compile
+(global-set-key (kbd "<f5>") 'compile)
 
 ;; Flyspell
 (defun flyspell-check-next-highlighted-word ()
@@ -148,7 +145,7 @@
 (global-set-key (kbd "A-<f10>") 'magit-status)
 (global-set-key (kbd "S-<f10>") #'git-messenger:popup-message)
 
-;; Helm related
+;; Toggle frame maximized
 (global-set-key (kbd "<f11>") 'toggle-frame-maximized)
 
 ;; iBuffer
@@ -157,7 +154,7 @@
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)
-                                     (executable-find "global"))
+                                   (executable-find "global"))
                                 'ggtags-find-tag-dwim
                               'etags-select-find-tag))
 
@@ -174,7 +171,7 @@
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
-       (executable-find "kdialog"))
+     (executable-find "kdialog"))
   (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
   ) ;; if
@@ -411,7 +408,7 @@
 (define-key my-keys-minor-mode-map (kbd "<A-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<S-f2>") 'bm-next)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "<f5>") 'ibuffer)
+(define-key my-keys-minor-mode-map (kbd "<f4>") 'ibuffer)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
 

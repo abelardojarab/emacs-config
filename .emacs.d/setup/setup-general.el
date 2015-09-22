@@ -259,21 +259,6 @@
       (setq sanityinc/indent-guide-mode-suppressed nil)
       (indent-guide-mode 1))))
 
-;; Fix longlines issue
-(defvar sanityinc/longlines-mode-suppressed nil)
-(defadvice popup-create (before longlines-mode activate)
-  "Suspend longlines-mode while popups are visible"
-  (let ((longlines-enabled (and (boundp 'longlines-mode) longlines-mode)))
-    (set (make-local-variable 'sanityinc/longlines-mode-suppressed) longlines-mode)
-    (when longlines-enabled
-      (longlines-mode-off))))
-(defadvice popup-delete (after longlines-mode activate)
-  "Restore longlines-mode when all popups have closed"
-  (let ((longlines-enabled (and (boundp 'longlines-mode) longlines-mode)))
-    (when (and (not popup-instances) sanityinc/longlines-mode-suppressed)
-      (setq sanityinc/longlines-mode-suppressed nil)
-      (longlines-mode 1))))
-
 ;; Avoid popup windows too
 (add-to-list 'load-path "~/.emacs.d/popwin")
 (require 'popwin)
