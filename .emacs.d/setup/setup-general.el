@@ -625,7 +625,8 @@
 (setq auto-insert-query nil)
 
 ;; Line numbers
-(global-linum-mode t)
+(require 'nlinum)
+(global-nlinum-mode t)
 
 ;; Dired async
 (add-to-list 'load-path "~/.emacs.d/async")
