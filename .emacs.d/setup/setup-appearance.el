@@ -44,10 +44,6 @@
 (standard-display-ascii ?\226 "---")
 (standard-display-ascii ?\227 "--")
 
-;; Fit frame
-(require 'autofit-frame)
-(add-hook 'after-make-frame-functions 'fit-frame)
-
 ;; Enable GUI features
 (setq use-file-dialog t)
 (setq use-dialog-box t)
@@ -73,9 +69,6 @@ non-nil."
                           (set-window-hscroll window 0)))
                     nil t)))
   t)
-
-;; Make side by side buffers function the same as the main window
-(setq-default truncate-partial-width-windows nil)
 
 ;; Fringe helper
 (add-to-list 'load-path "~/.emacs.d/fringe-helper")
@@ -192,12 +185,14 @@ non-nil."
 
 ;; Use 10-pt Consolas as default font
 (when (find-font (font-spec :name "Consolas"))
-  (set-face-attribute 'default nil :font "Consolas-12")
-  (set-face-attribute 'fixed-pitch nil :font "Consolas-12:antialias=subpixel")
-  (add-to-list 'default-frame-alist '(font . "Consolas-12"))) ;; default font, used by Speedbar
+  (setq main-programming-font "Consolas-14")
+  (set-face-attribute 'default nil :font main-programming-font)
+  (set-face-attribute 'fixed-pitch nil :font main-programming-font)
+  (add-to-list 'default-frame-alist '(font . main-programming-font))) ;; default font, used by speedbar
 
-(if (find-font (font-spec :name "Calibri"))
-    (set-face-attribute 'variable-pitch nil :font "Calibri-12" :weight 'normal))
+(when (find-font (font-spec :name "Calibri"))
+  (setq main-writing-font "Calibri-14")
+  (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
 
 ;; Fallback for Unicode symbols
@@ -219,78 +214,11 @@ non-nil."
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 
-;; Dynamic font adjusting based on monitor resolution
-(when (find-font (font-spec :name "Consolas"))
-  (let ()
-
-    ;; Finally, set the fonts as desired
-    (defun set-default-font (main-programming-font frame)
-      (interactive)
-      (set-face-attribute 'default nil :font main-programming-font)
-      (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-      (set-frame-parameter frame 'font main-programming-font))
-
-    (defun fontify-frame (frame)
-      (interactive)
-      (let (main-writing-font main-programming-font)
-        (setq main-programming-font "Consolas-12")
-        (setq main-writing-font "Consolas")
-        (if (find-font (font-spec :name "Calibri"))
-            (setq main-writing-font "Calibri"))
-
-        (if window-system
-            (progn
-              (if (> (x-display-pixel-width) 1800)
-                  (if (equal system-type 'windows-nt)
-                      (progn ;; HD monitor in Windows
-                        (setq main-programming-font "Consolas-11:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-13")))
-                    (if (> (x-display-pixel-width) 2000)
-                        (progn ;; Cinema display
-                          (setq main-programming-font "Consolas-15:antialias=subpixel")
-                          (setq main-writing-font (concat main-writing-font "-18")))
-                      (progn ;; HD monitor
-                        (setq main-programming-font "Consolas-13:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-16")))))
-                (progn ;; Small display
-                  (if (equal system-type 'darwin)
-                      (progn
-                        (setq main-programming-font "Consolas-12:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-15")))
-                    (progn
-                      (setq main-programming-font "Consolas-10:antialias=subpixel")
-                      (setq main-writing-font (concat main-writing-font "-13"))))))))
-
-        ;; Apply fonts
-        (set-default-font main-programming-font frame)
-        (add-to-list 'default-frame-alist (cons 'font main-programming-font))
-        (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
-
-    ;; Fontify current frame
-    (fontify-frame nil)
-
-    ;; Fontify any future frames for emacsclient
-    (push 'fontify-frame after-make-frame-functions)
-
-    ;; hook for setting up UI when not running in daemon mode
-    (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil)))))
-
 ;; Fixed pitched for html/nxml
 (defun fixed-pitch-mode ()
   (buffer-face-mode -1))
 (add-hook 'html-mode-hook 'fixed-pitch-mode)
 (add-hook 'nxml-mode-hook 'fixed-pitch-mode)
-
-;; Pretty symbols mode
-(add-to-list 'load-path "~/.emacs.d/pretty-symbols")
-(require 'pretty-symbols)
-(add-hook 'lisp-mode-hook 'pretty-symbols-mode)
-
-;; Additional Unicode characters
-(add-to-list 'load-path "~/.emacs.d/pretty-mode")
-(require 'pretty-mode)
-(global-pretty-mode t)
 
 ;; Change form/shape of emacs cursor
 (setq djcb-read-only-color "green")
@@ -373,10 +301,6 @@ non-nil."
 (global-highlight-changes-mode t)
 (setq highlight-changes-visibility-initial-state nil)
 
-;; higlight changes in documents
-(global-highlight-changes-mode t)
-(setq highlight-changes-visibility-initial-state nil)
-
 ;; Fix highlight bug of marking a file as modified
 (defadvice highlight-changes-rotate-faces (around around-rotate-faces)
   (let ((was-modified (buffer-modified-p))
@@ -444,10 +368,7 @@ non-nil."
   :lighter " sc"
   (if lawlist-scroll-bar-mode
       (progn
-        (add-hook 'post-command-hook 'lawlist-scroll-bar nil t)
-        ;; (add-hook 'change-major-mode-hook 'lawlist-scroll-bar nil t)
-        ;; (add-hook 'window-configuration-change-hook 'lawlist-scroll-bar nil t)
-        )
+        (add-hook 'post-command-hook 'lawlist-scroll-bar nil t))
     (remove-hook 'post-command-hook 'lawlist-scroll-bar t)
     (remove-hook 'change-major-mode-hook 'lawlist-scroll-bar t)
     (remove-hook 'window-configuration-change-hook 'lawlist-scroll-bar t)))

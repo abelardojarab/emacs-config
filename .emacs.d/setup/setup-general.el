@@ -377,7 +377,7 @@
 
 ;; Enable tooltips
 (tooltip-mode t)
-(setq tooltip-use-echo-area nil)
+(setq tooltip-use-echo-area t)
 
 ;; deleting files goes to OS's trash folder
 (setq delete-by-moving-to-trash t)
