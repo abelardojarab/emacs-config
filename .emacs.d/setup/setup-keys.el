@@ -108,7 +108,7 @@
 (global-set-key (kbd "<f4>") 'helm-semantic-or-imenu)
 
 ;; Switch function
-(global-set-key (kbd "<f5>") ''psw-switch-function)
+(global-set-key (kbd "<f5>") 'psw-switch-function)
 
 ;; Flyspell
 (defun flyspell-check-next-highlighted-word ()
