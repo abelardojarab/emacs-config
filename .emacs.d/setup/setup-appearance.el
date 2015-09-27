@@ -175,7 +175,7 @@ non-nil."
 (defun hi-lock-overlay-p (overlay)
   "Return the overlay if overlay is a hi-lock overlay."
   (if (and (overlayp overlay)
-         (eq (overlay-get overlay 'hi-lock-overlay) t))
+           (eq (overlay-get overlay 'hi-lock-overlay) t))
       overlay
     nil))
 
@@ -188,7 +188,7 @@ non-nil."
   (setq main-programming-font "Consolas-14")
   (set-face-attribute 'default nil :font main-programming-font)
   (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-  (add-to-list 'default-frame-alist '(font . main-programming-font))) ;; default font, used by speedbar
+  (add-to-list 'default-frame-alist '(font . "Consolas-14"))) ;; default font, used by speedbar
 
 (when (find-font (font-spec :name "Calibri"))
   (setq main-writing-font "Calibri-14")
@@ -389,11 +389,11 @@ non-nil."
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-     (catch 'matched
-       (let ((inhibit-changing-match-data t)) ; small optimization
-         (dolist (regexp regexps)
-           (when (string-match regexp string)
-             (throw 'matched t)))))))
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

@@ -36,11 +36,5 @@
 (add-to-list 'load-path "~/.emacs.d/use-package")
 (require 'use-package)
 
-;; Paradox
-;;(add-to-list 'load-path "~/.emacs.d/seq")
-;;(add-to-list 'load-path "~/.emacs.d/spinner")
-;;(add-to-list 'load-path "~/.emacs.d/paradox")
-;;(require 'paradox)
-
 (provide 'setup-package)
 ;;; setup-package.el ends here
