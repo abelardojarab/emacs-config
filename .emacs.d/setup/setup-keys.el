@@ -104,11 +104,11 @@
                   (goto-char (posn-point (event-start event)))
                   (highlight-symbol-at-point)))
 
-;; iBuffer
-(global-set-key (kbd "<f4>") 'ibuffer)
+;; Helm imenu
+(global-set-key (kbd "<f4>") 'helm-semantic-or-imenu)
 
-;; Compile
-(global-set-key (kbd "<f5>") 'compile)
+;; Switch function
+(global-set-key (kbd "<f5>") ''psw-switch-function)
 
 ;; Flyspell
 (defun flyspell-check-next-highlighted-word ()
@@ -149,8 +149,7 @@
 (global-set-key (kbd "<f11>") 'toggle-frame-maximized)
 
 ;; iBuffer
-(global-set-key (kbd "<f12>") 'helm-semantic-or-imenu)
-(global-set-key (kbd "C-<f12>") 'psw-switch-function)
+(global-set-key (kbd "<f12>") 'ibuffer)
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)

@@ -119,13 +119,10 @@ non-nil."
 ;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
-;; (load-theme 'zerodark t)
+(load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'material-light t)
-(load-theme 'faff t)
-
-;; Use grey for marking region
-(set-face-attribute 'region nil :background "#aaa")
+;; (load-theme 'faff t)
 
 ;; Syntax coloring
 (require 'jit-lock)
@@ -296,11 +293,11 @@ non-nil."
 (global-pretty-mode t)
 
 ;; Change form/shape of emacs cursor
-(setq djcb-read-only-color "gray")
+(setq djcb-read-only-color "green")
 (setq djcb-read-only-cursor-type 'hbar)
 (setq djcb-overwrite-color "red")
 (setq djcb-overwrite-cursor-type 'box)
-(setq djcb-normal-color "black")
+(setq djcb-normal-color "yellow")
 (setq djcb-normal-cursor-type 'bar)
 (defun djcb-set-cursor-according-to-mode ()
   "change cursor color and type according to some minor modes."
