@@ -634,17 +634,17 @@
 (require 'dired-async)
 (require 'dired+)
 
+;; Benchmark-init can give us a breakdown of time spent on require and load calls:
+(add-to-list 'load-path "~/.emacs.d/benchmark-init")
+(require 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
+
 ;; Measure Emacs startup time
 (defun show-startup-time ()
   "Show Emacs's startup time in the minibuffer"
   (message "Startup time: %s seconds."
            (emacs-uptime "%s")))
 (add-hook 'emacs-startup-hook 'show-startup-time 'append)
-
-;; Benchmark-init can give us a breakdown of time spent on require and load calls:
-(add-to-list 'load-path "~/.emacs.d/benchmark-init")
-(require 'benchmark-init)
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

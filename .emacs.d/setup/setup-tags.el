@@ -41,8 +41,8 @@
 ;; Tags table
 (setq tags-revert-without-query t)
 (setq tags-always-build-completion-table t)
-(setq tags-file-name "/tmp/TAGS")
-(setq tags-table-list '("/tmp/TAGS"))
+(setq tags-file-name (expand-file-name "~/.emacs.d/TAGS"))
+(setq tags-table-list (list tags-file-name))
 (setq tags-add-tables t)
 
 ;; Etags table
