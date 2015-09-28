@@ -57,9 +57,9 @@
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
           (lambda () (if (and (> (point-max) 5000)
-                       (not (semantic-parse-tree-needs-rebuild-p)))
-                    nil
-                  t)))
+                              (not (semantic-parse-tree-needs-rebuild-p)))
+                         nil
+                       t)))
 
 ;; This prevents Emacs to become uresponsive
 (defun semanticdb-kill-hook ()
@@ -104,6 +104,7 @@
 ;; Include settings
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
 (require 'semantic/bovine/c)
+(require 'semantic/bovine/gcc)
 (require 'semantic/bovine/clang)
 
 ;; Eassist header switches

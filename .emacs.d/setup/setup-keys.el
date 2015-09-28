@@ -340,20 +340,6 @@
 (global-set-key [M-S-up] 'move-text-up)
 (global-set-key [M-S-down] 'move-text-down)
 
-;; Show guide for shortcuts
-(add-to-list 'load-path "~/.emacs.d/guide-key")
-(require 'guide-key)
-(setq guide-key/guide-key-sequence t) ;; show guide key for all key combos. but you can configure it for specific combos also.
-(setq guide-key/recursive-key-sequence-flag t) ;; recurse into all key combos.
-(setq guide-key/popup-window-position 'bottom) ;; I want the help-pop up to be at the bottom like most buffer popups.
-(setq guide-key/guide-key-sequence '("C-h" "C-x" "C-c"))
-(guide-key-mode 1) ;; Enable guide-key-mode
-
-;; Guide key tooltips
-(add-to-list 'load-path "~/.emacs.d/guide-key-tip")
-(require 'guide-key-tip)
-(setq guide-key-tip/enabled t)
-
 ;; Tabbar
 (global-set-key [C-prior] 'tabbar-backward-tab)
 (global-set-key [C-next] 'tabbar-forward-tab)

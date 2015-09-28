@@ -186,9 +186,6 @@
 ;; try to improve slow performance on windows.
 (setq w32-get-true-file-attributes nil)
 
-;; turn-off info about of pointee for symlinks
-(setq dired-listing-switches "-alLF")
-
 ;; Garantee utf8 as input-method
 (set-input-method nil)
 (setq read-quoted-char-radix 10)
@@ -622,8 +619,8 @@
 (setq auto-insert-query nil)
 
 ;; Line numbers
-(require 'nlinum)
-(global-nlinum-mode t)
+(require 'linum)
+(global-linum-mode t)
 
 ;; Dired async
 (add-to-list 'load-path "~/.emacs.d/async")
