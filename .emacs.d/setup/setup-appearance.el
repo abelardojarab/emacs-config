@@ -112,27 +112,17 @@ non-nil."
 ;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
-(load-theme 'zerodark t)
+;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'material-light t)
 ;; (load-theme 'faff t)
+(load-theme 'monokai t)
 
 ;; Syntax coloring
-(require 'jit-lock)
 (global-font-lock-mode t)
 (global-hi-lock-mode nil)
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size (* 512 512))
-(setq font-lock-support-mode 'jit-lock-mode ;; lazy-lock-mode
-      fast-lock-cache-directories '("~/.emacs.cache"))
-(setq font-lock-support-mode 'jit-lock-mode)
-(setq jit-lock-stealth-time 20.0
-      jit-lock-stealth-load 300
-      jit-lock-chunk-size 20
-      jit-lock-defer-time 0.05
-      jit-lock-stealth-nice 0.5
-      jit-lock-contextually t
-      jit-lock-stealth-verbose nil)
 
 ;; Do not fontify large files
 (defun my-find-file-check-make-large-file-read-only-hook ()

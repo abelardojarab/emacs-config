@@ -90,41 +90,7 @@
   :group 'hideshow)
 
 (defun hideshowvis-highlight-hs-regions-in-fringe (&optional start end old-text-length)
-  (when hs-minor-mode
-    (save-restriction
-      (save-excursion
-        (when (and start end)
-          (narrow-to-region start end))
-        (goto-char (point-min))
-        (remove-overlays (point-min) (point-max) 'hideshowvis-hs t)
-        (while (search-forward-regexp hs-block-start-regexp nil t)
-          (let* ((ovl (make-overlay (match-beginning 0) (match-end 0)))
-                 (marker-string "*hideshowvis*")
-                 (doit
-                  (if hideshowvis-ignore-same-line
-                      (let (begin-line)
-                        (setq begin-line
-                              (save-excursion
-                                (goto-char (match-beginning 0))
-                                (line-number-at-pos (point))))
-                        (save-excursion
-                          (goto-char (match-beginning 0))
-                          (condition-case nothing
-                              (progn
-                                (funcall hs-forward-sexp-func 1)
-                                (> (line-number-at-pos (point)) begin-line))
-                            (error nil))))
-                    t)))
-            (when doit
-              (put-text-property 0
-                                 (length marker-string)
-                                 'display
-                                 (list 'left-fringe
-                                       'hideshowvis-hideable-marker
-                                       'hideshowvis-hidable-face)
-                                 marker-string)
-              (overlay-put ovl 'before-string marker-string)
-              (overlay-put ovl 'hideshowvis-hs t))))))))
+  t)
 
 ;;;###autoload
 (defun hideshowvis-click-fringe (event)
