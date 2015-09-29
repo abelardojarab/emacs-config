@@ -45,7 +45,7 @@
 (standard-display-ascii ?\227 "--")
 
 ;; Full redisplay before redraw
-(setq redisplay-dont-pause nil)
+(setq redisplay-dont-pause t)
 
 ;; Do not redraw entire frame after suspending.
 (setq no-redraw-on-reenter t)
