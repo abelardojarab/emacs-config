@@ -47,6 +47,12 @@
 ;; Full redisplay before redraw
 (setq redisplay-dont-pause nil)
 
+;; Do not redraw entire frame after suspending.
+(setq no-redraw-on-reenter t)
+
+;; Disable bidirectional text support
+(setq-default bidi-display-reordering nil)
+
 ;; Enable GUI features
 (setq use-file-dialog t)
 (setq use-dialog-box t)
@@ -178,10 +184,10 @@ non-nil."
 
 ;; Use 10-pt Consolas as default font
 (when (find-font (font-spec :name "Consolas"))
-  (setq main-programming-font "Consolas-14")
+  (setq main-programming-font "Consolas-13")
   (set-face-attribute 'default nil :font main-programming-font)
   (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-  (add-to-list 'default-frame-alist '(font . "Consolas-14"))) ;; default font, used by speedbar
+  (add-to-list 'default-frame-alist '(font . "Consolas-13"))) ;; default font, used by speedbar
 
 (when (find-font (font-spec :name "Calibri"))
   (setq main-writing-font "Calibri-14")
@@ -192,6 +198,63 @@ non-nil."
 (if (find-font (font-spec :name "Symbola"))
     (set-fontset-font "fontset-default" nil
                       (font-spec :size 18 :name "Symbola")))
+
+;; Dynamic font adjusting based on monitor resolution
+(when (find-font (font-spec :name "Consolas"))
+  (let ()
+
+    ;; Finally, set the fonts as desired
+    (defun set-default-font (main-programming-font frame)
+      (interactive)
+      (set-face-attribute 'default nil :font main-programming-font)
+      (set-face-attribute 'fixed-pitch nil :font main-programming-font)
+      (set-frame-parameter frame 'font main-programming-font))
+
+    (defun fontify-frame (frame)
+      (interactive)
+      (let (main-writing-font main-programming-font)
+        (setq main-programming-font "Consolas-12")
+        (setq main-writing-font "Consolas")
+        (if (find-font (font-spec :name "Calibri"))
+            (setq main-writing-font "Calibri"))
+
+        (if window-system
+            (progn
+              (if (> (x-display-pixel-width) 1800)
+                  (if (equal system-type 'windows-nt)
+                      (progn ;; HD monitor in Windows
+                        (setq main-programming-font "Consolas-11:antialias=subpixel")
+                        (setq main-writing-font (concat main-writing-font "-13")))
+                    (if (> (x-display-pixel-width) 2000)
+                        (progn ;; Cinema display
+                          (setq main-programming-font "Consolas-15:antialias=subpixel")
+                          (setq main-writing-font (concat main-writing-font "-18")))
+                      (progn ;; HD monitor
+                        (setq main-programming-font "Consolas-13:antialias=subpixel")
+                        (setq main-writing-font (concat main-writing-font "-16")))))
+                (progn ;; Small display
+                  (if (equal system-type 'darwin)
+                      (progn
+                        (setq main-programming-font "Consolas-12:antialias=subpixel")
+                        (setq main-writing-font (concat main-writing-font "-15")))
+                    (progn
+                      (setq main-programming-font "Consolas-10:antialias=subpixel")
+                      (setq main-writing-font (concat main-writing-font "-13"))))))))
+
+        ;; Apply fonts
+        (set-default-font main-programming-font frame)
+        (add-to-list 'default-frame-alist (cons 'font main-programming-font))
+        (set-face-attribute 'fixed-pitch nil :font main-programming-font)
+        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
+
+    ;; Fontify current frame
+    (fontify-frame nil)
+
+    ;; Fontify any future frames for emacsclient
+    (push 'fontify-frame after-make-frame-functions)
+
+    ;; hook for setting up UI when not running in daemon mode
+    (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil)))))
 
 ;; Highlight the line
 (require 'hl-line)
@@ -387,6 +450,16 @@ non-nil."
            (dolist (regexp regexps)
              (when (string-match regexp string)
                (throw 'matched t)))))))
+
+;; Pretty lambdas
+(defun pretty-lambdas ()
+  (font-lock-add-keywords
+   nil `(("\\<lambda\\>"
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
+(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
+(add-hook 'lisp-mode-hook 'pretty-lambdas)
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

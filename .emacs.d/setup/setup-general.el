@@ -222,8 +222,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                    (save-excursion
-                      (untabify (point-min) (point-max)))) nil))
+                         (save-excursion
+                           (untabify (point-min) (point-max)))) nil))
 
 ;; Prevent window splitting
 (setq split-width-threshold 75)
@@ -354,8 +354,8 @@
   (interactive)
   (let* ((cb (char-before (point)))
          (matching-text (and cb
-                           (char-equal (char-syntax cb) ?\) )
-                           (blink-matching-open))))
+                             (char-equal (char-syntax cb) ?\) )
+                             (blink-matching-open))))
     (when matching-text (message matching-text))))
 
 ;; Opening bracket to be highlighted when the point is on the closing bracket
@@ -483,11 +483,11 @@
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-     (catch 'matched
-       (let ((inhibit-changing-match-data t)) ; small optimization
-         (dolist (regexp regexps)
-           (when (string-match regexp string)
-             (throw 'matched t)))))))
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
 
 ;; Search at point
 (require 'thingatpt)
@@ -508,7 +508,7 @@
                            (progn (skip-syntax-forward "w_") (point)))
                           "\\>")))
       (if (and isearch-case-fold-search
-             (eq 'not-yanks search-upper-case))
+               (eq 'not-yanks search-upper-case))
           (setq string (downcase string)))
       (setq isearch-string string
             isearch-message
@@ -625,6 +625,11 @@
 ;; Line numbers
 (require 'linum)
 (global-linum-mode t)
+(defadvice linum-update-window (around linum-dynamic activate)
+  (let* ((w (length (number-to-string
+                     (count-lines (point-min) (point-max)))))
+         (linum-format (concat " %" (number-to-string w) "d ")))
+    ad-do-it))
 
 ;; Dired async
 (add-to-list 'load-path "~/.emacs.d/async")

@@ -153,7 +153,7 @@
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)
-                                   (executable-find "global"))
+                                     (executable-find "global"))
                                 'ggtags-find-tag-dwim
                               'etags-select-find-tag))
 
@@ -170,7 +170,7 @@
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
-     (executable-find "kdialog"))
+       (executable-find "kdialog"))
   (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
   ) ;; if
@@ -228,8 +228,6 @@
 ;; Helm-swoop extension
 (global-set-key (kbd "C-*") 'helm-swoop)
 (global-set-key [(control kp-multiply)] 'helm-swoop)
-(global-set-key (kbd "C-c C-*") 'helm-multi-swoop)
-(global-set-key (kbd "C-x C-*") 'helm-multi-swoop-all)
 
 ;; When doing isearch, hand the word over to helm-swoop
 (define-key isearch-mode-map (kbd "C-*") 'helm-swoop-from-isearch)
@@ -335,11 +333,6 @@
 (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
 (global-set-key (kbd "<mouse-3>") 'mouse3-popup-menu)
 
-;; Move text
-(require 'move-text)
-(global-set-key [M-S-up] 'move-text-up)
-(global-set-key [M-S-down] 'move-text-down)
-
 ;; Tabbar
 (global-set-key [C-prior] 'tabbar-backward-tab)
 (global-set-key [C-next] 'tabbar-forward-tab)
@@ -347,21 +340,25 @@
 ;; Faster buffer switching
 (add-to-list 'load-path "~/.emacs.d/popup-switcher")
 (require 'popup-switcher)
+(global-set-key (kbd "M-s") 'psw-switch-function)
+
+;; Select Window
 (require 'popup-select-window)
-(global-set-key [C-S-prior] 'popup-select-window)
-(global-set-key [C-S-next] 'popup-select-window)
+(global-set-key (kbd "M-o") 'popup-select-window)
 
 ;; Jump between windows
-(define-key c-mode-base-map [f4] 'eassist-switch-h-cpp)
-(define-key c-mode-base-map [C-f4] 'dts-switch-between-header-and-source)
-(global-set-key (kbd "C-1") 'psw-switch-buffer)
-(global-set-key (kbd "C-2") 'psw-switch-function)
+(global-set-key (kbd "C-x <up>") 'windmove-up)
+(global-set-key (kbd "C-x <down>") 'windmove-down)
+(global-set-key (kbd "C-x <right>") 'windmove-right)
+(global-set-key (kbd "C-x <left>") 'windmove-left)
 
 ;; Flycheck tips
-(define-key global-map (kbd "C-0") 'error-tip-cycle-dwim)
-(define-key global-map (kbd "C-9") 'error-tip-cycle-dwim-reverse)
-(define-key global-map (kbd "<A-right>") 'error-tip-cycle-dwim)
-(define-key global-map (kbd "<A-left>") 'error-tip-cycle-dwim-reverse)
+(define-key global-map (kbd "C-1") 'error-tip-cycle-dwim)
+(define-key global-map (kbd "C-2") 'error-tip-cycle-dwim-reverse)
+
+;; Switch header and source
+(define-key c-mode-base-map [f4] 'eassist-switch-h-cpp)
+(define-key c-mode-base-map [C-f4] 'dts-switch-between-header-and-source)
 
 ;; Drag stuff
 (add-to-list 'load-path "~/.emacs.d/drag-stuff")
@@ -379,20 +376,25 @@
 (define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
 (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
 
+;; Move text
+(require 'move-text)
+(define-key region-bindings-mode-map [C-up] 'move-text-up)
+(define-key region-bindings-mode-map [C-down] 'move-text-down)
+(define-key region-bindings-mode-map [C-right] 'increase-left-margin)
+(define-key region-bindings-mode-map [C-left] 'decrease-left-margin)
+
 ;; Overwrite other modes
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
-(define-key my-keys-minor-mode-map (kbd "C-S-<left>") 'popup-select-window)
-(define-key my-keys-minor-mode-map (kbd "C-S-<right>") 'popup-select-window)
 (define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
 (define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "<A-f2>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "<S-f2>") 'bm-next)
+(define-key my-keys-minor-mode-map (kbd "<A-f2>") 'bm-next)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
+(define-key my-keys-minor-mode-map (kbd "M-o") 'popup-select-window)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'ibuffer)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
