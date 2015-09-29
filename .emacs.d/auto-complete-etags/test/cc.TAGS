@@ -1,15 +1,0 @@
-
-test.cc,598
-class TestClass {TestClass1,0
-  void normal_func() {}normal_func3,26
-  void normal_func() {}TestClass::normal_func3,26
-  int get() const { return 0; }get4,50
-  int get() const { return 0; }TestClass::get4,50
-  void set(int i) { i_ = i; }set5,82
-  void set(int i) { i_ = i; }TestClass::set5,82
-  void overloaded_func(int i);overloaded_func8,139
-  void overloaded_func(int i);TestClass::overloaded_func8,139
-  void overloaded_func(double d);overloaded_func9,170
-  void overloaded_func(double d);TestClass::overloaded_func9,170
-  int i_;i_12,214
-  int i_;TestClass::i_12,214

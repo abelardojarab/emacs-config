@@ -121,17 +121,11 @@
 (ac-config-default)
 (setq-default ac-sources '(ac-source-words-in-same-mode-buffers ac-source-imenu))
 
-;; Autocomplete with TAGS
-(add-to-list 'load-path "~/.emacs.d/auto-complete-etags")
-(require 'auto-complete-etags)
-(setq ac-etags-use-document t)
-
 ;; Let's have snippets and TAGS in the auto-complete dropdown
 (defun ac-common-setup ()
   (setq ac-sources (append ac-sources '(ac-source-yasnippet
                                         ac-source-imenu
                                         ac-source-abbrev
-                                        ac-source-etags
                                         ac-source-gtags
                                         ac-source-semantic
                                         ac-source-dictionary
