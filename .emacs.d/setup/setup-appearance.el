@@ -44,6 +44,9 @@
 (standard-display-ascii ?\226 "---")
 (standard-display-ascii ?\227 "--")
 
+;; Full redisplay before redraw
+(setq redisplay-dont-pause nil)
+
 ;; Enable GUI features
 (setq use-file-dialog t)
 (setq use-dialog-box t)

@@ -79,8 +79,7 @@
   (local-set-key ">" 'ac-complete-semantic-self-insert)
   (local-set-key ":" 'ac-complete-semantic-self-insert))
 (add-hook 'c-mode-common-hook 'cc-mode-ac-key-bindings)
-(add-hook 'lisp-mode-hook 'cc-mode-ac-key-bindings)
-(add-hook 'python-mode-hook 'cc-mode-ac-key-bindings)
+(add-hook 'prog-mode-hook 'cc-mode-ac-key-bindings)
 
 ;; smart completions
 (setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
