@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Garbage collection
+(setq gc-cons-threshold 100000000)
+
 ;; Missing function
 (setq scheme-imenu-generic-expression "")
 

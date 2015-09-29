@@ -1,6 +1,6 @@
 ;;; auto-complete-etags.el ---
 
-;; Copyright 2009 Yen-Chin,Lee
+;; Copyright 2009, 2015 Yen-Chin,Lee
 ;;           2010, 2011 whitypig <whitypig@gmail.com>
 ;;
 
@@ -95,28 +95,13 @@ nil means there is no limit about it.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defun ac-etags-init ()
   "Initialization function for ac-etags."
-  (unless (and
-           ;; tags-file-name and tags-table-list are defined in `etags.el'
-           (equal tags-table-list
-                  ac-etags-current-tags-table-list)
-           (equal tags-file-name
-                  ac-etags-current-tags-file-name)
-           ;; We assume that tags-file-name and each file in
-           ;; tags-table-list have their own existing buffers.
-           (or (null tags-file-name)
-               (verify-visited-file-modtime (get-file-buffer tags-file-name)))
-           (or (null tags-table-list)
-               (not (member nil
-                       (mapcar #'verify-visited-file-modtime
-                               (mapcar #'get-file-buffer tags-table-list))))))
-    ;; When tags-file-name or list has changed, we create a new completion table.
-    (let ((tags-completion-table nil))
-      (setq ac-etags-tags-current-completion-table (tags-completion-table))
-      (setq ac-etags-current-tags-file-name tags-file-name)
-      (setq ac-etags-current-tags-table-list tags-table-list))))
+  ;; When tags-file-name or list has changed, we create a new completion table.
+  (let ((tags-completion-table nil))
+    (setq ac-etags-tags-current-completion-table (tags-completion-table))
+    (setq ac-etags-current-tags-file-name tags-file-name)
+    (setq ac-etags-current-tags-table-list tags-table-list)))
 
 (defun ac-etags-candidate ()
   ;; These two variables are defined in `etags.el'
