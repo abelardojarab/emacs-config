@@ -97,6 +97,7 @@
 (add-hook 'latex-mode-hook 'imenu-add-menubar-index)
 (add-hook 'org-mode-hook 'imenu-add-menubar-index)
 (add-hook 'python-mode-hook 'imenu-add-menubar-index)
+(add-hook 'java-mode-hook 'imenu-add-menubar-index)
 
 ;; iMenus
 (add-to-list 'load-path "~/.emacs.d/imenus")
@@ -104,9 +105,11 @@
 (autoload 'imenus-mode-buffers "imenus" nil t)
 
 ;; Enable which-function-mode for selected major modes
-(setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode
+(setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode java-mode
                                          c-mode c++-mode makefile-mode sh-mode))
 (which-function-mode t)
+(add-hook 'java-mode-hook
+          (lambda () (which-function-mode t)))
 (add-hook 'python-mode-hook
           (lambda () (which-function-mode t)))
 (add-hook 'js2-mode-hook

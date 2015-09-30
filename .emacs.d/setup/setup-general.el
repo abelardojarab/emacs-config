@@ -436,13 +436,13 @@
 (defadvice yank (after indent-region activate)
   (if (member major-mode
               '(emacs-lisp-mode lisp-mode c-mode c++-mode
-                                objc-mode latex-mode plain-tex-mode python-mode js2-mode))
+                                objc-mode latex-mode plain-tex-mode python-mode java-mode js2-mode))
       (indent-region (region-beginning) (region-end) nil)))
 
 (defadvice yank-pop (after indent-region activate)
   (if (member major-mode
               '(emacs-lisp-mode lisp-mode c-mode c++-mode
-                                objc-mode latex-mode plain-tex-mode python-mode))
+                                objc-mode latex-mode plain-tex-mode python-mode java-mode js2-mode))
       (indent-region (region-beginning) (region-end) nil)))
 
 ;; Autosave
