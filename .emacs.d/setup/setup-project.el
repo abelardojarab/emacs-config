@@ -51,7 +51,6 @@
 ;; Helm etags plus
 (add-to-list 'load-path "~/.emacs.d/helm-etags+")
 (require 'helm-etags+)
-(require 'ctags-update)
 
 ;; Helm swoop
 (add-to-list 'load-path "~/.emacs.d/helm-swoop")
@@ -157,23 +156,19 @@
 (add-to-list 'load-path "~/.emacs.d/helm-dash")
 (require 'helm-dash)
 (setq helm-dash-min-length 2)
-(setq helm-dash-docsets-path (format "%s/.emacs.d/docsets" (getenv "HOME")))
-(setq helm-dash-common-docsets '("C" "C++"))
+(setq helm-dash-docsets-path (expand-file-name "~/.emacs.d/docsets"))
+(setq helm-dash-common-docsets '("C" "C++" "Python" "Java"))
 
 (defun my/dash-path (docset)
-  (if (string= docset "OpenGL_2")
-      (concat (concat helm-dash-docsets-path "/") "OpenGL2.docset")
-    (if (string= docset "OpenGL_3")
-        (concat (concat helm-dash-docsets-path "/") "OpenGL3.docset")
-      (if (string= docset "OpenGL_4")
-          (concat (concat helm-dash-docsets-path "/") "OpenGL4.docset")
-        (if (string= docset "Emacs_Lisp")
-            (concat (concat helm-dash-docsets-path "/") "Emacs Lisp.docset")
-          (concat
-           (concat
-            (concat
-             (concat helm-dash-docsets-path "/")
-             (nth 0 (split-string docset "_")))) ".docset"))))))
+  (if (string= docset "OpenGL_4")
+      (concat (concat helm-dash-docsets-path "/") "OpenGL4.docset")
+    (if (string= docset "Emacs_Lisp")
+        (concat (concat helm-dash-docsets-path "/") "Emacs Lisp.docset")
+      (concat
+       (concat
+        (concat
+         (concat helm-dash-docsets-path "/")
+         (nth 0 (split-string docset "_")))) ".docset"))))
 
 (defun my/dash-install (docset)
   (unless (file-exists-p (my/dash-path docset))

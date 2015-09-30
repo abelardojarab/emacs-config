@@ -41,7 +41,7 @@
 ;; Tags table
 (setq tags-revert-without-query t)
 (setq tags-always-build-completion-table t)
-(setq tags-file-name (expand-file-name "~/.emacs.d/TAGS"))
+(setq tags-file-name (expand-file-name "~/.emacs.cache/TAGS"))
 (setq tags-table-list (list tags-file-name))
 (setq tags-add-tables t)
 
@@ -49,9 +49,10 @@
 (require 'etags-table)
 (setq etags-table-alist
       (list
-       `(,(concat user-emacs-directory "/.*") ,(concat user-emacs-directory "/TAGS"))
-       ))
-(setq etags-table-search-up-depth 15) ;; Max depth to search up for a tags file.  nil means don't search.
+       ;; For jumping to standard headers:
+       '(".*\\.\\([ch]\\|cpp\\)" (expand-file-name "~/.emacs.cache/TAGS"))
+        ))
+(setq etags-table-search-up-depth 1) ;; Max depth to search up for a tags file.  nil means don't search.
 
 ;; Below function comes useful when you change the project-root symbol to a
 ;; different value (when switching projects)
@@ -65,8 +66,8 @@ tag find"
   (etags-select-find-tag-at-point))
 
 ;; Ctags update
+(require 'ctags-update)
 (when (executable-find "ctags")
-  (require 'ctags-update)
   (setq ctags-update-delay-seconds (* 30 60)) ;; every 1/2 hour
   (autoload 'turn-on-ctags-auto-update-mode "ctags-update" "turn on `ctags-auto-update-mode'." t)
   (add-hook 'verilog-mode-hook    'turn-on-ctags-auto-update-mode)

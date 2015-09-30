@@ -89,9 +89,9 @@
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
-    ;; Use smex3
+    ;; Use smex2
     (add-to-list 'load-path "~/.emacs.d/smex2")
-  ;; Use smex2
+  ;; Use smex3
   (add-to-list 'load-path "~/.emacs.d/smex")
   ) ;; if
 (require 'smex)

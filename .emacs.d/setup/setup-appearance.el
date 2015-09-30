@@ -329,7 +329,7 @@ non-nil."
               t)))
 
 ;; Works for Emacs 24.4 and above
-(add-to-list 'default-frame-alist '(fullscreen . fullheight))
+(add-to-list 'default-frame-alist '(fullscreen . fullwidth))
 
 ;; Highlight blocks
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
@@ -460,6 +460,11 @@ non-nil."
                     nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
+
+;; Pretty mode
+(add-to-list 'load-path "~/.emacs.d/pretty-mode")
+(require 'pretty-mode)
+(global-pretty-mode t)
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

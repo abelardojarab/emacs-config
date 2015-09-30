@@ -39,12 +39,6 @@
 ;; Undefined function
 (require 'let-alist)
 
-;; Advice function
-(require 'nadvice)
-
-;; Cursor sensor
-(require 'cursor-sensor)
-
 ;; GUI-specific thing
 (when (window-system)
   (setenv "EMACS_GUI" "t"))
@@ -58,7 +52,7 @@
       ps-landscape-mode nil    ; for two pages per page: t
       ps-number-of-columns 1)  ; for two pages per page: 2
 
-;; Extra stuff
+;; Enable context menus
 (add-to-list 'load-path "~/.emacs.d/makey")
 (add-to-list 'load-path "~/.emacs.d/discover")
 (require 'discover)
@@ -267,7 +261,7 @@
       (setq sanityinc/indent-guide-mode-suppressed nil)
       (indent-guide-mode 1))))
 
-;; Avoid popup windows too
+;; Manage popup windows
 (add-to-list 'load-path "~/.emacs.d/popwin")
 (require 'popwin)
 
@@ -418,6 +412,14 @@
 (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
 (require 'auto-indent-mode)
 (auto-indent-global-mode)
+
+;; Aggresive indent mode
+(add-to-list 'load-path "~/.emacs.d/names")
+(add-to-list 'load-path "~/.emacs.d/aggressive-indent-mode")
+(require 'names)
+(require 'aggressive-indent)
+(global-aggressive-indent-mode 1)
+(add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)
@@ -597,14 +599,6 @@
           (lambda ()
             (visual-line-mode -1)
             (toggle-truncate-lines 1)))
-
-;; Aggresive indent mode
-(add-to-list 'load-path "~/.emacs.d/names")
-(add-to-list 'load-path "~/.emacs.d/aggressive-indent-mode")
-(require 'names)
-(require 'aggressive-indent)
-(global-aggressive-indent-mode 1)
-(add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
 ;; imenu list
 (add-to-list 'load-path "~/.emacs.d/imenu-list")
