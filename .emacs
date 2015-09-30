@@ -205,6 +205,9 @@ Defaults to `error'."
 ;; Setup Python
 (require 'setup-python)
 
+;; Setup Java mode
+(require 'setup-java)
+
 ;; Setup Javascript mode
 (require 'setup-js2-mode)
 
