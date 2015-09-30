@@ -35,6 +35,8 @@
           (lambda () (flycheck-mode t)))
 (add-hook 'python-mode-hook
           (lambda () (flycheck-mode t)))
+(add-hook 'java-mode-hook
+          (lambda () (flycheck-mode t)))
 
 ;; Configuration
 (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
