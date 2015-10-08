@@ -90,14 +90,17 @@
             (setq imenu-create-index-function 'imenu-example--create-lisp-index)
             (setq imenu-generic-expression scheme-imenu-generic-expression)))
 
-(add-hook 'emacs-lisp-mode-hook 'imenu-add-menubar-index)
-(add-hook 'lisp-mode-hook 'imenu-add-menubar-index)
-(add-hook 'reftex-load-hook 'imenu-add-menubar-index)
-(add-hook 'reftex-mode-hook 'imenu-add-menubar-index)
-(add-hook 'latex-mode-hook 'imenu-add-menubar-index)
-(add-hook 'org-mode-hook 'imenu-add-menubar-index)
-(add-hook 'python-mode-hook 'imenu-add-menubar-index)
-(add-hook 'java-mode-hook 'imenu-add-menubar-index)
+(mapc (lambda (mode)
+        (add-hook mode 'imenu-add-menubar-index))
+      '(c-mode-hook
+        c++-mode-hook
+        lisp-mode-hook
+        python-mode-hook
+        js2-mode-hook
+        java-mode-hook
+        reftex-mode-hook
+        reftex-load-hook
+        org-mode-hook))
 
 ;; iMenus
 (add-to-list 'load-path "~/.emacs.d/imenus")
@@ -108,18 +111,15 @@
 (setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode java-mode
                                          c-mode c++-mode makefile-mode sh-mode))
 (which-function-mode t)
-(add-hook 'java-mode-hook
-          (lambda () (which-function-mode t)))
-(add-hook 'python-mode-hook
-          (lambda () (which-function-mode t)))
-(add-hook 'js2-mode-hook
-          (lambda () (which-function-mode t)))
-(add-hook 'c-mode-common-hook
-          (lambda () (which-function-mode t)))
-(add-hook 'lisp-mode-hook
-          (lambda () (which-function-mode t)))
-(add-hook 'emacs-lisp-mode-hook
-          (lambda () (which-function-mode t)))
+(mapc (lambda (mode)
+        (add-hook mode (lambda () (which-function-mode t))))
+      '(c-mode-hook
+        c++-mode-hook
+        lisp-mode-hook
+        python-mode-hook
+        js2-mode-hook
+        java-mode-hook
+        org-mode-hook))
 
 ;; Project management
 (add-to-list 'load-path "~/.emacs.d/ack-and-a-half")

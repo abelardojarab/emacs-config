@@ -4,15 +4,18 @@ Emacs.pane.menubar.margin: 0
 Emacs*useXIM: false
 Emacs.fontBackend: xft
 Emacs.bitmapIcon: on
-Emacs.font: Monospace-11
-Emacs*menubar*font: DejaVu Sans Mono-9
-Emacs.menu*.font: DejaVu Sans Mono-9
-Emacs.pane.menubar.font: DejaVu Sans Mono-9
-Emacs.dialog*.font: DejaVu Sans Mono-9
+Emacs.font: -adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-2
+Emacs.FACE.italicFont:  -adobe-courier-medium-i-normal-*-12-*-*-*-*-*-iso8859-*
+Emacs.FACE.boldFont:	-adobe-courier-bold-r-*--12-*-*-*-*-100-iso8859-1
+Emacs*menubar*font: -adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-2
+Emacs.menu*.font: -adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-2
+Emacs.pane.menubar.font: -adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-2
+Emacs.dialog*.font: -adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-2
 Emacs.menuBar: on
 Emacs.toolBar: off
 Emacs.borderWidth: 0
 Emacs.internalBorder: 0
+Emacs.backgroundType: dark
 
 Xft.dpi: 96
 Xft.antialias: true

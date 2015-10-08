@@ -288,6 +288,18 @@
     ;; keep comment before the form from which we are splicing if it is on a separate line
     ("(\n    ;; foo bar\n |asd\n as\n ;; asds (asdasd asd hgujirjf) asd\n asd\n )" "|;; foo bar\nasd\nas\n;; asds (asdasd asd hgujirjf) asd\nasd")
     ("(\n    ;; foo bar\n asd\n as\n ;; asds (asdasd asd hgujirjf) asd\n |asd\n )" "|;; asds (asdasd asd hgujirjf) asd\nasd")
+
+    ;; when at the end of the expression, kill entire expression
+    ("(asdad asd (some-func) asdasd|)" "|")
+    ("(asdad asd (some-func) asdasd|  )" "|")
+    ("(asdad asd (some-func) asdasd  |)" "|")
+    ("(asdad asd (some-func) asdasd  |  )" "|")
+    ("foo (asdad asd (some-func) asdasd|)" "foo |")
+    ("foo (asdad asd (some-func) asdasd|) bar" "foo | bar")
+
+    ;; when there is a comment before the parent sexp and we are at
+    ;; the beginning, the comment shouldn't play any role
+    (";; foo bar\n\n(|foo bar baz)" ";; foo bar\n\n|foo bar baz")
     )))
 
 (sp-test-command sp-splice-sexp-killing-around

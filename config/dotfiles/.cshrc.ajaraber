@@ -3,7 +3,7 @@ source $HOME/.aliases
 endif
 alias ls       'ls -l --color -sF'
 alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
-
+alias emacs '$HOME/workspace/emacspkgs/emacs-24.5/src/emacs'
 
 setenv JAVA_HOME /usr/intel/pkgs/java/1.8.0
 if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
@@ -41,6 +41,6 @@ set add_libs=${HOME}/bin/lib:${oa_libs}:${oaxpop_libs}:${ctk_tool_root}/libs:/us
 set add_libs_post=/usr/lib64:/usr/lib                                                                                                                            
 
 # Front-load LD_LIBRARY_PATH
-setenv LD_LIBRARY_PATH ${add_libs}:${add_libs_post}
+alias python_ctk_load 'setenv LD_LIBRARY_PATH ${add_libs}:${add_libs_post}'
 alias python_ctk '${INTEL_CTK}/bin/python_ctk'
 source /p/foundry/env/startup/envrc.tcsh

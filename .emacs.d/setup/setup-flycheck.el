@@ -29,14 +29,14 @@
 (require 'f)
 (require 'flycheck)
 (add-hook 'after-init-hook 'global-flycheck-mode)
-(add-hook 'js2-mode-hook
-          (lambda () (flycheck-mode t)))
-(add-hook 'lisp-mode-hook
-          (lambda () (flycheck-mode t)))
-(add-hook 'python-mode-hook
-          (lambda () (flycheck-mode t)))
-(add-hook 'java-mode-hook
-          (lambda () (flycheck-mode t)))
+(mapc (lambda (mode)
+        (add-hook mode (lambda () (flycheck-mode t))))
+      '(c-mode-hook
+        c++-mode-hook
+        lisp-mode-hook
+        python-mode-hook
+        js2-mode-hook
+        java-mode-hook))
 
 ;; Configuration
 (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
