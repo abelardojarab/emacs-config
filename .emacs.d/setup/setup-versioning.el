@@ -60,51 +60,52 @@
 (require 'git-commit)
 (require 'magit)
 (require 'setup-magit)
-(require 'git-gutter-fringe+)
 (require 'git-timemachine)
 
-(global-git-gutter+-mode t)
-(set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
-(set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
-(set-face-foreground 'git-gutter-fr+-deleted  "red")
+(when window-system
+  (require 'git-gutter-fringe+)
+  (global-git-gutter+-mode t)
+  (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
+  (set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
+  (set-face-foreground 'git-gutter-fr+-deleted  "red")
 
-;; Please adjust fringe width if your own sign is too big.
-(setq-default left-fringe-width 20)
+  ;; Please adjust fringe width if your own sign is too big.
+  (setq-default left-fringe-width 20)
 
-(fringe-helper-define 'git-gutter-fr+-added nil
-  ".XXXXXX."
-  "XXxxxxXX"
-  "XX....XX"
-  "XX....XX"
-  "XXXXXXXX"
-  "XXXXXXXX"
-  "XX....XX"
-  "XX....XX")
+  (fringe-helper-define 'git-gutter-fr+-added nil
+    ".XXXXXX."
+    "XXxxxxXX"
+    "XX....XX"
+    "XX....XX"
+    "XXXXXXXX"
+    "XXXXXXXX"
+    "XX....XX"
+    "XX....XX")
 
-(fringe-helper-define 'git-gutter-fr+-deleted nil
-  "XXXXXX.."
-  "XXXXXXX."
-  "XX...xXX"
-  "XX....XX"
-  "XX....XX"
-  "XX...xXX"
-  "XXXXXXX."
-  "XXXXXX..")
+  (fringe-helper-define 'git-gutter-fr+-deleted nil
+    "XXXXXX.."
+    "XXXXXXX."
+    "XX...xXX"
+    "XX....XX"
+    "XX....XX"
+    "XX...xXX"
+    "XXXXXXX."
+    "XXXXXX..")
 
-(fringe-helper-define 'git-gutter-fr+-modified nil
-  "XXXXXXXX"
-  "XXXXXXXX"
-  "Xx.XX.xX"
-  "Xx.XX.xX"
-  "Xx.XX.xX"
-  "Xx.XX.xX"
-  "Xx.XX.xX"
-  "Xx.XX.xX")
+  (fringe-helper-define 'git-gutter-fr+-modified nil
+    "XXXXXXXX"
+    "XXXXXXXX"
+    "Xx.XX.xX"
+    "Xx.XX.xX"
+    "Xx.XX.xX"
+    "Xx.XX.xX"
+    "Xx.XX.xX"
+    "Xx.XX.xX")
 
-;; Fringe fix in Windows
-(unless (string-equal system-type "windows-nt")
-  (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
-    (ad-set-arg 0 (file-truename (ad-get-arg 0)))))
+  ;; Fringe fix in Windows
+  (unless (string-equal system-type "windows-nt")
+    (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
+      (ad-set-arg 0 (file-truename (ad-get-arg 0))))))
 
 ;; Speed up find file
 (remove-hook 'find-file-hooks 'vc-find-file-hook)

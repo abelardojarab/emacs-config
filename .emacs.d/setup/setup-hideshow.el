@@ -124,12 +124,13 @@
     ad-do-it))
 
 ;; Hideshow Visualization
-(require 'hideshowvis)
-(add-hook 'c-mode-common-hook 'hs-minor-mode)
-(dolist (x '(prog emacs-lisp lisp java perl sh python js2 nxml))
-  (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hs-minor-mode))
-(dolist (x '(prog emacs-lisp lisp java perl sh python js2 nxml))
-  (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hideshowvis-enable))
+(when window-system
+  (require 'hideshowvis)
+  (add-hook 'c-mode-common-hook 'hs-minor-mode)
+  (dolist (x '(prog emacs-lisp lisp java perl sh python js2 nxml))
+    (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hs-minor-mode))
+  (dolist (x '(prog emacs-lisp lisp java perl sh python js2 nxml))
+    (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hideshowvis-enable)))
 
 ;; Origami
 (add-to-list 'load-path "~/.emacs.d/origami")

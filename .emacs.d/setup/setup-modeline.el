@@ -25,9 +25,10 @@
 ;;; Code:
 
 ;; Nyan cat
-(add-to-list 'load-path "~/.emacs.d/nyan-mode")
-(require 'nyan-mode)
-(nyan-mode t)
+(when window-system
+  (add-to-list 'load-path "~/.emacs.d/nyan-mode")
+  (require 'nyan-mode)
+  (nyan-mode t))
 
 ;; Smart modeline
 (add-to-list 'load-path "~/.emacs.d/rich-minority")
