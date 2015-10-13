@@ -1,0 +1,32 @@
+"\e[B": history-search-forward
+"\e[A": history-search-backward
+"\ep": history-search-backward
+
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+"\e[1;2C": forward-word
+"\e[1;2D": backward-word
+"\e[5C": forward-word
+"\e[5D": backward-word
+"\e\e[C": forward-word
+"\e\e[D": backward-word
+"\e[1;6D": backward-word
+"\e[1;6C": forward-word
+
+# allow the use of the Home/End keys
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+
+# allow the use of the Delete/Insert keys
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+
+TAB: menu-complete
+
+set show-all-if-ambiguous on
+set completion-ignore-case on
+set expand-tilde on
+set convert-meta off
+set input-meta on
+set output-meta on
+set visible-stats on
