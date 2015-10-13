@@ -1,7 +1,4 @@
-"\e[B": history-search-forward
-"\e[A": history-search-backward
-"\ep": history-search-backward
-
+# edition
 "\e[1;5C": forward-word
 "\e[1;5D": backward-word
 "\e[1;2C": forward-word
@@ -30,3 +27,4 @@ set convert-meta off
 set input-meta on
 set output-meta on
 set visible-stats on
+
