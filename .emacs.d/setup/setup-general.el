@@ -34,7 +34,8 @@
 (setq inhibit-startup-message t)
 
 ;; Disable tool-bar
-(tool-bar-mode -1)
+(if window-system
+    (tool-bar-mode -1))
 
 ;; Undefined function
 (require 'let-alist)
