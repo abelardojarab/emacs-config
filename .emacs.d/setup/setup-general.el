@@ -28,7 +28,11 @@
 (setq gc-cons-threshold 100000000)
 
 ;; Missing function
+(defvar scheme-imenu-generic-expression "")
 (setq scheme-imenu-generic-expression "")
+
+;; Missing variable
+(defvar cursor-sensor-inhibit nil)
 
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
