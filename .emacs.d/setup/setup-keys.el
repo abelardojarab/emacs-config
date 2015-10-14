@@ -247,6 +247,13 @@
 (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
 (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
 
+;; Enable mouse support
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t))
+
 ;; Smooth scrolling
 (add-to-list 'load-path "~/.emacs.d/smooth-scrolling")
 (require 'smooth-scrolling)
@@ -258,7 +265,8 @@
  scroll-preserve-screen-position 1) ;; try to keep screen position when PgDn/PgUp
 
 ;; These ones are buffer local and thus have to be set up by setq-default
-(setq-default scroll-up-aggressively 0.01 scroll-down-aggressively 0.01)
+(setq-default scroll-up-aggressively 0.01
+              scroll-down-aggressively 0.01)
 
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq scroll-step 1)
@@ -273,20 +281,8 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
 ;; Scroll with the mouse
-(defun smooth-scroll (increment)
-  (scroll-up increment) (sit-for 0.05)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.05)
-  (scroll-up increment) (sit-for 0.05)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.05)
-  (scroll-up increment) (sit-for 0.06)
-  (scroll-up increment))
-
-(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 1)))
-(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll -1)))
+(global-set-key [(mouse-5)] '(lambda () (interactive) (scroll-up 1)))
+(global-set-key [(mouse-4)] '(lambda () (interactive) (scroll-down 1)))
 
 ;; Zoom in/out like feature, with mouse wheel
 (global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
