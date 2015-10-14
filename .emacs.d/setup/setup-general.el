@@ -27,9 +27,8 @@
 ;; Garbage collection
 (setq gc-cons-threshold 100000000)
 
-;; Missing function
+;; Missing variable
 (defvar scheme-imenu-generic-expression "")
-(setq scheme-imenu-generic-expression "")
 
 ;; Missing variable
 (defvar cursor-sensor-inhibit nil)
@@ -645,6 +644,10 @@
 (require 'dired-aux)
 (require 'dired-async)
 (require 'dired+)
+
+;; rsync support
+(require 'auto-rsync)
+(auto-rsync-mode t)
 
 ;; Benchmark-init can give us a breakdown of time spent on require and load calls:
 (add-to-list 'load-path "~/.emacs.d/benchmark-init")

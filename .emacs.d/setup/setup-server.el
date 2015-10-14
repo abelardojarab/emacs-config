@@ -24,13 +24,6 @@
 
 ;;; Code:
 
-;; rsync support
-(require 'auto-rsync)
-(auto-rsync-mode t)
-;; (setq auto-rsync-dir-alist
-;;       (("/path/to/src1/" . "/path/to/dest1/")
-;;        ("/path/to/src2/" . "username@hostname:/path/to/dest2/")))
-
 ;; Server configuration
 (load "server")
 (defadvice make-network-process (before force-tcp-server-ipv4 activate)
@@ -70,7 +63,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
     ;; Check if there are modified buffers or active clients or frames.
     (setq modified-buffers (modified-buffers-exist))
     (setq active-clients-or-frames (or (> (length server-clients) 1)
-                                      (> (length (frame-list)) 1)))
+                                       (> (length (frame-list)) 1)))
 
     ;;  Check for a server-buffer before closing the server-buffer
     (if server-clients
