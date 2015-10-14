@@ -148,8 +148,8 @@
        '(progn
           (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
             (if (and cua-mode
-                   org-support-shift-select
-                   (not (use-region-p)))
+                     org-support-shift-select
+                     (not (use-region-p)))
                 (cua-set-mark)))))))
 
 ;; Fix on the keys
@@ -324,7 +324,7 @@ a link to this file."
     (if (equal system-type 'windows-nt)
         ;; Windows: Irfanview
         (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                "/clippaste /convert=" filename))
+                                                                                      "/clippaste /convert=" filename))
 
       (if (equal system-type 'darwin)
           ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
@@ -361,21 +361,21 @@ a link to this file."
 (defun org-mode-reftex-setup ()
   (interactive)
   (and (buffer-file-name) (file-exists-p (buffer-file-name))
-     (progn
-       ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
-       (setq TeX-master t)
-       (turn-on-reftex)
-       ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-       (global-auto-revert-mode t) ; careful: this can kill the undo
-       ;; history when you change the file
-       ;; on-disk.
-       (reftex-parse-all)
-       ;; add a custom reftex cite format to insert links
-       ;; This also changes any call to org-citation!
-       (reftex-set-cite-format
-        '((?c . "\\citet{%l}") ; natbib inline text
-          (?i . "\\citep{%l}") ; natbib with parens
-          ))))
+       (progn
+         ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
+         (setq TeX-master t)
+         (turn-on-reftex)
+         ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
+         (global-auto-revert-mode t) ; careful: this can kill the undo
+         ;; history when you change the file
+         ;; on-disk.
+         (reftex-parse-all)
+         ;; add a custom reftex cite format to insert links
+         ;; This also changes any call to org-citation!
+         (reftex-set-cite-format
+          '((?c . "\\citet{%l}") ; natbib inline text
+            (?i . "\\citep{%l}") ; natbib with parens
+            ))))
   (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
   (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
 (add-hook 'org-mode-hook 'org-mode-reftex-setup)
@@ -681,7 +681,6 @@ a link to this file."
 (setq org-bullets-bullet-list
       '(
         "•"
-        "o"
         "*"
         "+"
         "-"
