@@ -434,7 +434,6 @@
 (add-to-list 'load-path "~/.emacs.d/aggressive-indent-mode")
 (require 'names)
 (require 'aggressive-indent)
-(global-aggressive-indent-mode 1)
 (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
 ;; auto-indent pasted code

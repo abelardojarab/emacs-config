@@ -1,6 +1,6 @@
 ;;; setup-server.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -58,30 +58,67 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
 ;; http://bnbeckwith.com/blog/not-killing-emacs-on-windows.html
 (defun bnb/exit ()
   (interactive)
-  ;;  Check for a server-buffer before closing the server-buffer
-  (if server-buffer-clients
-      (server-edit)
 
-    ;; If there are connected clients quit them
-    (if (> (length server-clients) 1)
-        (cond ((y-or-n-p "There are connected clients, really quit Emacs? ")
-               (progn (setq bnb/really-kill-emacs t)
-                      (save-buffers-kill-terminal))))
-      (progn (setq bnb/really-kill-emacs t)
-             (save-buffers-kill-terminal)))))
+  (let (new-frame modified-buffers active-clients-or-frames)
+
+    ;; message
+    (message (format "There are currently %d client(s), %d buffer clients and %d frames."
+                     (- (length server-clients) 0)
+                     (- (length server-buffer-clients) 0)
+                     (- (length (frame-list)) 0)))
+
+    ;; Check if there are modified buffers or active clients or frames.
+    (setq modified-buffers (modified-buffers-exist))
+    (setq active-clients-or-frames (or (> (length server-clients) 1)
+                                      (> (length (frame-list)) 1)))
+
+    ;;  Check for a server-buffer before closing the server-buffer
+    (if server-clients
+        ;; Disconnect from server
+        (server-edit))
+
+    ;; Hide the server
+    (make-frame-invisible nil t)))
 (global-set-key (kbd "C-x C-c") 'bnb/exit)
 
 (defvar bnb/really-kill-emacs nil)
 (defadvice kill-emacs (around bnb/really-exit activate)
   "Only kill emacs if a prefix is set"
-  (if bnb/really-kill-emacs
-      ad-do-it)
+  (when bnb/really-kill-emacs
+
+    ;; Save buffers
+    (save-buffers-kill-terminal)
+
+    ;; Kill all remaining clients
+    (progn
+      (dolist (client server-clients)
+        (server-delete-client client)))
+
+    ad-do-it)
   (bnb/exit))
 
 (defun bnb/really-kill-emacs ()
   (interactive)
   (setq bnb/really-kill-emacs t)
   (kill-emacs))
+
+(defun modified-buffers-exist()
+  "This function will check to see if there are any buffers
+that have been modified.  It will return true if there are
+and nil otherwise. Buffers that have buffer-offer-save set to
+nil are ignored."
+  (let (modified-found)
+    (dolist (buffer (buffer-list))
+      (when (and (buffer-live-p buffer)
+                 (buffer-modified-p buffer)
+                 (not (buffer-base-buffer buffer))
+                 (or
+                  (buffer-file-name buffer)
+                  (progn
+                    (set-buffer buffer)
+                    (and buffer-offer-save (> (buffer-size) 0)))))
+        (setq modified-found t)))
+    modified-found))
 
 ;; Emacsclient support
 (require 'remote-emacsclient)

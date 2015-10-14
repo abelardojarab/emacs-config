@@ -258,8 +258,6 @@ non-nil."
 
 ;; Highlight the line
 (require 'hl-line)
-(when window-system
-  (global-hl-line-mode t))
 (defun local-hl-line-mode-off ()
   (interactive)
   (make-local-variable 'global-hl-line-mode)
@@ -447,11 +445,11 @@ non-nil."
 ;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
-     (catch 'matched
-       (let ((inhibit-changing-match-data t)) ; small optimization
-         (dolist (regexp regexps)
-           (when (string-match regexp string)
-             (throw 'matched t)))))))
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
 
 ;; Pretty lambdas
 (defun pretty-lambdas ()
