@@ -107,14 +107,16 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 alias lmli='/opt/cadence/installs/IC615/tools/bin/lmgrd -c /opt/cadence/installs/IC615/share/license/license.dat'
-export LM_LICENSE_FILE=$HOME/flexlm/license.dat
+
+# export OA_UNSUPPORTED_PLAT=linux_rhel40
 export OA_UNSUPPORTED_PLAT=linux_rhel40_gcc44x
+# export OA_HOME=/opt/Ansys/Totem14.1.b2/lib/totem2/oa
+export OA_HOME=/opt/cadence/installs/IC615/oa_v22.41.029
 export PYTHONPATH=~/workspace/pythonlibs/lib/python2.7/site-packages
 export PYTHONPATH=${PYTHONPATH}:/opt/oaScript/python2
-export OA_HOME=/opt/cadence/installs/IC615/oa_v22.41.029
-export CDS_ROOT=/opt/cadence/installs/IC615
 export CDSROOT=/opt/cadence/installs/IC615
 export CDSHOME=/opt/cadence/installs/IC615
+export CDS_ROOT=/opt/cadence/installs/IC615
 export CDS_LOG_PATH=/tmp
 export CDS_LOG_VERSION=pid
 export CDS_AUTO_CKOUT=all
@@ -122,9 +124,12 @@ export CDS_LOAD_ENV=CWD
 export CDS_Netlisting_Mode=Analog
 export KEEP_CDS_LIB_MGR=1
 export MMSIM_ROOT=/opt/cadence/installs/MMSIM121
+export APACHEDA_LICENSE_FILE=$HOME/flexlm/totem.lic
+export APACHEROOT=/opt/Ansys/Totem14.1.b2
 export CALIBRE_HOME=/opt/mentor/calibre/2007.1_17.18
 export MGC_HOME=/opt/mentor/calibre/2007.1_17.18
-export MGLS_LICENSE_FILE=/home/abelardojara/flexlm/calibre.dat
+export MGLS_LICENSE_FILE=$HOME/flexlm/calibre.dat
+export LM_LICENSE_FILE=$HOME/flexlm/license.dat
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$CDS_ROOT/share/license/license.dat:$HOME/flexlm/cadence.dat:$HOME/flexlm/synopsys.dat:$HOME/flexlm/modelsim.dat:$HOME/flexlm/matlab.dat
 export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:/opt/cds/soc710/bin:/opt/synopsys/starrc/2012.12/bin:/opt/synopsys/hspice/H-2013.03-SP2/hspice/bin:/opt/synopsys/cosmosscope/H-2012.12/ai_bin:/opt/mentor/modelsim/6.5f/modeltech/bin:/opt/mentor/calibre/2007.1_17.18/bin:/opt/PyCharm/4.0.6/bin:/opt/IBM/SPSS/Statistics/22/bin:/opt/synopsys/icweb/G-2012.06-SP1/bin/amd64:/opt/synopsys/icvalidator/H-2013.06/bin/SUSE.64:$PYTHONPATH/bin:$PATH:~/workspace/frametools/bin
 export CDK_DIR=/opt/ncsu-cdk-1.6.0
