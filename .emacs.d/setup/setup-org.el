@@ -675,16 +675,19 @@ a link to this file."
 (add-hook 'org-mode-hook (lambda () (org-autolist-mode)))
 
 ;; Nice bulleted lists
-(add-to-list 'load-path "~/.emacs.d/org-bullets")
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-(setq org-bullets-bullet-list
-      '(
-        "•"
-        "+"
-        "-"
-        "•"
-        "○"))
+(when window-system
+  (add-to-list 'load-path "~/.emacs.d/org-bullets")
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (setq org-bullets-bullet-list
+        '(
+          "•"
+          "▪"
+          "▸"
+          "+"
+          "-"
+          "•"
+          "○")))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
