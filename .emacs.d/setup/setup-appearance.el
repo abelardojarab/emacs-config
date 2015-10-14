@@ -258,7 +258,8 @@ non-nil."
 
 ;; Highlight the line
 (require 'hl-line)
-(global-hl-line-mode t)
+(when window-system
+  (global-hl-line-mode t))
 (defun local-hl-line-mode-off ()
   (interactive)
   (make-local-variable 'global-hl-line-mode)
