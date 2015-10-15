@@ -25,6 +25,7 @@
 ;;; Code:
 
 ;; Enable Semantic
+(add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
 (require 'semantic/ia)
 (require 'semantic/wisent)
 (setq semantic-default-submodes
@@ -103,7 +104,6 @@
   (semanticdb-enable-gnu-global-databases 'c++-mode))
 
 ;; Include settings
-(add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
 (require 'semantic/bovine/c)
 (require 'semantic/bovine/gcc)
 (require 'semantic/bovine/clang)

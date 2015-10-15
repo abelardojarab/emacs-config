@@ -104,11 +104,15 @@
                   (goto-char (posn-point (event-start event)))
                   (highlight-symbol-at-point)))
 
-;; Helm imenu
+;; Helm semantic (switch function)
 (global-set-key (kbd "<f4>") 'helm-semantic-or-imenu)
+(global-set-key (kbd "C-<f4>") 'pws-switch-function)
+(define-key c-mode-base-map (kbd "S-<f4>") 'eassist-switch-h-cpp)
+(define-key c-mode-base-map (kbd "C-<f4>") 'dts-switch-between-header-and-source)
 
-;; Switch function
-(global-set-key (kbd "<f5>") 'psw-switch-function)
+;; Smex
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "<f5>") 'smex)
 
 ;; Flyspell
 (defun flyspell-check-next-highlighted-word ()
@@ -254,10 +258,6 @@
   (defun track-mouse (e))
   (setq mouse-sel-mode t))
 
-;; Smooth scrolling
-(add-to-list 'load-path "~/.emacs.d/smooth-scrolling")
-(require 'smooth-scrolling)
-
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq
  scroll-margin 1                ;; start scrolling when marker at top/bottom
@@ -352,10 +352,6 @@
 (define-key global-map (kbd "C-1") 'error-tip-cycle-dwim)
 (define-key global-map (kbd "C-2") 'error-tip-cycle-dwim-reverse)
 
-;; Switch header and source
-(define-key c-mode-base-map [f4] 'eassist-switch-h-cpp)
-(define-key c-mode-base-map [C-f4] 'dts-switch-between-header-and-source)
-
 ;; Drag stuff
 (add-to-list 'load-path "~/.emacs.d/drag-stuff")
 (require 'drag-stuff)
@@ -392,8 +388,9 @@
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "M-o") 'popup-select-window)
 (define-key my-keys-minor-mode-map (kbd "C-`") 'psw-switch-function)
-(define-key my-keys-minor-mode-map (kbd "<f4>") 'ibuffer)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-semantic-or-imenu)
+(define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
+(define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'ibuffer)
 (define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
 
 (define-minor-mode my-keys-minor-mode

@@ -41,6 +41,10 @@
 ;; Tags table
 (setq tags-revert-without-query t)
 (setq tags-always-build-completion-table t)
+(when (not (file-exists-p (expand-file-name "~/.emacs.cache/TAGS")))
+  (if (not (file-exists-p (expand-file-name "~/.emacs.cache")))
+      (make-directory (expand-file-name "~/.emacs.cache") t))
+  (with-temp-buffer (write-file (expand-file-name "~/.emacs.cache/TAGS"))))
 (setq tags-file-name (expand-file-name "~/.emacs.cache/TAGS"))
 (setq tags-table-list (list tags-file-name))
 (setq tags-add-tables t)

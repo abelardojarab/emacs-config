@@ -121,32 +121,5 @@ nil are ignored."
 (add-to-list 'command-switch-alist '("(make-frame-visible)" .
                                      (lambda (s))))
 
-;; Set tramp variables
-(if (eq system-type 'windows-nt)
-    (setq tramp-default-method "plink")
-  (setq tramp-default-method "ssh"))
-(update-tramp-emacs-server-port-forward tramp-default-method)
-
-;; Tramp configurations
-(setq my-tramp-ssh-completions
-      '((tramp-parse-sconfig "~/.ssh/config")
-        (tramp-parse-shosts "~/.ssh/known_hosts")))
-(mapc (lambda (method)
-        (tramp-set-completion-function method my-tramp-ssh-completions))
-      '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))
-
-;; Fix the auto save problem.
-(setq tramp-auto-save-directory "~/.emacs.cache/backups")
-(make-directory tramp-auto-save-directory t)
-
-;; have tramp save temps locally...
-(setq auto-save-file-name-transforms
-      '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
-        ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs.cache/backups/" t)))
-
-;; End of line
-(require 'eol-conversion)
-(setq inhibit-eol-conversion 't) ;; do this so tramp doesnt complain about ls
-
 (provide 'setup-server)
 ;;; setup-server.el ends here
