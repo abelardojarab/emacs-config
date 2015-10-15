@@ -108,9 +108,8 @@ fi
 
 alias lmli='/opt/cadence/installs/IC615/tools/bin/lmgrd -c /opt/cadence/installs/IC615/share/license/license.dat'
 
-# export OA_UNSUPPORTED_PLAT=linux_rhel40
+export EMACS_SERVER_FILE=$HOME/.emacs.cache/server/server
 export OA_UNSUPPORTED_PLAT=linux_rhel40_gcc44x
-# export OA_HOME=/opt/Ansys/Totem14.1.b2/lib/totem2/oa
 export OA_HOME=/opt/cadence/installs/IC615/oa_v22.41.029
 export PYTHONPATH=~/workspace/pythonlibs/lib/python2.7/site-packages
 export PYTHONPATH=${PYTHONPATH}:/opt/oaScript/python2
