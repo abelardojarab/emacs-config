@@ -72,9 +72,9 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
   (when bnb/really-kill-emacs
     ;; Kill all remaining clients
     (if (not (modified-buffers-exist))
-             (progn
-               (dolist (client server-clients)
-                 (server-delete-client client))))
+        (progn
+          (dolist (client server-clients)
+            (server-delete-client client))))
     ad-do-it)
   (bnb/exit))
 

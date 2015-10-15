@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; Get the client or server to properly detect the frame
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (select-frame frame)))
+
 ;; Garbage collection
 (setq gc-cons-threshold 100000000)
 

@@ -24,6 +24,19 @@
 
 ;;; Code:
 
+;; Fix bad keybinding in xterm
+(defun fix-up-xterm-control-arrows ()
+  (define-key function-key-map "\e[1;5A" [C-up])
+  (define-key function-key-map "\e[1;5B" [C-down])
+  (define-key function-key-map "\e[1;5C" [C-right])
+  (define-key function-key-map "\e[1;5D" [C-left])
+  (define-key function-key-map "\e[5A"   [C-up])
+  (define-key function-key-map "\e[5B"   [C-down])
+  (define-key function-key-map "\e[5C"   [C-right])
+  (define-key function-key-map "\e[5D"   [C-left]))
+(unless window-system
+  (fix-up-xterm-control-arrows))
+
 ;; As in Windows, replace after typing a letter
 (require 'delsel)
 (delete-selection-mode 1)
