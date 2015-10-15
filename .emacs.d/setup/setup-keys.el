@@ -85,7 +85,7 @@
   (define-key function-key-map "\e[z7b"    [M-C-return])
   (define-key function-key-map "\e[z8b"    [M-C-S-return]))
 
-(fix-up-xterm-input-map)
+(fix-up-xterm-input-function-key-map)
 
 ;; As in Windows, replace after typing a letter
 (require 'delsel)
