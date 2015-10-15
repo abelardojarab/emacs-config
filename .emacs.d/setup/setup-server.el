@@ -51,42 +51,30 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
 ;; http://bnbeckwith.com/blog/not-killing-emacs-on-windows.html
 (defun bnb/exit ()
   (interactive)
-
-  (let (new-frame modified-buffers active-clients-or-frames)
-
     ;; message
-    (message (format "There are currently %d client(s), %d buffer clients and %d frames."
+    (message (format "There are currently %d client(s) and %d frame(s)."
                      (- (length server-clients) 0)
-                     (- (length server-buffer-clients) 0)
                      (- (length (frame-list)) 0)))
 
-    ;; Check if there are modified buffers or active clients or frames.
-    (setq modified-buffers (modified-buffers-exist))
-    (setq active-clients-or-frames (or (> (length server-clients) 1)
-                                       (> (length (frame-list)) 1)))
-
-    ;;  Check for a server-buffer before closing the server-buffer
+    ;; Check for a server-buffer before closing the server-buffer
     (if server-clients
-        ;; Disconnect from server
         (server-edit))
 
     ;; Hide the server
-    (make-frame-invisible nil t)))
+    (if window-system
+        (iconify-frame)
+      (make-frame-invisible nil t)))
 (global-set-key (kbd "C-x C-c") 'bnb/exit)
 
 (defvar bnb/really-kill-emacs nil)
 (defadvice kill-emacs (around bnb/really-exit activate)
   "Only kill emacs if a prefix is set"
   (when bnb/really-kill-emacs
-
-    ;; Save buffers
-    (save-buffers-kill-terminal)
-
     ;; Kill all remaining clients
-    (progn
-      (dolist (client server-clients)
-        (server-delete-client client)))
-
+    (if (not (modified-buffers-exist)
+           (progn
+             (dolist (client server-clients)
+               (server-delete-client client)))))
     ad-do-it)
   (bnb/exit))
 
