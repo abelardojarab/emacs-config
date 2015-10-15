@@ -24,8 +24,17 @@
 
 ;;; Code:
 
-;; Fix bad keybinding in xterm
-(defun fix-up-xterm-control-arrows ()
+;; xterm through SSH
+(defun fix-up-xterm-input-function-key-map ()
+  (define-key function-key-map "\e[1;2A" [S-up])
+  (define-key function-key-map "\e[1;2B" [S-down])
+  (define-key function-key-map "\e[1;2C" [S-right])
+  (define-key function-key-map "\e[1;2D" [S-left])
+  (define-key function-key-map "\e[2A"   [S-up])
+  (define-key function-key-map "\e[2B"   [S-down])
+  (define-key function-key-map "\e[2C"   [S-right])
+  (define-key function-key-map "\e[2D"   [S-left])
+
   (define-key function-key-map "\e[1;5A" [C-up])
   (define-key function-key-map "\e[1;5B" [C-down])
   (define-key function-key-map "\e[1;5C" [C-right])
@@ -33,9 +42,50 @@
   (define-key function-key-map "\e[5A"   [C-up])
   (define-key function-key-map "\e[5B"   [C-down])
   (define-key function-key-map "\e[5C"   [C-right])
-  (define-key function-key-map "\e[5D"   [C-left]))
-(unless window-system
-  (fix-up-xterm-control-arrows))
+  (define-key function-key-map "\e[5D"   [C-left])
+
+  (define-key function-key-map "\e[1;3A" [M-up])
+  (define-key function-key-map "\e[1;3B" [M-down])
+  (define-key function-key-map "\e[1;3C" [M-right])
+  (define-key function-key-map "\e[1;3D" [M-left])
+
+  (define-key function-key-map "\e[1;4A" [M-S-up])
+  (define-key function-key-map "\e[1;4B" [M-S-down])
+  (define-key function-key-map "\e[1;4C" [M-S-right])
+  (define-key function-key-map "\e[1;4D" [M-S-left])
+
+  (define-key function-key-map "\e[5~"   [prior])
+  (define-key function-key-map "\e[6~"   [next])
+  (define-key function-key-map "\e[5;5~" [C-prior])
+  (define-key function-key-map "\e[6;5~" [C-next])
+
+  (define-key function-key-map "\e[5;2~"  [S-prior])
+  (define-key function-key-map "\e[5;3~"  [M-prior])
+  (define-key function-key-map "\e[5;4~"  [M-S-prior])
+  (define-key function-key-map "\e[5;5~"  [C-prior])
+  (define-key function-key-map "\e[5;6~"  [C-S-prior])
+  (define-key function-key-map "\e[5;7~"  [M-C-prior])
+  (define-key function-key-map "\e[5;8~"  [M-C-S-prior])
+
+  (define-key function-key-map "\e[6;2~"  [S-next])
+  (define-key function-key-map "\e[6;3~"  [M-next])
+  (define-key function-key-map "\e[6;4~"  [M-S-next])
+  (define-key function-key-map "\e[6;5~"  [C-next])
+  (define-key function-key-map "\e[6;6~"  [C-S-next])
+  (define-key function-key-map "\e[6;7~"  [M-C-next])
+  (define-key function-key-map "\e[6;8~"  [M-C-S-next])
+
+  (define-key function-key-map "\e[z2a"    [S-tab])
+  (define-key function-key-map "\e[z5a"    [C-tab])
+  (define-key function-key-map "\e[z2b"    [S-return])
+  (define-key function-key-map "\e[z3b"    [M-return])
+  (define-key function-key-map "\e[z4b"    [M-S-return])
+  (define-key function-key-map "\e[z5b"    [C-return])
+  (define-key function-key-map "\e[z6b"    [C-S-return])
+  (define-key function-key-map "\e[z7b"    [M-C-return])
+  (define-key function-key-map "\e[z8b"    [M-C-S-return]))
+
+(fix-up-xterm-input-map)
 
 ;; As in Windows, replace after typing a letter
 (require 'delsel)
@@ -425,9 +475,6 @@
         (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
-
-;; Selecting line with the mouse
-(require 'drag-select-lines)
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
