@@ -30,3 +30,7 @@ export _JAVA_OPTIONS="-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndF
 # Emacs options
 export EMACS_SERVER_FILE="${HOME}/.emacs.cache/server/server"
 
+# Aliases
+alias gedit='/Applications/gedit.app/Contents/MacOS/Gedit'
+alias ls='ls -lsF'
+
