@@ -6,9 +6,7 @@
 "\e[3~": delete-char
 "\e[2~": quoted-insert
 
-set expand-tilde on
 set convert-meta on
 set input-meta on
 set output-meta on
 set visible-stats on
-set -o vi
