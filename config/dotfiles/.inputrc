@@ -1,3 +1,9 @@
+# improve history, only show matching history
+# When pressing up or down arrows,
+# show only history entries that match what was already typed
+"\e[A":history-search-backward
+"\e[B":history-search-forward
+
 # allow the use of the Home/End keys
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
@@ -6,7 +12,38 @@
 "\e[3~": delete-char
 "\e[2~": quoted-insert
 
-set convert-meta on
+# mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+"\e[5C": forward-word
+"\e[5D": backward-word
+"\e\e[C": forward-word
+"\e\e[D": backward-word
+
+# be 8 bit clean
+set convert-meta off
 set input-meta on
 set output-meta on
-set visible-stats on
+
+# rxvt bindings
+$if term=rxvt
+	"\e[8~": end-of-line
+	"\eOc": forward-word
+	"\eOd": backward-word
+$endif
+
+# vi mode bindings
+$if mode=vi
+	set keymap vi-command
+	"gg": beginning-of-history
+	"G": end-of-history
+	"\e[A": history-search-backward
+	"\e[B": history-search-forward
+
+	set keymap vi-insert
+	"\C-l": clear-screen
+	"\C-p": dynamic-complete-history
+	"\C-n": menu-complete
+	"\e[A": history-search-backward
+	"\e[B": history-search-forward
+$endif
