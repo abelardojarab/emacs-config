@@ -1,0 +1,970 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/WebAPI?page=6 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:48:20 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: WebAPI</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: WebAPI" href="../feeds/atom/tag/WebAPI">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/WebAPI?page=6" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FWebAPI%3Fpage%3D6" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/WebAPI?page=6" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FWebAPI%3Fpage%3D6" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: WebAPI</h1>
+                <ol class="pagination">
+      <li class="prev">
+      <a href="WebAPIaf4d.html?page=5">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="WebAPI2679.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="WebAPI4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="WebAPI9ba9.html?page=3">3</a>
+    </li>
+      <li>
+      <a href="WebAPIfdb0.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="WebAPIaf4d.html?page=5">5</a>
+    </li>
+      <li class="selected">
+      <a href="WebAPIc575.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="WebAPI235c.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="WebAPIfdfa.html?page=8">8</a>
+    </li>
+      <li>
+      <a href="WebAPI0b08.html?page=9">9</a>
+    </li>
+          <li class="next">
+      <a href="WebAPI235c.html?page=7">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 813 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="../Web/API/Navigator/getDeviceStorage.html">Web/API/Navigator/getDeviceStorage</a>
+                                  <small>The getDeviceStorage method is used to access some storage area available on the device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/getDeviceStorages.html">Web/API/Navigator/getDeviceStorages</a>
+                                  <small>The getDeviceStorages method is used to access individual storage areas available on the device. ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozAlarms.html">Web/API/Navigator/mozAlarms</a>
+                                  <small>Returns a MozAlarmsManager object you can use to schedule notifications or applications to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozCamera.html">Web/API/Navigator/mozCamera</a>
+                                  <small>Returns a CameraManager object you can use to access the cameras available on the user's device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozCameras.html">Web/API/Navigator/mozCameras</a>
+                                  <small>Returns an array of CameraManager objects you can use to access the cameras available on the user's ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozContacts.html">Web/API/Navigator/mozContacts</a>
+                                  <small>Return a ContactManager to access and manage all the contacts available on the device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozHasPendingMessage.html">Web/API/Navigator/mozHasPendingMessage</a>
+                                  <small>This method is used to know if there are pending messages of a given type (true) ot not (false).</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozPay.html">Web/API/Navigator/mozPay</a>
+                                  <small>The mozPay function is used to perform payments. It enables an app to use in-app payments.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozPower.html">Web/API/Navigator/mozPower</a>
+                                  <small>Returns a PowerManager object you can use to manage the power usage of the device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/registerProtocolHandler.html">Web/API/Navigator/registerProtocolHandler</a>
+                                  <small>Allows web sites to register themselves as possible handlers for particular protocols.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/NavigatorOnLine/onLine.html">Web/API/NavigatorOnLine/onLine</a>
+                                  <small>Returns the online status of the browser. The property returns a boolean value, with true meaning ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Network_Information_API.html">Web/API/Network_Information_API</a>
+                                  <small>The Network Information API provides information about the system's connection, which is in term of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node.html">Web/API/Node</a>
+                                  <small>A Node is an interface from which a number of DOM types inherit, and allows these various types to ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/baseURIObject.html">Web/API/Node/baseURIObject</a>
+                                  <small>The Node.baseURIObject property returns the nsIURI representing the node's (typically a document or ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/childNodes.html">Web/API/Node/childNodes</a>
+                                  <small>The Node.childNodes read-only property returns a live collection of child nodes of the given ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notation.html">Web/API/Notation</a>
+                                  <small>Represents a DTD notation (read-only). May declare format of an unparsed entity or formally declare ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/notification.html">Web/API/notification</a>
+                                  <small>The Notification interface of the Notifications API is used to configure and display desktop ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/body.html">Web/API/Notification/body</a>
+                                  <small>The body read-only property of the Notification interface indicates the body string of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/close.html">Web/API/Notification/close</a>
+                                  <small>The close() method of the Notification interface is used to close a previously displayed ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/dir.html">Web/API/Notification/dir</a>
+                                  <small>The dir read-only property of the Notification interface indicates the text direction of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/icon.html">Web/API/Notification/icon</a>
+                                  <small>The icon read-only property of the Notification interface contains the URL of an icon to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/lang.html">Web/API/Notification/lang</a>
+                                  <small>The lang read-only property of the Notification interface indicates the text direction of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/onclick.html">Web/API/Notification/onclick</a>
+                                  <small>The onclick property of the Notification interface specifies an event listener to receive click ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/onclose.html">Web/API/Notification/onclose</a>
+                                  <small>The onclose property of the Notification interface specifies an event listener to receive close ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/onerror.html">Web/API/Notification/onerror</a>
+                                  <small>The onerror property of the Notification interface specifies an event listener to receive error ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/onshow.html">Web/API/Notification/onshow</a>
+                                  <small>The onshow property of the Notification interface specifies an event listener to receive show ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/permission.html">Web/API/Notification/permission</a>
+                                  <small>The permission read-only property of the Notification interface indicates the current permission ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/requestPermission.html">Web/API/Notification/requestPermission</a>
+                                  <small>The requestPermission() method of the Notification interface requests permission from the user for ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notification/tag.html">Web/API/Notification/tag</a>
+                                  <small>The tag read-only property of the Notification interface signifies an identifying tag for the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Notifications_API/Using_the_Notifications_API.html">Web/API/Notifications_API/Using_the_Notifications_API</a>
+                                  <small>The Notifications API lets a web page or app send notifications that are displayed outside the page ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/OfflineAudioContext.html">Web/API/OfflineAudioContext</a>
+                                  <small>Implements properties from its parent, AudioContext.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/OscillatorNode.html">Web/API/OscillatorNode</a>
+                                  <small>An OscillatorNode is created using the AudioContext.createOscillator method. It always has exactly ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PageTransitionEvent.html">Web/API/PageTransitionEvent</a>
+                                  <small>Page transition events fire when a webpage is being loaded or unloaded.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PannerNode.html">Web/API/PannerNode</a>
+                                  <small>A PannerNode always has exactly one input and one output: the input can be mono or stereo but the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/domainLookupEnd.html">Web/API/PerformanceTiming/domainLookupEnd</a>
+                                  <small>The PerformanceTiming.domainLookupEnd read-only property returns an unsigned long long representing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/domainLookupStart.html">Web/API/PerformanceTiming/domainLookupStart</a>
+                                  <small>The PerformanceTiming.domainLookupStart read-only property returns an unsigned long long ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/domLoading.html">Web/API/PerformanceTiming/domLoading</a>
+                                  <small>The PerformanceTiming.domLoading read-only property returns an unsigned long long representing the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/fetchStart.html">Web/API/PerformanceTiming/fetchStart</a>
+                                  <small>The PerformanceTiming.fetchStart read-only property returns an unsigned long long representing the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/loadEventEnd.html">Web/API/PerformanceTiming/loadEventEnd</a>
+                                  <small>The PerformanceTiming.loadEventEnd read-only property returns an unsigned long long representing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/loadEventStart.html">Web/API/PerformanceTiming/loadEventStart</a>
+                                  <small>The PerformanceTiming.loadEventStart read-only property returns an unsigned long long representing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/navigationStart.html">Web/API/PerformanceTiming/navigationStart</a>
+                                  <small>The PerformanceTiming.navigationStart read-only property returns an unsigned long long representing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/redirectEnd.html">Web/API/PerformanceTiming/redirectEnd</a>
+                                  <small>The PerformanceTiming.redirectEnd read-only property returns an unsigned long long representing the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/redirectStart.html">Web/API/PerformanceTiming/redirectStart</a>
+                                  <small>The PerformanceTiming.redirectStart read-only property returns an unsigned long long representing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/responseEnd.html">Web/API/PerformanceTiming/responseEnd</a>
+                                  <small>The PerformanceTiming.responseEnd read-only property returns an unsigned long long representing the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PerformanceTiming/responseStart.html">Web/API/PerformanceTiming/responseStart</a>
+                                  <small>The PerformanceTiming.responseStart read-only property returns an unsigned long long representing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PermissionSettings.html">Web/API/PermissionSettings</a>
+                                  <small>The PermissionSettings interface provides ways to let the user manage all the permissions requested ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PermissionSettings/get.html">Web/API/PermissionSettings/get</a>
+                                  <small>The get method allows to retrieve the current status of a given permission for a given app.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PermissionSettings/isExplicit.html">Web/API/PermissionSettings/isExplicit</a>
+                                  <small>The isExplicit method allows to know if the setting is explicit (true) or implicit (false).</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PermissionSettings/remove.html">Web/API/PermissionSettings/remove</a>
+                                  <small>The remove method allows to simply reset a permission for an app which is running inside the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PermissionSettings/set.html">Web/API/PermissionSettings/set</a>
+                                  <small>The set method allows to change a given permission for a given app.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Pointer_Lock_API.html">Web/API/Pointer_Lock_API</a>
+                                  <small>Pointer lock (formerly called mouse lock) provides input methods based on the movement of the mouse ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PopStateEvent.html">Web/API/PopStateEvent</a>
+                                  <small>An event handler for the popstate event on the window.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ProgressEvent/total.html">Web/API/ProgressEvent/total</a>
+                                  <small>The ProgressEvent.total read-only property is an unsigned long long representing the total amount ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PromiseResolver.html">Web/API/PromiseResolver</a>
+                                  <small>The PromiseResolver interface represents an object controlling the state and the result value of a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PushManager.html">Web/API/PushManager</a>
+                                  <small>The PushManager interface of the Push API provides a way to receive notifications from third-party ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PushManager/getSubscription.html">Web/API/PushManager/getSubscription</a>
+                                  <small>The PushManager.getSubscription() method of the PushManager interface retrieves an existing push ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PushManager/hasPermission.html">Web/API/PushManager/hasPermission</a>
+                                  <small>The PushManager.hasPermission() method of the PushManager interface returns a Promise that resolves ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PushManager/register.html">Web/API/PushManager/register</a>
+                                  <small>The register method is used to ask the system to request a new endpoint for notifications. This ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PushManager/registrations.html">Web/API/PushManager/registrations</a>
+                                  <small>The registrations method is used to ask the system about existing push endpoint registrations.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PushManager/subscribe.html">Web/API/PushManager/subscribe</a>
+                                  <small>The subscribe() method of the PushManager interface subscribes to a push service.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PushManager/unregister.html">Web/API/PushManager/unregister</a>
+                                  <small>The unregister() method was used to ask the system to unregister and delete the specified endpoint. ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PushRegistrationManager.html">Web/API/PushRegistrationManager</a>
+                                  <small>Returns an interface to register or unregister a push registration, get an active registration, or ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Range/collapsed.html">Web/API/Range/collapsed</a>
+                                  <small>The Range.collapsed read-only property returns a Boolean flag indicating whether the start and end ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Range/compareNode.html">Web/API/Range/compareNode</a>
+                                  <small>The Range.compareNode() returns a constant indicating the position of the Node.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Range/comparePoint.html">Web/API/Range/comparePoint</a>
+                                  <small>The Range.comparePoint() method returns -1, 0, or 1 depending on whether the referenceNode is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Range/createContextualFragment.html">Web/API/Range/createContextualFragment</a>
+                                  <small>The Range.createContextualFragment() method returns a DocumentFragment by invoking the HTML ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Range/Range.html">Web/API/Range/Range</a>
+                                  <small>The Range() constructor returns a newly created Range object whose start and end is the global ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/RTCDataChannel.html">Web/API/RTCDataChannel</a>
+                                  <small>The RTCDataChannel interface represents a bi-directional data channel between two peers of a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/RTCDataChannelEvent.html">Web/API/RTCDataChannelEvent</a>
+                                  <small>The RTCDataChannelEvent interface represents events that occurs while attaching a RTCDataChannel to ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/RTCPeerConnection.html">Web/API/RTCPeerConnection</a>
+                                  <small>The RTCPeerConnection interface represents a WebRTC connection between the local computer and a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Screen/mozEnabled.html">Web/API/Screen/mozEnabled</a>
+                                  <small>This Boolean attribute controls the device's screen. Setting it to false will turn off the screen.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorker/onstatechange.html">Web/API/ServiceWorker/onstatechange</a>
+                                  <small>An EventListener property called whenever an event of type statechange is fired; it is basically ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorker/scriptURL.html">Web/API/ServiceWorker/scriptURL</a>
+                                  <small>Returns the ServiceWorker serialized script URL defined as part of ServiceWorkerRegistration. Must ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorker/state.html">Web/API/ServiceWorker/state</a>
+                                  <small>The state read-only property of the ServiceWorker interface returns a string representing the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorkerContainer/getRegistrations.html">Web/API/ServiceWorkerContainer/getRegistrations</a>
+                                  <small>The getRegistrations() method of the ServiceWorkerContainer interface returns all ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorkerContainer/onmessage.html">Web/API/ServiceWorkerContainer/onmessage</a>
+                                  <small>The onmessage property of the ServiceWorkerContainer interface is an event handler fired whenever a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorkerGlobalScope/clients.html">Web/API/ServiceWorkerGlobalScope/clients</a>
+                                  <small>The clients read-only property of the ServiceWorkerGlobalScope interface contains the available ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorkerGlobalScope/onactivate.html">Web/API/ServiceWorkerGlobalScope/onactivate</a>
+                                  <small>The onactivate property of the ServiceWorkerGlobalScope interface is an event handler fired ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorkerGlobalScope/oninstall.html">Web/API/ServiceWorkerGlobalScope/oninstall</a>
+                                  <small>The oninstall property of the ServiceWorkerGlobalScope interface is an event handler fired whenever ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ServiceWorkerGlobalScope/registration.html">Web/API/ServiceWorkerGlobalScope/registration</a>
+                                  <small>The registration read-only property of the ServiceWorkerGlobalScope interface returns a reference ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsLock.html">Web/API/SettingsLock</a>
+                                  <small>The SettingsLock interface represents a lock on settings. it allows a script to modify settings ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsLock/clear.html">Web/API/SettingsLock/clear</a>
+                                  <small>This method clears the queue of SettingsLock objects.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsLock/closed.html">Web/API/SettingsLock/closed</a>
+                                  <small>The closed property indicates whether or not the settings lock is closed.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsLock/get.html">Web/API/SettingsLock/get</a>
+                                  <small>This method fetches the value of a specified setting.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsLock/set.html">Web/API/SettingsLock/set</a>
+                                  <small>This method is changes the value of one or more given settings.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsManager.html">Web/API/SettingsManager</a>
+                                  <small>Provides access to the device's settings.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsManager/addObserver.html">Web/API/SettingsManager/addObserver</a>
+                                  <small>Sets up a callback function to be notified when a specific setting's value changes.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsManager/createLock.html">Web/API/SettingsManager/createLock</a>
+                                  <small>This method returns a SettingsLock object. This object is used to access and modify all the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsManager/onsettingchange.html">Web/API/SettingsManager/onsettingchange</a>
+                                  <small>The onsettingchange property lets you set an event handler to be called for all setting changes.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SettingsManager/removeObserver.html">Web/API/SettingsManager/removeObserver</a>
+                                  <small>This method is used to remove a callback function that has been added with ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Simple_Push_API.html">Web/API/Simple_Push_API</a>
+                                  <small>The Simple Push API, also known as the Push Notification API, provides apps the ability to be woken ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Storage/LocalStorage.html">Web/API/Storage/LocalStorage</a>
+                                  <small>localStorage is the same as sessionStorage with the same same-origin rules applied but it is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/StyleSheet.html">Web/API/StyleSheet</a>
+                                  <small>An object implementing the StyleSheet interface represents a single style sheet. CSS style sheets ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SubtleCrypto.html">Web/API/SubtleCrypto</a>
+                                  <small>The SubtleCrypto interface represents a set of cryptographic primitives. It is available via the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SVGAElement.html">Web/API/SVGAElement</a>
+                                  <small>The SVGAElement interface provides access to the properties of a elements, as well as methods to ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SVGAngle.html">Web/API/SVGAngle</a>
+                                  <small>The SVGAngle interface correspond to the angle basic data type.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SVGAnimateColorElement.html">Web/API/SVGAnimateColorElement</a>
+                                  <small>The SVGAnimateColorElement interface corresponds to the animateColor element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SVGAnimatedAngle.html">Web/API/SVGAnimatedAngle</a>
+                                  <small>The SVGAnimatedAngle interface is used for attributes of basic type angle which can be animated.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SVGAnimatedBoolean.html">Web/API/SVGAnimatedBoolean</a>
+                                  <small>The SVGAnimatedBoolean interface is used for attributes of type boolean which can be animated.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/SVGAnimatedEnumeration.html">Web/API/SVGAnimatedEnumeration</a>
+                                  <small>The SVGAnimatedEnumeration interface is used for attributes whose value must be a constant from a ...</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+      <li class="prev">
+      <a href="WebAPIaf4d.html?page=5">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="WebAPI2679.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="WebAPI4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="WebAPI9ba9.html?page=3">3</a>
+    </li>
+      <li>
+      <a href="WebAPIfdb0.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="WebAPIaf4d.html?page=5">5</a>
+    </li>
+      <li class="selected">
+      <a href="WebAPIc575.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="WebAPI235c.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="WebAPIfdfa.html?page=8">8</a>
+    </li>
+      <li>
+      <a href="WebAPI0b08.html?page=9">9</a>
+    </li>
+          <li class="next">
+      <a href="WebAPI235c.html?page=7">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="6">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/WebAPI?page=6 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:48:20 GMT -->
+</body></html>

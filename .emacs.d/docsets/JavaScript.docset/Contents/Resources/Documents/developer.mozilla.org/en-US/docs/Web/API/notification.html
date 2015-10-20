@@ -1,0 +1,1045 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/notification by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:37:13 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Notification</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/notification$json">
+  <link rel="canonical" href="notification.html">
+
+            <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/Web/API/notification" title="Notification">
+          <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/API/notification" title="Notification">
+          <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/notification" title="Notification">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/notification" title="Notification">
+          <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/Web/API/notification" title="Notification">
+          <link rel="alternate" hreflang="pl" href="https://developer.mozilla.org/pl/docs/Web/API/powiadomienie" title="Powiadomienie">
+          <link rel="alternate" hreflang="pt-PT" href="https://developer.mozilla.org/pt-PT/docs/Web/API/notification" title="Notification">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/notification" title="notification">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Notification">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/notification">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/notification">
+  <meta name="twitter:title" content="Notification">
+    <meta property="og:description" content="The Notification interface of the Notifications API is used to configure and display desktop notifications to the user.">
+  <meta name="description" content="The Notification interface of the Notifications API is used to configure and display desktop notifications to the user.">
+  <meta name="twitter:description" content="The Notification interface of the Notifications API is used to configure and display desktop notifications to the user.">
+  
+      
+  </head>
+<body data-slug="Web/API/notification" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/notification" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2Fnotification" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/notification" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2Fnotification" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/Web/API/notification" title="Notification">Deutsch</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/API/notification" title="Notification">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/notification" title="Notification">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/notification" title="Notification">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/Web/API/notification" title="Notification">한국어</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pl/docs/Web/API/powiadomienie" title="Powiadomienie">Polski</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-PT/docs/Web/API/notification" title="Notification">Português (Europeu)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/notification" title="notification">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/notification$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/notification$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/notification$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Notification</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Notification</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 29 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ivstas" title="View profile: ivstas">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ivstas" data-src="../../../../../secure.gravatar.com/avatar/608e074065e67d81da6bf1a8206f5a416aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ivstas</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz" title="View profile: Sebastianz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sebastianz" data-src="../../../../../secure.gravatar.com/avatar/337fa9c543a4f881977b6d2fbbd2dea86aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sebastianz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jpmedley" title="View profile: jpmedley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jpmedley" data-src="../../../../../secure.gravatar.com/avatar/fde784135f738cc182672e703dea9a4b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jpmedley</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dsmatlak" title="View profile: dsmatlak">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dsmatlak" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dsmatlak</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/andregarzia" title="View profile: andregarzia">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="andregarzia" data-src="../../../../../secure.gravatar.com/avatar/b8948eca9c9d50202774e970d8410cef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">andregarzia</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kdex" title="View profile: kdex">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kdex" data-src="../../../../../secure.gravatar.com/avatar/7843f7cf0c19e61336ced940039617c36aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kdex</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jaredly" title="View profile: jaredly">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jaredly" data-src="../../../../../secure.gravatar.com/avatar/36c528f0d1f8811f27268119b2c63eaa6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jaredly</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/tilmanpotthof" title="View profile: tilmanpotthof">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tilmanpotthof" data-src="../../../../../secure.gravatar.com/avatar/5a3bb971f6efa1651d1f261f736e504c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tilmanpotthof</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kollishivagangadhar" title="View profile: kollishivagangadhar">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kollishivagangadhar" data-src="../../../../../secure.gravatar.com/avatar/aecb9d4dc9fdd55bcf6de8fdbf2ff07f6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kollishivagangadhar</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/DrewClaridge" title="View profile: DrewClaridge">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="DrewClaridge" data-src="../../../../../secure.gravatar.com/avatar/b262ae2547738215ad7539575e46deb66aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">DrewClaridge</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mneise" title="View profile: mneise">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mneise" data-src="../../../../../secure.gravatar.com/avatar/497e73768ce2908a8721134fd9f6a6e76aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mneise</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/bachelier.matthieu" title="View profile: bachelier.matthieu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bachelier.matthieu" data-src="../../../../../secure.gravatar.com/avatar/af868ba294c1fd2914c50305f23f25516aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">bachelier.matthieu</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/alispivak" title="View profile: alispivak">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="alispivak" data-src="../../../../../secure.gravatar.com/avatar/401943669c4af295f5b2c99f90dd221a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">alispivak</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mbildner" title="View profile: mbildner">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mbildner" data-src="../../../../../secure.gravatar.com/avatar/69f5ea15c6262d41bde8b1864e8d698e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mbildner</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mnoorenberghe" title="View profile: mnoorenberghe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mnoorenberghe" data-src="../../../../../secure.gravatar.com/avatar/b7e928b14ef7e22c266206f5852cc6b66aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mnoorenberghe</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/julienw" title="View profile: julienw">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="julienw" data-src="../../../../../secure.gravatar.com/avatar/a2b625f331361a7110da59a907d79e956aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">julienw</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/FabioMagnoni" title="View profile: FabioMagnoni">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="FabioMagnoni" data-src="../../../../../secure.gravatar.com/avatar/0d3a2ed4ac4a9840b7f6deb50e30e7e06aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">FabioMagnoni</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/achal" title="View profile: achal">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="achal" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">achal</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sole" title="View profile: Sole">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sole" data-src="../../../../../secure.gravatar.com/avatar/4ae094cd79788a2077f1b8dbd07a7c3f6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sole</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/SirQuackTheDuck" title="View profile: SirQuackTheDuck">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SirQuackTheDuck" data-src="../../../../../secure.gravatar.com/avatar/0715638b8d49aa34fc7bfa082ec655936aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">SirQuackTheDuck</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/zhangpin04" title="View profile: zhangpin04">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="zhangpin04" data-src="../../../../../secure.gravatar.com/avatar/c16ee49090669176a152d72e8e7af0c96aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">zhangpin04</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/markg" title="View profile: markg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="markg" data-src="../../../../../secure.gravatar.com/avatar/a6bdd84b4732a2c3c7ecadd886b3c64a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">markg</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Constructor" rel="internal">Constructor</a></li><li><a href="#Properties" rel="internal">Properties</a><ol><li><a href="#Static_properties" rel="internal">Static properties</a></li><li><a href="#Instance_properties" rel="internal">Instance properties</a><ol><li><a href="#Unsupported_properties" rel="internal">Unsupported properties</a></li><li><a href="#Event_handlers" rel="internal">Event handlers</a></li><li><a href="#Obsolete_handlers" rel="internal">Obsolete handlers</a></li></ol></li></ol></li><li><a href="#Methods" rel="internal">Methods</a><ol><li><a href="#Static_methods" rel="internal">Static methods</a></li><li><a href="#Instance_methods" rel="internal">Instance methods</a></li></ol></li><li><a href="#Example" rel="internal">Example</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p>The <code>Notification</code> interface of the <a href="Notifications_API.html">Notifications API</a> is used to configure and display desktop notifications to the user.</p>
+
+<p></p><div class="note"><strong>Note:</strong>&nbsp;This feature is available in <a href="Web_Workers_API.html">Web Workers</a>.</div><p></p>
+
+<h2 id="Constructor">Constructor</h2>
+
+<dl>
+ <dt><a href="Notification/Notification-2.html" title="Technical review completed. Editorial review completed."><code>Notification()</code></a></dt>
+ <dd>Creates a new instance of the <a href="Notification-2.html" title="The Notification interface of the Notifications API is used to configure and display desktop notifications to the user."><code>Notification</code></a> object.</dd>
+</dl>
+
+<h2 id="Properties">Properties</h2>
+
+<h3 id="Static_properties">Static properties</h3>
+
+<p>These properties are available only on the <code>Notification</code> object itself.</p>
+
+<dl>
+ <dt><a href="Notification/permission.html" title="The permission read-only property of the Notification interface indicates the current permission granted by the user for the current origin to display web notifications."><code>Notification.permission</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>A string representing the current permission to display notifications. Possible value are: <code>denied</code> (the user refuses to have notifications displayed), <code>granted</code> (the user accepts having notifications displayed), or <code>default</code> (the user choice is unknown and therefore the browser will act as if the value were denied).</dd>
+</dl>
+
+<h3 id="Instance_properties">Instance properties</h3>
+
+<p>These properties are available only on instances of the <code>Notification</code> object.</p>
+
+<dl>
+ <dt><a href="Notification/title-2.html" title="The title read-only property of the Notification interface indicates the title of the notification, as specified in the title parameter of the Notification() constructor."><code>Notification.title</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>The title of the notification as specified in the options parameter of the constructor.</dd>
+ <dt><a href="Notification/dir.html" title="The dir read-only property of the Notification interface indicates the text direction of the notification, as specified in the dir option of the Notification() constructor."><code>Notification.dir</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>The text direction of the notification as specified in the options parameter of the constructor.</dd>
+ <dt><a href="Notification/lang.html" title="The lang read-only property of the Notification interface indicates the text direction of the notification, as specified in the lang option of the Notification() constructor."><code>Notification.lang</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>The language code of the notification as specified in the options parameter of the constructor.</dd>
+ <dt><a href="Notification/body.html" title="The body read-only property of the Notification interface indicates the body string of the notification, as specified in the body option of the Notification() constructor."><code>Notification.body</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>The body string of the notification as specified in the options parameter of the constructor.</dd>
+ <dt><a href="Notification/tag.html" title="The tag read-only property of the Notification interface signifies an identifying tag for the notification, as specified in the tag option of the Notification() constructor."><code>Notification.tag</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>The ID of the notification (if any) as specified in the options parameter of the constructor.</dd>
+ <dt><a href="Notification/icon.html" title="The icon read-only property of the Notification interface contains the URL of an icon to be displayed as part of the notification, as specified in the icon option of the Notification() constructor."><code>Notification.icon</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>The URL of the image used as an icon of the notification as specified in the options parameter of the constructor.</dd>
+ <dt><a href="Notification/data-2.html" title="The data read-only property of the Notification interface returns a structured clone of the notification's data, as specified in the data option of the Notification() constructor."><code>Notification.data</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns a structured clone of the notification’s data.</dd>
+ <dt><a href="Notification/silent-2.html" title="The silent read-only property of the Notification interface specifies whether the notification should be silent, i.e. no sounds or vibrations should be issued, regardless of the device settings. This is specified in the renotify option of the Notification() constructor."><code>Notification.silent</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Specifies whether the notification should be silent, i.e. no sounds or vibrations should be issued, regardless of the device settings.</dd>
+</dl>
+
+<h4 id="Unsupported_properties">Unsupported properties</h4>
+
+<p>The following properties are listed in the most up-to-date spec, but are not supported in any browsers yet. It is advisable to keep checking back regularly to see if the status of these has updated, and let us know if you find any out of date information.</p>
+
+<dl>
+ <dt><a href="Notification/noscreen-2.html" title="The noscreen read-only property of the Notification interface specifies whether the notification firing should enable the device's screen or not, as specified in the noscreen option of the Notification() constructor."><code>Notification.noscreen</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Specifies whether the notification firing should enable the device's screen or not.</dd>
+ <dt><a href="Notification/renotify-2.html" title="The renotify read-only property of the Notification interface specifies whether the user should be notified after a new notification replaces an old one, as specified in the renotify option of the Notification() constructor."><code>Notification.renotify</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Specifies whether the user should be notified after a new notification replaces an old one.</dd>
+ <dt><a href="Notification/sound-2.html" title="The sound read-only property of the Notification interface specifies the URL of an audio file to be played when the notification fires. This is specified in the sound option of the Notification() constructor."><code>Notification.sound</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Specifies a sound resource to play when the notification fires, in place of the default system notification sound.</dd>
+ <dt><a href="Notification/sticky-2.html" title="The sticky read-only property of the Notification interface specifies whether the notification should be 'sticky', i.e. not easily clearable by the user. This is specified in the sticky option of the Notification() constructor."><code>Notification.sticky</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Specifies whether the notification should be 'sticky', i.e. not easily clearable by the user.</dd>
+ <dt><a href="Notification/vibrate-2.html" title="The vibrate read-only property of the Notification interface specifies a a vibration pattern for the device's vibration hardware to emit when the notification fires. This is specified in the vibrate option of the Notification() constructor."><code>Notification.vibrate</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Specifies a vibration pattern for devices with vibration hardware to emit.</dd>
+</dl>
+
+<h4 id="Event_handlers">Event handlers</h4>
+
+<dl>
+ <dt><a href="Notification/onclick.html" title="The onclick property of the Notification interface specifies an event listener to receive click events. These events occur when the user clicks on a displayed Notification."><code>Notification.onclick</code></a></dt>
+ <dd>A handler for the <code><a href="../Events/click.html" title="/en-US/docs/Web/Events/click">click</a></code> event. It is triggered each time the user clicks on the notification.</dd>
+ <dt><a href="Notification/onerror.html" title="The onerror property of the Notification interface specifies an event listener to receive error events. These events occur when something goes wrong with a Notification (in many cases an error preventing the notification from being displayed.)"><code>Notification.onerror</code></a></dt>
+ <dd>A handler for the <code><a href="../Events/error.html" title="/en-US/docs/Web/Events/error">error</a></code> event. It is triggered each time the notification encounters an error.</dd>
+</dl>
+
+<h4 id="Obsolete_handlers">Obsolete handlers</h4>
+
+<p>The following event handlers are still supported as listed in the <a href="#browser_compatibility">browser compatibility</a> section below, but are no longer listed in the current spec. I is safe therefore to assume they are obsolete, and may stop working in future browser versions.</p>
+
+<dl>
+ <dt><a href="Notification/onclose.html" title="The onclose property of the Notification interface specifies an event listener to receive close events. These events occur when a Notification is closed."><code>Notification.onclose</code></a></dt>
+ <dd>A handler for the <code><a href="../Events/close.html" title="/en-US/docs/Web/Events/close">close</a></code> event. It is triggered when the user closes the notification.</dd>
+ <dt><a href="Notification/onshow.html" title="The onshow property of the Notification interface specifies an event listener to receive show events. These events occur when a Notification is displayed."><code>Notification.onshow</code></a></dt>
+ <dd>A handler for the <code><a href="../Events/show.html" title="/en-US/docs/Web/Events/show">show</a></code> event. It is triggered when the notification is displayed.</dd>
+</dl>
+
+<h2 id="Methods">Methods</h2>
+
+<h3 id="Static_methods">Static methods</h3>
+
+<p>These methods are available only on the <code>Notification</code> object itself.</p>
+
+<dl>
+ <dt><a href="Notification/requestPermission.html" title="The requestPermission()&nbsp;method of the Notification interface requests permission from the user for the current origin to display notifications."><code>Notification.requestPermission()</code></a></dt>
+ <dd>Requests permission from the user to display notifications.</dd>
+</dl>
+
+<h3 id="Instance_methods">Instance methods</h3>
+
+<p>These properties are available only on an instance of the <code>Notification</code> object or through its <a href="../JavaScript/Inheritance_and_the_prototype_chain.html"><code>prototype</code></a>. The <code>Notification</code> object also inherits from the <a href="EventTarget.html" title="EventTarget is an interface implemented by objects that can receive events and may have listeners for them."><code>EventTarget</code></a> interface.</p>
+
+<dl>
+ <dt><a href="Notification/close.html" title="The close() method of the Notification interface is used to close a previously displayed notification."><code>Notification.close()</code></a></dt>
+ <dd>Programmatically closes a notification.</dd>
+</dl>
+
+<h2 id="Example">Example</h2>
+
+<p>Assume this basic HTML:</p>
+
+<pre class="brush: html">&lt;button onclick="notifyMe()"&gt;Notify me!&lt;/button&gt;</pre>
+
+<p>It's possible to send a notification as follows — here we present a fairly verbose and complete set of code you could use if you wanted to first check whether notifications are supported, then check if permission has been granted for the current origin to send notifications, then request permission if required, before then sending a notification.</p>
+
+<pre class="brush: js">function notifyMe() {
+  // Let's check if the browser supports notifications
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+
+  // Let's check whether notification permissions have already been granted
+  else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+    var notification = new Notification("Hi there!");
+  }
+
+  // Otherwise, we need to ask the user for permission
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        var notification = new Notification("Hi there!");
+      }
+    });
+  }
+
+  // At last, if the user has denied notifications, and you 
+  // want to be respectful there is no need to bother them any more.
+}</pre>
+
+<p><iframe id="frame_Example" height="30" src="../../../../../mdn.mozillademos.org/en-US/docs/Web/API/notification%24samples/Examplec754.html?revision=920719" frameborder="0" width="100%" class="live-sample-frame sample-code-frame"></iframe></p>
+
+<p>In many cases, you don't need to be this verbose. For example, in our <a href="http://mdn.github.io/emogotchi/" class="external">Emogotchi demo</a> (<a href="https://github.com/mdn/emogotchi" class="external">see source code</a>), we simply run <a href="Notification/requestPermission.html" title="The requestPermission()&nbsp;method of the Notification interface requests permission from the user for the current origin to display notifications."><code>Notification.requestPermission</code></a> regardless to make sure we can get permission to send notifications:</p>
+
+<pre class="brush: js">Notification.requestPermission();</pre>
+
+<p>Then we run a simple <code>spawnNotification()</code> function when we want to fire a notification — this is passed arguments to specify the body, icon and title we want, then it creates the necessary <code>options</code> object and fires the notification using the <a href="Notification/Notification-2.html" title="Technical review completed. Editorial review completed."><code>Notification()</code></a> constructor.</p>
+
+<pre class="brush: js">function spawnNotification(theBody,theIcon,theTitle) {
+  var options = {
+      body: theBody,
+      icon: theIcon
+  }
+  var n = new Notification(theTitle,options);
+}</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://notifications.spec.whatwg.org/" class="external" lang="en" title="The 'Notifications API' specification" hreflang="en">Notifications API</a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>Living standard</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>5<span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span><sup>[1]</sup><br>
+    22</td>
+   <td>4.0 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span><sup>[2]</sup><br>
+    22</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>25</td>
+   <td>6<sup>[3]</sup></td>
+  </tr>
+  <tr>
+   <td><code>icon</code></td>
+   <td>5<span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span><sup>[1]</sup><br>
+    22</td>
+   <td>4.0 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span><sup>[2]</sup><br>
+    22</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>25</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td>Available in workers</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/41" title="Released on 2015-09-22.">41.0</a> (41.0)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>silent</code></td>
+   <td>43.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>noscreen</code>, <code>renotify</code>, <code>sound</code>, <code>sticky</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Android Webview</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+   <th>Chrome for Android</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>
+    <p><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></p>
+   </td>
+   <td>4.0<span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span><sup>[2]</sup><br>
+    22</td>
+   <td>1.0.1<span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span><sup>[2]</sup><br>
+    1.2</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>
+    <p><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></p>
+   </td>
+  </tr>
+  <tr>
+   <td><code>icon</code></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>4.0<span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span><sup>[2]</sup><br>
+    22</td>
+   <td>1.0.1<span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span><sup>[2]</sup><br>
+    1.2</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Available in workers</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>41.0 (41.0)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>silent</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>43.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>43.0</td>
+  </tr>
+  <tr>
+   <td><code>noscreen</code>, <code>renotify</code>, <code>sound</code>, <code>sticky</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] Before Chrome 22, the support for notification followed an <a href="http://www.chromium.org/developers/design-documents/desktop-notifications/api-specification" class="external">old prefixed version of the specification</a> and used the <a href="Window/navigator/webkitNotifications.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.webkitNotifications</code></a> object to instantiate a new notification.</p>
+
+<p>Before Chrome 32, <a href="Notification/permission.html" title="The permission read-only property of the Notification interface indicates the current permission granted by the user for the current origin to display web notifications."><code>Notification.permission</code></a> was not supported.</p>
+
+<p>Before Chrome 42, service worker additions were not supported.</p>
+
+<p>[2] Prior to Firefox 22 (Firefox OS &lt;1.2), the instantiation of a new notification must be done with the <a href="Window/navigator/mozNotification.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozNotification</code></a> object through its <code>createNotification</code> method.</p>
+
+<p>Prior to Firefox 22 (Firefox OS &lt;1.2), the Notification was displayed when calling the <code>show</code> method and supported only the <code>click</code> and <code>close</code> events.</p>
+
+<p>Nick Desaulniers wrote a <a href="https://github.com/nickdesaulniers/fxos-irc/blob/master/js/notification.js" class="external">Notification shim</a> to cover both newer and older implementations.</p>
+
+<p>One particular Firefox OS issue is that you can <a href="https://github.com/nickdesaulniers/fxos-irc/blob/0160cf6c3a2b5c9fe33822aaf6bcba3b7e846da9/my.js#L171" class="external">pass a path to an icon</a> to use in the notification, but if the app is packaged you cannot use a relative path like <code>/my_icon.png</code>. You also can't use <code>window.location.origin + "/my_icon.png"</code> because <code>window.location.origin</code> is null in packaged apps. The <a href="https://developer.mozilla.org/en-US/Apps/Developing/Manifest#origin">manifest origin field</a> fixes this, but it is only available in Firefox OS 1.1+. A potential solution for supporting Firefox OS &lt;1.1 is to <a href="https://github.com/nickdesaulniers/fxos-irc/blob/0160cf6c3a2b5c9fe33822aaf6bcba3b7e846da9/my.js#L168" class="external">pass an absolute URL to an externally hosted version of the icon</a>. This is less than ideal as the notification is displayed immediately without the icon, then the icon is fetched, but it works on all versions of Firefox OS.</p>
+
+<p>When using notifications&nbsp; in a Firefox OS app, be sure to add the <code>desktop-notification</code> permission in your manifest file. Notifications can be used at any permission level, hosted or above: <code>"permissions": { "desktop-notification": {} }</code></p>
+
+<p>[3] Safari started to support notification with Safari 6, but only on Mac OSX 10.8+ (Mountain Lion).</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="Notifications_API/Using_the_Notifications_API.html">Using the Notifications API</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Interface">Interface</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Notifications">Notifications</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="../../tag/WebAPI.html">WebAPI</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ivstas">ivstas</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dsmatlak">dsmatlak</a>,             <a href="https://developer.mozilla.org/en-US/profiles/andregarzia">andregarzia</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kdex">kdex</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jaredly">jaredly</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tilmanpotthof">tilmanpotthof</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kollishivagangadhar">kollishivagangadhar</a>,             <a href="https://developer.mozilla.org/en-US/profiles/DrewClaridge">DrewClaridge</a>,             <a href="https://developer.mozilla.org/en-US/profiles/mneise">mneise</a>,             <a href="https://developer.mozilla.org/en-US/profiles/bachelier.matthieu">bachelier.matthieu</a>,             <a href="https://developer.mozilla.org/en-US/profiles/alispivak">alispivak</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/mbildner">mbildner</a>,             <a href="https://developer.mozilla.org/en-US/profiles/mnoorenberghe">mnoorenberghe</a>,             <a href="https://developer.mozilla.org/en-US/profiles/julienw">julienw</a>,             <a href="https://developer.mozilla.org/en-US/profiles/FabioMagnoni">FabioMagnoni</a>,             <a href="https://developer.mozilla.org/en-US/profiles/achal">achal</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sole">Sole</a>,             <a href="https://developer.mozilla.org/en-US/profiles/SirQuackTheDuck">SirQuackTheDuck</a>,             <a href="https://developer.mozilla.org/en-US/profiles/zhangpin04">zhangpin04</a>,             <a href="https://developer.mozilla.org/en-US/profiles/markg">markg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2015-09-21T14:46:26-07:00">Sep 21, 2015, 2:46:26 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="Notifications_API.html">Notifications API</a></strong></li><li><strong><a href="Notification-2.html"><code>Notification</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Constructor</strong></a><ol><li><a href="notification/Notification.html" title="Technical review completed. Editorial review completed."><code>Notification.Notification()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="Notification/body.html" title="The body read-only property of the Notification interface indicates the body string of the notification, as specified in the body option of the Notification() constructor."><code>Notification.body</code></a></li><li><a href="notification/data.html" title="The data read-only property of the Notification interface returns a structured clone of the notification's data, as specified in the data option of the Notification() constructor."><code>Notification.data</code></a></li><li><a href="Notification/dir.html" title="The dir read-only property of the Notification interface indicates the text direction of the notification, as specified in the dir option of the Notification() constructor."><code>Notification.dir</code></a></li><li><a href="Notification/icon.html" title="The icon read-only property of the Notification interface contains the URL of an icon to be displayed as part of the notification, as specified in the icon option of the Notification() constructor."><code>Notification.icon</code></a></li><li><a href="Notification/lang.html" title="The lang read-only property of the Notification interface indicates the text direction of the notification, as specified in the lang option of the Notification() constructor."><code>Notification.lang</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="notification/noscreen.html" title="The noscreen read-only property of the Notification interface specifies whether the notification firing should enable the device's screen or not, as specified in the noscreen option of the Notification() constructor."><code>Notification.noscreen</code></a></li><li><a href="Notification/onclick.html" title="The onclick property of the Notification interface specifies an event listener to receive click events. These events occur when the user clicks on a displayed Notification."><code>Notification.onclick</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="Notification/onclose.html" title="The onclose property of the Notification interface specifies an event listener to receive close events. These events occur when a Notification is closed."><code>Notification.onclose</code></a></s></li><li><a href="Notification/onerror.html" title="The onerror property of the Notification interface specifies an event listener to receive error events. These events occur when something goes wrong with a Notification (in many cases an error preventing the notification from being displayed.)"><code>Notification.onerror</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="Notification/onshow.html" title="The onshow property of the Notification interface specifies an event listener to receive show events. These events occur when a Notification is displayed."><code>Notification.onshow</code></a></s></li><li><a href="Notification/permission.html" title="The permission read-only property of the Notification interface indicates the current permission granted by the user for the current origin to display web notifications."><code>Notification.permission</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="notification/renotify.html" title="The renotify read-only property of the Notification interface specifies whether the user should be notified after a new notification replaces an old one, as specified in the renotify option of the Notification() constructor."><code>Notification.renotify</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="notification/silent.html" title="The silent read-only property of the Notification interface specifies whether the notification should be silent, i.e. no sounds or vibrations should be issued, regardless of the device settings. This is specified in the renotify option of the Notification() constructor."><code>Notification.silent</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="notification/sound.html" title="The sound read-only property of the Notification interface specifies the URL of an audio file to be played when the notification fires. This is specified in the sound option of the Notification() constructor."><code>Notification.sound</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="notification/sticky.html" title="The sticky read-only property of the Notification interface specifies whether the notification should be 'sticky', i.e. not easily clearable by the user. This is specified in the sticky option of the Notification() constructor."><code>Notification.sticky</code></a></li><li><a href="Notification/tag.html" title="The tag read-only property of the Notification interface signifies an identifying tag for the notification, as specified in the tag option of the Notification() constructor."><code>Notification.tag</code></a></li><li><a href="notification/title.html" title="The title read-only property of the Notification interface indicates the title of the notification, as specified in the title parameter of the Notification() constructor."><code>Notification.title</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="Notification/close.html" title="The close() method of the Notification interface is used to close a previously displayed notification."><code>Notification.close()</code></a></li><li><a href="Notification/requestPermission.html" title="The requestPermission()&nbsp;method of the Notification interface requests permission from the user for the current origin to display notifications."><code>Notification.requestPermission()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Inheritance:</strong></a><ol><li><a href="EventTarget.html"><code>EventTarget</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../Events/error.html"><code>error</code></a></li><li><a href="../Events/click.html"><code>click</code></a></li><li><a href="../Events/close.html"><code>close</code></a></li><li><a href="../Events/show.html"><code>show</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for Web Notifications</strong></a><ol><li><a href="NotificationEvent.html"><code>NotificationEvent</code></a></li><li><a href="ServiceWorkerRegistration/getNotifications.html"><code>ServiceWorkerRegistration.getNotifications()</code></a></li><li><a href="ServiceWorkerRegistration/onnotificationclick.html"><code>ServiceWorkerRegistration.onnotificationclick</code></a></li><li><a href="ServiceWorkerRegistration/showNotification.html"><code>ServiceWorkerRegistration.showNotification()</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/notification$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/notification$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/notification" selected="">
+          English (US)
+        </option>
+                  <option value="/de/docs/Web/API/notification">
+            Deutsch
+          </option>          <option value="/es/docs/Web/API/notification">
+            Español
+          </option>          <option value="/fr/docs/Web/API/notification">
+            Français
+          </option>          <option value="/ja/docs/Web/API/notification">
+            日本語
+          </option>          <option value="/ko/docs/Web/API/notification">
+            한국어
+          </option>          <option value="/pl/docs/Web/API/powiadomienie">
+            Polski
+          </option>          <option value="/pt-PT/docs/Web/API/notification">
+            Português (Europeu)
+          </option>          <option value="/zh-CN/docs/Web/API/notification">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/notification by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:37:20 GMT -->
+</body></html>

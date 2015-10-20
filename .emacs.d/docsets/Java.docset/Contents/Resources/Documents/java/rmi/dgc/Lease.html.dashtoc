@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"Lease(VMID, long)","path":"Lease-java.rmi.dgc.VMID-long-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getValue()","path":"getValue--","entryType":"Method"},{"name":"getVMID()","path":"getVMID--","entryType":"Method"}]}

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"childrenAdded(BeanContextMembershipEvent)","path":"childrenAdded-java.beans.beancontext.BeanContextMembershipEvent-","entryType":"Method"},{"name":"childrenRemoved(BeanContextMembershipEvent)","path":"childrenRemoved-java.beans.beancontext.BeanContextMembershipEvent-","entryType":"Method"}]}

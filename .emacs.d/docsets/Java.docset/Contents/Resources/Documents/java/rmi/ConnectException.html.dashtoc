@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"ConnectException(String)","path":"ConnectException-java.lang.String-","entryType":"Constructor"},{"name":"ConnectException(String, Exception)","path":"ConnectException-java.lang.String-java.lang.Exception-","entryType":"Constructor"}]}

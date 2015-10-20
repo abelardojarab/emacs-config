@@ -1,0 +1,35 @@
+.indexbox, .indexboxcont, .group {
+  min-height: 1px;
+}
+
+.sidebar .search form input#searchstring  {
+  border: 1px solid #fff;
+  height: 17px;
+}
+
+
+.indexboxcont .section {
+  zoom: 1;
+  float: left;
+}
+
+.indexboxcont .sectionlist {
+  zoom: 1;
+  float: left;
+}
+.breadcrumb {display:none}
+.toc {display:none}
+.descr {min-height:0px}
+.header { display:none }
+body{background:none}
+.wrapper{background:none}
+.hd{display:none}
+.bd{background:none !important}
+.sidebar{display:none}
+.wrap{margin:0px}
+.toolbar{display:none}
+.wrapper{margin:0px !important}
+.wrap .content {padding:15px !important}
+
+.ft{display:none}
+body {padding:10px !important}

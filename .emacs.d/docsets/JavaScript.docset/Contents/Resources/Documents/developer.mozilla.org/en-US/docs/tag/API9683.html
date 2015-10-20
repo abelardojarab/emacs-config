@@ -1,0 +1,966 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/API?page=18 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 21:59:12 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: API" href="../feeds/atom/tag/API">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'compat_api': false,'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/API?page=18" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FAPI%3Fpage%3D18" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/API?page=18" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FAPI%3Fpage%3D18" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: API</h1>
+                <ol class="pagination">
+      <li class="prev">
+      <a href="API5c43.html?page=17">
+        Previous
+      </a>
+    </li>
+        <li><a href="API2679.html?page=1">1</a></li>
+          <li class="skip">…</li>
+            <li>
+      <a href="API5760.html?page=15">15</a>
+    </li>
+      <li>
+      <a href="API42a7.html?page=16">16</a>
+    </li>
+      <li>
+      <a href="API5c43.html?page=17">17</a>
+    </li>
+      <li class="selected">
+      <a href="API9683.html?page=18">18</a>
+    </li>
+      <li>
+      <a href="API7537.html?page=19">19</a>
+    </li>
+      <li>
+      <a href="APIf62c.html?page=20">20</a>
+    </li>
+      <li>
+      <a href="APIe4a7.html?page=21">21</a>
+    </li>
+              <li class="skip">…</li>
+        <li><a href="APIb385.html?page=30">30</a></li>
+        <li class="next">
+      <a href="API7537.html?page=19">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 2979 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/iccid.html">Web/API/MozMobileICCInfo/iccid</a>
+                                  <small>iccid is a read-only property representing the Integrated Circuit Card (ICC) Identifier.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/isDisplayNetworkNameRequired.html">Web/API/MozMobileICCInfo/isDisplayNetworkNameRequired</a>
+                                  <small>isDisplayNetworkNameRequired is a read-only property that indicates the Network name must be a part ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/isDisplaySpnRequired.html">Web/API/MozMobileICCInfo/isDisplaySpnRequired</a>
+                                  <small>isDisplaySpnRequired is a read-only property that indicates the Service provider name must be a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/mcc.html">Web/API/MozMobileICCInfo/mcc</a>
+                                  <small>mcc is a read-only property representing the Mobile Country Code (MCC) of the subscriber's home ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/mnc.html">Web/API/MozMobileICCInfo/mnc</a>
+                                  <small>mnc is a read-only property representing the Mobile Network Code (MNC) of the subscriber's home ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/msisdn.html">Web/API/MozMobileICCInfo/msisdn</a>
+                                  <small>msisdn is a read-only property representing the Mobile Station ISDN Number (MSISDN) of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/spn.html">Web/API/MozMobileICCInfo/spn</a>
+                                  <small>spn is a read-only property representing the Service Provider Name (SPN) of the subscriber's home ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager.html">Web/API/MozMobileMessageManager</a>
+                                  <small>Provides support for sending and managing both MMS and SMS messages on a device with WebSMS.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/delete.html">Web/API/MozMobileMessageManager/delete</a>
+                                  <small>The delete method is used to delete a given message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/getMessage.html">Web/API/MozMobileMessageManager/getMessage</a>
+                                  <small>The getMessage method is used to access a given SMS message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/getMessages.html">Web/API/MozMobileMessageManager/getMessages</a>
+                                  <small>The getMessages method is used to access a list of messages.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/getSegmentInfoForText.html">Web/API/MozMobileMessageManager/getSegmentInfoForText</a>
+                                  <small>The getSegmentInfoForText method is used to get the information necessary to create a multi-part ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/getThreads.html">Web/API/MozMobileMessageManager/getThreads</a>
+                                  <small>The getThreads method is used to iterate through a list of MozMobileMessageThread objects. Each of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/markMessageRead.html">Web/API/MozMobileMessageManager/markMessageRead</a>
+                                  <small>The markMessageRead method is used to change the read state of a given message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/ondeliveryerror.html">Web/API/MozMobileMessageManager/ondeliveryerror</a>
+                                  <small>Specifies an event listener to receive deliveryerror events. These events occur when an SMS or MMS ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/ondeliverysuccess.html">Web/API/MozMobileMessageManager/ondeliverysuccess</a>
+                                  <small>Specifies an event listener to receive deliverysuccess events. These events occur when an SMS or ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onfailed.html">Web/API/MozMobileMessageManager/onfailed</a>
+                                  <small>Specifies an event listener to receive failed events. These events occur when an SMS or MMS has ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onreceived.html">Web/API/MozMobileMessageManager/onreceived</a>
+                                  <small>Specifies an event listener to receive received events. These events occur when an SMS or MMS is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onretrieving.html">Web/API/MozMobileMessageManager/onretrieving</a>
+                                  <small>Specifies an event listener to receive retrieving events. These events occur when an SMS or MMS ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onsending.html">Web/API/MozMobileMessageManager/onsending</a>
+                                  <small>Specifies an event listener to receive sending events. These events occur when an SMS or MMS enters ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onsent.html">Web/API/MozMobileMessageManager/onsent</a>
+                                  <small>Specifies an event listener to receive sent events. These events occur when an SMS or MMS is sent.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/retrieveMMS.html">Web/API/MozMobileMessageManager/retrieveMMS</a>
+                                  <small>The retrieveMMS method is used to access a given MMS message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/send.html">Web/API/MozMobileMessageManager/send</a>
+                                  <small>The send method is used to send an SMS message to one or more receivers.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/sendMMS.html">Web/API/MozMobileMessageManager/sendMMS</a>
+                                  <small>The sendMMS method is used to send an MMS message to one or more receivers.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageThread.html">Web/API/MozMobileMessageThread</a>
+                                  <small>The DOM MozMobileMessageThread object represents a thread of messages.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageThread/body.html">Web/API/MozMobileMessageThread/body</a>
+                                  <small>The body property represents the body of the last message available in the thread.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageThread/id.html">Web/API/MozMobileMessageThread/id</a>
+                                  <small>The id property represents the unique id of the thread. Each message belonging to that thread has a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageThread/lastMessageType.html">Web/API/MozMobileMessageThread/lastMessageType</a>
+                                  <small>The lastMessageType property represents the type of the last message in the thread.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageThread/participants.html">Web/API/MozMobileMessageThread/participants</a>
+                                  <small>The participants property is a list of all the participants' addresses to the thread.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageThread/timestamp.html">Web/API/MozMobileMessageThread/timestamp</a>
+                                  <small>The timestamp property represent the timestamp of the last message is the thread.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageThread/unreadCount.html">Web/API/MozMobileMessageThread/unreadCount</a>
+                                  <small>The unreadCount property represents the number of unread messages belonging to the thread.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileNetworkInfo.html">Web/API/MozMobileNetworkInfo</a>
+                                  <small>The MozMobileNetworkInfo interface allows access to information related to the network carrier. The ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileNetworkInfo/longName.html">Web/API/MozMobileNetworkInfo/longName</a>
+                                  <small>longName is a read-only property that gives the long name of the network operator.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileNetworkInfo/mcc.html">Web/API/MozMobileNetworkInfo/mcc</a>
+                                  <small>The mcc is a read-only property that represents the Mobile Country Code (MCC) of the network ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileNetworkInfo/mnc.html">Web/API/MozMobileNetworkInfo/mnc</a>
+                                  <small>The mnc is a read-only property that represents the Mobile Network Code (MNC) of the network ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileNetworkInfo/shortName.html">Web/API/MozMobileNetworkInfo/shortName</a>
+                                  <small>shortName is a read-only property that gives the long name of the network operator.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileNetworkInfo/state.html">Web/API/MozMobileNetworkInfo/state</a>
+                                  <small>The state is a read-only property that gives the state of the network operator.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNDEFRecord.html">Web/API/MozNDEFRecord</a>
+                                  <small>MozNDEFRecord is a data structure that implements the NFC Data Exchange Format (NDEF). It is a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNDEFRecord/id.html">Web/API/MozNDEFRecord/id</a>
+                                  <small>The id property of the MozNDEFRecord interface is application dependent (an appropriate id can be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNDEFRecord/payload.html">Web/API/MozNDEFRecord/payload</a>
+                                  <small>The payload property of the MozNDEFRecord interface is application dependent (for example, a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNDEFRecord/tnf.html">Web/API/MozNDEFRecord/tnf</a>
+                                  <small>The tnf property of the MozNDEFRecord interface contains the Type Name Format (3-bit field) of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNDEFRecord/type.html">Web/API/MozNDEFRecord/type</a>
+                                  <small>The type property of the MozNDEFRecord interface... fill in description of what it does</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStats.html">Web/API/MozNetworkStats</a>
+                                  <small>The MozNetworkStats object gives access to statistics about the data usage for a given network.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStats/connectionType.html">Web/API/MozNetworkStats/connectionType</a>
+                                  <small>The connectionType property indicates for which network the data usage statistics are provided.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStats/data.html">Web/API/MozNetworkStats/data</a>
+                                  <small>The data property is a list of data usage statistics chunk. Each chunk is a MozNetworkStatsData ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStats/end.html">Web/API/MozNetworkStats/end</a>
+                                  <small>The end property is a date equal to the one of the last MozNetworkStatsData objects available ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStats/start.html">Web/API/MozNetworkStats/start</a>
+                                  <small>The start property is a date equal to the one of the first MozNetworkStatsData objects available ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsData.html">Web/API/MozNetworkStatsData</a>
+                                  <small>The MozNetworkStatsData objects represent a chunk of data usage statistics.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsData/date.html">Web/API/MozNetworkStatsData/date</a>
+                                  <small>The date property provides the date when the data usage statistics chunk was stored.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsData/rxBytes.html">Web/API/MozNetworkStatsData/rxBytes</a>
+                                  <small>The rxBytes property is a number representing the amount of bytes received for a given connection. ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsData/txBytes.html">Web/API/MozNetworkStatsData/txBytes</a>
+                                  <small>The txBytes property is a number representing the amount of bytes sent for a given connection. The ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager.html">Web/API/MozNetworkStatsManager</a>
+                                  <small>The MozNetworkStatsManager interface provides methods and properties to monitor data usage.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/addAlarm.html">Web/API/MozNetworkStatsManager/addAlarm</a>
+                                  <small>The addAlarm method installs an alarm on a network. When total data usage reaches threshold bytes, ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/clearAllData.html">Web/API/MozNetworkStatsManager/clearAllData</a>
+                                  <small>The clearAllData method allows to clear all data usage chunks that were previously stored.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/clearAllStats.html">Web/API/MozNetworkStatsManager/clearAllStats</a>
+                                  <small>The clearAllStats method allows to clear all data usage chunks that were previously stored.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/clearStats.html">Web/API/MozNetworkStatsManager/clearStats</a>
+                                  <small>The clearStats method removes all stats related to the provided network from DB.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/connectionTypes.html">Web/API/MozNetworkStatsManager/connectionTypes</a>
+                                  <small>The connectionTypes property is a list of all possible monitored connection types by the current ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/getAllAlarms.html">Web/API/MozNetworkStatsManager/getAllAlarms</a>
+                                  <small>The getAllAlarms method obtains all alarms for those networks returned by ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/getAvailableNetworks.html">Web/API/MozNetworkStatsManager/getAvailableNetworks</a>
+                                  <small>The getAvailableNetworks method returns an Array of available networks that used to be saved in the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/getAvailableServiceTypes.html">Web/API/MozNetworkStatsManager/getAvailableServiceTypes</a>
+                                  <small>The getAvailableServiceTypes method returns an Array of available service types that used to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/getNetworkStats.html">Web/API/MozNetworkStatsManager/getNetworkStats</a>
+                                  <small>The getNetworkStats method allows to retrieve the data usage statistics for the various connection ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/getSamples.html">Web/API/MozNetworkStatsManager/getSamples</a>
+                                  <small>The getSamples method asynchronously queries network interface statistics. The query may be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/maxStorageAge.html">Web/API/MozNetworkStatsManager/maxStorageAge</a>
+                                  <small>Time in milliseconds recorded by the API until present time for each type of connection. All ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/maxStorageSamples.html">Web/API/MozNetworkStatsManager/maxStorageSamples</a>
+                                  <small>The maxStorageSamples property indicates the maximum number of date usage chunks stored for each ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/removeAlarms.html">Web/API/MozNetworkStatsManager/removeAlarms</a>
+                                  <small>The removeAlarms method removes all network alarms. If an alarmId is provided, then only that alarm ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNetworkStatsManager/sampleRate.html">Web/API/MozNetworkStatsManager/sampleRate</a>
+                                  <small>The sampleRate property indicates the time in seconds between when two data usage chunks are stored.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFC.html">Web/API/MozNFC</a>
+                                  <small>MozNFC is the top level API for operating in NFC Reader/Writer mode, NFC P2P mode and NFC Card ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFC/getNFCPeer.html">Web/API/MozNFC/getNFCPeer</a>
+                                  <small>The getNFCPeer() method of the MozNFC interface returns a Peer to Peer DOM object (MozNFCPeer) that ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFC/getNFCTag.html">Web/API/MozNFC/getNFCTag</a>
+                                  <small>The getNFCTag() method of the MozNFC interface returns an NDEF tag interface (MozNFCTag object) ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFC/onpeerfound.html">Web/API/MozNFC/onpeerfound</a>
+                                  <small>The onpeerfound event handler of the MozNFC interface is called when a MozNFCPeer is detected.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFC/onpeerlost.html">Web/API/MozNFC/onpeerlost</a>
+                                  <small>The onpeerlost event handler of the MozNFC interface handles the peerlost event, which is fired ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFC/onpeerready.html">Web/API/MozNFC/onpeerready</a>
+                                  <small>The onpeerready event handler of the MozNFC interface handles the peerready event, which fires when ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFC/ontagfound.html">Web/API/MozNFC/ontagfound</a>
+                                  <small>tag : The MozNFCTag object.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFC/ontaglost.html">Web/API/MozNFC/ontaglost</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCPeer.html">Web/API/MozNFCPeer</a>
+                                  <small>The NFC implementation in Gecko follows the NFC Forum specifications.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCPeer/sendFile.html">Web/API/MozNFCPeer/sendFile</a>
+                                  <small>The Blob file reference to be transferred.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCPeer/sendNDEF.html">Web/API/MozNFCPeer/sendNDEF</a>
+                                  <small>The sendNDEF() method of the MozNFCPeer interface is used</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCTag.html">Web/API/MozNFCTag</a>
+                                  <small>MozNFCTag contains the basic functions needed to read, write, and inspect NDEF-compatible NFC Tags.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCTag/close.html">Web/API/MozNFCTag/close</a>
+                                  <small>The close() method of the MozNFCTag interface closes a current NFC Tag session.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCTag/connect.html">Web/API/MozNFCTag/connect</a>
+                                  <small>The connect() method of the MozNFCTag interface accepts a technology type to use for subsequent ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCTag/getDetailsNDEF.html">Web/API/MozNFCTag/getDetailsNDEF</a>
+                                  <small>The getDetailsNDEF() method of the MozNFCTag interface retrieves basic metadata describing the NDEF ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCTag/makeReadOnlyNDEF.html">Web/API/MozNFCTag/makeReadOnlyNDEF</a>
+                                  <small>The makeReadOnlyNDEF() method of the MozNFCTag interface makes an NDEF Tag readonly. This is a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCTag/readNDEF.html">Web/API/MozNFCTag/readNDEF</a>
+                                  <small>The readNDEF() method of the MozNFCTag interface retrieves the contents of the NDEF stored on the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozNFCTag/writeNDEF.html">Web/API/MozNFCTag/writeNDEF</a>
+                                  <small>The writeNDEF() method of the MozNFCTag interface is used to write NDEF data to an NFC tag.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager.html">Web/API/MozPowerManager</a>
+                                  <small>The MozPowerManager interface allows to explicitly control the part of the device that uses power.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/addWakeLockListener.html">Web/API/MozPowerManager/addWakeLockListener</a>
+                                  <small>The MozPowerManager.addWakeLockListener() method is used to register a handler to be called each ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/cpuSleepAllowed.html">Web/API/MozPowerManager/cpuSleepAllowed</a>
+                                  <small>The MozPowerManager.cpuSleepAllowed property determines if the device's CPU will sleep after the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/factoryReset.html">Web/API/MozPowerManager/factoryReset</a>
+                                  <small>The MozPowerManager.factoryReset() method is used to reset the device to its factory state.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/getWakeLockState.html">Web/API/MozPowerManager/getWakeLockState</a>
+                                  <small>The MozPowerManager.getWakeLockState() method is used to retrieve the current lock state of a given ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/powerOff.html">Web/API/MozPowerManager/powerOff</a>
+                                  <small>The MozPowerManager.powerOff() method is used to shut off the device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/reboot.html">Web/API/MozPowerManager/reboot</a>
+                                  <small>The MozPowerManager.reboot() method is used to completely shut down and boot the device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/removeWakeLockListener.html">Web/API/MozPowerManager/removeWakeLockListener</a>
+                                  <small>The MozPowerManager.removeWakeLockListener() method is used to remove a handler previously set with ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/screenBrightness.html">Web/API/MozPowerManager/screenBrightness</a>
+                                  <small>Moz</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozPowerManager/screenEnabled.html">Web/API/MozPowerManager/screenEnabled</a>
+                                  <small>The M ozPowerManager.screenEnabled property allows to know if the device's screen is currently ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSettingsEvent.html">Web/API/MozSettingsEvent</a>
+                                  <small>The MozSettingsEvent represents a settingchange event, providing information about a change to the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSettingsEvent/settingName.html">Web/API/MozSettingsEvent/settingName</a>
+                                  <small>The settingName property of the MozSettingsEvent specifies the exact name of the setting that has ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSettingsEvent/settingValue.html">Web/API/MozSettingsEvent/settingValue</a>
+                                  <small>The settingValue property of the MozSettingsEvent object returns the setting's new value.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsEvent.html">Web/API/MozSmsEvent</a>
+                                  <small>The DOM MozSmsEvent represents events related to WebSMS text messages.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsEvent/message.html">Web/API/MozSmsEvent/message</a>
+                                  <small>The message property is the MozSmsMessage from which the event originated</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsFilter.html">Web/API/MozSmsFilter</a>
+                                  <small>The MozSmsFilter interface provides a way to filter out MozSmsMessage or MozMmsMessage objects ...</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+      <li class="prev">
+      <a href="API5c43.html?page=17">
+        Previous
+      </a>
+    </li>
+        <li><a href="API2679.html?page=1">1</a></li>
+          <li class="skip">…</li>
+            <li>
+      <a href="API5760.html?page=15">15</a>
+    </li>
+      <li>
+      <a href="API42a7.html?page=16">16</a>
+    </li>
+      <li>
+      <a href="API5c43.html?page=17">17</a>
+    </li>
+      <li class="selected">
+      <a href="API9683.html?page=18">18</a>
+    </li>
+      <li>
+      <a href="API7537.html?page=19">19</a>
+    </li>
+      <li>
+      <a href="APIf62c.html?page=20">20</a>
+    </li>
+      <li>
+      <a href="APIe4a7.html?page=21">21</a>
+    </li>
+              <li class="skip">…</li>
+        <li><a href="APIb385.html?page=30">30</a></li>
+        <li class="next">
+      <a href="API7537.html?page=19">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="18">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/API?page=18 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 21:59:12 GMT -->
+</body></html>

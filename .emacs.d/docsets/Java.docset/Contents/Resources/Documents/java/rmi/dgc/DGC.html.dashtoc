@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"clean(ObjID[]A, long, VMID, boolean)","path":"clean-java.rmi.server.ObjID:A-long-java.rmi.dgc.VMID-boolean-","entryType":"Method"},{"name":"dirty(ObjID[]A, long, Lease)","path":"dirty-java.rmi.server.ObjID:A-long-java.rmi.dgc.Lease-","entryType":"Method"}]}

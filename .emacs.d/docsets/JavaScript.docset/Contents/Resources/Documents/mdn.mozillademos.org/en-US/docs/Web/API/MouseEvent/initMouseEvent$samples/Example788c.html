@@ -1,0 +1,25 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/MouseEvent/initMouseEvent$samples/Example?revision=896861 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:13:56 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body>
+                    <div style="background:red;width:180px;padding:10px;">
+ <input type="text">
+</div>
+                            <script type="text/javascript">
+                document.body.onclick = function(){
+ e = arguments[0];
+ var dt = e.target,stag = dt.tagName.toLowerCase();
+ alert(stag);
+};
+var simulateClick = function(){
+ var evt = document.createEvent("MouseEvents");
+ evt.initMouseEvent("click", true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+ document.body.dispatchEvent(evt);
+}
+simulateClick();//Why it can not show "input" ?
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/MouseEvent/initMouseEvent$samples/Example?revision=896861 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:13:56 GMT -->
+</body></html>

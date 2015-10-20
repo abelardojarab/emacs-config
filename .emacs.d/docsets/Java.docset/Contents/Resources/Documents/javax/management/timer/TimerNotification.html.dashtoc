@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"TimerNotification(String, Object, long, long, String, Integer)","path":"TimerNotification-java.lang.String-java.lang.Object-long-long-java.lang.String-java.lang.Integer-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getNotificationID()","path":"getNotificationID--","entryType":"Method"}]}

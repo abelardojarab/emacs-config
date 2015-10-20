@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"ClassDefinition(Class, byte[]A)","path":"ClassDefinition-java.lang.Class-byte:A-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getDefinitionClass()","path":"getDefinitionClass--","entryType":"Method"},{"name":"getDefinitionClassFile()","path":"getDefinitionClassFile--","entryType":"Method"}]}

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"addDetailEntry(Name)","path":"addDetailEntry-javax.xml.soap.Name-","entryType":"Method"},{"name":"addDetailEntry(QName)","path":"addDetailEntry-javax.xml.namespace.QName-","entryType":"Method"},{"name":"getDetailEntries()","path":"getDetailEntries--","entryType":"Method"}]}

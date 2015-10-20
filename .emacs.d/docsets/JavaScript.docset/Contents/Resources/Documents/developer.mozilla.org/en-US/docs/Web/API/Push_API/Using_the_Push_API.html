@@ -1,0 +1,835 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Push_API/Using_the_Push_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:14:19 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Using the Push API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Push_API/Using_the_Push_API$json">
+  <link rel="canonical" href="Using_the_Push_API.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Using the Push API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Push_API/Using_the_Push_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Push_API/Using_the_Push_API">
+  <meta name="twitter:title" content="Using the Push API">
+    <meta property="og:description" content="The W3C Push API offers some exciting new functionality for developers to use in web applications: this article provides an introduction to getting Push notifications setup and running, with a simple demo.">
+  <meta name="description" content="The W3C Push API offers some exciting new functionality for developers to use in web applications: this article provides an introduction to getting Push notifications setup and running, with a simple demo.">
+  <meta name="twitter:description" content="The W3C Push API offers some exciting new functionality for developers to use in web applications: this article provides an introduction to getting Push notifications setup and running, with a simple demo.">
+  
+      
+  </head>
+<body data-slug="Web/API/Push_API/Using_the_Push_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Push_API/Using_the_Push_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPush_API%2FUsing_the_Push_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Push_API/Using_the_Push_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPush_API%2FUsing_the_Push_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Push_API/Using_the_Push_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Push_API/Using_the_Push_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Push_API/Using_the_Push_API$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Push_API.html" rel="v:url" property="v:title">Push API</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Using the Push API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Using the Push API</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 2 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/mar.castelluccio" title="View profile: mar.castelluccio">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mar.castelluccio" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mar.castelluccio</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Demo_the_basis_of_a_simple_chat_server_app" rel="internal">Demo: the basis of a simple chat server app</a></li><li><a href="#Technology_overview" rel="internal">Technology overview</a></li><li><a href="#Building_up_the_demo" rel="internal">Building up the demo</a><ol><li><a href="#The_HTML_and_CSS" rel="internal">The HTML and CSS</a></li><li><a href="#The_main_JavaScript_file" rel="internal">The main JavaScript file</a><ol><li><a href="#Variables_and_inital_setup" rel="internal">Variables and inital setup</a></li><li><a href="#Subscribing_and_unsubscribing" rel="internal">Subscribing and unsubscribing</a></li><li><a href="#Updating_the_status_in_the_app_and_server" rel="internal">Updating the status in the app and server</a></li></ol></li><li><a href="#The_server" rel="internal">The server</a></li><li><a href="#The_service_worker" rel="internal">The service worker</a></li></ol></li><li><a href="#Extra_steps_for_Chrome_support" rel="internal">Extra steps for Chrome support</a><ol><li><a href="#Setting_up_Google_Cloud_Messaging" rel="internal">Setting up Google Cloud Messaging</a></li><li><a href="#manifest.json" rel="internal">manifest.json</a></li><li><a href="#userVisibleOnly" rel="internal">userVisibleOnly</a></li></ol></li>
+                </ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p class="summary">The W3C <a href="../Push_API.html">Push API</a> offers some exciting new functionality for developers to use in web applications: this article provides an introduction to getting Push notifications setup and running, with a simple demo.</p>
+
+<p>The ability to push updates from a server to a client at any time, whether the app is active on your system or not is something that has been enjoyed by native platforms for some time, and it is finally coming to the Web; support is now available in Firefox 43+, and Chrome 42+ on desktop, with mobile platforms hopefully following soon.</p>
+
+<div class="note">
+<p><strong>Note</strong>: Early versions of Firefox OS used a proprietary version of this API called <a href="../Simple_Push_API.html">Simple Push</a>. This is being rendered obsolete by the Push API standard.</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: Some of the client-side code in this demo is heavily influenced by Matt Gaunt's excellent examples in <a href="http://updates.html5rocks.com/2015/03/push-notificatons-on-the-open-web" class="external">Push Notifications on the Open Web</a>. Thanks for the awesome work Matt!</p>
+</div>
+
+<h2 id="Demo_the_basis_of_a_simple_chat_server_app">Demo: the basis of a simple chat server app</h2>
+
+<p>The demo we've created provides the beginnings of a simple chat app. You've got a form to enter your chat handle into, and a button to press to subscribe to push messaging. Once the button is pressed, you are subscribed to push messaging, your details are recorded on the server, and a push message is sent that tells all current subscribers that a change has occured in the subscriptions.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11475/push-demo.png" style="border: 1px solid black; display: block; height: 125px; margin: 0px auto; width: 600px;" alt=""></p>
+
+<p>To run our demo, follow the instructions on the <a href="https://github.com/chrisdavidmills/push-api-demo" class="external">push-api-demo README</a>. Note that the server-side component still needs a bit of work to make it run in Chrome and generally run in a more reasonable way. But the Push aspects can still be explained thoroughly. More below.</p>
+
+<div class="note">
+<p><strong>Note</strong>: The chat server will become more interesting when browsers start to support the PushMessageData object, allowing data to be sent via push messaging. For the moment, Push messages cannot yet contain data, so we are currently limited to simply using them to notify that "something has happened", and finding out what via some other method.</p>
+</div>
+
+<h2 id="Technology_overview">Technology overview</h2>
+
+<p>This section provides a little outline as to what technologies are involved in this example.</p>
+
+<p>Web Push messages are part of the <a href="../Service_Worker_API.html">service workers</a> technology family — a service worker is required to be active on the page for it to receive push messages. The service worker receives the push message, and then it is up to you how to then notify the page. You could:</p>
+
+<ul>
+ <li>Send a Web Notification to pop up a system notification to alert the user. This requires permission to be granted for sending push messages.</li>
+ <li>Send a message back to the main page via a MessageChannel.</li>
+</ul>
+
+<p>Often a combination of the two will be required; for illustrative purposes, our demo features an example of both.</p>
+
+<p>The service worker also has to subscribe to the push messaging service — each session will be given its own unique endpoint upon subscription, which can be sent to your server and used to send a message to that session's active service worker. Each browser has its own push messaging server to handle sending the push message.</p>
+
+<p>As alluded to above, you need some kind of a server component in your application to handle the endpoint and send push message requests. In our demo we have put together a quick-and-dirty server using <a href="https://nodejs.org/" class="external">NodeJS</a>.</p>
+
+<h2 id="Building_up_the_demo">Building up the demo</h2>
+
+<p>Let's walk through the code for the demo so we can start to understand how this all works.</p>
+
+<h3 id="The_HTML_and_CSS">The HTML and CSS</h3>
+
+<p>There is nothing remarkable about the HTML and CSS for the demo — the HTML contains a simple form to allow you to enter your handle for the chat room, and a button to click to subscribe to push notifications.</p>
+
+<p>The CSS has been kept very minimal so as not to detract from the explaination of the Push API functionality.</p>
+
+<h3 id="The_main_JavaScript_file">The main JavaScript file</h3>
+
+<p>The JavaScript is obviously a lot more substantial. Let's take a look at the main JS file.</p>
+
+<h4 id="Variables_and_inital_setup">Variables and inital setup</h4>
+
+<p>To start with, we declare some variables to use in our app:</p>
+
+<pre class="brush: js">var isPushEnabled = false;
+var useNotifications = false;
+
+var subBtn = document.querySelector('.subscribe');
+var sendBtn;
+var sendInput;
+
+var nameForm = document.querySelector('#form');
+var nameInput = document.querySelector('#name-input');
+nameForm.onsubmit = function(e) {
+  e.preventDefault()
+};
+nameInput.value = 'Bob';</pre>
+
+<p>First, we have two booleans to track whether push is subscribed, and whether notification permission has been granted.</p>
+
+<p>Next, we grab a reference to the subscribe/unsubscribe <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a>, and declare variables to store references to our message sending button/input (which are only created when subscription is successful.)</p>
+
+<p>Finally we grab references to our name selection form and <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element, give the input a default value, and use <code><a href="../Event/preventDefault.html">preventDefault()</a></code> to stop the form submitting when the form is submitted by pressing return.</p>
+
+<p>Next, we request permission to send web notifications, using <a href="../Notification/requestPermission.html" title="The requestPermission()&nbsp;method of the Notification interface requests permission from the user for the current origin to display notifications."><code>requestPermission()</code></a>:</p>
+
+<pre class="brush: js">Notification.requestPermission();</pre>
+
+<p>Now we run a section of code when <code><a href="../GlobalEventHandlers/onload.html">onload</a></code> is fired, to start up the process of inialising the app when it is first loaded. First of all we add a click event listener to the subscribe/unsubscribe button that runs our <code>unsubscribe()</code> function if we are already subscribed (<code>isPushEnabled</code> is <code>true</code>), and <code>subscribe()</code> otherwise:</p>
+
+<pre class="brush: js">window.addEventListener('load', function() {   
+  subBtn.addEventListener('click', function() {  
+    if (isPushEnabled) {  
+      unsubscribe();  
+    } else {  
+      subscribe();  
+    }  
+  });</pre>
+
+<p>Next we check to see if service workers are supported. If so, we register a service worker using <a href="../ServiceWorkerContainer/register.html" title="The register() method of the ServiceWorkerContainer interface creates or updates a ServiceWorkerRegistration for the given scriptURL."><code>ServiceWorkerContainer.register()</code></a>, and run our <code>initialiseState()</code> function. If not, we deliver an error message to the console.</p>
+
+<pre class="brush: js">  // Check that service workers are supported, if so, progressively  
+  // enhance and add push messaging support, otherwise continue without it.  
+  if ('serviceWorker' in navigator) {  
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
+      if(reg.installing) {
+        console.log('Service worker installing');
+      } else if(reg.waiting) {
+        console.log('Service worker installed');
+      } else if(reg.active) {
+        console.log('Service worker active');
+      }
+
+      initialiseState(reg);
+    });  
+  } else {  
+    console.log('Service workers aren\'t supported in this browser.');  
+  }  
+});
+
+initialiseState()</pre>
+
+<p>Now onto the <code>initialiseState()</code> function — this first checks whether notifications are supported on service workers, then sets the <code>useNotifications</code> variable to <code>true</code> if so. Next, it checks whether said notifications are permitted by the user, and if push messages are supported, and reacts accordingly to each.</p>
+
+<p>Finally, it uses <a href="../ServiceWorkerContainer/ready.html" title=""><code>ServiceWorkerContainer.ready()</code></a> to wait until the service worker is active and ready to start doing things. Once its promise resolves, we retrieve our subscription to push messaging using the <a href="../ServiceWorkerRegistration/pushManager.html" title="The pushManager property of the ServiceWorkerRegistration interface returns a reference to the PushManager&nbsp;interface for managing push subscriptions including subscribing, getting an active subscription, and accessing push permission status."><code>ServiceWorkerRegistration.pushManager</code></a> property, which returns a <a href="../PushManager.html" title="The PushManager interface of the Push API provides a way to receive notifications from third-party servers as well as request URLs for push notifications."><code>PushManager</code></a> object that we then call <a href="../PushManager/getSubscription.html" title="The&nbsp;PushManager.getSubscription()&nbsp;method of the PushManager interface retrieves an existing push subscription."><code>PushManager.getSubscription()</code></a> on. Once this second inner promise resolves, we enable the subscribe/unsubscribe button (<code>subBtn.disabled = false;</code>), and check that we have a subscription object to work with.</p>
+
+<p>If we do, then we are already subscribed (this is possible when the app is not open in the browser — the service worker can still be active in the background.) This being the case, we update the UI to show that we are subscribed (update the button label), set <code>isPushEnabled</code> to true, grab the subscription endpoint (using <a href="../PushSubscription/endpoint.html" title="The endpoint read-only property of the PushSubscription interface returns a&nbsp;USVString containing the&nbsp;endpoint associated with the push subscription."><code>PushSubscription.endpoint</code></a>), and run our <code>updateStatus()</code> function, which as you'll see later communicates with the server.</p>
+
+<p>As an added bonus, we set up a new <a href="../MessageChannel.html" title="The MessageChannel interface of the Channel Messaging API allows us to create a new message channel and send data through it via its two MessagePort properties."><code>MessageChannel</code></a> using the <a href="../MessageChannel/MessageChannel.html" title="The MessageChannel() constructor of the MessageChannel interface returns a new MessageChannel object with two new MessagePort objects."><code>MessageChannel.MessageChannel()</code></a> constructor, grab a reference to the active service worker using <a href="../ServiceworkerRegistration/active-2.html" title="The active property of the ServiceWorkerRegistration interface returns a service worker whose ServiceWorker.state is activating or activated. This property is initially set to&nbsp;null."><code>ServiceworkerRegistration.active</code></a>, then set up a channel betweeen the main browser context and the service worker content using <a href="../Worker/postMessage.html" title="The postMessage() method of the Worker interface sends a message to the worker's inner scope. This accepts a single parameter, which is the data to send to the worker. The data may be any value or JavaScript object handled by the structured clone algorithm, which includes cyclical references."><code>postMessage()</code></a></p>
+
+<p>For the full commented code, look at the <a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/main.js#L47-L112" class="external"><code>initialiseState()</code> source on Github</a> (we are not repeating it here for brevity's sake.)</p>
+
+<h4 id="Subscribing_and_unsubscribing">Subscribing and unsubscribing</h4>
+
+<p>Let's now turn our attention to the <code>subscribe()</code> and <code>unsubscribe()</code> functions used to subscribe/unsubscribe to the push notification service.</p>
+
+<p>In the case of subscription, we again check that our service worker is active and ready using <a href="../ServiceWorkerContainer/ready.html" title=""><code>ServiceWorkerContainer.ready()</code></a>. When the promise resolves, we subscribe to the service using <a href="../PushManager/subscribe.html" title="The subscribe() method of the PushManager interface subscribes to a push service."><code>PushManager.subscribe()</code></a>. If the subscription is successful, we get a <a href="../PushSubscription.html" title="The PushSubscription interface of the Push API provides a subcription's URL endpoint and allows unsubscription from a push service."><code>PushSubscription</code></a> object, extract the subscription endpoint from this (again, <a href="../PushSubscription/endpoint.html" title="The endpoint read-only property of the PushSubscription interface returns a&nbsp;USVString containing the&nbsp;endpoint associated with the push subscription."><code>PushSubscription.endpoint</code></a>), and pass it to our <code>updateStatus()</code> function along with the update type (<code>subscribe</code>) to send the necessary details to the server.</p>
+
+<p>We also make the necessary updates to the app state (set <code>isPushEnabled</code> to <code>true</code>) and UI (enable the subscribe/unsubscribe button and set its label text to show that the next time it is pressed it will unsubscribe.)</p>
+
+<p>The <code>unsubscribe()</code> function is pretty similar in structure, but it basically does the opposite; the most notable difference is that it gets the current subscription using <a href="../PushManager/getSubscription.html" title="The&nbsp;PushManager.getSubscription()&nbsp;method of the PushManager interface retrieves an existing push subscription."><code>PushManager.getSubscription()</code></a>, and when that promise resolves it unsubscribes using <a href="../PushSubscription/unsubscribe.html" title="The unsubscribe() method of the PushSubscription interface returns a Promise that resolves to a Boolean when the current subscription is successfully unsubscribed."><code>PushSubscription.unsubscribe()</code></a>.</p>
+
+<p>Appropriate error handling is also provided in both functions. &nbsp;</p>
+
+<p>We only show the <code>subscribe()</code> code below, for brevity; see the full <a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/main.js#L116-L195" class="external">subscribe/unsubscribe code on Github</a>.</p>
+
+<pre class="brush: js">function subscribe() {
+  // Disable the button so it can't be changed while
+  // we process the permission request
+
+  subBtn.disabled = true;
+
+  navigator.serviceWorker.ready.then(function(reg) {
+    reg.pushManager.subscribe({userVisibleOnly: true})
+      .then(function(subscription) {
+        // The subscription was successful
+        isPushEnabled = true;
+        subBtn.textContent = 'Unsubscribe from Push Messaging';
+        subBtn.disabled = false;
+        
+        var endpoint = subscription.endpoint;
+        updateStatus(endpoint,'subscribe');
+      })
+      .catch(function(e) {
+        if (Notification.permission === 'denied') {
+          // The user denied the notification permission which
+          // means we failed to subscribe and the user will need
+          // to manually change the notification permission to
+          // subscribe to push messages
+          console.log('Permission for Notifications was denied');
+          
+        } else {
+          // A problem occurred with the subscription, this can
+          // often be down to an issue or lack of the gcm_sender_id
+          // and / or gcm_user_visible_only
+          console.log('Unable to subscribe to push.', e);
+          subBtn.disabled = false;
+          subBtn.textContent = 'Subscribe to Push Messaging';
+        }
+      });
+  });
+}</pre>
+
+<h4 id="Updating_the_status_in_the_app_and_server">Updating the status in the app and server</h4>
+
+<p>The final function in our main JavaScript is <code>updateStatus()</code>, which updates the UI for sending chat messages when subscribing/unsubscribing and sends a request to update this information on the server (you can't currently send chat messages, but this will be updated once browsers support <a href="../PushMessageData.html" title="The PushMessageData interface of the Push API provides access to push data sent by a server, and methods to manipulate the data."><code>PushMessageData</code></a>.)</p>
+
+<p>The function does one of three different things, depending on the <code>statusType</code> passed into it:</p>
+
+<ul>
+ <li><code>subscribe</code>: The button and text input for sending chat messages are created and inserted into the UI (this doesn't yet work, as mentioned above), and an object is sent to the server via XHR containing the status type (<code>subscribe</code>), username of the subscriber, and subscription endpoint.</li>
+ <li><code>unsubscribe</code>: This basically works in the opposite way to subscribe — the chat UI elements are removed, and an object is sent to the server to tell it that the user has unsubscribed.</li>
+ <li><code>init</code>: This is run when the app is first loaded/initialised — it creates the chat UI elements, but doesn't send a request to the server.</li>
+</ul>
+
+<p>Again, we have not included the entire function listing for brevity. Examine the <a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/main.js#L197-L261" class="external">full <code>updateStatus()</code> code on Github</a>.</p>
+
+<h3 id="The_server">The server</h3>
+
+<div class="note">
+<p><strong>Note</strong>: The server component currently isn't ideal: it currently only handles the server-side processing, leaving the static files to be served from somewhere else. This is inefficient and won't work in Chrome even with CORS set up. We are currently working on a rewrite.</p>
+</div>
+
+<p>As mentioned above, we need a server-side component in our app, to handle storing subscription details, and send out push messages when updates occur. We've hacked together a quick-and-dirty server using NodeJS (<a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/server.js" class="external">server.js</a>), which handles the XHR requests our client-side JavaScript sends out.</p>
+
+<p>It uses a text file to store subscription details — <a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/endpoint.txt" class="external">endpoint.txt</a> — which is initially empty.</p>
+
+<ul>
+ <li>When a request with a <code>statusType</code> of <code>subscribe</code> is received, the server adds the new subscriber's details into the textfile (including the endpoint), and then sends a push message to all the endpoints it has stored to tell all subscribers that someone new has subscribed.</li>
+ <li>When a request with a <code>statusType</code> of <code>unsubscribe</code> is received, the server finds that subscriber's details from the textfile and removes it, and sends a push message to all continuing subscribers to tell them someone has unsubscribed.</li>
+</ul>
+
+<p>A couple more things to note:</p>
+
+<ul>
+ <li>We are using the <a href="https://nodejs.org/api/https.html" class="external">https module</a> to create the server, as for security purposes, service workers require a secure connection to function. This is why we need to include the <code>.pfx</code> security cert in the app, and reference it when creating the server in the Node code.</li>
+ <li>When you send a push request, you basically just need to send it to the endpoint URL, with a method of <code>PUT</code>.</li>
+</ul>
+
+<h3 id="The_service_worker">The service worker</h3>
+
+<p>Now let's have a look at the service worker code (<a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/sw.js" class="external">sw.js</a>), which responds to the push messages. An event listener is added to the push event (<a href="../ServiceWorkerGlobalScope/onpush.html" title="The ServiceWorkerGlobalScope.onpush event of the ServiceWorkerGlobalScope interface is called whenever a notification is received from a server through a push subscription."><code>ServiceWorkerGlobalScope.onpush</code></a>) so that when a push message is received from the push server, a web notification is issued to let the user know there has been a change in subscription, using <a href="../ServiceWorkerRegistration/showNotification.html" title="The showNotification() method of the ServiceWorkerRegistration interface creates a notification on an active service worker."><code>ServiceWorkerRegistration.showNotification()</code></a>. In addition, we send a message back along the <a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/main.js#L108-L110" class="external">message channel we setup in main.js</a> to act as another way of communicating with the main thread.</p>
+
+<div class="note">
+<p><strong>Note</strong>: Web notifications from service workers were introduced around Firefox version 42, but are likely to be removed again while the surrounding functionality (such as <code>Clients.openWindow()</code>) is properly implemented (see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1203324" class="external" title="FIXED: Disable Web Notifications in service workers">bug&nbsp;1203324</a> for more details.)</p>
+</div>
+
+<p>At the bottom of the service worker, you can see the <a href="../ServiceWorkerGlobalScope/onmessage.html" title=""><code>ServiceWorkerGlobalScope.onmessage</code></a> handler being used to set a reference to the port we want to send the message via.</p>
+
+<pre class="brush: js">var port;
+
+self.addEventListener('push', function(event) {  
+  // var messageData = event.data; PushMessageData not yet supported.
+
+  var title = 'Yay a message.';  
+  var body = 'Subscription has changed.';  
+  var icon = 'push-icon.png';  
+  var tag = 'push';
+
+  event.waitUntil(  
+    self.registration.showNotification(title, {  
+      body: body,  
+      icon: icon,  
+      tag: tag  
+    })  
+  );
+
+  port.postMessage('Subscription has changed.');
+});
+
+self.onmessage = function(e) {
+  port = e.ports[0];
+}</pre>
+
+<p><strong>Note</strong>: when browsers start to support <a href="../PushMessageData.html" title="The PushMessageData interface of the Push API provides access to push data sent by a server, and methods to manipulate the data."><code>PushMessageData</code></a>, we will probably use the notification to tell the user that a new subscriber of name x has joined the app, and the <a href="../MessageChannel.html" title="The MessageChannel interface of the Channel Messaging API allows us to create a new message channel and send data through it via its two MessagePort properties."><code>MessageChannel</code></a> to send chat messages the the main thread to be displayed on the UI.</p>
+
+<h2 id="Extra_steps_for_Chrome_support">Extra steps for Chrome support</h2>
+
+<p>To get the app working on Chrome, we need a few extra steps, as Chrome currently relies on Google's Cloud Messaging service to work.</p>
+
+<h3 id="Setting_up_Google_Cloud_Messaging">Setting up Google Cloud Messaging</h3>
+
+<p>To get this set up, follow these steps:</p>
+
+<ol>
+ <li>Navigate to the <a href="https://console.developers.google.com/" class="external">Google Developers Console</a>&nbsp; and set up a new project.</li>
+ <li>Go to your project's homepage (ours is at <code>https://console.developers.google.com/project/push-project-978</code>, for example), then
+  <ol>
+   <li>Select the <em>Enable Google APIs for use in your apps</em> option.</li>
+   <li>In the next screen, click <em>Cloud Messaging for Android</em> under the <em>Mobile APIs</em> section.</li>
+   <li>Click the <em>Enable API</em> button.</li>
+  </ol>
+ </li>
+ <li>Now you need to make a note of your project number and API key — you'll need them later. To find them:
+  <ol>
+   <li><strong>Project number</strong>: click <em>Home</em> on the left; the project number is clearly marked at the top of your project's home page.</li>
+   <li><strong>API key</strong>: click <em>Credentials</em> on the left hand menu; the API key can be found on that screen.</li>
+  </ol>
+ </li>
+</ol>
+
+<h3 id="manifest.json">manifest.json</h3>
+
+<p>You need to include a Google app-style <code>manifest.json</code> file in your app, which references the project number you made a note of earlier in the <code>gcm_sender_id</code> parameter. Here is our simple example <a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/manifest.json" class="external">manifest.json</a>:</p>
+
+<pre class="brush: js">{  
+  "name": "Push Demo",  
+  "short_name": "Push Demo",  
+  "icons": [{  
+        "src": "push-icon.png",  
+        "sizes": "111x111",
+        "type": "image/png"
+      }],  
+  "start_url": "/index.html",  
+  "display": "standalone",  
+  "gcm_sender_id": "224273183921"    
+}</pre>
+
+<p>You also need to reference your manifest using a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a> element in your HTML:</p>
+
+<pre class="brush: html">&lt;link rel="manifest" href="manifest.json"&gt;</pre>
+
+<h3 id="userVisibleOnly">userVisibleOnly</h3>
+
+<p>Chrome requires you to set the <a href="../PushManager/subscribe.html#Parameters">userVisibleOnly parameter</a> to <code>true</code> when subscribing to the push service, which indicates that we are promising to show a notification whenever a push is received. This can be <a href="https://github.com/chrisdavidmills/push-api-demo/blob/gh-pages/main.js#L123" class="external">seen in action in our <code>subscribe()</code> function</a>.</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Experimental">Experimental</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/guide">guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/javascript">javascript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Javascript">Javascript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Push">Push</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/push">push</a></li>
+              <li><a href="../../../tag/push%20api-2.html">push api</a></li>
+              <li><a href="../../../tag/Push%20API.html">Push API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/service workers">service workers</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Service workers">Service workers</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Service Workers">Service Workers</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/web push">web push</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/mar.castelluccio">mar.castelluccio</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/mar.castelluccio">mar.castelluccio</a>,
+                      <time datetime="2015-09-30T08:12:01-07:00">Sep 30, 2015, 8:12:01 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Push_API/Using_the_Push_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Push_API/Using_the_Push_API$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Push_API/Using_the_Push_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:14:21 GMT -->
+</body></html>

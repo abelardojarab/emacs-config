@@ -1,0 +1,924 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/HTML DOM?page=1 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 18:06:43 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: HTML DOM</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: HTML DOM" href="../feeds/atom/tag/HTML%20DOM">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'compat_api': false,'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/HTML DOM?page=1" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FHTML+DOM%3Fpage%3D1" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/HTML DOM?page=1" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FHTML+DOM%3Fpage%3D1" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: HTML DOM</h1>
+                <ol class="pagination">
+          <li class="selected">
+      <a href="HTML%20DOM2679.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="HTML%20DOM4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="HTML%20DOM9ba9.html?page=3">3</a>
+    </li>
+          <li class="next">
+      <a href="HTML%20DOM4658.html?page=2">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 286 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="../Web/API/Document/activeElement.html">Web/API/Document/activeElement</a>
+                                  <small>Returns the currently focused element, that is, the element that will get keystroke events if the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/alinkColor.html">Web/API/Document/alinkColor</a>
+                                  <small>Returns or sets the color of an active link in the document body. A link is active during the time ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/anchors.html">Web/API/Document/anchors</a>
+                                  <small>anchors returns a list of all of the anchors in the document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/applets.html">Web/API/Document/applets</a>
+                                  <small>applets returns an ordered list of the applets within a document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/bgColor.html">Web/API/Document/bgColor</a>
+                                  <small>bgColor gets/sets the background color of the current document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/body.html">Web/API/Document/body</a>
+                                  <small>Returns the body or frameset node of the current document, or null if no such element exists.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/clear.html">Web/API/Document/clear</a>
+                                  <small>This method used to clear the whole specified document in early (pre-1.0) versions of Mozilla.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/close.html">Web/API/Document/close</a>
+                                  <small>The document.close() method finishes writing to a document, opened with document.open().</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/cookie.html">Web/API/Document/cookie</a>
+                                  <small>Get and set the cookies associated with the current document. For a general library, skip to the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/defaultView.html">Web/API/Document/defaultView</a>
+                                  <small>In browsers returns the window object associated with the document or null if none available.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/designMode.html">Web/API/Document/designMode</a>
+                                  <small>document.designMode controls whether the entire document is editable. Valid values are "on" and ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/dir.html">Web/API/Document/dir</a>
+                                  <small>The Document.dir property is a DOMString representing the directionality of the text of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/domain.html">Web/API/Document/domain</a>
+                                  <small>Gets/sets the domain portion of the origin of the current document, as used by the same origin ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/embeds.html">Web/API/Document/embeds</a>
+                                  <small>embeds returns a list of the embedded OBJECTS within the current document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/fgColor.html">Web/API/Document/fgColor</a>
+                                  <small>fgColor gets/sets the foreground color, or text color, of the current document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/forms.html">Web/API/Document/forms</a>
+                                  <small>forms returns a collection (an HTMLCollection) of the form elements within the current document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/getElementsByName.html">Web/API/Document/getElementsByName</a>
+                                  <small>Returns a nodelist collection with a given name in the (X)HTML document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/head.html">Web/API/Document/head</a>
+                                  <small>Returns the head element of the current document. If there are more than one head elements, the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/height.html">Web/API/Document/height</a>
+                                  <small>Returns the height of the document object. In most cases, this is equal to the body element of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/images.html">Web/API/Document/images</a>
+                                  <small>document.images returns a collection of the images in the current HTML document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/lastModified.html">Web/API/Document/lastModified</a>
+                                  <small>Returns a string containing the date and time on which the current document was last modified.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/linkColor.html">Web/API/Document/linkColor</a>
+                                  <small>linkColor gets/sets the color of links within the document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/links.html">Web/API/Document/links</a>
+                                  <small>The links property returns a collection of all area elements and a elements in a document with a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/location.html">Web/API/Document/location</a>
+                                  <small>The Document.location read-only property returns a Location object, which contains information ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/readyState.html">Web/API/Document/readyState</a>
+                                  <small>The Document.readyState property of a document describes the loading state of the document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/referrer.html">Web/API/Document/referrer</a>
+                                  <small>Returns the URI of the page that linked to this page.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/scripts.html">Web/API/Document/scripts</a>
+                                  <small>Returns a list of the script elements in the document. The returned object is an HTMLCollection.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/title.html">Web/API/Document/title</a>
+                                  <small>Gets or sets the title of the document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/URL.html">Web/API/Document/URL</a>
+                                  <small>The URL read-only property of the Document interface returns the document location as a string.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/vlinkColor.html">Web/API/Document/vlinkColor</a>
+                                  <small>Gets/sets the color of links that the user has visited in the document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Document/width.html">Web/API/Document/width</a>
+                                  <small>Returns the width of the body element of the current document in pixels.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/DOMStringMap.html">Web/API/DOMStringMap</a>
+                                  <small>Used by the dataset HTML&nbsp;attribute to represent data for custom attributes added to elements.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onblur.html">Web/API/GlobalEventHandlers/onblur</a>
+                                  <small>The onblur property returns the onBlur event handler code, if any, that exists on the current ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onchange.html">Web/API/GlobalEventHandlers/onchange</a>
+                                  <small>The onchange property sets and returns the event handler for the change event.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onclick.html">Web/API/GlobalEventHandlers/onclick</a>
+                                  <small>The onclick property returns the click event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onclose.html">Web/API/GlobalEventHandlers/onclose</a>
+                                  <small>An event handler for close events sent to the window. (Not available with Firefox 2 or Safari)</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/oncontextmenu.html">Web/API/GlobalEventHandlers/oncontextmenu</a>
+                                  <small>An event handler property for right-click events on the window. Unless the default behavior is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/ondblclick.html">Web/API/GlobalEventHandlers/ondblclick</a>
+                                  <small>The ondblclick property returns the onDblClick event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onerror.html">Web/API/GlobalEventHandlers/onerror</a>
+                                  <small>An event handler for the error event. Error events are fired at various targets for different kinds ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onfocus.html">Web/API/GlobalEventHandlers/onfocus</a>
+                                  <small>The onfocus property returns the onFocus event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/oninput.html">Web/API/GlobalEventHandlers/oninput</a>
+                                  <small>An event handler for the input event on the window.&nbsp;The input event is raised when an input element ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onkeydown.html">Web/API/GlobalEventHandlers/onkeydown</a>
+                                  <small>The onkeydown property returns the onKeyDown event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onkeypress.html">Web/API/GlobalEventHandlers/onkeypress</a>
+                                  <small>The onkeypress property sets and returns the onKeyPress event handler code for the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onkeyup.html">Web/API/GlobalEventHandlers/onkeyup</a>
+                                  <small>The onkeyup property returns the onKeyUp event handler code for the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onload.html">Web/API/GlobalEventHandlers/onload</a>
+                                  <small>An event handler for the load event of a window.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onmousedown.html">Web/API/GlobalEventHandlers/onmousedown</a>
+                                  <small>The onmousedown property returns the onmousedown event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onmousemove.html">Web/API/GlobalEventHandlers/onmousemove</a>
+                                  <small>The onmousemove property returns the mousemove event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onmouseout.html">Web/API/GlobalEventHandlers/onmouseout</a>
+                                  <small>The onmouseout property returns the onMouseOut event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onmouseover.html">Web/API/GlobalEventHandlers/onmouseover</a>
+                                  <small>The onmouseover property returns the onMouseOver event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onmouseup.html">Web/API/GlobalEventHandlers/onmouseup</a>
+                                  <small>The onmouseup property returns the onMouseUp event handler code on the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onscroll.html">Web/API/GlobalEventHandlers/onscroll</a>
+                                  <small>An event handler for scroll events on element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onselect.html">Web/API/GlobalEventHandlers/onselect</a>
+                                  <small>An event handler for the select event on the window.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/GlobalEventHandlers/onsubmit.html">Web/API/GlobalEventHandlers/onsubmit</a>
+                                  <small>An event handler for the submit event on the window.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/History/pushState.html">Web/API/History/pushState</a>
+                                  <small>In an HTML document, the history.pushState() method adds a state to the browsers history.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLAnchorElement.html">Web/API/HTMLAnchorElement</a>
+                                  <small>The HTMLAnchorElement interface represents hyperlink elements and provides special properties and ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLAnchorElement/rel.html">Web/API/HTMLAnchorElement/rel</a>
+                                  <small>The HTMLAnchorElement.rel property reflects the rel attribute. It is a DOMString containing a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLAnchorElement/relList.html">Web/API/HTMLAnchorElement/relList</a>
+                                  <small>The HTMLAnchorElement.relList read-only property reflects the rel attribute. It is a live ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLAreaElement.html">Web/API/HTMLAreaElement</a>
+                                  <small>The HTMLAreaElement interface provides special properties and methods (beyond those of the regular ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLAreaElement/rel.html">Web/API/HTMLAreaElement/rel</a>
+                                  <small>The HTMLAreaElement.rel property reflects the rel attribute. It is a DOMString containing a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLAreaElement/relList.html">Web/API/HTMLAreaElement/relList</a>
+                                  <small>The HTMLAreaElement.relList read-only property reflects the rel attribute. It is a live ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLAudioElement.html">Web/API/HTMLAudioElement</a>
+                                  <small>The HTMLAudioElement interface provides access to the properties of audio elements, as well as ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLBaseElement.html">Web/API/HTMLBaseElement</a>
+                                  <small>The HTMLBaseElement interface contains the base URI&nbsp;for a document. This object inherits all of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLBaseFontElement.html">Web/API/HTMLBaseFontElement</a>
+                                  <small>The HTMLBaseFontElement interface provides special properties (beyond the regular HTMLElement ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLBodyElement.html">Web/API/HTMLBodyElement</a>
+                                  <small>The HTMLBodyElement interface provides special properties (beyond those of the regular HTMLElement ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLBRElement.html">Web/API/HTMLBRElement</a>
+                                  <small>The HTMLBRElement interface represents a HTML line break element (br). It inherits from HTMLElement.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLButtonElement.html">Web/API/HTMLButtonElement</a>
+                                  <small>The HTMLButtonElement interface provides properties and methods (beyond the button object interface ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLCanvasElement.html">Web/API/HTMLCanvasElement</a>
+                                  <small>The HTMLCanvasElement interface provides properties and methods for manipulating the layout and ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLCollection/item.html">Web/API/HTMLCollection/item</a>
+                                  <small>HTMLCollection.item() gets an element by position.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLContentElement.html">Web/API/HTMLContentElement</a>
+                                  <small>The HTMLContentElement interface represents a content HTML Element, which is used in Shadow DOM.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLContentElement/getDistributedNodes.html">Web/API/HTMLContentElement/getDistributedNodes</a>
+                                  <small>The HTMLContentElement.getDistributedNodes() method returns a static NodeList of the distributed ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLContentElement/select.html">Web/API/HTMLContentElement/select</a>
+                                  <small>The HTMLContentElement.select property reflects the select attribute. It is a DOMString containing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLDataElement.html">Web/API/HTMLDataElement</a>
+                                  <small>The HTMLDataElement interface provides special properties (beyond the regular HTMLElement interface ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLDataListElement.html">Web/API/HTMLDataListElement</a>
+                                  <small>The HTMLDataListElement interface provides special properties (beyond the HTMLElement object ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLDialogElement.html">Web/API/HTMLDialogElement</a>
+                                  <small>The HTMLDialogElement interface provides methods to manipulate dialog elements. It inherits ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLDivElement.html">Web/API/HTMLDivElement</a>
+                                  <small>The HTMLDivElement interface provides special properties (beyond the regular HTMLElement interface ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLDListElement.html">Web/API/HTMLDListElement</a>
+                                  <small>The HTMLDListElement interface provides special properties (beyond those of the regular HTMLElement ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLDocument.html">Web/API/HTMLDocument</a>
+                                  <small>HTMLDocument is an abstract interface of the DOM which provides access to special properties and ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement.html">Web/API/HTMLElement</a>
+                                  <small>The HTMLElement interface represents any HTML element. Some elements directly implement this ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/blur.html">Web/API/HTMLElement/blur</a>
+                                  <small>The HTMLElement.blur() method removes keyboard focus from the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/click.html">Web/API/HTMLElement/click</a>
+                                  <small>The HTMLElement.click() method simulates a mouse click on an element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/contentEditable.html">Web/API/HTMLElement/contentEditable</a>
+                                  <small>The HTMLElement.contentEditable property is used to indicate whether or not the element is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/dataset.html">Web/API/HTMLElement/dataset</a>
+                                  <small>The HTMLElement.dataset read-only property allows access, both in reading and writing mode, to all ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/dir.html">Web/API/HTMLElement/dir</a>
+                                  <small>The HTMLElement.dir property gets or sets the text writing directionality of the content of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/focus.html">Web/API/HTMLElement/focus</a>
+                                  <small>The HTMLElement.focus() method sets focus on the specified element, if it can be focused.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/forceSpellCheck.html">Web/API/HTMLElement/forceSpellCheck</a>
+                                  <small>Forces a spelling and grammar check on HTML elements, even if the user has not focused on the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/isContentEditable.html">Web/API/HTMLElement/isContentEditable</a>
+                                  <small>The HTMLElement.isContentEditable read-only property returns a Boolean that is true if the contents ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/lang.html">Web/API/HTMLElement/lang</a>
+                                  <small>The HTMLElement.lang property gets or sets the base language of an element's attribute values and ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/style.html">Web/API/HTMLElement/style</a>
+                                  <small>The HTMLElement.style property returns a CSSStyleDeclaration object that represents the element's ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/tabIndex.html">Web/API/HTMLElement/tabIndex</a>
+                                  <small>The HTMLElement.tabIndex property represents the tab order of the current element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLElement/title.html">Web/API/HTMLElement/title</a>
+                                  <small>The HTMLElement.title property represents the title of the element, the text usually displayed in a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLEmbedElement.html">Web/API/HTMLEmbedElement</a>
+                                  <small>The HTMLEmbedElement interface, which provides special properties (beyond the regular HTMLElement ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFieldSetElement.html">Web/API/HTMLFieldSetElement</a>
+                                  <small>The HTMLFieldSetElement interface has special properties and methods (beyond the regular ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFormControlsCollection.html">Web/API/HTMLFormControlsCollection</a>
+                                  <small>The HTMLFormControlsCollection interface represents a collection of HTML form control elements. It ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFormControlsCollection/namedItem.html">Web/API/HTMLFormControlsCollection/namedItem</a>
+                                  <small>Note that this version of namedItem() hide the one inherited from HTMLCollection. Like that one, in ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFormElement.html">Web/API/HTMLFormElement</a>
+                                  <small>The HTMLFormElement interface provides methods to create and modify form elements; it inherits from ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFormElement/acceptCharset.html">Web/API/HTMLFormElement/acceptCharset</a>
+                                  <small>The HTMLFormElement.acceptCharset property represents a list of the supported character encodings ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFormElement/action.html">Web/API/HTMLFormElement/action</a>
+                                  <small>The HTMLFormElement.action property represents the action of the form element.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFormElement/elements.html">Web/API/HTMLFormElement/elements</a>
+                                  <small>The HTMLFormElement.elements property returns an HTMLFormControlsCollection (HTML 4 HTMLCollection) ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFormElement/encoding.html">Web/API/HTMLFormElement/encoding</a>
+                                  <small>The HTMLFormElement.encoding property is an alternative name for the enctype element on the DOM ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/HTMLFormElement/enctype.html">Web/API/HTMLFormElement/enctype</a>
+                                  <small>The HTMLFormElement.enctype property represents the content type of the form element.</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+          <li class="selected">
+      <a href="HTML%20DOM2679.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="HTML%20DOM4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="HTML%20DOM9ba9.html?page=3">3</a>
+    </li>
+          <li class="next">
+      <a href="HTML%20DOM4658.html?page=2">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="1">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/HTML DOM?page=1 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 18:06:43 GMT -->
+</body></html>

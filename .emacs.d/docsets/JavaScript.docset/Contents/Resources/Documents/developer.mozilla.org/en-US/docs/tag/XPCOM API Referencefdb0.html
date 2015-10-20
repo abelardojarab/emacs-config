@@ -1,0 +1,946 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/XPCOM API Reference?page=4 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 21:37:55 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: XPCOM API Reference</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: XPCOM API Reference" href="../feeds/atom/tag/XPCOM%20API%20Reference">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'compat_api': false,'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/XPCOM API Reference?page=4" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FXPCOM+API+Reference%3Fpage%3D4" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/XPCOM API Reference?page=4" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FXPCOM+API+Reference%3Fpage%3D4" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: XPCOM API Reference</h1>
+                <ol class="pagination">
+      <li class="prev">
+      <a href="XPCOM%20API%20Reference9ba9.html?page=3">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="XPCOM%20API%20Reference2679.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="XPCOM%20API%20Reference4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="XPCOM%20API%20Reference9ba9.html?page=3">3</a>
+    </li>
+      <li class="selected">
+      <a href="XPCOM%20API%20Referencefdb0.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="XPCOM%20API%20Referenceaf4d.html?page=5">5</a>
+    </li>
+          <li class="next">
+      <a href="XPCOM%20API%20Referenceaf4d.html?page=5">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 433 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProcess">Mozilla/Tech/XPCOM/Reference/Interface/nsIProcess</a>
+                                  <small>Implemented by: @mozilla.org/process/util;1. To create an instance, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrompt">Mozilla/Tech/XPCOM/Reference/Interface/nsIPrompt</a>
+                                  <small>Normally you would use the prompt service as it is more flexible, but sometimes a callback will ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProperties">Mozilla/Tech/XPCOM/Reference/Interface/nsIProperties</a>
+                                  <small>Implemented by: @mozilla.org/file/directory_service;1. To get an instance, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProperty">Mozilla/Tech/XPCOM/Reference/Interface/nsIProperty</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIPropertyBag">Mozilla/Tech/XPCOM/Reference/Interface/NsIPropertyBag</a>
+                                  <small>Get a property value for the given name.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPropertyBag2">Mozilla/Tech/XPCOM/Reference/Interface/nsIPropertyBag2</a>
+                                  <small>This method returns null if the value does not exist, or exists but is null.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPropertyElement">Mozilla/Tech/XPCOM/Reference/Interface/nsIPropertyElement</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProtocolHandler">Mozilla/Tech/XPCOM/Reference/Interface/nsIProtocolHandler</a>
+                                  <small>Lets a protocol override blacklisted ports. This method is called when there's an attempt to ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProxyInfo">Mozilla/Tech/XPCOM/Reference/Interface/nsIProxyInfo</a>
+                                  <small>This interface identifies a proxy server.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIRadioInterfaceLayer">Mozilla/Tech/XPCOM/Reference/Interface/nsIRadioInterfaceLayer</a>
+                                  <small>Implemented by: @mozilla.org/telephony/system-worker-manager;1. To create an instance, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIResumableChannel">Mozilla/Tech/XPCOM/Reference/Interface/nsIResumableChannel</a>
+                                  <small>Open this channel, and read starting at the specified offset.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIScriptableInputStream">Mozilla/Tech/XPCOM/Reference/Interface/nsIScriptableInputStream</a>
+                                  <small>Return the number of bytes currently available in the stream.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIScriptableIO">Mozilla/Tech/XPCOM/Reference/Interface/nsIScriptableIO</a>
+                                  <small>File and Stream Guide : [ nsIScriptableIO | Accessing Files | Getting File Information | Reading ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIScriptError">Mozilla/Tech/XPCOM/Reference/Interface/nsIScriptError</a>
+                                  <small>Implemented by: @mozilla.org/scripterror;1. To create an instance, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISecurityCheckedComponent">Mozilla/Tech/XPCOM/Reference/Interface/nsISecurityCheckedComponent</a>
+                                  <small>In Gecko, a "capability" is a string identifying a set of actions that code is allowed to perform.&nbsp; ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIServiceManager">Mozilla/Tech/XPCOM/Reference/Interface/nsIServiceManager</a>
+                                  <small>This method returns a reference to a particular XPCOM service given the ClassID of the service.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISessionStore">Mozilla/Tech/XPCOM/Reference/Interface/nsISessionStore</a>
+                                  <small>Deletes a value from a specified tab.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISHistory">Mozilla/Tech/XPCOM/Reference/Interface/nsISHistory</a>
+                                  <small>In an embedded browser environment, the nsIWebBrowser object creates an instance of session history ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISimpleEnumerator">Mozilla/Tech/XPCOM/Reference/Interface/nsISimpleEnumerator</a>
+                                  <small>Called to retrieve the next element in the enumerator. The "next" element is the first element upon ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISocketTransport">Mozilla/Tech/XPCOM/Reference/Interface/nsISocketTransport</a>
+                                  <small>To create an instance, call nsISocketTransportService.createTransport()</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISocketTransportService">Mozilla/Tech/XPCOM/Reference/Interface/nsISocketTransportService</a>
+                                  <small>Implemented by: @mozilla.org/network/socket-transport-service;1. To create an instance, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundle">Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundle</a>
+                                  <small>This interface is used by XUL:stringbundle to retrieve strings. It is recommended that you use the ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundleService">Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundleService</a>
+                                  <small>Implemented by: @mozilla.org/intl/stringbundle;1. To access this service, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStyleSheetService">Mozilla/Tech/XPCOM/Reference/Interface/nsIStyleSheetService</a>
+                                  <small>Allows extensions or embeddors to add to the built-in list of user or agent style sheets.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsChar">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsChar</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsDouble">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsDouble</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsFloat">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsFloat</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsFloat/data">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsFloat/data</a>
+                                  <small>This content is now available at nsISupportsFloat.Attributes.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsID">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsID</a>
+                                  <small>This method returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsInterfacePointer">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsInterfacePointer</a>
+                                  <small>Returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRBool">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRBool</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPrimitive">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPrimitive</a>
+                                  <small>This interface was frozen for Gecko&nbsp;1.2. See bug&nbsp;166426 for details. From Gecko&nbsp;2.0 interfaces are ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPrimitive/type">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPrimitive/type</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRInt16">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRInt16</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRInt32">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRInt32</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRInt64">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRInt64</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPriority">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPriority</a>
+                                  <small>This interface does not strictly define what happens when the priority of an object is changed. An ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRTime">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRTime</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRUint16">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRUint16</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRUint32">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRUint32</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRUint64">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRUint64</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRUint8">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsPRUint8</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsString">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsString</a>
+                                  <small>This methods returns a string valued representation of the object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsWeakReference">Mozilla/Tech/XPCOM/Reference/Interface/nsISupportsWeakReference</a>
+                                  <small>Produces an appropriate instance of nsIWeakReference.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITaggingService">Mozilla/Tech/XPCOM/Reference/Interface/nsITaggingService</a>
+                                  <small>Implemented by: @mozilla.org/browser/tagging-service;1. To use this service, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIThread">Mozilla/Tech/XPCOM/Reference/Interface/nsIThread</a>
+                                  <small>This interface provides a high-level abstraction for an operating system thread.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadEventFilter">Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadEventFilter</a>
+                                  <small>The nsIThreadEventFilter interface may be implemented to determine whether or not an event may be ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadInternal">Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadInternal</a>
+                                  <small>The nsIThreadInternal interface is implemented by the XPCOM thread object to let consumers observe ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadManager">Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadManager</a>
+                                  <small>The nsIThreadManager interface lets applications and extensions create and manage threads, each of ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadObserver">Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadObserver</a>
+                                  <small>The nsIThreadObserver interface may be implemented to let an observer implement a layered event ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadPool">Mozilla/Tech/XPCOM/Reference/Interface/nsIThreadPool</a>
+                                  <small>A thread pool provides a convenient way to process events off the main thread. When you send events ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIThreadPoolListener">Mozilla/Tech/XPCOM/Reference/Interface/NsIThreadPoolListener</a>
+                                  <small>The nsIThreadPoolListener interface represents objects that listen to notifications generated by ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITimer">Mozilla/Tech/XPCOM/Reference/Interface/nsITimer</a>
+                                  <small>The nsITimer interface offers a functionality to invoke a function after a specified delay.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITimerCallback">Mozilla/Tech/XPCOM/Reference/Interface/nsITimerCallback</a>
+                                  <small>Initialize a timer to fire after the given millisecond interval. This version takes a function to ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITransactionManager">Mozilla/Tech/XPCOM/Reference/Interface/nsITransactionManager</a>
+                                  <small>Adds a listener to the transaction manager's notification list. Listeners are notified whenever a ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITransport">Mozilla/Tech/XPCOM/Reference/Interface/nsITransport</a>
+                                  <small>This interface provides methods to open blocking or non-blocking, buffered or unbuffered streams to ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Tech/XPCOM/Reference/Interface/nsITransportEventSink.html">Mozilla/Tech/XPCOM/Reference/Interface/nsITransportEventSink</a>
+                                  <small>Transport status notification.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITreeColumn">Mozilla/Tech/XPCOM/Reference/Interface/nsITreeColumn</a>
+                                  <small>The nsITreeColumn interface represents a tree column.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsITreeContentView">Mozilla/Tech/XPCOM/Reference/Interface/NsITreeContentView</a>
+                                  <small>The nsITreeContentView interface is implemented by tree views that are backed by DOM content. It is ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdate">Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdate</a>
+                                  <small>Retrieves a patch.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdateChecker">Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdateChecker</a>
+                                  <small>Checks for available updates, notifying a listener of the results.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdateCheckListener">Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdateCheckListener</a>
+                                  <small>Called when the update check is completed.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdateManager">Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdateManager</a>
+                                  <small>Returns the update at the specified index into the history list.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdatePatch">Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdatePatch</a>
+                                  <small>Serializes the patch object into a DOM element.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdatePrompt">Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdatePrompt</a>
+                                  <small>Presents a user interface that checks for and displays the available updates.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdateTimerManager">Mozilla/Tech/XPCOM/Reference/Interface/nsIUpdateTimerManager</a>
+                                  <small>Presents a user interface that checks for and displays the available updates.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIUUIDGenerator">Mozilla/Tech/XPCOM/Reference/Interface/nsIUUIDGenerator</a>
+                                  <small>Implemented by @mozilla.org/uuid-generator; as a service:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIVersionComparator">Mozilla/Tech/XPCOM/Reference/Interface/nsIVersionComparator</a>
+                                  <small>Version strings are dot-separated sequences of version-parts. A version-part consists of up to four ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWeakReference">Mozilla/Tech/XPCOM/Reference/Interface/nsIWeakReference</a>
+                                  <small>An instance of nsIWeakReference is a proxy object that cooperates with its referent to give clients ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWebBrowser">Mozilla/Tech/XPCOM/Reference/Interface/nsIWebBrowser</a>
+                                  <small>Registers a listener of the type specified by the iid to receive callbacks. The browser stores a ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWebBrowserChrome">Mozilla/Tech/XPCOM/Reference/Interface/nsIWebBrowserChrome</a>
+                                  <small>Asks the implementer to destroy the window associated with this WebBrowser object.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWebBrowserPersist">Mozilla/Tech/XPCOM/Reference/Interface/nsIWebBrowserPersist</a>
+                                  <small>Implemented by: @mozilla.org/embedding/browser/nsWebBrowser;1 and ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWebContentHandlerRegistrar">Mozilla/Tech/XPCOM/Reference/Interface/nsIWebContentHandlerRegistrar</a>
+                                  <small>Implemented by @mozilla.org/embeddor.implemented/web-content-handler-registrar;1 as a service:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWebNavigation">Mozilla/Tech/XPCOM/Reference/Interface/nsIWebNavigation</a>
+                                  <small>This interface is implemented by the following components:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWebProgress">Mozilla/Tech/XPCOM/Reference/Interface/nsIWebProgress</a>
+                                  <small>The nsIWebProgress interface is used to add or remove nsIWebProgressListener instances to observe ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWebProgressListener">Mozilla/Tech/XPCOM/Reference/Interface/nsIWebProgressListener</a>
+                                  <small>nsIWebProgress describes the parent-child relationship of nsIWebProgress instances.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowCreator">Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowCreator</a>
+                                  <small>Create a new window. Gecko will/may call this method, if made available to it, to create new ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowMediator">Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowMediator</a>
+                                  <small>The two most common uses of nsIWindowMediator are, enumerating all windows of a given type and ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowWatcher">Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowWatcher</a>
+                                  <small>Usage notes: This component has an activeWindow property. Clients may expect this property to be ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXFormsModelElement">Mozilla/Tech/XPCOM/Reference/Interface/nsIXFormsModelElement</a>
+                                  <small>An nsIDOMDocument.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXFormsNSInstanceElement">Mozilla/Tech/XPCOM/Reference/Interface/nsIXFormsNSInstanceElement</a>
+                                  <small>nsIXFormsNSInstanceElement is implemented by all XForms instance/ elements, defining Mozilla ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXFormsNSModelElement">Mozilla/Tech/XPCOM/Reference/Interface/nsIXFormsNSModelElement</a>
+                                  <small>nsIXFormsNSModelElement is implemented by all XForms model/ elements. It defines Mozilla extensions ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXMLHttpRequest">Mozilla/Tech/XPCOM/Reference/Interface/nsIXMLHttpRequest</a>
+                                  <small>nsIXMLHttpRequest along with nsIJSXMLHttpRequest and nsIXMLHttpRequestEventTarget are Mozilla's ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXmlRpcClient">Mozilla/Tech/XPCOM/Reference/Interface/nsIXmlRpcClient</a>
+                                  <small>Inherits from: nsISupports</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXPCException">Mozilla/Tech/XPCOM/Reference/Interface/nsIXPCException</a>
+                                  <small>None.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXPCScriptable">Mozilla/Tech/XPCOM/Reference/Interface/nsIXPCScriptable</a>
+                                  <small>Inherits from: nsISupports</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULAppInfo">Mozilla/Tech/XPCOM/Reference/Interface/nsIXULAppInfo</a>
+                                  <small>In XULRunner applications nsIXULAppInfo obtains app-specific information from application.ini.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULRuntime">Mozilla/Tech/XPCOM/Reference/Interface/nsIXULRuntime</a>
+                                  <small>Implemented by: @mozilla.org/xre/app-info;1. To get an instance, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULTemplateBuilder">Mozilla/Tech/XPCOM/Reference/Interface/nsIXULTemplateBuilder</a>
+                                  <small>The nsITemplateBuilder interface controls the display of elements using a XUL template element and ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULTemplateQueryProcessor">Mozilla/Tech/XPCOM/Reference/Interface/nsIXULTemplateQueryProcessor</a>
+                                  <small>A query processor takes a template query and generates results for it given a datasource and a ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULTemplateResult">Mozilla/Tech/XPCOM/Reference/Interface/nsIXULTemplateResult</a>
+                                  <small>Each result is identified by an id, which must be unique within the set of results produced from a ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIZipEntry">Mozilla/Tech/XPCOM/Reference/Interface/nsIZipEntry</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIZipReader">Mozilla/Tech/XPCOM/Reference/Interface/nsIZipReader</a>
+                                  <small>Implemented by: @mozilla.org/libjar/zip-reader;1. To create an instance, use:</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIZipWriter">Mozilla/Tech/XPCOM/Reference/Interface/nsIZipWriter</a>
+                                  <small>Once all the operations you wish to perform are added to the queue, a call to processQueue() will ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Primitive">Mozilla/Tech/XPCOM/Reference/Primitive</a>
+                                  <small>An XPCOM primitive is an XPCOM object that "boxes" a value of a primitive type. All XPCOM ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringAppendData">Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringAppendData</a>
+                                  <small>The NS_CStringAppendData function appends data to the existing value of a nsACString instance. This ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringCloneData">Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringCloneData</a>
+                                  <small>The NS_CStringCloneData function returns a null-terminated, heap allocated copy of the string's ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringContainerFinish">Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringContainerFinish</a>
+                                  <small>The NS_CStringContainerFinish function releases any memory allocated by a nsCStringContainer ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringContainerInit">Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringContainerInit</a>
+                                  <small>The NS_CStringContainerInit function initializes a nsCStringContainer instance for use as a ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringContainerInit2">Mozilla/Tech/XPCOM/Reference/String_functions/NS_CStringContainerInit2</a>
+                                  <small>The NS_CStringContainerInit2 function initializes a nsCStringContainer instance for use as a ...</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+      <li class="prev">
+      <a href="XPCOM%20API%20Reference9ba9.html?page=3">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="XPCOM%20API%20Reference2679.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="XPCOM%20API%20Reference4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="XPCOM%20API%20Reference9ba9.html?page=3">3</a>
+    </li>
+      <li class="selected">
+      <a href="XPCOM%20API%20Referencefdb0.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="XPCOM%20API%20Referenceaf4d.html?page=5">5</a>
+    </li>
+          <li class="next">
+      <a href="XPCOM%20API%20Referenceaf4d.html?page=5">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="4">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/XPCOM API Reference?page=4 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 21:37:55 GMT -->
+</body></html>

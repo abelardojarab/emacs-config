@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QPlatformCursor","path":"QPlatformCursor","entryType":"Function"},{"name":"changeCursor","path":"changeCursor","entryType":"Function"},{"name":"pointerEvent","path":"pointerEvent","entryType":"Function"},{"name":"pos","path":"pos","entryType":"Function"},{"name":"setPos","path":"setPos","entryType":"Function"}]}

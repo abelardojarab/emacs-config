@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QTranslator","path":"QTranslator","entryType":"Function"},{"name":"~QTranslator","path":"dtor.QTranslator","entryType":"Function"},{"name":"isEmpty","path":"isEmpty","entryType":"Function"},{"name":"load","path":"load","entryType":"Function"},{"name":"translate","path":"translate","entryType":"Function"}]}

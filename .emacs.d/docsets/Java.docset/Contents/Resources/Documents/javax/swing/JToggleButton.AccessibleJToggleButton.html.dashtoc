@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"AccessibleJToggleButton()","path":"AccessibleJToggleButton--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getAccessibleRole()","path":"getAccessibleRole--","entryType":"Method"},{"name":"itemStateChanged(ItemEvent)","path":"itemStateChanged-java.awt.event.ItemEvent-","entryType":"Method"}]}

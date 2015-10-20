@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"BlockElement(Element, AttributeSet)","path":"BlockElement-javax.swing.text.Element-javax.swing.text.AttributeSet-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getName()","path":"getName--","entryType":"Method"},{"name":"getResolveParent()","path":"getResolveParent--","entryType":"Method"}]}

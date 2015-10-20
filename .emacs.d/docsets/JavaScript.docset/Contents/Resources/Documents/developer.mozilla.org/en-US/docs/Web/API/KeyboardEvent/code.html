@@ -1,0 +1,3299 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:02:20 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>KeyboardEvent.code</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code$json">
+  <link rel="canonical" href="code.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="KeyboardEvent.code">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code">
+  <meta name="twitter:title" content="KeyboardEvent.code">
+    <meta property="og:description" content="The KeyboardEvent.code property represents a physical key, that is value not changed neither by the modifier state, nor by keyboard layout.">
+  <meta name="description" content="The KeyboardEvent.code property represents a physical key, that is value not changed neither by the modifier state, nor by keyboard layout.">
+  <meta name="twitter:description" content="The KeyboardEvent.code property represents a physical key, that is value not changed neither by the modifier state, nor by keyboard layout.">
+  
+      
+  </head>
+<body data-slug="Web/API/KeyboardEvent/code" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/KeyboardEvent/code" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FKeyboardEvent%2Fcode" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/KeyboardEvent/code" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FKeyboardEvent%2Fcode" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../KeyboardEvent.html" rel="v:url" property="v:title">KeyboardEvent</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">KeyboardEvent.code</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>KeyboardEvent.code</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 7 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/cvrebert" title="View profile: cvrebert">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cvrebert" data-src="../../../../../../secure.gravatar.com/avatar/ab4acd574384edcfe0aba24cafc882496aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cvrebert</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jpmedley" title="View profile: jpmedley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jpmedley" data-src="../../../../../../secure.gravatar.com/avatar/fde784135f738cc182672e703dea9a4b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jpmedley</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jwhitlock" title="View profile: jwhitlock">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jwhitlock" data-src="../../../../../../secure.gravatar.com/avatar/40c605f51b728fc5655b5de202e898e16aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jwhitlock</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Masayuki" title="View profile: Masayuki">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Masayuki" data-src="../../../../../../secure.gravatar.com/avatar/900caab146bc7a489b3854cf10acf93f6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Masayuki</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Example" rel="internal">Example</a></li><li><a href="#Specification" rel="internal">Specification</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#Code_values" rel="internal">Code values</a><ol><li><a href="#Code_values_on_Windows_(When_scancode_is_available)" rel="internal">Code values on Windows (When scancode is available)</a></li><li><a href="#Code_values_on_Mac" rel="internal">Code values on Mac</a></li><li><a href="#Code_values_on_Linux_(X11)_(When_scancode_is_available)" rel="internal">Code values on Linux (X11) (When scancode is available)</a></li><li><a href="#Code_values_on_Android_and_Firefox_OS_(When_scancode_is_available)" rel="internal">Code values on Android and Firefox OS (When scancode is available)</a></li></ol></li>
+                </ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p id="Summary"></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p>The <code>KeyboardEvent.code</code> property represents a physical key, that is value <em>not</em> changed neither by the modifier state, nor by keyboard layout.</p>
+
+<p>If the inputting keyboard isn't a physical keyboard, e.g., using virtual keyboard or accessibility tools, web browsers should set proper code value for compatibility as far as possible.</p>
+
+<p>Uninitialized value must be <code>""</code> (empty string).</p>
+
+<p>This is useful when you attempt to distinguish keys physically. However, you need to be careful when you reference this value for printable key events. For example, <code>"KeyQ"</code> is set for the "<kbd>q</kbd>" key of the QWERTY keyboard layout, the "<kbd>'</kbd>" key of the Dvorak keyboard layout and the "<kbd>a</kbd>" key of the AZERTY keyboard layout. This means that you cannot show the actual key label for users. In other words, it's impossible to generate a proper tutorial for all users if some of them use an unexpected keyboard layout.</p>
+
+<h2 id="Example">Example</h2>
+
+<pre class="brush: js">window.addEventListener("keydown", function (event) {
+  if (event.defaultPrevented) {
+    return; // Should do nothing if the key event was already consumed.
+  }
+
+  switch (event.code) {
+    case "KeyS":
+      // Handle "s" key as "down arrow" key.
+      break;
+    case "KeyW":
+      // Handle "w" key as "up arrow" key.
+      break;
+    case "KeyA":
+      // Handle "a" key as "left arrow" key.
+      break;
+    case "KeyD":
+      // Handle "d" key as "right arrow" key.
+      break;
+    default:
+      return; // Quit when this doesn't handle the key event.
+  }
+
+  // Consume the event for suppressing "double action".
+  event.preventDefault();
+}, true);
+</pre>
+
+<h2 id="Specification">Specification</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/uievents/#widl-KeyboardEvent-code" class="external" lang="en" hreflang="en">Document Object Model (DOM) Level 3 Events Specification<br><small lang="en-US">The definition of 'KeyboardEvent.code' in that specification.</small></a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Initial definition, included <a href="https://dvcs.w3.org/hg/dom3events/raw-file/tip/html/DOM3Events-code.html" class="external">code values</a>.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> [1]</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/32" title="Released on 2014-09-02.">32.0</a> (32.0) [1]</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td>Without scancode (Windows)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/32" title="Released on 2014-09-02.">32.0</a> (32.0)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td>Without scancode (Linux)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Android Webview</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE&nbsp;Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+   <th>Chrome for Android</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>45.0 [1]</td>
+   <td>32.0 (32.0) [2]</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>42.0 [1]</td>
+  </tr>
+  <tr>
+   <td>Virtual keyboard</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] Behind a flag starting in Chrome 42.</p>
+
+<p>[2] Disabled on release builds: only available on Nightly, Aurora and Developer Editions. Starting <span title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Gecko&nbsp;38.0</span>, it's enabled in release builds too.</p>
+
+<h2 id="Code_values">Code values</h2>
+
+<p>The following tables show what code values are used for each native scancode or virtual keycode.</p>
+
+<h3 id="Code_values_on_Windows_(When_scancode_is_available)">Code values on Windows (When scancode is available)</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">scancode</th>
+   <th scope="col">Gecko <span class="badge geckoVersionBadge" title="(Firefox 32.0 / Thunderbird 32.0 / SeaMonkey 2.29)"><span class="badgeText">Requires Gecko 32.0</span></span></th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th scope="row"><code>0x0000</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0001</code></th>
+   <td><code>"Escape"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0002</code></th>
+   <td><code>"Digit0"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0003</code></th>
+   <td><code>"Digit1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0004</code></th>
+   <td><code>"Digit2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0005</code></th>
+   <td><code>"Digit3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0006</code></th>
+   <td><code>"Digit4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0007</code></th>
+   <td><code>"Digit5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0008</code></th>
+   <td><code>"Digit6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0009</code></th>
+   <td><code>"Digit7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000A</code></th>
+   <td><code>"Digit8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000B</code></th>
+   <td><code>"Digit9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000C</code></th>
+   <td><code>"Minus"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000D</code></th>
+   <td><code>"Equal"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000E</code></th>
+   <td><code>"Backspace"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000F</code></th>
+   <td><code>"Tab"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0010</code></th>
+   <td><code>"KeyQ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0011</code></th>
+   <td><code>"KeyW"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0012</code></th>
+   <td><code>"KeyE"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0013</code></th>
+   <td><code>"KeyR"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0014</code></th>
+   <td><code>"KeyT"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0015</code></th>
+   <td><code>"KeyY"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0016</code></th>
+   <td><code>"KeyU"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0017</code></th>
+   <td><code>"KeyI"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0018</code></th>
+   <td><code>"KeyO"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0019</code></th>
+   <td><code>"KeyP"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001A</code></th>
+   <td><code>"BracketLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001B</code></th>
+   <td><code>"BracketRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001C</code></th>
+   <td><code>"Enter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001D</code></th>
+   <td><code>"ControlLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001E</code></th>
+   <td><code>"KeyA"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001F</code></th>
+   <td><code>"KeyS"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0020</code></th>
+   <td><code>"KeyD"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0021</code></th>
+   <td><code>"KeyF"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0022</code></th>
+   <td><code>"KeyG"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0023</code></th>
+   <td><code>"KeyH"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0024</code></th>
+   <td><code>"KeyJ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0025</code></th>
+   <td><code>"KeyK"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0026</code></th>
+   <td><code>"KeyL"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0027</code></th>
+   <td><code>"Semicolon"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0028</code></th>
+   <td><code>"Quote"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0029</code></th>
+   <td><code>"Backquote"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002A</code></th>
+   <td><code>"ShiftLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002B</code></th>
+   <td><code>"Backslash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002C</code></th>
+   <td><code>"KeyZ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002D</code></th>
+   <td><code>"KeyX"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002E</code></th>
+   <td><code>"KeyC"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002F</code></th>
+   <td><code>"KeyV"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0030</code></th>
+   <td><code>"KeyB"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0031</code></th>
+   <td><code>"KeyN"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0032</code></th>
+   <td><code>"KeyM"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0033</code></th>
+   <td><code>"Comma"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0034</code></th>
+   <td><code>"Period"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0035</code></th>
+   <td><code>"Slash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0036</code></th>
+   <td><code>"ShiftRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0037</code></th>
+   <td><code>"NumpadMultiply"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0038</code></th>
+   <td><code>"AltLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0039</code></th>
+   <td><code>"Space"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003A</code></th>
+   <td><code>"CapsLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003B</code></th>
+   <td><code>"F1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003C</code></th>
+   <td><code>"F2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003D</code></th>
+   <td><code>"F3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003E</code></th>
+   <td><code>"F4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003F</code></th>
+   <td><code>"F5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0040</code></th>
+   <td><code>"F6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0041</code></th>
+   <td><code>"F7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0042</code></th>
+   <td><code>"F8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0043</code></th>
+   <td><code>"F9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0044</code></th>
+   <td><code>"F10"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0045</code></th>
+   <td><code>"Pause"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0046</code></th>
+   <td><code>"ScrollLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0047</code></th>
+   <td><code>"Numpad7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0048</code></th>
+   <td><code>"Numpad8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0049</code></th>
+   <td><code>"Numpad9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004A</code></th>
+   <td><code>"NumpadSubtract"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004B</code></th>
+   <td><code>"Numpad4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004C</code></th>
+   <td><code>"Numpad5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004D</code></th>
+   <td><code>"Numpad6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004E</code></th>
+   <td><code>"NumpadAdd"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004F</code></th>
+   <td><code>"Numpad1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0050</code></th>
+   <td><code>"Numpad2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0051</code></th>
+   <td><code>"Numpad3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0052</code></th>
+   <td><code>"Numpad0"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0053</code></th>
+   <td><code>"NumpadDecimal"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0054 (<kbd>Alt</kbd> + <kbd>PrintScreen</kbd>)</code></th>
+   <td><code>"PrintScreen"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0055</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0056</code></th>
+   <td><code>"IntlBackslash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0057</code></th>
+   <td><code>"F11"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0058</code></th>
+   <td><code>"F12"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0059</code></th>
+   <td><code>"NumpadEqual"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005A</code> ～ <code>0x0063</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0064</code></th>
+   <td><code>"F13"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0065</code></th>
+   <td><code>"F14"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0066</code></th>
+   <td><code>"F15"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0067</code></th>
+   <td><code>"F16"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0068</code></th>
+   <td><code>"F17"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0069</code></th>
+   <td><code>"F18"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006A</code></th>
+   <td><code>"F19"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006B</code></th>
+   <td><code>"F20"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006C</code></th>
+   <td><code>"F21"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006D</code></th>
+   <td><code>"F22"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006E</code></th>
+   <td><code>"F23"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006F</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0070</code></th>
+   <td><code>"KanaMode"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0071</code> (<kbd>Hanja</kbd> key without Korean keyboard layout)</th>
+   <td><code>"Lang2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0072</code> (<kbd>Han/Yeong</kbd> key without Korean keyboard layout)</th>
+   <td><code>"Lang1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0073</code></th>
+   <td><code>"IntlRo"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0074</code>, <code>0x0075</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0076</code></th>
+   <td><code>"F24"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0077</code>, <code>0x0078</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0079</code></th>
+   <td><code>"Convert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007A</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007B</code></th>
+   <td><code>"NonConvert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007C</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007D</code></th>
+   <td><code>"IntlYen"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007E</code></th>
+   <td><code>"NumpadComma"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007F</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE000</code> ～ <code>0xE00F</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE010</code></th>
+   <td><code>"MediaTrackPrevious"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE011</code> ～ <code>0xE018</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE019</code></th>
+   <td><code>"MediaTrackNext"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE01A, 0xE01B</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE01C</code></th>
+   <td><code>"NumpadEnter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE01D</code></th>
+   <td><code>"ControlRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE01E</code> ～ <code>0xE01F</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE020</code></th>
+   <td><code>"VolumeMute"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE021</code></th>
+   <td><code>"LaunchApp2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE022</code></th>
+   <td><code>"MediaPlayPause"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE023</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE024</code></th>
+   <td><code>"MediaStop"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE025</code> ～ <code>0xE02D</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE02E</code></th>
+   <td><code>"VolumeDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE02F</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE030</code></th>
+   <td><code>"VolumeUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE031</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE032</code></th>
+   <td><code>"BrowserHome"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE033</code>, <code>0xE034</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE035</code></th>
+   <td><code>"NumpadDivide"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE036</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE037</code></th>
+   <td><code>"PrintScreen"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE038</code></th>
+   <td><code>"AltRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE039</code> ～ <code>0xE044</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE045</code></th>
+   <td><code>"NumLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE046</code> (<kbd>Ctrl</kbd> + <kbd>Pause</kbd>)</th>
+   <td><code>"Pause"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE047</code></th>
+   <td><code>"Home"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE048</code></th>
+   <td><code>"ArrowUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE049</code></th>
+   <td><code>"PageUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE04A</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE04B</code></th>
+   <td><code>"ArrowLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE04C</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE04D</code></th>
+   <td><code>"ArrowRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE04F</code></th>
+   <td><code>"End"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE050</code></th>
+   <td><code>"ArrowDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE051</code></th>
+   <td><code>"PageDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE052</code></th>
+   <td><code>"Insert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE053</code></th>
+   <td><code>"Delete"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE054</code> ～ <code>0xE05A</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE05B</code></th>
+   <td><code>"OSLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE05C</code></th>
+   <td><code>"OSRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE05D</code></th>
+   <td><code>"ContextMenu"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE05E</code></th>
+   <td><code>"Power"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE05F</code> ～ <code>0xE064</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE065</code></th>
+   <td><code>"BrowserSearch"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE066</code></th>
+   <td><code>"BrowserFavorites"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE067</code></th>
+   <td><code>"BrowserRefresh"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE068</code></th>
+   <td><code>"BrowserStop"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE069</code></th>
+   <td><code>"BrowserForward"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE06A</code></th>
+   <td><code>"BrowserBack"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE06B</code></th>
+   <td><code>"LaunchApp1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE06C</code></th>
+   <td><code>"LaunchMail"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE06D</code></th>
+   <td><code>"MediaSelect"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE06E ～ 0xE0F0</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE0F1</code> (<kbd>Hanja</kbd> key with Korean keyboard layout)</th>
+   <td><code>"Lang2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0xE0F2</code> (<kbd>Han/Yeong</kbd> key with Korean keyboard layout)</th>
+   <td><code>"Lang1"</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Code_values_on_Mac">Code values on Mac</h3>
+
+<p>On Mac OS X, it's hard to get scancode or something which can distinguish a physical key from a key event. Therefore, Gecko always maps <code>code</code> value from the virtual keycode.</p>
+
+<table id="keyname_table_mac" class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">Virtual keycode</th>
+   <th rowspan="1" colspan="1" scope="col">Gecko <span class="badge geckoVersionBadge" title="(Firefox 32.0 / Thunderbird 32.0 / SeaMonkey 2.29)"><span class="badgeText">Requires Gecko 32.0</span></span></th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_A (0x00)</code></th>
+   <td><code>"KeyA"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_S (0x01)</code></th>
+   <td><code>"KeyS"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_D (0x02)</code></th>
+   <td><code>"KeyD"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_F (0x03)</code></th>
+   <td><code>"KeyF"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_H (0x04)</code></th>
+   <td><code>"KeyH"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_G (0x05)</code></th>
+   <td><code>"KeyG"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Z (0x06)</code></th>
+   <td><code>"KeyZ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_X (0x07)</code></th>
+   <td><code>"KeyX"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_C (0x08)</code></th>
+   <td><code>"KeyC"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_V (0x09)</code></th>
+   <td><code>"KeyV"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ISO_Section (0x0A)</code></th>
+   <td><code>"IntlBackslash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_B (0x0B)</code></th>
+   <td><code>"KeyB"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Q (0x0C)</code></th>
+   <td><code>"KeyQ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_W (0x0D)</code></th>
+   <td><code>"KeyW"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_E (0x0E)</code></th>
+   <td><code>"KeyE"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_R (0x0F)</code></th>
+   <td><code>"KeyR"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Y (0x10)</code></th>
+   <td><code>"KeyY"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_T (0x11)</code></th>
+   <td><code>"KeyT"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_1 (0x12)</code></th>
+   <td><code>"Digit1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_2 (0x13)</code></th>
+   <td><code>"Digit2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_3 (0x14)</code></th>
+   <td><code>"Digit3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_4 (0x15)</code></th>
+   <td><code>"Digit4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_6 (0x16)</code></th>
+   <td><code>"Digit6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_5 (0x17)</code></th>
+   <td><code>"Digit7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Equal (0x18)</code></th>
+   <td><code>"Equal"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_9 (0x19)</code></th>
+   <td><code>"Digit9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_7 (0x1A)</code></th>
+   <td><code>"Digit7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Minus (0x1B)</code></th>
+   <td><code>"Minus"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_8 (0x1C)</code></th>
+   <td><code>"Digit8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_0 (0x1D)</code></th>
+   <td><code>"Digit0"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_RightBracket (0x1E)</code></th>
+   <td><code>"BracketRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_O (0x1F)</code></th>
+   <td><code>"KeyO"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_U (0x20)</code></th>
+   <td><code>"KeyU"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_LeftBracket (0x21)</code></th>
+   <td><code>"BracketLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_I (0x22)</code></th>
+   <td><code>"KeyI"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_P (0x23)</code></th>
+   <td><code>"KeyP"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Return (0x24)</code></th>
+   <td><code>"Enter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_L (0x25)</code></th>
+   <td><code>"KeyL"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_J (0x26)</code></th>
+   <td><code>"KeyJ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Quote (0x27)</code></th>
+   <td><code>"Quote"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_K (0x28)</code></th>
+   <td><code>"KeyK"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Semicolon (0x29)</code></th>
+   <td><code>"Semicolon"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Tab (0x30)</code></th>
+   <td><code>"Tab"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Space (0x31)</code></th>
+   <td><code>"Space"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Grave (0x32)</code></th>
+   <td><code>"Backquote"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Delete (0x33)</code></th>
+   <td><code>"Backspace"</code></td>
+  </tr>
+  <tr>
+   <th scope="row">Enter key on keypad of PowerBook (<code>0x34</code>)</th>
+   <td><code>"NumpadEnter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Escape (0x35)</code></th>
+   <td><code>"Escape"</code></td>
+  </tr>
+  <tr>
+   <th scope="row">right-command key (<code>0x36</code>)</th>
+   <td><code>"OSRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Command (0x37)</code></th>
+   <td><code>"OSLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Shift (0x38)</code></th>
+   <td><code>"ShiftLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_CapsLock (0x39)</code></th>
+   <td><code>"CapsLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Option (0x3A)</code></th>
+   <td><code>"AltLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Control (0x3B)</code></th>
+   <td><code>"ControlLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_RightShift (0x3C)</code></th>
+   <td><code>"ShiftRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_RightOption (0x3D)</code></th>
+   <td><code>"AltRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_RightControl (0x3E)</code></th>
+   <td><code>"ControlRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Function (0x3F)</code></th>
+   <td><code>"Fn"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F17 (0x40)</code></th>
+   <td><code>"F17"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_KeypadDecimal (0x41)</code></th>
+   <td><code>"NumpadDecimal"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_KeypadMultiply (0x43)</code></th>
+   <td><code>"NumpadMultiply"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_KeypadPlus (0x45)</code></th>
+   <td><code>"NumpadAdd"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_KeypadClear (0x47)</code></th>
+   <td><code>"NumLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_VolumeUp (0x48)</code></th>
+   <td><code>"VolumeUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_VolumeDown (0x49)</code></th>
+   <td><code>"VolumeDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Mute (0x4A)</code></th>
+   <td><code>"VolumeMute"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_KeypadDivide (0x4B)</code></th>
+   <td><code>"NumpadDivide"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_KeypadEnter (0x4C)</code></th>
+   <td><code>"NumpadEnter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_KeypadMinus (0x4E)</code></th>
+   <td><code>"NumpadSubtract"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F18 (0x4F)</code></th>
+   <td><code>"F18"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F19 (0x50)</code></th>
+   <td><code>"F19"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_KeypadEquals (0x51)</code></th>
+   <td><code>"NumpadEqual"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad0 (0x52)</code></th>
+   <td><code>"Numpad0"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad1 (0x53)</code></th>
+   <td><code>"Numpad1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad2 (0x54)</code></th>
+   <td><code>"Numpad2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad3 (0x55)</code></th>
+   <td><code>"Numpad3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad4 (0x56)</code></th>
+   <td><code>"Numpad4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad5 (0x57)</code></th>
+   <td><code>"Numpad5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad6 (0x58)</code></th>
+   <td><code>"Numpad6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad7 (0x59)</code></th>
+   <td><code>"Numpad7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F20 (0x5A)</code></th>
+   <td><code>"F20"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad8 (0x5B)</code></th>
+   <td><code>"Numpad8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ANSI_Keypad9 (0x5C)</code></th>
+   <td><code>"Numpad9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_JIS_KeypadComma (0x5F)</code></th>
+   <td><code>"NumpadComma"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F5 (0x60)</code></th>
+   <td><code>"F5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F6 (0x61)</code></th>
+   <td><code>"F6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F7 (0x62)</code></th>
+   <td><code>"F7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F3 (0x63)</code></th>
+   <td><code>"F3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F8 (0x64)</code></th>
+   <td><code>"F8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F9 (0x65)</code></th>
+   <td><code>"F9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_JIS_Eisu (0x66)</code></th>
+   <td><code>"Lang2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F11 (0x67)</code></th>
+   <td><code>"F11"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_JIS_Kana (0x68)</code></th>
+   <td><code>"Lang1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F13 (0x69)</code></th>
+   <td><code>"F13"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F16 (0x6A)</code></th>
+   <td><code>"F16"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F14 (0x6B)</code></th>
+   <td><code>"F14"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F10 (0x6D)</code></th>
+   <td><code>"F10"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F12 (0x6F)</code></th>
+   <td><code>"F12"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F15 (0x71)</code></th>
+   <td><code>"F15"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Help (0x72)</code></th>
+   <td><code>"Help"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_Home (0x73)</code></th>
+   <td><code>"Home"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_PageUp (0x74)</code></th>
+   <td><code>"PageUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_ForwardDelete (0x75)</code></th>
+   <td><code>"Delete"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F4 (0x76)</code></th>
+   <td><code>"F4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_End (0x77)</code></th>
+   <td><code>"End"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F2 (0x78)</code></th>
+   <td><code>"F2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_PageDown (0x79)</code></th>
+   <td><code>"PageDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_F1 (0x7A)</code></th>
+   <td><code>"F1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_LeftArrow (0x7B)</code></th>
+   <td><code>"Left"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_RightArrow (0x7C)</code></th>
+   <td><code>"Right"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_DownArrow (0x7D)</code></th>
+   <td><code>"Down"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>kVK_UpArrow (0x7E)</code></th>
+   <td><code>"Up"</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Code_values_on_Linux_(X11)_(When_scancode_is_available)">Code values on Linux (X11) (When scancode is available)</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">scancode (hardware_keycode)</th>
+   <th scope="col">Gecko <span class="badge geckoVersionBadge" title="(Firefox 32.0 / Thunderbird 32.0 / SeaMonkey 2.29)"><span class="badgeText">Requires Gecko 32.0</span></span></th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th scope="row"><code>0x0009</code></th>
+   <td><code>"Escape"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000A</code></th>
+   <td><code>"Digit1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000B</code></th>
+   <td><code>"Digit2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000C</code></th>
+   <td><code>"Digit3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000D</code></th>
+   <td><code>"Digit4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000E</code></th>
+   <td><code>"Digit5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000F</code></th>
+   <td><code>"Digit6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0010</code></th>
+   <td><code>"Digit7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0011</code></th>
+   <td><code>"Digit8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0012</code></th>
+   <td><code>"Digit9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0013</code></th>
+   <td><code>"Digit0"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0014</code></th>
+   <td><code>"Minus"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0015</code></th>
+   <td><code>"Equal"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0016</code></th>
+   <td><code>"Backspace"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0017</code></th>
+   <td><code>"Tab"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0018</code></th>
+   <td><code>"KeyQ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0019</code></th>
+   <td><code>"KeyW"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001A</code></th>
+   <td><code>"KeyE"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001B</code></th>
+   <td><code>"KeyR"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001C</code></th>
+   <td><code>"KeyT"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001D</code></th>
+   <td><code>"KeyY"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001E</code></th>
+   <td><code>"KeyU"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001F</code></th>
+   <td><code>"KeyI"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0020</code></th>
+   <td><code>"KeyO"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0021</code></th>
+   <td><code>"KeyP"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0022</code></th>
+   <td><code>"BracketLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0023</code></th>
+   <td><code>"BracketRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0024</code></th>
+   <td><code>"Enter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0025</code></th>
+   <td><code>"ControlLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0026</code></th>
+   <td><code>"KeyA"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0027</code></th>
+   <td><code>"KeyS"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0028</code></th>
+   <td><code>"KeyD"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0029</code></th>
+   <td><code>"KeyF"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002A</code></th>
+   <td><code>"KeyG"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002B</code></th>
+   <td><code>"KeyH"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002C</code></th>
+   <td><code>"KeyJ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002D</code></th>
+   <td><code>"KeyK"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002E</code></th>
+   <td><code>"KeyL"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002F</code></th>
+   <td><code>"Semicolon"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0030</code></th>
+   <td><code>"Quote"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0031</code></th>
+   <td><code>"Backquote"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0032</code></th>
+   <td><code>"ShiftLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0033</code></th>
+   <td><code>"Backslash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0034</code></th>
+   <td><code>"KeyZ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0035</code></th>
+   <td><code>"KeyX"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0036</code></th>
+   <td><code>"KeyC"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0037</code></th>
+   <td><code>"KeyV"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0038</code></th>
+   <td><code>"KeyB"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0039</code></th>
+   <td><code>"KeyN"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003A</code></th>
+   <td><code>"KeyM"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003B</code></th>
+   <td><code>"Comma"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003C</code></th>
+   <td><code>"Period"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003D</code></th>
+   <td><code>"Slash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003E</code></th>
+   <td><code>"ShiftRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003F</code></th>
+   <td><code>"NumpadMultiply"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0040</code></th>
+   <td><code>"AltLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0041</code></th>
+   <td><code>"Space"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0042</code></th>
+   <td><code>"CapsLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0043</code></th>
+   <td><code>"F1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0044</code></th>
+   <td><code>"F2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0045</code></th>
+   <td><code>"F3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0046</code></th>
+   <td><code>"F4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0047</code></th>
+   <td><code>"F5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0048</code></th>
+   <td><code>"F6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0049</code></th>
+   <td><code>"F7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004A</code></th>
+   <td><code>"F8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004B</code></th>
+   <td><code>"F9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004C</code></th>
+   <td><code>"F10"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004D</code></th>
+   <td><code>"NumLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004E</code></th>
+   <td><code>"ScrollLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004F</code></th>
+   <td><code>"Numpad7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0050</code></th>
+   <td><code>"Numpad8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0051</code></th>
+   <td><code>"Numpad9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0052</code></th>
+   <td><code>"NumpadSubtract"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0053</code></th>
+   <td><code>"Numpad4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0054</code></th>
+   <td><code>"Numpad5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0055</code></th>
+   <td><code>"Numpad6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0056</code></th>
+   <td><code>"NumpadAdd"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0057</code></th>
+   <td><code>"Numpad1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0058</code></th>
+   <td><code>"Numpad2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0059</code></th>
+   <td><code>"Numpad3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005A</code></th>
+   <td><code>"Numpad0"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005B</code></th>
+   <td><code>"NumpadDecimal"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005C</code>, <code>0x005D</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005E</code></th>
+   <td><code>"IntlBackslash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005F</code></th>
+   <td><code>"F11"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0060</code></th>
+   <td><code>"F12"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0061</code></th>
+   <td><code>"IntlRo"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0062</code>, <code>0x0063</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0064</code></th>
+   <td><code>"Convert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0065</code></th>
+   <td><code>"KanaMode"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0066</code></th>
+   <td><code>"NonConvert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0067</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0068</code></th>
+   <td><code>"NumpadEnter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0069</code></th>
+   <td><code>"ControlRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006A</code></th>
+   <td><code>"NumpadDivide"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006B</code></th>
+   <td><code>"PrintScreen"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006C</code></th>
+   <td><code>"AltRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006D</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006E</code></th>
+   <td><code>"Home"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006F</code></th>
+   <td><code>"ArrowUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0070</code></th>
+   <td><code>"PageUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0071</code></th>
+   <td><code>"ArrowLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0072</code></th>
+   <td><code>"ArrowRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0073</code></th>
+   <td><code>"End"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0074</code></th>
+   <td><code>"ArrowDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0075</code></th>
+   <td><code>"PageDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0076</code></th>
+   <td><code>"Insert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0077</code></th>
+   <td><code>"Delete"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0078</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0079</code></th>
+   <td><code>"VolumeMute"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007A</code></th>
+   <td><code>"VolumeDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007B</code></th>
+   <td><code>"VolumeUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007C</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007D</code></th>
+   <td><code>"NumpadComma"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007E</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007F</code></th>
+   <td><code>"Pause"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0080</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0081</code></th>
+   <td><code>"NumpadComma"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0082</code></th>
+   <td><code>"Lang1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0083</code></th>
+   <td><code>"Lang2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0084</code></th>
+   <td><code>"IntlYen"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0085</code></th>
+   <td><code>"OSLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0086</code></th>
+   <td><code>"OSRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0087</code></th>
+   <td><code>"ContextMenu"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0088</code></th>
+   <td><code>"BrowserStop"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0089</code></th>
+   <td>"Again" <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008A</code></th>
+   <td><code>"Props"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008B</code></th>
+   <td><code>"Undo"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008C</code></th>
+   <td><code>"Select"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008D</code></th>
+   <td><code>"Copy"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008E</code></th>
+   <td><code>"Open"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008F</code></th>
+   <td><code>"Paste"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0090</code></th>
+   <td><code>"Find"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0091</code></th>
+   <td><code>"Cut"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0092</code></th>
+   <td><code>"Help"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0093</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0094</code></th>
+   <td><code>"LaunchApp2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0095</code>, <code>0x0096</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0097</code></th>
+   <td><code>"WakeUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0098</code></th>
+   <td><code>"LaunchApp1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0099</code> ～ <code>0x00A2</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A3</code></th>
+   <td><code>"LaunchMail"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A4</code></th>
+   <td><code>"BrowserFavorites"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A5</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A6</code></th>
+   <td><code>"BrowserBack"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A7</code></th>
+   <td><code>"BrowserForward"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A8</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A9</code></th>
+   <td><code>"Eject"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00AA</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00AB</code></th>
+   <td><code>"MediaTrackNext"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00AC</code></th>
+   <td><code>"MediaPlayPause"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00AD</code></th>
+   <td><code>"MediaTrackPrevious"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00AE</code></th>
+   <td><code>"MediaStop"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00AF</code> ～ <code>0x00B2</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00B3</code></th>
+   <td><code>"MediaSelect"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00B4</code></th>
+   <td><code>"BrowserHome"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00B5</code></th>
+   <td><code>"BrowserRefresh"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00B6</code> ～ <code>0x00BE</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00BF</code></th>
+   <td><code>"F13"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C0</code></th>
+   <td><code>"F14"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C1</code></th>
+   <td><code>"F15"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C2</code></th>
+   <td><code>"F16"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C3</code></th>
+   <td><code>"F17"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C4</code></th>
+   <td><code>"F18"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C5</code></th>
+   <td><code>"F19"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C6</code></th>
+   <td><code>"F20"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C7</code></th>
+   <td><code>"F21"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C8</code></th>
+   <td><code>"F22"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C9</code></th>
+   <td><code>"F23"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00CA</code></th>
+   <td><code>"F24"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00CB ～ 0x00E0</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00E1</code></th>
+   <td><code>"BrowserSearch"</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Code_values_on_Android_and_Firefox_OS_(When_scancode_is_available)">Code values on Android and Firefox OS (When scancode is available)</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">scancode</th>
+   <th scope="col">Gecko <span class="badge geckoVersionBadge" title="(Firefox 32.0 / Thunderbird 32.0 / SeaMonkey 2.29)"><span class="badgeText">Requires Gecko 32.0</span></span></th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th scope="row"><code>0x0001</code></th>
+   <td><code>"Escape"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0002</code></th>
+   <td><code>"Digit1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0003</code></th>
+   <td><code>"Digit2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0004</code></th>
+   <td><code>"Digit3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0005</code></th>
+   <td><code>"Digit4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0006</code></th>
+   <td><code>"Digit5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0007</code></th>
+   <td><code>"Digit6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0008</code></th>
+   <td><code>"Digit7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0009</code></th>
+   <td><code>"Digit8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000A</code></th>
+   <td><code>"Digit9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000B</code></th>
+   <td><code>"Digit0"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000C</code></th>
+   <td><code>"Minus"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000D</code></th>
+   <td><code>"Equal"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000E</code></th>
+   <td><code>"Backspace"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x000F</code></th>
+   <td><code>"Tab"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0010</code></th>
+   <td><code>"KeyQ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0011</code></th>
+   <td><code>"KeyW"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0012</code></th>
+   <td><code>"KeyE"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0013</code></th>
+   <td><code>"KeyR"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0014</code></th>
+   <td><code>"KeyT"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0015</code></th>
+   <td><code>"KeyY"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0016</code></th>
+   <td><code>"KeyU"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0017</code></th>
+   <td><code>"KeyI"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0018</code></th>
+   <td><code>"KeyO"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0019</code></th>
+   <td><code>"KeyP"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001A</code></th>
+   <td><code>"BracketLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001B</code></th>
+   <td><code>"BracketRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001C</code></th>
+   <td><code>"Enter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001D</code></th>
+   <td><code>"ControlLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001E</code></th>
+   <td><code>"KeyA"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x001F</code></th>
+   <td><code>"KeyS"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0020</code></th>
+   <td><code>"KeyD"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0021</code></th>
+   <td><code>"KeyF"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0022</code></th>
+   <td><code>"KeyG"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0023</code></th>
+   <td><code>"KeyH"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0024</code></th>
+   <td><code>"KeyJ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0025</code></th>
+   <td><code>"KeyK"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0026</code></th>
+   <td><code>"KeyL"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0027</code></th>
+   <td><code>"Semicolon"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0028</code></th>
+   <td><code>"Quote"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0029</code></th>
+   <td><code>"Backquote"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002A</code></th>
+   <td><code>"ShiftLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002B</code></th>
+   <td><code>"Backslash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002C</code></th>
+   <td><code>"KeyZ"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002D</code></th>
+   <td><code>"KeyX"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002E</code></th>
+   <td><code>"KeyC"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x002F</code></th>
+   <td><code>"KeyV"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0030</code></th>
+   <td><code>"KeyB"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0031</code></th>
+   <td><code>"KeyN"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0032</code></th>
+   <td><code>"KeyM"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0033</code></th>
+   <td><code>"Comma"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0034</code></th>
+   <td><code>"Period"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0035</code></th>
+   <td><code>"Slash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0036</code></th>
+   <td><code>"ShiftRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0037</code></th>
+   <td><code>"NumpadMultiply"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0038</code></th>
+   <td><code>"AltLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0039</code></th>
+   <td><code>"Space"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003A</code></th>
+   <td><code>"CapsLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003B</code></th>
+   <td><code>"F1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003C</code></th>
+   <td><code>"F2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003D</code></th>
+   <td><code>"F3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003E</code></th>
+   <td><code>"F4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x003F</code></th>
+   <td><code>"F5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0040</code></th>
+   <td><code>"F6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0041</code></th>
+   <td><code>"F7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0042</code></th>
+   <td><code>"F8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0043</code></th>
+   <td><code>"F9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0044</code></th>
+   <td><code>"F10"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0045</code></th>
+   <td><code>"NumLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0046</code></th>
+   <td><code>"ScrollLock"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0047</code></th>
+   <td><code>"Numpad7"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0048</code></th>
+   <td><code>"Numpad8"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0049</code></th>
+   <td><code>"Numpad9"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004A</code></th>
+   <td><code>"NumpadSubtract"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004B</code></th>
+   <td><code>"Numpad4"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004C</code></th>
+   <td><code>"Numpad5"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004D</code></th>
+   <td><code>"Numpad6"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004E</code></th>
+   <td><code>"NumpadAdd"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x004F</code></th>
+   <td><code>"Numpad1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0050</code></th>
+   <td><code>"Numpad2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0051</code></th>
+   <td><code>"Numpad3"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0052</code></th>
+   <td><code>"Numpad0"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0053</code></th>
+   <td><code>"NumpadDecimal"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0054</code>, <code>0x0055</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0056</code></th>
+   <td><code>"IntlBackslash"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0057</code></th>
+   <td><code>"F11"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0058</code></th>
+   <td><code>"F12"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0059</code></th>
+   <td><code>"IntlRo"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005A</code>, <code>0x005B</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005C</code></th>
+   <td><code>"Convert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005D</code></th>
+   <td><code>"KanaMode"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005E</code></th>
+   <td><code>"NonConvert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x005F</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0060</code></th>
+   <td><code>"NumpadEnter"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0061</code></th>
+   <td><code>"ControlRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0062</code></th>
+   <td><code>"NumpadDivide"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0063</code></th>
+   <td><code>"PrintScreen"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0064</code></th>
+   <td><code>"AltRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0065</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0066</code></th>
+   <td><code>"Home"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0067</code></th>
+   <td><code>"ArrowUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0068</code></th>
+   <td><code>"PageUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0069</code></th>
+   <td><code>"ArrowLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006A</code></th>
+   <td><code>"ArrowRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006B</code></th>
+   <td><code>"End"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006C</code></th>
+   <td><code>"ArrowDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006D</code></th>
+   <td><code>"PageDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006E</code></th>
+   <td><code>"Insert"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x006F</code></th>
+   <td><code>"Delete"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0070</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0071</code></th>
+   <td><code>"VolumeMute"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0072</code></th>
+   <td><code>"VolumeDown"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0073</code></th>
+   <td><code>"VolumeUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0074</code></th>
+   <td><code>"Power"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0075</code></th>
+   <td><code>"NumpadEqual"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0076</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0077</code></th>
+   <td><code>"Pause"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0078</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0079</code></th>
+   <td><code>"NumpadComma"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007A</code></th>
+   <td><code>"Lang1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007B</code></th>
+   <td><code>"Lang2"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007C</code></th>
+   <td><code>"IntlYen"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007D</code></th>
+   <td><code>"OSLeft"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007E</code></th>
+   <td><code>"OSRight"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x007F</code></th>
+   <td><code>"ContextMenu"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0080</code></th>
+   <td><code>"BrowserStop"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0081</code></th>
+   <td>"Again" <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0082</code></th>
+   <td><code>"Props"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0083</code></th>
+   <td><code>"Undo"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0084</code></th>
+   <td><code>"Select"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0085</code></th>
+   <td><code>"Copy"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0086</code></th>
+   <td><code>"Open"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0087</code></th>
+   <td><code>"Paste"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0088</code></th>
+   <td><code>"Find"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0089</code></th>
+   <td><code>"Cut"</code> <span class="badge geckoVersionBadge" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)"><span class="badgeText">Requires Gecko 38.0</span></span></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008A</code></th>
+   <td><code>"Help"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008B</code> ～ <code>0x008D</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008E</code></th>
+   <td><code>"Sleep"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x008F</code></th>
+   <td><code>"WakeUp"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0090</code></th>
+   <td><code>"LaunchApp1"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x0091</code> ～ <code>0x009B</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x009C</code></th>
+   <td><code>"BrowserFavorites"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x009D</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x009E</code></th>
+   <td><code>"BrowserBack"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x009F</code></th>
+   <td><code>"BrowserForward"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A0</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A1</code></th>
+   <td><code>"Eject"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A2</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A3</code></th>
+   <td><code>"MediaTrackNext"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A4</code></th>
+   <td><code>"MediaPlayPause"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A5</code></th>
+   <td><code>"MediaTrackPrevious"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A6</code></th>
+   <td><code>"MediaStop"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00A7</code> ～ <code>0x00AC</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00AD</code></th>
+   <td><code>"BrowserRefresh"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00AE</code> ～ <code>0x00B6</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00B7</code></th>
+   <td><code>"F13"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00B8</code></th>
+   <td><code>"F14"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00B9</code></th>
+   <td><code>"F15"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00BA</code></th>
+   <td><code>"F16"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00BB</code></th>
+   <td><code>"F17"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00BC</code></th>
+   <td><code>"F18"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00BD</code></th>
+   <td><code>"F19"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00BE</code></th>
+   <td><code>"F20"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00BF</code></th>
+   <td><code>"F21"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C0</code></th>
+   <td><code>"F22"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C1</code></th>
+   <td><code>"F23"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C2</code></th>
+   <td><code>"F24"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00C3</code> ～ <code>0x00D8</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00D9</code></th>
+   <td><code>"BrowserSearch"</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x00DA</code> ～ <code>0x01CF</code></th>
+   <td><code>""</code></td>
+  </tr>
+  <tr>
+   <th scope="row"><code>0x01D0</code></th>
+   <td><code>"Fn"</code></td>
+  </tr>
+ </tbody>
+</table>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../../tag/API.html">API</a></li>
+              <li><a href="../../../tag/events-2.html">events</a></li>
+              <li><a href="../../../tag/Events.html">Events</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Property">Property</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Read-only">Read-only</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/cvrebert">cvrebert</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jwhitlock">jwhitlock</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Masayuki">Masayuki</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/cvrebert">cvrebert</a>,
+                      <time datetime="2015-09-21T22:01:58-07:00">Sep 21, 2015, 10:01:58 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../KeyboardEvent.html"><code>KeyboardEvent</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Constructor</strong></a><ol><li><a href="KeyboardEvent.html" title="The KeyboardEvent() constructor creates a new KeyboardEvent."><code>KeyboardEvent()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="altKey.html" title="The KeyboardEvent.altKey read-only property is a Boolean indicates if the alt key was pressed (true) or not (false) when the event occured."><code>KeyboardEvent.altKey</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="charCode.html" title="The KeyboardEvent.charCode read-only property returns the Unicode value of a character key pressed during a keypress event."><code>KeyboardEvent.charCode</code></a></li><li><em><code>KeyboardEvent.code</code></em></li><li><a href="ctrlKey.html" title="The KeyboardEvent.ctrlKey read-only property returns a Boolean that indicates if the control key was pressed (true) or not (false) when the event occured."><code>KeyboardEvent.ctrlKey</code></a></li><li><a href="isComposing.html" title="The KeyboardEvent.isComposing read-only property returns a Boolean value indicating if the event is fired after compositionstart and before compositionend."><code>KeyboardEvent.isComposing</code></a></li><li><a href="key.html" title="The KeyboardEvent.key read-only property returns the value of a key or keys pressed by the user. It will be one of the following values:"><code>KeyboardEvent.key</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="keyCode.html" title="The KeyboardEvent.keyCode read-only property represents a system and implementation dependent numerical code identifying the unmodified value of the pressed key. This is usually the decimal ASCII (RFC 20) or Windows 1252 code corresponding to the key. If the key can't be identified, this value is 0."><code>KeyboardEvent.keyCode</code></a></li><li><a href="location.html" title="The KeyboardEvent.location read-only property returns an unsigned long representing the location of the key on the keyboard or other input device"><code>KeyboardEvent.location</code></a></li><li><a href="metaKey.html" title="The KeyboardEvent.metaKey read-only property returning a Boolean that indicates if the Meta key was pressed (true) or not (false) when the event occured."><code>KeyboardEvent.metaKey</code></a></li><li><a href="shiftKey.html" title="The KeyboardEvent.shiftKey read-only property indicates if the shift key was pressed (true) or not (false) when the event occurred."><code>KeyboardEvent.shiftKey</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="which.html" title="The KeyboardEvent.which read-only property returns the numeric keyCode of the key pressed, or the character code (charCode) for an alphanumeric key pressed."><code>KeyboardEvent.which</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="getModifierState.html" title="The KeyboardEvent.getModifierState() method returns the current state of the specified modifier key, true if the modifier is active (that is the modifier key is pressed or locked), otherwise, false."><code>KeyboardEvent.getModifierState()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="initKeyboardEvent.html" title="The KeyboardEvent.initKeyboardEvent() initializes the attributes of a keyboard event object. This method was introduced in draft of DOM Level 3 Events, but deprecated in newer draft. Gecko won't support this feature since implementing this method as experimental broke existing web apps (see bug&nbsp;999645). Web applications should use constructor instead of this if it's available."><code>KeyboardEvent.initKeyboardEvent()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="initKeyEvent.html" title="The KeyboardEvent.initKeyEvent method is used to initialize the value of an event created using document.createEvent(&quot;KeyboardEvent&quot;). Events initialized in this way must have been created with the document.createEvent(&quot;KeyboardEvent&quot;) method. initKeyEvent must be called to set the event before it is dispatched."><code>KeyboardEvent.initKeyEvent()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Inheritance:</strong></a><ol><li><a href="../UIEvent.html"><code>UIEvent</code></a></li><li><a href="../Event.html"><code>Event</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../../Events/abort.html"><code>abort</code></a></li><li><a href="../../Events/beforeinput.html"><code>beforeinput</code></a></li><li><a href="../../Events/blur.html"><code>blur</code></a></li><li><a href="../../Events/click.html"><code>click</code></a></li><li><a href="../../Events/compositionstart.html"><code>compositionstart</code></a></li><li><a href="../../Events/compositionupdate.html"><code>compositionupdate</code></a></li><li><a href="../../Events/compositionend.html"><code>compositionend</code></a></li><li><a href="../../Events/dblclick.html"><code>dblclick</code></a></li><li><a href="../../Events/error.html"><code>error</code></a></li><li><a href="../../Events/focus.html"><code>focus</code></a></li><li><a href="../../Events/focusin.html"><code>focusin</code></a></li><li><a href="../../Events/focusout.html"><code>focusout</code></a></li><li><a href="../../Events/input.html"><code>input</code></a></li><li><a href="../../Events/keydown.html"><code>keydown</code></a></li><li><a href="../../Events/keyup.html"><code>keyup</code></a></li><li><a href="../../Events/load.html"><code>load</code></a></li><li><a href="../../Events/mousedown.html"><code>mousedown</code></a></li><li><a href="../../Events/mouseenter.html"><code>mouseenter</code></a></li><li><a href="../../Events/mouseleave.html"><code>mouseleave</code></a></li><li><a href="../../Events/mousemove.html"><code>mousemove</code></a></li><li><a href="../../Events/mouseout.html"><code>mouseout</code></a></li><li><a href="../../Events/mouseover.html"><code>mouseover</code></a></li><li><a href="../../Events/mouseup.html"><code>mouseup</code></a></li><li><a href="../../Events/resize.html"><code>resize</code></a></li><li><a href="../../Events/scroll.html"><code>scroll</code></a></li><li><a href="../../Events/select.html"><code>select</code></a></li><li><a href="../../Events/unload.html"><code>unload</code></a></li><li><a href="../../Events/wheel.html"><code>wheel</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for DOM Events</strong></a><ol><li><a href="../CompositionEvent.html"><code>CompositionEvent</code></a></li><li><a href="../Event.html"><code>Event</code></a></li><li><a href="../EventListener.html"><code>EventListener</code></a></li><li><a href="../EventTarget.html"><code>EventTarget</code></a></li><li><a href="../FocusEvent.html"><code>FocusEvent</code></a></li><li><a href="../InputEvent.html"><code>InputEvent</code></a></li><li><a href="../MouseEvent.html"><code>MouseEvent</code></a></li><li><a href="../MouseScrollEvent.html"><code>MouseScrollEvent</code></a></li><li><a href="../MouseWheelEvent.html"><code>MouseWheelEvent</code></a></li><li><a href="../MutationEvent.html"><code>MutationEvent</code></a></li><li><a href="../ProgressEvent.html"><code>ProgressEvent</code></a></li><li><a href="../UIEvent.html"><code>UIEvent</code></a></li><li><a href="../WheelEvent.html"><code>WheelEvent</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/KeyboardEvent/code$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/KeyboardEvent/code$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:02:21 GMT -->
+</body></html>

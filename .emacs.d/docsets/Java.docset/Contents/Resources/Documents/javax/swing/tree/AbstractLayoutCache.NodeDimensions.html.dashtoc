@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"NodeDimensions()","path":"NodeDimensions--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getNodeDimensions(Object, int, int, boolean, Rectangle)","path":"getNodeDimensions-java.lang.Object-int-int-boolean-java.awt.Rectangle-","entryType":"Method"}]}

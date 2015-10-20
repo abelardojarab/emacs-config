@@ -1,0 +1,917 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/MDN/Doc_status/API/File_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:08:52 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>API: File API documentation status</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/File_API$json">
+  <link rel="canonical" href="File_API.html">
+
+            <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/File_API" title="Statut de la documentation API : File API">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="API: File API documentation status">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/File_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/File_API">
+  <meta name="twitter:title" content="API: File API documentation status">
+    <meta property="og:description" content="See also localization status of this section.">
+  <meta name="description" content="See also localization status of this section.">
+  <meta name="twitter:description" content="See also localization status of this section.">
+  
+      
+  </head>
+<body data-slug="MDN/Doc_status/API/File_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'compat_api': false,'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/MDN/Doc_status/API/File_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FFile_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/MDN/Doc_status/API/File_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FFile_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/File_API" title="Statut de la documentation API : File API">Français</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/File_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/File_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/File_API$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/MDN" rel="v:url" property="v:title">The MDN project</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status" rel="v:url" property="v:title">Doc status by topic</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">API documentation status overview</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">API: File API documentation status</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>API: File API documentation status</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 2 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-closed wiki-right-none wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><!-- --></div>
+
+<div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>This page tracks ongoing documentation work in the MDN <strong>File API </strong>section. Feel free to contribute!</p>
+
+<div class="note">
+<p><strong>Note</strong>: This list is not yet complete as proper tagging of API pages is still to be done.</p>
+</div>
+
+<h2 id="Summary">Summary</h2>
+
+<p></p><table class="docstatussummary standard-table"> 
+  <thead> 
+    <tr> 
+ 
+    <th><a href="../../../Web/API/Index.html">Pages</a></th> 
+ 
+    <th><a href="File_API.html#Needs*_tags">Needs* tags</a></th> 
+ 
+    <th><a href="File_API.html#Missing_tags">Missing tags</a></th> 
+ 
+    <th><a href="File_API.html#Editorial_reviews">Editorial reviews</a></th> 
+ 
+    <th><a href="File_API.html#Technical_reviews">Technical reviews</a></th> 
+ 
+    <th><a href="File_API.html#Outdated_pages">Outdated pages</a></th> 
+ 
+    <th><a href="File_API.html#Missing_pages">Missing pages</a></th> 
+ 
+    <th><a href="File_API.html#Documentation_requests">Documentation requests</a></th> 
+ 
+    </tr> 
+  </thead> 
+  <tbody> 
+    <tr> 
+ 
+    <td>33</td> 
+ 
+    <td style="background-color: rgb(255, 255, 153);">2 (7%) </td> 
+ 
+    <td style="background-color: rgb(204, 255, 153);">0 (0%) </td> 
+ 
+    <td style="background-color: rgb(204, 255, 153);">1 (4%) </td> 
+ 
+    <td style="background-color: rgb(204, 255, 153);">0 (0%) </td> 
+ 
+    <td style="background-color: rgb(204, 255, 153);">1 (4%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">17 (52%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">3 (10%) </td> 
+ 
+    </tr> 
+  </tbody> 
+</table> 
+ 
+<p>See also <a href="File_API.html#Localizations">localization status</a> of this section.</p> 
+ 
+ 
+ 
+ 
+ 
+ 
+<h2 id="Needs*_tags">Needs* tags</h2> 
+ 
+ 
+<p><strong>Found 2 pages.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag#Document_metadata">how to deal with meta-tags</a>.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li> 
+        <strong>NeedsMarkupWork</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Entry.html">Entry</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsContent</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/File/mozFullPath.html">File.mozFullPath</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Editorial_reviews">Editorial reviews</h2> 
+ 
+ 
+<p><strong>Found 1 pages.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_an_editorial_review">how to do an editorial review</a>.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/DirectoryEntry.html">DirectoryEntry</a></li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Outdated_pages">Outdated pages</h2> 
+ 
+ 
+<p><strong>Found 1 pages.</strong> These pages haven't been updated in over a year. Outdated pages can have problems with both content and format. Look at these pages and consider: Is this page talking about the Web of today? Does it look consistent with newer pages in this topic area? If not, make any needed changes.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/File_System_API/Introduction.html">Introduction to the File System API</a><br><small>665 days old</small></li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Missing_pages">Missing pages</h2> 
+ 
+ 
+<p><strong>Found 17 pages.</strong> These pages are not yet written. Please help to create them.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/File/File.html" class="new">File.File</a></li> 
+ 
+    <li><a href="../../../Web/API/File/lastModified.html" class="new">File.lastModified</a></li> 
+ 
+    <li><a href="../../../Web/API/File/path.html" class="new">File.path</a></li> 
+ 
+    <li><a href="../../../Web/API/FileList/item.html" class="new">FileList.item</a></li> 
+ 
+    <li><a href="../../../Web/API/FileList/length.html" class="new">FileList.length</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReader/FileReader.html" class="new">FileReader.FileReader</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReader/onabort.html" class="new">FileReader.onabort</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReader/onerror.html" class="new">FileReader.onerror</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReader/onload.html" class="new">FileReader.onload</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReader/onloadend.html" class="new">FileReader.onloadend</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReader/onloadstart.html" class="new">FileReader.onloadstart</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReader/onprogress.html" class="new">FileReader.onprogress</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReaderSync/FileReaderSync.html" class="new">FileReaderSync.FileReaderSync</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReaderSync/readAsArrayBuffer.html" class="new">FileReaderSync.readAsArrayBuffer</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReaderSync/readAsBinaryString.html" class="new">FileReaderSync.readAsBinaryString</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReaderSync/readAsDataURL.html" class="new">FileReaderSync.readAsDataURL</a></li> 
+ 
+    <li><a href="../../../Web/API/FileReaderSync/readAsText.html" class="new">FileReaderSync.readAsText</a></li> 
+ 
+</ul> 
+</div> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    <h2 id="Documentation_requests">Documentation requests</h2> 
+    <p><strong>Found 3 bugs.</strong> Documentation request bugs can contain various kinds work related to MDN pages. Read through the bug and ask questions in the bug if in doubt.</p> 
+     
+    <table class="standard-table"> 
+        <thead> 
+            <tr> 
+                <th>Bug</th> 
+                <th>Summary</th> 
+            </tr> 
+        </thead> 
+    <tbody> 
+     
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=993663" class="external">993663</a></td> 
+        <td>Broken link to loadend event on FileReader.readAsArrayBuffer</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1003769" class="external">1003769</a></td> 
+        <td>Document FileReader.onload event handler</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1208881" class="external">1208881</a></td> 
+        <td>No mention of how to open file in "append" mode</td> 
+    </tr> 
+     
+     
+    </tbody> 
+    </table> 
+    <p>Browse as <a href="https://bugzilla.mozilla.org/buglist.cgi?bug_id=993663,1003769,1208881," class="external">bug list</a>.</p> 
+ 
+ 
+ 
+ 
+ 
+ 
+<h2 id="Localizations">Localizations</h2> 
+<p>Please help us to localize this documentation into different languages. Read more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Localize/Translating_pages">how to translate</a>.</p> 
+<table class="standard-table"> 
+  <thead> 
+    <tr> 
+        <th>Language</th> 
+        <th>Pages</th> 
+        <th>Translated</th> 
+        <th>Translations up to date</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+     
+        <tr> 
+            <td><a href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/File_API">fr</a></td> 
+            <td>32</td> 
+            <td>2 (6%)</td> 
+            <td>1 (50%)</td> 
+        </tr> 
+     
+</tbody> 
+</table> 
+ 
+ 
+ 
+ 
+<div id="json" style="display: none;">{"pages":{"title":"Pages","link":"/en-US/docs/Web/API/Index","counter":33},"needsTags":{"title":"Needs* tags","link":"#Needs*_tags","counter":2,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag#Document_metadata\"&gt;how to deal with meta-tags&lt;/a&gt;."},"requiredTags":{"title":"Missing tags","link":"#Missing_tags","counter":0,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag\"&gt;how to tag pages&lt;/a&gt;."},"editorialReviews":{"title":"Editorial reviews","link":"#Editorial_reviews","counter":1,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_an_editorial_review\"&gt;how to do an editorial review&lt;/a&gt;."},"technicalReviews":{"title":"Technical reviews","link":"#Technical_reviews","counter":0,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_a_technical_review\"&gt;how to do a technical review&lt;/a&gt;."},"outdated":{"title":"Outdated pages","link":"#Outdated_pages","counter":1,"help":"These pages haven't been updated in over a year. Outdated pages can have problems with both content and format. Look at these pages and consider: Is this page talking about the Web of today? Does it look consistent with newer pages in this topic area? If not, make any needed changes."},"missing":{"title":"Missing pages","link":"#Missing_pages","counter":17,"help":"These pages are not yet written. Please help to create them."},"dr":{"title":"Documentation requests","link":"#Documentation_requests","counter":3}}</div><p></p>
+
+<h2 id="Notes">Notes</h2>
+
+<h3 id="Tagging_standard">Tagging standard</h3>
+
+<ul>
+ <li>Grouping tag is: "File API"</li>
+</ul>
+
+<h3 id="Other_tasks_to_do">Other tasks to do</h3>
+
+<ul>
+ <li>TBD</li>
+</ul>
+
+<h3 id="Tutorial_to-do_list">Tutorial to-do list</h3>
+
+<ul>
+ <li>TBD</li>
+</ul>
+
+<h3 id="Notes_for_translators">Notes for translators</h3>
+
+<p>Any notes here? Where do we expect updates, so that localizers don't translate and update too often?</p>
+
+<h3 id="Specifications">Specifications</h3>
+
+<p>The interfaces defined in the following specifications are tracked by this status page:</p>
+
+<table class="spec-table standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/FileAPI/" class="external" lang="en" title="The 'File API' specification" hreflang="en">File API</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+ </tbody>
+</table>
+
+<p></p><div class="overheadIndicator communitybox"> 
+    <div class="column-container"> 
+        <div id="Help_topic" class="communitysubhead">Help the 'API/File_API' documentation project…</div> 
+        <div class="communitycontact">Topic driver : <a href="https://developer.mozilla.org/en-US/profiles/sheppy">Eric Shepherd</a> (IRC nickname: sheppy)</div> 
+        <div class="communitycontact">Look at the current <a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">status</a> of the 'API/File_API' documentation.</div> 
+        <div class="communitysubhead communitycontact">Don't hesitate to contact us on <a href="irc://irc.mozilla.org/mdn">#mdn</a> or on the <em>dev-mdc</em> mailing-list:</div> 
+        <ul class="communitymailinglist"><a href="https://lists.mozilla.org/listinfo/dev-mdc" class="external">Mailing list</a> 
+   
+   
+  <li><a href="http://groups.google.com/group/mozilla.dev.mdc" class="external">Google Group</a></li> 
+  <li><a href="http://groups.google.com/group/mozilla.dev.mdc/feeds" class="external">RSS feed</a></li> 
+</ul> 
+    </div> 
+</div><p></p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Documentation status">Documentation status</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/MDN meta">MDN meta</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/MDN Meta">MDN Meta</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,
+                      <time datetime="2015-09-26T07:58:58-07:00">Sep 26, 2015, 7:58:58 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/About">About MDN</a>
+
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/About">About MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/About/Promote">Promote MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Send feedback about MDN</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Getting_started">Get started on MDN</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute">Help improve MDN</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute">Help improve MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto">Things you can do</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Localize">Localizing MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Editor">MDN editor UI</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Tools">Tools for power users</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Guidelines">Guidelines</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Processes">Work processes</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Structures">Content structures</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Kuma">Kuma: MDN's wiki platform</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">Doc status by topic</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">Doc status by topic</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Overview">Are we documented yet?</a></li>
+  </ol></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+    <ol> 
+        <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">Documentation status pages</a></strong></li> 
+        <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Overview">Overview</a></strong></li> 
+        <li><strong>Sections:</strong></li> 
+            <ol> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Accessibility">Accessibility</a> 
+                </li><li><a href="../API.html">API</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Apps">Apps</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/CSS">CSS</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/DevTools">DevTools</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Firefox_OS">Firefox OS</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Games">Games</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/HTML">HTML</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/JavaScript">JavaScript</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Marketplace">Marketplace</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/MathML">MathML</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/SVG">SVG</a> 
+            </li></ol> 
+         
+        <li><strong>Maintenance pages:</strong></li> 
+            <ol> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/needs-review/editorial">Editorial reviews</a></li> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/needs-review/technical">Technical reviews</a></li> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/with-errors">Pages with errors</a></li> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/without-parent">Pages without a parent</a></li> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/top-level">Top-level pages</a></li> 
+            </ol> 
+         
+        <li><strong>Localizations:</strong></li> 
+            <ol> 
+                <li><a href="https://developer.mozilla.org/bn-BD/docs/MDN/Doc_status/Overview">বাংলা (বাংলাদেশ) (bn-BD)</a> 
+                </li><li><a href="https://developer.mozilla.org/de/docs/MDN/Doc_status/Overview">Deutsch (de)</a> 
+                </li><li><a href="https://developer.mozilla.org/es/docs/MDN/Doc_status/Overview">Español (es)</a> 
+                </li><li><a href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/Overview">Français (fr)</a> 
+                </li><li><a href="https://developer.mozilla.org/ja/docs/MDN/Doc_status/Overview">日本語 (ja)</a> 
+                </li><li><a href="https://developer.mozilla.org/pl/docs/MDN/Doc_status/Overview">Polski (pl)</a> 
+                </li><li><a href="https://developer.mozilla.org/pt-BR/docs/MDN/Doc_status/Overview">Português (do Brasil) (pt-BR)</a> 
+                </li><li><a href="https://developer.mozilla.org/ru/docs/MDN/Doc_status/Overview">Русский (ru)</a> 
+                </li><li><a href="https://developer.mozilla.org/zh-CN/docs/MDN/Doc_status/Overview">中文 (简体) (zh-CN)</a> 
+            </li></ol> 
+    </ol> 
+
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/MDN/Doc_status/API/File_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/MDN/Doc_status/API/File_API$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/MDN/Doc_status/API/File_API" selected="">
+          English (US)
+        </option>
+                  <option value="/fr/docs/MDN/Doc_status/API/File_API">
+            Français
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/MDN/Doc_status/API/File_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:08:55 GMT -->
+</body></html>

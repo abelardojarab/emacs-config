@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"apply(ObjectName)","path":"apply-javax.management.ObjectName-","entryType":"Method"},{"name":"setMBeanServer(MBeanServer)","path":"setMBeanServer-javax.management.MBeanServer-","entryType":"Method"}]}

@@ -1,0 +1,946 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/JSAPI Reference?page=2 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 21:59:35 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: JSAPI Reference</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: JSAPI Reference" href="../feeds/atom/tag/JSAPI%20Reference">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'compat_api': false,'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/JSAPI Reference?page=2" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FJSAPI+Reference%3Fpage%3D2" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/JSAPI Reference?page=2" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FJSAPI+Reference%3Fpage%3D2" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: JSAPI Reference</h1>
+                <ol class="pagination">
+      <li class="prev">
+      <a href="JSAPI%20Reference2679.html?page=1">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="JSAPI%20Reference2679.html?page=1">1</a>
+    </li>
+      <li class="selected">
+      <a href="JSAPI%20Reference4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="JSAPI%20Reference9ba9.html?page=3">3</a>
+    </li>
+      <li>
+      <a href="JSAPI%20Referencefdb0.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="JSAPI%20Referenceaf4d.html?page=5">5</a>
+    </li>
+          <li class="next">
+      <a href="JSAPI%20Reference9ba9.html?page=3">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 486 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSID_IS_ZERO.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSID_IS_ZERO</a>
+                                  <small>JSID_IS_ZERO tests whether a specified JS ID, id, is zero (0 in its integer representation).</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSID_VOID.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSID_VOID</a>
+                                  <small>JSID_VOID does not occur in JS scripts but may be used to indicate the absence of a valid jsid. A ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/jsint.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/jsint</a>
+                                  <small>jsint and jsuint are 32-bit integer types.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSIteratorOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSIteratorOp</a>
+                                  <small>The JavaScript engine calls the JSExtendedClass.iteratorObject callback to create an iterator ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSMarkOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSMarkOp</a>
+                                  <small>Call JS_MarkGCThing for each GC thing directly reachable from obj. Use JSVAL_IS_GCTHING to check ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSNative.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSNative</a>
+                                  <small>JSNative is the type of native implementations of JavaScript functions.&nbsp; Full documentation of how ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSNewEnumerateOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSNewEnumerateOp</a>
+                                  <small>From SpiderMonkey 38, JSNewEnumerateOp is the type of ObjectOps::enumerate. This callback overrides ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSNewResolveOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSNewResolveOp</a>
+                                  <small>Like JSResolveOp, but flags provide contextual information about the property access.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObject.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObject</a>
+                                  <small>Objects are made up of the following parts:</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOp</a>
+                                  <small>The callbacks of this type are:</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.defaultValue</a>
+                                  <small>The JSObjectOps.defaultValue callback corresponds to the [[DefaultValue]] method defined in ECMA ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-2.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.defineProperty</a>
+                                  <small>Define obj[id], an own property of obj named id, having the given initial value, with the specified ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-3.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.destroyObjectMap</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-4.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.dropProperty</a>
+                                  <small>The following contract governs JSObjectOps callers and implementations:</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-5.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.enumerate</a>
+                                  <small>For native objects, the enumerate callback first checks the JSCLASS_NEW_ENUMERATE flag of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-6.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.getAttributes</a>
+                                  <small>Get or set attributes of the property obj[id]. Return JS_FALSE on error or exception, else JS_TRUE ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-7.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.getProperty</a>
+                                  <small>Get, set, or delete obj[id], returning JS_FALSE on error or exception, JS_TRUE on success. If ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-8.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.getRequiredSlot</a>
+                                  <small>Get and set a required slot, one that should already have been allocated. These operations are ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-9.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.lookupProperty</a>
+                                  <small>Look for id in obj and its prototype chain, returning JS_FALSE on error or exception, JS_TRUE on ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-10.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.newObjectMap</a>
+                                  <small>Create a new instance of (a concrete subclass of) JSObjectMap (see jsobj.h), with the nrefs and ops ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps-11.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectOps.setProto</a>
+                                  <small>These hooks must check for cycles without deadlocking, and otherwise take special steps. See ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectPrincipalsFinder.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSObjectPrincipalsFinder</a>
+                                  <small>The JavaScript engine calls this callback to obtain principals for a JSPrincipals.subsume check.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPrincipals.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPrincipals</a>
+                                  <small>JSPrincipals is the abstract base class of all principals objects, the objects that identify the ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPRINCIPALS_HOLD.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPRINCIPALS_HOLD</a>
+                                  <small>JSPRINCIPALS_HOLD and JSPRINCIPALS_DROP are used to manage memory for JSPrincipals objects.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSProperty.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSProperty</a>
+                                  <small>JSProperty is the abstract base class of all object properties. It is used internally in ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPropertyDescriptor.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPropertyDescriptor</a>
+                                  <small>The JSPropertyDescriptor holds the object that has the property, attributes of the property, getter ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPropertyOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPropertyOp</a>
+                                  <small>They are also the types of the JSClass.addProperty, getProperty, and setProperty callbacks, which ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPropertySpec.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSPropertySpec</a>
+                                  <small>JSPropertySpec defines the attributes for a single JS property to associate with an object. Pass to ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSProtoKey.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSProtoKey</a>
+                                  <small>Each of these types corresponds to standard objects in JavaScript. Some of them are Nightly only ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSReserveSlotsOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSReserveSlotsOp</a>
+                                  <small>JSClass offers the following hook:</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSResolveOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSResolveOp</a>
+                                  <small>JSResolveOp callback is a hook which is called when a property is not found on an object.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSRuntime.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSRuntime</a>
+                                  <small>In the JSAPI, JSRuntime is the top-level object that represents an instance of the JavaScript ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSString.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSString</a>
+                                  <small>Conceptually, a JavaScript string is just an array of char16_t characters and a length. You should ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSStringFinalizer.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSStringFinalizer</a>
+                                  <small>JSStringFinalizer::finalize finalizes external strings created by JS_NewExternalString.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSTraceOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSTraceOp</a>
+                                  <small>JSTraceOp is the function type for trace operation of the class called to enumerate all traceable ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSType.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSType</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_BOOLEAN.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_BOOLEAN</a>
+                                  <small>JSVAL_IS_BOOLEAN(v) is true if the given JavaScript value, v, is a boolean value (that is, it is ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_DOUBLE.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_DOUBLE</a>
+                                  <small>JSVAL_IS_DOUBLE(v) is true if v is a number represented in memory as a jsdouble.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_GCTHING.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_GCTHING</a>
+                                  <small>JSVAL_IS_GCTHING(v) is true if the jsval v is either JSVAL_NULL or a reference to a value that is ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_INT.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_INT</a>
+                                  <small>JSVAL_IS_INT(v) is true if the jsval v is a number represented in memory as an integer.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_NULL.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_NULL</a>
+                                  <small>JSVAL_IS_NULL(v) is true if v is JSVAL_NULL, which is the JavaScript null value.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_NUMBER.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_NUMBER</a>
+                                  <small>JSVAL_IS_NUMBER(v) is true if v is a JavaScript number.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_OBJECT.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_OBJECT</a>
+                                  <small>JSVAL_IS_OBJECT(v) returns true if v is either an object or JSVAL_NULL. This indicates that it is ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_PRIMITIVE.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_PRIMITIVE</a>
+                                  <small>JSVAL_IS_PRIMITIVE(v) is true if v is undefined, null, a boolean, a number, or a string. Otherwise ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_STRING.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_STRING</a>
+                                  <small>JSVAL_IS_STRING(v) is true if v is a string.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_VOID.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_IS_VOID</a>
+                                  <small>JSVAL_IS_VOID(v) is true if v is JSVAL_VOID, which represents the JavaScript value undefined.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_LOCK.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_LOCK</a>
+                                  <small>JSVAL_LOCK is a deprecated feature that is supported only for backward compatibility with existing ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_NULL.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_NULL</a>
+                                  <small>JSVAL_NULL is a jsval constant that represents the JavaScript value null. It is equivalent to ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_ONE.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_ONE</a>
+                                  <small>JSVAL_ONE is equivalent to INT_TO_JSVAL (1).</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_BOOLEAN.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_BOOLEAN</a>
+                                  <small>JSVAL_TO_BOOLEAN casts the value v to a C integer, either 0 or 1. As a precondition, ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_DOUBLE.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_DOUBLE</a>
+                                  <small>JSVAL_TO_DOUBLE casts a specified JS value, v, to a C floating-point number of type jsdouble. As a ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_GCTHING.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_GCTHING</a>
+                                  <small>JSVAL_TO_GCTHING casts a jsval, v, to a raw pointer. The type of the result is void *.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_INT.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_INT</a>
+                                  <small>JSVAL_TO_INT converts a specified integer jsval, v, to the corresponding C integer value. If v is ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_OBJECT.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_OBJECT</a>
+                                  <small>JSVAL_TO_OBJECT casts the argument, v, to type JSObject&nbsp;*. As a precondition, JSVAL_IS_OBJECT (v) ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_STRING.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TO_STRING</a>
+                                  <small>JSVAL_TO_STRING casts the argument, v, to type JSString&nbsp;*. As a precondition, JSVAL_IS_STRING (v) ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TRUE.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_TRUE</a>
+                                  <small>JSVAL_TRUE and JSVAL_FALSE are jsval constants that represent the JavaScript boolean values, true ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_UNLOCK.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_UNLOCK</a>
+                                  <small>JSVAL_UNLOCK is a deprecated feature that is supported only for backward compatibility with ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_VOID.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_VOID</a>
+                                  <small>JSVAL_VOID is a jsval constant that represents the JavaScript value undefined.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_ZERO.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVAL_ZERO</a>
+                                  <small>JSVAL_ZERO is equivalent to INT_TO_JSVAL (0).</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVersion.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSVersion</a>
+                                  <small>The JSVersion enumerated type includes the following values. Each version has a name, which is a ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSXDRObjectOp.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSXDRObjectOp</a>
+                                  <small>Serialize or deserialize an object, given an XDR state record representing external data. See ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AddArgumentFormatter.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AddArgumentFormatter</a>
+                                  <small>JS_AddArgumentFormatter establishes formatter as the conversion function for format strings ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AddExternalStringFinalizer.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AddExternalStringFinalizer</a>
+                                  <small>Add a finalizer for external strings created by JS_NewExternalString using a type-code returned ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AddFinalizeCallback.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AddFinalizeCallback</a>
+                                  <small>JS_AddFinalizeCallback add a callback function which the garbage collector calls at several points ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AddRoot.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AddRoot</a>
+                                  <small>The JS_Add*Root and functions add a C/C++ variable to the garbage collector's root set, the set of ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AliasElement.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AliasElement</a>
+                                  <small>JS_AliasElement assigns an alternate index number for an element or numeric property associated ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AliasProperty.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AliasProperty</a>
+                                  <small>JS_AliasProperty assigns an alternate name for a property associated with a native object. obj is ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AlreadyHasOwnProperty.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_AlreadyHasOwnProperty</a>
+                                  <small>These functions attempt to determine whether a property already exists on a specific JSObject ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ASSERT_STRING_IS_FLAT.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ASSERT_STRING_IS_FLAT</a>
+                                  <small>JS_ASSERT_STRING_IS_FLAT asserts the string is flattened, and returns a pointer to JSFlatString.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_BeginRequest.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_BeginRequest</a>
+                                  <small>Indicates to the JS engine that the calling thread is entering a region of code that may call into ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_BindCallable.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_BindCallable</a>
+                                  <small>JS_BindCallable binds the given callable to use the given object as this.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_BufferIsCompilableUnit.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_BufferIsCompilableUnit</a>
+                                  <small>Given a buffer, return false if the buffer might become a valid JavaScript statement with the ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CallFunction.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CallFunction</a>
+                                  <small>Calls a specified JS function.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CheckAccess.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CheckAccess</a>
+                                  <small>Check whether a running script may access a given object property.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearContextThread.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearContextThread</a>
+                                  <small>Transfer a JSContext from one thread to another.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearDateCaches.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearDateCaches</a>
+                                  <small>JS_ClearDateCaches clears the cache of calculated local time from each Date object. Call to ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearNewbornRoots.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearNewbornRoots</a>
+                                  <small>The last GC thing of each type (object, string, double, external string types) created on a given ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearNonGlobalObject.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearNonGlobalObject</a>
+                                  <small>JS_ClearNonGlobalObject removes all of obj 's own properties, except the special __proto__ and ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearPendingException.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearPendingException</a>
+                                  <small>JS_ClearPendingException cancels the currently pending exception in cx, if any. (There is a pending ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearRegExpStatics.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearRegExpStatics</a>
+                                  <small>JS_ClearRegExpStatics clears the pending input string and flags of the built-in RegExp object.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearScope.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ClearScope</a>
+                                  <small>JS_ClearScope removes all of obj 's own properties, except the special __proto__ and __parent__ ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CloneFunctionObject.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CloneFunctionObject</a>
+                                  <small>JS_CloneFunctionObject creates a new function object from funobj. The new object has the same code ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompareStrings.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompareStrings</a>
+                                  <small>JS_CompareStrings compares two JS strings, str1 and str2. If the strings are identical in content ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileFileHandleForPrincipals.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileFileHandleForPrincipals</a>
+                                  <small>Please provide a description of this function.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileFileHandleForPrincipalsVersion.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileFileHandleForPrincipalsVersion</a>
+                                  <small>Please provide a description for this function.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileFunction.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileFunction</a>
+                                  <small>JS_CompileFunction compiles a function from a text string, bytes, and optionally associates it with ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileFunctionForPrincipals.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileFunctionForPrincipals</a>
+                                  <small>JS_CompileFunctionForPrincipals compiles a security-enabled function from a text string, bytes, and ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileScript.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileScript</a>
+                                  <small>JS_CompileScript compiles a script, source, for execution. JS_CompileUCScript is the Unicode ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileScriptForPrincipals.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileScriptForPrincipals</a>
+                                  <small>JS_CompileScriptForPrincipals compiles a security-enabled script, src, for execution. ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileUCFunctionForPrincipalsVersion.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileUCFunctionForPrincipalsVersion</a>
+                                  <small>Please provide a description for this function.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileUTF8File.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileUTF8File</a>
+                                  <small>JS_CompileUTF8File compiles the text of script in an external file location for execution by the JS ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileUTF8FileHandle.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CompileUTF8FileHandle</a>
+                                  <small>JS_CompileUTF8FileHandle reads a script from a stdio file handle and compiles the script for ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConcatStrings.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConcatStrings</a>
+                                  <small>JS_ConcatStrings concatenates two JS strings, str1 and str2, and returns the result. The result ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConstructObject.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConstructObject</a>
+                                  <small>JS_ConstructObject creates a new object of the specified class, with the specified prototype and ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ContextIterator.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ContextIterator</a>
+                                  <small>JS_ContextIterator steps through the set of contexts associated with the runtime rt. Each call to ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConvertArguments.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConvertArguments</a>
+                                  <small>JS_ConvertArguments provides a convenient way to translate a series of JS values into their ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConvertArgumentsVA.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConvertArgumentsVA</a>
+                                  <small>JS_ConvertArgumentsVA is to JS_ConvertArguments as vprintf is to printf. See JS_ConvertArguments ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConvertValue.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_ConvertValue</a>
+                                  <small>JS_ConvertValue converts a JavaScript value, v, to the specified type. On success, the converted ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CStringsAreUTF8.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_CStringsAreUTF8</a>
+                                  <small>By default, all C/C++ strings passed into the JSAPI are treated as ISO/IEC&nbsp;8859-1, also known as ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_DecompileFunction.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JS_DecompileFunction</a>
+                                  <small>JS_DecompileFunction generates the complete source code of a function declaration from a function's ...</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+      <li class="prev">
+      <a href="JSAPI%20Reference2679.html?page=1">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="JSAPI%20Reference2679.html?page=1">1</a>
+    </li>
+      <li class="selected">
+      <a href="JSAPI%20Reference4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="JSAPI%20Reference9ba9.html?page=3">3</a>
+    </li>
+      <li>
+      <a href="JSAPI%20Referencefdb0.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="JSAPI%20Referenceaf4d.html?page=5">5</a>
+    </li>
+          <li class="next">
+      <a href="JSAPI%20Reference9ba9.html?page=3">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="2">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/JSAPI Reference?page=2 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 21:59:35 GMT -->
+</body></html>

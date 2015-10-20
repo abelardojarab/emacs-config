@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"TransactionRolledbackException()","path":"TransactionRolledbackException--","entryType":"Constructor"},{"name":"TransactionRolledbackException(String)","path":"TransactionRolledbackException-java.lang.String-","entryType":"Constructor"}]}

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"ReferenceQueue()","path":"ReferenceQueue--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"poll()","path":"poll--","entryType":"Method"},{"name":"remove()","path":"remove--","entryType":"Method"},{"name":"remove(long)","path":"remove-long-","entryType":"Method"}]}

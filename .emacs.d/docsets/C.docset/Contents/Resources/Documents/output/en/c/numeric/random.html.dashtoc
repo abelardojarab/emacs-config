@@ -1,0 +1,1 @@
+{"entries":[{"name":"Functions","isHeader":true},{"name":"rand","path":"\/\/apple_ref\/cpp\/func\/rand","entryType":"Function"},{"name":"srand","path":"\/\/apple_ref\/cpp\/func\/srand","entryType":"Function"},{"name":"Macros","isHeader":true},{"name":"RAND_MAX","path":"\/\/apple_ref\/cpp\/macro\/RAND_MAX","entryType":"Macro"}]}

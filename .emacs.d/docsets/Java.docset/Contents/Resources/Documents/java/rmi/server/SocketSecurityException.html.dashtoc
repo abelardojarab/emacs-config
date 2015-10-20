@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"SocketSecurityException(String)","path":"SocketSecurityException-java.lang.String-","entryType":"Constructor"},{"name":"SocketSecurityException(String, Exception)","path":"SocketSecurityException-java.lang.String-java.lang.Exception-","entryType":"Constructor"}]}

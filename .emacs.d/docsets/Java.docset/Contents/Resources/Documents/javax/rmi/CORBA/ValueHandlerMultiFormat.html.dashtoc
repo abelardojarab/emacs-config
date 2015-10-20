@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"getMaximumStreamFormatVersion()","path":"getMaximumStreamFormatVersion--","entryType":"Method"},{"name":"writeValue(OutputStream, Serializable, byte)","path":"writeValue-org.omg.CORBA.portable.OutputStream-java.io.Serializable-byte-","entryType":"Method"}]}

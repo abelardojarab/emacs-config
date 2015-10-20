@@ -1,0 +1,76 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Advanced_animations$samples/Adding_mouse_control?revision=802575 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:08:15 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body>
+                    <canvas id="canvas" style="border: 1px solid" width="600" height="300"></canvas>
+                            <script type="text/javascript">
+                var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var raf;
+var running = false;
+
+var ball = {
+  x: 100,
+  y: 100,
+  vx: 5,
+  vy: 1,
+  radius: 25,
+  color: 'blue',
+  draw: function() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
+    ctx.closePath();
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+};
+
+function clear() {
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+
+function draw() {
+  clear();
+  ball.draw();
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+
+  if (ball.y + ball.vy > canvas.height || ball.y + ball.vy < 0) {
+    ball.vy = -ball.vy;
+  }
+  if (ball.x + ball.vx > canvas.width || ball.x + ball.vx < 0) {
+    ball.vx = -ball.vx;
+  }
+
+  raf = window.requestAnimationFrame(draw);
+}
+
+canvas.addEventListener('mousemove', function(e){
+  if (!running) {
+    clear();
+    ball.x = e.clientX;
+    ball.y = e.clientY;
+    ball.draw();
+  }
+});
+
+canvas.addEventListener("click",function(e){
+  if (!running) {
+    raf = window.requestAnimationFrame(draw);
+    running = true;
+  }
+});
+
+canvas.addEventListener("mouseout",function(e){
+  window.cancelAnimationFrame(raf);
+  running = false;
+});
+
+ball.draw();
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Advanced_animations$samples/Adding_mouse_control?revision=802575 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:08:15 GMT -->
+</body></html>

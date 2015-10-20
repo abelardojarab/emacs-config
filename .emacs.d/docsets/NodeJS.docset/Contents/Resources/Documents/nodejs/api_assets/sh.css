@@ -1,0 +1,33 @@
+.sh_sourceCode {
+  font-weight: normal;
+  font-style: normal;
+}
+
+.sh_sourceCode .sh_symbol,
+.sh_sourceCode .sh_cbracket {
+  color: #333;
+}
+
+.sh_sourceCode .sh_keyword {
+  color: #338;
+}
+
+.sh_sourceCode .sh_string,
+.sh_sourceCode .sh_regexp,
+.sh_sourceCode .sh_number,
+.sh_sourceCode .sh_specialchar {
+  color: #E54305;
+}
+
+.sh_sourceCode .sh_comment {
+  color: #666;
+  font-weight: lighter;
+}
+#intro {display:none} 
+#column2 {display:none} 
+#content {font-size: 1.8em !important} #column1.interior {width:100%} 
+#toc {display:none} 
+header {display:none}
+#content {width:95%; margin-top:-60px}
+#footer {display:none}
+#column1.interior {margin-top:-40px} body, #content-wrap {background:transparent !important} #nav {display:none !important} pre {margin-right:0 !important} #column1.interior { border-left: 0 !important; padding-left: 0.7em !important; padding-right: 0.7em !important;} #content {width:auto !important; margin-top:7px !important} #column1 {width:auto !important} pre, code {white-space: pre-wrap !important} a.mark {opacity:0 !important}

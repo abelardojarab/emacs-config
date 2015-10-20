@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"createExtendedResponse(String, byte[]A, int, int)","path":"createExtendedResponse-java.lang.String-byte:A-int-int-","entryType":"Method"},{"name":"getEncodedValue()","path":"getEncodedValue--","entryType":"Method"},{"name":"getID()","path":"getID--","entryType":"Method"}]}

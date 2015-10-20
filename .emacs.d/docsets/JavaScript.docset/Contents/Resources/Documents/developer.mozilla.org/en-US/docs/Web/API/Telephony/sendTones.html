@@ -1,0 +1,715 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Telephony/sendTones by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:09:35 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Telephony.sendTones()</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Telephony/sendTones$json">
+  <link rel="canonical" href="sendTones.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Telephony.sendTones()">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Telephony/sendTones">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Telephony/sendTones">
+  <meta name="twitter:title" content="Telephony.sendTones()">
+    <meta property="og:description" content="The sendTones() method of the Telephony Interface generates multiple DTMF tones, with a specified duration for each tone, and an optional delay before generation starts. The tones are sent to the currently active call.">
+  <meta name="description" content="The sendTones() method of the Telephony Interface generates multiple DTMF tones, with a specified duration for each tone, and an optional delay before generation starts. The tones are sent to the currently active call.">
+  <meta name="twitter:description" content="The sendTones() method of the Telephony Interface generates multiple DTMF tones, with a specified duration for each tone, and an optional delay before generation starts. The tones are sent to the currently active call.">
+  
+      
+  </head>
+<body data-slug="Web/API/Telephony/sendTones" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Telephony/sendTones" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FTelephony%2FsendTones" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Telephony/sendTones" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FTelephony%2FsendTones" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Telephony/sendTones$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Telephony/sendTones$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Telephony/sendTones$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Telephony.html" rel="v:url" property="v:title">Telephony</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Telephony.sendTones()</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Telephony.sendTones()</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 3 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a><ol><li><a href="#Parameters" rel="internal">Parameters</a></li></ol></li><li><a href="#Examples" rel="internal">Examples</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><section class="Quick_links" id="Quick_Links"><!-- --></section></div>
+
+<div>&nbsp;</div>
+
+<div>
+<p></p><div class="overheadIndicator nonStandard nonStandardHeader"> 
+      <p><strong><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span> Non-standard</strong><br> 
+      This feature is not on a current W3C standards track, but it is supported on the Firefox OS platform. Although implementations may change in the future and it is not supported widely across browsers, it is suitable for use in code dedicated to Firefox OS apps.</p> 
+      </div><p></p>
+
+<p></p><div class="warning"> 
+    <p style="text-align: center;">This API is available on <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a> for <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Security/Application_security">internal applications</a> only.</p> 
+</div><p></p>
+</div>
+
+<p>The <code>sendTones()</code> method of the <a href="../Telephony.html" title="The Telephony interface of the Web Telephony API provides support for dialing, answering, and managing phone calls on a device with telephony support."><code>Telephony</code></a> Interface generates multiple DTMF tones, with a specified duration for each tone, and an optional delay before generation starts. The tones are sent to the <a href="active.html" title="Telephony.active">currently active call</a>.</p>
+
+<h2 id="Syntax" name="Syntax">Syntax</h2>
+
+<p>The new syntax is promise-based:</p>
+
+<pre class="eval">myTelephony.dial(dtmfChars,pauseDuration,toneDuration,serviceId).then(function() {
+&nbsp; // do something in response
+});
+</pre>
+
+<p>The original syntax (Firefox 1.3 and below) was just a regular non-promise method.</p>
+
+<pre>myTelephony.sendTones(<var>dtmfChars,pauseDuration,toneDuration,serviceId</var>);</pre>
+
+<h3 id="Parameters">Parameters</h3>
+
+<dl>
+ <dt><code>dtmfChars</code></dt>
+ <dd>A <a href="../DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> containing the DTMF characters to generate; these must be characters from 0-9, "*", or "+".</dd>
+ <dt><code>pauseDuration</code></dt>
+ <dd>The time to wait before sending the tones. The default value if none is specified is 3000ms. <span class="inlineIndicator optional optionalInline">Optional</span></dd>
+ <dt><code>toneDuration</code></dt>
+ <dd>The length each tone should be. The default value if none is specified is 70ms. <span class="inlineIndicator optional optionalInline">Optional</span></dd>
+ <dt><code>serviceId</code></dt>
+ <dd>The service ID, as specified in the <code>dom.telephony.defaultServiceId</code> setting. <span class="inlineIndicator optional optionalInline">Optional</span></dd>
+</dl>
+
+<h2 id="Examples">Examples</h2>
+
+<pre class="brush: js">// Telephony object
+var tel = navigator.mozTelephony;
+
+tel.sendTones("123456789").then(function(call) {
+  // 
+});
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a class="external" href="https://wiki.mozilla.org/WebAPI/WebTelephony" hreflang="en" lang="en" title="The 'Web Telephony' specification">Web Telephony</a></td>
+   <td><span class="spec-Draft">Draft</span></td>
+   <td>Draft</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p>For obvious reasons, support is primarily expected on mobile browsers.</p>
+
+<p></p><div class="htab"> 
+    <a id="AutoCompatibilityTable" name="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>12.0 (12.0)</td>
+   <td>1.0.1</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td>Promise version</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>30.0 (30.0)</td>
+   <td>1.4</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="../Web_Telephony_API/Using_the_Web_Telephony_API.html">Using the Web Telephony API</a></li>
+ <li><a href="../TelephonyCall.html" title="The TelephonyCall interface of the Web Telephony API represents one telephone call, providing information about the call and offering mechanisms for controlling it and detecting changes to its status."><code>TelephonyCall</code></a></li>
+ <li><a href="../CallEvent.html" title="The CallEvent interface of the Web Telephony API represents events related to telephone calls."><code>CallEvent</code></a></li>
+ <li><a href="../Navigator/mozTelephony.html" title="Returns a Telephony object you can use to initiate and control telephone calls from the browser."><code>Navigator.mozTelephony</code></a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/B2G">B2G</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Certified">Certified</a></li>
+              <li><a href="../../../tag/DOM.html">DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Firefox OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Method">Method</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Mobile">Mobile</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Non-standard">Non-standard</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/sendTones">sendTones</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Telephony">Telephony</a></li>
+              <li><a href="../../../tag/WebAPI.html">WebAPI</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,
+                      <time datetime="2015-06-04T12:16:15-07:00">Jun 4, 2015, 12:16:15 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Telephony.html"><code>Telephony</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="active.html" title="The active read-only property of the Telephony interface returns a TelephonyCall object indicating the call that is currently active. The active call is the one that is currently receiving input from the microphone, or tones generated by calls to the Telephony.startTone() method."><code>Telephony.active</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="calls.html" title="The calls read-only property of the Telephony interface returns a list of TelephonyCall objects representing the currently connected telephone calls."><code>Telephony.calls</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="conferenceGroup.html" title="The conferenceGroup read-only property of the Telephony interface returns a TelephonyCallGroup object, allowing programmatic control over a multi-person call/conference call."><code>Telephony.conferenceGroup</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="muted.html" title="The muted property of the Telephony interface indicates whether or not the microphone is muted for the purposes of telephony."><code>Telephony.muted</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="oncallschanged.html" title="The oncallschanged property of the Telephony interface specifies an event listener to receive callschanged events. These events occur when the list of ongoing calls, as indicated by Telephony.calls, changes."><code>Telephony.oncallschanged</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="onincoming.html" title="The onincoming property of the Telephony interface specifies an event listener to receive incoming events; these indicate when a new call is arriving."><code>Telephony.onincoming</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="onready.html" title="The onready property of the Telephony interface specifies an event listener to receive ready events. These events occur when the telephony object is initialized."><code>Telephony.onready</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="onremoteheld.html" title="The onremoteheld property of the Telephony interface specifies an event listener to receive remoteheld events. These events occur whenever a remote party (e.g. the person you called) puts the call on hold.."><code>Telephony.onremoteheld</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="onremoteresumed.html" title="The onremoteresumed property of the Telephony interface specifies an event listener to receive remoteresumed events. These events occur when when a remote party (e.g. the person you called) resumes a call previously put on hold."><code>Telephony.onremoteresumed</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="ready.html" title="The ready read-only property of the Telephony interface provides an asynchronous notification that the object is initialized."><code>Telephony.ready</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="speakerEnabled.html" title="The speakerEnabled property of the Telephony interface indicates whether or not the speakerphone functionality of the phone is enabled."><code>Telephony.speakerEnabled</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="dial.html" title="The dial() method of the Telephony interface dials a phone number and returns a new TelephonyCall object representing the new call."><code>Telephony.dial()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="dialEmergency.html" title="The dialEmergency() method of the Telephony interface dials an emergency phone number and returns a new TelephonyCall object representing the new call."><code>Telephony.dialEmergency()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><em><code>Telephony.sendTones()</code></em></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="startTone.html" title="The startTone() method of the Telephony Interface begins generating the tone for the specified DTMF character. The tone is sent to the currently active call, and continues to sound until a corresponding call to Telephony.stopTone()."><code>Telephony.startTone()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="stopTone.html" title="The startTone() method of the Telephony Interface stops transmitting the currently-playing DTMF tone started by a prior call to Telephony.startTone()."><code>Telephony.stopTone()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Inheritance:</strong></a><ol><li><a href="../EventTarget.html"><code>EventTarget</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for Firefox OS</strong></a><ol><li><a href="../CallEvent.html"><code>CallEvent</code></a></li><li><a href="../MozActivity.html"><code>MozActivity</code></a></li><li><a href="../MozActivityOptions.html"><code>MozActivityOptions</code></a></li><li><a href="../MozActivityRequestHandler.html"><code>MozActivityRequestHandler</code></a></li><li><a href="../MozAlarmsManager.html"><code>MozAlarmsManager</code></a></li><li><a href="../MozContact.html"><code>MozContact</code></a></li><li><a href="../MozContactChangeEvent.html"><code>MozContactChangeEvent</code></a></li><li><a href="../MozIccManager.html"><code>MozIccManager</code></a></li><li><a href="../MozMmsEvent.html"><code>MozMmsEvent</code></a></li><li><a href="../MozMmsMessage.html"><code>MozMmsMessage</code></a></li><li><a href="../MozMobileCFInfo.html"><code>MozMobileCFInfo</code></a></li><li><a href="../MozMobileCellInfo.html"><code>MozMobileCellInfo</code></a></li><li><a href="../MozMobileConnection.html"><code>MozMobileConnection</code></a></li><li><a href="../MozMobileConnectionInfo.html"><code>MozMobileConnectionInfo</code></a></li><li><a href="../MozMobileICCInfo.html"><code>MozMobileICCInfo</code></a></li><li><a href="../MozMobileMessageManager.html"><code>MozMobileMessageManager</code></a></li><li><a href="../MozMobileMessageThread.html"><code>MozMobileMessageThread</code></a></li><li><a href="../MozMobileNetworkInfo.html"><code>MozMobileNetworkInfo</code></a></li><li><a href="../MozNDEFRecord.html"><code>MozNDEFRecord</code></a></li><li><a href="../MozNFC.html"><code>MozNFC</code></a></li><li><a href="../MozNFCPeer.html"><code>MozNFCPeer</code></a></li><li><a href="../MozNFCTag.html"><code>MozNFCTag</code></a></li><li><a href="../MozNetworkStats.html"><code>MozNetworkStats</code></a></li><li><a href="../MozNetworkStatsData.html"><code>MozNetworkStatsData</code></a></li><li><a href="../MozNetworkStatsManager.html"><code>MozNetworkStatsManager</code></a></li><li><a href="../MozSettingsEvent.html"><code>MozSettingsEvent</code></a></li><li><a href="../MozSmsEvent.html"><code>MozSmsEvent</code></a></li><li><a href="../MozSmsFilter.html"><code>MozSmsFilter</code></a></li><li><a href="../MozSmsManager.html"><code>MozSmsManager</code></a></li><li><a href="../MozSmsMessage.html"><code>MozSmsMessage</code></a></li><li><a href="../MozSmsSegmentInfo.html"><code>MozSmsSegmentInfo</code></a></li><li><a href="../MozTimeManager.html"><code>MozTimeManager</code></a></li><li><a href="../MozVoicemail.html"><code>MozVoicemail</code></a></li><li><a href="../MozVoicemailEvent.html"><code>MozVoicemailEvent</code></a></li><li><a href="../MozVoicemailStatus.html"><code>MozVoicemailStatus</code></a></li><li><a href="../MozWifiConnectionInfoEvent.html"><code>MozWifiConnectionInfoEvent</code></a></li><li><a href="../MozWifiP2pGroupOwner.html"><code>MozWifiP2pGroupOwner</code></a></li><li><a href="../MozWifiP2pManager.html"><code>MozWifiP2pManager</code></a></li><li><a href="../MozWifiStatusChangeEvent.html"><code>MozWifiStatusChangeEvent</code></a></li><li><a href="../PermissionSettings.html"><code>PermissionSettings</code></a></li><li><a href="../PowerManager.png"><code>PowerManager</code></a></li><li><a href="../SettingsLock.html"><code>SettingsLock</code></a></li><li><a href="../SettingsManager.html"><code>SettingsManager</code></a></li><li><a href="../TCPServerSocket.html"><code>TCPServerSocket</code></a></li><li><a href="../TCPSocket.html"><code>TCPSocket</code></a></li><li><a href="../TelephonyCall.html"><code>TelephonyCall</code></a></li><li><a href="../WifiManager.html"><code>WifiManager</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Telephony/sendTones$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Telephony/sendTones$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Telephony/sendTones by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:09:37 GMT -->
+</body></html>

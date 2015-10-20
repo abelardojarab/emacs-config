@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"LanguageCallback()","path":"LanguageCallback--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getLocale()","path":"getLocale--","entryType":"Method"},{"name":"setLocale(Locale)","path":"setLocale-java.util.Locale-","entryType":"Method"}]}

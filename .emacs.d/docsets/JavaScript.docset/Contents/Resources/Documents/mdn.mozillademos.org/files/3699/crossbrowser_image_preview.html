@@ -1,0 +1,58 @@
+<html><!-- Mirrored from mdn.mozillademos.org/files/3699/crossbrowser_image_preview.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:07:48 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=UTF-8"><!-- /Added by HTTrack -->
+
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<title>Image preview example</title>
+<script type="text/javascript">
+var loadImageFile = (function () {
+	if (window.FileReader) {
+		var	oPreviewImg = null, oFReader = new window.FileReader(),
+			rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+
+		oFReader.onload = function (oFREvent) {
+			if (!oPreviewImg) {
+				var newPreview = document.getElementById("imagePreview");
+				oPreviewImg = new Image();
+				oPreviewImg.style.width = (newPreview.offsetWidth).toString() + "px";
+				oPreviewImg.style.height = (newPreview.offsetHeight).toString() + "px";
+				newPreview.appendChild(oPreviewImg);
+			}
+			oPreviewImg.src = oFREvent.target.result;
+		};
+
+		return function () {
+			var aFiles = document.getElementById("imageInput").files;
+			if (aFiles.length === 0) { return; }
+			if (!rFilter.test(aFiles[0].type)) { alert("You must select a valid image file!"); return; }
+			oFReader.readAsDataURL(aFiles[0]);
+		}
+
+	}
+	if (navigator.appName === "Microsoft Internet Explorer") {
+		return function () {
+			document.getElementById("imagePreview").filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = document.getElementById("imageInput").value;
+
+		}
+	}
+})();
+</script>
+<style type="text/css">
+#imagePreview {
+	width: 160px;
+	height: 120px;
+	float: right;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale);
+}
+</style>
+</head>
+
+<body>
+<div id="imagePreview"></div>
+
+<form name="uploadForm">
+<p><input id="imageInput" type="file" name="myPhoto" onchange="loadImageFile();"><br>
+<input type="submit" value="Send"></p>
+</form>
+
+
+<!-- Mirrored from mdn.mozillademos.org/files/3699/crossbrowser_image_preview.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:07:48 GMT -->
+</body></html>

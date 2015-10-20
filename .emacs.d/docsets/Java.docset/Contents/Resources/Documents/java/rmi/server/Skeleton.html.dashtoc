@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"dispatch(Remote, RemoteCall, int, long)","path":"dispatch-java.rmi.Remote-java.rmi.server.RemoteCall-int-long-","entryType":"Method"},{"name":"getOperations()","path":"getOperations--","entryType":"Method"}]}

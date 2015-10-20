@@ -1,0 +1,46 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin$samples/Playable_code?revision=891343 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 18:09:57 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body>
+                    <canvas id="canvas" width="400" height="200" class="playable-canvas"></canvas>
+<div class="playable-buttons">
+  <input id="edit" type="button" value="Edit">
+  <input id="reset" type="button" value="Reset">
+</div>
+<textarea id="code" class="playable-code" style="height:120px;">ctx.lineWidth = 10;
+ctx.lineJoin = "round";
+ctx.beginPath();
+ctx.moveTo(0,0);
+ctx.lineTo(200, 100);
+ctx.lineTo(300,0);
+ctx.stroke();</textarea>
+                            <script type="text/javascript">
+                var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var textarea = document.getElementById("code");
+var reset = document.getElementById("reset");
+var edit = document.getElementById("edit");
+var code = textarea.value;
+
+function drawCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  eval(textarea.value);
+}
+
+reset.addEventListener("click", function() {
+  textarea.value = code;
+  drawCanvas();
+});
+
+edit.addEventListener("click", function() {
+  textarea.focus();
+})
+
+textarea.addEventListener("input", drawCanvas);
+window.addEventListener("load", drawCanvas);
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin$samples/Playable_code?revision=891343 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 18:09:57 GMT -->
+</body></html>

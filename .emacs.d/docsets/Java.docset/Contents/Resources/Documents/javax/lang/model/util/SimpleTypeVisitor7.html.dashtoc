@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"SimpleTypeVisitor7()","path":"SimpleTypeVisitor7--","entryType":"Constructor"},{"name":"SimpleTypeVisitor7(R)","path":"SimpleTypeVisitor7-R-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"visitUnion(UnionType, P)","path":"visitUnion-javax.lang.model.type.UnionType-P-","entryType":"Method"}]}

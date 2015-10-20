@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from mxr.mozilla.org/mozilla-central/source/dom/wifi/DOMWifiManager.js by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:14:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta name="GENERATOR" content="lxr-1998-06-10: http://lxr.linux.no">
+<link rel="icon" href="../../../../mxr.png" type="image/png">
+<title>mozilla-central mozilla/dom/wifi/DOMWifiManager.js</title>
+<link rel='stylesheet' title='' href='../../../style/style.css' type='text/css'>
+<link rel='alternate stylesheet' title='Alt-1' href='../../../style/alt1-js.css' type='text/css'>
+
+<script src='../../../../coloration.js'></script>
+<script src='../../../../script.js'></script>
+</head>
+
+<body   bgcolor="#FFFFFF" text="#000000"
+	link="#0000EE" vlink="#551A8B" alink="#FF0000">
+
+<table class=banner bgcolor="#000000" width="100%" border=0 cellpadding=0 cellspacing=0>
+<tr><td><a class="logo" href="http://www.mozilla.org/"><img
+ src="../../../../../www.mozilla.org/images/mozilla-banner.gif" alt=""
+ border=0 width=600 height=58></a></td></tr></table>
+
+<table class=header border=0 cellpadding=12 cellspacing=0 width="100%">
+ <tr>
+  <td align=left valign=middle>
+   <nobr><font size="+2"><b><a href="http://mxr.mozilla.org/">Mozilla Cross-Reference</a></b>
+</nobr><i><a href="http://mxr.mozilla.org/mozilla-central">mozilla-central</a></i>
+</font>
+   <br><b><a href="http://mxr.mozilla.org/mozilla-central/source/">mozilla</a>/ <a href="http://mxr.mozilla.org/mozilla-central/source/dom/">dom</a>/ <a href="http://mxr.mozilla.org/mozilla-central/source/dom/wifi/">wifi</a>/ <a href="DOMWifiManager.html">DOMWifiManager.js</a> </b>
+  </TD>
+
+  <td align=right valign=top width="1%">
+   <table border cellpadding=12 cellspacing=0>
+    <tr>
+     <td nowrap bgcolor="#FAFAFA">
+
+
+
+
+
+
+
+
+<script>
+function updateHgBlameHash(node, event) {
+  if (!document.location.hash)
+    return;
+  var anchor = document.location.hash;
+  anchor = anchor.replace("#", "#l");
+  node.href =
+    node.href.replace(/#.*|$/, anchor);
+}
+</script>
+<a href="http://hg.mozilla.org/mozilla-central/filelog/2c1fb007137d/dom/wifi/DOMWifiManager.js">Hg Log</a><br>
+<a href="http://hg.mozilla.org/mozilla-central/annotate/2c1fb007137d/dom/wifi/DOMWifiManager.js"
+onfocus='updateHgBlameHash(this, event)'
+onmouseover='updateHgBlameHash(this, event)'
+>Hg Blame</a><br>
+
+
+
+      <a href="../../../diff498d.html?file=/dom/wifi/DOMWifiManager.js">Diff file</a><br>
+      <a href="DOMWifiManager2af1.js?raw=1">Raw file</a><br>
+     </TD>
+    </TR>
+   </table>
+  </TD>
+
+
+
+ </TR>
+</table>
+
+<form name='source' id='source' class='beforecontent'
+>view using tree:
+<select name='tree' id='tree' onchange='changetarget("http://mxr.mozilla.org/mozilla-central/", "http://mxr.mozilla.org/mozilla-central/source/dom/wifi/mozilla-central/")'>
+<option value="mozilla-aurora">mozilla-aurora</option>
+<option value="mozilla-b2g28_v1_3">mozilla-b2g28_v1_3</option>
+<option value="mozilla-b2g28_v1_3t">mozilla-b2g28_v1_3t</option>
+<option value="mozilla-b2g30_v1_4">mozilla-b2g30_v1_4</option>
+<option value="mozilla-b2g32_v2_0">mozilla-b2g32_v2_0</option>
+<option value="mozilla-b2g34_v2_1">mozilla-b2g34_v2_1</option>
+<option value="mozilla-b2g37_v2_2">mozilla-b2g37_v2_2</option>
+<option value="mozilla-beta">mozilla-beta</option>
+<option value="mozilla-central" selected=1>mozilla-central</option>
+<option value="mozilla-esr17">mozilla-esr17</option>
+<option value="mozilla-esr24">mozilla-esr24</option>
+<option value="mozilla-esr31">mozilla-esr31</option>
+<option value="mozilla-esr38">mozilla-esr38</option>
+<option value="mozilla-release">mozilla-release</option>
+
+</select></form>
+
+
+
+<pre lang='en'><style>.d2:before{content:' '} .d1:before{content:'  '} .d0:before{content:'   '} </style><span id='the-code'><a class='l d0' name=1 href="#1">1</a> <span class='c'>/* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */</span>
+<a class='l d0' name=2 href="#2">2</a> <span class='c'>/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */</span>
+<a class='l d0' name=3 href="#3">3</a> <span class='c'>/* This Source Code Form is subject to the terms of the Mozilla Public</span>
+<a class='l d0' name=4 href="#4">4</a> <span class='c'> * License, v. 2.0. If a copy of the MPL was not distributed with this file,</span>
+<a class='l d0' name=5 href="#5">5</a> <span class='c'> * You can obtain one at <a href="http://mozilla.org/MPL/2.0/.">http://mozilla.org/MPL/2.0/.</a> */</span>
+<a class='l d0' name=6 href="#6">6</a> 
+<a class='l d0' name=7 href="#7">7</a> <span class='s'>"use strict"</span>;
+<a class='l d0' name=8 href="#8">8</a> 
+<a class='l d0' name=9 href="#9">9</a> <span class='v'>const </span>{<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=classes">classes</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cc">Cc</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=interfaces">interfaces</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=utils">utils</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cu">Cu</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=results">results</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cr">Cr</a>} = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Components">Components</a>;
+<a class='l d1' name=10 href="#10">10</a> 
+<a class='l d1' name=11 href="#11">11</a> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cu">Cu</a>.<span class='v'>import("resource://gre/modules/XPCOMUtils.jsm");
+<a class='l d1' name=12 href="#12">12</a> </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cu">Cu</a>.<span class='v'>import("resource://gre/modules/Services.jsm");
+<a class='l d1' name=13 href="#13">13</a> </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cu">Cu</a>.<span class='v'>import("resource://gre/modules/DOMRequestHelper.jsm");
+<a class='l d1' name=14 href="#14">14</a> </span>
+<a class='l d1' name=15 href="#15">15</a> <span class='v'>const </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DEBUG">DEBUG</a> = <span class='v'>false;</span> <span class='c'>// set to false to suppress debug messages</span>
+<a class='l d1' name=16 href="#16">16</a> <span class='c'></span>
+<a class='l d1' name=17 href="#17">17</a> <span class='v'>const </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMWIFIMANAGER_CONTRACTID">DOMWIFIMANAGER_CONTRACTID</a> = <span class='s'>"@mozilla.org/wifimanager;1"</span>;
+<a class='l d1' name=18 href="#18">18</a> <span class='v'>const </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMWIFIMANAGER_CID">DOMWIFIMANAGER_CID</a>        = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Components">Components</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ID">ID</a>(<span class='s'>"{c9b5f09e-25d2-40ca-aef4-c4d13d93c706}"</span>);
+<a class='l d1' name=19 href="#19">19</a> 
+<a class='l d1' name=20 href="#20">20</a> <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiNetwork">MozWifiNetwork</a>() {
+<a class='l d1' name=21 href="#21">21</a> }
+<a class='l d1' name=22 href="#22">22</a> 
+<a class='l d1' name=23 href="#23">23</a> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiNetwork">MozWifiNetwork</a>.<span class='v'>prototype </span>= {
+<a class='l d1' name=24 href="#24">24</a> 
+<a class='l d1' name=25 href="#25">25</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=init">init</a>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aWindow">aWindow</a>) {
+<a class='l d1' name=26 href="#26">26</a>     <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aWindow">aWindow</a>;
+<a class='l d1' name=27 href="#27">27</a>   },
+<a class='l d1' name=28 href="#28">28</a> 
+<a class='l d1' name=29 href="#29">29</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=__init">__init</a>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>) {
+<a class='l d1' name=30 href="#30">30</a>     <span class='v'>for </span>(<span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=key">key</a> <span class='a'>in</span> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>) {
+<a class='l d1' name=31 href="#31">31</a>       <span class='v'>this[</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=key">key</a>] = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>[<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=key">key</a>];
+<a class='l d1' name=32 href="#32">32</a>     }
+<a class='l d1' name=33 href="#33">33</a>   },
+<a class='l d1' name=34 href="#34">34</a> 
+<a class='l d1' name=35 href="#35">35</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=classID">classID</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Components">Components</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ID">ID</a>(<span class='s'>"{c01fd751-43c0-460a-8b64-abf652ec7220}"</span>),
+<a class='l d1' name=36 href="#36">36</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=contractID">contractID</a>: <span class='s'>"@mozilla.org/mozwifinetwork;1"</span>,
+<a class='l d1' name=37 href="#37">37</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=QueryInterface">QueryInterface</a>: <span class='a'>XPCOMUtils</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=generateQI">generateQI</a>([<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsISupports">nsISupports</a>,
+<a class='l d1' name=38 href="#38">38</a>                                          <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsIDOMGlobalPropertyInitializer">nsIDOMGlobalPropertyInitializer</a>])
+<a class='l d1' name=39 href="#39">39</a> };
+<a class='l d1' name=40 href="#40">40</a> 
+<a class='l d1' name=41 href="#41">41</a> <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiConnection">MozWifiConnection</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>) {
+<a class='l d1' name=42 href="#42">42</a>   <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=status">status</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=status">status</a>;
+<a class='l d1' name=43 href="#43">43</a>   <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>;
+<a class='l d1' name=44 href="#44">44</a> }
+<a class='l d1' name=45 href="#45">45</a> 
+<a class='l d1' name=46 href="#46">46</a> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiConnection">MozWifiConnection</a>.<span class='v'>prototype </span>= {
+<a class='l d1' name=47 href="#47">47</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=classID">classID</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Components">Components</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ID">ID</a>(<span class='s'>"{23579da4-201b-4319-bd42-9b7f337343ac}"</span>),
+<a class='l d1' name=48 href="#48">48</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=contractID">contractID</a>: <span class='s'>"@mozilla.org/mozwificonnection;1"</span>,
+<a class='l d1' name=49 href="#49">49</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=QueryInterface">QueryInterface</a>: <span class='a'>XPCOMUtils</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=generateQI">generateQI</a>([<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsISupports">nsISupports</a>])
+<a class='l d1' name=50 href="#50">50</a> };
+<a class='l d1' name=51 href="#51">51</a> 
+<a class='l d1' name=52 href="#52">52</a> <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiConnectionInfo">MozWifiConnectionInfo</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>) {
+<a class='l d1' name=53 href="#53">53</a>   <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=signalStrength">signalStrength</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=signalStrength">signalStrength</a>;
+<a class='l d1' name=54 href="#54">54</a>   <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=relSignalStrength">relSignalStrength</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=relSignalStrength">relSignalStrength</a>;
+<a class='l d1' name=55 href="#55">55</a>   <span class='v'>this.</span><span class='a'>linkSpeed</span> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<span class='a'>linkSpeed</span>;
+<a class='l d1' name=56 href="#56">56</a>   <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ipAddress">ipAddress</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ipAddress">ipAddress</a>;
+<a class='l d1' name=57 href="#57">57</a> }
+<a class='l d1' name=58 href="#58">58</a> 
+<a class='l d1' name=59 href="#59">59</a> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiConnectionInfo">MozWifiConnectionInfo</a>.<span class='v'>prototype </span>= {
+<a class='l d1' name=60 href="#60">60</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=classID">classID</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Components">Components</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ID">ID</a>(<span class='s'>"{83670352-6ed4-4c35-8de9-402296a1959c}"</span>),
+<a class='l d1' name=61 href="#61">61</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=contractID">contractID</a>: <span class='s'>"@mozilla.org/mozwificonnectioninfo;1"</span>,
+<a class='l d1' name=62 href="#62">62</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=QueryInterface">QueryInterface</a>: <span class='a'>XPCOMUtils</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=generateQI">generateQI</a>([<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsISupports">nsISupports</a>])
+<a class='l d1' name=63 href="#63">63</a> }
+<a class='l d1' name=64 href="#64">64</a> 
+<a class='l d1' name=65 href="#65">65</a> <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiCapabilities">MozWifiCapabilities</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>) {
+<a class='l d1' name=66 href="#66">66</a>   <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=security">security</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=security">security</a>;
+<a class='l d1' name=67 href="#67">67</a>   <span class='v'>this.</span><span class='a'>eapMethod</span> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<span class='a'>eapMethod</span>;
+<a class='l d1' name=68 href="#68">68</a>   <span class='v'>this.</span><span class='a'>eapPhase2</span> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<span class='a'>eapPhase2</span>;
+<a class='l d1' name=69 href="#69">69</a>   <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=certificate">certificate</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=obj">obj</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=certificate">certificate</a>;
+<a class='l d1' name=70 href="#70">70</a> }
+<a class='l d1' name=71 href="#71">71</a> 
+<a class='l d1' name=72 href="#72">72</a> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiCapabilities">MozWifiCapabilities</a>.<span class='v'>prototype </span>= {
+<a class='l d1' name=73 href="#73">73</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=classID">classID</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Components">Components</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ID">ID</a>(<span class='s'>"08c88ece-8092-481b-863b-5515a52e411a"</span>),
+<a class='l d1' name=74 href="#74">74</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=contractID">contractID</a>: <span class='s'>"@mozilla.org/mozwificapabilities;1"</span>,
+<a class='l d1' name=75 href="#75">75</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=QueryInterface">QueryInterface</a>: <span class='a'>XPCOMUtils</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=generateQI">generateQI</a>([<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsISupports">nsISupports</a>])
+<a class='l d1' name=76 href="#76">76</a> }
+<a class='l d1' name=77 href="#77">77</a> 
+<a class='l d1' name=78 href="#78">78</a> <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMWifiManager">DOMWifiManager</a>() {
+<a class='l d1' name=79 href="#79">79</a>   <span class='v'>this.</span><span class='a'>defineEventHandlerGetterSetter</span>(<span class='s'>"onstatuschange"</span>);
+<a class='l d1' name=80 href="#80">80</a>   <span class='v'>this.</span><span class='a'>defineEventHandlerGetterSetter</span>(<span class='s'>"onconnectioninfoupdate"</span>);
+<a class='l d1' name=81 href="#81">81</a>   <span class='v'>this.</span><span class='a'>defineEventHandlerGetterSetter</span>(<span class='s'>"onenabled"</span>);
+<a class='l d1' name=82 href="#82">82</a>   <span class='v'>this.</span><span class='a'>defineEventHandlerGetterSetter</span>(<span class='s'>"ondisabled"</span>);
+<a class='l d1' name=83 href="#83">83</a>   <span class='v'>this.</span><span class='a'>defineEventHandlerGetterSetter</span>(<span class='s'>"onstationinfoupdate"</span>);
+<a class='l d1' name=84 href="#84">84</a> }
+<a class='l d1' name=85 href="#85">85</a> 
+<a class='l d1' name=86 href="#86">86</a> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMWifiManager">DOMWifiManager</a>.<span class='v'>prototype </span>= {
+<a class='l d1' name=87 href="#87">87</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=__proto__">__proto__</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequestIpcHelper">DOMRequestIpcHelper</a>.<span class='v'>prototype,</span>
+<a class='l d1' name=88 href="#88">88</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=classDescription">classDescription</a>: <span class='s'>"DOMWifiManager"</span>,
+<a class='l d1' name=89 href="#89">89</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=classID">classID</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMWIFIMANAGER_CID">DOMWIFIMANAGER_CID</a>,
+<a class='l d1' name=90 href="#90">90</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=contractID">contractID</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMWIFIMANAGER_CONTRACTID">DOMWIFIMANAGER_CONTRACTID</a>,
+<a class='l d1' name=91 href="#91">91</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=QueryInterface">QueryInterface</a>: <span class='a'>XPCOMUtils</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=generateQI">generateQI</a>([<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsIDOMGlobalPropertyInitializer">nsIDOMGlobalPropertyInitializer</a>,
+<a class='l d1' name=92 href="#92">92</a>                                          <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsISupportsWeakReference">nsISupportsWeakReference</a>,
+<a class='l d1' name=93 href="#93">93</a>                                          <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsIObserver">nsIObserver</a>]),
+<a class='l d1' name=94 href="#94">94</a> 
+<a class='l d1' name=95 href="#95">95</a>   <span class='c'>// nsIDOMGlobalPropertyInitializer implementation</span>
+<a class='l d1' name=96 href="#96">96</a> <span class='c'></span>  <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=init">init</a>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aWindow">aWindow</a>) {
+<a class='l d1' name=97 href="#97">97</a>     <span class='c'>// Maintain this state for synchronous APIs.</span>
+<a class='l d1' name=98 href="#98">98</a> <span class='c'></span>    <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>null;
+<a class='l d1' name=99 href="#99">99</a> </span>    <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"disconnected"</span>;
+<a class='l d2' name=100 href="#100">100</a>     <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_enabled">_enabled</a> = <span class='v'>false;</span>
+<a class='l d2' name=101 href="#101">101</a>     <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>null;
+<a class='l d2' name=102 href="#102">102</a> </span>    <span class='v'>this.</span><span class='a'>_capabilities</span> = <span class='v'>null;
+<a class='l d2' name=103 href="#103">103</a> </span>    <span class='v'>this.</span><span class='a'>_stationNumber</span> = 0;
+<a class='l d2' name=104 href="#104">104</a> 
+<a class='l d2' name=105 href="#105">105</a>     <span class='a'>const</span> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=messages">messages</a> = [<span class='s'>"WifiManager:getNetworks:Return:OK"</span>, <span class='s'>"WifiManager:getNetworks:Return:NO"</span>,
+<a class='l d2' name=106 href="#106">106</a>                       <span class='s'>"WifiManager:getKnownNetworks:Return:OK"</span>, <span class='s'>"WifiManager:getKnownNetworks:Return:NO"</span>,
+<a class='l d2' name=107 href="#107">107</a>                       <span class='s'>"WifiManager:associate:Return:OK"</span>, <span class='s'>"WifiManager:associate:Return:NO"</span>,
+<a class='l d2' name=108 href="#108">108</a>                       <span class='s'>"WifiManager:forget:Return:OK"</span>, <span class='s'>"WifiManager:forget:Return:NO"</span>,
+<a class='l d2' name=109 href="#109">109</a>                       <span class='s'>"WifiManager:wps:Return:OK"</span>, <span class='s'>"WifiManager:wps:Return:NO"</span>,
+<a class='l d2' name=110 href="#110">110</a>                       <span class='s'>"WifiManager:setPowerSavingMode:Return:OK"</span>, <span class='s'>"WifiManager:setPowerSavingMode:Return:NO"</span>,
+<a class='l d2' name=111 href="#111">111</a>                       <span class='s'>"WifiManager:setHttpProxy:Return:OK"</span>, <span class='s'>"WifiManager:setHttpProxy:Return:NO"</span>,
+<a class='l d2' name=112 href="#112">112</a>                       <span class='s'>"WifiManager:setStaticIpMode:Return:OK"</span>, <span class='s'>"WifiManager:setStaticIpMode:Return:NO"</span>,
+<a class='l d2' name=113 href="#113">113</a>                       <span class='s'>"WifiManager:importCert:Return:OK"</span>, <span class='s'>"WifiManager:importCert:Return:NO"</span>,
+<a class='l d2' name=114 href="#114">114</a>                       <span class='s'>"WifiManager:getImportedCerts:Return:OK"</span>, <span class='s'>"WifiManager:getImportedCerts:Return:NO"</span>,
+<a class='l d2' name=115 href="#115">115</a>                       <span class='s'>"WifiManager:deleteCert:Return:OK"</span>, <span class='s'>"WifiManager:deleteCert:Return:NO"</span>,
+<a class='l d2' name=116 href="#116">116</a>                       <span class='s'>"WifiManager:setWifiEnabled:Return:OK"</span>, <span class='s'>"WifiManager:setWifiEnabled:Return:NO"</span>,
+<a class='l d2' name=117 href="#117">117</a>                       <span class='s'>"WifiManager:wifiDown"</span>, <span class='s'>"WifiManager:wifiUp"</span>,
+<a class='l d2' name=118 href="#118">118</a>                       <span class='s'>"WifiManager:onconnecting"</span>, <span class='s'>"WifiManager:onassociate"</span>,
+<a class='l d2' name=119 href="#119">119</a>                       <span class='s'>"WifiManager:onconnect"</span>, <span class='s'>"WifiManager:ondisconnect"</span>,
+<a class='l d2' name=120 href="#120">120</a>                       <span class='s'>"WifiManager:onwpstimeout"</span>, <span class='s'>"WifiManager:onwpsfail"</span>,
+<a class='l d2' name=121 href="#121">121</a>                       <span class='s'>"WifiManager:onwpsoverlap"</span>, <span class='s'>"WifiManager:connectioninfoupdate"</span>,
+<a class='l d2' name=122 href="#122">122</a>                       <span class='s'>"WifiManager:onauthenticating"</span>, <span class='s'>"WifiManager:onconnectingfailed"</span>,
+<a class='l d2' name=123 href="#123">123</a>                       <span class='s'>"WifiManager:stationinfoupdate"</span>];
+<a class='l d2' name=124 href="#124">124</a>     <span class='v'>this.</span><span class='a'>initDOMRequestHelper</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aWindow">aWindow</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=messages">messages</a>);
+<a class='l d2' name=125 href="#125">125</a>     <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_mm">_mm</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cc">Cc</a>[<span class='s'>"@mozilla.org/childprocessmessagemanager;1"</span>].<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=getService">getService</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Ci">Ci</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsISyncMessageSender">nsISyncMessageSender</a>);
+<a class='l d2' name=126 href="#126">126</a> 
+<a class='l d2' name=127 href="#127">127</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=state">state</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_mm">_mm</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=sendSyncMessage">sendSyncMessage</a>(<span class='s'>"WifiManager:getState"</span>)[0];
+<a class='l d2' name=128 href="#128">128</a>     <span class='v'>if </span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=state">state</a>) {
+<a class='l d2' name=129 href="#129">129</a>       <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>this.</span><span class='a'>_convertWifiNetwork</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=state">state</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=130 href="#130">130</a>       <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>this.</span><span class='a'>_convertConnectionInfo</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=state">state</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=connectionInfo">connectionInfo</a>);
+<a class='l d2' name=131 href="#131">131</a>       <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_enabled">_enabled</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=state">state</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabled">enabled</a>;
+<a class='l d2' name=132 href="#132">132</a>       <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=state">state</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=status">status</a>;
+<a class='l d2' name=133 href="#133">133</a>       <span class='v'>this.</span><span class='a'>_macAddress</span> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=state">state</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=macAddress">macAddress</a>;
+<a class='l d2' name=134 href="#134">134</a>       <span class='v'>this.</span><span class='a'>_capabilities</span> = <span class='v'>this.</span><span class='a'>_convertWifiCapabilities</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=state">state</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=capabilities">capabilities</a>);
+<a class='l d2' name=135 href="#135">135</a>     } <span class='v'>else </span>{
+<a class='l d2' name=136 href="#136">136</a>       <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>null;
+<a class='l d2' name=137 href="#137">137</a> </span>      <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>null;
+<a class='l d2' name=138 href="#138">138</a> </span>      <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_enabled">_enabled</a> = <span class='v'>false;</span>
+<a class='l d2' name=139 href="#139">139</a>       <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"disconnected"</span>;
+<a class='l d2' name=140 href="#140">140</a>       <span class='v'>this.</span><span class='a'>_macAddress</span> = <span class='s'>""</span>;
+<a class='l d2' name=141 href="#141">141</a>     }
+<a class='l d2' name=142 href="#142">142</a>   },
+<a class='l d2' name=143 href="#143">143</a> 
+<a class='l d2' name=144 href="#144">144</a>   <span class='a'>_convertWifiNetworkToJSON</span>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a>) {
+<a class='l d2' name=145 href="#145">145</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=json">json</a> = {};
+<a class='l d2' name=146 href="#146">146</a> 
+<a class='l d2' name=147 href="#147">147</a>     <span class='v'>for </span>(<span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=key">key</a> <span class='a'>in</span> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a>) {
+<a class='l d2' name=148 href="#148">148</a>       <span class='c'>// In WifiWorker.js there are lots of check using "key in network".</span>
+<a class='l d2' name=149 href="#149">149</a> <span class='c'></span>      <span class='c'>// So if the value of any property of WifiNetwork is undefined, do not clone it.</span>
+<a class='l d2' name=150 href="#150">150</a> <span class='c'></span>      <span class='v'>if </span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a>[<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=key">key</a>] != <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=undefined">undefined</a>) {
+<a class='l d2' name=151 href="#151">151</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=json">json</a>[<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=key">key</a>] = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a>[<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=key">key</a>];
+<a class='l d2' name=152 href="#152">152</a>       }
+<a class='l d2' name=153 href="#153">153</a>     }
+<a class='l d2' name=154 href="#154">154</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=json">json</a>;
+<a class='l d2' name=155 href="#155">155</a>   },
+<a class='l d2' name=156 href="#156">156</a> 
+<a class='l d2' name=157 href="#157">157</a>   <span class='a'>_convertWifiNetwork</span>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a>) {
+<a class='l d2' name=158 href="#158">158</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a> ? <span class='v'>new </span><span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiNetwork">MozWifiNetwork</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a>) : <span class='v'>null;
+<a class='l d2' name=159 href="#159">159</a> </span>    <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>;
+<a class='l d2' name=160 href="#160">160</a>   },
+<a class='l d2' name=161 href="#161">161</a> 
+<a class='l d2' name=162 href="#162">162</a>   <span class='a'>_convertWifiNetworks</span>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetworks">aNetworks</a>) {
+<a class='l d2' name=163 href="#163">163</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=networks">networks</a> = <span class='v'>new </span><span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Array">Array</a>();
+<a class='l d2' name=164 href="#164">164</a>     <span class='v'>for </span>(<span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=i">i</a> <span class='a'>in</span> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetworks">aNetworks</a>) {
+<a class='l d2' name=165 href="#165">165</a>       <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=networks">networks</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=push">push</a>(<span class='v'>this.</span><span class='a'>_convertWifiNetwork</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetworks">aNetworks</a>[<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=i">i</a>]));
+<a class='l d2' name=166 href="#166">166</a>     }
+<a class='l d2' name=167 href="#167">167</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=networks">networks</a>;
+<a class='l d2' name=168 href="#168">168</a>   },
+<a class='l d2' name=169 href="#169">169</a> 
+<a class='l d2' name=170 href="#170">170</a>   <span class='a'>_convertConnection</span>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aConn">aConn</a>) {
+<a class='l d2' name=171 href="#171">171</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=conn">conn</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aConn">aConn</a> ? <span class='v'>new </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiConnection">MozWifiConnection</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aConn">aConn</a>) : <span class='v'>null;
+<a class='l d2' name=172 href="#172">172</a> </span>    <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=conn">conn</a>;
+<a class='l d2' name=173 href="#173">173</a>   },
+<a class='l d2' name=174 href="#174">174</a> 
+<a class='l d2' name=175 href="#175">175</a>   <span class='a'>_convertConnectionInfo</span>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aInfo">aInfo</a>) {
+<a class='l d2' name=176 href="#176">176</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aInfo">aInfo</a> ? <span class='v'>new </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiConnectionInfo">MozWifiConnectionInfo</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aInfo">aInfo</a>) : <span class='v'>null;
+<a class='l d2' name=177 href="#177">177</a> </span>    <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>;
+<a class='l d2' name=178 href="#178">178</a>   },
+<a class='l d2' name=179 href="#179">179</a> 
+<a class='l d2' name=180 href="#180">180</a>   <span class='a'>_convertWifiCapabilities</span>: <span class='v'>function(</span><span class='a'>aCapabilities</span>) {
+<a class='l d2' name=181 href="#181">181</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=capabilities">capabilities</a> = <span class='a'>aCapabilities</span> ?
+<a class='l d2' name=182 href="#182">182</a>                          <span class='v'>new </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiCapabilities">MozWifiCapabilities</a>(<span class='a'>aCapabilities</span>) : <span class='v'>null;
+<a class='l d2' name=183 href="#183">183</a> </span>    <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=capabilities">capabilities</a>;
+<a class='l d2' name=184 href="#184">184</a>   },
+<a class='l d2' name=185 href="#185">185</a> 
+<a class='l d2' name=186 href="#186">186</a>   <span class='a'>_sendMessageForRequest</span>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=name">name</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>) {
+<a class='l d2' name=187 href="#187">187</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=id">id</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=getRequestId">getRequestId</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=188 href="#188">188</a>     <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_mm">_mm</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=sendAsyncMessage">sendAsyncMessage</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=name">name</a>, { <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=rid">rid</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=id">id</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=mid">mid</a>: <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_id">_id</a> });
+<a class='l d2' name=189 href="#189">189</a>   },
+<a class='l d2' name=190 href="#190">190</a> 
+<a class='l d2' name=191 href="#191">191</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=receiveMessage">receiveMessage</a>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aMessage">aMessage</a>) {
+<a class='l d2' name=192 href="#192">192</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aMessage">aMessage</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=json">json</a>;
+<a class='l d2' name=193 href="#193">193</a>     <span class='v'>if </span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=mid">mid</a> &amp;&amp; <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=mid">mid</a> != <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_id">_id</a>)
+<a class='l d2' name=194 href="#194">194</a>       <span class='v'>return;</span>
+<a class='l d2' name=195 href="#195">195</a> 
+<a class='l d2' name=196 href="#196">196</a>     <span class='v'>let </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=197 href="#197">197</a>     <span class='v'>if </span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=rid">rid</a>) {
+<a class='l d2' name=198 href="#198">198</a>       <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><span class='a'>takeRequest</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=rid">rid</a>);
+<a class='l d2' name=199 href="#199">199</a>       <span class='v'>if </span>(!<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>) {
+<a class='l d2' name=200 href="#200">200</a>         <span class='v'>return;</span>
+<a class='l d2' name=201 href="#201">201</a>       }
+<a class='l d2' name=202 href="#202">202</a>     }
+<a class='l d2' name=203 href="#203">203</a> 
+<a class='l d2' name=204 href="#204">204</a>     <span class='v'>switch </span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aMessage">aMessage</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=name">name</a>) {
+<a class='l d2' name=205 href="#205">205</a>       <span class='v'>case </span><span class='s'>"WifiManager:setWifiEnabled:Return:OK"</span>:
+<a class='l d2' name=206 href="#206">206</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=207 href="#207">207</a>         <span class='v'>break;
+<a class='l d2' name=208 href="#208">208</a> </span>
+<a class='l d2' name=209 href="#209">209</a>       <span class='v'>case </span><span class='s'>"WifiManager:setWifiEnabled:Return:NO"</span>:
+<a class='l d2' name=210 href="#210">210</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <span class='s'>"Unable to enable/disable Wifi"</span>);
+<a class='l d2' name=211 href="#211">211</a>         <span class='v'>break;
+<a class='l d2' name=212 href="#212">212</a> </span>
+<a class='l d2' name=213 href="#213">213</a>       <span class='v'>case </span><span class='s'>"WifiManager:getNetworks:Return:OK"</span>:
+<a class='l d2' name=214 href="#214">214</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <span class='v'>this.</span><span class='a'>_convertWifiNetworks</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>));
+<a class='l d2' name=215 href="#215">215</a>         <span class='v'>break;
+<a class='l d2' name=216 href="#216">216</a> </span>
+<a class='l d2' name=217 href="#217">217</a>       <span class='v'>case </span><span class='s'>"WifiManager:getNetworks:Return:NO"</span>:
+<a class='l d2' name=218 href="#218">218</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <span class='s'>"Unable to scan for networks"</span>);
+<a class='l d2' name=219 href="#219">219</a>         <span class='v'>break;
+<a class='l d2' name=220 href="#220">220</a> </span>
+<a class='l d2' name=221 href="#221">221</a>       <span class='v'>case </span><span class='s'>"WifiManager:getKnownNetworks:Return:OK"</span>:
+<a class='l d2' name=222 href="#222">222</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <span class='v'>this.</span><span class='a'>_convertWifiNetworks</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>));
+<a class='l d2' name=223 href="#223">223</a>         <span class='v'>break;
+<a class='l d2' name=224 href="#224">224</a> </span>
+<a class='l d2' name=225 href="#225">225</a>       <span class='v'>case </span><span class='s'>"WifiManager:getKnownNetworks:Return:NO"</span>:
+<a class='l d2' name=226 href="#226">226</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <span class='s'>"Unable to get known networks"</span>);
+<a class='l d2' name=227 href="#227">227</a>         <span class='v'>break;
+<a class='l d2' name=228 href="#228">228</a> </span>
+<a class='l d2' name=229 href="#229">229</a>       <span class='v'>case </span><span class='s'>"WifiManager:associate:Return:OK"</span>:
+<a class='l d2' name=230 href="#230">230</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <span class='v'>true)</span>;
+<a class='l d2' name=231 href="#231">231</a>         <span class='v'>break;
+<a class='l d2' name=232 href="#232">232</a> </span>
+<a class='l d2' name=233 href="#233">233</a>       <span class='v'>case </span><span class='s'>"WifiManager:associate:Return:NO"</span>:
+<a class='l d2' name=234 href="#234">234</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <span class='s'>"Unable to add the network"</span>);
+<a class='l d2' name=235 href="#235">235</a>         <span class='v'>break;
+<a class='l d2' name=236 href="#236">236</a> </span>
+<a class='l d2' name=237 href="#237">237</a>       <span class='v'>case </span><span class='s'>"WifiManager:forget:Return:OK"</span>:
+<a class='l d2' name=238 href="#238">238</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <span class='v'>true)</span>;
+<a class='l d2' name=239 href="#239">239</a>         <span class='v'>break;
+<a class='l d2' name=240 href="#240">240</a> </span>
+<a class='l d2' name=241 href="#241">241</a>       <span class='v'>case </span><span class='s'>"WifiManager:forget:Return:NO"</span>:
+<a class='l d2' name=242 href="#242">242</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=243 href="#243">243</a>         <span class='v'>break;
+<a class='l d2' name=244 href="#244">244</a> </span>
+<a class='l d2' name=245 href="#245">245</a>       <span class='v'>case </span><span class='s'>"WifiManager:wps:Return:OK"</span>:
+<a class='l d2' name=246 href="#246">246</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=247 href="#247">247</a>         <span class='v'>break;
+<a class='l d2' name=248 href="#248">248</a> </span>
+<a class='l d2' name=249 href="#249">249</a>       <span class='v'>case </span><span class='s'>"WifiManager:wps:Return:NO"</span>:
+<a class='l d2' name=250 href="#250">250</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=251 href="#251">251</a>         <span class='v'>break;
+<a class='l d2' name=252 href="#252">252</a> </span>
+<a class='l d2' name=253 href="#253">253</a>       <span class='v'>case </span><span class='s'>"WifiManager:setPowerSavingMode:Return:OK"</span>:
+<a class='l d2' name=254 href="#254">254</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=255 href="#255">255</a>         <span class='v'>break;
+<a class='l d2' name=256 href="#256">256</a> </span>
+<a class='l d2' name=257 href="#257">257</a>       <span class='v'>case </span><span class='s'>"WifiManager:setPowerSavingMode:Return:NO"</span>:
+<a class='l d2' name=258 href="#258">258</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=259 href="#259">259</a>         <span class='v'>break;
+<a class='l d2' name=260 href="#260">260</a> </span>
+<a class='l d2' name=261 href="#261">261</a>       <span class='v'>case </span><span class='s'>"WifiManager:setHttpProxy:Return:OK"</span>:
+<a class='l d2' name=262 href="#262">262</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=263 href="#263">263</a>         <span class='v'>break;
+<a class='l d2' name=264 href="#264">264</a> </span>
+<a class='l d2' name=265 href="#265">265</a>       <span class='v'>case </span><span class='s'>"WifiManager:setHttpProxy:Return:NO"</span>:
+<a class='l d2' name=266 href="#266">266</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=267 href="#267">267</a>         <span class='v'>break;
+<a class='l d2' name=268 href="#268">268</a> </span>
+<a class='l d2' name=269 href="#269">269</a>       <span class='v'>case </span><span class='s'>"WifiManager:setStaticIpMode:Return:OK"</span>:
+<a class='l d2' name=270 href="#270">270</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=271 href="#271">271</a>         <span class='v'>break;
+<a class='l d2' name=272 href="#272">272</a> </span>
+<a class='l d2' name=273 href="#273">273</a>       <span class='v'>case </span><span class='s'>"WifiManager:setStaticIpMode:Return:NO"</span>:
+<a class='l d2' name=274 href="#274">274</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=275 href="#275">275</a>         <span class='v'>break;
+<a class='l d2' name=276 href="#276">276</a> </span>
+<a class='l d2' name=277 href="#277">277</a>       <span class='v'>case </span><span class='s'>"WifiManager:importCert:Return:OK"</span>:
+<a class='l d2' name=278 href="#278">278</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cu">Cu</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=cloneInto">cloneInto</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>, <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a>));
+<a class='l d2' name=279 href="#279">279</a>         <span class='v'>break;
+<a class='l d2' name=280 href="#280">280</a> </span>
+<a class='l d2' name=281 href="#281">281</a>       <span class='v'>case </span><span class='s'>"WifiManager:importCert:Return:NO"</span>:
+<a class='l d2' name=282 href="#282">282</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=283 href="#283">283</a>         <span class='v'>break;
+<a class='l d2' name=284 href="#284">284</a> </span>
+<a class='l d2' name=285 href="#285">285</a>       <span class='v'>case </span><span class='s'>"WifiManager:getImportedCerts:Return:OK"</span>:
+<a class='l d2' name=286 href="#286">286</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Cu">Cu</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=cloneInto">cloneInto</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>, <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a>));
+<a class='l d2' name=287 href="#287">287</a>         <span class='v'>break;
+<a class='l d2' name=288 href="#288">288</a> </span>
+<a class='l d2' name=289 href="#289">289</a>       <span class='v'>case </span><span class='s'>"WifiManager:getImportedCerts:Return:NO"</span>:
+<a class='l d2' name=290 href="#290">290</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=291 href="#291">291</a>         <span class='v'>break;
+<a class='l d2' name=292 href="#292">292</a> </span>
+<a class='l d2' name=293 href="#293">293</a>       <span class='v'>case </span><span class='s'>"WifiManager:deleteCert:Return:OK"</span>:
+<a class='l d2' name=294 href="#294">294</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireSuccess">fireSuccess</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=295 href="#295">295</a>         <span class='v'>break;
+<a class='l d2' name=296 href="#296">296</a> </span>
+<a class='l d2' name=297 href="#297">297</a>       <span class='v'>case </span><span class='s'>"WifiManager:deleteCert:Return:NO"</span>:
+<a class='l d2' name=298 href="#298">298</a>         <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Services">Services</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMRequest">DOMRequest</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=fireError">fireError</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=data">data</a>);
+<a class='l d2' name=299 href="#299">299</a>         <span class='v'>break;
+<a class='l d2' name=300 href="#300">300</a> </span>
+<a class='l d2' name=301 href="#301">301</a>       <span class='v'>case </span><span class='s'>"WifiManager:wifiDown"</span>:
+<a class='l d2' name=302 href="#302">302</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_enabled">_enabled</a> = <span class='v'>false;</span>
+<a class='l d2' name=303 href="#303">303</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>null;
+<a class='l d2' name=304 href="#304">304</a> </span>        <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireEnabledOrDisabled">_fireEnabledOrDisabled</a>(<span class='v'>false)</span>;
+<a class='l d2' name=305 href="#305">305</a>         <span class='v'>break;
+<a class='l d2' name=306 href="#306">306</a> </span>
+<a class='l d2' name=307 href="#307">307</a>       <span class='v'>case </span><span class='s'>"WifiManager:wifiUp"</span>:
+<a class='l d2' name=308 href="#308">308</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_enabled">_enabled</a> = <span class='v'>true;</span>
+<a class='l d2' name=309 href="#309">309</a>         <span class='v'>this.</span><span class='a'>_macAddress</span> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=macAddress">macAddress</a>;
+<a class='l d2' name=310 href="#310">310</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireEnabledOrDisabled">_fireEnabledOrDisabled</a>(<span class='v'>true)</span>;
+<a class='l d2' name=311 href="#311">311</a>         <span class='v'>break;
+<a class='l d2' name=312 href="#312">312</a> </span>
+<a class='l d2' name=313 href="#313">313</a>       <span class='v'>case </span><span class='s'>"WifiManager:onconnecting"</span>:
+<a class='l d2' name=314 href="#314">314</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>this.</span><span class='a'>_convertWifiNetwork</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=315 href="#315">315</a>         <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"connecting"</span>;
+<a class='l d2' name=316 href="#316">316</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=317 href="#317">317</a>         <span class='v'>break;
+<a class='l d2' name=318 href="#318">318</a> </span>
+<a class='l d2' name=319 href="#319">319</a>       <span class='v'>case </span><span class='s'>"WifiManager:onassociate"</span>:
+<a class='l d2' name=320 href="#320">320</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>this.</span><span class='a'>_convertWifiNetwork</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=321 href="#321">321</a>         <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"associated"</span>;
+<a class='l d2' name=322 href="#322">322</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=323 href="#323">323</a>         <span class='v'>break;
+<a class='l d2' name=324 href="#324">324</a> </span>
+<a class='l d2' name=325 href="#325">325</a>       <span class='v'>case </span><span class='s'>"WifiManager:onconnect"</span>:
+<a class='l d2' name=326 href="#326">326</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>this.</span><span class='a'>_convertWifiNetwork</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=327 href="#327">327</a>         <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"connected"</span>;
+<a class='l d2' name=328 href="#328">328</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=329 href="#329">329</a>         <span class='v'>break;
+<a class='l d2' name=330 href="#330">330</a> </span>
+<a class='l d2' name=331 href="#331">331</a>       <span class='v'>case </span><span class='s'>"WifiManager:ondisconnect"</span>:
+<a class='l d2' name=332 href="#332">332</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>null;
+<a class='l d2' name=333 href="#333">333</a> </span>        <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"disconnected"</span>;
+<a class='l d2' name=334 href="#334">334</a>         <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>null;
+<a class='l d2' name=335 href="#335">335</a> </span>        <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=336 href="#336">336</a>         <span class='v'>break;
+<a class='l d2' name=337 href="#337">337</a> </span>
+<a class='l d2' name=338 href="#338">338</a>       <span class='v'>case </span><span class='s'>"WifiManager:onwpstimeout"</span>:
+<a class='l d2' name=339 href="#339">339</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>null;
+<a class='l d2' name=340 href="#340">340</a> </span>        <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"wps-timedout"</span>;
+<a class='l d2' name=341 href="#341">341</a>         <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>null;
+<a class='l d2' name=342 href="#342">342</a> </span>        <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=343 href="#343">343</a>         <span class='v'>break;
+<a class='l d2' name=344 href="#344">344</a> </span>
+<a class='l d2' name=345 href="#345">345</a>       <span class='v'>case </span><span class='s'>"WifiManager:onwpsfail"</span>:
+<a class='l d2' name=346 href="#346">346</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>null;
+<a class='l d2' name=347 href="#347">347</a> </span>        <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"wps-failed"</span>;
+<a class='l d2' name=348 href="#348">348</a>         <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>null;
+<a class='l d2' name=349 href="#349">349</a> </span>        <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=350 href="#350">350</a>         <span class='v'>break;
+<a class='l d2' name=351 href="#351">351</a> </span>
+<a class='l d2' name=352 href="#352">352</a>       <span class='v'>case </span><span class='s'>"WifiManager:onwpsoverlap"</span>:
+<a class='l d2' name=353 href="#353">353</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>null;
+<a class='l d2' name=354 href="#354">354</a> </span>        <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"wps-overlapped"</span>;
+<a class='l d2' name=355 href="#355">355</a>         <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>null;
+<a class='l d2' name=356 href="#356">356</a> </span>        <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=357 href="#357">357</a>         <span class='v'>break;
+<a class='l d2' name=358 href="#358">358</a> </span>
+<a class='l d2' name=359 href="#359">359</a>       <span class='v'>case </span><span class='s'>"WifiManager:connectioninfoupdate"</span>:
+<a class='l d2' name=360 href="#360">360</a>         <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>this.</span><span class='a'>_convertConnectionInfo</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>);
+<a class='l d2' name=361 href="#361">361</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireConnectionInfoUpdate">_fireConnectionInfoUpdate</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>);
+<a class='l d2' name=362 href="#362">362</a>         <span class='v'>break;
+<a class='l d2' name=363 href="#363">363</a> </span>      <span class='v'>case </span><span class='s'>"WifiManager:onconnectingfailed"</span>:
+<a class='l d2' name=364 href="#364">364</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>null;
+<a class='l d2' name=365 href="#365">365</a> </span>        <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"connectingfailed"</span>;
+<a class='l d2' name=366 href="#366">366</a>         <span class='v'>this.</span><span class='a'>_lastConnectionInfo</span> = <span class='v'>null;
+<a class='l d2' name=367 href="#367">367</a> </span>        <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=368 href="#368">368</a>         <span class='v'>break;
+<a class='l d2' name=369 href="#369">369</a> </span>      <span class='v'>case </span><span class='s'>"WifiManager:onauthenticating"</span>:
+<a class='l d2' name=370 href="#370">370</a>         <span class='v'>this.</span><span class='a'>_currentNetwork</span> = <span class='v'>this.</span><span class='a'>_convertWifiNetwork</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=371 href="#371">371</a>         <span class='v'>this.</span><span class='a'>_connectionStatus</span> = <span class='s'>"authenticating"</span>;
+<a class='l d2' name=372 href="#372">372</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>);
+<a class='l d2' name=373 href="#373">373</a>         <span class='v'>break;
+<a class='l d2' name=374 href="#374">374</a> </span>      <span class='v'>case </span><span class='s'>"WifiManager:stationinfoupdate"</span>:
+<a class='l d2' name=375 href="#375">375</a>         <span class='v'>this.</span><span class='a'>_stationNumber</span> = <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>.<span class='a'>station</span>;
+<a class='l d2' name=376 href="#376">376</a>         <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStationInfoUpdate">_fireStationInfoUpdate</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=msg">msg</a>);
+<a class='l d2' name=377 href="#377">377</a>         <span class='v'>break;
+<a class='l d2' name=378 href="#378">378</a> </span>    }
+<a class='l d2' name=379 href="#379">379</a>   },
+<a class='l d2' name=380 href="#380">380</a> 
+<a class='l d2' name=381 href="#381">381</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStatusChangeEvent">_fireStatusChangeEvent</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=StatusChangeEvent">StatusChangeEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a>) {
+<a class='l d2' name=382 href="#382">382</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=event">event</a> = <span class='v'>new </span><span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a>.<span class='a'>MozWifiStatusChangeEvent</span>(<span class='s'>"statuschange"</span>,
+<a class='l d2' name=383 href="#383">383</a>                                                           { <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>: <span class='v'>this.</span><span class='a'>_convertWifiNetwork</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=aNetwork">aNetwork</a>),
+<a class='l d2' name=384 href="#384">384</a>                                                             <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=status">status</a>: <span class='v'>this.</span><span class='a'>_connectionStatus</span>
+<a class='l d2' name=385 href="#385">385</a>                                                           });
+<a class='l d2' name=386 href="#386">386</a>     <span class='v'>this.</span><span class='a'>__DOM_IMPL__</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=dispatchEvent">dispatchEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=event">event</a>);
+<a class='l d2' name=387 href="#387">387</a>   },
+<a class='l d2' name=388 href="#388">388</a> 
+<a class='l d2' name=389 href="#389">389</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireConnectionInfoUpdate">_fireConnectionInfoUpdate</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=onConnectionInfoUpdate">onConnectionInfoUpdate</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>) {
+<a class='l d2' name=390 href="#390">390</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=evt">evt</a> = <span class='v'>new </span><span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a>.<span class='a'>MozWifiConnectionInfoEvent</span>(<span class='s'>"connectioninfoupdate"</span>,
+<a class='l d2' name=391 href="#391">391</a>                                                           { <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>: <span class='v'>this.</span><span class='a'>_currentNetwork</span>,
+<a class='l d2' name=392 href="#392">392</a>                                                             <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=signalStrength">signalStrength</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=signalStrength">signalStrength</a>,
+<a class='l d2' name=393 href="#393">393</a>                                                             <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=relSignalStrength">relSignalStrength</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=relSignalStrength">relSignalStrength</a>,
+<a class='l d2' name=394 href="#394">394</a>                                                             <span class='a'>linkSpeed</span>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>.<span class='a'>linkSpeed</span>,
+<a class='l d2' name=395 href="#395">395</a>                                                             <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ipAddress">ipAddress</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=ipAddress">ipAddress</a>,
+<a class='l d2' name=396 href="#396">396</a>                                                           });
+<a class='l d2' name=397 href="#397">397</a>     <span class='v'>this.</span><span class='a'>__DOM_IMPL__</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=dispatchEvent">dispatchEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=evt">evt</a>);
+<a class='l d2' name=398 href="#398">398</a>   },
+<a class='l d2' name=399 href="#399">399</a> 
+<a class='l d2' name=400 href="#400">400</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireEnabledOrDisabled">_fireEnabledOrDisabled</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabledDisabled">enabledDisabled</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabled">enabled</a>) {
+<a class='l d2' name=401 href="#401">401</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=evt">evt</a> = <span class='v'>new </span><span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Event">Event</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabled">enabled</a> ? <span class='s'>"enabled"</span> : <span class='s'>"disabled"</span>);
+<a class='l d2' name=402 href="#402">402</a>     <span class='v'>this.</span><span class='a'>__DOM_IMPL__</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=dispatchEvent">dispatchEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=evt">evt</a>);
+<a class='l d2' name=403 href="#403">403</a>   },
+<a class='l d2' name=404 href="#404">404</a> 
+<a class='l d2' name=405 href="#405">405</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_fireStationInfoUpdate">_fireStationInfoUpdate</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=onStationInfoUpdate">onStationInfoUpdate</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>) {
+<a class='l d2' name=406 href="#406">406</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=evt">evt</a> = <span class='v'>new </span><span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_window">_window</a>.<span class='a'>MozWifiStationInfoEvent</span>(<span class='s'>"stationinfoupdate"</span>,
+<a class='l d2' name=407 href="#407">407</a>                                                        { <span class='a'>station</span>: <span class='v'>this.</span><span class='a'>_stationNumber</span>}
+<a class='l d2' name=408 href="#408">408</a>                                                       );
+<a class='l d2' name=409 href="#409">409</a>     <span class='v'>this.</span><span class='a'>__DOM_IMPL__</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=dispatchEvent">dispatchEvent</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=evt">evt</a>);
+<a class='l d2' name=410 href="#410">410</a>   },
+<a class='l d2' name=411 href="#411">411</a> 
+<a class='l d2' name=412 href="#412">412</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setWifiEnabled">setWifiEnabled</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setWifiEnabled">setWifiEnabled</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabled">enabled</a>) {
+<a class='l d2' name=413 href="#413">413</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=414 href="#414">414</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:setWifiEnabled"</span>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabled">enabled</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=415 href="#415">415</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=416 href="#416">416</a>   },
+<a class='l d2' name=417 href="#417">417</a> 
+<a class='l d2' name=418 href="#418">418</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=getNetworks">getNetworks</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=getNetworks">getNetworks</a>() {
+<a class='l d2' name=419 href="#419">419</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=420 href="#420">420</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:getNetworks"</span>, <span class='v'>null,</span> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=421 href="#421">421</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=422 href="#422">422</a>   },
+<a class='l d2' name=423 href="#423">423</a> 
+<a class='l d2' name=424 href="#424">424</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=getKnownNetworks">getKnownNetworks</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=getKnownNetworks">getKnownNetworks</a>() {
+<a class='l d2' name=425 href="#425">425</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=426 href="#426">426</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:getKnownNetworks"</span>, <span class='v'>null,</span> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=427 href="#427">427</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=428 href="#428">428</a>   },
+<a class='l d2' name=429 href="#429">429</a> 
+<a class='l d2' name=430 href="#430">430</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=associate">associate</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=associate">associate</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>) {
+<a class='l d2' name=431 href="#431">431</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=432 href="#432">432</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:associate"</span>,
+<a class='l d2' name=433 href="#433">433</a>                                 <span class='v'>this.</span><span class='a'>_convertWifiNetworkToJSON</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>), <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=434 href="#434">434</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=435 href="#435">435</a>   },
+<a class='l d2' name=436 href="#436">436</a> 
+<a class='l d2' name=437 href="#437">437</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=forget">forget</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=forget">forget</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>) {
+<a class='l d2' name=438 href="#438">438</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=439 href="#439">439</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:forget"</span>,
+<a class='l d2' name=440 href="#440">440</a>                                 <span class='v'>this.</span><span class='a'>_convertWifiNetworkToJSON</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>), <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=441 href="#441">441</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=442 href="#442">442</a>   },
+<a class='l d2' name=443 href="#443">443</a> 
+<a class='l d2' name=444 href="#444">444</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=wps">wps</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=wps">wps</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=detail">detail</a>) {
+<a class='l d2' name=445 href="#445">445</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=446 href="#446">446</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:wps"</span>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=detail">detail</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=447 href="#447">447</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=448 href="#448">448</a>   },
+<a class='l d2' name=449 href="#449">449</a> 
+<a class='l d2' name=450 href="#450">450</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setPowerSavingMode">setPowerSavingMode</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setPowerSavingMode">setPowerSavingMode</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabled">enabled</a>) {
+<a class='l d2' name=451 href="#451">451</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=452 href="#452">452</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:setPowerSavingMode"</span>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabled">enabled</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=453 href="#453">453</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=454 href="#454">454</a>   },
+<a class='l d2' name=455 href="#455">455</a> 
+<a class='l d2' name=456 href="#456">456</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setHttpProxy">setHttpProxy</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setHttpProxy">setHttpProxy</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>) {
+<a class='l d2' name=457 href="#457">457</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=458 href="#458">458</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:setHttpProxy"</span>,
+<a class='l d2' name=459 href="#459">459</a>                                 { <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>: <span class='v'>this.</span><span class='a'>_convertWifiNetworkToJSON</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>), <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>:<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>}, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=460 href="#460">460</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=461 href="#461">461</a>   },
+<a class='l d2' name=462 href="#462">462</a> 
+<a class='l d2' name=463 href="#463">463</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setStaticIpMode">setStaticIpMode</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setStaticIpMode">setStaticIpMode</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>) {
+<a class='l d2' name=464 href="#464">464</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=465 href="#465">465</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:setStaticIpMode"</span>,
+<a class='l d2' name=466 href="#466">466</a>                                 { <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>: <span class='v'>this.</span><span class='a'>_convertWifiNetworkToJSON</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>), <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=info">info</a>}, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=467 href="#467">467</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=468 href="#468">468</a>   },
+<a class='l d2' name=469 href="#469">469</a> 
+<a class='l d2' name=470 href="#470">470</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=importCert">importCert</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsIDOMWifiManager_importCert">nsIDOMWifiManager_importCert</a>(<span class='a'>certBlob</span>, <span class='a'>certPassword</span>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=certNickname">certNickname</a>) {
+<a class='l d2' name=471 href="#471">471</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=472 href="#472">472</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:importCert"</span>,
+<a class='l d2' name=473 href="#473">473</a>                                 {
+<a class='l d2' name=474 href="#474">474</a>                                   <span class='a'>certBlob</span>: <span class='a'>certBlob</span>,
+<a class='l d2' name=475 href="#475">475</a>                                   <span class='a'>certPassword</span>: <span class='a'>certPassword</span>,
+<a class='l d2' name=476 href="#476">476</a>                                   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=certNickname">certNickname</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=certNickname">certNickname</a>
+<a class='l d2' name=477 href="#477">477</a>                                 }, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=478 href="#478">478</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=479 href="#479">479</a>   },
+<a class='l d2' name=480 href="#480">480</a> 
+<a class='l d2' name=481 href="#481">481</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=getImportedCerts">getImportedCerts</a>: <span class='v'>function </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=nsIDOMWifiManager_getImportedCerts">nsIDOMWifiManager_getImportedCerts</a>() {
+<a class='l d2' name=482 href="#482">482</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=483 href="#483">483</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:getImportedCerts"</span>, <span class='v'>null,</span> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=484 href="#484">484</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=485 href="#485">485</a>   },
+<a class='l d2' name=486 href="#486">486</a> 
+<a class='l d2' name=487 href="#487">487</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=deleteCert">deleteCert</a>: <span class='v'>function </span><span class='a'>nsIDOMWifiManager_deleteCert</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=certNickname">certNickname</a>) {
+<a class='l d2' name=488 href="#488">488</a>     <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a> = <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=createRequest">createRequest</a>();
+<a class='l d2' name=489 href="#489">489</a>     <span class='v'>this.</span><span class='a'>_sendMessageForRequest</span>(<span class='s'>"WifiManager:deleteCert"</span>,
+<a class='l d2' name=490 href="#490">490</a>                                 {
+<a class='l d2' name=491 href="#491">491</a>                                   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=certNickname">certNickname</a>: <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=certNickname">certNickname</a>
+<a class='l d2' name=492 href="#492">492</a>                                 }, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>);
+<a class='l d2' name=493 href="#493">493</a>     <span class='v'>return </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=request">request</a>;
+<a class='l d2' name=494 href="#494">494</a>   },
+<a class='l d2' name=495 href="#495">495</a> 
+<a class='l d2' name=496 href="#496">496</a>   <span class='v'>get </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=enabled">enabled</a>() {
+<a class='l d2' name=497 href="#497">497</a>     <span class='v'>return </span><span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=_enabled">_enabled</a>;
+<a class='l d2' name=498 href="#498">498</a>   },
+<a class='l d2' name=499 href="#499">499</a> 
+<a class='l d2' name=500 href="#500">500</a>   <span class='v'>get </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=macAddress">macAddress</a>() {
+<a class='l d2' name=501 href="#501">501</a>     <span class='v'>return </span><span class='v'>this.</span><span class='a'>_macAddress</span>;
+<a class='l d2' name=502 href="#502">502</a>   },
+<a class='l d2' name=503 href="#503">503</a> 
+<a class='l d2' name=504 href="#504">504</a>   <span class='v'>get </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=connection">connection</a>() {
+<a class='l d2' name=505 href="#505">505</a>     <span class='v'>let </span><span class='a'>_connection</span> = <span class='v'>this.</span><span class='a'>_convertConnection</span>({ <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=status">status</a>: <span class='v'>this.</span><span class='a'>_connectionStatus</span>,
+<a class='l d2' name=506 href="#506">506</a>                                                 <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=network">network</a>: <span class='v'>this.</span><span class='a'>_currentNetwork</span>,
+<a class='l d2' name=507 href="#507">507</a>                                               });
+<a class='l d2' name=508 href="#508">508</a>     <span class='v'>return </span><span class='a'>_connection</span>;
+<a class='l d2' name=509 href="#509">509</a>   },
+<a class='l d2' name=510 href="#510">510</a> 
+<a class='l d2' name=511 href="#511">511</a>   <span class='v'>get </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=connectionInformation">connectionInformation</a>() {
+<a class='l d2' name=512 href="#512">512</a>     <span class='v'>return </span><span class='v'>this.</span><span class='a'>_lastConnectionInfo</span>;
+<a class='l d2' name=513 href="#513">513</a>   },
+<a class='l d2' name=514 href="#514">514</a> 
+<a class='l d2' name=515 href="#515">515</a>   <span class='v'>get </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=capabilities">capabilities</a>() {
+<a class='l d2' name=516 href="#516">516</a>     <span class='v'>return </span><span class='v'>this.</span><span class='a'>_capabilities</span>;
+<a class='l d2' name=517 href="#517">517</a>   },
+<a class='l d2' name=518 href="#518">518</a> 
+<a class='l d2' name=519 href="#519">519</a>   <span class='a'>defineEventHandlerGetterSetter</span>: <span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=name">name</a>) {
+<a class='l d2' name=520 href="#520">520</a>     <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=Object">Object</a>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=defineProperty">defineProperty</a>(<span class='v'>this,</span> <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=name">name</a>, {
+<a class='l d2' name=521 href="#521">521</a>       <span class='v'>get: </span><span class='v'>function(</span>) {
+<a class='l d2' name=522 href="#522">522</a>         <span class='v'>return </span><span class='v'>this.</span><span class='a'>__DOM_IMPL__</span>.<span class='a'>getEventHandler</span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=name">name</a>);
+<a class='l d2' name=523 href="#523">523</a>       },
+<a class='l d2' name=524 href="#524">524</a>       <span class='v'>set: </span><span class='v'>function(</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=handler">handler</a>) {
+<a class='l d2' name=525 href="#525">525</a>         <span class='v'>this.</span><span class='a'>__DOM_IMPL__</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=setEventHandler">setEventHandler</a>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=name">name</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=handler">handler</a>);
+<a class='l d2' name=526 href="#526">526</a>       }
+<a class='l d2' name=527 href="#527">527</a>     });
+<a class='l d2' name=528 href="#528">528</a>   },
+<a class='l d2' name=529 href="#529">529</a> };
+<a class='l d2' name=530 href="#530">530</a> 
+<a class='l d2' name=531 href="#531">531</a> <span class='v'>this.</span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=NSGetFactory">NSGetFactory</a> = <span class='a'>XPCOMUtils</span>.<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=generateNSGetFactory">generateNSGetFactory</a>([
+<a class='l d2' name=532 href="#532">532</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DOMWifiManager">DOMWifiManager</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiNetwork">MozWifiNetwork</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiConnection">MozWifiConnection</a>, <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiCapabilities">MozWifiCapabilities</a>,
+<a class='l d2' name=533 href="#533">533</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=MozWifiConnectionInfo">MozWifiConnectionInfo</a>
+<a class='l d2' name=534 href="#534">534</a> ]);
+<a class='l d2' name=535 href="#535">535</a> 
+<a class='l d2' name=536 href="#536">536</a> <span class='v'>var </span><a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=debug">debug</a>;
+<a class='l d2' name=537 href="#537">537</a> <span class='v'>if </span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=DEBUG">DEBUG</a>) {
+<a class='l d2' name=538 href="#538">538</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=debug">debug</a> = <span class='v'>function </span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=s">s</a>) {
+<a class='l d2' name=539 href="#539">539</a>     <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=dump">dump</a>(<span class='s'>"-*- DOMWifiManager component: "</span> + <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=s">s</a> + <span class='s'>"\n"</span>);
+<a class='l d2' name=540 href="#540">540</a>   };
+<a class='l d2' name=541 href="#541">541</a> } <span class='v'>else </span>{
+<a class='l d2' name=542 href="#542">542</a>   <a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=debug">debug</a> = <span class='v'>function </span>(<a class="d" href="http://mxr.mozilla.org/mozilla-central/ident?i=s">s</a>) {};
+<a class='l d2' name=543 href="#543">543</a> }
+<a class='l d2' name=544 href="#544">544</a> </span></pre><form name='revs' id='revs' class='aftercontent'
+>view http://hg.mozilla.org/mozilla-central/rev/
+<select name='rev' id='rev' onchange='changerev()'>
+<option value="380817d573cd">380817d573cd (2015-09-15 11:19 -0700) Shu-yu Guo</option>
+<option value="d993a62ce8db">d993a62ce8db (2014-10-07 18:06 +0800) Chuck Lee</option>
+<option value="674d025b67e9">674d025b67e9 (2014-10-03 10:05 +0200) Bobby Holley</option>
+<option value="5c14c63b4c1a">5c14c63b4c1a (2014-10-01 12:33 -0400) Ryan VanderMeulen</option>
+<option value="fbdb5bead639">fbdb5bead639 (2014-10-01 15:25 +0200) Bobby Holley</option>
+<option value="c8b5a6377dad">c8b5a6377dad (2014-09-17 15:08 +0800) Chuck Lee</option>
+<option value="4353846612d0">4353846612d0 (2014-08-07 17:19 +0800) Chuck Lee</option>
+<option value="4b45c0b4820d">4b45c0b4820d (2014-07-04 14:37 +0800) Chuck Lee</option>
+<option value="69d61e42d5df">69d61e42d5df (2014-06-24 22:12 -0700) Jim Blandy</option>
+<option value="11696ba7ddcb">11696ba7ddcb (2014-01-22 16:37 +0800) Vincent Chang</option>
+<option value="04193066a20c">04193066a20c (2014-05-19 10:29 +0800) Chuck Lee</option>
+<option value="dde446669ba6">dde446669ba6 (2014-04-25 18:41 +0800) Chuck Lee</option>
+<option value="947690de7b62">947690de7b62 (2014-04-28 15:50 +0800) Chuck Lee</option>
+<option value="2e55ff7dc0ff">2e55ff7dc0ff (2014-04-30 19:58 +0800) Chuck Lee</option>
+<option value="c9cb944fae53">c9cb944fae53 (2014-04-30 19:58 +0800) Chuck Lee</option>
+<option value="9b2c4a85a5e1">9b2c4a85a5e1 (2014-04-10 11:34 +0800) Dimi Lee</option>
+<option value="83d0d281cfbc">83d0d281cfbc (2014-04-14 12:24 +0200) Carsten &quot;Tomcat&quot; Book</option>
+<option value="ce623d85f0c4">ce623d85f0c4 (2014-04-10 11:34 +0800) Dimi Lee</option>
+<option value="c16f36021958">c16f36021958 (2014-03-21 14:44 -0400) Ryan VanderMeulen</option>
+<option value="463fa756b43b">463fa756b43b (2014-03-19 14:04 +0800) Dimi Lee</option>
+<option value="f540e87a999b">f540e87a999b (2014-03-12 18:25 +0800) Vincent Chang</option>
+<option value="05595c39906f">05595c39906f (2013-11-20 13:33 +0800) Ben Kelly</option>
+<option value="204d98726f64">204d98726f64 (2013-08-22 18:22 +0800) Dimi Lee</option>
+<option value="4b00bb32356d">4b00bb32356d (2013-07-08 17:55 -0400) Justin Lebar</option>
+<option value="43d14cca5953">43d14cca5953 (2013-07-08 19:41 +0800) masashi honma</option>
+<option value="f60f9ef069bc">f60f9ef069bc (2013-06-24 11:02 +0800) Dimi Lee</option>
+<option value="1574fba0dfa4">1574fba0dfa4 (2013-04-16 10:54 +0200) Carmen Jimenez Cabezas</option>
+<option value="9fbbb2fc5dbb">9fbbb2fc5dbb (2013-03-16 00:58 +0800) Vincent Chang</option>
+<option value="657980dc46fd">657980dc46fd (2012-11-08 15:32 +0800) Chuck Lee</option>
+<option value="5ce71981e005">5ce71981e005 (2012-10-31 09:13 -0700) Kyle Huey</option>
+<option value="5bf3abe91210">5bf3abe91210 (2012-10-31 16:35 +0800) Vicamo Yang</option>
+<option value="67cb43bb8865">67cb43bb8865 (2012-10-30 12:28 -0700) Kyle Huey</option>
+<option value="ad1d720d82b7">ad1d720d82b7 (2012-10-30 17:02 +0000) Ed Morley</option>
+<option value="1545e91c658e">1545e91c658e (2012-10-30 08:26 -0700) Kyle Huey</option>
+<option value="0d5ac783d657">0d5ac783d657 (2012-10-02 17:24 -0400) Blake Kaplan</option>
+<option value="bbfb9d9241e4">bbfb9d9241e4 (2012-09-27 14:18 -0400) Blake Kaplan</option>
+<option value="c4f422d91514">c4f422d91514 (2012-09-27 14:14 -0400) Blake Kaplan</option>
+<option value="bebaecb60f44">bebaecb60f44 (2012-09-24 17:05 +0800) Vincent Chang</option>
+<option value="9020feae5d3c">9020feae5d3c (2012-09-04 12:26 +0800) Gene Lian</option>
+<option value="a0240c1043ee">a0240c1043ee (2012-08-28 16:14 -0300) Vincent Chang</option>
+<option value="88d7348e0b05">88d7348e0b05 (2012-08-22 12:37 -0700) Blake Kaplan</option>
+<option value="f921ed75d75d">f921ed75d75d (2012-08-22 12:41 -0700) Masashi Honma</option>
+<option value="1ecca798b1fb">1ecca798b1fb (2012-08-16 15:19 -0700) Masashi Honma</option>
+<option value="030feb4315fc">030feb4315fc (2012-08-02 15:36 -0700) Blake Kaplan</option>
+<option value="02346e2e7156">02346e2e7156 (2012-07-31 14:27 -0700) Blake Kaplan</option>
+<option value="0762fea56b71">0762fea56b71 (2012-07-16 08:44 -0700) Mounir Lamouri</option>
+<option value="8f967762ac65">8f967762ac65 (2012-07-02 10:58 +0200) Blake Kaplan</option>
+<option value="ff38bb1bce5a">ff38bb1bce5a (2012-06-28 12:01 +0200) Blake Kaplan</option>
+<option value="75739012a1a6">75739012a1a6 (2012-06-16 11:14 -0700) Gregor Wagner</option>
+<option value="ff605042a4dc">ff605042a4dc (2012-06-13 15:49 -0700) Gregor Wagner</option>
+<option value="1d3aea7115d3">1d3aea7115d3 (2012-04-13 17:07 +0800) Blake Kaplan</option>
+<option value="14084207e9d1">14084207e9d1 (2012-04-09 11:32 +0800) Blake Kaplan</option>
+<option value="63a7d74d01d8">63a7d74d01d8 (2012-04-13 15:54 +0800) Fabien Cazenave</option>
+<option value="1d45940d8d69">1d45940d8d69 (2012-04-11 10:05 -0700) Vivien Nicolas</option>
+<option value="9aaed241e2b7">9aaed241e2b7 (2012-03-26 18:27 +0200) Blake Kaplan</option>
+<option value="92cc2053db2f">92cc2053db2f (2012-04-06 13:10 +0200) Ms2ger</option>
+<option value="74813b11cf8b">74813b11cf8b (2012-04-06 03:12 -0700) Vivien Nicolas</option>
+<option value="7290c4f0a150">7290c4f0a150 (2012-03-27 12:04 -0700) Blake Kaplan</option>
+<option value="7731e8b41a70">7731e8b41a70 (2012-03-27 12:13 +0200) Blake Kaplan</option>
+<option value="7f4d6e62d1f7">7f4d6e62d1f7 (2012-03-26 18:26 +0200) Blake Kaplan</option>
+<option value="ac271854f43d">ac271854f43d (2012-03-20 16:59 +0100) Blake Kaplan</option>
+<option value="29d7555d52fb">29d7555d52fb (2012-03-20 16:31 +0100) Blake Kaplan</option>
+<option value="350ed35543d2">350ed35543d2 (2012-03-16 17:51 +0100) Blake Kaplan</option>
+
+</select>/dom/wifi/DOMWifiManager.js
+</form>
+</p>
+
+
+<!-- Mirrored from mxr.mozilla.org/mozilla-central/source/dom/wifi/DOMWifiManager.js by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:14:47 GMT -->
+</html>

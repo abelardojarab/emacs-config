@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"and(LongPredicate)","path":"and-java.util.function.LongPredicate-","entryType":"Method"},{"name":"negate()","path":"negate--","entryType":"Method"},{"name":"or(LongPredicate)","path":"or-java.util.function.LongPredicate-","entryType":"Method"},{"name":"test(long)","path":"test-long-","entryType":"Method"}]}

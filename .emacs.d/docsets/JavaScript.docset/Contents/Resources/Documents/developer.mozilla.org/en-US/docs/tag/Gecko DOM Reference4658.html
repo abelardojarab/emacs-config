@@ -1,0 +1,918 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/Gecko DOM Reference?page=2 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 17:03:53 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: Gecko DOM Reference</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: Gecko DOM Reference" href="../feeds/atom/tag/Gecko%20DOM%20Reference">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/Gecko DOM Reference?page=2" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FGecko+DOM+Reference%3Fpage%3D2" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/Gecko DOM Reference?page=2" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FGecko+DOM+Reference%3Fpage%3D2" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: Gecko DOM Reference</h1>
+                <ol class="pagination">
+      <li class="prev">
+      <a href="Gecko%20DOM%20Reference2679.html?page=1">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="Gecko%20DOM%20Reference2679.html?page=1">1</a>
+    </li>
+      <li class="selected">
+      <a href="Gecko%20DOM%20Reference4658.html?page=2">2</a>
+    </li>
+        </ol>
+
+
+        <p>Found 200 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="../Web/API/MozSmsFilter/startDate.html">Web/API/MozSmsFilter/startDate</a>
+                                  <small>The startDate property represents the oldest message's timestamp to filter out messages.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsFilter/threadId.html">Web/API/MozSmsFilter/threadId</a>
+                                  <small>The threadId property represents a thread id to filter out messages.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsManager.html">Web/API/MozSmsManager</a>
+                                  <small>Provides support for sending and managing SMS messages on a device with WebSMS.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage.html">Web/API/MozSmsMessage</a>
+                                  <small>The DOM MozSmsMessage object represents an SMS text message and has all the information about ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/body.html">Web/API/MozSmsMessage/body</a>
+                                  <small>The body property represents the content of the message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/delivery.html">Web/API/MozSmsMessage/delivery</a>
+                                  <small>The delivery property represents the current state of the message delivery from the device ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/deliveryStatus.html">Web/API/MozSmsMessage/deliveryStatus</a>
+                                  <small>The deliveryStatus property represents the current state of the message delivery from the recipient ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/id.html">Web/API/MozSmsMessage/id</a>
+                                  <small>The id property represents the unique id of the message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/messageClass.html">Web/API/MozSmsMessage/messageClass</a>
+                                  <small>The messageClass property provides the class of a given message. SMS Classes are defined within the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/read.html">Web/API/MozSmsMessage/read</a>
+                                  <small>The read property indicates if the message has been read (true) or not (false).</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/receiver.html">Web/API/MozSmsMessage/receiver</a>
+                                  <small>The receiver property provides the phone number of the message's receiver.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/sender.html">Web/API/MozSmsMessage/sender</a>
+                                  <small>The sender property provides the phone number of the sender of a given message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/threadId.html">Web/API/MozSmsMessage/threadId</a>
+                                  <small>The threadId property represents the id of the thread the message is part of.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/timestamp.html">Web/API/MozSmsMessage/timestamp</a>
+                                  <small>The timestamp property represents the timestamp of a given message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsMessage/type.html">Web/API/MozSmsMessage/type</a>
+                                  <small>The type property represents the type of the message. It provides a convenient way to be sure that ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsSegmentInfo/charsAvailableInLastSegment.html">Web/API/MozSmsSegmentInfo/charsAvailableInLastSegment</a>
+                                  <small>The charsAvailableInLastSegment property represents the total number of characters available for ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsSegmentInfo/charsPerSegment.html">Web/API/MozSmsSegmentInfo/charsPerSegment</a>
+                                  <small>The charPerSegment property represents the total number of characters allowed per segment.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozSmsSegmentInfo/segments.html">Web/API/MozSmsSegmentInfo/segments</a>
+                                  <small>The segments property represents the total number of segments available for the provided text.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MutationObserver.html">Web/API/MutationObserver</a>
+                                  <small>MutationObserver provides developers a way to react to changes in a DOM. It is designed as a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozCamera.html">Web/API/Navigator/mozCamera</a>
+                                  <small>Returns a CameraManager object you can use to access the cameras available on the user's device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/mozCameras.html">Web/API/Navigator/mozCameras</a>
+                                  <small>Returns an array of CameraManager objects you can use to access the cameras available on the user's ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Navigator/registerProtocolHandler.html">Web/API/Navigator/registerProtocolHandler</a>
+                                  <small>Allows web sites to register themselves as possible handlers for particular protocols.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/NavigatorLanguage/language.html">Web/API/NavigatorLanguage/language</a>
+                                  <small>The NavigatorLanguage.language read-only property returns a string representing the preferred ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/baseURIObject.html">Web/API/Node/baseURIObject</a>
+                                  <small>The Node.baseURIObject property returns the nsIURI representing the node's (typically a document or ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/childNodes.html">Web/API/Node/childNodes</a>
+                                  <small>The Node.childNodes read-only property returns a live collection of child nodes of the given ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/firstChild.html">Web/API/Node/firstChild</a>
+                                  <small>The Node.firstChild read-only property returns the node's first child in the tree, or null if the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/lastChild.html">Web/API/Node/lastChild</a>
+                                  <small>The Node.lastChild read-only property returns the last child of the node. If its parent is an ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/localName.html">Web/API/Node/localName</a>
+                                  <small>The Node.localName read-only property returns the local part of the qualified name of this node.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/nextSibling.html">Web/API/Node/nextSibling</a>
+                                  <small>The Node.nextSibling read-only property returns the node immediately following the specified one in ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/nodeName.html">Web/API/Node/nodeName</a>
+                                  <small>The Node.nodeName read-only property returns the name of the current node as a string.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/nodePrincipal.html">Web/API/Node/nodePrincipal</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/nodeType.html">Web/API/Node/nodeType</a>
+                                  <small>The read-only Node.nodeType property that represents the type of the node.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/nodeValue.html">Web/API/Node/nodeValue</a>
+                                  <small>The Node.nodeValue property returns or sets the value of the current node.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/ownerDocument.html">Web/API/Node/ownerDocument</a>
+                                  <small>The Node.ownerDocument read-only property returns the top-level document object for this node.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/parentElement.html">Web/API/Node/parentElement</a>
+                                  <small>The Node.parentElement read-only property returns the DOM node's parent Element, or null if the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/parentNode.html">Web/API/Node/parentNode</a>
+                                  <small>The Node.parentNode read-only property returns the parent of the specified node in the DOM tree.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/prefix.html">Web/API/Node/prefix</a>
+                                  <small>The Node.prefix read-only property returns the namespace prefix of the specified node, or null if ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Node/previousSibling.html">Web/API/Node/previousSibling</a>
+                                  <small>The Node.previousSibling read-only property returns the node immediately preceding the specified ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/NodeList/length.html">Web/API/NodeList/length</a>
+                                  <small>length returns the number of items in a NodeList.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Plugin.html">Web/API/Plugin</a>
+                                  <small>The Plugin interface provides information about a browser plugin.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/PluginArray.html">Web/API/PluginArray</a>
+                                  <small>The PluginArray interface is used to store a list of available plugins; it's returned by the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ProcessingInstruction.html">Web/API/ProcessingInstruction</a>
+                                  <small>A processing instruction provides an opportunity for application-specific instructions to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/active.html">Web/API/Telephony/active</a>
+                                  <small>The active read-only property of the Telephony interface returns a TelephonyCall object indicating ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/calls.html">Web/API/Telephony/calls</a>
+                                  <small>The calls read-only property of the Telephony interface returns a list of TelephonyCall objects ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/dial.html">Web/API/Telephony/dial</a>
+                                  <small>The dial() method of the Telephony interface dials a phone number and returns a new TelephonyCall ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/muted.html">Web/API/Telephony/muted</a>
+                                  <small>The muted property of the Telephony interface indicates whether or not the microphone is muted for ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/oncallschanged.html">Web/API/Telephony/oncallschanged</a>
+                                  <small>The oncallschanged property of the Telephony interface specifies an event listener to receive ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/onincoming.html">Web/API/Telephony/onincoming</a>
+                                  <small>The onincoming property of the Telephony interface specifies an event listener to receive incoming ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/speakerEnabled.html">Web/API/Telephony/speakerEnabled</a>
+                                  <small>The speakerEnabled property of the Telephony interface indicates whether or not the speakerphone ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/startTone.html">Web/API/Telephony/startTone</a>
+                                  <small>The startTone() method of the Telephony Interface begins generating the tone for the specified DTMF ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Telephony/stopTone.html">Web/API/Telephony/stopTone</a>
+                                  <small>The startTone() method of the Telephony Interface stops transmitting the currently-playing DTMF ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall.html">Web/API/TelephonyCall</a>
+                                  <small>The TelephonyCall interface of the Web Telephony API represents one telephone call, providing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/answer.html">Web/API/TelephonyCall/answer</a>
+                                  <small>The answer() method of the TelephonyCall interface answers an incoming call.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/emergency.html">Web/API/TelephonyCall/emergency</a>
+                                  <small>The emergency read-only property of the TelephonyCall interface indicates whether the current ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/hangUp.html">Web/API/TelephonyCall/hangUp</a>
+                                  <small>The hangUp () method of the TelephonyCall interface hangs up an ongoing call.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/hold.html">Web/API/TelephonyCall/hold</a>
+                                  <small>The hold() method of the TelephonyCall interface is used to put a call on hold.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/number.html">Web/API/TelephonyCall/number</a>
+                                  <small>The number read-only property of the TelephonyCall interface indicates the telephone number ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/onalerting.html">Web/API/TelephonyCall/onalerting</a>
+                                  <small>The onalerting event handler of the TelephonyCall interface is a reference to a function to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/onbusy.html">Web/API/TelephonyCall/onbusy</a>
+                                  <small>A reference to a function to be called to handle the Telephony API's busy event. This event occurs ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/onconnected.html">Web/API/TelephonyCall/onconnected</a>
+                                  <small>The onconnected event handler of the TelephonyCall interface is a reference to a function to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/onconnecting.html">Web/API/TelephonyCall/onconnecting</a>
+                                  <small>The onconnecting event handler of the TelephonyCall interface is a reference to a function to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/ondialing.html">Web/API/TelephonyCall/ondialing</a>
+                                  <small>The ondialing event handler of the TelephonyCall interface is a reference to a function to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/ondisconnected.html">Web/API/TelephonyCall/ondisconnected</a>
+                                  <small>The ondisconnected event handler of the TelephonyCall interface is a reference to a function to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/ondisconnecting.html">Web/API/TelephonyCall/ondisconnecting</a>
+                                  <small>The ondisconnecting event handler of the TelephonyCall interface is a reference to a function to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/onincoming.html">Web/API/TelephonyCall/onincoming</a>
+                                  <small>The onincoming () property of the TelephonyCall interface is a reference to a function to be called ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/onstatechange.html">Web/API/TelephonyCall/onstatechange</a>
+                                  <small>The onstatechange event handler of the TelephonyCall interface is a reference to a function to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/resume.html">Web/API/TelephonyCall/resume</a>
+                                  <small>The resume() method of the TelephonyCall interface is used to resume a call that was previously put ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TelephonyCall/state.html">Web/API/TelephonyCall/state</a>
+                                  <small>The state read-only property of the TelephonyCall interface returns the current state of the phone ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Touch.html">Web/API/Touch</a>
+                                  <small>A Touch object represents a single point of contact between the user and a touch-sensitive ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TouchList.html">Web/API/TouchList</a>
+                                  <small>A TouchList represents a list of all of the points of contact with a touch surface; for example, if ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/TouchList/length.html">Web/API/TouchList/length</a>
+                                  <small>This read-only property indicates the number of items in a TouchList.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Touch_events.html">Web/API/Touch_events</a>
+                                  <small>In order to provide quality support for touch-based user interfaces, touch events offer the ability ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Vibration_API.html">Web/API/Vibration_API</a>
+                                  <small>Most modern mobile devices include vibration hardware, which lets software code provide physical ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Web_Workers_API/Structured_clone_algorithm.html">Web/API/Web_Workers_API/Structured_clone_algorithm</a>
+                                  <small>The structured clone algorithm is a new algorithm defined by the HTML5 specification for ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/back.html">Web/API/Window/back</a>
+                                  <small>Returns the window to the previous item in the history. This was a Gecko-specific method. Use the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/blur.html">Web/API/Window/blur</a>
+                                  <small>Shifts focus away from the window.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/captureEvents.html">Web/API/Window/captureEvents</a>
+                                  <small>Registers the window to capture all events of the specified type.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/find.html">Web/API/Window/find</a>
+                                  <small>Finds a string in a window.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/frameElement.html">Web/API/Window/frameElement</a>
+                                  <small>Returns the element (such as iframe or object) in which the window is embedded, or null if the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/frames.html">Web/API/Window/frames</a>
+                                  <small>Returns the window itself, which is an array-like object, listing the direct sub-frames of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/getSelection.html">Web/API/Window/getSelection</a>
+                                  <small>Returns a Selection object representing the range of text selected by the user or the current ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/home.html">Web/API/Window/home</a>
+                                  <small>Returns the window to the home page.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/length.html">Web/API/Window/length</a>
+                                  <small>Returns the number of frames (either frame or iframe elements) in the window.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/navigator/mozNetworkStats.html">Web/API/Window/navigator/mozNetworkStats</a>
+                                  <small>The MozNetworkStatsManager interface provides methods and properties to monitor data usage.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/openDialog.html">Web/API/Window/openDialog</a>
+                                  <small>window.openDialog() is an extension to window.open(). It behaves the same, except that it can ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/print.html">Web/API/Window/print</a>
+                                  <small>Opens the Print Dialog to print the current document.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/scrollByPages.html">Web/API/Window/scrollByPages</a>
+                                  <small>Scrolls the current document by the specified number of pages.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/scrollMaxX.html">Web/API/Window/scrollMaxX</a>
+                                  <small>Returns the maximum number of pixels that the document can be scrolled horizontally.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Window/showModalDialog.html">Web/API/Window/showModalDialog</a>
+                                  <small>The Window.showModalDialog() creates and displays a modal dialog box containing a specified HTML ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/WindowEventHandlers/onafterprint.html">Web/API/WindowEventHandlers/onafterprint</a>
+                                  <small>The WindowEventHandlers.onafterprint property sets and returns the onafterprint EventHandler for ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/WindowEventHandlers/onbeforeprint.html">Web/API/WindowEventHandlers/onbeforeprint</a>
+                                  <small>The onbeforeprint property sets and returns the onbeforeprint event handler code for the current ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/WindowTimers/clearInterval.html">Web/API/WindowTimers/clearInterval</a>
+                                  <small>Cancels repeated action which was set up using setInterval.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/WindowTimers/setInterval.html">Web/API/WindowTimers/setInterval</a>
+                                  <small>Calls a function or executes a code snippet repeatedly, with a fixed time delay between each call ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests.html">Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests</a>
+                                  <small>XMLHttpRequest supports both synchronous and asynchronous communications. In general, however, ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests_clone.html">Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests_clone</a>
+                                  <small>XMLHttpRequest supports both synchronous and asynchronous communications. In general, however, ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/Events/DOMMouseScroll.html">Web/Events/DOMMouseScroll</a>
+                                  <small>The DOM DOMMouseScroll event is fired asynchronously when mouse wheel or similar device is operated ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/Events/MozMousePixelScroll.html">Web/Events/MozMousePixelScroll</a>
+                                  <small>The DOM MozMousePixelScroll event is fired asynchronously when a mouse wheel or similar device is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/Events/MozOrientation.html">Web/Events/MozOrientation</a>
+                                  <small>An event that is repeatedly fired on the window as accelerator data is provided to the browser.</small>
+                            </li>
+                      <li>
+              <a href="../Web/Guide/Events/Mutation_events.html">Web/Guide/Events/Mutation_events</a>
+                                  <small>Mutation events provide a mechanism for a web page or an extension to get notified about changes ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/Guide/Events/Touch_events_(Mozilla_experimental).html">Web/Guide/Events/Touch_events_(Mozilla_experimental)</a>
+                                  <small>The experimental touch events API described on this page was available from Gecko 2.0 (Firefox 4 / ...</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+      <li class="prev">
+      <a href="Gecko%20DOM%20Reference2679.html?page=1">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="Gecko%20DOM%20Reference2679.html?page=1">1</a>
+    </li>
+      <li class="selected">
+      <a href="Gecko%20DOM%20Reference4658.html?page=2">2</a>
+    </li>
+        </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="2">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/Gecko DOM Reference?page=2 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 17:03:53 GMT -->
+</body></html>

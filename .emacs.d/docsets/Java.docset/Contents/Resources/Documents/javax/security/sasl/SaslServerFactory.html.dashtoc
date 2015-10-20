@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"createSaslServer(String, String, String, Map, CallbackHandler)","path":"createSaslServer-java.lang.String-java.lang.String-java.lang.String-java.util.Map-javax.security.auth.callback.CallbackHandler-","entryType":"Method"},{"name":"getMechanismNames(Map)","path":"getMechanismNames-java.util.Map-","entryType":"Method"}]}

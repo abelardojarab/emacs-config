@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"getContent()","path":"getContent--","entryType":"Method"},{"name":"getId()","path":"getId--","entryType":"Method"},{"name":"marshal(XMLStructure, XMLCryptoContext)","path":"marshal-javax.xml.crypto.XMLStructure-javax.xml.crypto.XMLCryptoContext-","entryType":"Method"}]}

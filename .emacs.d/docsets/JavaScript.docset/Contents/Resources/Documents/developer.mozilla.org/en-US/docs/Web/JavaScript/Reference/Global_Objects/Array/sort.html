@@ -1,0 +1,1057 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:34:13 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Array.prototype.sort()</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort$json">
+  <link rel="canonical" href="sort.html">
+
+            <link rel="alternate" hreflang="es" href="../../../../../../../es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/sort.html" title="Array.prototype.sort()">
+          <link rel="alternate" hreflang="fr" href="../../../../../../../fr/docs/Web/JavaScript/Reference/Objets_globaux/Array/sort.html" title="Array.prototype.sort()">
+          <link rel="alternate" hreflang="ja" href="../../../../../../../ja/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">
+          <link rel="alternate" hreflang="pl" href="../../../../../../../pl/docs/Web/JavaScript/Referencje/Obiekty/Array/sort.html" title="Array.prototype.sort()">
+          <link rel="alternate" hreflang="pt-BR" href="../../../../../../../pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">
+          <link rel="alternate" hreflang="ru" href="../../../../../../../ru/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">
+          <link rel="alternate" hreflang="zh-CN" href="../../../../../../../zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">
+          <link rel="alternate" hreflang="zh-TW" href="../../../../../../../zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Array.prototype.sort()">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">
+  <meta name="twitter:title" content="Array.prototype.sort()">
+    <meta property="og:description" content="The sort() method sorts the elements of an array in place and returns the array. The sort is not necessarily stable. The default sort order is according to string Unicode code points.">
+  <meta name="description" content="The sort() method sorts the elements of an array in place and returns the array. The sort is not necessarily stable. The default sort order is according to string Unicode code points.">
+  <meta name="twitter:description" content="The sort() method sorts the elements of an array in place and returns the array. The sort is not necessarily stable. The default sort order is according to string Unicode code points.">
+  
+      
+  </head>
+<body data-slug="Web/JavaScript/Reference/Global_Objects/Array/sort" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FArray%2Fsort" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FArray%2Fsort" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="../../../../../../../es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/sort.html" title="Array.prototype.sort()">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../fr/docs/Web/JavaScript/Reference/Objets_globaux/Array/sort.html" title="Array.prototype.sort()">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../ja/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../pl/docs/Web/JavaScript/Referencje/Obiekty/Array/sort.html" title="Array.prototype.sort()">Polski</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">Português (do&nbsp;Brasil)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../ru/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">中文 (简体)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/sort.html" title="Array.prototype.sort()">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="v:url" property="v:title">JavaScript</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../../Reference.html" rel="v:url" property="v:title">JavaScript reference</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../Global_Objects.html" rel="v:url" property="v:title">Standard built-in objects</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Array.html" rel="v:url" property="v:title">Array</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Array.prototype.sort()</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Array.prototype.sort()</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 49 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/izaakrogan" title="View profile: izaakrogan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="izaakrogan" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">izaakrogan</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/rutsky" title="View profile: rutsky">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rutsky" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">rutsky</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/studiowangfei" title="View profile: studiowangfei">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="studiowangfei" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">studiowangfei</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chris.johnson" title="View profile: chris.johnson">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chris.johnson" data-src="../../../../../../../../secure.gravatar.com/avatar/483f16ed5912b5fdf2b573205537c0436aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chris.johnson</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jsx" title="View profile: jsx">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jsx" data-src="../../../../../../../../secure.gravatar.com/avatar/8cc61d4e2dc63e75976a334348d473bc6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jsx</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/JacksonGL" title="View profile: JacksonGL">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JacksonGL" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">JacksonGL</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/xixixao" title="View profile: xixixao">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xixixao" data-src="../../../../../../../../secure.gravatar.com/avatar/f8680b8b03d90e228dae2db181b06d2b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">xixixao</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/hbkdsm" title="View profile: hbkdsm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="hbkdsm" data-src="../../../../../../../../secure.gravatar.com/avatar/36eb5e9c9ecad6e21f57a9d4bdefc41f6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">hbkdsm</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/aurelianofs" title="View profile: aurelianofs">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="aurelianofs" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">aurelianofs</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/joyously" title="View profile: joyously">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="joyously" data-src="../../../../../../../../secure.gravatar.com/avatar/aa8e5a3c12d13b8a152e6fb1862cb0b46aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">joyously</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/tiffon" title="View profile: tiffon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tiffon" data-src="../../../../../../../../secure.gravatar.com/avatar/59075534e3c88ab60360c198b7ab40b06aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tiffon</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mingun" title="View profile: Mingun">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mingun" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mingun</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ppseafield" title="View profile: ppseafield">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ppseafield" data-src="../../../../../../../../secure.gravatar.com/avatar/25caf4c77a59fc8a56a898be8d72b71b6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ppseafield</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/AntonNiklasson" title="View profile: AntonNiklasson">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AntonNiklasson" data-src="../../../../../../../../secure.gravatar.com/avatar/d9ca58b51e56049e1590164d646e79b76aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">AntonNiklasson</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/felixrabe" title="View profile: felixrabe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="felixrabe" data-src="../../../../../../../../secure.gravatar.com/avatar/6382fe69b5d18e9f65825d129ff922cf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">felixrabe</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Glutnix" title="View profile: Glutnix">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Glutnix" data-src="../../../../../../../../secure.gravatar.com/avatar/0db7e689e229126cba3629b094331bf46aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Glutnix</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Granjow" title="View profile: Granjow">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Granjow" data-src="../../../../../../../../secure.gravatar.com/avatar/e7df71ec7976506548d3cb0a75cda6c66aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Granjow</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rcaracaus" title="View profile: rcaracaus">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rcaracaus" data-src="../../../../../../../../secure.gravatar.com/avatar/339dee9d1aab94e248f1e342c83ec16e6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">rcaracaus</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/icarot" title="View profile: icarot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="icarot" data-src="../../../../../../../../secure.gravatar.com/avatar/2bd456ca5582fc294e928490a95d78856aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">icarot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/roryokane" title="View profile: roryokane">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="roryokane" data-src="../../../../../../../../secure.gravatar.com/avatar/5b2b185c814bb25f2f95a1152e58f0336aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">roryokane</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/nebulon" title="View profile: nebulon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nebulon" data-src="../../../../../../../../secure.gravatar.com/avatar/e1585572e290a867aa946b231510d42b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">nebulon</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/robatron" title="View profile: robatron">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="robatron" data-src="../../../../../../../../secure.gravatar.com/avatar/385a950398daa4651cef95bbafa469af6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">robatron</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/madarche" title="View profile: madarche">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="madarche" data-src="../../../../../../../../secure.gravatar.com/avatar/a15ce308d52c691ba765d0ac972aac876aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">madarche</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fkling" title="View profile: fkling">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fkling" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fkling</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rodneyrehm" title="View profile: rodneyrehm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rodneyrehm" data-src="../../../../../../../../secure.gravatar.com/avatar/1fe89044eef1cf027c146e8d7969d8ee6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">rodneyrehm</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/evilpie" title="View profile: evilpie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="evilpie" data-src="../../../../../../../../secure.gravatar.com/avatar/6bb31f7207fc068158047b9c8ad4592d6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">evilpie</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dotnetCarpenter" title="View profile: dotnetCarpenter">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dotnetCarpenter" data-src="../../../../../../../../secure.gravatar.com/avatar/e6a042553edc475cda59f8f62df2a86c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dotnetCarpenter</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brendan" title="View profile: Brendan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brendan" data-src="../../../../../../../../secure.gravatar.com/avatar/c936d5fc7ef09504480b9d8aafb7e8a06aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Brendan</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../../../../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Normanr" title="View profile: Normanr">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Normanr" data-src="../../../../../../../../secure.gravatar.com/avatar/e59a875f6d38e00b3bd275ec165091db6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Normanr</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Husky" title="View profile: Husky">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Husky" data-src="../../../../../../../../secure.gravatar.com/avatar/46f6dc70088702cdb542062d382bed296aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Husky</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/quotemstr" title="View profile: quotemstr">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="quotemstr" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">quotemstr</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Neil" title="View profile: Neil">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Neil" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Neil</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Trinithis" title="View profile: Trinithis">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Trinithis" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Trinithis</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kris.kowal" title="View profile: Kris.kowal">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kris.kowal" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Kris.kowal</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Waldo" title="View profile: Waldo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Waldo" data-src="../../../../../../../../secure.gravatar.com/avatar/d26a0ca7ae1134e0e1dbdddf82e289296aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Waldo</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/H3h" title="View profile: H3h">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="H3h" data-src="../../../../../../../../secure.gravatar.com/avatar/311c297fac1413aed55bced7735dea296aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">H3h</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/1212jtraceur" title="View profile: 1212jtraceur">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="1212jtraceur" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">1212jtraceur</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Yuichirou" title="View profile: Yuichirou">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Yuichirou" data-src="../../../../../../../../secure.gravatar.com/avatar/f79b20eff088bebcd7dd63c30580b5da6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Yuichirou</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nickolay" title="View profile: Nickolay">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nickolay" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Nickolay</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ecmanaut" title="View profile: Ecmanaut">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ecmanaut" data-src="../../../../../../../../secure.gravatar.com/avatar/f9710302df78c0f49a2dafc9191f41186aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ecmanaut</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Maian" title="View profile: Maian">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Maian" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Maian</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dria" title="View profile: Dria">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dria" data-src="../../../../../../../../secure.gravatar.com/avatar/c6c044311a2c98b383718e00964cda726aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dria</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a><ol><li><a href="#Parameters" rel="internal">Parameters</a></li></ol></li><li><a href="#Description" rel="internal">Description</a></li><li><a href="#Examples" rel="internal">Examples</a><ol><li><a href="#Creating_displaying_and_sorting_an_array" rel="internal">Creating, displaying, and sorting an array</a></li><li><a href="#Sorting_non-ASCII_characters" rel="internal">Sorting non-ASCII characters</a></li><li><a href="#Sorting_with_map" rel="internal">Sorting with map</a></li></ol></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>The <code><strong>sort()</strong></code> method sorts the elements of an array <em>in place</em> and returns the array. The sort is not necessarily <a href="https://en.wikipedia.org/wiki/Sorting_algorithm#Stability" class="external">stable</a>. The default sort order is according to string Unicode code points.</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><code><var>arr</var>.sort([<var>compareFunction</var>])</code></pre>
+
+<h3 id="Parameters">Parameters</h3>
+
+<dl>
+ <dt><code>compareFunction</code></dt>
+ <dd>Optional. Specifies a function that defines the sort order. If omitted, the array is sorted according to each character's <a href="../../../Guide/Grammar_and_types.html#Unicode">Unicode</a> code point value, according to the string conversion of each element.</dd>
+</dl>
+
+<h2 id="Description">Description</h2>
+
+<p>If <code>compareFunction</code> is not supplied, elements are sorted by converting them to strings and comparing strings in Unicode code point order. For example,&nbsp;"Cherry" comes before "banana". In a numeric sort, 9 comes before 80, but because numbers are converted to strings, "80" comes before "9" in Unicode order.</p>
+
+<pre class="brush: js">var fruit = ['cherries', 'apples', 'bananas'];
+fruit.sort(); // ['apples', 'bananas', 'cherries']
+
+var scores = [1, 10, 2, 21]; 
+scores.sort(); // [1, 10, 2, 21]
+// Watch out that 10 comes before 2,
+// because '10' comes before '2' in Unicode code point order.
+
+var things = ['word', 'Word', '1 Word', '2 Words'];
+things.sort(); // ['1 Word', '2 Words', 'Word', 'word']
+// In Unicode, numbers come before upper case letters,
+// which come before lower case letters.
+</pre>
+
+<p>If <code>compareFunction</code> is supplied, the array elements are sorted according to the return value of the compare function. If <code>a</code> and <code>b</code> are two elements being compared, then:</p>
+
+<ul>
+ <li>If <code>compareFunction(a, b)</code> is less than 0, sort <code>a</code> to a lower index than <code>b</code>, i.e. <code>a</code> comes first.</li>
+ <li>If <code>compareFunction(a, b)</code> returns 0, leave <code>a</code> and <code>b</code> unchanged with respect to each other, but sorted with respect to all different elements. Note: the ECMAscript standard does not guarantee this behaviour, and thus not all browsers (e.g. Mozilla versions dating back to at least 2003) respect this.</li>
+ <li>If <code>compareFunction(a, b)</code> is greater than 0, sort <code>b</code> to a lower index than <code>a</code>.</li>
+ <li><code>compareFunction(a, b)</code> must always return the same value when given a specific pair of elements a and b as its two arguments. If inconsistent results are returned then the sort order is undefined.</li>
+</ul>
+
+<p>So, the compare function has the following form:</p>
+
+<pre class="brush: js">function compare(a, b) {
+  if (a is less than b by some ordering criterion) {
+    return -1;
+  }
+  if (a is greater than b by the ordering criterion) {
+    return 1;
+  }
+  // a must be equal to b
+  return 0;
+}
+</pre>
+
+<p>To compare numbers instead of strings, the compare function can simply subtract <code>b</code> from <code>a</code>. The following function will sort the array ascending:</p>
+
+<pre class="brush: js">function compareNumbers(a, b) {
+  return a - b;
+}
+</pre>
+
+<p>The <code>sort</code> method can be conveniently used with <a href="../../Operators/function.html" title="The function keyword can be used to define a function inside an expression.">function expressions</a> (and <a href="../../../Closures.html">closures</a>):</p>
+
+<pre class="brush: js">var numbers = [4, 2, 5, 1, 3];
+numbers.sort(function(a, b) {
+  return a - b;
+});
+console.log(numbers);
+
+// [1, 2, 3, 4, 5]
+</pre>
+
+<p>Objects can be sorted given the value of one of their properties.</p>
+
+<pre id="expanded-example" class="brush: js">var items = [
+  { name: 'Edward', value: 21 },
+  { name: 'Sharpe', value: 37 },
+  { name: 'And', value: 45 },
+  { name: 'The', value: -12 },
+  { name: 'Magnetic' },
+  { name: 'Zeros', value: 37 }
+];
+items.sort(function (a, b) {
+  if (a.value &gt; b.value) {
+    return 1;
+  }
+  if (a.value &lt; b.value) {
+    return -1;
+  }
+  // a must be equal to b
+  return 0;
+});
+</pre>
+
+<h2 id="Examples">Examples</h2>
+
+<h3 id="Creating_displaying_and_sorting_an_array">Creating, displaying, and sorting an array</h3>
+
+<p>The following example creates four arrays and displays the original array, then the sorted arrays. The numeric arrays are sorted without, then with, a compare function.</p>
+
+<pre class="brush: js">var stringArray = ['Blue', 'Humpback', 'Beluga'];
+var numericStringArray = ['80', '9', '700'];
+var numberArray = [40, 1, 5, 200];
+var mixedNumericArray = ['80', '9', '700', 40, 1, 5, 200];
+
+function compareNumbers(a, b) {
+  return a - b;
+}
+
+console.log('stringArray:', stringArray.join());
+console.log('Sorted:', stringArray.sort());
+
+console.log('numberArray:', numberArray.join());
+console.log('Sorted without a compare function:', numberArray.sort());
+console.log('Sorted with compareNumbers:', numberArray.sort(compareNumbers));
+
+console.log('numericStringArray:', numericStringArray.join());
+console.log('Sorted without a compare function:', numericStringArray.sort());
+console.log('Sorted with compareNumbers:', numericStringArray.sort(compareNumbers));
+
+console.log('mixedNumericArray:', mixedNumericArray.join());
+console.log('Sorted without a compare function:', mixedNumericArray.sort());
+console.log('Sorted with compareNumbers:', mixedNumericArray.sort(compareNumbers));
+</pre>
+
+<p>This example produces the following output. As the output shows, when a compare function is used, numbers sort correctly whether they are numbers or numeric strings.</p>
+
+<pre>stringArray: Blue,Humpback,Beluga
+Sorted: Beluga,Blue,Humpback
+
+numberArray: 40,1,5,200
+Sorted without a compare function: 1,200,40,5
+Sorted with compareNumbers: 1,5,40,200
+
+numericStringArray: 80,9,700
+Sorted without a compare function: 700,80,9
+Sorted with compareNumbers: 9,80,700
+
+mixedNumericArray: 80,9,700,40,1,5,200
+Sorted without a compare function: 1,200,40,5,700,80,9
+Sorted with compareNumbers: 1,5,9,40,80,200,700
+</pre>
+
+<h3 id="Sorting_non-ASCII_characters">Sorting non-ASCII characters</h3>
+
+<p>For sorting strings with non-ASCII characters, i.e. strings with accented characters (e, é, è, a, ä, etc.), strings from languages other than English: use <a href="../String/localeCompare.html" title="The localeCompare() method returns a number indicating whether a reference string comes before or after or is the same as the given string in sort order."><code>String.localeCompare</code></a>. This function can compare those characters so they appear in the right order.</p>
+
+<pre class="brush: js">var items = ['réservé', 'premier', 'cliché', 'communiqué', 'café', 'adieu'];
+items.sort(function (a, b) {
+  return a.localeCompare(b);
+});
+
+// items is ['adieu', 'café', 'cliché', 'communiqué', 'premier', 'réservé']
+</pre>
+
+<h3 id="Sorting_with_map">Sorting with map</h3>
+
+<p>The <code>compareFunction</code> can be invoked multiple times per element within the array. Depending on the <code>compareFunction</code>'s nature, this may yield a high overhead. The more work a <code>compareFunction</code> does and the more elements there are to sort, the wiser it may be to consider using a <a href="map.html">map</a> for sorting. The idea is to walk the array once to extract the actual values used for sorting into a temporary array, sort the temporary array and then walk the temporary array to achieve the right order.</p>
+
+<pre class="brush: js">// the array to be sorted
+var list = ['Delta', 'alpha', 'CHARLIE', 'bravo'];
+
+// temporary array holds objects with position and sort-value
+var mapped = list.map(function(el, i) {
+  return { index: i, value: el.toLowerCase() };
+})
+
+// sorting the mapped array containing the reduced values
+mapped.sort(function(a, b) {
+  return +(a.value &gt; b.value) || +(a.value === b.value) - 1;
+});
+
+// container for the resulting order
+var result = mapped.map(function(el){
+  return list[el.index];
+});
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262, 1st edition, June 1997.pdf" class="external" lang="en" title="The 'ECMAScript 1st Edition (ECMA-262)' specification" hreflang="en">ECMAScript 1st Edition (ECMA-262)</a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Initial definition.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.4.4.11" class="external" lang="en" hreflang="en">ECMAScript 5.1 (ECMA-262)<br><small lang="en-US">The definition of 'Array.prototype.sort' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-262/6.0/#sec-array.prototype.sort" class="external" lang="en" hreflang="en">ECMAScript 2015 (6th Edition, ECMA-262)<br><small lang="en-US">The definition of 'Array.prototype.sort' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>5.5</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="reverse.html" title="The reverse() method reverses an array in place. The first array element becomes the last and the last becomes the first."><code>Array.prototype.reverse()</code></a></li>
+ <li><a href="../String/localeCompare.html" title="The localeCompare() method returns a number indicating whether a reference string comes before or after or is the same as the given string in sort order."><code>String.prototype.localeCompare()</code></a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Array">Array</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/javascript">javascript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Javascript">Javascript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Method">Method</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/prototype">prototype</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Prototype">Prototype</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/izaakrogan">izaakrogan</a>,             <a href="https://developer.mozilla.org/en-US/profiles/rutsky">rutsky</a>,             <a href="https://developer.mozilla.org/en-US/profiles/studiowangfei">studiowangfei</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chris.johnson">chris.johnson</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jsx">jsx</a>,             <a href="https://developer.mozilla.org/en-US/profiles/JacksonGL">JacksonGL</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/xixixao">xixixao</a>,             <a href="https://developer.mozilla.org/en-US/profiles/hbkdsm">hbkdsm</a>,             <a href="https://developer.mozilla.org/en-US/profiles/aurelianofs">aurelianofs</a>,             <a href="https://developer.mozilla.org/en-US/profiles/joyously">joyously</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tiffon">tiffon</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mingun">Mingun</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ppseafield">ppseafield</a>,             <a href="https://developer.mozilla.org/en-US/profiles/AntonNiklasson">AntonNiklasson</a>,             <a href="https://developer.mozilla.org/en-US/profiles/felixrabe">felixrabe</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Glutnix">Glutnix</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Granjow">Granjow</a>,             <a href="https://developer.mozilla.org/en-US/profiles/rcaracaus">rcaracaus</a>,             <a href="https://developer.mozilla.org/en-US/profiles/icarot">icarot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/roryokane">roryokane</a>,             <a href="https://developer.mozilla.org/en-US/profiles/nebulon">nebulon</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>,             <a href="https://developer.mozilla.org/en-US/profiles/robatron">robatron</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/madarche">madarche</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fkling">fkling</a>,             <a href="https://developer.mozilla.org/en-US/profiles/rodneyrehm">rodneyrehm</a>,             <a href="https://developer.mozilla.org/en-US/profiles/evilpie">evilpie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dotnetCarpenter">dotnetCarpenter</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Brendan">Brendan</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Normanr">Normanr</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Husky">Husky</a>,             <a href="https://developer.mozilla.org/en-US/profiles/quotemstr">quotemstr</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Neil">Neil</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Trinithis">Trinithis</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Kris.kowal">Kris.kowal</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Waldo">Waldo</a>,             <a href="https://developer.mozilla.org/en-US/profiles/H3h">H3h</a>,             <a href="https://developer.mozilla.org/en-US/profiles/1212jtraceur">1212jtraceur</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Yuichirou">Yuichirou</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Nickolay">Nickolay</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ecmanaut">Ecmanaut</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Maian">Maian</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dria">Dria</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/izaakrogan">izaakrogan</a>,
+                      <time datetime="2015-09-13T01:23:40-07:00">Sep 13, 2015, 1:23:40 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../index.html">Standard built-in objects</a></strong></li><li><strong><a href="../Array.html"><code>Array</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="prototype.html" title="The Array.prototype property represents the prototype for the Array constructor."><code>Array.prototype</code></a></li><li><a href="length.html" title="The length property represents an unsigned, 32-bit integer that&nbsp;is always numerically greater than the highest index in the array."><code>Array.prototype.length</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="from.html" title="The Array.from() method creates a new Array instance from an array-like or iterable object."><code>Array.from()</code></a></li><li><a href="isArray.html" title="The Array.isArray() method returns true if an object is an array, false if it is not."><code>Array.isArray()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="observe.html" title="The Array.observe() method is used for asynchronously observing changes to Arrays, similar to Object.observe() for objects. It provides a stream of changes in order of occurrence. It's equivalent to Object.observe() invoked with the accept type list [&quot;add&quot;, &quot;update&quot;, &quot;delete&quot;, &quot;splice&quot;]."><code>Array.observe()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="of.html" title="The Array.of() method creates a new Array instance with a variable number of arguments, regardless of number or type of the arguments."><code>Array.of()</code></a></li><li><a href="concat.html" title="The concat() method returns a new array comprised of the array on which it is called joined with the array(s) and/or value(s) provided as arguments."><code>Array.prototype.concat()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="copyWithin.html" title="The copyWithin() method copies the sequence of array elements within the array to the position starting at target. The copy is taken from the index positions of the second and third arguments start and end. The end argument is optional and defaults to the length of the array."><code>Array.prototype.copyWithin()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="entries.html" title="The entries() method returns a new Array Iterator object that contains the key/value pairs for each index in the array."><code>Array.prototype.entries()</code></a></li><li><a href="every.html" title="The every() method tests whether all elements in the array pass the test implemented by the provided function."><code>Array.prototype.every()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="fill.html" title="The fill() method fills all the elements of an array from a start index to an end index with a static value."><code>Array.prototype.fill()</code></a></li><li><a href="filter.html" title="The filter() method creates a new array with all elements that pass the test implemented by the provided function."><code>Array.prototype.filter()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="find.html" title="The find() method returns a value in the array, if an element in the array satisfies the provided testing function. Otherwise undefined is returned."><code>Array.prototype.find()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="findIndex.html" title="The findIndex() method returns an index in the array, if an element in the array satisfies the provided testing function. Otherwise -1 is returned."><code>Array.prototype.findIndex()</code></a></li><li><a href="forEach.html" title="The forEach() method executes a provided function once per array element."><code>Array.prototype.forEach()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="includes.html" title="The includes() method determines whether an array includes a certain element, returning true or false as appropriate."><code>Array.prototype.includes()</code></a></li><li><a href="indexOf.html" title="The indexOf() method returns the first index at which a given element can be found in the array, or -1 if it is not present."><code>Array.prototype.indexOf()</code></a></li><li><a href="join.html" title="The join() method joins all elements of an array into a string."><code>Array.prototype.join()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="keys.html" title="The keys() method returns a new Array Iterator that contains the keys for each index in the array."><code>Array.prototype.keys()</code></a></li><li><a href="lastIndexOf.html" title="The lastIndexOf() method returns the last index at which a given element can be found in the array, or -1 if it is not present. The array is searched backwards, starting at fromIndex."><code>Array.prototype.lastIndexOf()</code></a></li><li><a href="map.html" title="The map() method creates a new array with the results of calling a provided function on every element in this array."><code>Array.prototype.map()</code></a></li><li><a href="pop.html" title="The pop() method removes the last element from an array and returns that element."><code>Array.prototype.pop()</code></a></li><li><a href="push.html" title="The push() method adds one or more elements to the end of an array and returns the new length of the array."><code>Array.prototype.push()</code></a></li><li><a href="Reduce-2.html" title="The reduce() method applies a function against an accumulator and each value of the array (from left-to-right) to reduce it to a single value."><code>Array.prototype.reduce()</code></a></li><li><a href="ReduceRight-2.html" title="The reduceRight() method applies a function against an accumulator and each value of the array (from right-to-left) has to reduce it to a single value."><code>Array.prototype.reduceRight()</code></a></li><li><a href="reverse.html" title="The reverse() method reverses an array in place. The first array element becomes the last and the last becomes the first."><code>Array.prototype.reverse()</code></a></li><li><a href="shift.html" title="The shift() method removes the first element from an array and returns that element. This method changes the length of the array."><code>Array.prototype.shift()</code></a></li><li><a href="slice.html" title="The slice() method returns a shallow copy of a portion of an array into a new array object."><code>Array.prototype.slice()</code></a></li><li><a href="some.html" title="The some() method tests whether some element in the array passes the test implemented by the provided function."><code>Array.prototype.some()</code></a></li><li><em><code>Array.prototype.sort()</code></em></li><li><a href="splice.html" title="The splice() method changes the content of an array by removing existing elements and/or adding new elements."><code>Array.prototype.splice()</code></a></li><li><a href="toLocaleString.html" title="The toLocaleString() method returns a string representing the elements of the array. The elements are converted to Strings using their toLocaleString methods and these Strings are separated by a locale-specific String (such as a comma “,”)."><code>Array.prototype.toLocaleString()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="toSource.html" title="The toSource() method returns a string representing the source code of the array."><code>Array.prototype.toSource()</code></a></li><li><a href="toString.html" title="The toString() method returns a string representing the specified array and its elements."><code>Array.prototype.toString()</code></a></li><li><a href="unshift.html" title="The unshift() method adds one or more elements to the beginning of an array and returns the new length of the array."><code>Array.prototype.unshift()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="values.html" title="The values() method returns a new Array Iterator object that contains the values for each index in the array."><code>Array.prototype.values()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="%40%40iterator-2.html" title="The initial value of the @@iterator property is the same function object as the initial value of the values() property."><code>Array.prototype[@@iterator]()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="unobserve.html" title="The Array.unobserve() method is used to remove observers set by Array.observe()."><code>Array.unobserve()</code></a></li></ol></li><li><strong>Inheritance:</strong></li><li><strong><a href="../Function.html"><code>Function</code></a></strong></li><li><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Function/arguments.html" title="The function.arguments property refers to an an array-like object corresponding to the arguments passed to a function. Use the simple variable arguments instead."><code>Function.arguments</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../Function/arity.html" title="The arity property used to return the number of arguments expected by the function, however, it no longer exists and has been replaced by the Function.prototype.length property."><code>Function.arity</code></a></s></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Function/caller.html" title="The function.caller property returns the function that invoked the specified function."><code>Function.caller</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Function/displayName.html" title="The function.displayName property returns the display name of the function."><code>Function.displayName</code></a></li><li><a href="../Function/length.html" title="The length property specifies the number of arguments expected by the function."><code>Function.length</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Function/name.html" title="The function.name property returns the name of the function."><code>Function.name</code></a></li><li><a href="../Function/prototype.html" title="The Function.prototype property represents the Function prototype object."><code>Function.prototype</code></a></li></ol></li><li><a href="#"><strong>Methods</strong></a><ol><li><a href="../Function/apply.html" title="The apply() method calls a function with a given this value and arguments provided as an array (or an array-like object)."><code>Function.prototype.apply()</code></a></li><li><a href="../Function/bind.html" title="The bind() method creates a new function that, when called, has its this keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called."><code>Function.prototype.bind()</code></a></li><li><a href="../Function/call.html" title="The call() method calls a function with a given this value and arguments provided individually."><code>Function.prototype.call()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Function/isGenerator.html" title="The isGenerator() method determines whether or not a function is a generator."><code>Function.prototype.isGenerator()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Function/toSource.html" title="The toSource() method returns a string representing the source code of the object."><code>Function.prototype.toSource()</code></a></li><li><a href="../Function/toString.html" title="The toString() method returns a string representing the source code of the function."><code>Function.prototype.toString()</code></a></li></ol></li><li><strong><a href="../Object.html"><code>Object</code></a></strong></li><li><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../Object/count.html" title="The __count__ property used to store the count of enumerable properties on the object, but it has been removed."><code>Object.prototype.__count__</code></a></s></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../Object/noSuchMethod.html" title="The __noSuchMethod__ property references a function to be executed when a non-existent method is called on an object."><code>Object.prototype.__noSuchMethod__</code></a></s></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../Object/Parent.html" title="The __parent__ property used to point to an object's context, but it has been removed."><code>Object.prototype.__parent__</code></a></s></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Object/proto.html" title="The __proto__ property of Object.prototype is an accessor property (a getter function and a setter function) that exposes the internal [[Prototype]] (either an object or null) of the object through which it is accessed."><code>Object.prototype.__proto__</code></a></li><li><a href="../Object/constructor.html" title="Returns a reference to the Object function that created the instance's prototype. Note that the value of this property is a reference to the function itself, not a string containing the function's name. The value is only read-only for primitive values such as&nbsp;1,&nbsp;true and&nbsp;&quot;test&quot;."><code>Object.prototype.constructor</code></a></li></ol></li><li><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/__defineGetter__.html" title="The __defineGetter__ method binds an object's property to a function to be called when that property is looked up."><code>Object.prototype.__defineGetter__()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/__defineSetter__.html" title="The __defineSetter__ method binds an object's property to a function to be called when an attempt is made to set that property."><code>Object.prototype.__defineSetter__()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Object/__lookupGetter__.html" title="The __lookupGetter__ method returns the function bound as a getter to the specified property."><code>Object.prototype.__lookupGetter__()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Object/__lookupSetter__.html" title="The __lookupSetter__ method returns the function bound as a setter to the specified property."><code>Object.prototype.__lookupSetter__()</code></a></li><li><a href="../Object/hasOwnProperty.html" title="The hasOwnProperty() method returns a boolean indicating whether the object has the specified property."><code>Object.prototype.hasOwnProperty()</code></a></li><li><a href="../Object/isPrototypeOf.html" title="The isPrototypeOf() method tests for an object in another object's prototype chain."><code>Object.prototype.isPrototypeOf()</code></a></li><li><a href="../Object/propertyIsEnumerable.html" title="The propertyIsEnumerable() method returns a Boolean indicating whether the specified property is enumerable."><code>Object.prototype.propertyIsEnumerable()</code></a></li><li><a href="../Object/toLocaleString.html" title="The toLocaleString() method returns a string representing the object. This method is meant to be overridden by derived objects for locale-specific purposes."><code>Object.prototype.toLocaleString()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/toSource.html" title="The toSource() method returns a string representing the source code of the object."><code>Object.prototype.toSource()</code></a></li><li><a href="../Object/toString.html" title="The toString() method returns a string representing object."><code>Object.prototype.toString()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/unwatch.html" title="The unwatch() method removes a watchpoint set with the watch() method."><code>Object.prototype.unwatch()</code></a></li><li><a href="../Object/valueOf.html" title="The valueOf() method returns the primitive value of the specified object."><code>Object.prototype.valueOf()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/watch.html" title="The watch() method watches for a property to be assigned a value and runs a function when that occurs."><code>Object.prototype.watch()</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" selected="">
+          English (US)
+        </option>
+                  <option value="/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/sort">
+            Español
+          </option>          <option value="/fr/docs/Web/JavaScript/Reference/Objets_globaux/Array/sort">
+            Français
+          </option>          <option value="/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">
+            日本語
+          </option>          <option value="/pl/docs/Web/JavaScript/Referencje/Obiekty/Array/sort">
+            Polski
+          </option>          <option value="/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">
+            Português (do&nbsp;Brasil)
+          </option>          <option value="/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">
+            Русский
+          </option>          <option value="/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">
+            中文 (简体)
+          </option>          <option value="/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:34:25 GMT -->
+</body></html>

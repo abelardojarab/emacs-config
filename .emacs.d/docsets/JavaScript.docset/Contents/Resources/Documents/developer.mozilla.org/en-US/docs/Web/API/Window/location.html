@@ -1,0 +1,1094 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Window/location by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:16:04 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Window.location</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/location$json">
+  <link rel="canonical" href="location.html">
+
+            <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/API/Window/location" title="Window.location">
+          <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/window/location" title="window.location">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/Window/location" title="window.location">
+          <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Web/API/Window/location" title="Window.location">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/location" title="window.location">
+          <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/DOM/window.location" title="window.location">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Window.location">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Window/location">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Window/location">
+  <meta name="twitter:title" content="Window.location">
+    <meta property="og:description" content="The Window.location read-only property returns a Location object with information about the current location of the document.">
+  <meta name="description" content="The Window.location read-only property returns a Location object with information about the current location of the document.">
+  <meta name="twitter:description" content="The Window.location read-only property returns a Location object with information about the current location of the document.">
+  
+      
+  </head>
+<body data-slug="Web/API/Window/location" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Window/location" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWindow%2Flocation" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Window/location" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWindow%2Flocation" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/API/Window/location" title="Window.location">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/window/location" title="window.location">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/Window/location" title="window.location">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Web/API/Window/location" title="Window.location">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/location" title="window.location">中文 (简体)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/DOM/window.location" title="window.location">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/location$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/location$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/location$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Window.html" rel="v:url" property="v:title">Window</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Window.location</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Window.location</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 60 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Noitidart" title="View profile: Noitidart">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Noitidart" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Noitidart</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/cta" title="View profile: cta">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cta" data-src="../../../../../../secure.gravatar.com/avatar/ff912e33733a3afa86851ade035687946aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cta</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jsx" title="View profile: jsx">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jsx" data-src="../../../../../../secure.gravatar.com/avatar/8cc61d4e2dc63e75976a334348d473bc6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jsx</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/cpigat" title="View profile: cpigat">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cpigat" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cpigat</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Krinkle" title="View profile: Krinkle">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Krinkle" data-src="../../../../../../secure.gravatar.com/avatar/49061e8503ca321a8045c9065963a8c66aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Krinkle</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/darlesson" title="View profile: darlesson">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="darlesson" data-src="../../../../../../secure.gravatar.com/avatar/40a594408dfe75da824757ca107a42a16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">darlesson</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fusionchess" title="View profile: fusionchess">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fusionchess" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fusionchess</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/therealklanni" title="View profile: therealklanni">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="therealklanni" data-src="../../../../../../secure.gravatar.com/avatar/fb350df0b685da74d815cbf1da88e0766aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">therealklanni</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/lborgman" title="View profile: lborgman">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lborgman" data-src="../../../../../../secure.gravatar.com/avatar/315fe442e8742c7a28d4df8e1dcc61f86aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">lborgman</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/charmander" title="View profile: charmander">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="charmander" data-src="../../../../../../secure.gravatar.com/avatar/ac1ec936c9c89794aec47829185a507d6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">charmander</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/mua" title="View profile: mua">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mua" data-src="../../../../../../secure.gravatar.com/avatar/f394b822c935303424f4c2ac1ad648316aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mua</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/cvr_hulu" title="View profile: cvr_hulu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cvr_hulu" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cvr_hulu</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/marquete" title="View profile: marquete">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="marquete" data-src="../../../../../../secure.gravatar.com/avatar/f0e1c545060b4a6405da3b95fb6178416aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">marquete</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/utkarsh_shah" title="View profile: utkarsh_shah">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="utkarsh_shah" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">utkarsh_shah</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/akoenig" title="View profile: akoenig">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="akoenig" data-src="../../../../../../secure.gravatar.com/avatar/0402503d36fb7576dda860bf3acc46ed6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">akoenig</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mkmelin" title="View profile: Mkmelin">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mkmelin" data-src="../../../../../../secure.gravatar.com/avatar/18eb16a976feb4b40d839c5e9036bc3a6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mkmelin</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/pablofiumara" title="View profile: pablofiumara">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="pablofiumara" data-src="../../../../../../secure.gravatar.com/avatar/4c4d3e6cc75217369a59bf130c5948a46aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">pablofiumara</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/johnwilander" title="View profile: johnwilander">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="johnwilander" data-src="../../../../../../secure.gravatar.com/avatar/124034ae52bcb03dc484260b492c48f76aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">johnwilander</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/charliekilian" title="View profile: charliekilian">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="charliekilian" data-src="../../../../../../secure.gravatar.com/avatar/685f5c7620b0c36c11e8cea6f05f38606aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">charliekilian</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/evilpie" title="View profile: evilpie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="evilpie" data-src="../../../../../../secure.gravatar.com/avatar/6bb31f7207fc068158047b9c8ad4592d6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">evilpie</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/briankuhn" title="View profile: briankuhn">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="briankuhn" data-src="../../../../../../secure.gravatar.com/avatar/a0d8b345042b7b2d583ec688f0c923966aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">briankuhn</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/silverwind" title="View profile: silverwind">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="silverwind" data-src="../../../../../../secure.gravatar.com/avatar/538c64efa7c682e02ca2ab92d6c6e7ff6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">silverwind</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mattbasta" title="View profile: mattbasta">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mattbasta" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mattbasta</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Bzbarsky" title="View profile: Bzbarsky">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Bzbarsky" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Bzbarsky</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tarekcorp" title="View profile: tarekcorp">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tarekcorp" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tarekcorp</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jacefarm" title="View profile: jacefarm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jacefarm" data-src="../../../../../../secure.gravatar.com/avatar/39a18e0a7f7d3493b1358d92003507f96aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jacefarm</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/minitech" title="View profile: minitech">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="minitech" data-src="../../../../../../secure.gravatar.com/avatar/ad70e2494769b308240329977c19adae6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">minitech</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Crownabhisek" title="View profile: Crownabhisek">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Crownabhisek" data-src="../../../../../../secure.gravatar.com/avatar/8a4924b04ad0fa95cb4c53a0da3f6c256aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Crownabhisek</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/myakura" title="View profile: myakura">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="myakura" data-src="../../../../../../secure.gravatar.com/avatar/5053cd2607234c47d43959cc9430f1a56aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">myakura</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kenneth" title="View profile: Kenneth">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kenneth" data-src="../../../../../../secure.gravatar.com/avatar/b404e9b4f7ffc0b28af7e004da3d7f1b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Kenneth</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tjcrowder" title="View profile: tjcrowder">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tjcrowder" data-src="../../../../../../secure.gravatar.com/avatar/ca3e484c121268e4c8302616b2395eb96aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tjcrowder</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ienzam" title="View profile: ienzam">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ienzam" data-src="../../../../../../secure.gravatar.com/avatar/5f4cb4b3af32314213d624496dd2c8306aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ienzam</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/louisremi" title="View profile: louisremi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="louisremi" data-src="../../../../../../secure.gravatar.com/avatar/1d924ae6b834d2c43d313a94137ac6fe6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">louisremi</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/pmorris" title="View profile: pmorris">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="pmorris" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">pmorris</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/grendel" title="View profile: grendel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="grendel" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">grendel</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Günther" title="View profile: Günther">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Günther" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Günther</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/masondesu" title="View profile: masondesu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="masondesu" data-src="../../../../../../secure.gravatar.com/avatar/091bc95204caaf52b0d299bd9ac595406aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">masondesu</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nickolay" title="View profile: Nickolay">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nickolay" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Nickolay</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Inonit" title="View profile: Inonit">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Inonit" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Inonit</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sephr" title="View profile: Sephr">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sephr" data-src="../../../../../../secure.gravatar.com/avatar/f43206cf935c8a5d532285c0d67b20d16aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sephr</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dinomite" title="View profile: Dinomite">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dinomite" data-src="../../../../../../secure.gravatar.com/avatar/9a223a3d153ecc93fcd2dd743ada68216aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dinomite</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Tobu" title="View profile: Tobu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Tobu" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Tobu</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nemon" title="View profile: Nemon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nemon" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Nemon</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Potappo" title="View profile: Potappo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Potappo" data-src="../../../../../../secure.gravatar.com/avatar/f0ee74ffcc558dd3895fde235b2aec426aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Potappo</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Arend" title="View profile: Arend">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Arend" data-src="../../../../../../secure.gravatar.com/avatar/4a5a2102c1f72577bf9254537b8e86e56aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Arend</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Snotling" title="View profile: Snotling">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Snotling" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Snotling</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kray2" title="View profile: Kray2">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kray2" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Kray2</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/BenoitL" title="View profile: BenoitL">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="BenoitL" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">BenoitL</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/IdiosMachi" title="View profile: IdiosMachi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="IdiosMachi" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">IdiosMachi</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/RobG" title="View profile: RobG">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="RobG" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">RobG</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Callek" title="View profile: Callek">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Callek" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Callek</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dria" title="View profile: Dria">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dria" data-src="../../../../../../secure.gravatar.com/avatar/c6c044311a2c98b383718e00964cda726aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dria</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JesseW" title="View profile: JesseW">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JesseW" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">JesseW</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a></li><li><a href="#Example" rel="internal">Examples</a><ol><li><a href="#Basic_Example" rel="internal">Basic Example</a></li><li><a href="#Example_1_Navigate_to_a_new_page" rel="internal">Example #1: Navigate to a new page</a></li><li><a href="#Example_2_Force_reloading_the_current_page_from_the_server" rel="internal">Example #2: Force reloading the current page from the server</a></li><li><a href="#Example_3" rel="internal">Example #3</a></li><li><a href="#Example_4_Display_the_properties_of_the_current_URL_in_an_alert_dialog" rel="internal">Example #4: Display the properties of the current URL in an alert dialog:</a></li><li><a href="#Example_5_Send_a_string_of_data_to_the_server_by_modifying_the_search_property" rel="internal">Example #5: Send a string of data to the server by modifying the <code>search</code> property:</a></li><li><a href="#Example_6_Using_bookmarks_without_changing_the_hash_property" rel="internal">Example #6: Using bookmarks without changing the <code>hash</code> property:</a></li></ol></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p>The <strong><code>Window.location</code></strong> read-only property returns a <a href="../Location.html" title="The Location interface represents the location of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively."><code>Location</code></a> object with information about the current location of the document.</p>
+
+<p>Though <code>Window.location</code> is a <em>read-only</em> <code>Location</code> object, you can also assign a <a href="../DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> to it. This means that you can work with <code>location</code> as if it were a string in most cases: <code>location = 'http://www.example.com'</code> is a synonym of <code>location.href = 'http://www.example.com'</code>.</p>
+
+<h2 name="Syntax" id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox">var <em>oldLocation</em> = location;
+location = <em>newLocation</em>;
+</pre>
+
+<h2 name="Example" id="Example">Examples</h2>
+
+<h3 id="Basic_Example">Basic Example</h3>
+
+<pre class="brush: js">alert(location); // alerts "https://developer.mozilla.org/en-US/docs/Web/API/Window.location"</pre>
+
+<h3 id="Example_1_Navigate_to_a_new_page">Example #1: Navigate to a new page</h3>
+
+<p>Whenever a new value is assigned to the location object, a document will be loaded using the URL as if <code>location.assign()</code> had been called with the modified URL. Note that security settings, like CORS, may prevent this to effectively happen.</p>
+
+<pre class="brush: js">location.assign("http://www.mozilla.org"); // or
+location = "http://www.mozilla.org";
+</pre>
+
+<h3 id="Example_2_Force_reloading_the_current_page_from_the_server">Example #2: Force reloading the current page from the server</h3>
+
+<pre class="brush: js">location.reload(true);</pre>
+
+<h3 id="Example_3">Example #3</h3>
+
+<p>Consider the following example, which will reload the page by using the <a href="../Location/replace.html"><code>replace()</code></a> method to insert the value of <code>location.pathname</code> into the hash:</p>
+
+<pre class="brush: js">function reloadPageWithHash() {
+  var initialPage = location.pathname;
+  location.replace('http://example.com/#' + initialPage);
+} 
+</pre>
+
+<div class="note"><strong>Note:</strong> The example above works in situations where <code>location.hash</code>&nbsp;does not need to be retained. However, in Gecko-based browsers, setting <code>location.pathname</code> in this manner will erase any information in <code>location.hash</code>, whereas in WebKit (and possibly other browsers), setting the pathname will not alter the the hash. If you need to change pathname but keep the hash as is, use the <code>replace()</code> method instead, which should work consistently across browsers.</div>
+
+<h3 id="Example_4_Display_the_properties_of_the_current_URL_in_an_alert_dialog">Example #4: Display the properties of the current URL in an alert dialog:</h3>
+
+<pre class="brush: js">function showLoc() {
+&nbsp; var oLocation = location, aLog = ["Property (Typeof): Value", "location (" + (typeof oLocation) + "): " + oLocation ];
+&nbsp; for (var sProp in oLocation){
+&nbsp;&nbsp;&nbsp; aLog.push(sProp + " (" + (typeof oLocation[sProp]) + "): " +&nbsp; (oLocation[sProp] || "n/a"));
+&nbsp; }
+&nbsp; alert(aLog.join("\n"));
+}
+
+// in html: &lt;button onclick="showLoc();"&gt;Show location properties&lt;/button&gt;
+</pre>
+
+<h3 id="Example_5_Send_a_string_of_data_to_the_server_by_modifying_the_search_property">Example #5: Send a string of data to the server by modifying the <code>search</code> property:</h3>
+
+<pre class="brush: js">function sendData (sData) {
+  location.search = sData;
+}
+
+// in html: &lt;button onclick="sendData('Some data');"&gt;Send data&lt;/button&gt;
+</pre>
+
+<p>The current URL with "?Some%20data" appended is sent to the server (if no action is taken by the server, the current document is reloaded with the modified search string).</p>
+
+<h3 id="Example_6_Using_bookmarks_without_changing_the_hash_property">Example #6: Using bookmarks without changing the <code>hash</code> property:</h3>
+
+<pre class="brush: html">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"/&gt;
+&lt;title&gt;MDN Example&lt;/title&gt;
+&lt;script&gt;
+function showNode (oNode) {
+&nbsp; var nLeft = 0, nTop = 0;
+&nbsp; for (var oItNode = oNode; oItNode; nLeft += oItNode.offsetLeft, nTop += oItNode.offsetTop, oItNode = oItNode.offsetParent);
+&nbsp; document.documentElement.scrollTop = nTop;
+&nbsp; document.documentElement.scrollLeft = nLeft;
+}
+
+function showBookmark (sBookmark, bUseHash) {
+&nbsp; if (arguments.length === 1 || bUseHash) { location.hash = sBookmark; return; }
+&nbsp; var oBookmark = document.querySelector(sBookmark);
+&nbsp; if (oBookmark) { showNode(oBookmark); }
+}
+&lt;/script&gt;
+&lt;style&gt;
+span.intLink {
+&nbsp;&nbsp; &nbsp;cursor: pointer;
+&nbsp;&nbsp; &nbsp;color: #0000ff;
+&nbsp;&nbsp; &nbsp;text-decoration: underline;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultrices dolor ac dolor imperdiet ullamcorper. Suspendisse quam libero, luctus auctor mollis sed, malesuada condimentum magna. Quisque in ante tellus, in placerat est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec a mi magna, quis mattis dolor. Etiam sit amet ligula quis urna auctor imperdiet nec faucibus ante. Mauris vel consectetur dolor. Nunc eget elit eget velit pulvinar fringilla consectetur aliquam purus. Curabitur convallis, justo posuere porta egestas, velit erat ornare tortor, non viverra justo diam eget arcu. Phasellus adipiscing fermentum nibh ac commodo. Nam turpis nunc, suscipit a hendrerit vitae, volutpat non ipsum.&lt;/p&gt;
+&lt;p&gt;Duis lobortis sapien quis nisl luctus porttitor. In tempor semper libero, eu tincidunt dolor eleifend sit amet. Ut nec velit in dolor tincidunt rhoncus non non diam. Morbi auctor ornare orci, non euismod felis gravida nec. Curabitur elementum nisi a eros rutrum nec blandit diam placerat. Aenean tincidunt risus ut nisi consectetur cursus. Ut vitae quam elit. Donec dignissim est in quam tempor consequat. Aliquam aliquam diam non felis convallis suscipit. Nulla facilisi. Donec lacus risus, dignissim et fringilla et, egestas vel eros. Duis malesuada accumsan dui, at fringilla mauris bibendum quis. Cras adipiscing ultricies fermentum. Praesent bibendum condimentum feugiat.&lt;/p&gt;
+&lt;p id="myBookmark1"&gt;[&amp;nbsp;&lt;span class="intLink" onclick="showBookmark('#myBookmark2');"&gt;Go to bookmark #2&lt;/span&gt;&amp;nbsp;]&lt;/p&gt;
+&lt;p&gt;Vivamus blandit massa ut metus mattis in fringilla lectus imperdiet. Proin ac ante a felis ornare vehicula. Fusce pellentesque lacus vitae eros convallis ut mollis magna pellentesque. Pellentesque placerat enim at lacus ultricies vitae facilisis nisi fringilla. In tincidunt tincidunt tincidunt. Nulla vitae tempor nisl. Etiam congue, elit vitae egestas mollis, ipsum nisi malesuada turpis, a volutpat arcu arcu id risus.&lt;/p&gt;
+&lt;p&gt;Nam faucibus, ligula eu fringilla pulvinar, lectus tellus iaculis nunc, vitae scelerisque metus leo non metus. Proin mattis lobortis lobortis. Quisque accumsan faucibus erat, vel varius tortor ultricies ac. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec libero nunc. Nullam tortor nunc, elementum a consectetur et, ultrices eu orci. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a nisl eu sem vehicula egestas.&lt;/p&gt;
+&lt;p&gt;Aenean viverra varius mauris, sed elementum lacus interdum non. Phasellus sit amet lectus vitae eros egestas pellentesque fermentum eget magna. Quisque mauris nisl, gravida vitae placerat et, condimentum id metus. Nulla eu est dictum dolor pulvinar volutpat. Pellentesque vitae sollicitudin nunc. Donec neque magna, lobortis id egestas nec, sodales quis lectus. Fusce cursus sollicitudin porta. Suspendisse ut tortor in mauris tincidunt rhoncus. Maecenas tincidunt fermentum facilisis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.&lt;/p&gt;
+&lt;p&gt;Suspendisse turpis nisl, consectetur in lacinia ut, ornare vel mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non lectus eu turpis vulputate cursus. Mauris interdum tincidunt erat id pharetra. Nullam in libero elit, sed consequat lectus. Morbi odio nisi, porta vitae molestie ut, gravida ut nunc. Ut non est dui, id ullamcorper orci. Praesent vel elementum felis. Maecenas ornare, dui quis auctor hendrerit, turpis sem ullamcorper odio, in auctor magna metus quis leo. Morbi at odio ante.&lt;/p&gt;
+&lt;p&gt;Curabitur est ipsum, porta ac viverra faucibus, eleifend sed eros. In sit amet vehicula tortor. Vestibulum viverra pellentesque erat a elementum. Integer commodo ultricies lorem, eget tincidunt risus viverra et. In enim turpis, porttitor ac ornare et, suscipit sit amet nisl. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque vel ultrices nibh. Sed commodo aliquam aliquam. Nulla euismod, odio ut eleifend mollis, nisi dui gravida nibh, vitae laoreet turpis purus id ipsum. Donec convallis, velit non scelerisque bibendum, diam nulla auctor nunc, vel dictum risus ipsum sit amet est. Praesent ut nibh sit amet nibh congue pulvinar. Suspendisse dictum porttitor tempor.&lt;/p&gt;
+&lt;p&gt;Vestibulum dignissim erat vitae lectus auctor ac bibendum eros semper. Integer aliquet, leo non ornare faucibus, risus arcu tristique dolor, a aliquet massa mauris quis arcu. In porttitor, lectus ac semper egestas, ligula magna laoreet libero, eu commodo mauris odio id ante. In hac habitasse platea dictumst. In pretium erat diam, nec consequat eros. Praesent augue mi, consequat sed porttitor at, volutpat vitae eros. Sed pretium pharetra dapibus. Donec auctor interdum erat, lacinia molestie nibh commodo ut. Maecenas vestibulum vulputate felis, ut ullamcorper arcu faucibus in. Curabitur id arcu est. In semper mollis lorem at pellentesque. Sed lectus nisl, vestibulum id scelerisque eu, feugiat et tortor. Pellentesque porttitor facilisis ultricies.&lt;/p&gt;
+&lt;p id="myBookmark2"&gt;[&amp;nbsp;&lt;span class="intLink" onclick="showBookmark('#myBookmark1');"&gt;Go to bookmark #1&lt;/span&gt; | &lt;span class="intLink" onclick="showBookmark('#myBookmark1', false);"&gt;Go to bookmark #1 without using location.hash&lt;/span&gt; | &lt;span class="intLink" onclick="showBookmark('#myBookmark3');"&gt;Go to bookmark #3&lt;/span&gt;&amp;nbsp;]&lt;/p&gt;
+&lt;p&gt;Phasellus tempus fringilla nunc, eget sagittis orci molestie vel. Nulla sollicitudin diam non quam iaculis ac porta justo venenatis. Quisque tellus urna, molestie vitae egestas sit amet, suscipit sed sem. Quisque nec lorem eu velit faucibus tristique ut ut dolor. Cras eu tortor ut libero placerat venenatis ut ut massa. Sed quis libero augue, et consequat libero. Morbi rutrum augue sed turpis elementum sed luctus nisl molestie. Aenean vitae purus risus, a semper nisl. Pellentesque malesuada, est id sagittis consequat, libero mauris tincidunt tellus, eu sagittis arcu purus rutrum eros. Quisque eget eleifend mi. Duis pharetra mi ac eros mattis lacinia rutrum ipsum varius.&lt;/p&gt;
+&lt;p&gt;Fusce cursus pulvinar aliquam. Duis justo enim, ornare vitae elementum sed, porta a quam. Aliquam eu enim eu libero mollis tempus. Morbi ornare aliquam posuere. Proin faucibus luctus libero, sed ultrices lorem sagittis et. Vestibulum malesuada, ante nec molestie vehicula, quam diam mollis ipsum, rhoncus posuere mauris lectus in eros. Nullam feugiat ultrices augue, ac sodales sem mollis in.&lt;/p&gt;
+&lt;p id="myBookmark3"&gt;&lt;em&gt;Here is the bookmark #3&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Proin vitae sem non lorem pellentesque molestie. Nam tempus massa et turpis placerat sit amet sollicitudin orci sodales. Pellentesque enim enim, sagittis a lobortis ut, tempus sed arcu. Aliquam augue turpis, varius vel bibendum ut, aliquam at diam. Nam lobortis, dui eu hendrerit pellentesque, sem neque porttitor erat, non dapibus velit lectus in metus. Vestibulum sit amet felis enim. In quis est vitae nunc malesuada consequat nec nec sapien. Suspendisse aliquam massa placerat dui lacinia luctus sed vitae risus. Fusce tempus, neque id ultrices volutpat, mi urna auctor arcu, viverra semper libero sem vel enim. Mauris dictum, elit non placerat malesuada, libero elit euismod nibh, nec posuere massa arcu eu risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer urna velit, dapibus eget varius feugiat, pellentesque sit amet ligula. Maecenas nulla nisl, facilisis eu egestas scelerisque, mollis eget metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi sed congue mi.&lt;/p&gt;
+&lt;p&gt;Fusce metus velit, pharetra at vestibulum nec, facilisis porttitor mi. Curabitur ligula sapien, fermentum vel porttitor id, rutrum sit amet magna. Sed sit amet sollicitudin turpis. Aenean luctus rhoncus dolor, et pulvinar ante egestas et. Donec ac massa orci, quis dapibus augue. Vivamus consectetur auctor pellentesque. Praesent vestibulum tincidunt ante sed consectetur. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce purus metus, imperdiet vitae iaculis convallis, bibendum vitae turpis.&lt;/p&gt;
+&lt;p&gt;Fusce aliquet molestie dolor, in ornare dui sodales nec. In molestie sollicitudin felis a porta. Mauris nec orci sit amet orci blandit tristique congue nec nunc. Praesent et tellus sollicitudin mauris accumsan fringilla. Morbi sodales, justo eu sollicitudin lacinia, lectus sapien ullamcorper eros, quis molestie urna elit bibendum risus. Proin eget tincidunt quam. Nam luctus commodo mauris, eu posuere nunc luctus non. Nulla facilisi. Vivamus eget leo rhoncus quam accumsan fringilla. Aliquam sit amet lorem est. Nullam vel tellus nibh, id imperdiet orci. Integer egestas leo eu turpis blandit scelerisque.&lt;/p&gt;
+&lt;p&gt;Etiam in blandit tellus. Integer sed varius quam. Vestibulum dapibus mi gravida arcu viverra blandit. Praesent tristique augue id sem adipiscing pellentesque. Sed sollicitudin, leo sed interdum elementum, nisi ante condimentum leo, eget ornare libero diam semper quam. Vivamus augue urna, porta eget ultrices et, dapibus ut ligula. Ut laoreet consequat faucibus. Praesent at lectus ut lectus malesuada mollis. Nam interdum adipiscing eros, nec sodales mi porta nec. Proin et quam vitae sem interdum aliquet. Proin vel odio at lacus vehicula aliquet.&lt;/p&gt;
+&lt;p&gt;Etiam placerat dui ut sem ornare vel vestibulum augue mattis. Sed semper malesuada mi, eu bibendum lacus lobortis nec. Etiam fringilla elementum risus, eget consequat urna laoreet nec. Etiam mollis quam non sem convallis vel consectetur lectus ullamcorper. Aenean mattis lacus quis ligula mattis eget vestibulum diam hendrerit. In non placerat mauris. Praesent faucibus nunc quis eros sagittis viverra. In hac habitasse platea dictumst. Suspendisse eget nisl erat, ac molestie massa. Praesent mollis vestibulum tincidunt. Fusce suscipit laoreet malesuada. Aliquam erat volutpat. Aliquam dictum elementum rhoncus. Praesent in est massa, pulvinar sodales nunc. Pellentesque gravida euismod mi ac convallis.&lt;/p&gt;
+&lt;p&gt;Mauris vel odio vel nulla facilisis lacinia. Aliquam ultrices est at leo blandit tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse porttitor adipiscing facilisis. Duis cursus quam iaculis augue interdum porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis vulputate magna ac metus pretium condimentum. In tempus, est eget vestibulum blandit, velit massa dignissim nisl, ut scelerisque lorem neque vel velit. Maecenas fermentum commodo viverra. Curabitur a nibh non velit aliquam cursus. Integer semper condimentum tortor a pellentesque. Pellentesque semper, nisl id porttitor vehicula, sem dui feugiat lacus, vitae consequat augue urna vel odio.&lt;/p&gt;
+&lt;p&gt;Vestibulum id neque nec turpis iaculis pulvinar et a massa. Vestibulum sed nibh vitae arcu eleifend egestas. Mauris fermentum ultrices blandit. Suspendisse vitae lorem libero. Aenean et pellentesque tellus. Morbi quis neque orci, eu dignissim dui. Fusce sollicitudin mauris ac arcu vestibulum imperdiet. Proin ultricies nisl sit amet enim imperdiet eu ornare dui tempus. Maecenas lobortis nisi a tortor vestibulum vel eleifend tellus vestibulum. Donec metus sapien, hendrerit a fermentum id, dictum quis libero.&lt;/p&gt;
+&lt;p&gt;Pellentesque a lorem nulla, in tempor justo. Duis odio nisl, dignissim sed consequat sit amet, hendrerit ac neque. Nunc ac augue nec massa tempor rhoncus. Nam feugiat, tellus a varius euismod, justo nisl faucibus velit, ut vulputate justo massa eu nibh. Sed bibendum urna quis magna facilisis in accumsan dolor malesuada. Morbi sit amet nunc risus, in faucibus sem. Nullam sollicitudin magna sed sem mollis id commodo libero condimentum. Duis eu massa et lacus semper molestie ut adipiscing sem.&lt;/p&gt;
+&lt;p&gt;Sed id nulla mi, eget suscipit eros. Aliquam tempus molestie rutrum. In quis varius elit. Nullam dignissim neque nec velit vulputate porttitor. Mauris ac ligula sit amet elit fermentum rhoncus. In tellus urna, pulvinar quis condimentum ut, porta nec justo. In hac habitasse platea dictumst. Proin volutpat elit id quam molestie ac commodo lacus sagittis. Quisque placerat, augue tempor placerat pulvinar, nisi nisi venenatis urna, eget convallis eros velit quis magna. Suspendisse volutpat iaculis quam, ut tristique lacus luctus quis.&lt;/p&gt;
+&lt;p&gt;Nullam commodo suscipit lacus non aliquet. Phasellus ac nisl lorem, sed facilisis ligula. Nam cursus lobortis placerat. Sed dui nisi, elementum eu sodales ac, placerat sit amet mauris. Pellentesque dapibus tellus ut ipsum aliquam eu auctor dui vehicula. Quisque ultrices laoreet erat, at ultrices tortor sodales non. Sed venenatis luctus magna, ultricies ultricies nunc fringilla eget. Praesent scelerisque urna vitae nibh tristique varius consequat neque luctus. Integer ornare, erat a porta tempus, velit justo fermentum elit, a fermentum metus nisi eu ipsum. Vivamus eget augue vel dui viverra adipiscing congue ut massa. Praesent vitae eros erat, pulvinar laoreet magna. Maecenas vestibulum mollis nunc in posuere. Pellentesque sit amet metus a turpis lobortis tempor eu vel tortor. Cras sodales eleifend interdum.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<div class="note"><strong>Note:</strong> The function <code>showNode</code> is also an example of the use of the <code><a href="../../JavaScript/Reference/Statements/for.html" title="en/JavaScript/Reference/Statements/for">for</a></code> cycle without a <code>statement</code> section. In this case <strong>a semicolon is always put immediately after the declaration of the cycle</strong>.</div>
+
+<p>…the same thing but with an animated page scroll:</p>
+
+<pre class="brush: js">var showBookmark = (function () {
+&nbsp; var&nbsp; _useHash, _scrollX, _scrollY, _nodeX, _nodeY, _itFrame, _scrollId = -1, _bookMark,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /*
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * nDuration: the duration in milliseconds of each frame
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * nFrames: number of frames for each scroll
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nDuration = 200, nFrames = 10;
+
+&nbsp; function _next () {
+&nbsp;&nbsp;&nbsp; if (_itFrame &gt; nFrames) { clearInterval(_scrollId); _scrollId = -1; return; }
+&nbsp;&nbsp;&nbsp; _isBot = true;
+&nbsp;&nbsp;&nbsp; document.documentElement.scrollTop = Math.round(_scrollY + (_nodeY - _scrollY) * _itFrame / nFrames);
+&nbsp;&nbsp;&nbsp; document.documentElement.scrollLeft = Math.round(_scrollX + (_nodeX - _scrollX) * _itFrame / nFrames);
+&nbsp;&nbsp;&nbsp; if (_useHash &amp;&amp; _itFrame === nFrames) { location.hash = _bookMark; }
+&nbsp;&nbsp;&nbsp; _itFrame++;
+&nbsp; }
+
+&nbsp; function _chkOwner () {
+&nbsp;&nbsp;&nbsp; if (_isBot) { _isBot = false; return; }
+&nbsp;&nbsp;&nbsp; if (_scrollId &gt; -1) { clearInterval(_scrollId); _scrollId = -1; }
+&nbsp; }
+
+&nbsp; if (window.addEventListener) { window.addEventListener("scroll", _chkOwner, false); }
+&nbsp; else if (window.attachEvent) { window.attachEvent("onscroll", _chkOwner); }
+
+&nbsp; return function (sBookmark, bUseHash) {
+&nbsp;&nbsp;&nbsp; _scrollY = document.documentElement.scrollTop;
+&nbsp;&nbsp;&nbsp; _scrollX = document.documentElement.scrollLeft;
+&nbsp;&nbsp;&nbsp; _bookMark = sBookmark;
+&nbsp;&nbsp;&nbsp; _useHash = arguments.length === 1 || bUseHash;
+&nbsp;&nbsp;&nbsp; for (
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var nLeft = 0, nTop = 0, oNode = document.querySelector(sBookmark);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; oNode;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nLeft += oNode.offsetLeft, nTop += oNode.offsetTop, oNode = oNode.offsetParent
+&nbsp;&nbsp;&nbsp; );
+&nbsp;&nbsp;&nbsp; _nodeX = nLeft, _nodeY = nTop, _itFrame = 1;
+&nbsp;&nbsp;&nbsp; if (_scrollId === -1) { _scrollId = setInterval(_next, Math.round(nDuration / nFrames)); }
+&nbsp; };
+})();
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://html.spec.whatwg.org/multipage/history.html#the-location-interface" class="external" lang="en" hreflang="en">WHATWG HTML Living Standard<br><small lang="en-US">The definition of 'Window.location' in that specification.</small></a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>No change from <a href="http://www.w3.org/TR/html5/" class="external" lang="en" title="The 'HTML5' specification" hreflang="en">HTML5</a>.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/html5/browsers.html#the-location-interface" class="external" lang="en" hreflang="en">HTML5<br><small lang="en-US">The definition of 'Window.location' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Initial definition.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><code>window.location.origin</code></td>
+   <td>30.0.1599.101 (possibly earlier)</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/21" title="Released on 2013-05-14.">21.0</a> (21.0)</td>
+   <td>11</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>7 (possibly earlier, see webkit bug&nbsp;46558)</td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><code>window.location.origin</code></td>
+   <td>30.0.1599.101 (possibly earlier)</td>
+   <td>21.0 (21.0)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span style="font-size: 12px; line-height: 18px;">7 (possibly earlier, see webkit bug&nbsp;</span><span style="font-size: 12px; line-height: 18px;">46558)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li>The interface of the returned value, <a href="../Location.html" title="The Location interface represents the location of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively."><code>Location</code></a>.</li>
+ <li>A similar information, but attached to the browsing context, <a href="../Document/location.html" title="The Document.location read-only property returns a Location object, which contains information about the URL of the document and provides methods for changing that URL and loading another URL."><code>Document.location</code></a></li>
+ <li><a href="../History_API.html" title="en/DOM/Manipulating the browser history">Manipulating the browser history</a></li>
+ <li><a href="../../Events/hashchange.html" title="/en-US/docs/DOM/Mozilla_event_reference/hashchange">hashchange</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../../tag/API.html">API</a></li>
+              <li><a href="../../../tag/HTML%20DOM.html">HTML DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsCompatTable">NeedsCompatTable</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsExample">NeedsExample</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsMarkupWork">NeedsMarkupWork</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsSpecTable">NeedsSpecTable</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Property">Property</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Window">Window</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Noitidart">Noitidart</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cta">cta</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jsx">jsx</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cpigat">cpigat</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Krinkle">Krinkle</a>,             <a href="https://developer.mozilla.org/en-US/profiles/darlesson">darlesson</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fusionchess">fusionchess</a>,             <a href="https://developer.mozilla.org/en-US/profiles/therealklanni">therealklanni</a>,             <a href="https://developer.mozilla.org/en-US/profiles/lborgman">lborgman</a>,             <a href="https://developer.mozilla.org/en-US/profiles/charmander">charmander</a>,             <a href="https://developer.mozilla.org/en-US/profiles/mua">mua</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cvr_hulu">cvr_hulu</a>,             <a href="https://developer.mozilla.org/en-US/profiles/marquete">marquete</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/utkarsh_shah">utkarsh_shah</a>,             <a href="https://developer.mozilla.org/en-US/profiles/akoenig">akoenig</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mkmelin">Mkmelin</a>,             <a href="https://developer.mozilla.org/en-US/profiles/pablofiumara">pablofiumara</a>,             <a href="https://developer.mozilla.org/en-US/profiles/johnwilander">johnwilander</a>,             <a href="https://developer.mozilla.org/en-US/profiles/charliekilian">charliekilian</a>,             <a href="https://developer.mozilla.org/en-US/profiles/evilpie">evilpie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/briankuhn">briankuhn</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/silverwind">silverwind</a>,             <a href="https://developer.mozilla.org/en-US/profiles/mattbasta">mattbasta</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Bzbarsky">Bzbarsky</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tarekcorp">tarekcorp</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jacefarm">jacefarm</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>,             <a href="https://developer.mozilla.org/en-US/profiles/minitech">minitech</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Crownabhisek">Crownabhisek</a>,             <a href="https://developer.mozilla.org/en-US/profiles/myakura">myakura</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Kenneth">Kenneth</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tjcrowder">tjcrowder</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ienzam">ienzam</a>,             <a href="https://developer.mozilla.org/en-US/profiles/louisremi">louisremi</a>,             <a href="https://developer.mozilla.org/en-US/profiles/pmorris">pmorris</a>,             <a href="https://developer.mozilla.org/en-US/profiles/grendel">grendel</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Günther">Günther</a>,             <a href="https://developer.mozilla.org/en-US/profiles/masondesu">masondesu</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Nickolay">Nickolay</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Inonit">Inonit</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sephr">Sephr</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dinomite">Dinomite</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Tobu">Tobu</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Nemon">Nemon</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Potappo">Potappo</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Arend">Arend</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Snotling">Snotling</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Kray2">Kray2</a>,             <a href="https://developer.mozilla.org/en-US/profiles/BenoitL">BenoitL</a>,             <a href="https://developer.mozilla.org/en-US/profiles/IdiosMachi">IdiosMachi</a>,             <a href="https://developer.mozilla.org/en-US/profiles/RobG">RobG</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Callek">Callek</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dria">Dria</a>,             <a href="https://developer.mozilla.org/en-US/profiles/JesseW">JesseW</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2015-08-22T02:22:36-07:00">Aug 22, 2015, 2:22:36 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Window.html"><code>Window</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="applicationCache.html" title="Returns a reference to the application cache object for the window."><code>Window.applicationCache</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="caches.html" title="The Window.caches&nbsp;read-only property returns the CacheStorage object associated with the current origin. This object enables service worker functionality such as storing assets for offline use, and generating custom responses to requests."><code>Window.caches</code></a></li><li><a href="closed.html" title="This read-only property indicates whether the referenced window is closed or not."><code>Window.closed</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="controllers.html" title="Returns the XUL controllers of the chrome window."><code>Window.controllers</code></a></li><li><a href="crypto.html" title="The Window.crypto read-only property returns the Crypto object associated to the global object. This object allows web pages access to certain cryptographic related services."><code>Window.crypto</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="defaultStatus.html" title="Gets/sets the status bar text for the given window."><code>Window.defaultStatus</code></a></s></li><li><a href="devicePixelRatio.html" title="The Window.devicePixelRatio read-only property returns the ratio of the (vertical) size of one physical pixel on the current display device to the size of one CSS pixel. Note that as the page is zoomed in the number of device pixels that one CSS pixel covers increases, and therefore the value of devicePixelRatio will also increase."><code>Window.devicePixelRatio</code></a></li><li><a href="dialogArguments.html" title="The dialogArguments property returns the parameters that were passed into the window.showModalDialog() method. This lets you determine what parameters were specified when the modal dialog was created."><code>Window.dialogArguments</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="directories.html" title="Returned the window personalbar toolbar object. Use the window.personalbar instead."><code>Window.directories</code></a></s></li><li><a href="document.html" title="Returns a reference to the document contained in the window."><code>Window.document</code></a></li><li><a href="frameElement.html" title="Returns the element (such as &lt;iframe&gt; or &lt;object&gt;) in which the window is embedded, or null if the window is top-level."><code>Window.frameElement</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="frames.html" title="Returns the window itself, which is an array-like object, listing the direct sub-frames of the current window."><code>Window.frames</code></a></li><li><a href="fullScreen.html" title="This property indicates whether the window is displayed in full screen mode or not. It is only reliable in Gecko 1.9 (Firefox 3) and later, see the Notes below."><code>Window.fullScreen</code></a></li><li><a href="history.html" title="The Window.history read-only property returns a reference to the History object, which provides an interface for manipulating the browser session history (pages visited in the tab or frame that the current page is loaded in)."><code>Window.history</code></a></li><li><a href="../IDBEnvironment/indexedDB.html" title="An IDBFactory object."><code>IDBEnvironment.indexedDB</code></a></li><li><a href="innerHeight.html" title="Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar."><code>Window.innerHeight</code></a></li><li><a href="innerWidth.html" title="Width (in pixels) of the browser window viewport including, if rendered, the vertical scrollbar."><code>Window.innerWidth</code></a></li><li><a href="length.html" title="Returns the number of frames (either frame or iframe elements) in the window."><code>Window.length</code></a></li><li><a href="localStorage.html" title="The localStorage property allows you to access a local Storage object. localStorage is similar to sessionStorage. The only difference is that, while data stored in localStorage has no expiration time, data stored in sessionStorage gets cleared when the browsing session ends—that is, when the browser is closed."><code>Window.localStorage</code></a></li><li><em><code>window.location</code></em></li><li><a href="locationbar.html" title="Returns the locationbar object, whose visibility can be checked."><code>Window.locationbar</code></a></li><li><a href="menubar.html" title="Returns the menubar object, whose visibility can be checked."><code>Window.menubar</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="messageManager.html" title="Returns the message manager object for this window. See The message manager for details."><code>Window.messageManager</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozAnimationStartTime.html" title="Returns the time, in milliseconds since the epoch, at which animations started now should be considered to have started. This value should be used instead of, for example, Date.now(), because this value will be the same for all animations started in this window during this refresh interval, allowing them to remain in sync with one another."><code>Window.mozAnimationStartTime</code></a></li><li><a href="mozInnerScreenX.html" title="Gets the X coordinate of the top-left corner of the window's viewport, in screen coordinates."><code>Window.mozInnerScreenX</code></a></li><li><a href="mozInnerScreenY.html" title="Gets the Y coordinate of the top-left corner of the window's viewport, in screen coordinates."><code>Window.mozInnerScreenY</code></a></li><li><a href="mozPaintCount.html" title="Returns the number of times the current document has been painted to the screen in this window."><code>Window.mozPaintCount</code></a></li><li><a href="name.html" title="Gets/sets the name of the window."><code>Window.name</code></a></li><li><a href="navigator.html" title="The Window.navigator read-only property returns a reference to the Navigator object, which can be queried for information about the application running the script."><code>Window.navigator</code></a></li><li><a href="../GlobalEventHandlers/onabort.html" title="An event handler for abort events sent to the window. (Not available with Firefox 2 or Safari)"><code>GlobalEventHandlers.onabort</code></a></li><li><a href="../WindowEventHandlers/onafterprint.html" title="The WindowEventHandlers.onafterprint property sets and returns the onafterprint EventHandler for the current window."><code>WindowEventHandlers.onafterprint</code></a></li><li><a href="../WindowEventHandlers/onbeforeprint.html" title="The onbeforeprint property sets and returns the onbeforeprint event handler code for the current window."><code>WindowEventHandlers.onbeforeprint</code></a></li><li><a href="../WindowEventHandlers/onbeforeunload.html" title="An event that fires when a window is about to unload its resources. The document is still visible and the event is still cancelable."><code>WindowEventHandlers.onbeforeunload</code></a></li><li><a href="../GlobalEventHandlers/onblur.html" title="The onblur property returns the onBlur event handler code, if any, that exists on the current element."><code>GlobalEventHandlers.onblur</code></a></li><li><a href="../GlobalEventHandlers/onchange.html" title="The onchange property sets and returns the event handler for the change event."><code>GlobalEventHandlers.onchange</code></a></li><li><a href="../GlobalEventHandlers/onclick.html" title="The onclick property returns the click event handler code on the current element."><code>GlobalEventHandlers.onclick</code></a></li><li><a href="../GlobalEventHandlers/onclose.html" title="An event handler for close events sent to the window. (Not available with Firefox 2 or Safari)"><code>GlobalEventHandlers.onclose</code></a></li><li><a href="../GlobalEventHandlers/oncontextmenu.html" title="An event handler property for right-click events on the window. Unless the default behavior is prevented (see examples below on how to do this), the browser context menu will activate (though IE8 has a bug with this and will not activate the context menu if a contextmenu event handler is defined). Note that this event will occur with any non-disabled right-click event and does not depend on an element possessing the &quot;contextmenu&quot; attribute."><code>GlobalEventHandlers.oncontextmenu</code></a></li><li><a href="../GlobalEventHandlers/ondblclick.html" title="The ondblclick property returns the onDblClick event handler code on the current element."><code>GlobalEventHandlers.ondblclick</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="ondevicelight.html" title="Specifies an event listener to receive devicelight events. These events occur when the device's light level sensor detects a change in the intensity of the ambient light level."><code>Window.ondevicelight</code></a></li><li><a href="ondevicemotion.html" title="An event handler for the devicemotion events sent to the window."><code>Window.ondevicemotion</code></a></li><li><a href="ondeviceorientation.html" title="An event handler for the deviceorientation events sent to the window."><code>Window.ondeviceorientation</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="ondeviceproximity.html" title="Specifies an event listener to receive deviceproximity events. These events occur when the device sensor detects that an object becomes closer to or farther from the device."><code>Window.ondeviceproximity</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="ondragdrop.html" title="An event handler for drag and drop events sent to the window."><code>Window.ondragdrop</code></a></s></li><li><a href="../GlobalEventHandlers/onerror.html" title="An event handler for the error event. Error events are fired at various targets for different kinds of errors:"><code>GlobalEventHandlers.onerror</code></a></li><li><a href="../GlobalEventHandlers/onfocus.html" title="The onfocus property returns the onFocus event handler code on the current element."><code>GlobalEventHandlers.onfocus</code></a></li><li><a href="../WindowEventHandlers/onhashchange.html" title="The hashchange event fires when a window's hash changes (see location.hash)."><code>WindowEventHandlers.onhashchange</code></a></li><li><a href="../GlobalEventHandlers/oninput.html" title="An event handler for the input event on the window.&nbsp;The input event is raised when an &lt;input&gt; element value changes."><code>GlobalEventHandlers.oninput</code></a></li><li><a href="../GlobalEventHandlers/onkeydown.html" title="The onkeydown property returns the onKeyDown event handler code on the current element."><code>GlobalEventHandlers.onkeydown</code></a></li><li><a href="../GlobalEventHandlers/onkeypress.html" title="The onkeypress property sets and returns the onKeyPress event handler code for the current element."><code>GlobalEventHandlers.onkeypress</code></a></li><li><a href="../GlobalEventHandlers/onkeyup.html" title="The onkeyup property returns the onKeyUp event handler code for the current element."><code>GlobalEventHandlers.onkeyup</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../WindowEventHandlers/onlanguagechange.html" title="The WindowEventHandlers.onlanguagechange event handler is a property containing the code to execute when the languagechange event, of type Event, is received by the object implementing this interface, usually a Window, an HTMLBodyElement, or an HTMLIFrameElement. Such an event is sent by the browser to inform that the preferred languages list has been updated. The list is accessible via NavigatorLanguage.languages."><code>WindowEventHandlers.onlanguagechange</code></a></li><li><a href="../GlobalEventHandlers/onload.html" title="An event handler for the load event of a window."><code>GlobalEventHandlers.onload</code></a></li><li><a href="../GlobalEventHandlers/onmousedown.html" title="The onmousedown property returns the onmousedown event handler code on the current element."><code>GlobalEventHandlers.onmousedown</code></a></li><li><a href="../GlobalEventHandlers/onmousemove.html" title="The onmousemove property returns the mousemove event handler code on the current element."><code>GlobalEventHandlers.onmousemove</code></a></li><li><a href="../GlobalEventHandlers/onmouseout.html" title="The onmouseout property returns the onMouseOut event handler code on the current element."><code>GlobalEventHandlers.onmouseout</code></a></li><li><a href="../GlobalEventHandlers/onmouseover.html" title="The onmouseover property returns the onMouseOver event handler code on the current element."><code>GlobalEventHandlers.onmouseover</code></a></li><li><a href="../GlobalEventHandlers/onmouseup.html" title="The onmouseup property returns the onMouseUp event handler code on the current element."><code>GlobalEventHandlers.onmouseup</code></a></li><li><a href="onmozbeforepaint.html" title="An event handler for the MozBeforePaint event. This is used in concert with the window.mozRequestAnimationFrame() method to perform smooth, synchronized animations from&nbsp;JavaScript code."><code>Window.onmozbeforepaint</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="onmoztimechange.html" title="An event handler for the moztimechange events sent to the window."><code>Window.onmoztimechange</code></a></li><li><a href="onpaint.html" title="An event handler for the paint event on the window. Not working in Gecko-based applications currently, see Notes section!"><code>Window.onpaint</code></a></li><li><a href="../WindowEventHandlers/onpopstate.html" title="An event handler for the popstate event on the window."><code>WindowEventHandlers.onpopstate</code></a></li><li><a href="../GlobalEventHandlers/onreset.html" title="The GlobalEventHandlers.onreset property contains an EventHandler triggered when a reset event is received."><code>GlobalEventHandlers.onreset</code></a></li><li><a href="../GlobalEventHandlers/onresize.html" title="The GlobalEventHandlers.onresize property contains an EventHandler triggered when a resize event is received."><code>GlobalEventHandlers.onresize</code></a></li><li><a href="../GlobalEventHandlers/onscroll.html" title="An event handler for scroll events on&nbsp;element."><code>GlobalEventHandlers.onscroll</code></a></li><li><a href="../GlobalEventHandlers/onselect.html" title="An event handler for the select event on the window."><code>GlobalEventHandlers.onselect</code></a></li><li><a href="../GlobalEventHandlers/onsubmit.html" title="An event handler for the submit event on the window."><code>GlobalEventHandlers.onsubmit</code></a></li><li><a href="../WindowEventHandlers/onunload.html" title="The unload event is raised when the window is unloading its content and resources. The resources removal is processed after the unload event occurs."><code>WindowEventHandlers.onunload</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="onuserproximity.html" title="The Window.onuserproxymity property represents an EventHandler, that is a function to be called when the userproximity event occurs. These events are of type UserProximityEvent and occur when the the device sensor detects that an object becomes nearby."><code>Window.onuserproximity</code></a></li><li><a href="opener.html" title="Returns a reference to the window that opened this current window."><code>Window.opener</code></a></li><li><a href="outerHeight.html" title="Window.outerHeight gets the height in pixels of the whole browser window. It represents the height of the whole browser window including sidebar (if expanded), window chrome and window resizing borders/handles."><code>Window.outerHeight</code></a></li><li><a href="outerWidth.html" title="Window.outerWidth gets the width of the outside of the browser window. It represents the width of the whole browser window including sidebar (if expanded), window chrome and window resizing borders/handles."><code>Window.outerWidth</code></a></li><li><a href="parent.html" title="A reference to the parent of the current window or subframe."><code>Window.parent</code></a></li><li><a href="performance.html" title="The Web Performance API allows web pages access to certain functions for measuring the performance of web pages and web applications, including the Navigation Timing API and high-resolution time data."><code>Window.performance</code></a></li><li><a href="personalbar.html" title="Returns the personalbar object, whose visibility can be toggled in the window."><code>Window.personalbar</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="pkcs11.html" title="Returns the pkcs11 object, which is used to install drivers and other software associated with the pkcs11 protocol. If pkcs11 isn't supported, this property returns null."><code>Window.pkcs11</code></a></s></li><li><a href="screen.html" title="Returns a reference to the screen object associated with the window.&nbsp;The screen object, implementing the Screen interface, is a special object for inspecting properties of the screen on which the current window is being rendered."><code>Window.screen</code></a></li><li><a href="screenX.html" title="The Window.screenX read-only property returns the horizontal distance, in CSS pixels, of the left border of the user's browser from the left side of the screen."><code>Window.screenX</code></a></li><li><a href="screenY.html" title="The Window.screenY read-only property returns the vertical distance, in CSS pixels of the top border of the user's browser from the top edge of the screen."><code>Window.screenY</code></a></li><li><a href="scrollbars.html" title="Returns the scrollbars object, whose visibility can be checked."><code>Window.scrollbars</code></a></li><li><a href="scrollMaxX.html" title="Returns the maximum number of pixels that the document can be scrolled horizontally."><code>Window.scrollMaxX</code></a></li><li><a href="scrollMaxY.html" title="Returns the maximum number of pixels that the document can be scrolled vertically."><code>Window.scrollMaxY</code></a></li><li><a href="scrollX.html" title="Returns the number of pixels that the document has already been scrolled horizontally."><code>Window.scrollX</code></a></li><li><a href="scrollY.html" title="Returns the number of pixels that the document has already been scrolled vertically."><code>Window.scrollY</code></a></li><li><a href="self.html" title="The Window.self read-only property returns the window itself, as a WindowProxy. It can be used with dot notation on a window object (that is, window.self) or standalone (self). The advantage of the standalone notation is that a similar notation exists for non-window contexts, such as in Web Workers. By using self, you can refer to the global scope in a way that will work not only in a window context (self will resolve to window.self) but also in a worker context (self will then resolve to WorkerGlobalScope.self)."><code>Window.self</code></a></li><li><a href="sessionStorage.html" title="The sessionStorage property allows you to access a session Storage object. sessionStorage is similar to Window.localStorage, the only difference is while data stored in localStorage has no expiration set, data stored in sessionStorage gets cleared when the page session ends. A page session lasts for as long as the browser is open and survives over page reloads and restores. Opening a page in a new tab or window will cause a new session to be initiated, which differs from how session cookies work."><code>Window.sessionStorage</code></a></li><li><a href="status.html" title="Sets the text in the status bar at the bottom of the browser or returns the previously set text."><code>Window.status</code></a></li><li><a href="statusbar.html" title="Returns the statusbar object, whose visibility can be toggled in the window."><code>Window.statusbar</code></a></li><li><a href="toolbar.html" title="Returns the toolbar object, whose visibility can be toggled in the window."><code>Window.toolbar</code></a></li><li><a href="top.html" title="Returns a reference to the topmost window in the window hierarchy."><code>Window.top</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="URL.html" title="The Window.URL property returns a URL object that provides static methods used for creating and managing object URLs."><code>Window.URL</code></a></li><li><a href="window.html" title="The window property of a window object points to the window object itself. Thus the following expressions all return the same window object:"><code>Window.window</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="alert.html" title="The Window.alert() method displays an alert dialog with the optional specified content and an OK button."><code>Window.alert()</code></a></li><li><a href="../WindowBase64/atob.html" title="The WindowBase64.atob()&nbsp;function decodes a string of data which has been encoded using base-64 encoding. You can use the window.btoa() method to encode and transmit data which may otherwise cause communication problems, then transmit it and use the window.atob() method to decode the data again. For example, you can encode, transmit, and decode control characters such as ASCII values 0 through 31."><code>WindowBase64.atob()</code></a></li><li><a href="back.html" title="Returns the window to the previous item in the history. This was a Gecko-specific method. Use the standard history.back method instead."><code>Window.back()</code></a></li><li><a href="blur.html" title="Shifts focus away from the window."><code>Window.blur()</code></a></li><li><a href="../WindowBase64/btoa.html" title="Creates a base-64 encoded ASCII string from a &quot;string&quot; of binary data."><code>WindowBase64.btoa()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="cancelAnimationFrame.html" title="Cancels an animation frame request previously scheduled through a call to window.requestAnimationFrame()."><code>Window.cancelAnimationFrame()</code></a></li><li><a href="captureEvents.html" title="Registers the window to capture all events of the specified type."><code>Window.captureEvents()</code></a></li><li><a href="clearImmediate.html" title="This method clears the action specified by window.setImmediate."><code>Window.clearImmediate()</code></a></li><li><a href="../WindowTimers/clearInterval.html" title="Cancels repeated action which was set up using setInterval."><code>WindowTimers.clearInterval()</code></a></li><li><a href="../WindowTimers/clearTimeout.html" title="Clears the delay set by WindowTimers.setTimeout()."><code>WindowTimers.clearTimeout()</code></a></li><li><a href="close.html" title="Closes the current window, or the window on which it was called."><code>Window.close()</code></a></li><li><a href="confirm.html" title="The Window.confirm() method displays a modal dialog with an optional message and two buttons, OK and Cancel."><code>Window.confirm()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="convertPointFromNodeToPage.html" title="The Window.convertPointFromNodeToPage() method converts a Point object from coordinates based on the given CSS node to coordinates based on the page."><code>Window.convertPointFromNodeToPage()</code></a></li><li><a href="dump.html" title="Prints messages to the (native) console."><code>Window.dump()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../GlobalFetch/fetch.html" title="The fetch() method of the GlobalFetch interface starts the process of fetching a resource. This returns a promise that resolves to the Response object representing the response to your request."><code>GlobalFetch.fetch()</code></a></li><li><a href="find.html" title="Finds a string in a window."><code>Window.find()</code></a></li><li><a href="focus.html" title="Makes a request to bring the window to the front. It may fail due to user settings and the window isn't guaranteed to be frontmost before this method returns."><code>Window.focus()</code></a></li><li><a href="forward.html" title="Moves the window one document forward in the history. This was a Gecko-specific method. Use the standard history.forward method instead."><code>Window.forward()</code></a></li><li><a href="getAttention.html" title="Attempts to get the user's attention. How this happens varies based on OS and window manager."><code>Window.getAttention()</code></a></li><li><a href="getComputedStyle.html" title="The Window.getComputedStyle() method gives the values of all the CSS properties of an element after applying the active stylesheets and resolving any basic computation those values may contain."><code>Window.getComputedStyle()</code></a></li><li><a href="getDefaultComputedStyle-2.html" title="getDefaultComputedStyle() gives the default computed values of all the CSS properties of an element, ignoring author styling.&nbsp; That is, only user-agent and user styles are taken into account."><code>Window.getDefaultComputedStyle()</code></a></li><li><a href="getSelection.html" title="Returns a Selection object representing the range of text selected by the user or the current position of the caret."><code>Window.getSelection()</code></a></li><li><a href="home.html" title="Returns the window to the home page."><code>Window.home()</code></a></li><li><a href="importDialog.html" title="Because opening windows on mobile isn't necessarily appropriate, the Firefox Mobile team designed the importDialog() method to replace window.openDialog(). Instead of opening a new window, it merges the specified XUL&nbsp;dialog into the main window."><code>Window.importDialog()</code></a></li><li><a href="matchMedia.html" title="Returns a new MediaQueryList object representing the parsed results of the specified media query string."><code>Window.matchMedia()</code></a></li><li><a href="minimize.html" title="Sets a window to minimized state (a way to undo it programatically is by calling window.moveTo())."><code>Window.minimize()</code></a></li><li><a href="moveBy.html" title="Moves the current window by a specified amount."><code>Window.moveBy()</code></a></li><li><a href="moveTo.html" title="Moves the window to the specified coordinates."><code>Window.moveTo()</code></a></li><li><a href="open.html" title="Loads a resource into either a new browsing context (such as a window) or one that already exists, depending on the specified parameters."><code>Window.open()</code></a></li><li><a href="openDialog.html" title="window.openDialog() is an extension to window.open(). It behaves the same, except that it can optionally take one or more parameters past windowFeatures, and windowFeatures itself is treated a little differently."><code>Window.openDialog()</code></a></li><li><a href="postMessage.html" title="The window.postMessage method safely enables cross-origin communication. Normally, scripts on different pages are allowed to access each other if and only if the pages that executed them are at locations with the same protocol (usually both https), port number (443 being the default for https), and host (modulo document.domain being set by both pages to the same value). window.postMessage provides a controlled mechanism to circumvent this restriction in a way which is secure when properly used."><code>Window.postMessage()</code></a></li><li><a href="print.html" title="Opens the Print Dialog to print the current document."><code>Window.print()</code></a></li><li><a href="prompt.html" title="The Window.prompt() displays a dialog with an optional message prompting the user to input some text."><code>Window.prompt()</code></a></li><li><a href="releaseEvents.html" title="Releases the window from trapping events of a specific type."><code>Window.releaseEvents()</code></a></li><li><a href="requestAnimationFrame.html" title="You should call this method whenever you're ready to update your animation onscreen. This will request that your animation function be called before the browser performs the next repaint. The number of callbacks is usually 60 times per second, but will generally match the display refresh rate in most web browsers as per W3C recommendation. The callback rate may be reduced to a lower rate when running in background tabs."><code>Window.requestAnimationFrame()</code></a></li><li><a href="resizeBy.html" title="Resizes the current window by a certain amount."><code>Window.resizeBy()</code></a></li><li><a href="resizeTo.html" title="Dynamically resizes window."><code>Window.resizeTo()</code></a></li><li><a href="restore.html" title="This method is currently not working, but you can use:"><code>Window.restore()</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="routeEvent.html" title=""><code>Window.routeEvent()</code></a></s></li><li><a href="scroll.html" title="Scrolls the window to a particular place in the document."><code>Window.scroll()</code></a></li><li><a href="scrollBy.html" title="Scrolls the document in the window by the given amount."><code>Window.scrollBy()</code></a></li><li><a href="scrollByLines.html" title="Scrolls the document by the given number of lines."><code>Window.scrollByLines()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="scrollByPages.html" title="Scrolls the current document by the specified number of pages."><code>Window.scrollByPages()</code></a></li><li><a href="scrollTo.html" title="Scrolls to a particular set of coordinates in the document."><code>Window.scrollTo()</code></a></li><li><a href="setCursor.html" title="Changes the cursor for the current window."><code>Window.setCursor()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="setImmediate.html" title="This method is used to break up long running operations and run a callback function immediately after the browser has completed other operations such as events and display updates."><code>Window.setImmediate()</code></a></li><li><a href="../WindowTimers/setInterval.html" title="Calls a function or executes a code snippet repeatedly, with a fixed time delay between each call to that function. Returns an intervalID."><code>WindowTimers.setInterval()</code></a></li><li><a href="../WindowTimers/setTimeout.html" title="Calls a function or executes a code snippet after a specified delay."><code>WindowTimers.setTimeout()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="showModalDialog.html" title="The Window.showModalDialog() creates and displays a modal dialog box containing a specified HTML document."><code>Window.showModalDialog()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="sizeToContent.html" title="The Window.sizeToContent() method sizes the window according to its content. In order for it to work, the DOM content should be loaded when this function is called, for example once the DOMContentLoaded event has been thrown."><code>Window.sizeToContent()</code></a></li><li><a href="stop.html" title="This method stops window loading."><code>Window.stop()</code></a></li><li><a href="updateCommands.html" title="Updates the state of commands of the current chrome window (UI)."><code>Window.updateCommands()</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Window/location$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Window/location$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Window/location" selected="">
+          English (US)
+        </option>
+                  <option value="/es/docs/Web/API/Window/location">
+            Español
+          </option>          <option value="/fr/docs/Web/API/window/location">
+            Français
+          </option>          <option value="/ja/docs/Web/API/Window/location">
+            日本語
+          </option>          <option value="/ru/docs/Web/API/Window/location">
+            Русский
+          </option>          <option value="/zh-CN/docs/Web/API/Window/location">
+            中文 (简体)
+          </option>          <option value="/zh-TW/docs/DOM/window.location">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Window/location by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:16:17 GMT -->
+</body></html>

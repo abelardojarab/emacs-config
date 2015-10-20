@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"UnmarshalException(String)","path":"UnmarshalException-java.lang.String-","entryType":"Constructor"},{"name":"UnmarshalException(String, Exception)","path":"UnmarshalException-java.lang.String-java.lang.Exception-","entryType":"Constructor"}]}

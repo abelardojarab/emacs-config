@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"Q3ColorDrag","path":"Q3ColorDrag","entryType":"Function"},{"name":"setColor","path":"setColor","entryType":"Function"},{"name":"Static Public Members","isHeader":true},{"name":"canDecode","path":"canDecode","entryType":"Method"},{"name":"decode","path":"decode","entryType":"Method"}]}

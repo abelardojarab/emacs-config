@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"~QTouchEventSequence","path":"dtor.QTouchEventSequence","entryType":"Function"},{"name":"move","path":"move","entryType":"Function"},{"name":"press","path":"press","entryType":"Function"},{"name":"release","path":"release","entryType":"Function"},{"name":"stationary","path":"stationary","entryType":"Function"}]}

@@ -1,0 +1,747 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Marketplace/Marketplace_APIs by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:37:30 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Firefox Marketplace APIs</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+                  <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace$styles">
+          
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Marketplace_APIs$json">
+  <link rel="canonical" href="Marketplace_APIs.html">
+
+            <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/Mozilla/Marketplace/Marktplatz_APIs" title="Firefox Marktplatz APIs">
+          <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Mozilla/Marketplace/Marketplace_APIs" title="Firefox Marketplace APIs">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Mozilla/Marketplace/Marketplace_APIs" title="Firefox Marketplace API">
+          <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/Mozilla/Marketplace/Marketplace_APIs" title="Firefox Marketplace APIs">
+          <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/Mozilla/Marketplace/Marketplace_APIs" title="Firefox Marketplace API">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Firefox Marketplace APIs">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Marketplace_APIs">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Marketplace_APIs">
+  <meta name="twitter:title" content="Firefox Marketplace APIs">
+    <meta property="og:description" content="Links to the main references covering Mozilla's Firefox Marketplace APIs, with which you can handle app submissions, configure a payment account for an app, and more.">
+  <meta name="description" content="Links to the main references covering Mozilla's Firefox Marketplace APIs, with which you can handle app submissions, configure a payment account for an app, and more.">
+  <meta name="twitter:description" content="Links to the main references covering Mozilla's Firefox Marketplace APIs, with which you can handle app submissions, configure a payment account for an app, and more.">
+  
+      
+  </head>
+<body data-slug="Mozilla/Marketplace/Marketplace_APIs" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Marketplace/Marketplace_APIs" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FMarketplace%2FMarketplace_APIs" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Marketplace/Marketplace_APIs" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FMarketplace%2FMarketplace_APIs" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../docs/Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+                <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+     <!-- end is_zone -->
+
+
+    <div class="wiki-main-content"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/Mozilla/Marketplace/Marktplatz_APIs" title="Firefox Marktplatz APIs">Deutsch</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Mozilla/Marketplace/Marketplace_APIs" title="Firefox Marketplace APIs">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Mozilla/Marketplace/Marketplace_APIs" title="Firefox Marketplace API">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/Mozilla/Marketplace/Marketplace_APIs" title="Firefox Marketplace APIs">Português (do&nbsp;Brasil)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/Mozilla/Marketplace/Marketplace_APIs" title="Firefox Marketplace API">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Marketplace_APIs$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Marketplace_APIs$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Marketplace_APIs$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace" rel="v:url" property="v:title">Firefox Marketplace</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Firefox Marketplace APIs</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Firefox Marketplace APIs</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 4 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/mehmetaergun" title="View profile: mehmetaergun">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mehmetaergun" data-src="../../../secure.gravatar.com/avatar/3b112b9ef9d36139f7fd03a8ece9721e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mehmetaergun</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/alispivak" title="View profile: alispivak">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="alispivak" data-src="../../../secure.gravatar.com/avatar/401943669c4af295f5b2c99f90dd221a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">alispivak</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/markg" title="View profile: markg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="markg" data-src="../../../secure.gravatar.com/avatar/a6bdd84b4732a2c3c7ecadd886b3c64a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">markg</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-closed wiki-right-none wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div class="summary">
+ <p><span class="seoSummary">Links to the main references covering Mozilla's Firefox Marketplace APIs, with which you can handle app submissions, configure a payment account for an app, and more.</span></p>
+</div>
+<div class="row topicpage-table">
+ <div class="section">
+  <dl>
+   <dt>
+    <a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Publishing/Marketplace_utility_library">Marketplace utility library</a></dt>
+   <dd>
+    To help you work with the Firefox Marketplace, we provide a JavaScript library you can use in your apps to make it easier to handle in-app payments and verify payment receipts.</dd>
+   <dt>
+    <a class="external" href="http://firefox-marketplace-api.readthedocs.org/en/latest/topics/submission.html" title="http://firefox-marketplace-api.readthedocs.org/en/latest/topics/submission.html">Submission API</a></dt>
+   <dd>
+    The Submission API lets you validate your app, update your app, and fetch information about the apps available to be installed.</dd>
+   <dt>
+    <a class="external" href="http://firefox-marketplace-api.readthedocs.org/en/latest/topics/payment.html" title="http://firefox-marketplace-api.readthedocs.org/en/latest/topics/payment.html">Payment API</a></dt>
+   <dd>
+    The Payment API lets you do things like get information about in-app purchases and get information about pricing tiers for various countries.</dd>
+   <dt>
+    <a class="external" href="http://firefox-marketplace-api.readthedocs.org/en/latest/topics/overview.html" title="http://firefox-marketplace-api.readthedocs.org/en/latest/topics/overview.html">Other Marketplace APIs</a></dt>
+   <dd>
+    The full documentation for the Firefox Marketplace APIs.</dd>
+  </dl>
+ </div>
+ <div class="section">
+  <p></p><h5 class="Tools" id="Tools" name="Tools">Tools for app developers</h5> 
+<ul> 
+    <li><a class="external" href="https://marketplace.firefox.com/developers/">Visit Firefox Marketplace Developer Hub</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Using_Firefox_OS_Simulator">Firefox OS Simulator</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Apps/App_developer_tools">App developer tools</a></li> 
+</ul> 
+<h5 class="Documentation" id="Documentation" name="Documentation">Technology reference documentation</h5> 
+<div class="twocolumns"> 
+    <ul> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li> 
+        <li><a href="../docs/Web/API/Document_Object_Model.html">DOM</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/JavaScript">JavaScript</a></li> 
+        <li><a href="../docs/WebAPI.html">WebAPI</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/WebGL">WebGL</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/SVG">SVG</a></li> 
+        <li><a class="external" href="https://www.mozilla.org/en-US/apps/">Open Web Apps overview site</a></li> 
+        <li><a class="external" href="https://wiki.mozilla.org/Apps">Apps project wiki page</a></li> 
+    </ul> 
+</div> 
+<h5 class="Community" id="Community" name="Community">Getting help from the community</h5> 
+<p>If you still aren't sure how to do what you're trying to get done, feel free to join the conversation!</p> 
+<ul> 
+    <li>Consult the webapps forum: <ul><a class="external" href="https://lists.mozilla.org/listinfo/dev-webapps">Mailing list</a> 
+  <li><a class="external" href="https://twitter.com/mozilla"> Twitter</a></li> 
+  <li><a class="external" href="http://stackoverflow.com/r/mozilla"> Stack Overflow</a></li> 
+  <li><a class="external" href="http://groups.google.com/group/mozilla.dev.webapps">Google Group</a></li> 
+  <li><a class="external" href="http://groups.google.com/group/mozilla.dev.webapps/feeds">RSS feed</a></li> 
+</ul> 
+        <ul> 
+            <li>Ask your question on the Open Web Apps IRC channel: <a class="link-irc" href="irc://irc.mozilla.org/openwebapps">#openwebapps</a></li> 
+        </ul> 
+    </li> 
+</ul> 
+<p><span class="alllinks"><a class="external" href="http://www.catb.org/~esr/faqs/smart-questions.html" rel="external">Don't forget about the <em>netiquette</em>...</a></span></p><p></p>
+ </div>
+</div>
+<p>&nbsp;</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../docs/tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Marketplace">Marketplace</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/mehmetaergun">mehmetaergun</a>,             <a href="https://developer.mozilla.org/en-US/profiles/alispivak">alispivak</a>,             <a href="https://developer.mozilla.org/en-US/profiles/markg">markg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/mehmetaergun">mehmetaergun</a>,
+                      <time datetime="2014-09-28T12:07:26-07:00">Sep 28, 2014, 12:07:26 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare">Prepare for success</a>
+
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Introduction">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Deciding_what_to_build">Deciding what to build</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Getting_to_know_your_users">Getting to know your users</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Choosing_your_business_model">Choosing your business model</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Localizing_your_apps">Localizing your apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Promoting_your_app">Promoting your app</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Creating_your_community">Creating your community</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options">Your publication options</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Introduction">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Packaged_apps">Packaged apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Hosted_apps">Hosted apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Packaged_or_hosted">Packaged or hosted?</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Open_web_apps_for_android">Open Web Apps for Android</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Open_web_apps_for_desktop">Open Web Apps for Desktop</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Mobile_optimized_websites">Mobile-optimized websites</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Self_publishing">Publish apps yourself</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Creating_a_store">Create your own store</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization">Monetization</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Introduction_Monetization">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Profiting_from_your_app" title="This guide contains introductory materials on how to monetize your apps, including tools needed, and a monetization calculator.">Publishing your app for profit</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/App_payments_guide">Building paid apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/In-app_payments_section/Introduction_In-app_Payments" title="A guide to implementing support for in-app payments in your Web app.">Building for in-app payments</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/In-app_payments_section/Introduction_In-app_Payments">Introduction</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/In-app_payments_section/mozPay_iap">With mozPay</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/In-app_payments_section/fxPay_iap">With fxPay</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Refunds">Refunds</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/validating_a_receipt" title="A guide to when—and how—to validate your app's purchase receipt.">Validating a receipt</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/App_pricing" title="A round up of fixed price points you can choose for your paid apps, and how these vary across different currencies, along with useful supporting information on dealing with app payments.">App pricing tiers</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Payments_Status" title="An at-a-glance summary of what countries have got our app payment services set up in them — where paid apps can be distributed">Country guides</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Payment_processing_and_your_revenue">Payment processing and your revenue</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing">App publishing overview</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Introduction">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submission_checklist">Submission checklist</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Marketplace_review_criteria" title="An explanation of the criteria an app must meet in order to be published on the Firefox Marketplace">Marketplace review criteria</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Marketplace_showcase_criteria">Marketplace showcase criteria</a></li>
+   <li><a href="Publishing/Adding_a_subdomain.html" title="For security reasons, each app must have its own domain (or subdomain) on the Web. This article covers how to go about creating a subdomain for your app.">Adding a subdomain for an app</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Publishing_mobile_app_to_Desktop">Publishing an existing mobile app to Desktop</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines">Policies and Guidelines</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines/Introduction">Introduction</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines/Marketplace_screenshot_criteria" title="Some guidelines on how to create an effective screenshot for marketplace submission">Marketplace screenshot criteria</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines/Privacy_policies" title="Your users' privacy is very important, so you need to develop and adhere to a reasonable privacy policy to engender their trust. This article provides a guide to developing privacy policies.">Privacy policy</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines/Testing_and_troubleshooting">App testing and troubleshooting</a></li>
+    </ol>
+   </li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit">Submit your app</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Overview">Overview</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Sign-in_to_your_developer_account" title="This step-by-step guide will help you successfully submit your app to the Firefox Marketplace.">Step 1: Sign-in</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Load_your_app">Step 2: Load app</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Enter_your_apps_details">Step 3: Listing details</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Next_steps">Step 4: Next steps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Rating_Your_Content">Step 5: App rating</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing">Step 6: Pricing your app</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Introduction">Introduction</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Payment_Accounts">Payment accounts</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Providers/Bango">Bango</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Providers/Boku">Boku</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Promote_as_upgrade_to_free_version">Promote as upgrade</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/In-app_products">fxPay in-app products</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Define_your_team">Step 7: Define team members</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/View_your_listing">Step 8: View listing</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Edit_other_localizations">Step 9: Edit other localizations</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Managing_your_apps">Managing and updating published apps</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Managing_your_apps/Introduction_Managing_your_apps">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Managing_your_apps/Status___Versions">Your app's status</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Updating_apps" title="Information about how both hosted and packaged app updates are handled, and what you need to do to ensure that your app properly supports updating.">Updating apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Managing_your_apps/App_Statistics">App Stats</a></li>
+  </ol>
+ </li>
+ <li><a href="APIs.html">Libraries and APIs</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/FAQ">Firefox Marketplace FAQ</a></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Marketplace/Marketplace_APIs$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Marketplace/Marketplace_APIs$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Mozilla/Marketplace/Marketplace_APIs" selected="">
+          English (US)
+        </option>
+                  <option value="/de/docs/Mozilla/Marketplace/Marktplatz_APIs">
+            Deutsch
+          </option>          <option value="/es/docs/Mozilla/Marketplace/Marketplace_APIs">
+            Español
+          </option>          <option value="/ja/docs/Mozilla/Marketplace/Marketplace_APIs">
+            日本語
+          </option>          <option value="/pt-BR/docs/Mozilla/Marketplace/Marketplace_APIs">
+            Português (do&nbsp;Brasil)
+          </option>          <option value="/zh-TW/docs/Mozilla/Marketplace/Marketplace_APIs">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Marketplace/Marketplace_APIs by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:37:30 GMT -->
+</body></html>

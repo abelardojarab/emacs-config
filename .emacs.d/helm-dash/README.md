@@ -33,6 +33,17 @@ there is an explanation about stable packages and MELPA and
 
 `m-x package-install helm-dash RET`
 
+
+## Installing docsets
+
+Helm-dash uses the same docsets as [Dash](http://www.kapeli.com/dash).
+You can install them with `m-x helm-dash-install-docset` for the
+official docsets or `m-x helm-dash-install-user-docset` for user
+contributed docsets (experimental).
+
+To install a docset from a file in your drive you can use `m-x
+helm-dash-install-docset-from-file'.
+
 ## Usage
 
 `m-x helm-dash RET` will run helm with your active docsets
@@ -61,6 +72,12 @@ searching. Defaults to 3.
 `helm-dash-browser-func` is a function to encapsulate the way to browse
 Dash' docsets. Defaults to browse-url. For example, if you want to use eww to
 browse your docsets, you can do: `(setq helm-dash-browser-func 'eww)`.
+
+When `helm-dash-enable-debugging` is non-nil stderr from sqlite queries is
+captured and displayed in a buffer. The default value is `t`. Setting this
+to `nil` may speed up queries on some machines (capturing stderr requires
+the creation and deletion of a temporary file for each query).
+
 
 ## Sets of Docsets
 
@@ -120,6 +137,15 @@ just fine
 - I get nil for every search I do
 
 make sure you don't have sqlite3 .mode column but .mode list (the default). check your .sqliterc
+
+- When selecting an item in helm-dash, no browser lookup occurs with firefox >= 38.0.and emacs >= 24.4
+
+try:
+```
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "/path/to/firefox")
+(setq helm-dash-browser-func 'browse-url-generic)
+```
 
 
 ## Contribution

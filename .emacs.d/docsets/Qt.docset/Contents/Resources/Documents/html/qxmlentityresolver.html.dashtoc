@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"~QXmlEntityResolver","path":"dtor.QXmlEntityResolver","entryType":"Function"},{"name":"errorString","path":"errorString","entryType":"Function"},{"name":"resolveEntity","path":"resolveEntity","entryType":"Function"}]}

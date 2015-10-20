@@ -1,0 +1,1008 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:57:10 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Using the Gamepad API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API$json">
+  <link rel="canonical" href="Using_the_Gamepad_API.html">
+
+            <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/Guide/API/Gamepad" title="Utiliser l'API Gamepad">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/Guide/API/Gamepad" title="Gamepad APIの利用">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Using the Gamepad API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API">
+  <meta name="twitter:title" content="Using the Gamepad API">
+    <meta property="og:description" content="HTML5 introduced many of the necessary components for rich, interactive game development. Technologies like canvas, WebGL, audio, and video, along with JavaScript implementations, have matured to the point where they can now support many tasks previously requiring native code. The Gamepad API is a way for developers and designers to access and use gamepads and other game controllers.">
+  <meta name="description" content="HTML5 introduced many of the necessary components for rich, interactive game development. Technologies like canvas, WebGL, audio, and video, along with JavaScript implementations, have matured to the point where they can now support many tasks previously requiring native code. The Gamepad API is a way for developers and designers to access and use gamepads and other game controllers.">
+  <meta name="twitter:description" content="HTML5 introduced many of the necessary components for rich, interactive game development. Technologies like canvas, WebGL, audio, and video, along with JavaScript implementations, have matured to the point where they can now support many tasks previously requiring native code. The Gamepad API is a way for developers and designers to access and use gamepads and other game controllers.">
+  
+      
+  </head>
+<body data-slug="Web/API/Gamepad_API/Using_the_Gamepad_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FGamepad_API%2FUsing_the_Gamepad_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FGamepad_API%2FUsing_the_Gamepad_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/Guide/API/Gamepad" title="Utiliser l'API Gamepad">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/Guide/API/Gamepad" title="Gamepad APIの利用">日本語</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Gamepad_API.html" rel="v:url" property="v:title">Gamepad API</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Using the Gamepad API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Using the Gamepad API</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 11 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/gmanpersona" title="View profile: gmanpersona">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gmanpersona" data-src="../../../../../../secure.gravatar.com/avatar/c144c854f4c728ecdc977df4c5407d566aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">gmanpersona</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/brianblakely" title="View profile: brianblakely">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="brianblakely" data-src="../../../../../../secure.gravatar.com/avatar/9481d4984e85f636fd5911554c4ef8856aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">brianblakely</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/cvan" title="View profile: cvan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cvan" data-src="../../../../../../secure.gravatar.com/avatar/190aca80aec0083652d9e728661c7e116aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cvan</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Qantas94Heavy" title="View profile: Qantas94Heavy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Qantas94Heavy" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Qantas94Heavy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ted_Mielczarek" title="View profile: Ted_Mielczarek">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ted_Mielczarek" data-src="../../../../../../secure.gravatar.com/avatar/30fa9f928422bef2f98dd5f564def6866aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ted_Mielczarek</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Raffzahn" title="View profile: Raffzahn">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Raffzahn" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Raffzahn</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/grendel" title="View profile: grendel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="grendel" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">grendel</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/lillithompson" title="View profile: lillithompson">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lillithompson" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">lillithompson</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#conntecting" rel="internal">Connecting to a gamepad</a></li><li><a href="#disconnecting" rel="internal">Disconnecting a gamepad</a></li><li><a href="#querying" rel="internal">Querying the Gamepad object</a><ol><li><a href="#Using_button_information" rel="internal">Using button information</a></li><li><a href="#Using_axes_information" rel="internal">Using axes information</a></li></ol></li><li><a href="#Complete_example_Displaying_gamepad_state" rel="internal">Complete example: Displaying gamepad state</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><div class="notice experimental"> 
+    <p><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span> <strong>This is an experimental technology</strong><br>Because this technology's specification has not stabilized, check the <a href="#Browser_compatibility">compatibility table</a> for the proper prefixes to use in various browsers. Also note that the syntax and behavior of an experimental technology is subject to change in future versions of browsers as the spec changes.</p> 
+</div><p></p>
+
+<div class="summary">
+<p><span class="seoSummary">HTML5 introduced many of the necessary components for rich, interactive game development. Technologies like <code>&lt;canvas&gt;</code>, WebGL, <code>&lt;audio&gt;</code>, and <code>&lt;video&gt;</code>, along with JavaScript implementations, have matured to the point where they can now support many tasks previously requiring native code. The Gamepad API is a way for developers and designers to access and use gamepads and other game controllers.</span></p>
+</div>
+
+<p>The <a href="../Gamepad_API.html">Gamepad API</a> introduces new events on the <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a> object for reading gamepad and controller (hereby referred to as&nbsp;<em>gamepad</em>) state. In addition to these events, the API also adds a <a href="../Gamepad.html" title="The Gamepad interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id."><code>Gamepad</code></a> object, which you can use to query the state of a connected gamepad, and a <a href="../Navigator/getGamepads.html" title="The Navigator.getGamepads() method returns an array: the first value is null, and the others are all Gamepad objects, one for each gamepad connected to the device. So if no gamepads are connected, the method will just return null."><code>navigator.getGamepads()</code></a> method which you can use to get a list of gamepads known to the page.</p>
+
+<h2 name="conntecting" id="conntecting">Connecting to a gamepad</h2>
+
+<p>When a new gamepad is connected to the computer, the focused page first receives a <code><a href="../../Events/gamepadconnected.html" title="/en-US/docs/Web/Events/gamepadconnected">gamepadconnected</a></code> event. If a gamepad is already connected when the page loaded, the <code><a href="../../Events/gamepadconnected.html" title="/en-US/docs/Web/Events/gamepadconnected">gamepadconnected</a></code> event is dispatched to the focused page when the user presses a button or moves an axis.</p>
+
+<div class="geckoVersionNote">
+<p>In Firefox, gamepads are only exposed to a page when the user interacts with one with the page visible. This helps prevent gamepads being used for fingerprinting the user. Once one gamepad has been interacted with, other gamepads that are connected will automatically be visible.</p>
+</div>
+
+<p>You can use <code><a href="../../Events/gamepadconnected.html" title="/en-US/docs/Web/Events/gamepadconnected">gamepadconnected</a></code> like this:</p>
+
+<pre class="brush: js">window.addEventListener("gamepadconnected", function(e) {
+&nbsp; console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+&nbsp;   e.gamepad.index, e.gamepad.id,
+&nbsp;   e.gamepad.buttons.length, e.gamepad.axes.length);
+});
+</pre>
+
+<p>Each gamepad has a unique ID associated with it, which is available on the event's <a href="../GamepadEvent/gamepad.html" title="The GamepadEvent.gamepad property of the GamepadEvent interface returns a Gamepad object, providing access to the associated gamepad data for fired gamepadconnected and gamepaddisconnected events."><code>gamepad</code></a> property.</p>
+
+<h2 name="disconnecting" id="disconnecting">Disconnecting a gamepad</h2>
+
+<p>When a gamepad is disconnected, and if a page has previously received data for that gamepad (e.g. <code><a href="../../Events/gamepadconnected.html" title="/en-US/docs/Web/Events/gamepadconnected">gamepadconnected</a></code>), a second event is dispatched to the focused window, <code><a href="../../Events/gamepaddisconnected.html" title="/en-US/docs/Web/Events/gamepaddisconnected">gamepaddisconnected</a></code>:</p>
+
+<pre class="brush: js">window.addEventListener("gamepaddisconnected", function(e) {
+&nbsp; console.log("Gamepad disconnected from index %d: %s",
+&nbsp;   e.gamepad.index, e.gamepad.id);
+});</pre>
+
+<p>The gamepad's <a href="../Gamepad/index.html" title="The Gamepad.index property of the Gamepad interface returns an integer that is auto-incremented to be unique for each device currently connected to the system."><code>index</code></a> property will be unique per-device connected to the system, even if multiple controllers of the same type are used. The <code>index</code> property also functions as the index into the <a href="../../JavaScript/Reference/Global_Objects/Array.html" title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects."><code>Array</code></a> returned by <a href="../Navigator/getGamepads.html" title="The Navigator.getGamepads() method returns an array: the first value is null, and the others are all Gamepad objects, one for each gamepad connected to the device. So if no gamepads are connected, the method will just return null."><code>Navigator.getGamepads()</code></a>.</p>
+
+<pre class="brush: js">var gamepads = {};
+
+function gamepadHandler(event, connecting) {
+&nbsp; var gamepad = event.gamepad;
+  // Note:
+  // gamepad === navigator.getGamepads()[gamepad.index]
+
+&nbsp; if (connecting) {
+&nbsp;&nbsp;&nbsp; gamepads[gamepad.index] = gamepad;
+&nbsp; } else {
+&nbsp;&nbsp;&nbsp; delete gamepads[gamepad.index];
+&nbsp; }
+}
+
+window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
+window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
+</pre>
+
+<p>This previous example also demonstrates how the&nbsp;<code>gamepad</code>&nbsp;property can be held after the event has completed — a technique we will use for device state querying later.</p>
+
+<h2 name="querying" id="querying">Querying the Gamepad object</h2>
+
+<p>As you can see, the <strong>gamepad</strong> events discussed above include a&nbsp;<code>gamepad</code>&nbsp;property on the event object, which returns a <a href="../Gamepad.html" title="The Gamepad interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id."><code>Gamepad</code></a> object. We can use this in order to determine which gamepad (i.e., its ID) had caused the event, since multiple gamepads might be connected at once. We can do much more with the <a href="../Gamepad.html" title="The Gamepad interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id."><code>Gamepad</code></a> object, including holding a reference to it and querying it to find out which buttons and axes are being pressed at any one time. Doing so is often desirable for games or other interactive web pages that need to know the state of a gamepad now vs. the next time an event fires.</p>
+
+<p>Performing such checks tends to involve using the <a href="../Gamepad.html" title="The Gamepad interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id."><code>Gamepad</code></a> object in conjunction with an animation loop (e.g., <a href="../Window/requestAnimationFrame-2.html" title="You should call this method whenever you're ready to update your animation onscreen. This will request that your animation function be called before the browser performs the next repaint. The number of callbacks is usually 60 times per second, but will generally match the display refresh rate in most web browsers as per W3C recommendation. The callback rate may be reduced to a lower rate when running in background tabs or in hidden &lt;iframe&gt;s in order to improve performance and battery life."><code>requestAnimationFrame</code></a>), where developers want to make decisions for the current frame based on the state of the gamepad or gamepads.</p>
+
+<div>
+<p>The <a href="../Navigator/getGamepads.html" title="The Navigator.getGamepads() method returns an array: the first value is null, and the others are all Gamepad objects, one for each gamepad connected to the device. So if no gamepads are connected, the method will just return null."><code>Navigator.getGamepads()</code></a> method returns an array of all devices currently visible to the webpage, as <a href="../Gamepad.html" title="The Gamepad interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id."><code>Gamepad</code></a> objects (the first value is always <code>null</code>, so <code>null</code> will be returned if there are no gamepads connected.) This can then be used to get the same information. For example, the first code example above you be rewritten as shown below:</p>
+</div>
+
+<pre class="brush: js">window.addEventListener("gamepadconnected", function(e) {
+  var gp = navigator.getGamepads()[e.gamepad.index];
+  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+    gp.index, gp.id,
+    gp.buttons.length, gp.axes.length);
+});</pre>
+
+<p>The <a href="../Gamepad.html" title="The Gamepad interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id."><code>Gamepad</code></a> object's properties are as follows:</p>
+
+<ul>
+ <li><code>id</code>: A string containing some information about the controller. This is not strictly specified, but in Firefox it will contain three pieces of information separated by dashes (<code>-</code>): two 4-digit hexadecimal strings containing the USB vendor and product id of the controller, and the name of the controller as provided by the driver. This information is intended to allow you to find a mapping for the controls on the device as well as display useful feedback to the user.</li>
+ <li><code>index</code>: An integer that is unique for each gamepad currently connected to the system. This can be used to distinguish multiple controllers. Note that disconnecting a device and then connecting a new device may reuse the previous index.</li>
+ <li><code>mapping</code>: A string indicating whether the browser has remapped the controls on the device to a known layout. Currently there is only one supported known layout — the <a href="https://dvcs.w3.org/hg/gamepad/raw-file/default/gamepad.html#remapping" class="external">standard gamepad</a>. If the browser is able to map controls on the device to that layout the <code>mapping</code> property will be set to the string <code>standard</code>.</li>
+ <li><code>connected</code>: A boolean indicating whether the gamepad is still connected to the system. If this is so the value is <code>True</code>; if not, it is <code>False</code>.</li>
+ <li><code>buttons</code>: An array of <a href="../GamepadButton.html" title="The GamepadButton interface defines an individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device."><code>GamepadButton</code></a> objects representing the buttons present on the device. Each <a href="../GamepadButton.html" title="The GamepadButton interface defines an individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device."><code>GamepadButton</code></a> has a <code>pressed</code> and a <code>value</code> property:
+  <ul>
+   <li>The <code>pressed</code> property is a boolean indicating whether the button is currently pressed (<code>true</code>) or unpressed (<code>false</code>).</li>
+   <li>The <code>value</code> property is a floating point value used to enable representing analog buttons, such as the triggers on many modern gamepads. The values are normalized to the range 0.0..1.0, with 0.0 representing a button that is not pressed, and 1.0 representing a button that is fully pressed.</li>
+  </ul>
+ </li>
+ <li><code>axes</code>: An array representing the controls with axes present on the device (e.g. analog thumb sticks). Each entry in the array is a floating point value in the range -1.0 - 1.0, representing the axis position from the lowest value (-1.0) to the highest value (1.0).</li>
+ <li><code>timestamp</code>: This returns a <a href="../DOMHighResTimeStamp.html" title="No specific property."><code>DOMHighResTimeStamp</code></a> representing the last time the data for this gamepad was updated, allowing developers to determine if the <code>axes</code> and <code>button</code> data have been updated from the hardware. The value must be relative to the <code>navigationStart</code> attribute of the <a href="../PerformanceTiming.html" title="The PerformanceTiming interface represents timing-related performance information for the given page."><code>PerformanceTiming</code></a> interface. Values are monotonically increasing, meaning that they can be compared to determine the ordering of updates, as newer values will always be greater than or equal to older values. Note that this property is not currently supported in Firefox.</li>
+</ul>
+
+<div class="note">
+<p><strong>Note</strong>: The Gamepad object is available on the <code><a href="../../Events/gamepadconnected.html" title="/en-US/docs/Web/Events/gamepadconnected">gamepadconnected</a></code> event rather than the <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a> object itself, for security reasons. Once we have a reference to it, we can query its properties for information about the current state of the gamepad. Behind the scenes, this object will be updated every time the gamepad's state changes.</p>
+</div>
+
+<h3 id="Using_button_information">Using button information</h3>
+
+<p>Let's look at a simple example that displays connection information for one gamepad (it ignores subsequent gamepad connections) and allows you to move a ball around the screen using the four gamepad buttons on the right hand side of the gamepad. You can <a href="http://chrisdavidmills.github.io/gamepad-buttons/" class="external">view the demo live</a>, and <a href="https://github.com/chrisdavidmills/gamepad-buttons/tree/master" class="external">find the source code</a> on Github.</p>
+
+<p>To start with, we declare some variables: The <code>gamepadInfo</code> paragraph that the connection info is written into, the <code>ball</code> that we want to move, the <code>start</code> variable that acts as the ID for <code>requestAnimation Frame</code>, the <code>a</code> and <code>b</code> variables that act as position modifiers for moving the ball, and the shorthand variables that will be used for the <a href="../Window/requestAnimationFrame-2.html" title="You should call this method whenever you're ready to update your animation onscreen. This will request that your animation function be called before the browser performs the next repaint. The number of callbacks is usually 60 times per second, but will generally match the display refresh rate in most web browsers as per W3C recommendation. The callback rate may be reduced to a lower rate when running in background tabs or in hidden &lt;iframe&gt;s in order to improve performance and battery life."><code>requestAnimationFrame()</code></a> and <a href="../Window/cancelAnimationFrame.html" title="Cancels an animation frame request previously scheduled through a call to window.requestAnimationFrame()."><code>cancelAnimationFrame()</code></a> cross browser forks.</p>
+
+<pre class="brush: js">var gamepadInfo = document.getElementById("gamepad-info");
+var ball = document.getElementById("ball");
+var start;
+var a = 0;
+var b = 0;
+</pre>
+
+<p>Next we use the <code><a href="../../Events/gamepadconnected.html" title="/en-US/docs/Web/Events/gamepadconnected">gamepadconnected</a></code> event to check for a gamepad being connected. When one is connected, we grab the gamepad using <a href="../Navigator/getGamepads.html" title="The Navigator.getGamepads() method returns an array: the first value is null, and the others are all Gamepad objects, one for each gamepad connected to the device. So if no gamepads are connected, the method will just return null."><code>Navigator.getGamepads()</code></a><code>[0]</code>, print information about the gamepad into our gamepad info <code>div</code>, and fire the <code>gameLoop()</code> function that starts the whole ball movement process up.</p>
+
+<pre class="brush: js">window.addEventListener("gamepadconnected", function(e) {
+  var gp = navigator.getGamepads()[e.gamepad.index];
+  gamepadInfo.innerHTML = "Gamepad connected at index " + gp.index + ": " + gp.id + ". It has " + gp.buttons.length + " buttons and " + gp.axes.length + " axes.";
+
+  gameLoop();
+});</pre>
+
+<p>Now we use the <code><a href="../../Events/gamepaddisconnected.html" title="/en-US/docs/Web/Events/gamepaddisconnected">gamepaddisconnected</a></code> event to check if the gamepad is disconnected again. If so, we stop the <a href="../Window/requestAnimationFrame-2.html" title="You should call this method whenever you're ready to update your animation onscreen. This will request that your animation function be called before the browser performs the next repaint. The number of callbacks is usually 60 times per second, but will generally match the display refresh rate in most web browsers as per W3C recommendation. The callback rate may be reduced to a lower rate when running in background tabs or in hidden &lt;iframe&gt;s in order to improve performance and battery life."><code>requestAnimationFrame()</code></a> loop (see below) and revert the gamepad information back to what it was originally.</p>
+
+<pre class="brush: js">window.addEventListener("gamepaddisconnected", function(e) {
+  gamepadInfo.innerHTML = "Waiting for gamepad.";
+
+  cancelRequestAnimationFrame(start);
+});</pre>
+
+<p>Chrome does things differently here. Instead of constantly storing the gamepad's latest state in a variable it only stores a snapshot, so to do the same thing in Chrome you have to keep polling it and then only use the <a href="../Gamepad.html" title="The Gamepad interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id."><code>Gamepad</code></a> object in code when it is available. We have done this below using <a href="../WindowTimers/setInterval.html" title="Calls a function or executes a code snippet repeatedly, with a fixed time delay between each call to that function. Returns an&nbsp;intervalID."><code>Window.setInterval()</code></a>; once the object is available the gamepad info is outputted, the game loop is started, and the interval is cleared using <a href="../WindowTimers/clearInterval.html" title="Cancels repeated action which was set up using setInterval."><code>Window.clearInterval()</code></a>. Note that in older versions of Chrome <a href="../Navigator/getGamepads.html" title="The Navigator.getGamepads() method returns an array: the first value is null, and the others are all Gamepad objects, one for each gamepad connected to the device. So if no gamepads are connected, the method will just return null."><code>Navigator.getGamepads()</code></a> is implemented with a <code>webkit</code> prefix. We attempt to detect and handle both the prefixed version and the standard version of the function for backwards compatibility.</p>
+
+<pre class="brush: js">var interval;
+
+if (!('ongamepadconnected' in window)) {
+  // No gamepad events available, poll instead.
+  interval = setInterval(pollGamepads, 500);
+}
+
+function pollGamepads() {
+  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+  for (var i = 0; i &lt; gamepads.length; i++) {
+    var gp = gamepads[i];
+    if (gp) {
+      gamepadInfo.innerHTML = "Gamepad connected at index " + gp.index + ": " + gp.id +
+        ". It has " + gp.buttons.length + " buttons and " + gp.axes.length + " axes.";
+      gameLoop();
+      clearInterval(interval);
+    }
+  }
+}</pre>
+
+<p>Now on to the main game loop. In each execution of the loop we check if one of four buttons is being pressed; if so, we update the values of the <code>a</code> and <code>b</code> movement variables appropriately, then update the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/left" title="The left CSS property specifies part of the position of positioned elements."><code>left</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/top" title="The top CSS property specifies part of the position of positioned elements. It has no effect on non-positioned elements."><code>top</code></a> properties, changing their values to the current values of <code>a</code> and <code>b</code> respectively. This has the effect of moving the ball around the screen.&nbsp; In current versions of Chrome (version 34 as of this writing) the button values are stored as an array of double values, instead of <a href="../GamepadButton.html" title="The GamepadButton interface defines an individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device."><code>GamepadButton</code></a> objects. This is fixed in development versions.</p>
+
+<p>After all this is done, we use our <font face="Consolas, Monaco, Andale Mono, monospace">requestAnimationFrame()</font> to request the next animation frame, running <code>gameLoop()</code> again.</p>
+
+<pre class="brush: js">function buttonPressed(b) {
+<span class="k">  if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"object"</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">    return</span> <span class="nx">b</span><span class="p">.</span><span class="nx">pressed</span><span class="p">;</span>
+<span class="nx">  </span><span class="p">}</span>
+<span class="p">  return</span> <span class="nx">b</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">;</span>
+}
+
+function gameLoop() {
+  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+  if (!gamepads) {
+    return;
+  }
+
+  var gp = gamepads[0];
+  if (buttonPressed(gp.buttons[0])) {
+    b--;
+  } else if (buttonPressed(gp.buttons[2])) {
+    b++;
+  }
+  if (buttonPressed(gp.buttons[1])) {
+    a++;
+  } else if (buttonPressed(gp.buttons[3])) {
+    a--;
+  }
+
+  ball.style.left = a * 2 + "px";
+  ball.style.top = b * 2 + "px";
+
+  start = requestAnimationFrame(gameLoop);
+}</pre>
+
+<h3 id="Using_axes_information">Using axes information</h3>
+
+<p><strong>TBD (basically the same, except using axes[i] rather than button[i].value for both Firefox and Chrome.)</strong></p>
+
+<h2 id="Complete_example_Displaying_gamepad_state">Complete example: Displaying gamepad state</h2>
+
+<p>This example shows how to use the <a href="../Gamepad.html" title="The Gamepad interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id."><code>Gamepad</code></a> object, as well as the <code><a href="../../Events/gamepadconnected.html" title="/en-US/docs/Web/Events/gamepadconnected">gamepadconnected</a></code> and <code><a href="../../Events/gamepaddisconnected.html" title="/en-US/docs/Web/Events/gamepaddisconnected">gamepaddisconnected</a></code> events in order to display the state of all gamepads connected to the system. You can find a <a href="http://luser.github.io/gamepadtest/" class="external">working demo</a> and look at the <a href="https://github.com/luser/gamepadtest" class="external">full source code</a> on Github.</p>
+
+<pre class="brush: js">var haveEvents = 'ongamepadconnected' in window;
+var controllers = {};<span style="font-size: 1rem;">
+
+</span><span style="font-size: 1rem;">function connecthandler(e) {
+</span><span style="font-size: 1rem;">&nbsp; addgamepad(e.gamepad);
+</span><span style="font-size: 1rem;">}
+
+</span><span style="font-size: 1rem;">function addgamepad(gamepad) {
+</span><span style="font-size: 1rem;">&nbsp; controllers[gamepad.index] = gamepad;
+
+  var d = document.createElement("div");
+</span><span style="font-size: 1rem;">  d.setAttribute("id", "controller" + gamepad.index);
+
+</span><span style="font-size: 1rem;">  var t = document.createElement("h1");
+</span><span style="font-size: 1rem;">&nbsp; t.appendChild(document.createTextNode("gamepad: " + gamepad.id));
+</span><span style="font-size: 1rem;">&nbsp; d.appendChild(t);
+
+</span><span style="font-size: 1rem;">&nbsp; var b = document.createElement("div");
+</span><span style="font-size: 1rem;">&nbsp; b.className = "buttons";
+</span><span style="font-size: 1rem;">&nbsp; for (var i = 0; i &lt; gamepad.buttons.length; i++) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; var e = document.createElement("span");
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; e.className = "button";
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; //e.id = "b" + i;
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; e.innerHTML = i;
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; b.appendChild(e);
+</span><span style="font-size: 1rem;">&nbsp; }
+
+</span><span style="font-size: 1rem;">&nbsp; d.appendChild(b);
+
+</span><span style="font-size: 1rem;">&nbsp; var a = document.createElement("div");
+</span><span style="font-size: 1rem;">&nbsp; a.className = "axes";
+
+</span><span style="font-size: 1rem;">&nbsp; for (var i = 0; i &lt; gamepad.axes.length; i++) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; var p = document.createElement("progress");
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; p.className = "axis";
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; //p.id = "a" + i;
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; p.setAttribute("max", "2");
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; p.setAttribute("value", "1");
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; p.innerHTML = i;
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; a.appendChild(p);
+</span><span style="font-size: 1rem;">&nbsp; }
+
+</span><span style="font-size: 1rem;">&nbsp; d.appendChild(a);
+
+  // See </span>https://github.com/luser/gamepadtest/blob/master/index.html<span style="font-size: 1rem;">
+  var start = </span><span style="font-size: 1rem;">document.getElementById("start");</span>
+<span style="font-size: 1rem;">  if (start) {
+</span><span style="font-size: 1rem;">  &nbsp; start.style.display = "none";
+  }
+</span><span style="font-size: 1rem;">
+&nbsp; document.body.appendChild(d);
+</span><span style="font-size: 1rem;">&nbsp; requestAnimationFrame(updateStatus);
+</span><span style="font-size: 1rem;">}
+</span><span style="font-size: 1rem;">
+function disconnecthandler(e) {
+</span><span style="font-size: 1rem;">&nbsp; removegamepad(e.gamepad);
+</span><span style="font-size: 1rem;">}
+
+</span><span style="font-size: 1rem;">function removegamepad(gamepad) {
+</span><span style="font-size: 1rem;">&nbsp; var d = document.getElementById("controller" + gamepad.index);
+</span><span style="font-size: 1rem;">&nbsp; document.body.removeChild(d);
+</span><span style="font-size: 1rem;">&nbsp; delete controllers[gamepad.index];
+</span><span style="font-size: 1rem;">}
+
+</span><span style="font-size: 1rem;">function updateStatus() {
+</span><span style="font-size: 1rem;">&nbsp; if (!haveEvents) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; scangamepads();
+</span><span style="font-size: 1rem;">&nbsp; }
+
+  var i = 0;
+  var j;
+
+</span><span style="font-size: 1rem;">&nbsp; for (j in controllers) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; var controller = controllers[j];
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; var d = document.getElementById("controller" + j);
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; var buttons = d.getElementsByClassName("button");
+</span><span style="font-size: 1rem;">
+&nbsp;&nbsp;&nbsp; for (i = 0; i &lt; controller.buttons.length; i++) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var b = buttons[i];
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var val = controller.buttons[i];
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var pressed = val == 1.0;
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (typeof(val) == "object") {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pressed = val.pressed;
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; val = val.value;
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var pct = Math.round(val * 100) + "%";
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b.style.backgroundSize = pct + " " + pct;
+
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (pressed) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b.className = "button pressed";
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b.className = "button";
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; }
+
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; var axes = d.getElementsByClassName("axis");
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; for (i = 0; i &lt; controller.axes.length; i++) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var a = axes[i];
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a.innerHTML = i + ": " + controller.axes[i].toFixed(4);
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a.setAttribute("value", controller.axes[i] + 1);
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; }
+</span><span style="font-size: 1rem;">&nbsp; }
+
+</span><span style="font-size: 1rem;">&nbsp; requestAnimationFrame(updateStatus);
+</span><span style="font-size: 1rem;">}
+
+</span><span style="font-size: 1rem;">function scangamepads() {
+</span><span style="font-size: 1rem;">  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+</span><span style="font-size: 1rem;">&nbsp; for (var i = 0; i &lt; gamepads.length; i++) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; if (gamepads[i]) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (gamepads[i].index in controllers) {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-size: 1rem;">controllers[gamepads[i].index] = gamepads[i];
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="font-size: 1rem;">addgamepad(gamepads[i]);
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+</span><span style="font-size: 1rem;">&nbsp;&nbsp;&nbsp; }
+</span><span style="font-size: 1rem;">&nbsp; }
+</span><span style="font-size: 1rem;">}
+
+</span><span style="font-size: 1rem;">
+window.addEventListener("gamepadconnected", connecthandler);
+</span><span style="font-size: 1rem;">window.addEventListener("gamepaddisconnected", disconnecthandler);
+
+</span><span style="font-size: 1rem;">if (!haveEvents) {
+</span><span style="font-size: 1rem;">&nbsp; setInterval(scangamepads, 500);
+</span><span style="font-size: 1rem;">}</span></pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/gamepad/#gamepad-interface" class="external" lang="en" hreflang="en">Gamepad<br><small lang="en-US">The definition of 'Gamepad' in that specification.</small></a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Initial defintion</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>General support</td>
+   <td>21.0 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span><br>
+    35.0</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/29" title="Released on 2014-04-29.">29.0</a> (29.0) [1]</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>15.0 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span><br>
+    22.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>General support</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/32" title="Released on 2014-09-02.">32.0</a> (32.0)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] Starting with Firefox 24, the Gamepad API was available behind a preference. You can enable it in those versions by loading <code>about:config</code> and setting the <code>dom.gamepad.enabled</code> preference to true.</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Advanced">Advanced</a></li>
+              <li><a href="../../../tag/API.html">API</a></li>
+              <li><a href="../../../tag/Gamepad%20API.html">Gamepad API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Games">Games</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/guide">guide</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/gmanpersona">gmanpersona</a>,             <a href="https://developer.mozilla.org/en-US/profiles/brianblakely">brianblakely</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cvan">cvan</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Qantas94Heavy">Qantas94Heavy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ted_Mielczarek">Ted_Mielczarek</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Raffzahn">Raffzahn</a>,             <a href="https://developer.mozilla.org/en-US/profiles/grendel">grendel</a>,             <a href="https://developer.mozilla.org/en-US/profiles/lillithompson">lillithompson</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2015-09-16T06:44:10-07:00">Sep 16, 2015, 6:44:10 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Gamepad_API.html">Gamepad API</a></strong></li><li data-default-state="open"><a href="#"><strong>Guides</strong></a><ol><li><a href="Using_the_Gamepad_API.html" title="HTML5 introduced many of the necessary components for rich, interactive game development. Technologies like &lt;canvas&gt;, WebGL, &lt;audio&gt;, and &lt;video&gt;, along with JavaScript implementations, have matured to the point where they can now support many tasks previously requiring native code. The Gamepad API is a way for developers and designers to access and use gamepads and other game controllers.">Using the Gamepad API</a></li><li><a href="https://developer.mozilla.org/docs/Games/Techniques/Controls_Gamepad_API" title="">Implemneting controls using the Gamepad API</a></li></ol></li><li data-default-state="open"><a href="#"><strong>Interfaces</strong></a><ol><li><a href="../Gamepad.html"><code>Gamepad</code></a></li><li><a href="../GamepadButton.html"><code>GamepadButton</code></a></li><li><a href="../GamepadEvent.html"><code>GamepadEvent</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="../Window/ongamepadconnected.html"><code>Window.ongamepadconnected</code></a></li><li><a href="../Window/ongamepaddisconnected.html"><code>Window.ongamepaddisconnected</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../../Events/gamepadconnected.html"><code>gamepadconnected</code></a></li><li><a href="../../Events/gamepaddisconnected.html"><code>gamepaddisconnected</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API" selected="">
+          English (US)
+        </option>
+                  <option value="/fr/docs/Web/Guide/API/Gamepad">
+            Français
+          </option>          <option value="/ja/docs/Web/Guide/API/Gamepad">
+            日本語
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:57:14 GMT -->
+</body></html>

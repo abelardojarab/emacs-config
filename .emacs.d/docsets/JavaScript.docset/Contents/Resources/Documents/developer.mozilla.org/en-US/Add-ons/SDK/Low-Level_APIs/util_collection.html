@@ -1,0 +1,779 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/util_collection by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 18:20:28 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>util/collection</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+                  <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons$styles">
+          
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection$json">
+  <link rel="canonical" href="util_collection.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="util/collection">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection">
+  <meta name="twitter:title" content="util/collection">
+    <meta property="og:description" content="A simple list-like class and utilities for using it.">
+  <meta name="description" content="A simple list-like class and utilities for using it.">
+  <meta name="twitter:description" content="A simple list-like class and utilities for using it.">
+  
+      
+  </head>
+<body data-slug="Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'compat_api': false,'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Add-ons/SDK/Low-Level_APIs/util_collection" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FAdd-ons%2FSDK%2FLow-Level_APIs%2Futil_collection" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Add-ons/SDK/Low-Level_APIs/util_collection" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FAdd-ons%2FSDK%2FLow-Level_APIs%2Futil_collection" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../docs/Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+                <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+     <!-- end is_zone -->
+
+
+    <div class="wiki-main-content"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons" rel="v:url" property="v:title">Add-ons</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK" rel="v:url" property="v:title">Add-on SDK</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Low-Level_APIs.html" rel="v:url" property="v:title">Low-Level APIs</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">util/collection</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>util/collection</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 3 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/n8chz" title="View profile: n8chz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="n8chz" data-src="../../../../../secure.gravatar.com/avatar/05cb19ad33c2a2919e936f60f4009d976aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">n8chz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wbamberg" title="View profile: wbamberg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wbamberg" data-src="../../../../../secure.gravatar.com/avatar/576b94c81f8ad97e58d63f12e5fdb00c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">wbamberg</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jsantell" title="View profile: jsantell">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jsantell" data-src="../../../../../secure.gravatar.com/avatar/595768eaea3925799b659b979de0f93a6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jsantell</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Usage" rel="internal">Usage</a></li><li><a href="#Globals" rel="internal">Globals</a><ol><li><a href="#Constructors" rel="internal">Constructors</a><ol><li><a href="#Collection(.5Barray.5D)" rel="internal"><code>Collection([array])</code></a></li></ol></li><li><a href="#Functions" rel="internal">Functions</a><ol><li><a href="#addCollectionProperty(object.2C_propName.2C_.5BbackingArray.5D)" rel="internal"><code>addCollectionProperty(object, propName, [backingArray])</code></a></li></ol></li></ol></li><li><a href="#Collection" rel="internal">Collection</a><ol><li><a href="#Methods" rel="internal">Methods</a><ol><li><a href="#add(itemOrItems)" rel="internal"><code>add(itemOrItems)</code></a></li><li><a href="#remove(itemOrItems)" rel="internal"><code>remove(itemOrItems)</code></a></li></ol></li><li><a href="#Properties" rel="internal">Properties</a><ol><li><a href="#length" rel="internal"><code>length</code></a></li></ol></li></ol></li>
+                </ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div class="note">
+ <p>Unstable</p>
+</div>
+<p><span class="seoSummary">A simple list-like class and utilities for using it.</span></p>
+<h2 id="Usage">Usage</h2>
+<p>A collection is ordered, like an array, but its items are unique, like a set.</p>
+<h2 id="Globals">Globals</h2>
+<h3 id="Constructors">Constructors</h3>
+<h4 class="addon-sdk-api-name" id="Collection(.5Barray.5D)"><code>Collection([array])</code></h4>
+<p>Creates a new collection. The collection is backed by an array.</p>
+<h5 id="Parameters">Parameters</h5>
+<p><strong>array : array</strong><br>
+ If <em>array</em> is given, it will be used as the backing array. This way the caller can fully control the collection. Otherwise a new empty array will be used, and no one but the collection will have access to it.</p>
+<h3 id="Functions">Functions</h3>
+<h4 class="addon-sdk-api-name" id="addCollectionProperty(object.2C_propName.2C_.5BbackingArray.5D)"><code>addCollectionProperty(object, propName, [backingArray])</code></h4>
+<p>Adds a collection property to the given object. Setting the property to a scalar value empties the collection and adds the value. Setting it to an array empties the collection and adds all the items in the array.</p>
+<h5 id="Parameters_2">Parameters</h5>
+<p><strong>object : object</strong><br>
+ The property will be defined on this object.</p>
+<p><strong>propName : string</strong><br>
+ The name of the property.</p>
+<p><strong>backingArray : array</strong><br>
+ If given, this will be used as the collection's backing array.</p>
+<h2 id="Collection">Collection</h2>
+<p>A collection object provides for...in-loop iteration. Items are yielded in the order they were added. For example, the following code...</p>
+<pre class="brush: js">var collection = require("sdk/util/collection");
+var c = new collection.Collection();
+c.add(1);
+c.add(2);
+c.add(3);
+for (item in c)
+  console.log(item);</pre>
+<p>... would print this to the console:</p>
+<pre>  1
+  2
+  3
+</pre>
+<p>Iteration proceeds over a copy of the collection made before iteration begins, so it is safe to mutate the collection during iteration; doing so does not affect the results of the iteration.</p>
+<h3 id="Methods">Methods</h3>
+<h4 class="addon-sdk-api-name" id="add(itemOrItems)"><code>add(itemOrItems)</code></h4>
+<p>Adds a single item or an array of items to the collection. Any items already contained in the collection are ignored.</p>
+<h5 id="Parameters_3">Parameters</h5>
+<p><strong>itemOrItems : object</strong><br>
+ An item or array of items.</p>
+<h5 id="Returns">Returns</h5>
+<p><strong>Collection</strong> : The Collection.</p>
+<h4 class="addon-sdk-api-name" id="remove(itemOrItems)"><code>remove(itemOrItems)</code></h4>
+<p>Removes a single item or an array of items from the collection. Any items not contained in the collection are ignored.</p>
+<h5 id="Parameters_4">Parameters</h5>
+<p><strong>itemOrItems : object</strong><br>
+ An item or array of items.</p>
+<h5 id="Returns_2">Returns</h5>
+<p><strong>Collection</strong> : The Collection.</p>
+<h3 id="Properties">Properties</h3>
+<h4 class="addon-sdk-api-name" id="length"><code>length</code></h4>
+<p>The number of items in the collection array.</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                    
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/n8chz">n8chz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jsantell">jsantell</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/n8chz">n8chz</a>,
+                      <time datetime="2014-04-10T11:16:00-07:00">Apr 10, 2014, 11:16:00 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="https://developer.mozilla.org/en-US/Add-ons/Bootstrapped_extensions" title="Restartless extensions">Restartless extensions</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions" title="Legacy extensions">Legacy extensions</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK">Add-on SDK</a><ol> 
+ <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Installation">Installation</a></li> 
+ <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials">Tutorials</a></li> 
+ <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides">Guides</a></li> 
+ <li><a href="../High-Level_APIs.html">High-Level APIs</a>  
+  
+ <ol><li><a href="../High-Level_APIs/url.html">URL</a></li><li><a href="../High-Level_APIs/addon-page.html">addon-page</a></li><li><a href="../High-Level_APIs/base64.html">base64</a></li><li><a href="../High-Level_APIs/clipboard.html">clipboard</a></li><li><a href="../High-Level_APIs/context-menu.html">context-menu</a></li><li><a href="../High-Level_APIs/hotkeys.html">hotkeys</a></li><li><a href="../High-Level_APIs/indexed-db.html">indexed-db</a></li><li><a href="../High-Level_APIs/l10n.html">l10n</a></li><li><a href="../High-Level_APIs/notifications.html">notifications</a></li><li><a href="../High-Level_APIs/page-mod.html">page-mod</a></li><li><a href="../High-Level_APIs/page-worker.html">page-worker</a></li><li><a href="../High-Level_APIs/panel.html">panel</a></li><li><a href="../High-Level_APIs/passwords.html">passwords</a></li><li><a href="../High-Level_APIs/private-browsing.html">private-browsing</a></li><li><a href="../High-Level_APIs/querystring.html">querystring</a></li><li><a href="../High-Level_APIs/request.html">request</a></li><li><a href="../High-Level_APIs/selection.html">selection</a></li><li><a href="../High-Level_APIs/self.html">self</a></li><li><a href="../High-Level_APIs/simple-prefs.html">simple-prefs</a></li><li><a href="../High-Level_APIs/simple-storage.html">simple-storage</a></li><li><a href="../High-Level_APIs/system.html">system</a></li><li><a href="../High-Level_APIs/tabs.html">tabs</a></li><li><a href="../High-Level_APIs/timers.html">timers</a></li><li><a href="../High-Level_APIs/ui.html">ui</a></li><li><a href="../High-Level_APIs/widget.html">widget</a></li><li><a href="../High-Level_APIs/windows.html">windows</a></li></ol> 
+  
+ </li> 
+ <li><a href="../Low-Level_APIs.html">Low-Level APIs</a>  
+  
+ <ol><li><a href="_loader.html">/loader</a></li><li><a href="chrome.html">chrome</a></li><li><a href="console_plain-text.html">console/plain-text</a></li><li><a href="console_traceback.html">console/traceback</a></li><li><a href="content_content.html">content/content</a></li><li><a href="content_loader.html">content/loader</a></li><li><a href="content_mod.html">content/mod</a></li><li><a href="content_symbiont.html">content/symbiont</a></li><li><a href="content_worker.html">content/worker</a></li><li><a href="core_heritage.html">core/heritage</a></li><li><a href="core_namespace.html">core/namespace</a></li><li><a href="core_promise.html">core/promise</a></li><li><a href="dev_panel.html">dev/panel</a></li><li><a href="event_core.html">event/core</a></li><li><a href="event_target.html">event/target</a></li><li><a href="frame_hidden-frame.html">frame/hidden-frame</a></li><li><a href="frame_utils.html">frame/utils</a></li><li><a href="fs_path.html">fs/path</a></li><li><a href="io_byte-streams.html">io/byte-streams</a></li><li><a href="io_file.html">io/file</a></li><li><a href="io_text-streams.html">io/text-streams</a></li><li><a href="lang_functional.html">lang/functional</a></li><li><a href="lang_type.html">lang/type</a></li><li><a href="loader_cuddlefish.html">loader/cuddlefish</a></li><li><a href="loader_sandbox.html">loader/sandbox</a></li><li><a href="net_url.html">net/url</a></li><li><a href="net_xhr.html">net/xhr</a></li><li><a href="places_bookmarks.html">places/bookmarks</a></li><li><a href="places_favicon.html">places/favicon</a></li><li><a href="places_history.html">places/history</a></li><li><a href="platform_xpcom.html">platform/xpcom</a></li><li><a href="preferences_event-target.html">preferences/event-target</a></li><li><a href="preferences_service.html">preferences/service</a></li><li><a href="remote_child.html">remote/child</a></li><li><a href="remote_parent.html">remote/parent</a></li><li><a href="stylesheet_style.html">stylesheet/style</a></li><li><a href="stylesheet_utils.html">stylesheet/utils</a></li><li><a href="system_child_process.html">system/child_process</a></li><li><a href="system_environment.html">system/environment</a></li><li><a href="system_events.html">system/events</a></li><li><a href="system_runtime.html">system/runtime</a></li><li><a href="system_unload.html">system/unload</a></li><li><a href="system_xul-app.html">system/xul-app</a></li><li><a href="tabs_utils.html">tabs/utils</a></li><li><a href="test_assert.html">test/assert</a></li><li><a href="test_harness.html">test/harness</a></li><li><a href="test_httpd.html">test/httpd</a></li><li><a href="test_runner.html">test/runner</a></li><li><a href="test_utils.html">test/utils</a></li><li><a href="ui_button_action.html">ui/button/action</a></li><li><a href="ui_button_toggle.html">ui/button/toggle</a></li><li><a href="ui_frame.html">ui/frame</a></li><li><a href="ui_id.html">ui/id</a></li><li><a href="ui_sidebar.html">ui/sidebar</a></li><li><a href="ui_toolbar.html">ui/toolbar</a></li><li><a href="util_array.html">util/array</a></li><li><a href="util_collection.html">util/collection</a></li><li><a href="util_deprecate.html">util/deprecate</a></li><li><a href="util_list.html">util/list</a></li><li><a href="util_match-pattern.html">util/match-pattern</a></li><li><a href="util_object.html">util/object</a></li><li><a href="util_uuid.html">util/uuid</a></li><li><a href="window_utils.html">window/utils</a></li></ol> 
+ 
+ </li> 
+ <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools">Tools Reference</a> 
+  <ol> 
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpm">jpm</a></li> 
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpm-mobile">jpm-mobile</a></li> 
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpmignore">jpmignore</a></li> 
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/console">console</a></li> 
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/cfx_to_jpm">cfx to jpm</a></li> 
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/package_json">package.json</a></li> 
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/Add-on_Debugger">The Add-on Debugger</a></li> 
+  </ol> 
+ </li> 
+ <li><a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Release_notes">Release notes</a></li> 
+</ol></li>
+ <li><a href="#">Techniques</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/Techniques/Promises">Promises</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Recommended practices</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/Performance_best_practices_in_extensions" title="Performance">Performance</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/Security_best_practices_in_extensions" title="Security">Security</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/Extension_etiquette" title="Etiquette">Etiquette</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Themes</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/Add-ons/Themes/Background" title="Lightweight themes">Lightweight themes</a></li>
+   <li><a href="https://developer.mozilla.org/Add-ons/Themes/Background/FAQ" title="Lightweight themes FAQ">Lightweight themes FAQ</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Themes" title="Complete themes">Complete themes</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Legacy Plugins </a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Plug-in_Basics">Plug-in Basics</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Plug-in_Development_Overview">Plug-in Development Overview</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Initialization_and_Destruction">Initialization and Destruction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Drawing_and_Event_Handling">Drawing and Event Handling</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Streams">Streams</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/URLs">URLs</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Memory">Memory</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Version%2C_UI%2C_and_Status_Information">Version, UI, and Status Information</a></li>
+   <li><a href="../../../docs/Plugins/Guide/Plug-in_Side_Plug-in_API.html">Plug-in side Plug-in API</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_Destroy">NPP_Destroy</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_DestroyStream">NPP_DestroyStream</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_GetValue">NPP_GetValue</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NP_GetValue">NP_GetValue</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_HandleEvent">NPP_HandleEvent</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NP_Initialize">NP_Initialize</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_New">NPP_New</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_NewStream">NPP_NewStream</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_Print">NPP_Print</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_SetValue">NPP_SetValue</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_SetWindow">NPP_SetWindow</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NP_Shutdown">NP_Shutdown</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_StreamAsFile">NPP_StreamAsFile</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_URLNotify">NPP_URLNotify</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_Write">NPP_Write</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPP_WriteReady">NPP_WriteReady</a></li>
+    </ol>
+   </li>
+   <li><a href="../../../docs/Plugins/Guide/Browser_Side_Plug-in_API.html">Browser Side Plug-in API</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_DestroyStream" title="Closes and deletes a stream.">NPN_DestroyStream</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_ForceRedraw" title="Asks the plugin host to immediately (synchronously) repaint invalid areas.">NPN_ForceRedraw</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetAuthenticationInfo" title="The function is called by plugins to get HTTP authentication information from the browser.">NPN_GetAuthenticationInfo</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetURL" title="Asks the browser to create a stream for the specified URL.">NPN_GetURL</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetURLNotify" title="Requests creation of a new stream with the contents of the specified URL; gets notification of the result.">NPN_GetURLNotify</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetValue" title="Allows the plug-in to query the browser for information.">NPN_GetValue</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetValueForURL" title="Provides information to a plugin which is associated with a given URL, for example the cookies or preferred proxy.">NPN_GetValueForURL</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_InvalidateRect" title="Invalidates the specified portion of the plugin's drawing area, adding it to the region that needs to be redrawn when the plugin next repaints its contents.">NPN_InvalidateRect</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_InvalidateRegion" title="Invalidates the specified drawing region prior to repainting or refreshing a windowless plug-in.">NPN_InvalidateRegion</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_MemAlloc" title="Allocates memory from the browser's memory space.">NPN_MemAlloc</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_MemFlush" title="Requests that the browser free a specified amount of memory.">NPN_MemFlush</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_MemFree" title="Deallocates a block of allocated memory.">NPN_MemFree</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_NewStream" title="Requests the creation of a new data stream produced by the plug-in and consumed by the browser.">NPN_NewStream</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_PluginThreadAsyncCall" title="Thread safe way to request that the browser calls a plug-in function on the browser or plugin thread (the thread on which the plug-in was initiated).">NPN_PluginThreadAsyncCall</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_PostURL" title="Posts data to a URL.">NPN_PostURL</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference//NPN_PostURLNotify" title="Posts data to a URL, and receives notification of the result.">NPN_PostURLNotify</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_ReloadPlugins" title="Reloads all of the installed plugins.">NPN_ReloadPlugins</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_RequestRead" title="Requests a range of bytes from a seekable stream. This initiates a read operation; the actual data is received through subsequent calls to NPP_WriteReady() and NPP_Write().">NPN_RequestRead</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_SetValue" title="Implemented by browsers. This call is used to inform the browser of variable information controlled by the plugin.">NPN_SetValue</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_SetValueForURL" title="Allows a plugin to change the stored information associated with a URL, in particular its cookies. (While the API theoretically allows the preferred proxy for a given URL to be changed, doing so does not have much meaning given how proxies are configured, and is not supported.)">NPN_SetValueForURL</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_Status" title="Lets a plug-in display a message on the browser's status line.">NPN_Status</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_UserAgent" title="Returns the browser's user agent field. This can be used to handle variations in different browsers (or versions thereof) when implementing your plug-in.">NPN_UserAgent</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/docs/NPN_Version" title="Lets plugins obtain version information, both of the plug-in API and of the browser itself.">NPN_Version</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_Write" title="Pushes data into a stream produced by the plug-in and consumed by the browser.">NPN_Write</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Scripting_plugins">Scripting plugins</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPString">NPString</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPVariant">NPVariant</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_ReleaseVariantValue">NPN_ReleaseVariantValue</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetStringIdentifier">NPN_GetStringIdentifier</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetStringIdentifiers">NPN_GetStringIdentifiers</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetIntIdentifier">NPN_GetIntIdentifier</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_IdentifierIsString">NPN_IdentifierIsString</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_UTF8FromIdentifier">NPN_UTF8FromIdentifier</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_IntFromIdentifier">NPN_IntFromIdentifier</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPObject">NPObject</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_CreateObject">NPN_CreateObject</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_RetainObject">NPN_RetainObject</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_ReleaseObject">NPN_ReleaseObject</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_Invoke">NPN_Invoke</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_InvokeDefault">NPN_InvokeDefault</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_Evaluate">NPN_Evaluate</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_GetProperty">NPN_GetProperty</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_SetProperty">NPN_SetProperty</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_RemoveProperty">NPN_RemoveProperty</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_HasProperty">NPN_HasProperty</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_HasMethod">NPN_HasMethod</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPN_SetException">NPN_SetException</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/Reference/NPClass">NPClass</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Structures">Structures</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Plugins/Guide/Constants">Constants</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/Plugins/External_resources_for_plugin_creation">External Resources</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Publishing add-ons</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/Distribution">Signing and distributing your add-on</a></li>
+   <li><a href="https://addons.mozilla.org/developers/addon/submit/">Submit a new add-on</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Add-ons/AMO/Policy">Policies</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/AMO/Policy/Extensions">Extensions</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/AMO/Policy/Agreement">Developer Agreement</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/AMO/Policy/Reviews">Review Process</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/Add-on_guidelines">Add-on guidelines</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/AMO/Policy/Featured">Featured Add-ons</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Add-ons/AMO/Policy/Contact">Contacting Us</a></li>
+    </ol>
+   </li>
+  </ol>
+ </li>
+ <li><a href="#">Community and Support</a>
+  <ol>
+   <li><a href="https://blog.mozilla.org/addons">Add-ons Blog</a></li>
+   <li><a href="https://discourse.mozilla-community.org/c/add-ons">Add-on Forums</a></li>
+   <li><a href="http://stackoverflow.com/questions/tagged/firefox-addon">Stack Overflow</a></li>
+   <li><a href="https://groups.google.com/forum/#!forum/mozilla.dev.extensions">Development Newsgroup</a></li>
+   <li><a href="irc://irc.mozilla.org/extdev">IRC Channel</a></li>
+  </ol>
+ </li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/util_collection$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/util_collection by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 18:20:28 GMT -->
+</body></html>

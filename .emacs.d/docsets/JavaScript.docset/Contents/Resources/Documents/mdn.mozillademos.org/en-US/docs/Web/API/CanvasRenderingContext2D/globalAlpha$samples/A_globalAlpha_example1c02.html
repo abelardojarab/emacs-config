@@ -1,0 +1,34 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha$samples/A_globalAlpha_example?revision=813491 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 21:14:28 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body>
+                    <canvas id="canvas" width="150" height="150"></canvas>
+                            <script type="text/javascript">
+                var ctx = document.getElementById('canvas').getContext('2d');
+
+// draw background
+ctx.fillStyle = '#FD0';
+ctx.fillRect(0,0,75,75);
+ctx.fillStyle = '#6C0';
+ctx.fillRect(75,0,75,75);
+ctx.fillStyle = '#09F';
+ctx.fillRect(0,75,75,75);
+ctx.fillStyle = '#F30';
+ctx.fillRect(75,75,75,75);
+ctx.fillStyle = '#FFF';
+
+// set transparency value
+ctx.globalAlpha = 0.2;
+
+// Draw semi transparent circles
+for (i=0;i<7;i++){
+  ctx.beginPath();
+  ctx.arc(75,75,10+10*i,0,Math.PI*2,true);
+  ctx.fill();
+}
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha$samples/A_globalAlpha_example?revision=813491 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 21:14:28 GMT -->
+</body></html>

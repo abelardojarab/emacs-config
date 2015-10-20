@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"DynamicImplementation()","path":"DynamicImplementation--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"_ids()","path":"Z:Z_ids--","entryType":"Method"},{"name":"invoke(ServerRequest)","path":"invoke-org.omg.CORBA.ServerRequest-","entryType":"Method"}]}

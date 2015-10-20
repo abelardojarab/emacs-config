@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"UnexpectedException(String)","path":"UnexpectedException-java.lang.String-","entryType":"Constructor"},{"name":"UnexpectedException(String, Exception)","path":"UnexpectedException-java.lang.String-java.lang.Exception-","entryType":"Constructor"}]}

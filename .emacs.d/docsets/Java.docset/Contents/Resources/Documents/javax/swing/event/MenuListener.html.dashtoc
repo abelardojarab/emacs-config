@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"menuCanceled(MenuEvent)","path":"menuCanceled-javax.swing.event.MenuEvent-","entryType":"Method"},{"name":"menuDeselected(MenuEvent)","path":"menuDeselected-javax.swing.event.MenuEvent-","entryType":"Method"},{"name":"menuSelected(MenuEvent)","path":"menuSelected-javax.swing.event.MenuEvent-","entryType":"Method"}]}

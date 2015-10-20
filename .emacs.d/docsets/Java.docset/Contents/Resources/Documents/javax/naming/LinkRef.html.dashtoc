@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"LinkRef(Name)","path":"LinkRef-javax.naming.Name-","entryType":"Constructor"},{"name":"LinkRef(String)","path":"LinkRef-java.lang.String-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getLinkName()","path":"getLinkName--","entryType":"Method"}]}

@@ -1,0 +1,873 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:37:27 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>PromiseWorker.jsm</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm$json">
+  <link rel="canonical" href="PromiseWorker.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="PromiseWorker.jsm">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm">
+  <meta name="twitter:title" content="PromiseWorker.jsm">
+    <meta property="og:description" content="A PromiseWorker is a ChromeWorker except instead of calling postMessage() to send a message, you call post(), which returns a Promise. JavaScript files imported into the worker scope and main thread scope which allows posting to the worker and receiving in the form of a promise. As are ChromeWorker objects, PromiseWorker is mostly used for js-ctypes but it is not limited to that. There is no XPCOM access, similar to ChromeWorker. This answers the question &quot;When should I use a PromiseWorker ?&quot;, and the answer is, whenever you would normally use a ChromeWorker, but want postMessage to return promises.">
+  <meta name="description" content="A PromiseWorker is a ChromeWorker except instead of calling postMessage() to send a message, you call post(), which returns a Promise. JavaScript files imported into the worker scope and main thread scope which allows posting to the worker and receiving in the form of a promise. As are ChromeWorker objects, PromiseWorker is mostly used for js-ctypes but it is not limited to that. There is no XPCOM access, similar to ChromeWorker. This answers the question &quot;When should I use a PromiseWorker ?&quot;, and the answer is, whenever you would normally use a ChromeWorker, but want postMessage to return promises.">
+  <meta name="twitter:description" content="A PromiseWorker is a ChromeWorker except instead of calling postMessage() to send a message, you call post(), which returns a Promise. JavaScript files imported into the worker scope and main thread scope which allows posting to the worker and receiving in the form of a promise. As are ChromeWorker objects, PromiseWorker is mostly used for js-ctypes but it is not limited to that. There is no XPCOM access, similar to ChromeWorker. This answers the question &quot;When should I use a PromiseWorker ?&quot;, and the answer is, whenever you would normally use a ChromeWorker, but want postMessage to return promises.">
+  
+      
+  </head>
+<body data-slug="Mozilla/JavaScript_code_modules/PromiseWorker.jsm" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FJavaScript_code_modules%2FPromiseWorker.jsm" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FJavaScript_code_modules%2FPromiseWorker.jsm" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules" rel="v:url" property="v:title">JavaScript code modules</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">PromiseWorker.jsm</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>PromiseWorker.jsm</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 3 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Noitidart" title="View profile: Noitidart">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Noitidart" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Noitidart</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/arai" title="View profile: arai">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="arai" data-src="../../../../../secure.gravatar.com/avatar/0432a84805ea7033f4646049963e3bf16aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">arai</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Summary" rel="internal">Summary</a><ol><li><a href="#PromiseWorker.jsm" rel="internal">PromiseWorker.jsm</a></li><li><a href="#PromiseWorker.js" rel="internal">PromiseWorker.js</a></li></ol></li><li><a href="#Setup_and_usage" rel="internal">Setup and usage</a><ol><li><a href="#Worker_file" rel="internal">Worker file</a></li><li><a href="#Main_thread_file" rel="internal">Main thread file</a></li><li><a href="#Sending_a_message_from_main_thread" rel="internal">Sending a message from main thread</a><ol><li><a href="#post" rel="internal"><code>post</code></a></li><li><a href="#Transferring_special_data_from_main_thread_to_worker" rel="internal">Transferring special data from main thread to worker</a></li><li><a href="#BasePromiseWorker.Meta" rel="internal">BasePromiseWorker.Meta</a></li></ol></li><li><a href="#Sending_a_message_from_worker" rel="internal">Sending a message from worker</a><ol><li><a href="#Resolving_the_Promise" rel="internal">Resolving the Promise</a></li><li><a href="#Transferring_special_data_from_worker_to_main_thread" rel="internal">Transferring special data from worker to main thread</a></li><li><a href="#Rejecting_the_Promise" rel="internal">Rejecting the Promise</a></li><li><a href="#Catching_the_Promise" rel="internal">Catching the Promise</a></li></ol></li></ol></li><li><a href="#Complete_example" rel="internal">Complete example</a><ol><li><a href="#Worker_file_2" rel="internal">Worker file</a><ol><li><a href="#myWorker.js" rel="internal">myWorker.js</a></li></ol></li><li><a href="#Main_thread_file_2" rel="internal">Main thread file</a><ol><li><a href="#bootstrap.js" rel="internal">bootstrap.js</a></li></ol></li><li><a href="#Result" rel="internal">Result</a></li></ol></li><li><a href="#Other_examples" rel="internal">Other examples</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                <div class="warning warning-review"><p>This article is in need of a technical review.</p></div>
+                                                  <div class="warning warning-review"><p>This article is in need of an editorial review.</p></div>
+                                                            
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><div class="banner geckoVersionBadge"> 
+<div class="bannerHeading">Requires Gecko 33 (Firefox 33 / Thunderbird 33 / SeaMonkey 2.30)</div> 
+<div class="bannerText"></div> 
+</div><p></p>
+
+<h2 id="Summary">Summary</h2>
+
+<p>A <code>PromiseWorker</code> is a <a href="../../Web/API/ChromeWorker.html" title="If you're developing privileged code, and would like to create a worker that can use js-ctypes to perform calls to native code, you can do so by using ChromeWorker instead of the standard Worker object. It works exactly like a standard Worker, except that it has access to js-ctypes via a global ctypes object available in the global scope of the worker. Examples of ChromeWorker's using js-ctypes are availabe on Github and are linked to from the See Also section below. To use a postMessage with callback version of ChromeWorker that features promises, see PromiseWorker."><code>ChromeWorker</code></a> except instead of calling <code>postMessage()</code> to send a message, you call <code>post()</code>, which returns a <a href="../../Web/JavaScript/Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future."><code>Promise</code></a>. JavaScript files imported into the worker scope and main thread scope which allows posting to the worker and receiving in the form of a <a href="../../Web/JavaScript/Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future.">promise</a>. As are <code>ChromeWorker</code> objects, <code>PromiseWorker</code> is mostly used for <a href="https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes">js-ctypes</a> but it is not limited to that. There is no <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Guide/Creating_components/An_Overview_of_XPCOM">XPCOM</a> access, similar to <code>ChromeWorker</code>. This answers the question "When should I use a <code>PromiseWorker</code>?", and the answer is, whenever you would normally use a <code>ChromeWorker</code>, but want <code>postMessage</code> to return promises.</p>
+
+<p>The PromiseWorker object is used to deliever all of the <code><a href="OSFile.html">OS.File</a></code> functionality to the main thread. Here is the test case from Firefox codebase: <a href="../../../../../dxr.mozilla.org/mozilla-central/source/toolkit/components/promiseworker/tests/xpcshell/test_Promise.html" class="external">Mozilla DXR :: test_Promise.js</a>.</p>
+
+<p><code>PromiseWorker</code> module consists from two JavaScript files, <code>PromiseWorker.jsm</code> and <code>PromiseWorker.js</code>.</p>
+
+<h3 id="PromiseWorker.jsm">PromiseWorker.jsm</h3>
+
+<p><span class="pl-s">Path: </span><code><span class="pl-s">resource://gre/modules/PromiseWorker.jsm</span></code></p>
+
+<p>A JavaScript code module used by main thread, to create worker thread and communicate with it. <code>PromiseWorker.jsm</code> provides <code>BasePromiseWorker</code>.</p>
+
+<h3 id="PromiseWorker.js">PromiseWorker.js</h3>
+
+<p><code id="line-9"><span class="str">Path: </span></code><code><span class="str">resource://gre/modules/workers/PromiseWorker.js</span></code></p>
+
+<p>A JavaScript file used by worker thread, which is created by <code>PromiseWorker.jsm</code> in main thread, to communicate with main thread. <code>PromiseWorker.js</code> provides <code>AbstractWorker</code>.</p>
+
+<p>Here's the simplified diagram of how PromiseWorker works (<a href="../../../../../mdn.mozillademos.org/files/11223/PromiseWorker.svg" class="external">SVG version of the PromiseWorker diagram</a>)</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/11221/PromiseWorker.png" style="height: 864px; width: 768px;" alt="Describes how PromiseWorker works both in Main thread and Worker thread."></p>
+
+<h2 id="Setup_and_usage">Setup and usage</h2>
+
+<p>This section explains how to set up and use a <code>PromiseWorker</code>. As well known with workers, there is a minimum of two files required. The worker file, and the main thread file. Below tells you the basic content to populate your worker and main thread files with in order to be able to use <code>PromiseWorker</code> objects.</p>
+
+<h3 id="Worker_file">Worker file</h3>
+
+<p>There is some standard templating that must be manually dropped into the worker file by the developer. The <code>require.js </code>file must be imported with <a href="../../Web/API/WorkerGlobalScope/importScripts.html" title="The importScripts() method of the WorkerGlobalScope interface imports one or more scripts into the worker's scope."><code>WorkerGlobalScope/importScripts()</code></a>. Next, the <code>PromiseWorker.js</code> file should be brought in with the <code>require()</code> method. Finally, the template code should be added in. The code below is what should be copied and pasted:</p>
+
+<pre class="brush: js"><code id="line-8">importScripts(<span class="str">"resource://gre/modules/workers/require.js"</span>);</code>
+<code id="line-9"><span class="k">let</span> PromiseWorker = require(<span class="str">"resource://gre/modules/workers/PromiseWorker.js"</span>);</code>
+
+// Instantiate AbstractWorker (see below).
+<code id="line-11"><span class="k">let</span> worker = <span class="k">new</span> PromiseWorker.AbstractWorker()
+</code>
+<code id="line-12">worker.dispatch = <span class="k">function</span>(method, args = []) {</code>
+  // Dispatch a call to method `method` with args `args`
+<code id="line-13">  <span class="k">return</span> self[method](...args);</code>
+<code id="line-14">};</code>
+<code id="line-15">worker.postMessage = <span class="k">function</span>(...args) {
+  </code><code>// Post a message to the main thread</code>
+<code id="line-16">  self.postMessage(...args);</code>
+<code id="line-17">};</code>
+<code id="line-18">worker.close = <span class="k">function</span>() {
+  </code><code>// Close the worker</code>
+<code id="line-19">  self.close();</code>
+<code id="line-20">};</code>
+<code id="line-21">worker.log = <span class="k">function</span>(...args) {</code>
+  // Log (or discard) messages (optional)
+<code id="line-22">  dump(<span class="str">"Worker: "</span> + args.join(<span class="str">" "</span>) + <span class="str">"\n"</span>);</code>
+<code id="line-23">};</code>
+
+// Connect it to message port.
+<code id="line-24">self.addEventListener(<span class="str">"message"</span>, msg =&gt; worker.handleMessage(msg));</code>
+</pre>
+
+<p><code>AbstractWorker</code> is a base class for worker, and it's designed to be used by derived class, which provides above 4 methods (<code>dispatch</code>, <code>postMessage</code>, <code>close</code>, and <code>log</code>). but you can instantiate <code>AbstractWorker</code> itself and set its properties later, instead of creating derived class.</p>
+
+<h3 id="Main_thread_file">Main thread file</h3>
+
+<p>The <code>BasePromiseWorker</code> object needs to be imported:</p>
+
+<pre class="brush: js"><code>const { utils: Cu } = Components;
+const</code> { BasePromiseWorker } <span class="pl-k">=</span> Cu.import(<span class="pl-s"><span class="pl-pds">'</span>resource://gre/modules/PromiseWorker.jsm<span class="pl-pds">'</span></span>, {});
+
+let myWorker = new BasePromiseWorker("path_to_worker_file.js");
+</pre>
+
+<p>You're now ready to start using <code>PromiseWorker</code>.</p>
+
+<h3 id="Sending_a_message_from_main_thread">Sending a message from main thread</h3>
+
+<p>To send a message to a worker from the main thread, one normally uses <code>postMessage()</code>. For <code>PromiseWorker</code> objects, however, you can't do that. Instead, use the <code>post()</code> method, as seen below.</p>
+
+<h4 id="post"><code>post</code></h4>
+
+<h5 id="Syntax">Syntax</h5>
+
+<pre>promise = myWorker.post(aFunctionName, aArgs, aClosure, aTransferList);</pre>
+
+<h5 id="Parameters">Parameters</h5>
+
+<ul>
+</ul>
+
+<dl>
+ <dt><code>aFunctionName</code></dt>
+ <dd>The name of the function to be called as it appears in the worker file.</dd>
+ <dt><code>aArgs</code></dt>
+ <dd>
+ <p>An array of arguments to pass to the function named <code>aFunctionName</code> in the worker file. If the worker function does not have any arguments and empty array should be passed here. If any of the arguments is a <a href="../../Web/JavaScript/Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future."><code>Promise</code></a>, it is resolved before posting the message. If any of the arguments needs to be transfered instead of copied, this may be specified by making the argument an instance of <code>BasePromiseWorker.Meta</code> or by using the <code>aTransferList</code> argument.</p>
+
+ <p>By convention, the last argument may be an object options with some of the following fields:</p>
+
+ <dl>
+  <dt>outExecutionDuration</dt>
+  <dd>{number|null} A parameter to be filled with the duration of the off main thread execution for this call.</dd>
+ </dl>
+ </dd>
+ <dt><code>aClosure</code> <span class="inlineIndicator optional optionalInline">Optional</span></dt>
+ <dd>An object holding strong references to value that should not be garbage-collected before the reply has been received.</dd>
+ <dt><code>aTransferList</code> <span class="inlineIndicator optional optionalInline">Optional</span></dt>
+ <dd>An optional <a href="../../Web/JavaScript/Reference/Global_Objects/Array.html" title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects.">array</a> of <a href="../../Web/API/Transferable.html" title="The Transferable interface represents an object that can be transfered between different execution contexts, like the main thread and Web workers."><code>Transferable</code></a> objects to transfer ownership of. If the ownership of an object is transferred, it becomes unusable (neutered) in the context it was sent from and it becomes available only to the worker it was sent to.</dd>
+ <dd>Only <a href="../../Web/API/MessagePort.html" title="The MessagePort interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing sending of messages from one port and listening out for them arriving at the other."><code>MessagePort</code></a> and <a href="../../Web/JavaScript/Reference/Global_Objects/ArrayBuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>ArrayBuffer</code></a> objects can be transferred. To learn more on how to acheive this see the section in this article titled <a href="#transferDataFromMainThreadToWorker">Transferring special data from main thread to worker</a>.</dd>
+</dl>
+
+<h5 id="Returns">Returns</h5>
+
+<p>A <a href="../../Web/JavaScript/Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future."><code>Promise</code></a> object.</p>
+
+<h4 id="Transferring_special_data_from_main_thread_to_worker">Transferring special data from main thread to worker<a name="transferDataFromMainThreadToWorker" id="transferDataFromMainThreadToWorker"></a></h4>
+
+<p>The regular rules of workers apply; special data of <a href="../../Web/API/MessagePort.html" title="The MessagePort interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing sending of messages from one port and listening out for them arriving at the other."><code>MessagePort</code></a> and <a href="../../Web/JavaScript/Reference/Global_Objects/ArrayBuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>ArrayBuffer</code></a> objects can be transferred as of Firefox 40. There are two ways to transfer data. The first is with <code>aTransferList</code> argument and other with <code>BasePromiseWorker.Meta</code>. Both are done from the <code>post</code> function described above.</p>
+
+<h5 id="aTransferList">aTransferList</h5>
+
+<p>To transfer an <code>ArrayBuffer</code> object, pass an array containing it as <code>aTransferList</code> argument.</p>
+
+<pre class="brush: js">myWorker.post("func", [buffer], null, [buffer]);</pre>
+
+<p>This is simpler if the you know what to transfer at the callsite.</p>
+
+<h4 id="BasePromiseWorker.Meta">BasePromiseWorker.Meta</h4>
+
+<p>Above code can also be done with the Meta object. Each special data argument that you want to transfer, you can wrap in a <code>BasePromiseWorker.Meta</code> object. The above example can be rewritten like this:</p>
+
+<pre class="brush: js">myWorker.post("func", [new BasePromiseWorker.Meta(buffer, {transfers: [buffer]})]);</pre>
+
+<p>This will be convenient if the function's arguments are generated by some other functions or passed from somewhere else.&nbsp; <code>post</code> callsite doesn't have to know which object should be transferred. For example:</p>
+
+<pre class="brush: js">myWorker.post("func", [foo(), bar(), baz()])</pre>
+
+<p><code>foo</code> now has the power to determine if the argument should be transferred by returning a <code>Meta</code> instance. So it can transfer an object without modifying the caller.</p>
+
+<p>Here is a simple demo showing how to transfer the second argument to a worker: <a href="https://github.com/Noitidart/PromiseWorker/blob/demo-transfer-arraybuffer/bootstrap.js#L23" class="external">Github :: PromiseWorker Transfer Data Line 23</a>. The commend out line below this shows how to do the same with Meta syntax.</p>
+
+<h3 id="Sending_a_message_from_worker">Sending a message from worker</h3>
+
+<p>With all other workers, to send a message to the main thread, <code>postMessage</code> is typically used. However with <code>PromiseWorker</code> objects this is no longer the case, simply return data or throw from your function depending if you want to resolve or reject the promise. In summary, from a worker file data can <em>only</em> be sent back as a response to a request from the main thread, it is not possible for a worker to send data to the main thread otherwise, this is a key difference between <code>PromiseWorker</code> worker file and all other types of workers.</p>
+
+<h4 id="Resolving_the_Promise">Resolving the Promise</h4>
+
+<p>To resolve the promise from the worker, simply return anything from the worker scope, and the main thread promise will be resolved with the returned value.</p>
+
+<pre>function func(buffer) {
+  // do something with buffer...
+
+  return 1; // 1 is sent back to main thread, as a resolved promise.
+}
+</pre>
+
+<h4 id="Transferring_special_data_from_worker_to_main_thread">Transferring special data from worker to main thread</h4>
+
+<p>Just as it was possible to transfer special data from <a href="#transferDataFromMainThreadToWorker">main thread to worker</a> it is possible to transfer data from the worker to the main thread. Transferring is possible only when resolving the promise from the worker. Unlike when sending/transferring from the main thread, transferring from worker does not require each piece of data that you want transferred to be wrapped in its own <code>Meta</code> object, instead the whole return should be wrapped. Also unlike when sending/transferring from the main thread, when sending/transferring from worker there are no alternative syntaxes, it must be wrapped in a <code>Meta</code> object.</p>
+
+<p>This example shows how to transfer a single value, which is an ArrayBuffer.</p>
+
+<pre class="brush: js"><span class="pl-k">return</span> <span class="pl-k">new</span> <span class="pl-en">PromiseWorker.Meta</span>(aBuf, {transfers<span class="pl-k">:</span> [aBuf]});</pre>
+
+<p>If you want to return an object or an array and transfer only certain parts of this data, it would all have to be return wrapped in this Meta object like so:</p>
+
+<pre class="brush: js">return new PromiseWorker.Meta({
+&nbsp;&nbsp; &nbsp;theBuf: aBuf,
+&nbsp;&nbsp; &nbsp;otherNonTrans: 'this string is not transfered but copied'
+}, {transfers: [aBuf]});</pre>
+
+<p>A simple demo showing this in live action can be found here: <a href="https://github.com/Noitidart/PromiseWorker/blob/demo-transfer-arraybuffer/myWorker.js#L28" class="external">Github :: PromiseWorker Transfer ArrayBuffer - Worker Side</a></p>
+
+<h4 id="Rejecting_the_Promise">Rejecting the Promise</h4>
+
+<p>To reject the promise from the worker, simply <code>throw</code>. Various error objects are supported; each one has its specific meaning; they're described below.</p>
+
+<p>Supported built-in JavaScript Error are following:</p>
+
+<ul>
+ <li><a href="../../Web/JavaScript/Reference/Global_Objects/EvalError.html" title="The EvalError object indicates an error regarding the global eval() function."><code>EvalError</code></a></li>
+ <li><a href="../../Web/JavaScript/Reference/Global_Objects/InternalError.html" title="The InternalError object indicates an error that occurred internally in the JavaScript engine. For example: &quot;InternalError: too much recursion&quot;."><code>InternalError</code></a></li>
+ <li><a href="../../Web/JavaScript/Reference/Global_Objects/RangeError.html" title="The RangeError object indicates an error when a value is not in the set or range of allowed values."><code>RangeError</code></a></li>
+ <li><a href="../../Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="The ReferenceError object represents an error when a non-existent variable is referenced."><code>ReferenceError</code></a></li>
+ <li><a href="../../Web/JavaScript/Reference/Global_Objects/SyntaxError.html" title="The SyntaxError object represents an error when trying to interpret syntactically invalid code."><code>SyntaxError</code></a></li>
+ <li><a href="../../Web/JavaScript/Reference/Global_Objects/TypeError.html" title="The TypeError object represents an error when a value is not of the expected type."><code>TypeError</code></a></li>
+ <li><a href="../../Web/JavaScript/Reference/Global_Objects/URIError.html" title="The URIError object represents an error when a global URI handling function was used in a wrong way."><code>URIError</code></a></li>
+</ul>
+
+<p>In addition to them, <a href="../../Web/JavaScript/Reference/Global_Objects/StopIteration.html" title="The StopIteration object is used to tell the end of the iteration in the legacy iterator protocol."><code>StopIteration</code></a> is also supported (note that <code>StopIteration</code> is deprecated).</p>
+
+<p>You can also construct and throw your own custom error objects as needed.&nbsp; When custom error is caught by <code>AbstractWorker</code>, <code>toMsg</code> method will be called to convert it into message. The <code>toMsg</code> function should return an object which has <code>exn</code> property, that is the property key for the <code>fromMsg</code> function in main thread side.</p>
+
+<pre class="brush: js">// Worker
+
+// Define a custom error prototype.
+function CustomError(message) {
+  this.message = message;
+}
+CustomError.prototype.toMsg = function() {
+  return {
+ <code id="line-160">   exn: <span class="str">"</span></code>CustomError<code><span class="str">"</span>,</code>
+    message: this.message,
+<code id="line-167">  };</code>
+};
+
+// A function called by message.
+function func() {
+  ...
+  // Throw a custom error.
+  throw new CustomError("meow");
+}
+</pre>
+
+<p>converted message will be posted back to main thread, and it will be converted again to error object, with <code>fromMsg</code> function specified for the error in <code>ExceptionHandlers</code> property. This is seen in a simple demo <a href="https://github.com/Noitidart/PromiseWorker/blob/demo-custom-error/bootstrap.js#L31-L40" class="external">GitHub :: PromiseWorker Custom Errors Demo - Main Thread Setup</a>.</p>
+
+<pre class="brush: js">// Main thread
+
+// Define a custom error prototype.
+function CustomError(message) {
+  this.message = message;
+}
+CustomError.fromMsg = function(msg) {
+<code id="line-174">  return <span class="k">new</span> </code>CustomError<code>(msg.message);</code>
+};
+
+// Register a constructor.
+myWorker.ExceptionHandlers["CustomError"] = CustomError.fromMsg;
+</pre>
+
+<p>This is seen in a simple demo at <a href="https://github.com/Noitidart/PromiseWorker/blob/demo-custom-error/myWorker.js#L20-L29" class="external">GitHub :: PromiseWorker Custom Errors Demo - Worker Side Setup</a>.</p>
+
+<p>The complete demo is found here: <a href="https://github.com/Noitidart/PromiseWorker/blob/demo-custom-error/bootstrap.js#L31-L40" class="external">GitHub :: PromiseWorker Custom Errors Demo</a></p>
+
+<h4 id="Catching_the_Promise">Catching the Promise</h4>
+
+<p>From the worker, it is not possible, as of Firefox 40, to cause the promise on the main thread catch. Any developer errors on the worker side, such as syntax errors, type errors, and so forth, will cause the promise to reject. A catch will trigger if there is a developer error in the main thread resolve or reject callbacks.</p>
+
+<h2 id="Complete_example">Complete example</h2>
+
+<p>Following example provides <code>resolveTest</code> function, which resolves the promise when <code>true</code> is passed as an argument, and rejects the promise when <code>false</code> is passed as an argument, and post messages to it from main thread.</p>
+
+<h3 id="Worker_file_2">Worker file</h3>
+
+<h4 id="myWorker.js"><span class="pl-s">myWorker.js</span></h4>
+
+<pre><code id="line-8">importScripts(<span class="str">"resource://gre/modules/workers/require.js"</span>);</code>
+<code id="line-9"><span class="k">let</span> PromiseWorker = require(<span class="str">"resource://gre/modules/workers/PromiseWorker.js"</span>);</code>
+
+<code id="line-11"><span class="k">let</span> worker = <span class="k">new</span> PromiseWorker.AbstractWorker();</code>
+<code id="line-12">worker.dispatch = <span class="k">function</span>(method, args = []) {</code>
+<code id="line-13">  <span class="k">return</span> self[method](...args);</code>
+<code id="line-14">},</code>
+<code id="line-15">worker.postMessage = <span class="k">function</span>(...args) {</code>
+<code id="line-16">  self.postMessage(...args);</code>
+<code id="line-17">};</code>
+<code id="line-18">worker.close = <span class="k">function</span>() {</code>
+<code id="line-19">  self.close();</code>
+<code id="line-20">};</code>
+<code id="line-21">worker.log = <span class="k">function</span>(...args) {</code>
+<code id="line-22">  dump(<span class="str">"Worker: "</span> + args.join(<span class="str">" "</span>) + <span class="str">"\n"</span>);</code>
+<code id="line-23">};</code>
+<code id="line-24">self.addEventListener(<span class="str">"message"</span>, msg =&gt; worker.handleMessage(msg));</code>
+
+// start - my functionalities
+
+function resolveTest(shouldResolve) {
+  if (shouldResolve) {
+    return 'You sent to PromiseWorker argument of: `' + shouldResolve + '`';
+  } else {
+    throw new Error('You passed in a non-true value for shouldResolve argument and therefore this will reject the main thread promise');
+  }
+}
+</pre>
+
+<h3 id="Main_thread_file_2">Main thread file</h3>
+
+<h4 id="bootstrap.js">bootstrap.js</h4>
+
+<pre><code>const { utils: Cu } = Components;
+const { BasePromiseWorker } = Cu.import('resource://gre/modules/PromiseWorker.jsm', {});</code>
+
+var myWorker = <span class="pl-k">new</span> <code>BasePromiseWorker</code>('chrome://path/to/content/<span class="pl-s">myWorker.js<span class="pl-pds">'</span></span>);
+
+<span class="pl-k">var</span> promise_doMyFuncTrue <span class="pl-k">=</span> myWorker.post(<span class="pl-s"><span class="pl-pds">'</span></span>resolveTest<span class="pl-s"><span class="pl-pds">'</span></span>, [true]);
+promise_doMyFuncTrue.then(
+&nbsp;&nbsp; &nbsp;function(aVal) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;console.log('Fullfilled - promise_doMyFuncTrue - ', aVal);
+&nbsp;&nbsp; &nbsp;},
+&nbsp;&nbsp; &nbsp;function(aReason) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;console.error('Rejected - promise_doMyFuncTrue - ', aReason);
+&nbsp;&nbsp; &nbsp;}
+).catch(
+&nbsp;&nbsp; &nbsp;function(aCaught) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;console.error('Caught - promise_doMyFuncTrue - ', aCaught);
+&nbsp;&nbsp; &nbsp;}
+);
+
+<span class="pl-k">var</span> promise_doMyFuncFalse <span class="pl-k">=</span> myWorker.post(<span class="pl-s"><span class="pl-pds">'</span></span>resolveTest<span class="pl-s"><span class="pl-pds">'</span></span>, [false]);
+promise_doMyFuncTrue.then(
+&nbsp;&nbsp; &nbsp;function(aVal) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;console.log('Fullfilled - promise_doMyFuncFalse - ', aVal);
+&nbsp;&nbsp; &nbsp;},
+&nbsp;&nbsp; &nbsp;function(aReason) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;console.error('Rejected - promise_doMyFuncFalse - ', aReason);
+&nbsp;&nbsp; &nbsp;}
+).catch(
+&nbsp;&nbsp; &nbsp;function(aCaught) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;console.error('Caught - promise_doMyFuncFalse - ', aCaught);
+&nbsp;&nbsp; &nbsp;}
+);
+</pre>
+
+<h3 id="Result">Result</h3>
+
+<p>Running the code above will log the following information to the console:</p>
+
+<pre>"Fullfilled - promise_doMyFuncTrue - " "You sent to PromiseWorker argument of: `true`"                                                                      bootstrap.js Line 8
+"Rejected - promise_doMyFuncFalse - " "You passed in a non-true value for shouldResolve argument and therefore this will reject the main thread promise"    bootstrap.js Line 25</pre>
+
+<h2 id="Other_examples">Other examples</h2>
+
+<ul>
+ <li><a href="https://github.com/Noitidart/PromiseWorker/tree/demo-backward-compat" class="external">GitHub :: PromiseWorker with Backward Compatability </a>- This example is of a Firefox addon that copies and pastes in the contents of PromiseWorker.js and PromiseWorker.jsm so that it works all the way back till the Firefox version in which the Promise interface was frozen.</li>
+ <li><a href="https://github.com/Noitidart/PromiseWorker/tree/demo-transfer-arraybuffer" class="external">GitHub :: PromiseWorker Transfer Array Buffer </a>- This example is of a Firefox addon that shows how to transfer an ArrayBuffer between main thread and worker.</li>
+ <li><a href="https://github.com/Noitidart/PromiseWorker/tree/demo-custom-error" class="external">GitHub :: PromiseWorker Custom Errors</a>&nbsp;- This is a simple fully working demo that shows how to reject promises with custom user defined errors.</li>
+</ul>
+
+<h2 id="See_also">See also<a name="seealso" id="seealso"></a></h2>
+
+<ul>
+ <li><a href="../../Web/API/ChromeWorker.html" class="internal" title="en/Using DOM workers">ChromeWorker</a></li>
+ <li><a href="../../Web/API/AbstractWorker.html">AbstractWorker</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/add-ons">add-ons</a></li>
+              <li><a href="../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Extensions">Extensions</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/guide">guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/js-ctypes">js-ctypes</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsContent">NeedsContent</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Workers">Workers</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/workers">workers</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/Noitidart">Noitidart</a>,             <a href="https://developer.mozilla.org/en-US/profiles/arai">arai</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Noitidart">Noitidart</a>,
+                      <time datetime="2015-09-19T04:59:19-07:00">Sep 19, 2015, 4:59:19 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/PromiseWorker.jsm by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:37:29 GMT -->
+</body></html>

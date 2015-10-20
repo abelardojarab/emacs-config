@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"ServerException(String)","path":"ServerException-java.lang.String-","entryType":"Constructor"},{"name":"ServerException(String, Exception)","path":"ServerException-java.lang.String-java.lang.Exception-","entryType":"Constructor"}]}

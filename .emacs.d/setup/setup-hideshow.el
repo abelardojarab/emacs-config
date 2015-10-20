@@ -40,14 +40,6 @@
          (re-search-forward folding-re2 nil t)))))
 (setq folding-check-folded-file-function 'my-folding-check-folded)
 (folding-mode-add-find-file-hook)
-(global-set-key (kbd "M-s i") folding-mode-prefix-map)
-(define-key folding-mode-prefix-map (kbd "i") 'folding-shift-in)
-(define-key folding-mode-prefix-map (kbd "o") 'folding-shift-out)
-(define-key folding-mode-prefix-map (kbd "<SPC>") 'folding-context-next-action)
-(define-key folding-mode-prefix-map (kbd "j") 'folding-next-visible-heading)
-(define-key folding-mode-prefix-map (kbd "n") 'folding-next-visible-heading)
-(define-key folding-mode-prefix-map (kbd "k") 'folding-previous-visible-heading)
-(define-key folding-mode-prefix-map (kbd "p") 'folding-previous-visible-heading)
 
 ;; why open-fold is defined but not called in this function?
 (defun folding-shift-in (&optional noerror)
@@ -131,10 +123,6 @@
     (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hs-minor-mode))
   (dolist (x '(prog emacs-lisp lisp java perl sh python js2 nxml))
     (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'hideshowvis-enable)))
-
-;; Origami
-(add-to-list 'load-path "~/.emacs.d/origami")
-(require 'origami)
 
 (provide 'setup-hideshow)
 ;;; setup-hideshow.el ends here

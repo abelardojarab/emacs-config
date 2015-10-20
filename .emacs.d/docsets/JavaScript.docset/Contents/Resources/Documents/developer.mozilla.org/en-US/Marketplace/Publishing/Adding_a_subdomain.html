@@ -1,0 +1,708 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Marketplace/Publishing/Adding_a_subdomain by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 18:21:20 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Adding a subdomain for an app</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+                  <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace$styles">
+          
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain$json">
+  <link rel="canonical" href="Adding_a_subdomain.html">
+
+            <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain" title="為 App 添增子網域">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Adding a subdomain for an app">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain">
+  <meta name="twitter:title" content="Adding a subdomain for an app">
+    <meta property="og:description" content="The following sections explain how to add a subdomain with specific hosting tools.">
+  <meta name="description" content="The following sections explain how to add a subdomain with specific hosting tools.">
+  <meta name="twitter:description" content="The following sections explain how to add a subdomain with specific hosting tools.">
+  
+      
+  </head>
+<body data-slug="Mozilla/Marketplace/Publishing/Adding_a_subdomain" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'compat_api': false,'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Marketplace/Publishing/Adding_a_subdomain" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FMarketplace%2FPublishing%2FAdding_a_subdomain" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Marketplace/Publishing/Adding_a_subdomain" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FMarketplace%2FPublishing%2FAdding_a_subdomain" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../docs/Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+                <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+     <!-- end is_zone -->
+
+
+    <div class="wiki-main-content"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain" title="為 App 添增子網域">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace" rel="v:url" property="v:title">Firefox Marketplace</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace/Publishing" rel="v:url" property="v:title">Publishing</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Adding a subdomain for an app</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Adding a subdomain for an app</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 3 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/markg" title="View profile: markg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="markg" data-src="../../../../secure.gravatar.com/avatar/a6bdd84b4732a2c3c7ecadd886b3c64a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">markg</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Generic_instructions_for_adding_a_subdomain" rel="internal">Generic instructions for adding a subdomain</a></li><li><a href="#Adding_a_subdomain_with_cPanel" rel="internal">Adding a subdomain with cPanel</a></li><li><a href="#Adding_a_subdomain_with_Go_Daddy" rel="internal">Adding a subdomain with Go Daddy</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div class="summary">
+ <p>On older versions of Gecko (Firefox OS 2.1, Firefox Desktop/Android 34) you can only have one app per origin. One around this is to use a subdomain for each app. Each subdomain is a different origin, for example <code>app1.example.com</code>, <code>app2.example.com</code>. Creating a subdomain is usually easy to do, and it is free with most domain hosting providers. Typically the hosting provider allows a certain number of free subdomains. Some examples of adding subdomains are given below.</p>
+</div>
+<h2 id="Generic_instructions_for_adding_a_subdomain">Generic instructions for adding a subdomain</h2>
+<ol>
+ <li>Log in to your hosting provider's administrative console for your domain.</li>
+ <li>Find the page that deals with configuring domains.</li>
+ <li>Locate the capability to add a subdomain.</li>
+ <li>Add the subdomain, specify where the subdomain's files will be stored, and save your changes.</li>
+ <li>Put your app's files on the server where you specified in step 4.</li>
+ <li>Verify that the new subdomain exists by going to it in a browser.</li>
+</ol>
+<p>The following sections explain how to add a subdomain with specific hosting tools.</p>
+<h2 id="Adding_a_subdomain_with_cPanel">Adding a subdomain with cPanel</h2>
+<p>Here is an example of creating a subdomain with cPanel, which&nbsp;is a web hosting control panel that is used by many hosting providers.&nbsp;&nbsp;Your cPanel page might look different, depending on how it has been configured, but this should give you an idea.</p>
+<ol>
+ <li>Log into cPanel.</li>
+ <li>Scroll down and find the Domains section.
+  <p><img alt="" src="../../../../mdn.mozillademos.org/files/4007/cpanel-domains1.png" style="width: 527px; height: 181px;"></p>
+ </li>
+ <li>Click <em>Subdomains</em> to open the <em>Subdomains</em> page.
+  <p><img alt="" src="../../../../mdn.mozillademos.org/files/4011/subdomain.png" style="width: 802px; height: 300px;"></p>
+ </li>
+ <li>Type the subdomain name in the <em>Subdomain</em> box. For this example we will use "newsubdomain".</li>
+ <li>Click in the <em>Document Root</em> box. This displays the path where the files for the new subdomain will be stored. In this example we will use <code>/public_html/newsubdomain</code>. You can change this if you want your app's files in another location.&nbsp;For example, if the files for your app are in&nbsp;<code>public_html/gamedev_com/games/coolgame/</code>,&nbsp;then type that path in the Document Root box.<img alt="Document root" src="../../../../mdn.mozillademos.org/files/4035/subdomain2.png" style="width: 768px; height: 163px;"></li>
+ <li>Click the <em>Create</em> button and you should get a confirmation message.</li>
+ <li>Put your app's files in the directory that you specified for the subdomain. For this example we will use a simple HTML file named <code>index.html</code> that displays "This is on a new subdomain!"</li>
+ <li>Confirm that the new subdomain exists. Open a browser and type in the new domain name. In this example the following appears:
+  <p><img alt="New subdomain in browser" src="../../../../mdn.mozillademos.org/files/4037/subdomain3.png" style="width: 696px; height: 204px;"></p>
+ </li>
+</ol>
+<h2 id="Adding_a_subdomain_with_Go_Daddy">Adding a subdomain with Go Daddy</h2>
+<p>Here is a <a class="external" href="http://www.youtube.com/watch?v=Nw5mi8ihA5A" title="http://www.youtube.com/watch?v=Nw5mi8ihA5A">video</a> of how to add a subdomain to a domain hosted by Go Daddy.</p>
+<div>
+ &nbsp;</div>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Apps">Apps</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/markg">markg</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,
+                      <time datetime="2015-01-07T11:11:22-08:00">Jan 7, 2015, 11:11:22 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare">Prepare for success</a>
+
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Introduction">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Deciding_what_to_build">Deciding what to build</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Getting_to_know_your_users">Getting to know your users</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Choosing_your_business_model">Choosing your business model</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Localizing_your_apps">Localizing your apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Promoting_your_app">Promoting your app</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Prepare/Creating_your_community">Creating your community</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options">Your publication options</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Introduction">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Packaged_apps">Packaged apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Hosted_apps">Hosted apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Packaged_or_hosted">Packaged or hosted?</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Open_web_apps_for_android">Open Web Apps for Android</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Open_web_apps_for_desktop">Open Web Apps for Desktop</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Mobile_optimized_websites">Mobile-optimized websites</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Self_publishing">Publish apps yourself</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Options/Creating_a_store">Create your own store</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization">Monetization</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Introduction_Monetization">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Profiting_from_your_app" title="This guide contains introductory materials on how to monetize your apps, including tools needed, and a monetization calculator.">Publishing your app for profit</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/App_payments_guide">Building paid apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/In-app_payments_section/Introduction_In-app_Payments" title="A guide to implementing support for in-app payments in your Web app.">Building for in-app payments</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/In-app_payments_section/Introduction_In-app_Payments">Introduction</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/In-app_payments_section/mozPay_iap">With mozPay</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/In-app_payments_section/fxPay_iap">With fxPay</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Refunds">Refunds</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/validating_a_receipt" title="A guide to when—and how—to validate your app's purchase receipt.">Validating a receipt</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/App_pricing" title="A round up of fixed price points you can choose for your paid apps, and how these vary across different currencies, along with useful supporting information on dealing with app payments.">App pricing tiers</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Payments_Status" title="An at-a-glance summary of what countries have got our app payment services set up in them — where paid apps can be distributed">Country guides</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Monetization/Payment_processing_and_your_revenue">Payment processing and your revenue</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing">App publishing overview</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Introduction">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submission_checklist">Submission checklist</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Marketplace_review_criteria" title="An explanation of the criteria an app must meet in order to be published on the Firefox Marketplace">Marketplace review criteria</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Marketplace_showcase_criteria">Marketplace showcase criteria</a></li>
+   <li><a href="Adding_a_subdomain.html" title="For security reasons, each app must have its own domain (or subdomain) on the Web. This article covers how to go about creating a subdomain for your app.">Adding a subdomain for an app</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Publishing_mobile_app_to_Desktop">Publishing an existing mobile app to Desktop</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines">Policies and Guidelines</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines/Introduction">Introduction</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines/Marketplace_screenshot_criteria" title="Some guidelines on how to create an effective screenshot for marketplace submission">Marketplace screenshot criteria</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines/Privacy_policies" title="Your users' privacy is very important, so you need to develop and adhere to a reasonable privacy policy to engender their trust. This article provides a guide to developing privacy policies.">Privacy policy</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Policies_and_Guidelines/Testing_and_troubleshooting">App testing and troubleshooting</a></li>
+    </ol>
+   </li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit">Submit your app</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Overview">Overview</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Sign-in_to_your_developer_account" title="This step-by-step guide will help you successfully submit your app to the Firefox Marketplace.">Step 1: Sign-in</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Load_your_app">Step 2: Load app</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Enter_your_apps_details">Step 3: Listing details</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Next_steps">Step 4: Next steps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Rating_Your_Content">Step 5: App rating</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing">Step 6: Pricing your app</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Introduction">Introduction</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Payment_Accounts">Payment accounts</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Providers/Bango">Bango</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Providers/Boku">Boku</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/Promote_as_upgrade_to_free_version">Promote as upgrade</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Pricing/In-app_products">fxPay in-app products</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Define_your_team">Step 7: Define team members</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/View_your_listing">Step 8: View listing</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Submit/Edit_other_localizations">Step 9: Edit other localizations</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Managing_your_apps">Managing and updating published apps</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Managing_your_apps/Introduction_Managing_your_apps">Introduction</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Managing_your_apps/Status___Versions">Your app's status</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Updating_apps" title="Information about how both hosted and packaged app updates are handled, and what you need to do to ensure that your app properly supports updating.">Updating apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Marketplace/Publishing/Managing_your_apps/App_Statistics">App Stats</a></li>
+  </ol>
+ </li>
+ <li><a href="../APIs.html">Libraries and APIs</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace/FAQ">Firefox Marketplace FAQ</a></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain" selected="">
+          English (US)
+        </option>
+                  <option value="/zh-TW/docs/Mozilla/Marketplace/Publishing/Adding_a_subdomain">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Marketplace/Publishing/Adding_a_subdomain by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 18:21:23 GMT -->
+</body></html>

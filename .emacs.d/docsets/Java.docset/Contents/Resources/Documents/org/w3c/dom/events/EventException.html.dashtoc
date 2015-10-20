@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"EventException(short, String)","path":"EventException-short-java.lang.String-","entryType":"Constructor"},{"name":"Fields","isHeader":true},{"name":"code","path":"code","entryType":"Field"},{"name":"UNSPECIFIED_EVENT_TYPE_ERR","path":"UNSPECIFIED_EVENT_TYPE_ERR","entryType":"Field"}]}

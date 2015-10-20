@@ -1,0 +1,714 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Range/collapsed by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:13:28 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Range.collapsed</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Range/collapsed$json">
+  <link rel="canonical" href="collapsed.html">
+
+            <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/API/Range/collapsed" title="range.collapsed">
+          <link rel="alternate" hreflang="it" href="https://developer.mozilla.org/it/docs/Web/API/Range/collapsed" title="range.collapsed">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/Range/collapsed" title="range.collapsed">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Range.collapsed">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Range/collapsed">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Range/collapsed">
+  <meta name="twitter:title" content="Range.collapsed">
+    <meta property="og:description" content="The Range.collapsed read-only property returns a Boolean flag indicating whether the start and end points of the Range are at the same position. It returns true if the start and end boundary points of the Range are the same point in the DOM, false if not.">
+  <meta name="description" content="The Range.collapsed read-only property returns a Boolean flag indicating whether the start and end points of the Range are at the same position. It returns true if the start and end boundary points of the Range are the same point in the DOM, false if not.">
+  <meta name="twitter:description" content="The Range.collapsed read-only property returns a Boolean flag indicating whether the start and end points of the Range are at the same position. It returns true if the start and end boundary points of the Range are the same point in the DOM, false if not.">
+  
+      
+  </head>
+<body data-slug="Web/API/Range/collapsed" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Range/collapsed" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FRange%2Fcollapsed" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Range/collapsed" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FRange%2Fcollapsed" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/API/Range/collapsed" title="range.collapsed">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/it/docs/Web/API/Range/collapsed" title="range.collapsed">Italiano</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/Range/collapsed" title="range.collapsed">日本語</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Range/collapsed$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Range/collapsed$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Range/collapsed$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Range.html" rel="v:url" property="v:title">Range</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Range.collapsed</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Range.collapsed</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 10 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jsx" title="View profile: jsx">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jsx" data-src="../../../../../../secure.gravatar.com/avatar/8cc61d4e2dc63e75976a334348d473bc6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jsx</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/DR" title="View profile: DR">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="DR" data-src="../../../../../../secure.gravatar.com/avatar/c2310a4955e3c8be252f02c90bf7baad6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">DR</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Maian" title="View profile: Maian">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Maian" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Maian</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jonnyq" title="View profile: Jonnyq">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jonnyq" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jonnyq</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a></li><li><a href="#Example" rel="internal">Example</a></li><li><a href="#Specification" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div>
+<p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+</div>
+
+<p>The <code><strong>Range.collapsed</strong></code> read-only property returns a <a href="../../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a> flag indicating whether the start and end points of the <a href="../Range.html" title="The Range interface represents a fragment of a document that can contain nodes and parts of text nodes."><code>Range</code></a> are at the same position. It returns <code>true</code> if the start and end boundary points of the <a href="../Range.html" title="The Range interface represents a fragment of a document that can contain nodes and parts of text nodes."><code>Range</code></a> are the same point in the DOM, <code>false</code> if not.</p>
+
+<p>A collapsed <a href="../Range.html" title="The Range interface represents a fragment of a document that can contain nodes and parts of text nodes."><code>Range</code></a> is empty, containing no content, specifying a single-point in a DOM tree. The collapsed property is read-only. To collapse a range, see the <a href="collapse.html" title="The Range.collapse() method collapses the Range to one of its boundary points."><code>Range.collapse()</code></a> method.</p>
+
+<h2 name="Syntax" id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><em>isCollapsed</em> = <em>range</em>.collapsed;
+</pre>
+
+<h2 name="Example" id="Example">Example</h2>
+
+<pre class="brush:js">var range = document.createRange(); 
+
+range.setStart(startNode,startOffset); 
+range.setEnd(endNode,endOffset);
+isCollapsed = range.collapsed;
+</pre>
+
+<h2 name="Specification" id="Specification">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://dom.spec.whatwg.org/#dom-range-collapsed" class="external" lang="en" hreflang="en">DOM<br><small lang="en-US">The definition of 'Range.collapsed' in that specification.</small></a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>No change.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level-2-Range-attr-collapsed" class="external" lang="en" hreflang="en">Document Object Model (DOM) Level 2 Traversal and Range Specification<br><small lang="en-US">The definition of 'Range.collapsed' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Initial specification.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>9.0</td>
+   <td>9.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>1.0 (1.0)</td>
+   <td>9.0</td>
+   <td>9.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="../../../DOM/DOM_Reference.png" title="/en-US/docs/DOM/DOM_Reference">The DOM interfaces index</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../../tag/API.html">API</a></li>
+              <li><a href="../../../tag/DOM.html">DOM</a></li>
+              <li><a href="../../../tag/DOM%20Reference.html">DOM Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Property">Property</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Range">Range</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="../../../tag/WebAPI.html">WebAPI</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jsx">jsx</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/DR">DR</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Maian">Maian</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jonnyq">Jonnyq</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2015-06-18T21:26:51-07:00">Jun 18, 2015, 9:26:51 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Range.html"><code>Range</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Constructor</strong></a><ol><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="https://developer.mozilla.org/en-US/docs/Range/Range" title="The Range() constructor returns a newly created Range object whose start and end is the global Document object."><code>Range()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="https://developer.mozilla.org/en-US/docs/Range/collapsed" title="The Range.collapsed read-only property returns a Boolean flag indicating whether the start and end points of the Range are at the same position. It returns true if the start and end boundary points of the Range are the same point in the DOM, false if not."><code>Range.collapsed</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/commonAncestorContainer" title="The Range.commonAncestorContainer read-only property returns the deepest — or furthest down the document tree — Node that contains both boundary points of the range. This means that if&nbsp;Range.startContainer and&nbsp;Range.endContainer both refer to the&nbsp;same node, this node is the commonAncestorContainer."><code>Range.commonAncestorContainer</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/endContainer" title="The Range.endContainer read-only property returns the Node within which the Range ends. To change the end position of a node, use the Range.setEnd() method or a similar one."><code>Range.endContainer</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/endOffset" title="The Range.endOffset read-only property returns a number representing where in the Range.endContainer the Range ends."><code>Range.endOffset</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/startContainer" title="The Range.startContainer read-only property returns the Node within which the Range starts. To change the start position of a node, use one of the Range.setStart() methods."><code>Range.startContainer</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/startOffset" title="The Range.startOffset read-only property returns a number representing where in the startContainer the Range starts."><code>Range.startOffset</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="https://developer.mozilla.org/en-US/docs/Range/cloneContents" title="The Range.cloneContents() returns a DocumentFragment copying the objects of type Node included in the Range."><code>Range.cloneContents()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/cloneRange" title="The Range.cloneRange() method returns a Range object with boundary points identical to the cloned Range."><code>Range.cloneRange()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/collapse" title="The Range.collapse() method collapses the Range to one of its boundary points."><code>Range.collapse()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/compareBoundaryPoints" title="The Range.compareBoundaryPoints() method compares the boundary points of the Range with another one."><code>Range.compareBoundaryPoints()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="https://developer.mozilla.org/en-US/docs/Range/compareNode" title="The Range.compareNode() returns a constant indicating the position of the Node."><code>Range.compareNode()</code></a></s></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="https://developer.mozilla.org/en-US/docs/Range/comparePoint" title="The Range.comparePoint() method returns -1, 0, or 1 depending on whether the referenceNode is before, the same as, or after the Range."><code>Range.comparePoint</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="https://developer.mozilla.org/en-US/docs/Range/createContextualFragment" title="The Range.createContextualFragment() method returns a DocumentFragment by invoking the HTML fragment parsing algorithm or the XML&nbsp;fragment parsing algorithm with the start of the range (the parent of the selected node) as the context node. The HTML&nbsp;fragment parsing algorithm is used if the range belongs to a Document whose HTMLness bit is set. In the HTML case, if the context node would be html, for historical reasons the fragment parsing algorithm is invoked with body as the context instead."><code>Range.createContextualFragment()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/deleteContents" title="The Range.deleteContents() removes the contents of the Range&nbsp;from the Document."><code>Range.deleteContents()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/detach" title="The Range.detach() method releases a Range from use. This lets the browser choose to release resources associated with this Range. Subsequent attempts to use the detached range will result in a DOMException being thrown with an error code of INVALID_STATE_ERR."><code>Range.detach()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/extractContents" title="The Range.extractContents() method moves contents of the Range&nbsp;from the document tree into a DocumentFragment."><code>Range.extractContents()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="https://developer.mozilla.org/en-US/docs/Range/getBoundingClientRect" title="The Range.getBoundingClientRect() method returns a ClientRect&nbsp;object that bounds the contents of the range; this a rectangle enclosing the union of the bounding rectangles for all the elements in the range."><code>Range.getBoundingClientRect()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="https://developer.mozilla.org/en-US/docs/Range/getClientRects" title="The Range.getClientRects() method returns a list of ClientRect&nbsp;objects representing the area of the screen occupied by the range. This is created by aggregating the results of calls to Element.getClientRects() for all the elements in the range."><code>Range.getClientRects()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/insertNode" title="The Range.insertNode() method inserts a node at the start of the Range."><code>Range.insertNode()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="https://developer.mozilla.org/en-US/docs/Range/intersectsNode" title="The Range.intersectsNode() method returns a boolean indicating whether the given Node intersects the Range."><code>Range.intersectsNode()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="https://developer.mozilla.org/en-US/docs/Range/isPointInRange" title="The Range.isPointInRange() method returns a boolean indicating whether the given point is in the Range. It returns true if the point (cursor position) at offset within ReferenceNode is within this range."><code>Range.isPointInRange()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/selectNode" title="The Range.selectNode() method sets the Range to contain the Node and its contents. The parent Node of the start and end of the Range will be the same as the parent of the referenceNode."><code>Range.selectNode()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/selectNodeContents" title="The Range.selectNodeContents() sets the&nbsp;Range&nbsp;to contain the contents of a&nbsp;Node."><code>Range.selectNodeContents()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/setEnd" title="The Range.setEnd() method sets the end position of a Range."><code>Range.setEnd()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/setEndAfter" title="The Range.setEndAfter() method sets the end position of a Range relative to another Node. The parent Node of end of the Range will be the same as that for the referenceNode."><code>Range.setEndAfter()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/setEndBefore" title="The Range.setEndBefore() method sets the end position of a Range relative to another Node. The parent Node of end of the Range will be the same as that for the referenceNode."><code>Range.setEndBefore()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/setStart" title="The Range.setStart() method sets the start position of a Range."><code>Range.setStart()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/setStartAfter" title="The Range.setStartAfter() method sets the start position of a Range relative to a Node. The parent Node of the start of the Range will be the same as that for the referenceNode."><code>Range.setStartAfter()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/setStartBefore" title="The Range.setStartBefore() method sets the start position of a Range relative to another Node. The parent Node of the start of the Range will be the same as that for the referenceNode."><code>Range.setStartBefore()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/surroundContents" title="The Range.surroundContents() method moves content of the Range into a new node, placing the new node at the start of the specified range."><code>Range.surroundContents()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Range/toString" title="The Range.toString() method is a stringifier returning the text of the Range."><code>Range.toString()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for DOM</strong></a><ol><li><a href="../Attr.html"><code>Attr</code></a></li><li><a href="../ByteString.html"><code>ByteString</code></a></li><li><a href="../CDATASection.html"><code>CDATASection</code></a></li><li><a href="../CharacterData.html"><code>CharacterData</code></a></li><li><a href="../ChildNode.html"><code>ChildNode</code></a></li><li><a href="../Comment.html"><code>Comment</code></a></li><li><a href="../CustomEvent.html"><code>CustomEvent</code></a></li><li><a href="../DOMConfiguration.html"><code>DOMConfiguration</code></a></li><li><a href="../DOMError.html"><code>DOMError</code></a></li><li><a href="../DOMErrorHandler.html"><code>DOMErrorHandler</code></a></li><li><a href="../DOMException.html"><code>DOMException</code></a></li><li><a href="../DOMImplementation.html"><code>DOMImplementation</code></a></li><li><a href="../DOMImplementationList.html"><code>DOMImplementationList</code></a></li><li><a href="../DOMImplementationRegistry.html"><code>DOMImplementationRegistry</code></a></li><li><a href="../DOMImplementationSource.html"><code>DOMImplementationSource</code></a></li><li><a href="../DOMLocator.html"><code>DOMLocator</code></a></li><li><a href="../DOMObject.html"><code>DOMObject</code></a></li><li><a href="../DOMParser.html"><code>DOMParser</code></a></li><li><a href="../DOMPoint.html"><code>DOMPoint</code></a></li><li><a href="../DOMRect.html"><code>DOMRect</code></a></li><li><a href="../DOMString.html"><code>DOMString</code></a></li><li><a href="../DOMTimeStamp.html"><code>DOMTimeStamp</code></a></li><li><a href="../DOMTokenList.html"><code>DOMTokenList</code></a></li><li><a href="../DOMUserData.html"><code>DOMUserData</code></a></li><li><a href="../Document.html"><code>Document</code></a></li><li><a href="../DocumentFragment.html"><code>DocumentFragment</code></a></li><li><a href="../DocumentType.html"><code>DocumentType</code></a></li><li><a href="../Element.html"><code>Element</code></a></li><li><a href="../ElementTraversal.html"><code>ElementTraversal</code></a></li><li><a href="../Entity.html"><code>Entity</code></a></li><li><a href="../EntityReference.html"><code>EntityReference</code></a></li><li><a href="../Event.html"><code>Event</code></a></li><li><a href="../EventTarget.html"><code>EventTarget</code></a></li><li><a href="../HTMLCollection.html"><code>HTMLCollection</code></a></li><li><a href="../MutationObserver.html"><code>MutationObserver</code></a></li><li><a href="../Node.html"><code>Node</code></a></li><li><a href="../NodeFilter.html"><code>NodeFilter</code></a></li><li><a href="../NodeIterator.html"><code>NodeIterator</code></a></li><li><a href="../NodeList.html"><code>NodeList</code></a></li><li><a href="../NonDocumentTypeChildNode.html"><code>NonDocumentTypeChildNode</code></a></li><li><a href="../ProcessingInstruction.html"><code>ProcessingInstruction</code></a></li><li><a href="../PromiseResolver.html"><code>PromiseResolver</code></a></li><li><a href="../Selection.html"><code>Selection</code></a></li><li><a href="../Text.html"><code>Text</code></a></li><li><a href="../TextDecoder.html"><code>TextDecoder</code></a></li><li><a href="../TextEncoder.html"><code>TextEncoder</code></a></li><li><a href="../TimeRanges.html"><code>TimeRanges</code></a></li><li><a href="../TreeWalker.html"><code>TreeWalker</code></a></li><li><a href="../TypeInfo.html"><code>TypeInfo</code></a></li><li><a href="../USVString.html"><code>USVString</code></a></li><li><a href="../UserDataHandler.html"><code>UserDataHandler</code></a></li><li><a href="../XMLDocument.html"><code>XMLDocument</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Range/collapsed$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Range/collapsed$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Range/collapsed" selected="">
+          English (US)
+        </option>
+                  <option value="/es/docs/Web/API/Range/collapsed">
+            Español
+          </option>          <option value="/it/docs/Web/API/Range/collapsed">
+            Italiano
+          </option>          <option value="/ja/docs/Web/API/Range/collapsed">
+            日本語
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Range/collapsed by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:13:29 GMT -->
+</body></html>

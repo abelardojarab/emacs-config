@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"getId()","path":"getId--","entryType":"Method"},{"name":"getValue()","path":"getValue--","entryType":"Method"},{"name":"validate(XMLValidateContext)","path":"validate-javax.xml.crypto.dsig.XMLValidateContext-","entryType":"Method"}]}

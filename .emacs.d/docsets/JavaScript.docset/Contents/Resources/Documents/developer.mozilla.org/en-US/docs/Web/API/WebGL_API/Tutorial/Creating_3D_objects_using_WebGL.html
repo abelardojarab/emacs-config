@@ -1,0 +1,789 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:11:06 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Creating 3D objects using WebGL</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL$json">
+  <link rel="canonical" href="Creating_3D_objects_using_WebGL.html">
+
+            <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/Web/API/WebGL_API/Tutorial/3D-Objekte_mit_WebGL_erstellen" title="3D-Objekte mit WebGL erstellen">
+          <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/WebGL_API/Tutorial/Creer_des_objets_3D_avec_WebGL" title="Créer des objets 3D avec WebGL">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL" title="Creating 3D objects using WebGL">
+          <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL" title="WebGL로 3D 객체 만들기">
+          <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/Web/API/WebGL_API/Tutorial/Criando_objetos_em_3D_usando_o_WebGL" title="Criando objetos em 3D usando o WebGL">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Creating 3D objects using WebGL">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL">
+  <meta name="twitter:title" content="Creating 3D objects using WebGL">
+    <meta property="og:description" content="Let's take our square into three dimensions by adding five more faces to create a cube. To do this efficiently, we're going to switch from drawing using the vertices directly by calling the gl.drawArrays() method to using the vertex array as a table, and referencing individual vertices in that table to define the positions of each face's vertices, by calling gl.drawElements().">
+  <meta name="description" content="Let's take our square into three dimensions by adding five more faces to create a cube. To do this efficiently, we're going to switch from drawing using the vertices directly by calling the gl.drawArrays() method to using the vertex array as a table, and referencing individual vertices in that table to define the positions of each face's vertices, by calling gl.drawElements().">
+  <meta name="twitter:description" content="Let's take our square into three dimensions by adding five more faces to create a cube. To do this efficiently, we're going to switch from drawing using the vertices directly by calling the gl.drawArrays() method to using the vertex array as a table, and referencing individual vertices in that table to define the positions of each face's vertices, by calling gl.drawElements().">
+  
+      
+  </head>
+<body data-slug="Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGL_API%2FTutorial%2FCreating_3D_objects_using_WebGL" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGL_API%2FTutorial%2FCreating_3D_objects_using_WebGL" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/Web/API/WebGL_API/Tutorial/3D-Objekte_mit_WebGL_erstellen" title="3D-Objekte mit WebGL erstellen">Deutsch</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/WebGL_API/Tutorial/Creer_des_objets_3D_avec_WebGL" title="Créer des objets 3D avec WebGL">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL" title="Creating 3D objects using WebGL">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL" title="WebGL로 3D 객체 만들기">한국어</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/Web/API/WebGL_API/Tutorial/Criando_objetos_em_3D_usando_o_WebGL" title="Criando objetos em 3D usando o WebGL">Português (do&nbsp;Brasil)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../WebGL_API.html" rel="v:url" property="v:title">WebGL</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Tutorial.html" rel="v:url" property="v:title">WebGL tutorial</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Creating 3D objects using WebGL</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Creating 3D objects using WebGL</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 9 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/brt" title="View profile: brt">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="brt" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">brt</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/TatumCreative" title="View profile: TatumCreative">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="TatumCreative" data-src="../../../../../../../secure.gravatar.com/avatar/3bec14d3db8ed72b447d97645a4899866aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">TatumCreative</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Shriken" title="View profile: Shriken">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Shriken" data-src="../../../../../../../secure.gravatar.com/avatar/77dfe287e51cb6c2efc0ce993273adce6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Shriken</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/qbolec" title="View profile: qbolec">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="qbolec" data-src="../../../../../../../secure.gravatar.com/avatar/424695ee5125c2873a79308a8cadb3f26aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">qbolec</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AllenZ" title="View profile: AllenZ">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AllenZ" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">AllenZ</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/yyss" title="View profile: yyss">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yyss" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">yyss</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Define_the_positions_of_the_cube's_vertices" rel="internal">Define the positions of the cube's vertices</a></li><li><a href="#Define_the_vertices'_colors" rel="internal">Define the vertices' colors</a></li><li><a href="#Define_the_element_array" rel="internal">Define the element array</a></li><li><a href="#Drawing_the_cube" rel="internal">Drawing the cube</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><section id="Quick_Links"><!-- --></section> <div class="prevnext" style="text-align: right;"> 
+    <p><a href="Animating_objects_with_WebGL.html" style="float: left;">« Previous</a><a href="Using_textures_in_WebGL.html">Next  »</a></p> 
+</div><p></p>
+
+<p>Let's take our square into three dimensions by adding five more faces to create a cube. To do this efficiently, we're going to switch from drawing using the vertices directly by calling the <code>gl.drawArrays()</code> method to using the vertex array as a table, and referencing individual vertices in that table to define the positions of each face's vertices, by calling <code>gl.drawElements()</code>.</p>
+
+<p>Consider:&nbsp;each face requires four vertices to define it, but each vertex is shared by three faces. We can pass a lot less data around by building a list of all 24 vertices, then referring to each vertex by its index into that list instead of passing entire sets of coordinates around. If you wonder why we need 24 vertices, and not just 8, it is because each corner belongs to three faces of different colours, and a single vertex needs to have a single specific color - therefore we will create 3 copies of each vertex in three different colors, one for each face.</p>
+
+<h2 id="Define_the_positions_of_the_cube's_vertices">Define the positions of the cube's vertices</h2>
+
+<p>First, let's build the cube's vertex position buffer by updating the code in <code>initBuffers()</code>. This is pretty much the same as it was for the square, but rather longer since there are 24 vertices (4 per side):</p>
+
+<pre class="brush: js">var vertices = [
+  // Front face
+  -1.0, -1.0,  1.0,
+   1.0, -1.0,  1.0,
+   1.0,  1.0,  1.0,
+  -1.0,  1.0,  1.0,
+  
+  // Back face
+  -1.0, -1.0, -1.0,
+  -1.0,  1.0, -1.0,
+   1.0,  1.0, -1.0,
+   1.0, -1.0, -1.0,
+  
+  // Top face
+  -1.0,  1.0, -1.0,
+  -1.0,  1.0,  1.0,
+   1.0,  1.0,  1.0,
+   1.0,  1.0, -1.0,
+  
+  // Bottom face
+  -1.0, -1.0, -1.0,
+   1.0, -1.0, -1.0,
+   1.0, -1.0,  1.0,
+  -1.0, -1.0,  1.0,
+  
+  // Right face
+   1.0, -1.0, -1.0,
+   1.0,  1.0, -1.0,
+   1.0,  1.0,  1.0,
+   1.0, -1.0,  1.0,
+  
+  // Left face
+  -1.0, -1.0, -1.0,
+  -1.0, -1.0,  1.0,
+  -1.0,  1.0,  1.0,
+  -1.0,  1.0, -1.0
+];
+</pre>
+
+<h2 id="Define_the_vertices'_colors">Define the vertices' colors</h2>
+
+<p>We also need to build an array of colors for each of the 24 vertices. This code starts by defining a color for each face, then uses a loop to assemble an array of all the colors for each of the vertices.</p>
+
+<pre class="brush: js">var colors = [
+  [1.0,  1.0,  1.0,  1.0],    // Front face: white
+  [1.0,  0.0,  0.0,  1.0],    // Back face: red
+  [0.0,  1.0,  0.0,  1.0],    // Top face: green
+  [0.0,  0.0,  1.0,  1.0],    // Bottom face: blue
+  [1.0,  1.0,  0.0,  1.0],    // Right face: yellow
+  [1.0,  0.0,  1.0,  1.0]     // Left face: purple
+];
+
+var generatedColors = [];
+
+for (j=0; j&lt;6; j++) {
+  var c = colors[j];
+  
+  for (var i=0; i&lt;4; i++) {
+    generatedColors = generatedColors.concat(c);
+  }
+}
+
+var cubeVerticesColorBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesColorBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(generatedColors), gl.STATIC_DRAW);
+</pre>
+
+<h2 id="Define_the_element_array">Define the element array</h2>
+
+<p>Once the vertex arrays are generated, we need to build the element array.</p>
+
+<pre class="brush: js">var cubeVerticesIndexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
+
+// This array defines each face as two triangles, using the
+// indices into the vertex array to specify each triangle's
+// position.
+
+var cubeVertexIndices = [
+  0,  1,  2,      0,  2,  3,    // front
+  4,  5,  6,      4,  6,  7,    // back
+  8,  9,  10,     8,  10, 11,   // top
+  12, 13, 14,     12, 14, 15,   // bottom
+  16, 17, 18,     16, 18, 19,   // right
+  20, 21, 22,     20, 22, 23    // left
+];
+
+// Now send the element array to GL
+
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
+    new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+</pre>
+
+<p>The <code>cubeVertexIndices</code> array defines each face as a pair of triangles, specifying each triangle's vertices as an index into the cube's vertex array. Thus the cube is described as a collection of 12 triangles.</p>
+
+<h2 id="Drawing_the_cube">Drawing the cube</h2>
+
+<p>Next we need to add code to our <code>drawScene()</code> function to draw using the cube's index buffer, adding new <code>bindBuffer()</code>&nbsp;and <code>drawElements()</code>&nbsp;calls:</p>
+
+<pre class="brush: js">gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
+setMatrixUniforms();
+gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+</pre>
+
+<p>Since each face of our cube is comprised of two triangles, there are 6 vertices per side, or 36 total vertices in the cube, even though many of them are duplicates. However, since our index array is comprised of simple integers, this isn't an inordinate amount of data to pass for each frame of animation.</p>
+
+<p>At this point, we now have an animated cube bouncing around and rotating, its six faces rather vividly colored. If your browser supports WebGL, <a href="https://developer.mozilla.org/samples/webgl/sample5/index.html" title="https://developer.mozilla.org/samples/webgl/sample5/index.html">take a look at the demo in action</a>.</p>
+
+<p></p><div class="prevnext" style="text-align: right;"> 
+    <p><a href="Animating_objects_with_WebGL.html" style="float: left;">« Previous</a><a href="Using_textures_in_WebGL.html">Next  »</a></p> 
+</div><p></p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Tutorial">Tutorial</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebGL">WebGL</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/brt">brt</a>,             <a href="https://developer.mozilla.org/en-US/profiles/TatumCreative">TatumCreative</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Shriken">Shriken</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/qbolec">qbolec</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/AllenZ">AllenZ</a>,             <a href="https://developer.mozilla.org/en-US/profiles/yyss">yyss</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/brt">brt</a>,
+                      <time datetime="2015-09-26T12:24:33-07:00">Sep 26, 2015, 12:24:33 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="../../WebGL_API.html"><strong>WebGL API</strong></a></li> 
+  <li data-default-state="open"><a href="../Tutorial.html"><strong>WebGL tutorial</strong></a> 
+   <ol> 
+     <li><a href="Getting_started_with_WebGL.html">Getting started with WebGL</a></li> 
+     <li><a href="Adding_2D_content_to_a_WebGL_context.html">Adding 2D content to a WebGL context</a></li> 
+     <li><a href="Using_shaders_to_apply_color_in_WebGL.html">Using shaders to apply color in WebGL</a></li> 
+     <li><a href="Animating_objects_with_WebGL.html">Animating objects with WebGL</a></li> 
+     <li><a href="Creating_3D_objects_using_WebGL.html">Creating 3D objects using WebGL</a></li> 
+     <li><a href="Using_textures_in_WebGL.html">Using textures in WebGL</a></li> 
+     <li><a href="Lighting_in_WebGL.html">Lighting in WebGL</a></li> 
+     <li><a href="Animating_textures_in_WebGL.html">Animating textures in WebGL</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>Examples and articles</strong></a> 
+   <ol> 
+    <li><a href="../Matrix_math_for_the_web.html">Matrix math for the web</a></li> 
+    <li><a href="../WebGL_model_view_projection.html">WebGL model view projection</a></li> 
+    <li><a href="../WebGL_best_practices.html">WebGL best practices</a></li> 
+    <li><a href="../Using_Extensions.html">Using WebGL extensions</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/demos/tag/tech:webgl">WebGL demos in MDN Demo Studio</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>Interfaces</strong></a> 
+   <ol> 
+    <li><a href="../../WebGLRenderingContext.html" title="The WebGLRenderingContext interface provides the OpenGL ES 2.0 rendering context for the drawing surface of an HTML &lt;canvas&gt; element."><code>WebGLRenderingContext</code></a></li> 
+    <li><a href="../../WebGL2RenderingContext.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGL2RenderingContext</code></a></li> 
+    <li><a href="../../WebGLActiveInfo.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLActiveInfo</code></a></li> 
+    <li><a href="../../WebGLBuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLBuffer</code></a></li> 
+    <li><a href="../../WebGLContextEvent.html" title="The WebContextEvent interface is part of the WebGL API and is an interface for an event that is generated in response to a status change to the WebGL rendering context."><code>WebGLContextEvent</code></a></li> 
+    <li><a href="../../WebGLFramebuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLFramebuffer</code></a></li> 
+    <li><a href="../../WebGLProgram.html" title="The WebGLProgram is part of the WebGL API and is a combination of two compiled WebGLShaders consisting of a vertex shader and a fragment shader (both written in GLSL). These are then linked into a usable program."><code>WebGLProgram</code></a></li> 
+    <li><a href="../../WebGLQuery.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLQuery</code></a></li> 
+    <li><a href="../../WebGLRenderbuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLRenderbuffer</code></a></li> 
+    <li><a href="../../WebGLSampler.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLSampler</code></a></li> 
+    <li><a href="../../WebGLShader.html" title="The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders."><code>WebGLShader</code></a></li> 
+    <li><a href="../../WebGLShaderPrecisionFormat.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLShaderPrecisionFormat</code></a></li> 
+    <li><a href="../../WebGLSync.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLSync</code></a></li> 
+    <li><a href="../../WebGLTexture.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLTexture</code></a></li> 
+    <li><a href="../../WebGLTransformFeedback.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLTransformFeedback</code></a></li> 
+    <li><a href="../../WebGLUniformLocation.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLUniformLocation</code></a></li> 
+    <li><a href="../../WebGLVertexArrayObject.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLVertexArrayObject</code></a></li> 
+   </ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebGL">Pages tagged "WebGL"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="../../../../MDN/Doc_status/API/WebGL.html">WebGL doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL" selected="">
+          English (US)
+        </option>
+                  <option value="/de/docs/Web/API/WebGL_API/Tutorial/3D-Objekte_mit_WebGL_erstellen">
+            Deutsch
+          </option>          <option value="/fr/docs/Web/API/WebGL_API/Tutorial/Creer_des_objets_3D_avec_WebGL">
+            Français
+          </option>          <option value="/ja/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL">
+            日本語
+          </option>          <option value="/ko/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL">
+            한국어
+          </option>          <option value="/pt-BR/docs/Web/API/WebGL_API/Tutorial/Criando_objetos_em_3D_usando_o_WebGL">
+            Português (do&nbsp;Brasil)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:11:08 GMT -->
+</body></html>

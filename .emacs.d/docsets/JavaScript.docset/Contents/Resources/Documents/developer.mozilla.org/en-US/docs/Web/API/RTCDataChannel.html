@@ -1,0 +1,794 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:37:46 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>RTCDataChannel</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel$json">
+  <link rel="canonical" href="RTCDataChannel.html">
+
+            <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/Web/API/RTCDataChannel" title="RTCDataChannel">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/RTCDataChannel" title="RTCDataChannel">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/RTCDataChannel" title="RTCDataChannel">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="RTCDataChannel">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel">
+  <meta name="twitter:title" content="RTCDataChannel">
+    <meta property="og:description" content="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection.">
+  <meta name="description" content="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection.">
+  <meta name="twitter:description" content="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection.">
+  
+      
+  </head>
+<body data-slug="Web/API/RTCDataChannel" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/RTCDataChannel" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FRTCDataChannel" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/RTCDataChannel" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FRTCDataChannel" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/Web/API/RTCDataChannel" title="RTCDataChannel">Deutsch</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/RTCDataChannel" title="RTCDataChannel">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/RTCDataChannel" title="RTCDataChannel">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">RTCDataChannel</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>RTCDataChannel</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 7 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jpmedley" title="View profile: jpmedley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jpmedley" data-src="../../../../../secure.gravatar.com/avatar/fde784135f738cc182672e703dea9a4b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jpmedley</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/vonagam" title="View profile: vonagam">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="vonagam" data-src="../../../../../secure.gravatar.com/avatar/118e16c66688a7ad74be5688fee44ef86aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">vonagam</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/bemasc" title="View profile: bemasc">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bemasc" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">bemasc</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/m0ppers" title="View profile: m0ppers">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="m0ppers" data-src="../../../../../secure.gravatar.com/avatar/4092c9352e92122b1fadb12978fd6f576aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">m0ppers</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/tOkeshu" title="View profile: tOkeshu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tOkeshu" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tOkeshu</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Properties" rel="internal">Properties</a><ol><li><a href="#Event_Handlers" rel="internal">Event Handlers</a></li></ol></li><li><a href="#Methods" rel="internal">Methods</a></li><li><a href="#Example" rel="internal">Example</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><div class="notice experimental"> 
+    <p><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span> <strong>This is an experimental technology</strong><br>Because this technology's specification has not stabilized, check the <a href="#Browser_compatibility">compatibility table</a> for the proper prefixes to use in various browsers. Also note that the syntax and behavior of an experimental technology is subject to change in future versions of browsers as the spec changes.</p> 
+</div><p></p>
+
+<p>The <strong><code>RTCDataChannel</code></strong> interface represents a bi-directional data channel between two peers of a connection.</p>
+
+<p>Objects of this type can be created using <a href="RTCPeerConnection/createDataChannel.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCPeerConnection.createDataChannel()</code></a>, or are received in a <code><a href="../Events/datachannel.html" title="/en-US/docs/Web/Events/datachannel">datachannel</a></code> event of type <a href="RTCDataChannelEvent.html" title="The RTCDataChannelEvent interface represents events that occurs while attaching a RTCDataChannel to a RTCPeerConnection. The only event sent with this interface is datachannel."><code>RTCDataChannelEvent</code></a> on an existing <a href="RTCPeerConnection.html" title="The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It is used to handle efficient streaming of data between the two peers."><code>RTCPeerConnection</code></a>.</p>
+
+<div class="note">
+<p>On Gecko, this API is called <code>DataChannel</code> instead of the standard <code>RTCDataChannel</code> name.</p>
+</div>
+
+<h2 id="Properties">Properties</h2>
+
+<dl>
+ <dt><a href="RTCDataChannel/label.html" title="The read-only property RTCDataChannel.label returns a DOMString containing a name describing the data channel. There is no constraint of uniqueness about it."><code>RTCDataChannel.label</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> containing a name describing the data channel. There is no constraint of uniqueness about it.</dd>
+ <dt><a href="RTCDataChannel/ordered.html" title="The read-only property RTCDataChannel.ordered returns a Boolean indicating if the order of delivery of the messages is guaranteed or not."><code>RTCDataChannel.ordered</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns a <a href="../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a> indicating if the order of delivery of the messages is guaranteed or not.</dd>
+ <dt><a href="RTCDataChannel/protocol.html" title="The read-only property RTCDataChannel.protocol returns a DOMString containing the name of the subprotocol in use. If none, it returns &quot;&quot;."><code>RTCDataChannel.protocol</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> containing the name of the subprotocol in use. If none, it returns <code>""</code>.</dd>
+ <dt><a href="RTCDataChannel/id.html" title="The read-only property RTCDataChannel.id returns an unsigned short being a unique id for the channel. It is set at the creation of the RTCDataChannel object."><code>RTCDataChannel.id</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns an <code>unsigned short</code> being a unique id for the channel. It is set at the creation of the <a href="RTCDataChannel.html" title="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection."><code>RTCDataChannel</code></a> object.</dd>
+ <dt><a href="RTCDataChannel/readyState.html" title="The read-only property RTCDataChannel.readyState returns an enum of the type RTCDataChannelState representing the state of the underlying data connection."><code>RTCDataChannel.readyState</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns an enum of the type <code>RTCDataChannelState</code> representing the state of the underlying data connection. It can be one of the following values:
+ <ul>
+  <li><code>"connecting"</code> is the state indicating that the underlying connection is not yet set up and active. This is the initial state of a data channel created with <a href="RTCPeerConnection/createDataChannel.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCPeerConnection.createDataChannel()</code></a>.</li>
+  <li><code>"open"</code> is the state indicating that the underlying connection is up and running. This is the initial state of a data channel dispatched in a <a href="RTCDataChannelEvent.html" title="The RTCDataChannelEvent interface represents events that occurs while attaching a RTCDataChannel to a RTCPeerConnection. The only event sent with this interface is datachannel."><code>RTCDataChannelEvent</code></a>.</li>
+  <li><code>"closing"</code> is the state indicating that the underlying connection is in the process of shutting down. No new sending task is accepting but the cached messages are in the process of being sent, or received.</li>
+  <li><code>"closed"</code> is the state indicating that the underlying connection has been shut down (or couldn't be established).</li>
+ </ul>
+ </dd>
+ <dt><a href="RTCDataChannel/bufferedAmount.html" title="The read-only property RTCDataChannel.bufferedAmount returns an unsigned long containing the amount of bytes that have been queued for sending: that is the amount of data requested to be transmitted via RTCDataChannel.send() that has not been sent yet. Note that if the channel state, as given by RTCDataChannel.readyState is &quot;closed&quot;, the buffering continues."><code>RTCDataChannel.bufferedAmount</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns an <code>unsigned long</code> containing the amount of bytes that have been queued for sending: that is the amount of data requested to be transmitted via <a href="RTCDataChannel/send.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCDataChannel.send()</code></a> that has not been sent yet. Note that if the channel is <code>closed</code>, the buffering continues.</dd>
+ <dt><a href="RTCDataChannel/bufferedAmountLowThreshold.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCDataChannel.bufferedAmountLowThreshold</code></a></dt>
+ <dd>Is an <code>unsigned long</code> representing the number of bytes at which the <a href="RTCDataChannel/bufferedAmount.html" title="The read-only property RTCDataChannel.bufferedAmount returns an unsigned long containing the amount of bytes that have been queued for sending: that is the amount of data requested to be transmitted via RTCDataChannel.send() that has not been sent yet. Note that if the channel state, as given by RTCDataChannel.readyState is &quot;closed&quot;, the buffering continues."><code>RTCDataChannel.bufferedAmount</code></a> is considered to be low. &nbsp;When&nbsp;the&nbsp;<a href="RTCDataChannel/bufferedAmount.html" title="The read-only property RTCDataChannel.bufferedAmount returns an unsigned long containing the amount of bytes that have been queued for sending: that is the amount of data requested to be transmitted via RTCDataChannel.send() that has not been sent yet. Note that if the channel state, as given by RTCDataChannel.readyState is &quot;closed&quot;, the buffering continues."><code>RTCDataChannel.bufferedAmount</code></a>&nbsp;decreases from above this threshold to equal or below it, the <code><a href="../Events/bufferedamountlow.html" class="new" title="/en-US/docs/Web/Events/bufferedamountlow">bufferedamountlow</a></code>&nbsp;event fires. &nbsp;This value is initially zero on each new channel object, and the application may change this value at any time.</dd>
+ <dt><a href="RTCDataChannel/binaryType.html" title="The read-only property RTCDataChannel.binaryType is a DOMString indicating the type of binary data transmitted by the connection. This should be either &quot;blob&quot;&nbsp;if Blob objects are being used or &quot;arraybuffer&quot; if ArrayBuffer objects are being used. Initially it is set to &quot;blob&quot;."><code>RTCDataChannel.binaryType</code></a></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> indicating the type of binary data transmitted by the connection. This should be either <code>"blob"</code>&nbsp;if <a href="Blob.html" title="A Blob object represents a file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system."><code>Blob</code></a> objects are being used or <code>"arraybuffer"</code> if <a href="../JavaScript/Reference/Global_Objects/ArrayBuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>ArrayBuffer</code></a> objects are being used. Initially it is set to <code>"blob"</code>.</dd>
+ <dt><a href="RTCDataChannel/maxPacketLifeType.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCDataChannel.maxPacketLifeType</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Is an <code>unsigned short</code> indicating the length in milliseconds of the window in when messaging happens in unreliable mode.</dd>
+ <dt><a href="RTCDataChannel/maxRetransmits.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCDataChannel.maxRetransmits</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Is an <code>unsigned short</code> indicating the maximum amount of retransmissions that can happen when messaging happens in unreliable mode.</dd>
+ <dt><a href="RTCDataChannel/negotiated.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCDataChannel.negotiated</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Is a <a href="../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a> indicating if the channel has been negotiated by the application, or not.</dd>
+ <dt><a href="DataChannel/reliable.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>DataChannel.reliable</code></a> <span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Is a <a href="../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a> indicating if the connection can send message in unreliable mode.</dd>
+ <dt><a href="DataChannel/stream.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>DataChannel.stream</code></a> <span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Is an obsolete synonym for <a href="RTCDataChannel/id.html" title="The read-only property RTCDataChannel.id returns an unsigned short being a unique id for the channel. It is set at the creation of the RTCDataChannel object."><code>RTCDataChannel.id</code></a>.</dd>
+</dl>
+
+<h3 id="Event_Handlers">Event Handlers</h3>
+
+<dl>
+ <dt><a href="RTCDataChannel/onopen.html" title="The RTCDataChannel.onopen event handler is a property called when the open event is received. Such an event is sent when a the underlying data transport, that is the data connection, has been established."><code>RTCDataChannel.onopen</code></a></dt>
+ <dd>Is the event handler called when the <code><a href="../Events/open.html" title="/en-US/docs/Web/Events/open">open</a></code> event is received. Such an event is sent when a the underlying data transport, that is the data connection, has been established.</dd>
+ <dt><a href="RTCDataChannel/onmessage.html" title="The RTCDataChannel.ommessage event handler is a property called when the message event is received. Such an event is sent when a message is available on the data connection."><code>RTCDataChannel.onmessage</code></a></dt>
+ <dd>Is the event handler called when the <code><a href="../Events/message.html" title="/en-US/docs/Web/Events/message">message</a></code> event is received. Such an event is sent when a message is available on the data connection.</dd>
+ <dt><a href="RTCDataChannel/onbufferedamountlow.html" title="The RTCDataChannel.onbufferedamountlow handler is called&nbsp;when the&nbsp;bufferedamountlow&nbsp;event is received. Such an event is sent when&nbsp;RTCDataChannel.bufferedAmount&nbsp;drops to less than or equal to the amount specified by the&nbsp;RTCDataChannel.bufferedAmountLowThreshold&nbsp;property."><code>RTCDataChannel.onbufferedamountlow</code></a></dt>
+ <dd>Is the event handler called when the <code><a href="../Events/bufferedamountlow.html" class="new" title="/en-US/docs/Web/Events/bufferedamountlow">bufferedamountlow</a></code> event is received. Such an event is sent when <a href="RTCDataChannel/bufferedAmount.html" title="The read-only property RTCDataChannel.bufferedAmount returns an unsigned long containing the amount of bytes that have been queued for sending: that is the amount of data requested to be transmitted via RTCDataChannel.send() that has not been sent yet. Note that if the channel state, as given by RTCDataChannel.readyState is &quot;closed&quot;, the buffering continues."><code>RTCDataChannel.bufferedAmount</code></a> drops to less than or equal to the amount specified by the&nbsp;<a href="RTCDataChannel/bufferedAmountLowThreshold.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCDataChannel.bufferedAmountLowThreshold</code></a> property.</dd>
+ <dt><a href="RTCDataChannel/onclose.html" title="The RTCDataChannel.onclose event handler is a property called when the close event is received. Such an event is sent when the underlying data transport has been closed."><code>RTCDataChannel.onclose</code></a></dt>
+ <dd>Is the event handler called when the <code><a href="../Events/close.html" title="/en-US/docs/Web/Events/close">close</a></code> event is received. Such an event is sent when the underlying data transport has been closed.</dd>
+ <dt><a href="RTCDataChannel/onerror.html" title="The RTCDataChannel.onerror event handler is a property called when the error event is received. Such an event is sent when an error has been encountered."><code>RTCDataChannel.onerror</code></a></dt>
+ <dd>Is the event handler called when the <code><a href="../Events/error.html" title="/en-US/docs/Web/Events/error">error</a></code> event is received. Such an event is sent when an error has been encountered.</dd>
+</dl>
+
+<h2 id="Methods">Methods</h2>
+
+<dl>
+ <dt><a href="RTCDataChannel/close.html" title="The RTCDataChannel.close() method closes the data channel. The closing is done in a non abrupt way. The state of the channel is set to &quot;closing&quot;, the messages not yet sent are sent, then the channel is closed."><code>RTCDataChannel.close()</code></a></dt>
+ <dd>Closes the channel. The closing is done in a non abrupt way. The <a href="RTCDataChannel/readyState.html" title="The read-only property RTCDataChannel.readyState returns an enum of the type RTCDataChannelState representing the state of the underlying data connection."><code>state</code></a> of the channel is set to <code>"closing"</code>, the messages not yet sent are sent, then the channel is closed.</dd>
+ <dt><a href="RTCDataChannel/send.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCDataChannel.send()</code></a></dt>
+ <dd>Sends the data in parameter over the channel. The data can be a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a>, a <a href="Blob.html" title="A Blob object represents a file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system."><code>Blob</code></a>, an <a href="../JavaScript/Reference/Global_Objects/ArrayBuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>ArrayBuffer</code></a> or an <a href="ArrayBufferView.html" title="ArrayBufferView is a helper type representing any of the following JavaScript TypedArray types:"><code>ArrayBufferView</code></a>.</dd>
+</dl>
+
+<h2 id="Example">Example</h2>
+
+<pre class="brush: js">var pc = new RTCPeerConnection();
+var dc = pc.createDataChannel("my channel");
+
+dc.onmessage = function (event) {
+  console.log("received: " + event.data);
+};
+
+dc.onopen = function () {
+  console.log("datachannel open");
+};
+
+dc.onclose = function () {
+  console.log("datachannel close");
+};
+</pre>
+
+<p>&nbsp;</p>
+
+<h2 name="Specifications" id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a href="http://dev.w3.org/2011/webrtc/editor/webrtc.html#idl-def-RTCDataChannel" class="external" lang="en" hreflang="en">WebRTC 1.0: Real-time Communication Between Browser<br><small lang="en-US">The definition of 'RTCDataChannel' in that specification.</small></a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Initial specification.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span> [1]</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>onbufferedamountlow</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> [1]</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>33</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+   <th>Chrome for Android</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>onbufferedamountlow</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] The interface is called <code>DataChannel</code> and not <code>RTCDataChannel</code></p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="../Guide/API/WebRTC.html">WebRTC</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Experimental">Experimental</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Expérimental">Expérimental</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Interface">Interface</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="../../tag/WebAPI.html">WebAPI</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebRTC">WebRTC</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>,             <a href="https://developer.mozilla.org/en-US/profiles/vonagam">vonagam</a>,             <a href="https://developer.mozilla.org/en-US/profiles/bemasc">bemasc</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/m0ppers">m0ppers</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tOkeshu">tOkeshu</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>,
+                      <time datetime="2015-08-18T14:51:28-07:00">Aug 18, 2015, 2:51:28 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="RTCDataChannel.html"><code>RTCDataChannel</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/binaryType.html" title="The read-only property RTCDataChannel.binaryType is a DOMString indicating the type of binary data transmitted by the connection. This should be either &quot;blob&quot;&nbsp;if Blob objects are being used or &quot;arraybuffer&quot; if ArrayBuffer objects are being used. Initially it is set to &quot;blob&quot;."><code>RTCDataChannel.binaryType</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/bufferedAmount.html" title="The read-only property RTCDataChannel.bufferedAmount returns an unsigned long containing the amount of bytes that have been queued for sending: that is the amount of data requested to be transmitted via RTCDataChannel.send() that has not been sent yet. Note that if the channel state, as given by RTCDataChannel.readyState is &quot;closed&quot;, the buffering continues."><code>RTCDataChannel.bufferedAmount</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/id.html" title="The read-only property RTCDataChannel.id returns an unsigned short being a unique id for the channel. It is set at the creation of the RTCDataChannel object."><code>RTCDataChannel.id</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/label.html" title="The read-only property RTCDataChannel.label returns a DOMString containing a name describing the data channel. There is no constraint of uniqueness about it."><code>RTCDataChannel.label</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/onclose.html" title="The RTCDataChannel.onclose event handler is a property called when the close event is received. Such an event is sent when the underlying data transport has been closed."><code>RTCDataChannel.onclose</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/onerror.html" title="The RTCDataChannel.onerror event handler is a property called when the error event is received. Such an event is sent when an error has been encountered."><code>RTCDataChannel.onerror</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/onmessage.html" title="The RTCDataChannel.ommessage event handler is a property called when the message event is received. Such an event is sent when a message is available on the data connection."><code>RTCDataChannel.onmessage</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/onopen.html" title="The RTCDataChannel.onopen event handler is a property called when the open event is received. Such an event is sent when a the underlying data transport, that is the data connection, has been established."><code>RTCDataChannel.onopen</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/ordered.html" title="The read-only property RTCDataChannel.ordered returns a Boolean indicating if the order of delivery of the messages is guaranteed or not."><code>RTCDataChannel.ordered</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/protocol.html" title="The read-only property RTCDataChannel.protocol returns a DOMString containing the name of the subprotocol in use. If none, it returns &quot;&quot;."><code>RTCDataChannel.protocol</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/readyState.html" title="The read-only property RTCDataChannel.readyState returns an enum of the type RTCDataChannelState representing the state of the underlying data connection."><code>RTCDataChannel.readyState</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="RTCDataChannel/close.html" title="The RTCDataChannel.close() method closes the data channel. The closing is done in a non abrupt way. The state of the channel is set to &quot;closing&quot;, the messages not yet sent are sent, then the channel is closed."><code>RTCDataChannel.close()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for WebRTC</strong></a><ol><li><a href="MediaDevices.html"><code>MediaDevices</code></a></li><li><a href="MediaStreamEvent.html"><code>MediaStreamEvent</code></a></li><li><a href="Navigator/mediaDevices.html"><code>Navigator.mediaDevices</code></a></li><li><a href="RTCConfiguration.html"><code>RTCConfiguration</code></a></li><li><a href="RTCDataChannelEvent.html"><code>RTCDataChannelEvent</code></a></li><li><a href="RTCIdentityErrorEvent.html"><code>RTCIdentityErrorEvent</code></a></li><li><a href="RTCIdentityEvent.html"><code>RTCIdentityEvent</code></a></li><li><a href="RTCPeerConnection.html"><code>RTCPeerConnection</code></a></li><li><a href="RTCPeerConnectionIceEvent.html"><code>RTCPeerConnectionIceEvent</code></a></li><li><a href="RTCSessionDescription.html"><code>RTCSessionDescription</code></a></li><li><a href="RTCSessionDescriptionCallback.html"><code>RTCSessionDescriptionCallback</code></a></li><li><a href="RTCStatsReport.html"><code>RTCStatsReport</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/RTCDataChannel$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/RTCDataChannel$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/RTCDataChannel" selected="">
+          English (US)
+        </option>
+                  <option value="/de/docs/Web/API/RTCDataChannel">
+            Deutsch
+          </option>          <option value="/ja/docs/Web/API/RTCDataChannel">
+            日本語
+          </option>          <option value="/zh-CN/docs/Web/API/RTCDataChannel">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:37:49 GMT -->
+</body></html>

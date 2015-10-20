@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"ConfigurationSpi()","path":"ConfigurationSpi--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"engineGetAppConfigurationEntry(String)","path":"engineGetAppConfigurationEntry-java.lang.String-","entryType":"Method"},{"name":"engineRefresh()","path":"engineRefresh--","entryType":"Method"}]}

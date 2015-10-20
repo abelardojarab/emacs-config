@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"IvParameterSpec(byte[]A)","path":"IvParameterSpec-byte:A-","entryType":"Constructor"},{"name":"IvParameterSpec(byte[]A, int, int)","path":"IvParameterSpec-byte:A-int-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getIV()","path":"getIV--","entryType":"Method"}]}

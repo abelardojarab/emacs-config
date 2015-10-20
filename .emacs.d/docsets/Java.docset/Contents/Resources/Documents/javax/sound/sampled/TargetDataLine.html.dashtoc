@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"open(AudioFormat)","path":"open-javax.sound.sampled.AudioFormat-","entryType":"Method"},{"name":"open(AudioFormat, int)","path":"open-javax.sound.sampled.AudioFormat-int-","entryType":"Method"},{"name":"read(byte[]A, int, int)","path":"read-byte:A-int-int-","entryType":"Method"}]}

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"IllegalFormatCodePointException(int)","path":"IllegalFormatCodePointException-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getCodePoint()","path":"getCodePoint--","entryType":"Method"},{"name":"getMessage()","path":"getMessage--","entryType":"Method"}]}

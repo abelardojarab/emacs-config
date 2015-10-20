@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"RowSetProvider()","path":"RowSetProvider--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"newFactory()","path":"newFactory--","entryType":"Method"},{"name":"newFactory(String, ClassLoader)","path":"newFactory-java.lang.String-java.lang.ClassLoader-","entryType":"Method"}]}

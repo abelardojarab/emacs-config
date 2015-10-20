@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"andThen(Function)","path":"andThen-java.util.function.Function-","entryType":"Method"},{"name":"apply(T)","path":"apply-T-","entryType":"Method"},{"name":"compose(Function)","path":"compose-java.util.function.Function-","entryType":"Method"},{"name":"identity()","path":"identity--","entryType":"Method"}]}

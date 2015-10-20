@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"XmlAdapter()","path":"XmlAdapter--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"marshal(BoundType)","path":"marshal-BoundType-","entryType":"Method"},{"name":"unmarshal(ValueType)","path":"unmarshal-ValueType-","entryType":"Method"}]}

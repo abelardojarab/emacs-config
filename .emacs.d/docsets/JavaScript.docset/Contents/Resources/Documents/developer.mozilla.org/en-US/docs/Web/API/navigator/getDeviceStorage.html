@@ -1,0 +1,624 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Navigator/getDeviceStorage by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:54:24 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Navigator.getDeviceStorage()</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getDeviceStorage$json">
+  <link rel="canonical" href="getDeviceStorage.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Navigator.getDeviceStorage()">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getDeviceStorage">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getDeviceStorage">
+  <meta name="twitter:title" content="Navigator.getDeviceStorage()">
+    <meta property="og:description" content="The getDeviceStorage method is used to access some storage area available on the device.">
+  <meta name="description" content="The getDeviceStorage method is used to access some storage area available on the device.">
+  <meta name="twitter:description" content="The getDeviceStorage method is used to access some storage area available on the device.">
+  
+      
+  </head>
+<body data-slug="Web/API/Navigator/getDeviceStorage" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Navigator/getDeviceStorage" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FNavigator%2FgetDeviceStorage" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Navigator/getDeviceStorage" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FNavigator%2FgetDeviceStorage" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getDeviceStorage$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getDeviceStorage$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getDeviceStorage$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Navigator.html" rel="v:url" property="v:title">Navigator</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Navigator.getDeviceStorage()</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Navigator.getDeviceStorage()</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 4 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Summary" rel="internal">Summary</a></li><li><a href="#Syntax" rel="internal">Syntax</a><ol><li><a href="#Parameters" rel="internal">Parameters</a></li></ol></li><li><a href="#Returns" rel="internal">Returns</a></li><li><a href="#Example" rel="internal">Example</a></li><li><a href="#Specification" rel="internal">Specification</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><section class="Quick_links" id="Quick_Links"><!-- --></section><div class="overheadIndicator nonStandard nonStandardHeader"> 
+      <p><strong>Non-standard</strong><br> 
+      This feature is not on a current W3C standards track, but it is supported on the Firefox OS platform. Although implementations may change in the future and it is not supported widely across browsers, it is suitable for use in code dedicated to Firefox OS apps.</p> 
+      </div><p></p>
+
+<p></p><div class="warning"> 
+    <p style="text-align: center;">This API is available on <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a> for <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Security/Application_security">privileged or certified applications</a> only.</p> 
+</div><p></p>
+
+<h2 id="Summary">Summary</h2>
+
+<p>The <code>getDeviceStorage</code> method is used to access some storage area available on the device.</p>
+
+<p>This method gives access to a storage area from the device's default storage, that is the storage area whose <code>.default</code> attribute is <code>true</code>. This is controlled by the user via <em>Settings App &gt; Media Storage &gt; Default media location</em> (e.g. sdcard, internal memory, etc.) Alternatively, you can use the <a class="new" href="../window/navigator/getDeviceStorages.html" title="The documentation about this has not yet been written; please consider contributing!"><code>getDeviceStorages</code></a> method, which returns an <code><a href="../../JavaScript/Reference/Global_Objects/Array.html" title="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code> of <a href="../DeviceStorage.html" title="The DeviceStorage interface is used to access files on a specific storage area available on the device. A storage area is, in essence, a file system repository even if it hides the reality of the underlaying file system."><code>DeviceStorage</code></a> objects, one per physical storage area.</p>
+
+<div class="note">
+<p><strong>Note:</strong> To be able to use a storage area, the application must declare it in its <a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Manifest" title="/en-US/docs/Web/Apps/Manifest">application manifest</a>. For example, if the application wants to access the <code>sdcard</code> storage area, it must have the "<code>device-storage:sdcard</code>" permission in its manifest.</p>
+</div>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox">  var <em>instanceOfDeviceStorage</em> = navigator.getDeviceStorage(<em>storageName</em>);</pre>
+
+<h3 id="Parameters">Parameters</h3>
+
+<dl>
+ <dt><code>storageName</code></dt>
+ <dd>The name of the targeted storage area. Firefox OS supports the following areas:
+ <ul>
+  <li><code>apps</code>: This storage area is used to store the user data needed by apps. As it is critical data, accessing this storage area requires some extra privileges and is available for certified applications only.</li>
+  <li><code>music</code>: This is the storage area where music and sounds are stored.</li>
+  <li><code>pictures</code>: This is the storage area where pictures are stored.</li>
+  <li><code>sdcard</code>: This is the storage area that gives access to the device's SDCard.</li>
+  <li><code>videos</code>: This is the storage area where videos are stored.</li>
+ </ul>
+ </dd>
+</dl>
+
+<h2 id="Returns">Returns</h2>
+
+<p>This method returns a <a href="../DeviceStorage.html" title="The DeviceStorage interface is used to access files on a specific storage area available on the device. A storage area is, in essence, a file system repository even if it hides the reality of the underlaying file system."><code>DeviceStorage</code></a> object that can be used to manage files on the associated storage area.</p>
+
+<h2 id="Example">Example</h2>
+
+<pre class="brush: js">var sdcard = navigator.getDeviceStorage("sdcard");
+</pre>
+
+<h2 id="Specification" name="Specification">Specification</h2>
+
+<p>Not part of any specification.</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="../DeviceStorage.html" title="The DeviceStorage interface is used to access files on a specific storage area available on the device. A storage area is, in essence, a file system repository even if it hides the reality of the underlaying file system."><code>DeviceStorage</code></a></li>
+ <li><a class="new" href="../window/navigator/getDeviceStorages.html" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.getDeviceStorages()</code></a></li>
+ <li><a href="../Device_Storage_API.html" title="/en-US/docs/WebAPI/Device_Storage">Device Storage API</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/B2G">B2G</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Device Storage">Device Storage</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Firefox OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Method">Method</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Non Standard">Non Standard</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="../../../tag/WebAPI.html">WebAPI</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2015-02-22T10:27:43-08:00">Feb 22, 2015, 10:27:43 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Navigator.html"><code>Navigator</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/appCodeName.html" title="The NavigatorID.appCodeName always returns 'Mozilla', on any browser. This property is kept only for compatibility purposes."><code>NavigatorID.appCodeName</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/appName.html" title="The NavigatorID.appName property returns the name of the browser. The HTML5 specification also allows any browser to return &quot;Netscape&quot; here, for compatibility reasons."><code>NavigatorID.appName</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/appVersion.html" title="Returns the version of the browser as a string. It may be either a plain version number, like &quot;5.0&quot;, or a version number followed by more detailed information. The HTML5 specification also allows any browser to return &quot;4.0&quot;, for compatibility reasons."><code>NavigatorID.appVersion</code></a></li><li><a href="battery.html" title="The battery read-only property returns a BatteryManagerprovides information about the system's battery charge level; provides also some new events you can handle to monitor the battery status. This implements the Battery Status API; see that documentation for additional details, a guide to using the API, and sample code."><code>Navigator.battery</code></a></li><li><a href="buildID.html" title="Returns the build identifier of the browser."><code>Navigator.buildID</code></a></li><li><a href="cookieEnabled.html" title="Returns a Boolean value indicating whether cookies are enabled or not (read-only)."><code>Navigator.cookieEnabled</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="doNotTrack.html" title="Returns the user's do-not-track setting. This is &quot;yes&quot; if the user has requested not to be tracked by web sites, content, or advertising."><code>Navigator.doNotTrack</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Navigator.geolocation" title="The NavigatorGeolocation.geolocation read-only property returns a Geolocation object that gives Web content access to the location of the device. This allows a Web site or app offer customized results based on the user's location."><code>NavigatorGeolocation.geolocation</code></a></li><li><a href="../NavigatorLanguage/language.html" title="The NavigatorLanguage.language read-only property returns a string representing the preferred language of the user, usually the language of the browser UI."><code>NavigatorLanguage.language</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../NavigatorLanguage/languages.html" title="The NavigatorLanguage.languages read-only property returns an array of DOMStrings representing the user's preferred languages. The language is described using BCP 47 language tags. In the returned array they are ordered by preference with the most preferred language first."><code>NavigatorLanguage.languages</code></a></li><li><a href="maxTouchPoints.html" title="Return the maximum number of touch contacts of current device."><code>Navigator.maxTouchPoints</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozAlarms.html" title="Returns a MozAlarmsManager object you can use to schedule notifications or applications to be started at a specific time."><code>Navigator.mozAlarms</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozApps.html" title="Returns an Apps object you can use to install, manage, and control Open Web Apps in the browser."><code>Navigator.mozApps</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozAudioChannelManager.html" title="The navigator.mozAudioChannelManager object provides access to the mozAudioChannelManager interface, which is used to manage your Firefox OS device's audio channels, including setting what channel's volume to affect when the volume buttons are pressed inside a particular app."><code>Navigator.mozAudioChannelManager</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozCamera.html" title="Returns a CameraManager object you can use to access the cameras available on the user's device."><code>Navigator.mozCamera</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><a href="mozCameras.html" title="Returns an array of CameraManager objects you can use to access the cameras available on the user's device."><code>Navigator.mozCameras</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozContacts.html" title="Return a ContactManager to access and manage all the contacts available on the device."><code>Navigator.mozContacts</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozFMRadio.html" title="Returns a FMRadio object you can use to access to the device FM radio."><code>Navigator.mozFMRadio</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozMobileConnections.html" title="navigator.mozMobileConnections returns an array of MozMobileConnection objects, which you can use to get information about the current mobile voice and data connection states of the device."><code>Navigator.mozMobileConnections</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozMobileMessage.html" title="Returns a MozMobileMessageManager object you can use to receive and send MMS and SMS messages."><code>Navigator.mozMobileMessage</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozNetworkStats.html" title="Returns a MozNetworkStatsManager object you can use to access data amount information."><code>Navigator.mozNetworkStats</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozNfc.html" title="The mozNfc property returns a MozNFC object that can be used to access Firefox OS's NFC functionality: Near Field Communication (NFC) is a short range radio technology used to exchange data and tags between mobile devices by tapping them together or moving them close to each other."><code>Navigator.mozNfc</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="mozNotification.html" title="Provides support for creating notification objects, which are used to display desktop notification alerts to the user. Currently, these are only supported on Firefox Mobile and Firefox OS. See Displaying notifications for an example."><code>Navigator.mozNotification</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozPower.html" title="Returns a PowerManager object you can use to manage the power usage of the device."><code>Navigator.mozPower</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozSettings.html" title="Returns a SettingsManager object you can use to access and change the device's settings."><code>Navigator.mozSettings</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><a href="mozSms.html" title="Returns an SmsManager object you can use to receive and send SMS messages."><code>Navigator.mozSms</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozSocial.html" title="The MozSocial object, returned by the navigator.mozSocial property, is available within the social media provider's panel to provide functionality it may need."><code>Navigator.mozSocial</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozTCPSocket.html" title="Returns a TCPSocket object you can use to open other sockets."><code>Navigator.mozTCPSocket</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozTelephony.html" title="Returns a Telephony object you can use to initiate and control telephone calls from the browser."><code>Navigator.mozTelephony</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozTime.html" title="Returns a MozTimeManager object you can use to change the device's time."><code>Navigator.mozTime</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozWifiManager.html" title="Returns a WifiManager object you can use to manage the device WiFi connection."><code>Navigator.mozWifiManager</code></a></li><li><a href="../NavigatorOnLine/onLine.html" title="Returns the online status of the browser. The property returns a boolean value, with true meaning online and false meaning offline. The property sends updates whenever the browser's ability to connect to the network changes. The update occurs when the user follows links or when a script requests a remote page. For example, the property should return false when users click links soon after they lose internet connection."><code>NavigatorOnLine.onLine</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="oscpu.html" title="Returns a string that identifies the current operating system."><code>Navigator.oscpu</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/platform.html" title="Returns a string representing the platform of the browser. The specification allows browsers to always return the empty string, so don't rely on this property to get a reliable answer."><code>NavigatorID.platform</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/product.html" title="The NavigatorID.product property returns the product name of the current browser."><code>NavigatorID.product</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="productSub.html" title="The Navigator.productSub read-only property returns the build number of the current browser."><code>Navigator.productSub</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="push.html" title="The Navigator.push read-only property is a PushManager object providing a way to receive notifications from third party servers. These are real-time notifications provided by external services directly to installed apps. This implements the SimplePush API that does not require sending real data on those notifications. Also, you can see this documentation for additional details, a guide to using the API, and sample code."><code>Navigator.push</code></a></li><li><a href="serviceWorker.html" title="Returns a ServiceWorkerContainer&nbsp;object, which provides access to registration, removal, upgrade, and communication with the&nbsp;ServiceWorker objects&nbsp;for the&nbsp;associated document."><code>Navigator.serviceWorker</code></a></li><li><a href="../NavigatorID/userAgent.html" title="Returns the user agent string for the current browser."><code>NavigatorID.userAgent</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="vendor.html" title="Returns the name of the browser vendor for the current browser."><code>Navigator.vendor</code></a></li><li><a href="vendorSub.html" title="The Navigator.vendorSub read-only property is the substring of the vendor having to do with the vendor version number."><code>Navigator.vendorSub</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="addIdleObserver.html" title="This method is used to add an observer that will check if the user is idle and will act accordingly. Once an observer is added, it can be removed with Navigator.removeIdleObserver."><code>Navigator.addIdleObserver()</code></a></li><li><a href="getBattery.html" title="The getBattery() method provides information about the system's battery, returns a battery promise, which is resolved in a BatteryManager object providing also some new events you can handle to monitor the battery status.. This implements the Battery Status API; see that documentation for additional details, a guide to using the API, and sample code."><code>Navigator.getBattery()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="getDataStores.html" title="The navigator.getDataStores() method provides access to a list of the Data Store API data stores available on the device."><code>Navigator.getDataStores()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><em><code>Navigator.getDeviceStorage()</code></em></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="getDeviceStorages.html" title="The getDeviceStorages method is used to access individual storage areas available on the device. This method return an Array of DeviceStorage objects, one per physical storage area. Each storage area will have a name, retrievable using the .storageName attribute (see below)."><code>Navigator.getDeviceStorages()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="getGamepads.html" title="The Navigator.getGamepads() method returns an array of Gamepad objects, one for each gamepad connected to the device."><code>Navigator.getGamepads()</code></a></li><li><a href="mozHasPendingMessage.html" title="This method is used to know if there are pending messages of a given type (true) ot not (false)."><code>Navigator.mozHasPendingMessage()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozIsLocallyAvailable.html" title="Allows code to determine whether or not a given resource is available."><code>Navigator.mozIsLocallyAvailable()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozPay.html" title="The mozPay function is used to perform payments. It enables an app to use in-app payments."><code>Navigator.mozPay()</code></a></li><li><a href="mozSetMessageHandler.html" title="This method is used to allow applications to register a function handler that can receive — and react to — a message from the system."><code>Navigator.mozSetMessageHandler()</code></a></li><li><a href="registerContentHandler.html" title="Allows web sites to register themselves as possible handlers for content of a particular MIME type."><code>Navigator.registerContentHandler()</code></a></li><li><a href="registerProtocolHandler.html" title="Allows web sites to register themselves as possible handlers for particular protocols."><code>Navigator.registerProtocolHandler()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="removeIdleObserver.html" title="This method is used to remove an idle observer previously set with navigator.addIdleObserver."><code>Navigator.removeIdleObserver()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="requestWakeLock.html" title="This method is used to request a wake lock on any resource of the device. This means that you can prevent that resource from becoming unavailable as long as your app holds a lock for that resource. For example, a voice recording app can obtain a lock to keep the screen on during recording so that it can give prover visual feedback to the user that recording is progressing."><code>Navigator.requestWakeLock()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/taintEnabled.html" title="The NavigatorID.taintEnabled() method always returns false."><code>NavigatorID.taintEnabled()</code></a></li><li><a href="vibrate.html" title="The Navigator.vibrate() method pulses the vibration hardware on the device, if such hardware exists. If the device doesn't support vibration, this method has no effect. If a vibration pattern is already in progress when this method is called, the previous pattern is halted and the new one begins instead."><code>Navigator.vibrate()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages:</strong></a><ol><li><a href="../MozActivity.html"><code>MozActivity</code></a></li><li><a href="../MozActivityOptions.html"><code>MozActivityOptions</code></a></li><li><a href="../MozActivityRequestHandler.html"><code>MozActivityRequestHandler</code></a></li><li><a href="../MozAlarmsManager.html"><code>MozAlarmsManager</code></a></li><li><a href="../MozContact.html"><code>MozContact</code></a></li><li><a href="../MozContactChangeEvent.html"><code>MozContactChangeEvent</code></a></li><li><a href="../MozIccManager.html"><code>MozIccManager</code></a></li><li><a href="../MozMmsEvent.html"><code>MozMmsEvent</code></a></li><li><a href="../MozMmsMessage.html"><code>MozMmsMessage</code></a></li><li><a href="../MozMobileCFInfo.html"><code>MozMobileCFInfo</code></a></li><li><a href="../MozMobileCellInfo.html"><code>MozMobileCellInfo</code></a></li><li><a href="../MozMobileConnection.html"><code>MozMobileConnection</code></a></li><li><a href="../MozMobileConnectionInfo.html"><code>MozMobileConnectionInfo</code></a></li><li><a href="../MozMobileICCInfo.html"><code>MozMobileICCInfo</code></a></li><li><a href="../MozMobileMessageManager.html"><code>MozMobileMessageManager</code></a></li><li><a href="../MozMobileMessageThread.html"><code>MozMobileMessageThread</code></a></li><li><a href="../MozMobileNetworkInfo.html"><code>MozMobileNetworkInfo</code></a></li><li><a href="../MozNDEFRecord.html"><code>MozNDEFRecord</code></a></li><li><a href="../MozNFC.html"><code>MozNFC</code></a></li><li><a href="../MozNFCPeer.html"><code>MozNFCPeer</code></a></li><li><a href="../MozNFCTag.html"><code>MozNFCTag</code></a></li><li><a href="../MozNetworkStats.html"><code>MozNetworkStats</code></a></li><li><a href="../MozNetworkStatsData.html"><code>MozNetworkStatsData</code></a></li><li><a href="../MozNetworkStatsManager.html"><code>MozNetworkStatsManager</code></a></li><li><a href="../MozSettingsEvent.html"><code>MozSettingsEvent</code></a></li><li><a href="../MozSmsEvent.html"><code>MozSmsEvent</code></a></li><li><a href="../MozSmsFilter.html"><code>MozSmsFilter</code></a></li><li><a href="../MozSmsManager.html"><code>MozSmsManager</code></a></li><li><a href="../MozSmsMessage.html"><code>MozSmsMessage</code></a></li><li><a href="../MozSmsSegmentInfo.html"><code>MozSmsSegmentInfo</code></a></li><li><a href="../MozTimeManager.html"><code>MozTimeManager</code></a></li><li><a href="../MozVoicemail.html"><code>MozVoicemail</code></a></li><li><a href="../MozVoicemailEvent.html"><code>MozVoicemailEvent</code></a></li><li><a href="../MozVoicemailStatus.html"><code>MozVoicemailStatus</code></a></li><li><a href="../MozWifiConnectionInfoEvent.html"><code>MozWifiConnectionInfoEvent</code></a></li><li><a href="../MozWifiP2pGroupOwner.html"><code>MozWifiP2pGroupOwner</code></a></li><li><a href="../MozWifiP2pManager.html"><code>MozWifiP2pManager</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Navigator/getDeviceStorage$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Navigator/getDeviceStorage$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Navigator/getDeviceStorage by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:54:24 GMT -->
+</body></html>

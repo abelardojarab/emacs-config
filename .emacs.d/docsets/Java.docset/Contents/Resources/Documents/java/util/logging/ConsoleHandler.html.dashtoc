@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"ConsoleHandler()","path":"ConsoleHandler--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"close()","path":"close--","entryType":"Method"},{"name":"publish(LogRecord)","path":"publish-java.util.logging.LogRecord-","entryType":"Method"}]}

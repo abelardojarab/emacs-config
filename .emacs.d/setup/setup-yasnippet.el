@@ -132,9 +132,5 @@
     (throw 'exit nil)))
 (add-hook 'yas-after-exit-snippet-hook 'yas/after-exit-snippet-hook--recursive-edit)
 
-;; Yatemplate
-(add-to-list 'load-path "~/.emacs.d/yatemplate")
-(require 'yatemplate)
-
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet.el ends here

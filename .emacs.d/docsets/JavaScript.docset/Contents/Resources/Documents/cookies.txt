@@ -1,0 +1,6 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+hacks.mozilla.org	TRUE	/	FALSE	1999999999	X-Mapping-fjhppofk	8E4595518676B6D2B095804014C9A7BC
+developer.mozilla.org	TRUE	/	FALSE	1999999999	sessionid	suek96rai1yst9zz56w0jgo6p4ki2j0f
+developer.mozilla.org	TRUE	/	FALSE	1999999999	messages	e1f3e227e689208153d0b779c38a9a8a031d61aa$[[\"__json_message\"\0541\05430\054\"Redirected from https://developer.mozilla.org/en-US/docs/JavaScript_OS.File/OS.File.DirectoryIterator.Entry\"\054\"wiki_redirect\"]]"
+

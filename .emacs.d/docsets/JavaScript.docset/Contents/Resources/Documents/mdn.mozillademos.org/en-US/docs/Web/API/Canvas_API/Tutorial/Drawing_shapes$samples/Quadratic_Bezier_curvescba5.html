@@ -1,0 +1,33 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes$samples/Quadratic_Bezier_curves?revision=821493 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:08:17 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body onload="draw();">
+                    
+ 
+   <canvas id="canvas" width="150" height="150"></canvas>
+ 
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes$samples/Quadratic_Bezier_curves?revision=821493 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:08:17 GMT -->
+
+                            <script type="text/javascript">
+                function draw() {
+  var canvas = document.getElementById('canvas');
+  if (canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+
+    // Quadratric curves example
+    var path = new Path2D();
+    path.moveTo(75,25);
+    path.quadraticCurveTo(25,25,25,62.5);
+    path.quadraticCurveTo(25,100,50,100);
+    path.quadraticCurveTo(50,120,30,125);
+    path.quadraticCurveTo(60,120,65,100);
+    path.quadraticCurveTo(125,100,125,62.5);
+    path.quadraticCurveTo(125,25,75,25);
+    ctx.stroke(path);
+  }
+}
+            </script>
+            
+</body></html>

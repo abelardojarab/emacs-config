@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"~QAccessibleBridge","path":"dtor.QAccessibleBridge","entryType":"Function"},{"name":"notifyAccessibilityUpdate","path":"notifyAccessibilityUpdate","entryType":"Function"},{"name":"setRootObject","path":"setRootObject","entryType":"Function"}]}

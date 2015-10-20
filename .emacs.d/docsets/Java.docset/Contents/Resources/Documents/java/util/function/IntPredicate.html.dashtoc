@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"and(IntPredicate)","path":"and-java.util.function.IntPredicate-","entryType":"Method"},{"name":"negate()","path":"negate--","entryType":"Method"},{"name":"or(IntPredicate)","path":"or-java.util.function.IntPredicate-","entryType":"Method"},{"name":"test(int)","path":"test-int-","entryType":"Method"}]}

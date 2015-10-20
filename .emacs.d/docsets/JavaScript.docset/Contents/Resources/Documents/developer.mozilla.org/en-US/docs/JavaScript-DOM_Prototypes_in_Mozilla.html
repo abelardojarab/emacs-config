@@ -1,0 +1,623 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:44:03 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>JavaScript-DOM Prototypes in Mozilla</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla$json">
+  <link rel="canonical" href="JavaScript-DOM_Prototypes_in_Mozilla.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="JavaScript-DOM Prototypes in Mozilla">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla">
+  <meta name="twitter:title" content="JavaScript-DOM Prototypes in Mozilla">
+    <meta property="og:description" content="When a DOM node is accessed from JavaScript in Mozilla, the native C++ DOM node is wrapped using XPConnect and the wrapper is exposed to JavaScript as the JavaScript representation of the DOM node. When XPConnect wraps a C++ object it will create a JSObject that is unique to this C++ object. In the case where the C++ object has class info (nsIClassInfo), the JSObject is a more or less empty JSObject which is not really that special. All the methods that are supposed to show up on this JSObject are actually not properties of the object itself, but rather properties of the prototype of the JSObject for the wrapper (unless the C++ object's class info has the flag nsIXPCScriptable::DONT_SHARE_PROTOTYPE set, but lets assume that's not the case here).">
+  <meta name="description" content="When a DOM node is accessed from JavaScript in Mozilla, the native C++ DOM node is wrapped using XPConnect and the wrapper is exposed to JavaScript as the JavaScript representation of the DOM node. When XPConnect wraps a C++ object it will create a JSObject that is unique to this C++ object. In the case where the C++ object has class info (nsIClassInfo), the JSObject is a more or less empty JSObject which is not really that special. All the methods that are supposed to show up on this JSObject are actually not properties of the object itself, but rather properties of the prototype of the JSObject for the wrapper (unless the C++ object's class info has the flag nsIXPCScriptable::DONT_SHARE_PROTOTYPE set, but lets assume that's not the case here).">
+  <meta name="twitter:description" content="When a DOM node is accessed from JavaScript in Mozilla, the native C++ DOM node is wrapped using XPConnect and the wrapper is exposed to JavaScript as the JavaScript representation of the DOM node. When XPConnect wraps a C++ object it will create a JSObject that is unique to this C++ object. In the case where the C++ object has class info (nsIClassInfo), the JSObject is a more or less empty JSObject which is not really that special. All the methods that are supposed to show up on this JSObject are actually not properties of the object itself, but rather properties of the prototype of the JSObject for the wrapper (unless the C++ object's class info has the flag nsIXPCScriptable::DONT_SHARE_PROTOTYPE set, but lets assume that's not the case here).">
+  
+      
+  </head>
+<body data-slug="JavaScript-DOM_Prototypes_in_Mozilla" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FJavaScript-DOM_Prototypes_in_Mozilla" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FJavaScript-DOM_Prototypes_in_Mozilla" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">JavaScript-DOM Prototypes in Mozilla</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>JavaScript-DOM Prototypes in Mozilla</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 5 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/calvinh" title="View profile: calvinh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="calvinh" data-src="../../../secure.gravatar.com/avatar/e9b11978ff73acb065713bc3829b61166aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">calvinh</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sevenspade" title="View profile: Sevenspade">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sevenspade" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sevenspade</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dhtmlkitchen%40gmail.com" title="View profile: Dhtmlkitchen@gmail.com">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dhtmlkitchen@gmail.com" data-src="../../../secure.gravatar.com/avatar/8af1013a673588b5cc61e32d2dd7e01e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dhtmlkitchen@gmail.com</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ccsgraphic" title="View profile: Ccsgraphic">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ccsgraphic" data-src="../../../secure.gravatar.com/avatar/d6ac86d3a3abfa3e43d5a49ad0944c286aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ccsgraphic</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Andreas Wuest" title="View profile: Andreas Wuest">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Andreas Wuest" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Andreas Wuest</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Prototype_setup_on_an_XPConnect_wrapped_DOM_node_in_Mozilla" rel="internal">Prototype setup on an XPConnect wrapped DOM node in Mozilla</a><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><ol><li><a href="#Non_Standard" rel="internal">Non Standard</a><code></code><code></code></li></ol></li><li><a href="#So_how_does_all_this_work_in_the_Mozilla_DOM_code.3F" rel="internal">So how does all this work in the Mozilla DOM code?</a><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code></li><li><a href="#Original_Document_Information" rel="internal">Original Document Information</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <h2 id="Prototype_setup_on_an_XPConnect_wrapped_DOM_node_in_Mozilla" name="Prototype_setup_on_an_XPConnect_wrapped_DOM_node_in_Mozilla">Prototype setup on an XPConnect wrapped DOM node in Mozilla</h2>
+<p>When a <a href="../../en/DOM.png" title="en/DOM">DOM</a> node is accessed from <a href="https://developer.mozilla.org/en/JavaScript" title="en/JavaScript">JavaScript</a> in Mozilla, the native C++ DOM node is wrapped using <a href="https://developer.mozilla.org/en/XPConnect" title="en/XPConnect">XPConnect</a> and the wrapper is exposed to JavaScript as the JavaScript representation of the DOM node. When XPConnect wraps a C++ object it will create a <code>JSObject</code> that is unique to this C++ object. In the case where the C++ object has class info (<a href="https://developer.mozilla.org/en/nsIClassInfo" title="en/nsIClassInfo">nsIClassInfo</a>), the <code>JSObject</code> is a more or less empty <code>JSObject</code> which is not really that special. All the methods that are supposed to show up on this <code>JSObject</code> are actually not properties of the object itself, but rather properties of the prototype of the <code>JSObject</code> for the wrapper (unless the C++ object's class info has the flag <code>nsIXPCScriptable::DONT_SHARE_PROTOTYPE</code> set, but lets assume that's not the case here).</p>
+<p>As an example of this let's look at an HTML image element in a document.</p>
+<pre class="eval">var obj = document.images[0];
+</pre>
+<p>Here, <code>obj</code> will not really have any properties (except for the standard <code>JSObject</code> properties such as <code>constructor</code>, and the non-standard <code>__parent__</code>, <code>__proto__</code>, etc.), all the DOM functionality of <code>obj</code> comes from <code>obj</code>'s prototype (<code>obj.__proto__</code>) that XPConnect sets up when exposing the first image in <code>document</code> to JavaScript. Here are a few of the properties of obj's prototype:</p>
+<pre class="eval">obj.__proto__
+  parentNode (getter Function)
+  src (getter and setter Functions)
+  getElementsByTagName (Function)
+  TEXT_NODE (Number property, constant)
+  ...
+</pre>
+<p>All those properties come from the interfaces that the C++ image object (<code>nsHTMLImageElement</code>) implements and chooses to expose to XPConnect through the object's class info. One of these interfaces is <code>nsIDOMHTMLImageElement</code>, others are <code>nsIDOMNSHTMLImageElement</code> (Netscape extensions to the standard interface), <code>nsIDOMEventTarget</code>, <code>nsIDOMEventListener</code>, <code>nsIDOM3Node</code>, and so on.</p>
+<p>The prototype object that XPConnect creates for the classes that have class info are shared within a scope (<code>window</code>). Because of this, the following holds true (assuming <code>img1</code> and <code>img2</code> are two different image objects in the same document):</p>
+<pre class="eval">img1.__proto__ === img2.__proto__
+</pre>
+<p>If <code>img1</code> would come from one document and <code>img2</code> from another document, then the above would not be true. Both prototypes would look identical, but they would be two different <code>JSObject</code>'s.</p>
+<p>This sharing of prototypes lets users do cool things like modify how all instances of a given class works by modifying the prototype of one instance. As an example:</p>
+<pre class="eval">function bar() {
+  alert("Hello world!");
+}
+
+document.images[0].__proto__.foo = bar;
+</pre>
+<p>This would make every image in this document have a callable <code>foo</code> property (i.e. a <code>foo()</code> method).</p>
+<p>Alternatively, one can access and modify the prototype of an <code>HTMLImageElement</code> through the <code>prototype</code> property of the constructor:</p>
+<pre class="eval">HTMLImageElement.prototype.foo = bar;
+</pre>
+<p>Modifying the prototype of a Host object is not guaranteed by <a href="https://developer.mozilla.org/en/ECMAScript" title="en/ECMAScript">ECMAScript specification</a>. Moreover, no specification guarantees that there will be a globally available <code>HTMLImageElement</code>, or that such object will be the constructor for any arbitrary image's <span class="nowiki">[[Prototype]]</span>.</p>
+<p>A third way through which one can access the prototype of an object is through the <code>constructor</code> property of the object, which itself points (initially) to the constructor:</p>
+<pre class="eval">document.images[0].constructor.prototype.foo = bar;
+</pre>
+<p>Note though, the above may or may not work in Mozilla.</p>
+<p>So far so good; we have shared prototypes, and XPConnect gives us most of this automatically. But this is not good enough, in addition to being able to share and represent each "class" with a constructor, we also want users to be able to extend interfaces, like <code>Node</code>. <code>Node</code> is a DOM interface, but there are no pure <code>Node</code> instances; there are lots of different classes that implement <code>Node</code> (<code>HTMLImageElement</code>, <code>HTMLDocument</code>, <code>ProcessingInstruction</code>, et c.).</p>
+<p>But the fact that an instance of a <code>Node</code> will never exist in Mozilla does not mean that the <code>Node</code> interface is useless, in fact, <code>Node can be extended just as we've been doing.</code> If you think back to the <code>HTMLImageElement</code> examples above, those examples let you define new properties on all image elements. By modifying the <code>Node</code> top-level object, you can do similar things to <em>all</em> objects that implement <code>Node</code>. This means you can add a property to every node in a DOM tree by doing something like this:</p>
+<pre class="eval">Node.prototype.foo = bar;
+</pre>
+<p>Again, modifying host objects is an unsafe practice. It is not guaranteed to work or be error-free in any implementation. It is not standard and cannot be expected to have any result.</p>
+<p>Here is an attempt to modify a host object:</p>
+<pre class="eval">   (function(){
+       try {
+           Image.prototype.src = 1;
+       }
+       catch(ex){ alert(ex); }
+   })();
+</pre>
+<p>This demonstrates that the <code>Image</code> constructor, a host object supported in nearly all browsers for Mac and Windows, has a <code>prototype</code> property, and that an attempt to modify the <code>prototype</code>'s <code>src</code> - property results in an error.</p>
+<p>Another example would be modifying the <code>pageX</code> property of a <code>MouseEvent</code> instance. The <code>pageX</code> property actually needs a patch because it doesn't get set correctly in <code>initMouseEvent</code> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=411031" title="LayerX/Y properties are incorrectly calculated when a event is manually dispatched (initmouseevent)">bug&nbsp;411031</a>.</p>
+<p>Here is a diagram that shows the prototype layout of a <code>HTMLDivElement</code> in Mozilla:</p>
+<pre class="eval">   HTMLDivElement.prototype
+             |
+             |.__proto__
+             |
+    HTMLElement.prototype
+             |
+             |.__proto__
+             |
+      Element.prototype
+             |
+             |.__proto__
+             |
+       Node.prototype
+             |
+             |.__proto__
+             |
+      Object.prototype
+             |
+             |.__proto__
+             |
+           null
+</pre>
+<p>If you have an instance of a <code>HTMLDivElement</code> in JavaScript, the following will hold true:</p>
+<pre class="eval">div.__proto__ === HTMLDivElement.prototype
+</pre>
+<p>which means that the following should also be true:</p>
+<pre class="eval">div.__proto__ === div.constructor.prototype
+</pre>
+<h3 id="Non_Standard" name="Non_Standard">Non Standard</h3>
+<p>No browser is required to provide modifiable <code>__proto__</code>, nor a global <code>Node</code>, nor provide any way to get at host objects nor their associated prototypes. If such objects are provided, they are not guaranteed by any specification to have any effect on the environment. Results in other browsers is not guaranteed.</p>
+<h2 id="So_how_does_all_this_work_in_the_Mozilla_DOM_code.3F" name="So_how_does_all_this_work_in_the_Mozilla_DOM_code.3F">So how does all this work in the Mozilla DOM code?</h2>
+<p>It all happens in XPConnect and <code>nsDOMClassInfo.{cpp,h}</code> in the DOM code. During startup, the <code>nsDOMClassInfo</code> code registers two different types of "global names", these are names of properties of the global object with special meaning to the DOM code. The two types of "global names" are class constructor names and class prototype names. What's the difference? Class constructor names are names of real classes, and class prototype names are names of "classes" that are inherited by real classes, but are not real classes. A few examples of class constructor names would be <code>HTMLImageElement</code>, <code>HTMLDocument</code>, <code>Element</code>, <code>NodeList</code>, and two examples of class prototype names would be <code>Node</code> and <code>CharacterData</code>.</p>
+<p>This registration is done with the <code>nsScriptNameSpaceManager</code>, which is in charge of keeping track of what names are registered in the global namespace, and what kinds of names those names are (i.e. class constructor name, class prototype name). When a class constructor name is registered (<code>nsGlobalNameStruct::eTypeClassConstructor</code>), the <code>nsScriptNameSpaceManager</code> is given a DOM class info ID (a 32 bit ID that identifies class info defined in <code>nsDOMClassInfo</code>). When a class prototype name is registered (<code>nsGlobalNameStruct::eTypeClassProto</code>), the <code>nsScriptNameSpaceManager</code> is given the <code>nsIID</code> of the interface that is inherited by the class which the registered name is a prototype of (e.g. <code>NS_GET_IID(nsIDOMNode)</code> for <code>Node</code>). <code>nsScriptNameSpaceManager</code> also deals with other types of names, but those are unrelated to the DOM object prototype setup, so we will ignore those here.</p>
+<p>Once the registration is done, the <code>nsDOMClassInfo</code> code uses the registry every time a named property is resolved on a global object (because of this, the <code>nsScriptNameSpaceManager</code> needs to be pretty fast at looking things up in its registry; that's why it is a hash table). When a property is resolved on the global object, the <code>nsDOMClassInfo</code> code will ask the <code>nsScriptNameSpaceManager</code> if the name is a known name (in <code>nsWindowSH::GlobalResolve()</code>), and if the name is known, the code will look at the type of the name and act accordingly.</p>
+<p>If a class constructor or class prototype name is resolved, the class info code will define the constructor for that class, and also define the prototype property of that constructor (i.e. <code>HTMLImageElement.prototype</code>). The prototype of a constructor will either be the prototype object that XPConnect creates for a class (if the name is the name of a real class) or simply an empty <code>JSObject</code> of a specific <code>JSClass</code> that is defined in <code>nsDOMClassInfo.cpp</code> (<code>nsDOMClassInfo::sDOMConstructorProtoClass</code>).</p>
+<p>As the <code>prototype</code> property of the constructor is being defined, the code also sets up the prototype of the <code>prototype</code> property of the constructor (i.e. <code>HTMLImageElement.prototype.__proto__</code>). To do this, the code figures out what the name of the immediate prototype of the class is by looking at the parent of the primary interface in the class info (if the name is a class constructor, such as <code>HTMLImageElement</code>) or by looking at the parent of the interface that the IID stored in the <code>nsScriptNameSpaceManager</code> for this name represents (if the name is a class prototype, such as <code>Node</code>). Once the name of the parent interface is known (and the name is not <code><a href="https://developer.mozilla.org/en/nsISupports" title="en/nsISupports">nsISupports</a></code>) the code will look up a property by that name on the global object. This will cause the code to recurse down along the parent chain of the interface of interest for the name we started out resolving (i.e. <code>nsWindowSH::GlobalResolve()</code> will be called for every name on the parent chain). The result of this recursion is that by resolving the name <code>HTMLImageElement</code>, we'll create the constructor <code>HTMLImageElement</code>, <code>HTMLElement</code>, <code>Element</code>, and <code>Node</code>, and the <code>prototype</code> properties on all those constructor will be correctly set up. This means that the next time the name of a class constructor is resolved in the same scope, say <code>HTMLAnchorElement</code>, the code will resolve the name <code>HTMLAnchorElement</code>, find the parent name, which is <code>HTMLElement</code>, and resolve that, but since we've already resolved <code>HTMLElement</code> as a result of resolving the name <code>HTMLImageElement</code> earlier, the recursion will stop right there.</p>
+<p>Ok, so that's how class constructor and their prototype properties are set up, what about the actual prototype chain of a XPConnected DOM object? The beauty of this code is that the <code>prototype</code> property of a class constructor is the real XPConnect prototype for that class. When XPConnect wraps a DOM object (i.e. creates a XPConnect JavaScript wrapper for a DOM object), XPConnect will call the scriptable helper method <code>nsDOMClassInfo::PostCreate()</code> which will make sure the prototype chain of the wrapper <code>JSObject</code> is properly set up. In this call, the <code>nsDOMClassInfo</code> code just needs to resolve the name of the class on the global object, and the prototype will be set up by the resolving code (<code>nsWindowSH::GlobalResolve()</code>). This is also done only once per class, <code>nsDOMClassInfo::PostCreate()</code> checks if the prototype of the prototype of the wrapper <code>JSObject</code> (i.e. <code>obj.__proto__.__proto__</code>) has been set up already, if it has, then there's nothing left to do in <code>nsDOMClassInfo::PostCreate()</code>.</p>
+<div class="originaldocinfo">
+<h2 id="Original_Document_Information" name="Original_Document_Information">Original Document Information</h2>
+<ul> <li>Author(s): <a class="link-mailto" href="mailto:fguisset@softhome.net">Fabian Guisset</a></li> <li>Last Updated Date: February 2, 2002</li> <li>Copyright Information: Copyright (C) <a class="link-mailto" href="mailto:fguisset@softhome.net">Fabian Guisset</a></li>
+</ul>
+</div>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="tag/DOM.html">DOM</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/calvinh">calvinh</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sevenspade">Sevenspade</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dhtmlkitchen%40gmail.com">Dhtmlkitchen@gmail.com</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ccsgraphic">Ccsgraphic</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Andreas Wuest">Andreas Wuest</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/calvinh">calvinh</a>,
+                      <time datetime="2010-07-27T03:41:55-07:00">Jul 27, 2010, 3:41:55 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/JavaScript-DOM_Prototypes_in_Mozilla by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:44:05 GMT -->
+</body></html>

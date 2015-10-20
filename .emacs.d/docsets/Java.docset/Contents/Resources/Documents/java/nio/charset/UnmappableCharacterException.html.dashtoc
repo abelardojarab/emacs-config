@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"UnmappableCharacterException(int)","path":"UnmappableCharacterException-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getInputLength()","path":"getInputLength--","entryType":"Method"},{"name":"getMessage()","path":"getMessage--","entryType":"Method"}]}

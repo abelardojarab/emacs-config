@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"UndoableEditEvent(Object, UndoableEdit)","path":"UndoableEditEvent-java.lang.Object-javax.swing.undo.UndoableEdit-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getEdit()","path":"getEdit--","entryType":"Method"}]}

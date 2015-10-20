@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"get_slot(int)","path":"get_slot-int-","entryType":"Method"},{"name":"set_slot(int, Any)","path":"set_slot-int-org.omg.CORBA.Any-","entryType":"Method"}]}

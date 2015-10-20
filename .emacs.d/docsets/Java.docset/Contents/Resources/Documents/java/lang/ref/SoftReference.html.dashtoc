@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"SoftReference(T)","path":"SoftReference-T-","entryType":"Constructor"},{"name":"SoftReference(T, ReferenceQueue)","path":"SoftReference-T-java.lang.ref.ReferenceQueue-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"get()","path":"get--","entryType":"Method"}]}

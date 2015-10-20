@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"Parser()","path":"Parser--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"parse(Reader, ParserCallback, boolean)","path":"parse-java.io.Reader-javax.swing.text.html.HTMLEditorKit.ParserCallback-boolean-","entryType":"Method"}]}

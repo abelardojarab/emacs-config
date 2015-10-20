@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"UnknownHostException(String)","path":"UnknownHostException-java.lang.String-","entryType":"Constructor"},{"name":"UnknownHostException(String, Exception)","path":"UnknownHostException-java.lang.String-java.lang.Exception-","entryType":"Constructor"}]}

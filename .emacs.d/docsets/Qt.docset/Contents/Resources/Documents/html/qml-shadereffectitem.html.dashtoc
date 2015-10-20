@@ -1,0 +1,1 @@
+{"entries":[{"name":"Properties","isHeader":true},{"name":"blending","path":"blending-prop","entryType":"Property"},{"name":"fragmentShader","path":"fragmentShader-prop","entryType":"Property"},{"name":"meshResolution","path":"meshResolution-prop","entryType":"Property"},{"name":"vertexShader","path":"vertexShader-prop","entryType":"Property"}]}

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"connectionClosed(ConnectionEvent)","path":"connectionClosed-javax.sql.ConnectionEvent-","entryType":"Method"},{"name":"connectionErrorOccurred(ConnectionEvent)","path":"connectionErrorOccurred-javax.sql.ConnectionEvent-","entryType":"Method"}]}

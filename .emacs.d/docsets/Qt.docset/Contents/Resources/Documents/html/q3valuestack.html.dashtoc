@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"Q3ValueStack","path":"Q3ValueStack","entryType":"Function"},{"name":"~Q3ValueStack","path":"dtor.Q3ValueStack","entryType":"Function"},{"name":"pop","path":"pop","entryType":"Function"},{"name":"push","path":"push","entryType":"Function"},{"name":"top","path":"top","entryType":"Function"}]}

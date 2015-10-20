@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"RMIServerImpl_Stub(RemoteRef)","path":"RMIServerImpl_Stub-java.rmi.server.RemoteRef-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getVersion()","path":"getVersion--","entryType":"Method"},{"name":"newClient(Object)","path":"newClient-java.lang.Object-","entryType":"Method"}]}

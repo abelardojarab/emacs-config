@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QScopedValueRollback","path":"QScopedValueRollback","entryType":"Function"},{"name":"~QScopedValueRollback","path":"dtor.QScopedValueRollback","entryType":"Function"},{"name":"commit","path":"commit","entryType":"Function"}]}

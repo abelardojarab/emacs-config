@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"UnknownFormatFlagsException(String)","path":"UnknownFormatFlagsException-java.lang.String-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getFlags()","path":"getFlags--","entryType":"Method"},{"name":"getMessage()","path":"getMessage--","entryType":"Method"}]}

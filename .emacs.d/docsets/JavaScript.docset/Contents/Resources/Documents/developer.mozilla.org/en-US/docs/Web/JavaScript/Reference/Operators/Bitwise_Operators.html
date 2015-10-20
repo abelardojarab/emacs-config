@@ -1,0 +1,1503 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:26:10 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Bitwise operators</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators$json">
+  <link rel="canonical" href="Bitwise_Operators.html">
+
+            <link rel="alternate" hreflang="ca" href="../../../../../../ca/docs/Web/JavaScript/Referencia/Operadors/Bitwise_Operators.html" title="Operadors de bits">
+          <link rel="alternate" hreflang="es" href="../../../../../../es/docs/Web/JavaScript/Referencia/Operadores/Bitwise_Operators.html" title="Bitwise operators">
+          <link rel="alternate" hreflang="fr" href="../../../../../../fr/docs/Web/JavaScript/Reference/Op%c3%a9rateurs/Op%c3%a9rateurs_binaires.html" title="Opérateurs binaires">
+          <link rel="alternate" hreflang="ja" href="../../../../../../ja/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators.html" title="ビット演算子">
+          <link rel="alternate" hreflang="ko" href="../../../../../../ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators.html" title="Bitwise Operators">
+          <link rel="alternate" hreflang="ru" href="../../../../../../ru/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators.html" title="Битовые операции">
+          <link rel="alternate" hreflang="zh-CN" href="../../../../../../zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators.html" title="按位操作符">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Bitwise operators">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">
+  <meta name="twitter:title" content="Bitwise operators">
+    <meta property="og:description" content="Bitwise operators treat their operands as a sequence of 32 bits (zeroes and ones), rather than as decimal, hexadecimal, or octal numbers. For example, the decimal number nine has a binary representation of 1001. Bitwise operators perform their operations on such binary representations, but they return standard JavaScript numerical values.">
+  <meta name="description" content="Bitwise operators treat their operands as a sequence of 32 bits (zeroes and ones), rather than as decimal, hexadecimal, or octal numbers. For example, the decimal number nine has a binary representation of 1001. Bitwise operators perform their operations on such binary representations, but they return standard JavaScript numerical values.">
+  <meta name="twitter:description" content="Bitwise operators treat their operands as a sequence of 32 bits (zeroes and ones), rather than as decimal, hexadecimal, or octal numbers. For example, the decimal number nine has a binary representation of 1001. Bitwise operators perform their operations on such binary representations, but they return standard JavaScript numerical values.">
+  
+      
+  </head>
+<body data-slug="Web/JavaScript/Reference/Operators/Bitwise_Operators" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FOperators%2FBitwise_Operators" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FOperators%2FBitwise_Operators" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="../../../../../../ca/docs/Web/JavaScript/Referencia/Operadors/Bitwise_Operators.html" title="Operadors de bits">Català</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../es/docs/Web/JavaScript/Referencia/Operadores/Bitwise_Operators.html" title="Bitwise operators">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../fr/docs/Web/JavaScript/Reference/Op%c3%a9rateurs/Op%c3%a9rateurs_binaires.html" title="Opérateurs binaires">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../ja/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators.html" title="ビット演算子">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators.html" title="Bitwise Operators">한국어</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../ru/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators.html" title="Битовые операции">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators.html" title="按位操作符">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="v:url" property="v:title">JavaScript</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../Reference.html" rel="v:url" property="v:title">JavaScript reference</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Operators.html" rel="v:url" property="v:title">Expressions and operators</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Bitwise operators</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Bitwise operators</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 30 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/glebec" title="View profile: glebec">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="glebec" data-src="../../../../../../../secure.gravatar.com/avatar/100b92b164beba4d16133f515c463baf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">glebec</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Christier" title="View profile: Christier">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Christier" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Christier</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/imahungry" title="View profile: imahungry">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="imahungry" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">imahungry</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/russt" title="View profile: russt">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="russt" data-src="../../../../../../../secure.gravatar.com/avatar/9a3569e0a5f10ffe80a5c4c382059ebf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">russt</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jbailey4" title="View profile: jbailey4">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jbailey4" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jbailey4</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/rschaosid" title="View profile: rschaosid">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rschaosid" data-src="../../../../../../../secure.gravatar.com/avatar/39a2aa075375e5d7f027ff354ab0b05a6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">rschaosid</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Agamemnus" title="View profile: Agamemnus">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Agamemnus" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Agamemnus</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Havvy" title="View profile: Havvy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Havvy" data-src="../../../../../../../secure.gravatar.com/avatar/e799a79441c7543be48562403411cd136aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Havvy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/harshkothari410" title="View profile: harshkothari410">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="harshkothari410" data-src="../../../../../../../secure.gravatar.com/avatar/f75bfe4cf45caede5d850a2387ca51fe6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">harshkothari410</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Noitidart" title="View profile: Noitidart">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Noitidart" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Noitidart</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/forest51690" title="View profile: forest51690">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="forest51690" data-src="../../../../../../../secure.gravatar.com/avatar/024ca42cf79ed90cd18eec585986629c6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">forest51690</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sunfish" title="View profile: sunfish">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sunfish" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">sunfish</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/gb2048" title="View profile: gb2048">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gb2048" data-src="../../../../../../../secure.gravatar.com/avatar/c22c077d94802c8b27fc32a401d1ac586aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">gb2048</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/BrianDiPalma" title="View profile: BrianDiPalma">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="BrianDiPalma" data-src="../../../../../../../secure.gravatar.com/avatar/b9d1a2d2be04d97a91cea414a4140eec6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">BrianDiPalma</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fusionchess" title="View profile: fusionchess">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fusionchess" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fusionchess</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/J-Mackerel" title="View profile: J-Mackerel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="J-Mackerel" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">J-Mackerel</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nick_Rizzolo" title="View profile: Nick_Rizzolo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nick_Rizzolo" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Nick_Rizzolo</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/brianblakely" title="View profile: brianblakely">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="brianblakely" data-src="../../../../../../../secure.gravatar.com/avatar/9481d4984e85f636fd5911554c4ef8856aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">brianblakely</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Inimino" title="View profile: Inimino">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Inimino" data-src="../../../../../../../secure.gravatar.com/avatar/e4e997037a6341e7881816db5ef23ba76aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Inimino</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Orinoco" title="View profile: Orinoco">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Orinoco" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Orinoco</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Maxim" title="View profile: Maxim">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Maxim" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Maxim</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/AdmiralNovia" title="View profile: AdmiralNovia">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AdmiralNovia" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">AdmiralNovia</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Maian" title="View profile: Maian">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Maian" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Maian</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Tezza" title="View profile: Tezza">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Tezza" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Tezza</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nickolay" title="View profile: Nickolay">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nickolay" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Nickolay</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dria" title="View profile: Dria">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dria" data-src="../../../../../../../secure.gravatar.com/avatar/c6c044311a2c98b383718e00964cda726aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dria</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Signed_32-bit_integers" rel="internal">Signed 32-bit integers</a></li><li><a href="#Bitwise_logical_operators" rel="internal">Bitwise logical operators</a><ol><li><a href="#(Bitwise_AND)" rel="internal">&amp; (Bitwise AND)</a></li><li><a href="#(Bitwise_OR)" rel="internal">| (Bitwise OR)</a></li><li><a href="#(Bitwise_XOR)" rel="internal">^ (Bitwise XOR)</a></li><li><a href="#(Bitwise_NOT)" rel="internal">~ (Bitwise NOT)</a></li></ol></li><li><a href="#Bitwise_shift_operators" rel="internal">Bitwise shift operators</a><ol><li><a href="#&lt;&lt;_(Left_shift)" rel="internal">&lt;&lt; (Left shift)</a></li><li><a href="#&gt;&gt;_(Sign-propagating_right_shift)" rel="internal">&gt;&gt; (Sign-propagating right shift)</a></li><li><a href="#&gt;&gt;&gt;_(Zero-fill_right_shift)" rel="internal">&gt;&gt;&gt; (Zero-fill right shift)</a></li></ol></li><li><a href="#Examples" rel="internal">Examples</a><ol><li><a href="#Flags_and_bitmasks" rel="internal">Flags and bitmasks</a></li><li><a href="#Conversion_snippets" rel="internal">Conversion snippets</a></li><li><a href="#Automatize_the_creation_of_a_mask" rel="internal">Automatize the creation of a mask</a></li><li><a href="#Reverse_algorithm_an_array_of_booleans_from_a_mask" rel="internal">Reverse algorithm: an array of booleans from a mask</a></li></ol></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p><strong>Bitwise operators</strong> treat their operands as a sequence of 32 bits (zeroes and ones), rather than as decimal, hexadecimal, or octal <code><a href="../Global_Objects/Number.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Number">numbers</a></code>. For example, the decimal number nine has a binary representation of 1001. Bitwise operators perform their operations on such binary representations, but they return standard JavaScript numerical values.</p>
+
+<p>The following table summarizes JavaScript's bitwise operators:</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th>Operator</th>
+   <th>Usage</th>
+   <th>Description</th>
+  </tr>
+  <tr>
+   <td><a href="#Bitwise_AND">Bitwise AND</a></td>
+   <td><code>a &amp; b</code></td>
+   <td>Returns a one in each bit position for which the corresponding bits of both operands are ones.</td>
+  </tr>
+  <tr>
+   <td><a href="#Bitwise_OR">Bitwise OR</a></td>
+   <td><code>a | b</code></td>
+   <td>Returns a one in each bit position for which the corresponding bits of either or both operands are ones.</td>
+  </tr>
+  <tr>
+   <td><a href="#Bitwise_XOR">Bitwise XOR</a></td>
+   <td><code>a ^ b</code></td>
+   <td>Returns a one in each bit position for which the corresponding bits of either but not both operands are ones.</td>
+  </tr>
+  <tr>
+   <td><a href="#Bitwise_NOT">Bitwise NOT</a></td>
+   <td><code>~ a</code></td>
+   <td>Inverts the bits of its operand.</td>
+  </tr>
+  <tr>
+   <td><a href="#Left_shift">Left shift</a></td>
+   <td><code>a &lt;&lt; b</code></td>
+   <td>Shifts <code>a</code> in binary representation <code>b</code> (&lt; 32) bits to the left, shifting in zeroes from the right.</td>
+  </tr>
+  <tr>
+   <td><a href="#Right_shift">Sign-propagating right shift</a></td>
+   <td><code>a &gt;&gt; b</code></td>
+   <td>Shifts <code>a</code> in binary representation <code>b</code> (&lt; 32) bits to the right, discarding bits shifted off.</td>
+  </tr>
+  <tr>
+   <td><a href="#Unsigned_right_shift">Zero-fill right shift</a></td>
+   <td><code>a &gt;&gt;&gt; b</code></td>
+   <td>Shifts <code>a</code> in binary representation <code>b</code> (&lt; 32) bits to the right, discarding bits shifted off, and shifting in zeroes from the left.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Signed_32-bit_integers">Signed 32-bit integers</h2>
+
+<p>The operands of all bitwise operators are converted to signed 32-bit integers in two's complement format. Two's complement format means that a number's negative counterpart (e.g. 5 vs. -5) is all the number's bits inverted (bitwise NOT of the number, a.k.a. ones' complement of the number) plus one. For example, the following encodes the integer 314:</p>
+
+<pre>00000000000000000000000100111010
+</pre>
+
+<p>The following encodes <code>~314</code>, i.e. the ones' complement of <code>314</code>:</p>
+
+<pre>11111111111111111111111011000101
+</pre>
+
+<p>Finally, the following encodes <code>-314,</code> i.e. the two's complement of <code>314</code>:</p>
+
+<pre>11111111111111111111111011000110
+</pre>
+
+<p>The two's complement guarantees that the left-most bit is 0 when the number is positive and 1 when the number is negative. Thus, it is called the <em>sign bit</em>.</p>
+
+<p>The number <code>0</code> is the integer that is composed completely of 0 bits.</p>
+
+<pre>0 (base 10) = 00000000000000000000000000000000 (base 2)
+</pre>
+
+<p>The number <code>-1</code> is the integer that is composed completely of 1 bits.</p>
+
+<pre>-1 (base 10) = 11111111111111111111111111111111 (base 2)
+</pre>
+
+<p>The number <code>-2147483648</code> (hexadecimal representation: <code>-0x80000000</code>) is the integer that is composed completely of 0 bits except the first (left-most) one.</p>
+
+<pre>-2147483648 (base 10) = 10000000000000000000000000000000 (base 2)
+</pre>
+
+<p>The number <code>2147483647</code> (hexadecimal representation: <code>0x7fffffff</code>) is the integer that is composed completely of 1 bits except the first (left-most) one.</p>
+
+<pre>2147483647 (base 10) = 01111111111111111111111111111111 (base 2)
+</pre>
+
+<p>The numbers <code>-2147483648</code> and <code>2147483647</code> are the minimum and the maximum integers representable through a 32bit signed number.</p>
+
+<h2 id="Bitwise_logical_operators">Bitwise logical operators</h2>
+
+<p>Conceptually, the bitwise logical operators work as follows:</p>
+
+<ul>
+ <li>The operands are converted to 32-bit integers and expressed by a series of bits (zeroes and ones).</li>
+ <li>Each bit in the first operand is paired with the corresponding bit in the second operand: first bit to first bit, second bit to second bit, and so on.</li>
+ <li>The operator is applied to each pair of bits, and the result is constructed bitwise.</li>
+</ul>
+
+<h3 id="(Bitwise_AND)"><a name="Bitwise_AND">&amp; (Bitwise AND)</a></h3>
+
+<p>Performs the AND operation on each pair of bits. <code>a</code> AND <code>b</code> yields 1 only if both <code>a</code> and <code>b</code> are 1. The truth table for the AND operation is:</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header">a</td>
+   <td class="header">b</td>
+   <td class="header">a AND b</td>
+  </tr>
+  <tr>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+  </tr>
+  <tr>
+   <td>0</td>
+   <td>1</td>
+   <td>0</td>
+  </tr>
+  <tr>
+   <td>1</td>
+   <td>0</td>
+   <td>0</td>
+  </tr>
+  <tr>
+   <td>1</td>
+   <td>1</td>
+   <td>1</td>
+  </tr>
+ </tbody>
+</table>
+
+<pre>.    9 (base 10) = 00000000000000000000000000001001 (base 2)
+    14 (base 10) = 00000000000000000000000000001110 (base 2)
+                   --------------------------------
+14 &amp; 9 (base 10) = 00000000000000000000000000001000 (base 2) = 8 (base 10)
+</pre>
+
+<p>Bitwise ANDing any number x with 0 yields 0. Bitwise ANDing any number x with -1 yields x.</p>
+
+<h3 id="(Bitwise_OR)"><a name="Bitwise_OR">| (Bitwise OR)</a></h3>
+
+<p>Performs the OR operation on each pair of bits. <code>a</code> OR <code>b</code> yields 1 if either <code>a</code> or <code>b</code> is 1. The truth table for the OR operation is:</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header">a</td>
+   <td class="header">b</td>
+   <td class="header">a OR b</td>
+  </tr>
+  <tr>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+  </tr>
+  <tr>
+   <td>0</td>
+   <td>1</td>
+   <td>1</td>
+  </tr>
+  <tr>
+   <td>1</td>
+   <td>0</td>
+   <td>1</td>
+  </tr>
+  <tr>
+   <td>1</td>
+   <td>1</td>
+   <td>1</td>
+  </tr>
+ </tbody>
+</table>
+
+<pre>.    9 (base 10) = 00000000000000000000000000001001 (base 2)
+    14 (base 10) = 00000000000000000000000000001110 (base 2)
+                   --------------------------------
+14 | 9 (base 10) = 00000000000000000000000000001111 (base 2) = 15 (base 10)
+</pre>
+
+<p>Bitwise ORing any number x with 0 yields x. Bitwise ORing any number x with -1 yields -1.</p>
+
+<h3 id="(Bitwise_XOR)"><a name="Bitwise_XOR">^ (Bitwise XOR)</a></h3>
+
+<p>Performs the XOR operation on each pair of bits. <code>a</code> XOR <code>b</code> yields 1 if <code>a</code> and <code>b</code> are different. The truth table for the XOR operation is:</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header">a</td>
+   <td class="header">b</td>
+   <td class="header">a XOR b</td>
+  </tr>
+  <tr>
+   <td>0</td>
+   <td>0</td>
+   <td>0</td>
+  </tr>
+  <tr>
+   <td>0</td>
+   <td>1</td>
+   <td>1</td>
+  </tr>
+  <tr>
+   <td>1</td>
+   <td>0</td>
+   <td>1</td>
+  </tr>
+  <tr>
+   <td>1</td>
+   <td>1</td>
+   <td>0</td>
+  </tr>
+ </tbody>
+</table>
+
+<pre>.    9 (base 10) = 00000000000000000000000000001001 (base 2)
+    14 (base 10) = 00000000000000000000000000001110 (base 2)
+                   --------------------------------
+14 ^ 9 (base 10) = 00000000000000000000000000000111 (base 2) = 7 (base 10)
+</pre>
+
+<p>Bitwise XORing any number x with 0 yields x. Bitwise XORing any number x with -1 yields ~x.</p>
+
+<h3 id="(Bitwise_NOT)"><a name="Bitwise_NOT">~ (Bitwise NOT)</a></h3>
+
+<p>Performs the NOT operator on each bit. NOT <code>a</code> yields the inverted value (a.k.a. one's complement) of <code>a</code>. The truth table for the NOT operation is:</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header">a</td>
+   <td class="header">NOT a</td>
+  </tr>
+  <tr>
+   <td>0</td>
+   <td>1</td>
+  </tr>
+  <tr>
+   <td>1</td>
+   <td>0</td>
+  </tr>
+ </tbody>
+</table>
+
+<pre> 9 (base 10) = 00000000000000000000000000001001 (base 2)
+               --------------------------------
+~9 (base 10) = 11111111111111111111111111110110 (base 2) = -10 (base 10)
+</pre>
+
+<p>Bitwise NOTing any number x yields -(x + 1). For example, ~5 yields -6.</p>
+
+<p>Example with indexOf:</p>
+
+<pre class="brush: js">var str = 'rawr';
+var searchFor = 'a';
+
+// this is alternative way of typing if (-1*str.indexOf('a') &lt;= -1)
+if (~str.indexOf(searchFor)) {
+  // searchFor is in the string
+} else {
+  // searchFor is not in the string
+}
+
+// here are the values returned by (~str.indexOf(searchFor))
+// r == -1
+// a == -2
+// w == -3
+</pre>
+
+<h2 id="Bitwise_shift_operators">Bitwise shift operators</h2>
+
+<p>The bitwise shift operators take two operands: the first is a quantity to be shifted, and the second specifies the number of bit positions by which the first operand is to be shifted. The direction of the shift operation is controlled by the operator used.</p>
+
+<p>Shift operators convert their operands to 32-bit integers in big-endian order and return a result of the same type as the left operand. The right operand should be less than 32, but if not only the low five bits will be used.</p>
+
+<h3 id="&lt;&lt;_(Left_shift)"><a name="Left_shift">&lt;&lt; (Left shift)</a></h3>
+
+<p>This operator shifts the first operand the specified number of bits to the left. Excess bits shifted off to the left are discarded. Zero bits are shifted in from the right.</p>
+
+<p>For example, <code>9 &lt;&lt; 2</code> yields 36:</p>
+
+<pre>.    9 (base 10): 00000000000000000000000000001001 (base 2)
+                  --------------------------------
+9 &lt;&lt; 2 (base 10): 00000000000000000000000000100100 (base 2) = 36 (base 10)
+</pre>
+
+<p>Bitwise shifting any number <strong>x</strong> to the left by <strong>y</strong> bits yields <strong>x * 2^y</strong>.</p>
+
+<h3 id="&gt;&gt;_(Sign-propagating_right_shift)"><a name="Right_shift">&gt;&gt; (Sign-propagating right shift)</a></h3>
+
+<p>This operator shifts the first operand the specified number of bits to the right. Excess bits shifted off to the right are discarded. Copies of the leftmost bit are shifted in from the left. Since the new leftmost bit has the same value as the previous leftmost bit, the sign bit (the leftmost bit) does not change. Hence the name "sign-propagating".</p>
+
+<p>For example, <code>9 &gt;&gt; 2</code> yields 2:</p>
+
+<pre>.    9 (base 10): 00000000000000000000000000001001 (base 2)
+                  --------------------------------
+9 &gt;&gt; 2 (base 10): 00000000000000000000000000000010 (base 2) = 2 (base 10)
+</pre>
+
+<p>Likewise, <code>-9 &gt;&gt; 2</code> yields -3, because the sign is preserved:</p>
+
+<pre>.    -9 (base 10): 11111111111111111111111111110111 (base 2)
+                   --------------------------------
+-9 &gt;&gt; 2 (base 10): 11111111111111111111111111111101 (base 2) = -3 (base 10)
+</pre>
+
+<h3 id="&gt;&gt;&gt;_(Zero-fill_right_shift)"><a name="Unsigned_right_shift">&gt;&gt;&gt; (Zero-fill right shift)</a></h3>
+
+<p>This operator shifts the first operand the specified number of bits to the right. Excess bits shifted off to the right are discarded. Zero bits are shifted in from the left. The sign bit becomes 0, so the result is always non-negative.</p>
+
+<p>For non-negative numbers, zero-fill right shift and sign-propagating right shift yield the same result. For example, <code>9 &gt;&gt;&gt; 2</code> yields 2, the same as <code>9 &gt;&gt; 2</code>:</p>
+
+<pre>.     9 (base 10): 00000000000000000000000000001001 (base 2)
+                   --------------------------------
+9 &gt;&gt;&gt; 2 (base 10): 00000000000000000000000000000010 (base 2) = 2 (base 10)
+</pre>
+
+<p>However, this is not the case for negative numbers. For example, <code>-9 &gt;&gt;&gt; 2</code> yields 1073741821, which is different than <code>-9 &gt;&gt; 2</code> (which yields -3):</p>
+
+<pre>.     -9 (base 10): 11111111111111111111111111110111 (base 2)
+                    --------------------------------
+-9 &gt;&gt;&gt; 2 (base 10): 00111111111111111111111111111101 (base 2) = 1073741821 (base 10)
+</pre>
+
+<h2 id="Examples">Examples</h2>
+
+<h3 id="Flags_and_bitmasks">Flags and bitmasks</h3>
+
+<p>The bitwise logical operators are often used to create, manipulate, and read sequences of <em>flags</em>, which are like binary variables. Variables could be used instead of these sequences, but binary flags take much less memory (by a factor of 32).</p>
+
+<p>Suppose there are 4 flags:</p>
+
+<ul>
+ <li>flag A: we have an ant problem</li>
+ <li>flag B: we own a bat</li>
+ <li>flag C: we own a cat</li>
+ <li>flag D: we own a duck</li>
+</ul>
+
+<p>These flags are represented by a sequence of bits: DCBA. When a flag is <em>set</em>, it has a value of 1. When a flag is <em>cleared</em>, it has a value of 0. Suppose a variable <code>flags</code> has the binary value 0101:</p>
+
+<pre class="brush: js">var flags = 5;   // binary 0101
+</pre>
+
+<p>This value indicates:</p>
+
+<ul>
+ <li>flag A is true (we have an ant problem);</li>
+ <li>flag B is false (we don't own a bat);</li>
+ <li>flag C is true (we own a cat);</li>
+ <li>flag D is false (we don't own a duck);</li>
+</ul>
+
+<p>Since bitwise operators are 32-bit, 0101 is actually 00000000000000000000000000000101, but the preceding zeroes can be neglected since they contain no meaningful information.</p>
+
+<p>A <em>bitmask</em> is a sequence of bits that can manipulate and/or read flags. Typically, a "primitive" bitmask for each flag is defined:</p>
+
+<pre class="brush: js">var FLAG_A = 1; // 0001
+var FLAG_B = 2; // 0010
+var FLAG_C = 4; // 0100
+var FLAG_D = 8; // 1000
+</pre>
+
+<p>New bitmasks can be created by using the bitwise logical operators on these primitive bitmasks. For example, the bitmask 1011 can be created by ORing FLAG_A, FLAG_B, and FLAG_D:</p>
+
+<pre class="brush: js">var mask = FLAG_A | FLAG_B | FLAG_D; // 0001 | 0010 | 1000 =&gt; 1011
+</pre>
+
+<p>Individual flag values can be extracted by ANDing them with a bitmask, where each bit with the value of one will "extract" the corresponding flag. The bitmask <em>masks</em> out the non-relevant flags by ANDing with zeroes (hence the term "bitmask"). For example, the bitmask 0101&nbsp;can be used to see if flag C is set:</p>
+
+<pre class="brush: js">// if we own a cat
+if (flags &amp; FLAG_C) { // 0101 &amp; 0100 =&gt; 0100 =&gt; true
+   // do stuff
+}
+</pre>
+
+<p>A bitmask with multiple set flags acts like an "either/or". For example, the following two are equivalent:</p>
+
+<pre class="brush: js">// if we own a bat or we own a cat
+// (0101 &amp; 0010) || (0101 &amp; 0100) =&gt; 0000 || 0100 =&gt; true
+if ((flags &amp; FLAG_B) || (flags &amp; FLAG_C)) {
+   // do stuff
+}
+</pre>
+
+<pre class="brush: js">// if we own a bat or cat
+var mask = FLAG_B | FLAG_C; // 0010 | 0100 =&gt; 0110
+if (flags &amp; mask) { // 0101 &amp; 0110 =&gt; 0100 =&gt; true
+   // do stuff
+}
+</pre>
+
+<p>Flags can be set by ORing them with a bitmask, where each bit with the value one will set the corresponding flag, if that flag isn't already set. For example, the bitmask 1100 can be used to set flags C and D:</p>
+
+<pre class="brush: js">// yes, we own a cat and a duck
+var mask = FLAG_C | FLAG_D; // 0100 | 1000 =&gt; 1100
+flags |= mask;   // 0101 | 1100 =&gt; 1101
+</pre>
+
+<p>Flags can be cleared by ANDing them with a bitmask, where each bit with the value zero will clear the corresponding flag, if it isn't already cleared. This bitmask can be created by NOTing primitive bitmasks. For example, the bitmask 1010 can be used to clear flags A and C:</p>
+
+<pre class="brush: js">// no, we don't have an ant problem or own a cat
+var mask = ~(FLAG_A | FLAG_C); // ~0101 =&gt; 1010
+flags &amp;= mask;   // 1101 &amp; 1010 =&gt; 1000
+</pre>
+
+<p>The mask could also have been created with <code>~FLAG_A &amp; ~FLAG_C</code> (De Morgan's law):</p>
+
+<pre class="brush: js">// no, we don't have an ant problem, and we don't own a cat
+var mask = ~FLAG_A &amp; ~FLAG_C;
+flags &amp;= mask;   // 1101 &amp; 1010 =&gt; 1000
+</pre>
+
+<p>Flags can be toggled by XORing them with a bitmask, where each bit with the value one will toggle the corresponding flag. For example, the bitmask 0110 can be used to toggle flags B and C:</p>
+
+<pre class="brush: js">// if we didn't have a bat, we have one now, 
+// and if we did have one, bye-bye bat
+// same thing for cats
+var mask = FLAG_B | FLAG_C;
+flags = flags ^ mask;   // 1100 ^ 0110 =&gt; 1010
+</pre>
+
+<p>Finally, the flags can all be flipped with the NOT operator:</p>
+
+<pre class="brush: js">// entering parallel universe...
+flags = ~flags;    // ~1010 =&gt; 0101
+</pre>
+
+<h3 id="Conversion_snippets">Conversion snippets</h3>
+
+<p>Convert a binary <code><a href="../Global_Objects/String.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/String">String</a></code> to a decimal <code><a href="../Global_Objects/Number.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Number">Number</a></code>:</p>
+
+<pre class="brush: js">var sBinString = "1011";
+var nMyNumber = parseInt(sBinString, 2);
+alert(nMyNumber); // prints 11, i.e. 1011
+</pre>
+
+<p>Convert a decimal <code><a href="../Global_Objects/Number.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Number">Number</a></code> to a binary <code><a href="../Global_Objects/String.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/String">String</a></code>:</p>
+
+<pre class="brush: js">var nMyNumber = 11;
+var sBinString = nMyNumber.toString(2);
+alert(sBinString); // prints 1011, i.e. 11
+</pre>
+
+<h3 id="Automatize_the_creation_of_a_mask">Automatize the creation of a mask</h3>
+
+<p>If you have to create many masks from some <code><a href="../Global_Objects/Boolean.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code> values, you can automatize the process:</p>
+
+<pre class="brush: js">function createMask () {
+  var nMask = 0, nFlag = 0, nLen = arguments.length &gt; 32 ? 32 : arguments.length;
+  for (nFlag; nFlag &lt; nLen; nMask |= arguments[nFlag] &lt;&lt; nFlag++);
+  return nMask;
+}
+var mask1 = createMask(true, true, false, true); // 11, i.e.: 1011
+var mask2 = createMask(false, false, true); // 4, i.e.: 0100
+var mask3 = createMask(true); // 1, i.e.: 0001
+// etc.
+
+alert(mask1); // prints 11, i.e.: 1011
+</pre>
+
+<h3 id="Reverse_algorithm_an_array_of_booleans_from_a_mask">Reverse algorithm: an array of booleans from a mask</h3>
+
+<p>If you want to create an <code><a href="../Global_Objects/Array.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Array">Array</a></code> of <code><a href="../Global_Objects/Boolean.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Boolean">Booleans</a></code> from a mask you can use this code:</p>
+
+<pre class="brush: js">function arrayFromMask (nMask) {
+  // nMask must be between -2147483648 and 2147483647
+  if (nMask &gt; 0x7fffffff || nMask &lt; -0x80000000) { 
+    throw new TypeError("arrayFromMask - out of range"); 
+  }
+  for (var nShifted = nMask, aFromMask = []; nShifted; 
+       aFromMask.push(Boolean(nShifted &amp; 1)), nShifted &gt;&gt;&gt;= 1);
+  return aFromMask;
+}
+
+var array1 = arrayFromMask(11);
+var array2 = arrayFromMask(4);
+var array3 = arrayFromMask(1);
+
+alert("[" + array1.join(", ") + "]");
+// prints "[true, true, false, true]", i.e.: 11, i.e.: 1011
+</pre>
+
+<p>You can test both algorithms at the same time…</p>
+
+<pre class="brush: js">var nTest = 19; // our custom mask
+var nResult = createMask.apply(this, arrayFromMask(nTest));
+
+alert(nResult); // 19
+</pre>
+
+<p>For didactic purpose only (since there is the <code><a href="../Global_Objects/Number/toString.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Number/toString">Number.toString(2)</a></code> method), we show how it is possible to modify the <code>arrayFromMask</code> algorithm in order to create a <code><a href="../Global_Objects/String.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/String">String</a></code> containing the binary representation of a <code><a href="../Global_Objects/Number.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Number">Number</a></code>, rather than an <code><a href="../Global_Objects/Array.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Array">Array</a></code> of <code><a href="../Global_Objects/Boolean.html" title="/en-US/docs/JavaScript/Reference/Global_Objects/Boolean">Booleans</a></code>:</p>
+
+<pre class="brush: js">function createBinaryString (nMask) {
+  // nMask must be between -2147483648 and 2147483647
+  for (var nFlag = 0, nShifted = nMask, sMask = ""; nFlag &lt; 32;
+       nFlag++, sMask += String(nShifted &gt;&gt;&gt; 31), nShifted &lt;&lt;= 1);
+  return sMask;
+}
+
+var string1 = createBinaryString(11);
+var string2 = createBinaryString(4);
+var string3 = createBinaryString(1);
+
+alert(string1);
+// prints 00000000000000000000000000001011, i.e. 11
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262, 1st edition, June 1997.pdf" class="external" lang="en" title="The 'ECMAScript 1st Edition (ECMA-262)' specification" hreflang="en">ECMAScript 1st Edition (ECMA-262)</a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Initial definition.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.7" class="external" lang="en" title="The 'ECMAScript 5.1 (ECMA-262)' specification" hreflang="en">ECMAScript 5.1 (ECMA-262)</a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Defined in several sections of the specification: <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.4.8" class="external">Bitwise NOT operator</a>, <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.7" class="external">Bitwise shift operators</a>, <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.10" class="external">Binary bitwise operators</a></td>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-262/6.0/#sec-bitwise-shift-operators" class="external" lang="en" title="The 'ECMAScript 2015 (6th Edition, ECMA-262)' specification" hreflang="en">ECMAScript 2015 (6th Edition, ECMA-262)</a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Defined in several sections of the specification: <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-bitwise-not-operator" class="external">Bitwise NOT operator</a>, <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-bitwise-shift-operators" class="external">Bitwise shift operators</a>, <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-binary-bitwise-operators" class="external">Binary bitwise operators</a></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Bitwise NOT (<code>~</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Bitwise AND (<code>&amp;</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Bitwise OR (<code>|</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Bitwise XOR (<code>^</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Left shift (<code>&lt;&lt;</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Right shift (<code>&gt;&gt;</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Unsigned right shift (<code>&gt;&gt;&gt;</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Bitwise NOT (<code>~</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Bitwise AND (<code>&amp;</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Bitwise OR (<code>|</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Bitwise XOR (<code>^</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Left shift (<code>&lt;&lt;</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Right shift (<code>&gt;&gt;</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td>Unsigned right shift (<code>&gt;&gt;&gt;</code>)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="Logical_Operators.html">Logical operators</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/javascript">javascript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Javascript">Javascript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Operator">Operator</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/glebec">glebec</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Christier">Christier</a>,             <a href="https://developer.mozilla.org/en-US/profiles/imahungry">imahungry</a>,             <a href="https://developer.mozilla.org/en-US/profiles/russt">russt</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jbailey4">jbailey4</a>,             <a href="https://developer.mozilla.org/en-US/profiles/rschaosid">rschaosid</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Agamemnus">Agamemnus</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Havvy">Havvy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/harshkothari410">harshkothari410</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Noitidart">Noitidart</a>,             <a href="https://developer.mozilla.org/en-US/profiles/forest51690">forest51690</a>,             <a href="https://developer.mozilla.org/en-US/profiles/sunfish">sunfish</a>,             <a href="https://developer.mozilla.org/en-US/profiles/gb2048">gb2048</a>,             <a href="https://developer.mozilla.org/en-US/profiles/BrianDiPalma">BrianDiPalma</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fusionchess">fusionchess</a>,             <a href="https://developer.mozilla.org/en-US/profiles/J-Mackerel">J-Mackerel</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Nick_Rizzolo">Nick_Rizzolo</a>,             <a href="https://developer.mozilla.org/en-US/profiles/brianblakely">brianblakely</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Inimino">Inimino</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Orinoco">Orinoco</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Maxim">Maxim</a>,             <a href="https://developer.mozilla.org/en-US/profiles/AdmiralNovia">AdmiralNovia</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Maian">Maian</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Tezza">Tezza</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Nickolay">Nickolay</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dria">Dria</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,
+                      <time datetime="2015-09-14T11:22:30-07:00">Sep 14, 2015, 11:22:30 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><strong><em>JavaScript</em></strong></a></li> 
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><strong>Tutorials:</strong></a></li> 
+  <li data-default-state="closed"><a href="../../Guide.html">JavaScript Guide</a> 
+    <ol> 
+      <li><a href="../../Guide/Introduction.html">Introduction</a></li> 
+      <li><a href="../../Guide/Grammar_and_Types-2.html">Grammar and types</a></li> 
+      <li><a href="../../Guide/Control_flow_and_error_handling.html">Control flow and error handling</a></li> 
+      <li><a href="../../Guide/Loops_and_iteration.html">Loops and iteration</a></li> 
+      <li><a href="../../Guide/Functions.html">Functions</a></li> 
+      <li><a href="../../Guide/Expressions_and_Operators.html">Expressions and operators</a></li> 
+      <li><a href="../../Guide/Numbers_and_dates.html">Numbers and dates</a></li> 
+      <li><a href="../../Guide/Text_formatting.html">Text formatting</a></li> 
+      <li><a href="../../Guide/Regular_Expressions.html">Regular expressions</a></li> 
+      <li><a href="../../Guide/Indexed_collections.html">Indexed collections</a></li> 
+      <li><a href="../../Guide/Keyed_collections.html">Keyed collections</a></li> 
+      <li><a href="../../Guide/Working_with_Objects.html">Working with objects</a></li> 
+      <li><a href="../../Guide/Details_of_the_Object_Model.html">Details of the object model</a></li> 
+      <li><a href="../../Guide/Iterators_and_generators.html">Iterators and generators</a></li> 
+      <li><a href="../../Guide/Meta_programming.html">Meta programming</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Introductory</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/Learn/Getting_started_with_the_web/JavaScript_basics">JavaScript basics</a></li> 
+    <li><a href="../../JavaScript_technologies_overview.html">JavaScript technologies overview</a></li> 
+    <li><a href="../../Introduction_to_Object-Oriented_JavaScript.html">Introduction to Object Oriented JavaScript</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Intermediate</a> 
+   <ol> 
+    <li><a href="../../A_re-introduction_to_JavaScript.html">A re-introduction to JavaScript</a></li> 
+    <li><a href="../../Data_structures.html">JavaScript data structures</a></li> 
+    <li><a href="../../Equality_comparisons_and_sameness.html">Equality comparisons and sameness</a></li> 
+    <li><a href="../../Closures.html">Closures</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Advanced</a> 
+   <ol> 
+    <li><a href="../../Inheritance_and_the_prototype_chain.html">Inheritance and the prototype chain</a></li> 
+    <li><a href="../Strict_mode.html">Strict mode</a></li> 
+    <li><a href="../../Typed_arrays.html">JavaScript typed arrays</a></li> 
+    <li><a href="../../SIMD_types.html">SIMD types</a></li> 
+    <li><a href="../../Memory_Management.html">Memory Management</a></li> 
+    <li><a href="../../EventLoop.html">Concurrency model and Event Loop</a></li> 
+   </ol> 
+  </li> 
+  <li><strong><a href="../../Reference.html">References:</a></strong></li> 
+  <li data-default-state="closed"><a href="../Global_Objects.html">Built-in objects</a> 
+   <ol><li><a href="../Global_Objects.html" title="This chapter documents all of JavaScript's standard, built-in objects, including their methods and properties.">Standard built-in objects</a></li><li><a href="../Global_Objects/Array.html" title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects.">Array</a></li><li><a href="../Global_Objects/ArrayBuffer.html" title="The ArrayBuffer object is used to represent a generic, fixed-length raw binary data buffer. You can not directly manipulate the contents of an ArrayBuffer; instead, you create one of the typed array objects or a DataView object which represents the buffer in a specific format, and use that to read and write the contents of the buffer.">ArrayBuffer</a></li><li><a href="../Global_Objects/Boolean.html" title="The Boolean object is an object wrapper for a boolean value.">Boolean</a></li><li><a href="../Global_Objects/DataView.html" title="The DataView view provides a low-level interface for reading data from and writing it to an ArrayBuffer.">DataView</a></li><li><a href="../Global_Objects/Date.html" title="Creates a JavaScript Date instance that represents a single moment in time. Date objects are based on a time value that is the number of milliseconds since 1 January, 1970 UTC.">Date</a></li><li><a href="../Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base objects for user-defined exceptions. See below for standard built-in error types.">Error</a></li><li><a href="../Global_Objects/EvalError.html" title="The EvalError object indicates an error regarding the global eval() function.">EvalError</a></li><li><a href="../Global_Objects/Float32Array.html" title="The Float32Array typed array represents an array of 32-bit floating point numbers (corresponding to the C float data type) in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Float32Array</a></li><li><a href="../Global_Objects/Float64Array.html" title="The Float64Array typed array represents an array of 64-bit floating point numbers (corresponding to the C double data type) in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Float64Array</a></li><li><a href="../Global_Objects/Function.html" title="The Function constructor creates a new Function object. In JavaScript every function is actually a Function object.">Function</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Generator.html" title="The Generator object is returned by a generator function&nbsp;and it conforms to both the iterator and the Iterable protocol.">Generator</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/GeneratorFunction.html" title="The GeneratorFunction constructor creates a new generator function object. In JavaScript every generator function is actually a GeneratorFunction object.">GeneratorFunction</a></li><li><a href="../Global_Objects/Infinity.html" title="The global Infinity property is a numeric value representing infinity.">Infinity</a></li><li><a href="../Global_Objects/Int16Array.html" title="The Int16Array typed array represents an array of twos-complement 16-bit signed integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int16Array</a></li><li><a href="../Global_Objects/Int32Array.html" title="The Int32Array typed array represents an array of twos-complement 32-bit signed integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int32Array</a></li><li><a href="../Global_Objects/Int8Array.html" title="The Int8Array typed array represents an array of twos-complement 8-bit signed integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int8Array</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Global_Objects/InternalError.html" title="The InternalError object indicates an error that occurred internally in the JavaScript engine. For example: &quot;InternalError: too much recursion&quot;.">InternalError</a></li><li><a href="../Global_Objects/Intl.html" title="The Intl object is the namespace for the ECMAScript Internationalization API, which provides language sensitive string comparison, number formatting, and date and time formatting. The constructors for Collator, NumberFormat, and DateTimeFormat objects are properties of the Intl object. This page documents these properties as well as functionality common to the internationalization constructors and other language sensitive functions.">Intl</a></li><li><a href="../Global_Objects/Collator.html" title="The Intl.Collator object is a constructor for collators, objects that enable language sensitive string comparison.">Intl.Collator</a></li><li><a href="../Global_Objects/DateTimeFormat.html" title="The Intl.DateTimeFormat object is a constructor for objects that enable language sensitive date and time formatting.">Intl.DateTimeFormat</a></li><li><a href="../Global_Objects/NumberFormat.html" title="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting.">Intl.NumberFormat</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Global_Objects/Iterator.html" title="The Iterator function returns an object which implements legacy iterator protocol and iterates over enumerable properties of an object.">Iterator</a></li><li><a href="../Global_Objects/JSON.html" title="The JSON object contains methods for parsing JavaScript Object Notation (JSON) and converting values to JSON. It can't be called or constructed, and aside from its two method properties it has no interesting functionality of its own.">JSON</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Map.html" title="The Map object is a simple key/value map. Any value (both objects and primitive values) may be used as either a key or a value.">Map</a></li><li><a href="../Global_Objects/Math.html" title="Math is a built-in object that has properties and methods for mathematical constants and functions. Not a function object.">Math</a></li><li><a href="../Global_Objects/NaN.html" title="The global NaN property is a value representing Not-A-Number.">NaN</a></li><li><a href="../Global_Objects/Number.html" title="The Number JavaScript object is a wrapper object allowing you to work with numerical values. A Number object is created using the Number() constructor.">Number</a></li><li><a href="../Global_Objects/Object.html" title="The Object constructor creates an object wrapper.">Object</a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><a href="../Global_Objects/ParallelArray.html" title="The goal of ParallelArray was to enable data-parallelism in web applications. The higher-order functions available on ParallelArray attempted to execute in parallel, though they may fall back to sequential execution if necessary. To ensure that your code executes in parallel, it is suggested that the functions should be limited to the parallelizable subset of JS that Firefox supports.">ParallelArray</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future.">Promise</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Proxy.html" title="The Proxy object is used to define custom behavior for fundamental operations (e.g. property lookup, assignment, enumeration, function invocation, etc).">Proxy</a></li><li><a href="../Global_Objects/RangeError.html" title="The RangeError object indicates an error when a value is not in the set or range of allowed values.">RangeError</a></li><li><a href="../Global_Objects/ReferenceError.html" title="The ReferenceError object represents an error when a non-existent variable is referenced.">ReferenceError</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Reflect.html" title="Reflect is a built-in object that provides methods for interceptable JavaScript operations. The methods are the same as those of proxy handlers. Reflect is not a function object, so it's not constructible.">Reflect</a></li><li><a href="../Global_Objects/RegExp.html" title="The RegExp constructor creates a regular expression object for matching text with a pattern.">RegExp</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/SIMD.html" title="SIMD (pronounced &quot;sim-dee&quot;) is short for Single Instruction/Multiple Data which is one classification of computer architectures. SIMD operations perform the same computation on multiple data points resulting in data level parallelism and thus performance gains, for example for 3D graphics and video processing, physics simulations or cryptography, and other domains.">SIMD</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Float32x4.html" title="The SIMD.Float32x4 data type is a 128-bit vector divided into 4 lanes storing single precision floating point values.">SIMD.Float32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Float64x2.html" title="The SIMD.Float64x2 data type is a 128-bit vector divided into 2 lanes storing double precision floating point values.">SIMD.Float64x2</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Int16x8.html" title="The SIMD.Int16x8 data type is a 128-bit vector divided into 8 lanes storing 16-bit signed integer values.">SIMD.Int16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Int32x4.html" title="The SIMD.Int32x4 data type is a 128-bit vector divided into 4 lanes storing 32-bit signed integer values.">SIMD.Int32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Int8x16.html" title="The SIMD.Int8x16 data type is a 128-bit vector divided into 16 lanes storing 8-bit signed integer values.">SIMD.Int8x16</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Set.html" title="The Set object lets you store unique values of any type, whether primitive values or object references.">Set</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Global_Objects/StopIteration.html" title="The StopIteration object is used to tell the end of the iteration in the legacy iterator protocol.">StopIteration</a></li><li><a href="../Global_Objects/String.html" title="The String global object is a constructor for strings, or a sequence of characters.">String</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/Symbol.html" title="A symbol is a unique and immutable data type and may be used as an identifier for object properties. The symbol object is an implicit object wrapper for the symbol primitive data type.">Symbol</a></li><li><a href="../Global_Objects/SyntaxError.html" title="The SyntaxError object represents an error when trying to interpret syntactically invalid code.">SyntaxError</a></li><li><a href="../Global_Objects/TypeError.html" title="The TypeError object represents an error when a value is not of the expected type.">TypeError</a></li><li><a href="../Global_Objects/TypedArray.html" title="A TypedArray object describes an array-like view of an underlying binary data buffer. There is no global property named TypedArray, nor is there a directly visible TypedArray constructor.&nbsp; Instead, there are a number of different global properties, whose values are typed array constructors for specific element types, listed below. On the following pages you will find common properties and methods that can be used with any typed array containing elements of any type.">TypedArray</a></li><li><a href="../Global_Objects/URIError.html" title="The URIError object represents an error when a global URI handling function was used in a wrong way.">URIError</a></li><li><a href="../Global_Objects/Uint16Array.html" title="The Uint16Array typed array represents an array of 16-bit unsigned integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint16Array</a></li><li><a href="../Global_Objects/Uint32Array.html" title="The Uint32Array typed array represents an array of 32-bit unsigned integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint32Array</a></li><li><a href="../Global_Objects/Uint8Array.html" title="The Uint8Array typed array represents an array of 8-bit unsigned integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint8Array</a></li><li><a href="../Global_Objects/Uint8ClampedArray.html" title="The Uint8ClampedArray typed array represents an array of 8-bit unsigned integers clamped to 0-255. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint8ClampedArray</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/WeakMap.html" title="The WeakMap object is a collection of key/value pairs in which the keys are weakly referenced.&nbsp; The keys must be objects and the values can be arbitrary values.">WeakMap</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Global_Objects/WeakSet.html" title="The WeakSet object lets you store weakly held objects in a collection.">WeakSet</a></li><li><a href="../Global_Objects/decodeURI.html" title="The decodeURI() function decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine.">decodeURI()</a></li><li><a href="../Global_Objects/decodeURIComponent.html" title="The decodeURIComponent() method decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine.">decodeURIComponent()</a></li><li><a href="../Global_Objects/encodeURI.html" title="The encodeURI() method encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two &quot;surrogate&quot; characters).">encodeURI()</a></li><li><a href="../Global_Objects/encodeURIComponent.html" title="The encodeURIComponent() method encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two &quot;surrogate&quot; characters).">encodeURIComponent()</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Global_Objects/escape.html" title="The deprecated escape() method computes a new string in which certain characters have been replaced by a hexadecimal escape sequence. Use encodeURI or encodeURIComponent instead.">escape()</a></li><li><a href="../Global_Objects/eval.html" title="The eval() method evaluates JavaScript code represented as a string.">eval()</a></li><li><a href="../Global_Objects/isFinite.html" title="The global isFinite() function determines whether the passed value is a finite number. If needed, the parameter is first converted to a number.">isFinite()</a></li><li><a href="../Global_Objects/isNaN.html" title="The isNaN() function determines whether a value is NaN or not. Note: coercion inside the isNaN function has interesting rules; you may alternatively want to use Number.isNaN(), as defined in ECMAScript 6, or you can use typeof to determine if the value is Not-A-Number.">isNaN()</a></li><li><a href="../Global_Objects/null.html" title="The value null is a JavaScript literal representing null or an &quot;empty&quot; value, i.e. no object value is present. It is one of JavaScript's primitive values.">null</a></li><li><a href="../Global_Objects/parseFloat.html" title="The parseFloat() function parses a string argument and returns a floating point number.">parseFloat()</a></li><li><a href="../Global_Objects/parseInt.html" title="The parseInt() function parses a string argument and returns an integer of the specified radix (the base in mathematical numeral systems).">parseInt()</a></li><li><a href="../Global_Objects/undefined.html" title="The global undefined property represents the primitive value undefined. It is one of JavaScript's primitive types.">undefined</a></li><li><a href="../Global_Objects/unescape.html" title="The deprecated unescape() method computes a new string in which hexadecimal escape sequences are replaced with the character that it represents. The escape sequences might be introduced by a function like escape. Because unescape is deprecated, use decodeURI or decodeURIComponent instead.">unescape()</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Global_Objects/uneval.html" title="The uneval() method creates an string representation of the source code of an Object.">uneval()</a></li></ol> 
+  </li> 
+  <li data-default-state="open"><a href="../Operators.html">Expressions &amp; operators</a> 
+   <ol><li><a href="../Operators.html" title="This chapter documents all the JavaScript language operators, expressions and keywords.">Expressions and operators</a></li><li><a href="Arithmetic_Operators.html" title="Arithmetic operators take numerical values (either literals or variables) as their operands and return a single numerical value. The standard arithmetic operators are addition (+), subtraction (-), multiplication (*), and division (/).">Arithmetic operators</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="Array_comprehensions.html" title="The array comprehension syntax is a JavaScript expression which allows you to quickly assemble a new array based on an existing one. Comprehensions exist in many programming languages and the upcoming ECMAScript 7 standard defines array comprehensions for JavaScript.">Array comprehensions</a></li><li><a href="Assignment_Operators.html" title="An assignment operator assigns a value to its left operand based on the value of its right operand.">Assignment operators</a></li><li><a href="Bitwise_Operators.html" title="Editorial review completed.">Bitwise operators</a></li><li><a href="Comma_Operator.html" title="The comma operator evaluates each of its operands (from left to right)&nbsp;and returns the value of the last operand.">Comma operator</a></li><li><a href="Comparison_Operators.html" title="JavaScript has both strict and type–converting comparisons. A strict comparison (e.g., ===) is only true if the operands are of the same type. The more commonly used abstract comparison (e.g. ==) converts the operands to the same Type before making the comparison. For relational abstract comparisons (e.g., &lt;=), the operands are first converted to primitives, then to the same type, before comparison.">Comparison operators</a></li><li><a href="Conditional_Operator.html" title="The conditional (ternary) operator is the only JavaScript operator that takes three operands. This operator is frequently used as a shortcut for the if statement.">Conditional (ternary) Operator</a></li><li><a href="Destructuring_assignment.html" title="The destructuring assignment syntax is a JavaScript expression that makes it possible to extract data from arrays or objects using a syntax that mirrors the construction of array and object literals.">Destructuring assignment</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="Expression_closures.html" title="Expression closures are a shorthand function syntax for writing simple functions.">Expression closures</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="Generator_comprehensions.html" title="The generator comprehension syntax is a JavaScript expression which allows you to quickly assemble a new generator function based on an existing iterable object. Comprehensions exist in many programming languages and the upcoming ECMAScript 7 standard defines array comprehensions for JavaScript.">Generator comprehensions</a></li><li><a href="Grouping.html" title="The grouping operator ( ) controls the precedence of evaluation in expressions.">Grouping operator</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="Legacy_generator_function.html" title="The function keyword can be used to define a legacy generator function inside an expression. To make the function a legacy generator, the function body should contain at least one yield expression.">Legacy generator function expression</a></li><li><a href="Logical_Operators.html" title="Logical operators are typically used with Boolean (logical) values. When they are, they return a Boolean value. However, the &amp;&amp; and || operators actually return the value of one of the specified operands, so if these operators are used with non-Boolean values, they may return a non-Boolean value.">Logical Operators</a></li><li><a href="Object_initializer.html" title="Objects can be initialized using new Object(), Object.create(), or using the literal notation (initializer notation). An object initializer is a list of zero or more pairs of property names and associated values of an object, enclosed in curly braces ({}).">Object initializer</a></li><li><a href="Operator_Precedence.html" title="Operator precedence determines the order in which operators are evaluated. Operators with higher precedence are evaluated first.">Operator precedence</a></li><li><a href="Property_Accessors.html" title="Property accessors provide access to an object's properties by using the dot notation or the bracket notation.">Property accessors</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="Spread_operator.html" title="The spread operator allows an expression to be expanded in places where multiple arguments (for function calls) or multiple elements (for array literals) are expected.">Spread operator</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="class.html" title="The class expression is one way define a class in ECMAScript 6. Similar to function expressions, class expressions can be named or unnamed. If named, the name of the class is local the class body only. JavaScript classes are using prototype-based inheritance.">class expression</a></li><li><a href="delete.html" title="The delete operator removes a property from an object.">delete operator</a></li><li><a href="function.html" title="The function keyword can be used to define a function inside an expression.">function expression</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="function_.html" title="The function* keyword can be used to define a generator function inside an expression.">function* expression</a></li><li><a href="in.html" title="The in operator returns true if the specified property is in the specified object.">in operator</a></li><li><a href="instanceof.html" title="The instanceof operator tests whether an object has in its prototype chain the prototype property of a constructor.">instanceof</a></li><li><a href="new.html" title="The new operator creates an instance of a user-defined object type or of one of the built-in object types that has a constructor function.">new operator</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="new-2.html" title="The new.target syntax is available in all functions. In constructors, new.target refers to the constructor that was invoked by new. In normal function calls, new.target is undefined.">new.target</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="super.html" title="The super keyword is used to call functions on an object's parent.">super</a></li><li><a href="this.html" title="A function's this keyword behaves a little differently in JavaScript compared to other languages. It also has some differences between strict mode and non-strict mode.">this</a></li><li><a href="typeof.html" title="The typeof operator returns a string indicating the type of the unevaluated operand.">typeof</a></li><li><a href="void.html" title="The void operator evaluates the given expression and then returns undefined.">void operator</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="yield.html" title="The yield keyword is used to pause and resume a generator function (function* or legacy generator function).">yield</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="yield_.html" title="The yield* expression is used to delegate to another generator or iterable object.">yield*</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Statements.html">Statements &amp; declarations</a> 
+   <ol><li><a href="../Statements.html" title="JavaScript applications consist of statements with an appropriate syntax. A single statement may span multiple lines. Multiple statements may occur on a single line if each statement is separated by a semicolon. This isn't a keyword, but a group of keywords.">Statements and declarations</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Statements/Legacy_generator_function.html" title="The legacy generator function statement declares legacy generator functions with the specified parameters.">Legacy generator function</a></li><li><a href="../Statements/block.html" title="A block statement (or compound statement in other languages) is used to group zero or more statements. The block is delimited by a pair of curly brackets.">block</a></li><li><a href="../Statements/break.html" title="The break statement terminates the current loop, switch, or label statement and transfers program control to the statement following the terminated statement.">break</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Statements/class.html" title="The class declaration creates a new class with a given name using prototype-based inheritance.">class</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Statements/const.html" title="The const declaration creates a read-only reference to a value. It does not&nbsp;mean the value it holds is immutable, solely&nbsp;that the variable identifier can not be reassigned.">const</a></li><li><a href="../Statements/continue.html" title="The continue statement terminates execution of the statements in the current iteration of the current or labeled loop, and continues execution of the loop with the next iteration.">continue</a></li><li><a href="../Statements/debugger.html" title="The debugger statement invokes any available debugging functionality, such as setting a breakpoint. If no debugging functionality is available, this statement has no effect.">debugger</a></li><li><a href="../Statements/do...html" title="The do...while statement creates a loop that executes a specified statement until the test condition evaluates to false. The condition is evaluated after executing the statement, resulting in the specified statement executing at least once.">do...while</a></li><li><a href="../Statements/Empty.html" title="An empty statement is used to provide no statement, although the JavaScript syntax would expect one.">empty</a></li><li><a href="../Statements/export.html" title="The following content does not reflect the final state of the ECMAScript 6 modules specification. For more accurate documentation, see ECMAScript 6 modules: the final syntax.">export</a></li><li><a href="../Statements/for.html" title="The for statement creates a loop that consists of three optional expressions, enclosed in parentheses and separated by semicolons, followed by a statement or a set of statements executed in the loop.">for</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Statements/for_each...html" title="The for each...in statement iterates a specified variable over all values of object's properties. For each distinct property, a specified statement is executed.">for each...in</a></li><li><a href="../Statements/for...html" title="The for...in statement iterates over the enumerable properties of an object, in arbitrary order. For each distinct property, statements can be executed.">for...in</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Statements/for..-2.html" title="The for...of statement creates a loop Iterating over iterable objects (including Array,&nbsp;Map, Set,&nbsp;arguments&nbsp;object and so on), invoking a custom iteration hook with statements to be executed for the value of each distinct property.">for...of</a></li><li><a href="../Statements/function.html" title="The function declaration defines a function with the specified parameters.">function</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Statements/function_.html" title="The function* declaration (function keyword followed by an asterisk) defines a generator function, which returns a Generator object.">function*</a></li><li><a href="../Statements/if...html" title="The if statement executes a statement if a specified condition is true. If the condition is false, another statement can be executed.">if...else</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Statements/import.html" title="The following content does not reflect the final state of the ECMAScript 6 modules specification. For more accurate documentation, see Exploring JS: Modules.">import</a></li><li><a href="../Statements/label.html" title="The labeled statement can be used with break or continue statements. It is prefixing a statement with an identifier which you can refer to.">label</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Statements/let.html" title="The let statement declares a block scope local variable, optionally initializing it to a value.">let</a></li><li><a href="../Statements/return.html" title="The return statement ends function execution and specifies a value to be returned to the function caller.">return</a></li><li><a href="../Statements/switch.html" title="The switch statement evaluates an expression, matching the expression's value to a case clause, and executes statements associated with that case.">switch</a></li><li><a href="../Statements/throw.html" title="The throw statement throws a user-defined exception. Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack. If no catch block exists among caller functions, the program will terminate.">throw</a></li><li><a href="../Statements/try...html" title="The try...catch statement marks a block of statements to try, and specifies a response, should an exception be thrown.">try...catch</a></li><li><a href="../Statements/var.html" title="The variable statement declares a variable, optionally initializing it to a value.">var</a></li><li><a href="../Statements/while.html" title="The while statement creates a loop that executes a specified statement as long as the test condition evaluates to true. The condition is evaluated before executing the statement.">while</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Statements/with.html" title="The with statement extends the scope chain for a statement.">with</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Functions.html">Functions</a> 
+   <ol><li><a href="../Functions.html" title="Generally speaking, a function is a &quot;subprogram&quot; that can be called by code external (or internal in the case of recursion) to the function. Like the program itself, a function is composed of a sequence of statements called the function body. Values can be passed to a function, and the function can return a value.">Functions</a></li><li><a href="../Functions/arguments.html" title="The arguments object is an Array-like object corresponding to the arguments passed to a function.">Arguments object</a></li><li><a href="../Functions/Arrow_functions.html" title="An arrow function expression (also known as fat arrow function) has a shorter syntax compared to function expressions and lexically binds the this value. Arrow functions are always anonymous.">Arrow functions</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Functions/Default_parameters.html" title="Default function parameters allow formal parameters to be initialized with default values if no value or undefined is passed.">Default parameters</a></li><li><a href="../Functions/Method_definitions.html" title="Starting with ECMAScript 6, a shorter syntax for method definitions on objects initializers is introduced. It is a shorthand for a function assigned to the method's name.">Method definitions</a></li><li><a href="../Functions/rest_parameters.html" title="The rest parameter syntax allows to represent an indefinite number of arguments as an array.">Rest parameters</a></li><li><a href="../Functions/get.html" title="The get syntax binds an object property to a function that will be called when that property is looked up.">getter</a></li><li><a href="../Functions/set.html" title="The set syntax binds an object property to a function to be called when there is an attempt to set that property.">setter</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Classes.html">Classes</a> 
+   <ol><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Classes.html" title="JavaScript classes are introduced in ECMAScript 6 and are syntactical sugar over JavaScript's existing prototype-based inheritance. The class syntax is not introducing a new object-oriented inheritance model to JavaScript. JavaScript classes provide a much simpler and clearer syntax to create objects and deal with inheritance.">Classes</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Classes/constructor.html" title="The constructor method is a special method for creating and initializing an object created with a class.">constructor</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Classes/extends.html" title="The extends keyword is used in a class declarations or class expressions to create a class with a child of another class.">extends</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Classes/static.html" title="The static keyword defines a static method for a class.">static</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Misc</a> 
+   <ol> 
+    <li><a href="../Lexical_grammar.html">Lexical grammar</a></li> 
+    <li><a href="../../Data_structures.html">JavaScript data structures</a></li> 
+    <li><a href="../../Enumerability_and_ownership_of_properties.html">Enumerability and ownership of properties</a></li> 
+    <li><a href="../Iteration_protocols.html">Iteration protocols</a></li> 
+    <li><a href="../Strict_mode.html">Strict mode</a></li> 
+    <li><a href="../Strict_mode/Transitioning_to_strict_mode.html">Transitioning to strict mode</a></li> 
+    <li><a href="../template_strings.html">Template strings</a></li> 
+    <li><a href="../Deprecated_and_obsolete_features.html">Deprecated features</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../../New_in_JavaScript.html">New in JavaScript</a> 
+   <ol><li><a href="../../New_in_JavaScript.html" title="This chapter contains information about JavaScript's version history and implementation status for Mozilla/SpiderMonkey-based JavaScript applications, such as Firefox.">New in JavaScript</a></li><li><a href="../../New_in_JavaScript/ECMAScript_5_support_in_Mozilla.html" title="ECMAScript 5.1, the latest edition of the standard upon which JavaScript is based, was approved in June 2011.">ECMAScript 5 support in Mozilla</a></li><li><a href="../../New_in_JavaScript/ECMAScript_6_support_in_Mozilla.html" title="ECMAScript 2015 (6th Edition) is the current version of the ECMAScript Language Specification standard. Commonly referred to as &quot;ES6&quot;, it defines the standard for the JavaScript implementation in SpiderMonkey, the engine used in Firefox and other Mozilla applications.">ECMAScript 6 support in Mozilla</a></li><li><a href="../../New_in_JavaScript/ECMAScript_7_support_in_Mozilla.html" title="ECMAScript 7 is the next evolution of the ECMA-262 standard (commonly referred to as JavaScript). Even before ECMAScript 6 was finalized on June 17, 2015, new features were already being proposed. You can see the latest proposals on the tc39/ecma262 GitHub repository.">ECMAScript 7 support in Mozilla</a></li><li><a href="../../New_in_JavaScript/Firefox_JavaScript_changelog.html" title="The following is a changelog for JavaScript features in Firefox releases.">Firefox JavaScript changelog</a></li><li><a href="../../New_in_JavaScript/1.html" title="The following is a changelog for JavaScript from Netscape Navigator 2.0 to 3.0. The old Netscape documentation references this as &quot;Features added after version 1&quot;. Netscape Navigator 3.0 was released on August 19, 1996. Netscape Navigator 3.0 was the second major version of the browser with JavaScript support.">New in JavaScript 1.1</a></li><li><a href="../../New_in_JavaScript/1-2.html" title="The following is a changelog for JavaScript from Netscape Navigator 3.0 to 4.0. The old Netscape documentation can be found on archive.org. Netscape Navigator 4.0 was released on June 11, 1997. Netscape Navigator 4.0 was the third major version of the browser with JavaScript support.">New in JavaScript 1.2</a></li><li><a href="../../New_in_JavaScript/1-3.html" title="The following is a changelog for JavaScript from Netscape Navigator 4.0 to 4.5. The old Netscape documentation can be found on archive.org. Netscape Navigator 4.5 was released on October 19, 1998.">New in JavaScript 1.3</a></li><li><a href="../../New_in_JavaScript/1-4.html" title="The following is a changelog for JavaScript 1.4, which was only used for Netscape's server side JavaScript released in 1999. The old Netscape documentation can be found on archive.org.">New in JavaScript 1.4</a></li><li><a href="../../New_in_JavaScript/1-5.html" title="The following is a changelog for JavaScript 1.5. This version was included in Netscape Navigator 6.0 was released on November 14, 2000 and was also used in later versions of Netscape Navigator and Firefox 1.0. You can compare JavaScript 1.5 to JScript version 5.5 and Internet Explorer 5.5, which was released in July 2000. The corresponding ECMA standard is ECMA-262 Edition 3 (from December 1999).">New in JavaScript 1.5</a></li><li><a href="../../New_in_JavaScript/1-6.html" title="The following is a changelog for JavaScript 1.6. This version was included in Firefox 1.5 (Gecko 1.8), which was released in November 2005. The corresponding ECMA standard is ECMA-262 Edition 3 and ECMAScript for XML (E4X) with some additional features. Several new features were introduced: E4X, several new Array methods, and Array and String generics.">New in JavaScript 1.6</a></li><li><a href="../../New_in_JavaScript/1-7.html" title="The following is a changelog for JavaScript 1.7. This version was included in Firefox 2 (October 2006).">New in JavaScript 1.7</a></li><li><a href="../../New_in_JavaScript/1-8.html" title="The following is a changelog for JavaScript 1.8. This version was included in Firefox 3 and is part of Gecko 1.9. See bug&nbsp;380236 for a tracking development bug for JavaScript 1.8.">New in JavaScript 1.8</a></li><li><a href="../../New_in_JavaScript/1.8.html" title="The following is a changelog for JavaScript 1.8.1. This version was included in Firefox 3.5.">New in JavaScript 1.8.1</a></li><li><a href="../../New_in_JavaScript/1.8-2.html" title="The following is a changelog for JavaScript 1.8.5. This version was included in Firefox 4.">New in JavaScript 1.8.5</a></li></ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="../../Index.html">All pages index</a></li> 
+    <li><a href="../Methods_Index.html">Methods index</a></li> 
+    <li><a href="../Properties_Index.html">Properties index</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">Pages tagged "JavaScript"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/JavaScript">JavaScript doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators" selected="">
+          English (US)
+        </option>
+                  <option value="/ca/docs/Web/JavaScript/Referencia/Operadors/Bitwise_Operators">
+            Català
+          </option>          <option value="/es/docs/Web/JavaScript/Referencia/Operadores/Bitwise_Operators">
+            Español
+          </option>          <option value="/fr/docs/Web/JavaScript/Reference/Op%C3%A9rateurs/Op%C3%A9rateurs_binaires">
+            Français
+          </option>          <option value="/ja/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">
+            日本語
+          </option>          <option value="/ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">
+            한국어
+          </option>          <option value="/ru/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">
+            Русский
+          </option>          <option value="/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:26:19 GMT -->
+</body></html>

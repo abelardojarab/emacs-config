@@ -1,0 +1,1263 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:39:42 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>WebVTT</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format$json">
+  <link rel="canonical" href="Web_Video_Text_Tracks_Format.html">
+
+            <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/Web_Video_Text_Tracks_Format" title="WebVTT">
+          <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/Web/API/Web_Video_Text_Tracks_Format" title="WebVTT">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="WebVTT">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format">
+  <meta name="twitter:title" content="WebVTT">
+    <meta property="og:description" content="WebVTT is a format for displaying timed text tracks (e.g. subtitles) with the track element. The primary purpose of WebVTT files is to add subtitles to a video.">
+  <meta name="description" content="WebVTT is a format for displaying timed text tracks (e.g. subtitles) with the track element. The primary purpose of WebVTT files is to add subtitles to a video.">
+  <meta name="twitter:description" content="WebVTT is a format for displaying timed text tracks (e.g. subtitles) with the track element. The primary purpose of WebVTT files is to add subtitles to a video.">
+  
+      
+  </head>
+<body data-slug="Web/API/Web_Video_Text_Tracks_Format" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Web_Video_Text_Tracks_Format" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Video_Text_Tracks_Format" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Web_Video_Text_Tracks_Format" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Video_Text_Tracks_Format" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/Web_Video_Text_Tracks_Format" title="WebVTT">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/Web/API/Web_Video_Text_Tracks_Format" title="WebVTT">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">WebVTT</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>WebVTT</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 11 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz" title="View profile: Sebastianz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sebastianz" data-src="../../../../../secure.gravatar.com/avatar/337fa9c543a4f881977b6d2fbbd2dea86aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sebastianz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/KK4OXJ" title="View profile: KK4OXJ">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="KK4OXJ" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">KK4OXJ</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/crazyformozilla01" title="View profile: crazyformozilla01">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="crazyformozilla01" data-src="../../../../../secure.gravatar.com/avatar/9605d23a0e7dbabdc37b8377b8cd74de6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">crazyformozilla01</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/davidbourguignon" title="View profile: davidbourguignon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="davidbourguignon" data-src="../../../../../secure.gravatar.com/avatar/d3492dc17fd7396f98ab3e1fe9b2d7c66aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">davidbourguignon</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/MattBrubeck" title="View profile: MattBrubeck">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MattBrubeck" data-src="../../../../../secure.gravatar.com/avatar/6c7f46790bdcbae3f2046b02b43ab6bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">MattBrubeck</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/james_oh" title="View profile: james_oh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="james_oh" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">james_oh</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/KyleBarnhart" title="View profile: KyleBarnhart">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="KyleBarnhart" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">KyleBarnhart</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#WebVTT_Body" rel="internal">WebVTT Body</a></li><li><a href="#WebVTT_Comment" rel="internal">WebVTT Comment</a></li><li><a href="#WebVTT_Cues" rel="internal">WebVTT Cues</a><ol><li><a href="#Cue_Identifier" rel="internal">Cue Identifier</a></li><li><a href="#Cue_Timings" rel="internal">Cue Timings</a></li><li><a href="#Cue_Settings" rel="internal">Cue Settings</a></li><li><a href="#Cue_Payload" rel="internal">Cue Payload</a></li><li><a href="#Cue_Payload_Text_Tags" rel="internal">Cue Payload Text Tags</a></li></ol></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Compatibility" rel="internal">Compatibility</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><div class="overheadIndicator htmlVer htmlMinVerHeader"> 
+  <p>Introduced in <a href="https://developer.mozilla.org/en-US/docs/HTML/HTML5">HTML5</a></p> 
+</div></div>
+
+<p>WebVTT is a format for displaying timed text tracks (e.g. subtitles) with the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track" title="The HTML &lt;track&gt; element is used as a child of the media elements—&lt;audio&gt; and &lt;video&gt;. It lets you specify timed text tracks (or time-based data), for example to automatically handle subtitles. The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks."><code>&lt;track&gt;</code></a> element. The primary purpose of WebVTT files is to add subtitles to a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a>.</p>
+
+<p>WebVTT is a text based format. A WebVTT file must be encoded in UTF-8 format. Where you can use spaces you can also use tabs.</p>
+
+<p>The mime type of WebVTT is <code>text/vtt</code>.</p>
+
+<h2 id="WebVTT_Body">WebVTT Body</h2>
+
+<p>The structure of a WebVTT file requires two things and has four optional components.</p>
+
+<ul>
+ <li>An optional byte order mark (BOM)</li>
+ <li>The string <code>WEBVTT</code></li>
+ <li>An optional text header to the right of <code>WEBVTT</code>.
+  <ul>
+   <li>There must be at least one space after <code>WEBVTT</code></li>
+   <li>You might use this to add a description to the file</li>
+   <li>You may use anything except newlines or the string "<code>--&gt;"</code></li>
+  </ul>
+ </li>
+ <li>A blank line, which is equivalent to two consecutive newlines.</li>
+ <li>Zero or more cues or comments.</li>
+ <li>Zero or more blank lines.</li>
+</ul>
+
+<h5 id="Example_1_-_Simplest_possible_WEBVTT_file">Example 1 - Simplest possible WEBVTT file</h5>
+
+<pre class="eval">  WEBVTT
+</pre>
+
+<h5 id="Example_2_-_Very_simple_WebVTT_file">Example 2 - Very simple WebVTT file</h5>
+
+<pre class="eval">  WEBVTT - This file has no cues.
+</pre>
+
+<h5 id="Example_3_-_Common_WebVTT_example">Example 3 - Common WebVTT example</h5>
+
+<pre class="eval">  WEBVTT - This file has cues.
+
+  14
+  00:01:14.815 --&gt; 00:01:18.114
+  - What?
+  - Where are we now?
+
+  15
+  00:01:18.171 --&gt; 00:01:20.991
+  - This is big bat country.
+
+  16
+  00:01:21.058 --&gt; 00:01:23.868
+  - [ Bats Screeching ]
+  - They won't get in your hair. They're after the bugs.
+</pre>
+
+<h2 id="WebVTT_Comment">WebVTT Comment</h2>
+
+<p>Comments are an optional component that can be used to add information to a WebVTT file. Comments are intended for those reading the file and are not seen by users. Comments may contain newlines but it cannot contain a blank line, which is equivalent to two consecutive newlines. A blank line signifies the end of a comment.</p>
+
+<p>A comment cannot contain the string "<code>--&gt;",</code>&nbsp;the ampersand character (&amp;), or the less-than sign (&lt;). Instead use the escape sequence "&amp;amp;" for ampersand and "&amp;lt;" for less-than. It is also recommended that you use the greater-than escape sequence "&amp;gt;" instead of the greater-than character (&gt;) to avoid confusion with tags.</p>
+
+<p>A comment consists of three parts:</p>
+
+<ul>
+ <li>The string <code>NOTE</code></li>
+ <li>A space or a newline</li>
+ <li>Zero or more characters other than those noted above</li>
+</ul>
+
+<h5 id="Example_4_-_Common_WebVTT_example">Example 4 - Common WebVTT example</h5>
+
+<pre class="eval">  NOTE This is a comment
+</pre>
+
+<h5 id="Example_5_-_Multi-line_comment">Example 5 - Multi-line comment</h5>
+
+<pre class="eval">  NOTE
+  Another comment that is spanning
+  more than one line.
+
+  NOTE You can also make a comment
+  across more than one line this way.
+</pre>
+
+<h5 id="Example_6_-_Common_comment_usage">Example 6 - Common comment usage</h5>
+
+<pre class="eval">  WEBVTT - Translation of that film I like
+
+  NOTE
+  This translation was done by Kyle so that
+  some friends can watch it with their parents.
+
+  1
+  00:02:15.000 --&gt; 00:02:20.000
+  - Ta en kopp varmt te.
+  - Det är inte varmt.
+
+  2
+  00:02:20.000 --&gt; 00:02:25.000
+  - Har en kopp te.
+  - Det smakar som te.  
+
+  NOTE This last line may not translate well.
+
+  3
+  00:02:25.000 --&gt; 00:02:30.000
+  -Ta en kopp.
+</pre>
+
+<h2 id="WebVTT_Cues">WebVTT Cues</h2>
+
+<p>A cue is a single subtitle block that has a single start time, end time, and textual payload. Example 6 consists of the header, a blank line, and then five cues separated by blank lines. A cue consists of five components:</p>
+
+<ul>
+ <li>An optional cue identifier followed by a newline</li>
+ <li>Cue timings</li>
+ <li>Optional cue settings with at least one space before the first and between each setting</li>
+ <li>One or more newlines</li>
+ <li>The cue payload text</li>
+</ul>
+
+<h5 id="Example_7_-_Example_of_a_cue">Example 7 - Example of a cue</h5>
+
+<pre class="eval">1 - Title Crawl
+00:00:5.000 --&gt; 00:00:10.000 line:0 position:20% size:60% align:start
+Some time ago in a place rather distant....</pre>
+
+<h3 id="Cue_Identifier">Cue Identifier</h3>
+
+<p>The identifier is a name that identifies the cue. It can be used to reference the cue from a script. It must not contain a newline and cannot contain the string "<code>--&gt;"</code>. It must end with a single newline. They do not have to be unique, although it is common to number them (e.g. 1, 2, 3, ...).</p>
+
+<h5 id="Example_8_-_Cue_identifier_from_Example_7">Example 8 - Cue identifier from Example 7</h5>
+
+<pre class="eval">1 - Title Crawl</pre>
+
+<h5 id="Example_9_-_Common_usage_of_identifiers">Example 9 - Common usage of identifiers</h5>
+
+<pre class="eval">WEBVTT
+
+1
+00:00:22.230 --&gt; 00:00:24.606
+This is the first subtitle.
+
+2
+00:00:30.739 --&gt; 00:00:34.074
+This is the second.
+
+3
+00:00:34.159 --&gt; 00:00:35.743
+Third
+</pre>
+
+<h3 id="Cue_Timings">Cue Timings</h3>
+
+<p>A cue timing indicates when the cue is shown. It has a start and end time which are represented by timestamps. The end time must be greater than the start time, and the start time must be greater than or equal to all previous start times. Cues may have overlapping timings.</p>
+
+<p>If the WebVTT file is being used for chapters (<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track" title="The HTML &lt;track&gt; element is used as a child of the media elements—&lt;audio&gt; and &lt;video&gt;. It lets you specify timed text tracks (or time-based data), for example to automatically handle subtitles. The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks."><code>&lt;track&gt;</code></a> <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-kind">kind</a></code> is <code>chapters</code>) then the file cannot have overlapping timings.</p>
+
+<p>Each cue timing contains five components:</p>
+
+<ul>
+ <li>Timestamp for start time</li>
+ <li>At least one space</li>
+ <li>The string "<code>--&gt;"</code></li>
+ <li>At least one space</li>
+ <li>Timestamp for end time
+  <ul>
+   <li>Which must be greater than the start time</li>
+  </ul>
+ </li>
+</ul>
+
+<p>The timestamps must be in one of two formats:</p>
+
+<ul>
+ <li><code>mm:ss.ttt</code></li>
+ <li><code>hh:mm:ss.ttt</code></li>
+</ul>
+
+<p>Where the components are defined as follows:</p>
+
+<ul>
+ <li><code>hh</code> is hours
+
+  <ul>
+   <li>Must be at least two digits and not less than 01</li>
+   <li>Hours can be greater than two digits (e.g. 9999:00:00.000)</li>
+  </ul>
+ </li>
+ <li><code>mm</code> is minutes
+  <ul>
+   <li>Must be between 00 and 59 inclusive</li>
+  </ul>
+ </li>
+ <li><code>ss</code> is senconds
+  <ul>
+   <li>Must be between 00 and 59 inclusive</li>
+  </ul>
+ </li>
+ <li><code>ttt</code> is miliseconds
+  <ul>
+   <li>Must be between 000 and 999 inclusive</li>
+  </ul>
+ </li>
+</ul>
+
+<h5 id="Example_10_-_Basic_cue_timing_examples">Example 10 - Basic cue timing examples</h5>
+
+<pre class="eval">00:22.230 --&gt; 00:24.606
+00:30.739 --&gt; 00:00:34.074
+00:00:34.159 --&gt; 00:35.743
+00:00:35.827 --&gt; 00:00:40.122</pre>
+
+<h5 id="Example_11_-_Overlapping_cue_timing_examples">Example 11 - Overlapping cue timing examples</h5>
+
+<pre class="eval">00:00:00.000 --&gt; 00:00:10.000
+00:00:05.000 --&gt; 00:01:00.000
+00:00:30.000 --&gt; 00:00:50.000</pre>
+
+<h5 id="Example_12_-_Non-overlapping_cue_timing_examples">Example 12 - Non-overlapping cue timing examples</h5>
+
+<pre class="eval">00:00:00.000 --&gt; 00:00:10.000
+00:00:10.000 --&gt; 00:01:00.581
+00:01:00.581 --&gt; 00:02:00.100
+00:02:01.000 --&gt; 00:02:01.000</pre>
+
+<h3 id="Cue_Settings">Cue Settings</h3>
+
+<p>Cue settings are optional components used to position where the cue payload text will be displayed over the video. This includes whether the text is displayed horizontally or vertically. There can be zero or more of them, and they can be used in any order so long as each setting is used no more than once.</p>
+
+<p>The cue settings are added to the right of the cue timings. There must be one or more spaces between the cue timing and the first setting and between each setting. A setting's name and value are separated by a colon. The settings are case sensitive so use lower case as shown. There are five cue settings:</p>
+
+<ul>
+ <li><strong>vertical</strong>
+
+  <ul>
+   <li>Indicates that the text will be displayed vertically rather than horizontally, such as in some Asian languages.</li>
+  </ul>
+
+  <table>
+   <thead>
+    <tr>
+     <th colspan="2">Table 1 - vertical values</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <th><code>vertical:rl</code></th>
+     <td>writing direction is right to left</td>
+    </tr>
+    <tr>
+     <th><code>vertical:lr</code></th>
+     <td>writing direction is left to right</td>
+    </tr>
+   </tbody>
+  </table>
+ </li>
+ <li><strong>line</strong>
+  <ul>
+   <li>Specifies where text appears vertically. If vertical is set, line specifies where text appears horizontally.</li>
+   <li>Value can be a line number
+    <ul>
+     <li>The line height is the height of the first line of the cue as it appears on the video</li>
+     <li>Positive numbers indicate top down</li>
+     <li>Negative numbers indicate bottom up</li>
+    </ul>
+   </li>
+   <li>Or value can be a percentage
+    <ul>
+     <li>Must be an integer (i.e. no decimals) between 0 and 100 inclusive</li>
+     <li>Must be followed by a percent sign (%)</li>
+    </ul>
+   </li>
+  </ul>
+
+  <table>
+   <thead>
+    <tr>
+     <th colspan="4">Table 2 - line examples</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <th>&nbsp;</th>
+     <th><code>vertical</code> omitted</th>
+     <th><code>vertical:rl</code></th>
+     <th><code>vertical:lr</code></th>
+    </tr>
+    <tr>
+     <th><code>line:0</code></th>
+     <td>top</td>
+     <td>right</td>
+     <td>left</td>
+    </tr>
+    <tr>
+     <th><code>line:-1</code></th>
+     <td>bottom</td>
+     <td>left</td>
+     <td>right</td>
+    </tr>
+    <tr>
+     <th><code>line:0%</code></th>
+     <td>top</td>
+     <td>right</td>
+     <td>left</td>
+    </tr>
+    <tr>
+     <th><code>line:100%</code></th>
+     <td>bottom</td>
+     <td>left</td>
+     <td>right</td>
+    </tr>
+   </tbody>
+  </table>
+ </li>
+ <li><strong>position</strong>
+  <ul>
+   <li>Specifies where the text will appear horizontally. If vertical is set, position specifies where the text will appear vertically.</li>
+   <li>Value is a percentage</li>
+   <li>Must be an integer (no decimals) between 0 and 100 inclusive</li>
+   <li>Must be followed by a percent sign (%)</li>
+  </ul>
+
+  <table>
+   <thead>
+    <tr>
+     <th colspan="4">Table 3 - position examples</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <th>&nbsp;</th>
+     <th><code>vertical</code> omitted</th>
+     <th><code>vertical:rl</code></th>
+     <th><code>vertical:lr</code></th>
+    </tr>
+    <tr>
+     <th><code>position:0%</code></th>
+     <td>left</td>
+     <td>top</td>
+     <td>top</td>
+    </tr>
+    <tr>
+     <th><code>position:100%</code></th>
+     <td>right</td>
+     <td>bottom</td>
+     <td>bottom</td>
+    </tr>
+   </tbody>
+  </table>
+ </li>
+ <li><strong>size</strong>
+  <ul>
+   <li>Specifies the width of the text area. If vertical is set, size specifies the height of the text area.</li>
+   <li>Value is a percentage</li>
+   <li>Must be an integer (i.e. no decimals) between 0 and 100 inclusive</li>
+   <li>Must be followed by a percent sign (%)</li>
+  </ul>
+
+  <table>
+   <thead>
+    <tr>
+     <th colspan="4">Table 4 - size examples</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <th>&nbsp;</th>
+     <th><code>vertical</code> omitted</th>
+     <th><code>vertical:rl</code></th>
+     <th><code>vertical:lr</code></th>
+    </tr>
+    <tr>
+     <th><code>size:100%</code></th>
+     <td>full width</td>
+     <td>full height</td>
+     <td>full height</td>
+    </tr>
+    <tr>
+     <th><code>size:50%</code></th>
+     <td>half width</td>
+     <td>half height</td>
+     <td>half height</td>
+    </tr>
+   </tbody>
+  </table>
+ </li>
+ <li><strong>align</strong>
+  <ul>
+   <li>Specifies the alignment of the text. Text is aligned within the space given by the size cue setting if it is set.</li>
+  </ul>
+
+  <table>
+   <thead>
+    <tr>
+     <th colspan="4">Table 5 - align values</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <th>&nbsp;</th>
+     <th><code>vertical</code> omitted</th>
+     <th><code>vertical:rl</code></th>
+     <th><code>vertical:lr</code></th>
+    </tr>
+    <tr>
+     <th><code>align:start</code></th>
+     <td>left</td>
+     <td>top</td>
+     <td>top</td>
+    </tr>
+    <tr>
+     <th><code>align:middle</code></th>
+     <td>centred horizontally</td>
+     <td>centred vertically</td>
+     <td>centred vertically</td>
+    </tr>
+    <tr>
+     <th><code>align:end</code></th>
+     <td>right</td>
+     <td>bottom</td>
+     <td>bottom</td>
+    </tr>
+   </tbody>
+  </table>
+ </li>
+</ul>
+
+<h5 id="Example_13_-_Cue_setting_examples">Example 13 - Cue setting examples</h5>
+
+<p>The first line demonstrates no settings. The second line might be used to overlay text on a sign or label. The third line might be used for a title. The last line might be used for an Asian language.</p>
+
+<pre class="eval">00:00:5.000 --&gt; 00:00:10.000
+00:00:5.000 --&gt; 00:00:10.000 line:63% position:72% align:start
+00:00:5.000 --&gt; 00:00:10.000 line:0 position:20% size:60% align:start
+00:00:5.000 --&gt; 00:00:10.000 vertical:rt line:-1 align:end
+</pre>
+
+<h3 id="Cue_Payload">Cue Payload</h3>
+
+<p>The payload is where the main information or content is located. In normal usage the payload contains the subtitles to be displayed.&nbsp;The payload text may contain newlines but it cannot contain a blank line, which is equivalent to two consecutive newlines. A blank line signifies the end of a cue.</p>
+
+<p>A cue text payload cannot contain the string "<code>--&gt;"</code>, the ampersand character (&amp;), or the less-than sign (&lt;). Instead use the escape sequence "&amp;amp;" for ampersand and "&amp;lt;" for less-than. It is also recommended that you use the greater-than escape sequence "&amp;gt;" instead of the greater-than character (&gt;) to avoid confusion with tags. If you are using the WebVTT file for metadata these restrictions do not apply.</p>
+
+<p>In addition to the three escape sequences mentioned above, there are fours others. They are listed in the table below.</p>
+
+<table>
+ <thead>
+  <tr>
+   <th colspan="3">Table 6 - Escape sequences</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th>Name</th>
+   <th>Character</th>
+   <th>Escape Sequence</th>
+  </tr>
+  <tr>
+   <td>Ampersand</td>
+   <td>&amp;</td>
+   <td><code>&amp;amp;</code></td>
+  </tr>
+  <tr>
+   <td>Less-than</td>
+   <td>&lt;</td>
+   <td><code>&amp;lt;</code></td>
+  </tr>
+  <tr>
+   <td>Greater-than</td>
+   <td>&gt;</td>
+   <td><code>&amp;gt;</code></td>
+  </tr>
+  <tr>
+   <td>Left-to-right mark</td>
+   <td>&nbsp;</td>
+   <td><code>&amp;lrm;</code></td>
+  </tr>
+  <tr>
+   <td>Right-to-left mark</td>
+   <td>&nbsp;</td>
+   <td><code>&amp;rlm;</code></td>
+  </tr>
+  <tr>
+   <td>Non-breaking space</td>
+   <td><code>&nbsp;</code></td>
+   <td><code>&amp;nbsp;</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Cue_Payload_Text_Tags">Cue Payload Text Tags</h3>
+
+<p>There are a number of tags, such as <code>&lt;bold&gt;</code>, that can be used. However, if the WebVTT file is used in a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track" title="The HTML &lt;track&gt; element is used as a child of the media elements—&lt;audio&gt; and &lt;video&gt;. It lets you specify timed text tracks (or time-based data), for example to automatically handle subtitles. The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks."><code>&lt;track&gt;</code></a> element where the attribute <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-kind">kind</a></code> is <code>chapters</code> then you cannot use tags.</p>
+
+<ul>
+ <li><strong>Timestamp tag</strong>
+
+  <ul>
+   <li>The timestamp must be greater that the cue's start timestamp, greater than any previous timestamp in the cue payload, and less than the cue's end timestamp. The<em>active text</em> is the text between the timestamp and the next timestamp or to the end of the payload if there is not another timestamp in the payload. Any text before the<em>active text</em> in the payload is<em>previous text</em> . Any text beyond the<em>active text</em> is<em>future text</em> . This enables karaoke style captions.</li>
+  </ul>
+
+  <div>
+  <h5 id="Example_12_-_Karaoke_style_text">Example 12 - Karaoke style text</h5>
+
+  <pre class="eval">1
+00:16.500 --&gt; 00:18.500
+When the moon &lt;00:17.500&gt;hits your eye
+
+1
+00:00:18.500 --&gt; 00:00:20.500
+Like a &lt;00:19.000&gt;big-a &lt;00:19.500&gt;pizza &lt;00:20.000&gt;pie
+
+1
+00:00:20.500 --&gt; 00:00:21.500
+That's &lt;00:00:21.000&gt;amore
+      </pre>
+  </div>
+ </li>
+</ul>
+
+<p>The following tags are the HTML tags allowed in a cue and require opening and closing tags (e.g. <code>&lt;b&gt;text&lt;/b&gt;</code>).</p>
+
+<ul>
+ <li><strong>Class tag</strong> (<code>&lt;c&gt;&lt;/c&gt;</code>)
+
+  <ul>
+   <li>Style the contained text using a CSS class.</li>
+  </ul>
+
+  <div>
+  <h5 id="Example_14_-_Class_tag">Example 14 - Class tag</h5>
+
+  <pre class="brush: html">&lt;c.classname&gt;text&lt;/c&gt;</pre>
+  </div>
+ </li>
+ <li><strong>Italics tag</strong> (<code>&lt;i&gt;&lt;/i&gt;</code>)
+  <ul>
+   <li>Italicize the contained text.</li>
+  </ul>
+
+  <div>
+  <h5 id="Example_15_-_Italics_tag">Example 15 - Italics tag</h5>
+
+  <pre class="brush: html">&lt;i&gt;text&lt;/i&gt;</pre>
+  </div>
+ </li>
+ <li><strong>Bold tag</strong> (<code>&lt;b&gt;&lt;/b&gt;</code>)
+  <ul>
+   <li>Bold the contained text.</li>
+  </ul>
+
+  <div>
+  <h5 id="Example_16_-_Bold_tag">Example 16 - Bold tag</h5>
+
+  <pre class="brush: html">&lt;b&gt;text&lt;/b&gt;</pre>
+  </div>
+ </li>
+ <li><strong>Underline tag</strong> (<code>&lt;u&gt;&lt;/u&gt;</code>)
+  <ul>
+   <li>Underline the contained text.</li>
+  </ul>
+
+  <div>
+  <h5 id="Example_17_-_Underline_tag">Example 17 - Underline tag</h5>
+
+  <pre class="brush: html">&lt;u&gt;text&lt;/u&gt;</pre>
+  </div>
+ </li>
+ <li><strong>Ruby tag</strong> (<code>&lt;ruby&gt;&lt;/ruby&gt;</code>)
+  <ul>
+   <li>Used with ruby text tags to display <a href="http://en.wikipedia.org/wiki/Ruby_character" class="external">ruby characters</a> (i.e. small annotative characters above other characters).</li>
+  </ul>
+
+  <div>
+  <h5 id="Example_18_-_Ruby_tag">Example 18 - Ruby tag</h5>
+
+  <pre class="brush: html">&lt;ruby&gt;WWW&lt;rt&gt;World Wide Web&lt;/rt&gt;oui&lt;rt&gt;yes&lt;/rt&gt;&lt;/ruby&gt;</pre>
+  </div>
+ </li>
+ <li><strong>Ruby text tag</strong> (<code>&lt;rt&gt;&lt;/rt&gt;</code>)
+  <ul>
+   <li>Used with ruby tags to display <a href="http://en.wikipedia.org/wiki/Ruby_character" class="external">ruby characters</a> (i.e. small annotative characters above other characters).</li>
+  </ul>
+
+  <div>
+  <h5 id="Example_19_-_Ruby_text_tag">Example 19 - Ruby text tag</h5>
+
+  <pre class="brush: html">&lt;ruby&gt;WWW&lt;rt&gt;World Wide Web&lt;/rt&gt;oui&lt;rt&gt;yes&lt;/rt&gt;&lt;/ruby&gt;</pre>
+  </div>
+ </li>
+ <li><strong>Voice tag</strong> (<code>&lt;v&gt;&lt;/v&gt;</code>)
+  <ul>
+   <li>Similar to class tag, also used to style the contained text using CSS.</li>
+  </ul>
+
+  <div>
+  <h5 id="Example_20_-_Voice_tag">Example 20 - Voice tag</h5>
+
+  <pre class="brush: html">&lt;v Bob&gt;text&lt;/v&gt;</pre>
+  </div>
+ </li>
+</ul>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th>Specification</th>
+   <th>Status</th>
+   <th>Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://dev.w3.org/html5/webvtt/" class="external" lang="en" title="The 'WebVTT: The Web Video Text Tracks Format' specification" hreflang="en">WebVTT: The Web Video Text Tracks Format</a></td>
+   <td><span class="spec-Draft">Draft</span></td>
+   <td>Initial definition</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Compatibility">Compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>18</td>
+   <td>24<sup>[1]</sup></td>
+   <td>10</td>
+   <td>15.0</td>
+   <td>7</td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IChrome for Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>4.4</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>35.0</td>
+   <td>21.0</td>
+   <td>7</td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] This feature is disabled by default in Gecko. See <a href="https://wiki.mozilla.org/WebVTT" class="external">more information within theMozilla wiki</a>.</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/captions">captions</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Intermediate">Intermediate</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/subtitles">subtitles</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/text tracks">text tracks</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web Video Text Tracks">Web Video Text Tracks</a></li>
+              <li><a href="../../tag/WebAPI.html">WebAPI</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebVTT">WebVTT</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/KK4OXJ">KK4OXJ</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/crazyformozilla01">crazyformozilla01</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/davidbourguignon">davidbourguignon</a>,             <a href="https://developer.mozilla.org/en-US/profiles/MattBrubeck">MattBrubeck</a>,             <a href="https://developer.mozilla.org/en-US/profiles/james_oh">james_oh</a>,             <a href="https://developer.mozilla.org/en-US/profiles/KyleBarnhart">KyleBarnhart</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>,
+                      <time datetime="2015-07-28T05:24:48-07:00">Jul 28, 2015, 5:24:48 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Web_Video_Text_Tracks_Format$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Web_Video_Text_Tracks_Format$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Web_Video_Text_Tracks_Format" selected="">
+          English (US)
+        </option>
+                  <option value="/ja/docs/Web/API/Web_Video_Text_Tracks_Format">
+            日本語
+          </option>          <option value="/zh-TW/docs/Web/API/Web_Video_Text_Tracks_Format">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:39:44 GMT -->
+</body></html>

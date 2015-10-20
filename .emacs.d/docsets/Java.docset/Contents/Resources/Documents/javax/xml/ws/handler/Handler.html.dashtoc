@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"close(MessageContext)","path":"close-javax.xml.ws.handler.MessageContext-","entryType":"Method"},{"name":"handleFault(C)","path":"handleFault-C-","entryType":"Method"},{"name":"handleMessage(C)","path":"handleMessage-C-","entryType":"Method"}]}

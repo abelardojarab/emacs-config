@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"HexBinaryAdapter()","path":"HexBinaryAdapter--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"marshal(byte[]A)","path":"marshal-byte:A-","entryType":"Method"},{"name":"unmarshal(String)","path":"unmarshal-java.lang.String-","entryType":"Method"}]}

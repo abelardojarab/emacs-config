@@ -1,0 +1,733 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_concepts by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:11:41 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>WebVR concepts</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_concepts$json">
+  <link rel="canonical" href="WebVR_concepts.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="WebVR concepts">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_concepts">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_concepts">
+  <meta name="twitter:title" content="WebVR concepts">
+    <meta property="og:description" content="This article discusses some of the concepts and theory behind virtual reality (VR). If you are a newcomer to the area, it is worthwhile getting an understanding of these topics before you start diving into code.">
+  <meta name="description" content="This article discusses some of the concepts and theory behind virtual reality (VR). If you are a newcomer to the area, it is worthwhile getting an understanding of these topics before you start diving into code.">
+  <meta name="twitter:description" content="This article discusses some of the concepts and theory behind virtual reality (VR). If you are a newcomer to the area, it is worthwhile getting an understanding of these topics before you start diving into code.">
+  
+      
+  </head>
+<body data-slug="Web/API/WebVR_API/WebVR_concepts" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/WebVR_API/WebVR_concepts" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebVR_API%2FWebVR_concepts" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/WebVR_API/WebVR_concepts" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebVR_API%2FWebVR_concepts" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_concepts$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_concepts$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_concepts$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../WebVR_API.html" rel="v:url" property="v:title">WebVR API</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">WebVR concepts</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>WebVR concepts</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 4 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/omarimayerswalker" title="View profile: omarimayerswalker">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="omarimayerswalker" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">omarimayerswalker</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/arturitu" title="View profile: arturitu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="arturitu" data-src="../../../../../../secure.gravatar.com/avatar/48035ad4f98ef5bbeaffa4b1684f0d356aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">arturitu</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/groovecoder" title="View profile: groovecoder">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="groovecoder" data-src="../../../../../../secure.gravatar.com/avatar/ec25d046746de3be33779256f6957d8f6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">groovecoder</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Background" rel="internal">Background</a></li><li><a href="#VR_Hardware_setup" rel="internal">VR Hardware setup</a></li><li><a href="#VR_Hardware" rel="internal">VR Hardware</a></li><li><a href="#Position_and_orientation_velocity_and_acceleration" rel="internal">Position and orientation, velocity and acceleration</a></li><li><a href="#Field_of_view" rel="internal">Field of view</a></li><li><a href="#Concepts_for_VR_apps" rel="internal">Concepts for VR apps</a><ol><li><a href="#Stereoscopic_vision" rel="internal">Stereoscopic vision</a></li><li><a href="#Head_tracking" rel="internal">Head tracking</a></li><li><a href="#Eye_strain" rel="internal">Eye strain</a></li><li><a href="#Motion_sickness" rel="internal">Motion sickness</a></li><li><a href="#Latency" rel="internal">Latency</a></li><li><a href="#Framerate_(_Frames_per_second_FPS_)" rel="internal">Framerate ( Frames per second / FPS )</a></li><li><a href="#Interpupillary_distance_(_IPD_)" rel="internal">Interpupillary distance ( IPD )</a></li><li><a href="#Degrees_of_Freedom_(_DoF_)" rel="internal">Degrees of Freedom ( DoF )</a></li><li><a href="#Cone_of_focus" rel="internal">Cone of focus</a></li><li><a href="#3D_Positional_Audio" rel="internal">3D Positional Audio</a></li></ol></li>
+                </ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p class="summary">This article discusses some of the concepts and theory behind virtual reality (VR). If you are a newcomer to the area, it is worthwhile getting an understanding of these topics before you start diving into code.</p>
+
+<h2 id="Background">Background</h2>
+
+<p>VR is not a completely new concept — VR devices have been around for perhaps 20 years, so what's new? Virtual Reality hardware needs to deliver high-precision, low-latency data to deliver an acceptable user experience; computers running VR applications need to be powerful enough to handle all this information. It has not been until recently that such accuracy and power has been available at an afforable cost, if at all. Early VR prototypes cost tens of thousands of dollars, whereas the latest <a href="https://www.oculus.com/rift/" class="external">Oculus Rift</a> developer kit is available for $350, and cheaper solutions are available, such as mobile device-based solutions like <a href="https://www.google.com/get/cardboard/" class="external">Google Cardboard</a>.</p>
+
+<p>By 2015, such VRDevices gained commercial support for VR technology. Sony are developing a VR hardware kit for the PS4 (codename <a href="http://www.cnet.com/products/sony-project-morpheus/" class="external">Project Morpheus</a>), Facebook bought Oculus Rift for $2 billion, Valve has created <a href="http://store.steampowered.com/universe/vr" class="external">SteamVR</a> software that works with HTC's <a href="http://www.htcvr.com/" class="external">Vive VR headset</a>, and Google has launched a 2.0&nbsp;version&nbsp;of its Cardboard &nbsp;that&nbsp;supports up to 6 inch phones (it is also fully compatible with iOS devices because it has a piece of conductive foam that works as a tap over the screen.)</p>
+
+<p>Samsung also launched a headset associated with Oculus called <a href="http://www.samsung.com/global/microsite/gearvr/gearvr_features.html" class="external">GearVR</a>, which works by connecting its Note 4 and 6S devices. This however only works with native apps,&nbsp;so it is not very interesting for the specific area of WebVR.</p>
+
+<h2 id="VR_Hardware_setup" style="line-height: 30px; font-size: 2.14285714285714rem;">VR Hardware setup</h2>
+
+<p>There are mainly two types of setup, mobile or computer connected:</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11085/mobileBasedVRSetup.png" style="width: 100%;" alt="Mobile based VR setup"></p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11089/computerBasedVRSetup.png" style="width: 100%;" alt="Computer based VR Setup"></p>
+
+<h2 id="VR_Hardware" style="line-height: 30px; font-size: 2.14285714285714rem;">VR Hardware</h2>
+
+<p>The minimum hardware required is:</p>
+
+<ul>
+ <li>A head mounted display (HMD)
+  <ul>
+   <li>Computer connected&nbsp;setup: This consists of a high resolution landscape-oriented screen onto which the visuals for both the left and right eye are displayed. It also includes a lens for each eye to promote separation of the left and right eye scene (stereoscopic vision.)</li>
+   <li>Mobile setup: Your smartphone&nbsp;acts as the screen and fits inside an HMD, which includes&nbsp;the required&nbsp;lenses&nbsp;to provide stereoscopic vision&nbsp;of what is projected on the mobile screen.</li>
+  </ul>
+ </li>
+</ul>
+
+<p>Optionally we have:</p>
+
+<ul>
+ <li>A position sensor (computer connected setup only): A specialised camera that calculates the position and orientation of the HMD, along with any linear or angular velocity/acceleration being experienced by the HMD, and outputs this information constantly.</li>
+</ul>
+
+<p>Other&nbsp;hardware that complements the VR experience includes:</p>
+
+<ul>
+ <li>A hand recognition sensor: A sensor that tracks the position and movement of your hand, allowing it to become an interesting controller, and an object in VR gameworlds. The most advanced to date is the <a href="https://www.leapmotion.com/" class="external">Leap Motion</a>, which works with the computer&nbsp;(connected to the Oculus Rift) and can also work connected to a mobile device (the latter is in an experimental phase.)</li>
+ <li>A gamepad: We can configurate an XBox controller or similar to work as a keyboard in the browser — this offers further possibilities of interaction with a VR webpage. There are some gamepads that work with a mobile setup — like the <a href="http://www.mergevr.com/" class="external">MergeVR headset</a> — but these are connected via Bluetooth so don't work with WebVR.&nbsp;</li>
+ <li>An eye tracking sensor (experimental): The FOVE project&nbsp;is the first headset that&nbsp;reads subtle eye movements.</li>
+ <li>A facial expression tracker&nbsp;(experimental):&nbsp;Researchers at the University of Southern California and Facebook’s Oculus division have been testing new ways of tracking facial expressions and transferring them to a virtual character.</li>
+ <li>A more complex positional sensor system: The SteamVR controller, combined with the <a href="http://www.roadtovr.com/steamvr-beta-update-brings-lighthouse-support-and-vr-tracking-app/" class="external">Lighthouse</a> tracking system aims to achieve an experience in which you can move through a space of 10x10 square feet in a VR world.</li>
+</ul>
+
+<h2 id="Position_and_orientation_velocity_and_acceleration">Position and orientation, velocity and acceleration</h2>
+
+<p>As mentioned above, the position sensor detects information concerning the HMD and constantly outputs it, allowing you to continually update a scene according to head movement, rotation, etc. But what exactly is the information?</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11083/positionOrientationVR.png" style="width: 100%;" alt="Position and Orientation VR setup"></p>
+
+<p>The output information falls into four categories:</p>
+
+<ol>
+ <li>Position — The position of the HMD along three axes in a 3D coordinate space. x is to the left and right, y is up and down, and z is towards and away from the position sensor. In WebVR:
+  <ul>
+   <li>x position is represented by <a href="../VRPositionState/position.html" title="The position read-only property of the VRPositionState interface returns the current position of the sensor relative to the head mounted display, as a 3D vector (DOMPoint value.)"><code>VRPositionState.position</code></a>.x.</li>
+   <li>y position is represented by <a href="../VRPositionState/position.html" title="The position read-only property of the VRPositionState interface returns the current position of the sensor relative to the head mounted display, as a 3D vector (DOMPoint value.)"><code>VRPositionState.position</code></a>.y.</li>
+   <li>z position is represented by <a href="../VRPositionState/position.html" title="The position read-only property of the VRPositionState interface returns the current position of the sensor relative to the head mounted display, as a 3D vector (DOMPoint value.)"><code>VRPositionState.position</code></a>.z.</li>
+  </ul>
+ </li>
+ <li>Orientation — The rotation of the HMD around three axes in a 3D coordinate space. Pitch is rotation around the x axis, yaw is rotation around the y axis, and roll is rotation around the z axis. In WebVR:
+  <ul>
+   <li>Pitch is represented by <a href="../VRPositionState/orientation.html" title="The orientation read-only property of the VRPositionState interface returns the current orientation of the sensor relative to the head mounted display, as a quarternion value."><code>VRPositionState.orientation</code></a>.x.</li>
+   <li>Yaw is represented by <a href="../VRPositionState/orientation.html" title="The orientation read-only property of the VRPositionState interface returns the current orientation of the sensor relative to the head mounted display, as a quarternion value."><code>VRPositionState.orientation</code></a>.y.</li>
+   <li>Roll is represented by <a href="../VRPositionState/orientation.html" title="The orientation read-only property of the VRPositionState interface returns the current orientation of the sensor relative to the head mounted display, as a quarternion value."><code>VRPositionState.orientation</code></a>.z.</li>
+  </ul>
+ </li>
+ <li>Velocity — There are two types of velocity to consider in VR:
+  <ul>
+   <li>Linear — The speed along any one of the axes that the HMD is traveling. This information can be accessed using <a href="../VRPositionState/linearVelocity.html" title="The linearVelocity read-only property of the VRPositionState interface returns the current linear velocity of the sensor."><code>VRPositionState.linearVelocity</code></a> (x, y, and z.)</li>
+   <li>Angular — The speed at which the HMD is rotating around any one of the axes. This information can be accessed using <a href="../VRPositionState/angularVelocity.html" title="The angularVelocity read-only property of the VRPositionState interface returns the current angular velocity of the sensor."><code>VRPositionState.angularVelocity</code></a> (x, y, and z.)</li>
+  </ul>
+ </li>
+ <li>Acceleration — There are two types of acceleration to consider in VR:
+  <ul>
+   <li>Linear — The acceleration of travel along any one of the axes that the HMD is traveling. This information can be accessed using <a href="../VRPositionState/linearAcceleration.html" title="The linearAcceleration read-only property of the VRPositionState interface returns the current linear acceleration of the sensor."><code>VRPositionState.linearAcceleration</code></a> (x, y, and z.)</li>
+   <li>Angular — The acceleration of rotation of the HMD around any one of the axes. This information can be accessed using <a href="../VRPositionState/angularAcceleration.html" title="The angularAcceleration read-only property of the VRPositionState interface returns the current angular acceleration of the sensor."><code>VRPositionState.angularAcceleration</code></a> (x, y, and z.)</li>
+  </ul>
+ </li>
+</ol>
+
+<h2 id="Field_of_view">Field of view</h2>
+
+<p>The field of view (FOV) is the area that each of the user's eyes can reasonably be expected to see. It roughly takes the form of a pyramid shape, laid down on one side, with the apex inside the user's head, and the rest of the pyramid eminating from the user's eye. Each eye has it's own FOV, one slightly overlapping the other.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11091/FOVrelatedProperties.png" style="width: 100%;" alt="FOV related properties"></p>
+
+<p>The FOV is defined by the following values:</p>
+
+<ul>
+ <li><a href="../VRFieldOfViewReadOnly/upDegrees.html" title="The upDegrees read-only property of the VRFieldOfViewReadOnly interface returns the number of degrees upwards that the field of view extends in."><code>VRFieldOfViewReadOnly.upDegrees</code></a>: The number of degrees upwards that the field of view extends in.</li>
+ <li><a href="../VRFieldOfViewReadOnly/rightDegrees.html" title="The rightDegrees read-only property of the VRFieldOfViewReadOnly interface returns the number of degrees to the right that the field of view extends in."><code>VRFieldOfViewReadOnly.rightDegrees</code></a>: The number of degrees to the right that the field of view extends in.</li>
+ <li><a href="../VRFieldOfViewReadOnly/downDegrees.html" title="The downDegrees read-only property of the VRFieldOfViewReadOnly interface returns the number of degrees downwards that the field of view extends in."><code>VRFieldOfViewReadOnly.downDegrees</code></a>: The number of degrees downwards that the field of view extends in.</li>
+ <li><a href="../VRFieldOfViewReadOnly/leftDegrees.html" title="The leftDegrees read-only property of the VRFieldOfViewReadOnly interface returns the number of degrees to the left that the field of view extends in."><code>VRFieldOfViewReadOnly.leftDegrees</code></a>: The number of degrees to the left that the field of view extends in.</li>
+ <li>zNear: The distance from the middle of the user's head to the start of the visible FOV. &nbsp;</li>
+ <li>zFar: The distance from the middle of the user's head to the end of the visible FOV.</li>
+</ul>
+
+<p>The default values for these properties will differ slightly by VR hardware, although they tend to be around 53° up and down, and 47° left and right, with zNear and zFar coming in at around 0.1m and 10000m respectively.</p>
+
+<p>Different users will also require slightly different values for optimal viewing. It therefore makes sense to be able to calibrate these when a user starts using an app. You can detect the current value of these using the methods of the <a href="../VREyeParameters.html" title="The VREyeParameters interface of the WebVR API represents all the information required to correctly render a scene for a given eye, including field of view information."><code>VREyeParameters</code></a> interface, and set new values using the <a href="../HMDVRDevice/setFieldOfView.html" title="The setFieldOfView() method of the HMDVRDevice interface can be used to set the field of view for one eye, or both eyes simultaneously."><code>HMDVRDevice.setFieldOfView()</code></a> method.</p>
+
+<h2 id="Concepts_for_VR_apps">Concepts for VR apps</h2>
+
+<p>This section discusses concepts to be aware of when developing VR apps that you've probably not had to consider before when developing regular apps for mobile or desktop.</p>
+
+<h3 id="Stereoscopic_vision">Stereoscopic vision</h3>
+
+<p>Stereoscopic vision is the normal vision humans and (most) animals have —&nbsp;<span class="hvr">the</span>&nbsp;<span class="hvr">perception</span>&nbsp;of two&nbsp;<span class="hvr">slightly</span>&nbsp;<span class="hvr">differing</span>&nbsp;<span class="hvr">images</span>&nbsp;(one&nbsp;<span class="hvr">from</span>&nbsp;<span class="hvr">each</span>&nbsp;<span class="hvr">eye) as a single image. This</span>&nbsp;<span class="hvr">results</span>&nbsp;in&nbsp;<span class="hvr">depth</span>&nbsp;<span class="hvr">perception, helping us to see the world in glorious 3D. To recreate this in VR apps, you need to render two very slightly different views side by side, which will be taken in by the left and right eyes when the user is using the HMD.</span></p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11095/createStereoscopicImages.png" style="width: 100%;" alt="How to create stereoscopic 3D images"></p>
+
+<h3 id="Head_tracking" style="line-height: 24px; font-size: 1.71428571428571rem;">Head tracking</h3>
+
+<p>The primary technology used to make you feel present in a 360º scene, thanks to the&nbsp;gyroscope, accelerometer, and magnetometer (compass) included in the HMD.<br>
+ It&nbsp;has primary relevance because it makes our eyes believe we are in front of a spherical&nbsp;screen, giving users realistic immersion inside the app canvas.</p>
+
+<h3 id="Eye_strain">Eye strain</h3>
+
+<p>A term commonly used in VR because it is a major handicap of using an HMD — we are constantly fooling the eye&nbsp;with what we are showing in the app canvas, and this leads to the eyes doing a lot more work than they normally would, so using VR apps for any extended period of time can lead to eye strain.</p>
+
+<p>To minimize this unwanted effect, we need to:</p>
+
+<ul>
+ <li>Avoid focusing on different depths&nbsp;(e.g. avoid using a lot of&nbsp;particles with differents depths.)</li>
+ <li>Avoid eye convergion&nbsp;(e.g. if you have an object&nbsp;that comes towards the camera your eyes will follow and converge on it.)</li>
+ <li>Use darker backgrounds with more subdued colors where possible; a bright screen will make the eyes more tired.</li>
+ <li>Avoid rapid brightness changes.</li>
+ <li>Avoid presenting the user with large amounts of text to read. You should also be careful with the distance between the eyes/camera and the text to read. 0.5m is uncomfortable, whereas at more than&nbsp;2m the stereo effect starts to break down, so somewhere in between is advisable.</li>
+ <li>Be careful with the distance between objects and the camera in general. Oculus recommends 0.75m as a minimum distance of focus.</li>
+ <li>Use a pointer if the user needs to interact with an object in the scene — this will help them point to it correctly with less effort.</li>
+</ul>
+
+<p>In general, the path of least visual effort will give the user a less tiring experience.</p>
+
+<h3 id="Motion_sickness">Motion sickness</h3>
+
+<p>If developers do not take utmost care, VR apps can actually cause their users to feel sick. This effect is produced when the stimuli their eyes are receiving is not what the body expects to receive.</p>
+
+<p>To avoid bringing on motion sickness in our users (or at least minimize the effects), we need to:</p>
+
+<ul>
+ <li>Always maintain head tracking (this is the most important of all,&nbsp;especially if it occurs in middle of the experience.)</li>
+ <li>Use constant velocity; avoid acceleration or&nbsp;decceleration camera movements (use&nbsp;linear acceleration, and avoid vs easing if you can.)</li>
+ <li>Keep the framerate up (less than 30fps is uncomfortable.)</li>
+ <li>Avoid sharp and/or unexpected camera rotations.</li>
+ <li>Add fixed points of reference for fixed objects (otherwise the user will believe they are on the move.)</li>
+ <li>Do not use Depth of Field or Motion Blur post processing because you do not know where the eyes will focus.</li>
+ <li>Avoid&nbsp;brightness changes (use low frecuency textures or fog effects to create smooth&nbsp;lighting&nbsp;transitions).</li>
+</ul>
+
+<p>Overall&nbsp;your eyes should not send signals to the brain that cause reflex actions in other parts of the body.</p>
+
+<h3 id="Latency">Latency</h3>
+
+<p>Latency is the time between the&nbsp;physical head movement and the visual display reaching the user's eyes from the screen of an HMD being updated. This is one of the most critical factors in providing a realistic experience.&nbsp;Humans can detect very small delays — we need to keep the latency below 20 milliseconds if they are to be imperceptible (for example a 60Hz monitor has a 16 ms response.)</p>
+
+<p>The Oculus Rift headset has a letency of 20 ms or less, but woth mobile device-based setups it will depend heavily on the smartphone CPU power and other capabilities.&nbsp;</p>
+
+<h3 id="Framerate_(_Frames_per_second_FPS_)">Framerate ( Frames per second / FPS )</h3>
+
+<p>Based on the Wikipedia definition, framerate is the frequency at which an imaging device produces unique consecutive images, called frames. A rate of 60fps is an acceptable rate for a smooth user experience, but depending on the performance of the machine the app is running on, or the complexity of the content you want to show, it can drastically lower. Less&nbsp;than 30fps is generally considered juddery, and annoying to the user.</p>
+
+<p>One of the most difficult tasks is to maintain a constant and high framerate&nbsp;value, so we must optimize our code to make it as efficient as possible. It is preferable to have a decent framerate&nbsp;that doesn't constantly or suddenly change; for this you need to as few necessary objects moving into the scene as possible and (in the case of WebGL) try to reduce draw calls.&nbsp;</p>
+
+<h3 id="Interpupillary_distance_(_IPD_)">Interpupillary distance ( IPD )</h3>
+
+<p>Based on the Wikipedia definition, IPD is the distance between the centers of the pupils of the two eyes. IPD is critical for the design of binocular viewing systems, where both eye pupils need to be positioned within the exit pupils of the viewing system.</p>
+
+<p>Interpupillary distace ( IPD )&nbsp;is represented by <a href="../VREyeParameters/eyeTranslation.html" title="The eyeTranslation read-only property of the VREyeParameters interface represents the offset from the center of the user's head to the eye, measured in meters."><code>VREyeParameters.eyeTranslation</code></a> in WebVR.</p>
+
+<p>This value is returned by the HMD and its value may be around 60 to 70 mm; in the case of some HMDs like Oculus Rift's, you can set your own IPD. Normally we don't change this value but you can play with it to change the scale of the entire scene. For example, if your IPD is set to 6000 mm, the user would view the scene like a giant looking at a Lilliputian world.</p>
+
+<h3 id="Degrees_of_Freedom_(_DoF_)">Degrees of Freedom ( DoF )</h3>
+
+<p>DoF refers to the movement&nbsp;of a rigid body inside space.&nbsp;There is no uniformity in creating acronyms for this term — we can find references to 3DoF in the context of sensors that detect only rotational head tracking, and 6DoF when an input allows us to control position and orientation simultaneously. We even sometimes find 9DoF references when the hardware contains three sensors like gyroscope, accelerometer and magnetometer, but the results of the 3 x 3DoF values will actually return a 6 degrees of freedom tracking.</p>
+
+<p>DoF is directly related to the tracking of the user's head movement.</p>
+
+<h3 id="Cone_of_focus">Cone of focus</h3>
+
+<p>Although our field of view is much larger (approximately 180º),&nbsp;we need to be aware that only in a small portion of that field can you perceive symbols (the center 60º)&nbsp;or read text (the center 10º).&nbsp;If you do not have an eye tracking sensor we assume that the center of the screen is where the user is focusing their eyes.</p>
+
+<p>This limitation is important to consider when deciding where place visuals on the app canvas — too far towards the edge of the cone of focus can lead to eye strain much ore quickly. There is a very interesting post about this (amongst other things) at MozVR.com — see <a href="http://mozvr.com/posts/quick-vr-prototypes/" class="external">Quick VR Mockups with Illustrator</a>.</p>
+
+<h3 id="3D_Positional_Audio">3D Positional Audio</h3>
+
+<p>3D positional audio refers to a group of effects that manipulate audio to simulate how it would sound in a three dimensional space.</p>
+
+<p>This directly related to the&nbsp;<a href="../Web_Audio_API.html">Web Audio API</a>, which allows us&nbsp;to place sounds on objects we have in the canvas or launch audio depending on the part of the scene the user is traveling towards or looking at.</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Acceleration">Acceleration</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/concepts">concepts</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/FOV">FOV</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Orientation">Orientation</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Position">Position</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/velocity">velocity</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Virtual Reality">Virtual Reality</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/VR">VR</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebVR">WebVR</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/omarimayerswalker">omarimayerswalker</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/arturitu">arturitu</a>,             <a href="https://developer.mozilla.org/en-US/profiles/groovecoder">groovecoder</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/omarimayerswalker">omarimayerswalker</a>,
+                      <time datetime="2015-07-12T18:24:47-07:00">Jul 12, 2015, 6:24:47 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/WebVR_API/WebVR_concepts$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/WebVR_API/WebVR_concepts$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_concepts by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:11:43 GMT -->
+</body></html>

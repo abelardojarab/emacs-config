@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QGraphicsSceneResizeEvent","path":"QGraphicsSceneResizeEvent","entryType":"Function"},{"name":"~QGraphicsSceneResizeEvent","path":"dtor.QGraphicsSceneResizeEvent","entryType":"Function"},{"name":"newSize","path":"newSize","entryType":"Function"},{"name":"oldSize","path":"oldSize","entryType":"Function"}]}

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"AbstractTypeVisitor8()","path":"AbstractTypeVisitor8--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"visitIntersection(IntersectionType, P)","path":"visitIntersection-javax.lang.model.type.IntersectionType-P-","entryType":"Method"}]}

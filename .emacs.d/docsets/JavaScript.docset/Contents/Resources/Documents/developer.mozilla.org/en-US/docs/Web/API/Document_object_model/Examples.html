@@ -1,0 +1,1044 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:16:21 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Examples of web and XML development using the DOM</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples$json">
+  <link rel="canonical" href="Examples.html">
+
+            <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Referencia_DOM_de_Gecko/Ejemplos" title="Ejemplos">
+          <link rel="alternate" hreflang="fr" href="../../../../../fr/docs/Web/API/R%c3%a9f%c3%a9rence_du_DOM_Gecko/Exemples.html" title="Exemples">
+          <link rel="alternate" hreflang="it" href="https://developer.mozilla.org/it/docs/Reference_del_DOM_di_Gecko/Esempi" title="Esempi">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/DOM/DOM_Reference/Examples" title="例">
+          <link rel="alternate" hreflang="pl" href="../../../../../pl/docs/Dokumentacja_Gecko_DOM/Przyk%c5%82ady_u%c5%bcycia_DOM.html" title="Przykłady użycia DOM">
+          <link rel="alternate" hreflang="zh-CN" href="../../../../../zh-CN/docs/Web/API/Document_Object_Model/Examples.html" title="Examples">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Examples of web and XML development using the DOM">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples">
+  <meta name="twitter:title" content="Examples of web and XML development using the DOM">
+    <meta property="og:description" content="This chapter provides some longer examples of web and XML development using the DOM. Wherever possible, the examples use common APIs, tricks, and patterns in JavaScript for manipulating the document object.">
+  <meta name="description" content="This chapter provides some longer examples of web and XML development using the DOM. Wherever possible, the examples use common APIs, tricks, and patterns in JavaScript for manipulating the document object.">
+  <meta name="twitter:description" content="This chapter provides some longer examples of web and XML development using the DOM. Wherever possible, the examples use common APIs, tricks, and patterns in JavaScript for manipulating the document object.">
+  
+      
+  </head>
+<body data-slug="Web/API/Document_Object_Model/Examples" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Document_Object_Model/Examples" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FDocument_Object_Model%2FExamples" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Document_Object_Model/Examples" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FDocument_Object_Model%2FExamples" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Referencia_DOM_de_Gecko/Ejemplos" title="Ejemplos">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../fr/docs/Web/API/R%c3%a9f%c3%a9rence_du_DOM_Gecko/Exemples.html" title="Exemples">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/it/docs/Reference_del_DOM_di_Gecko/Esempi" title="Esempi">Italiano</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/DOM/DOM_Reference/Examples" title="例">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../pl/docs/Dokumentacja_Gecko_DOM/Przyk%c5%82ady_u%c5%bcycia_DOM.html" title="Przykłady użycia DOM">Polski</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../zh-CN/docs/Web/API/Document_Object_Model/Examples.html" title="Examples">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Document_Object_Model.html" rel="v:url" property="v:title">Document Object Model (DOM)</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Examples of web and XML development using the DOM</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Examples of web and XML development using the DOM</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 25 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AlfredoLlaquet" title="View profile: AlfredoLlaquet">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AlfredoLlaquet" data-src="../../../../../../secure.gravatar.com/avatar/170785429ece67cc1fea85dd098b96706aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">AlfredoLlaquet</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kosvrouvas" title="View profile: kosvrouvas">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kosvrouvas" data-src="../../../../../../secure.gravatar.com/avatar/bc1b3479b679fd48d07d1231141d557a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kosvrouvas</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/xfq" title="View profile: xfq">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xfq" data-src="../../../../../../secure.gravatar.com/avatar/d37eb6e5701cb30b871077f04cf2ebb76aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">xfq</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/hectorsan68" title="View profile: hectorsan68">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="hectorsan68" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">hectorsan68</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/MalcolmInglis" title="View profile: MalcolmInglis">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MalcolmInglis" data-src="../../../../../../secure.gravatar.com/avatar/a6fdabddd2815bdd1b8a8760aa9bc8556aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">MalcolmInglis</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ziyunfei" title="View profile: ziyunfei">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ziyunfei" data-src="../../../../../../secure.gravatar.com/avatar/2dbf9c055c2b32d3ca45d25be01174236aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ziyunfei</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/RobG" title="View profile: RobG">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="RobG" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">RobG</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Tetrix" title="View profile: Tetrix">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Tetrix" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Tetrix</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Adenevens" title="View profile: Adenevens">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Adenevens" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Adenevens</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Gabrielsroka" title="View profile: Gabrielsroka">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Gabrielsroka" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Gabrielsroka</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Donspeck" title="View profile: Donspeck">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Donspeck" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Donspeck</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jabez" title="View profile: Jabez">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jabez" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jabez</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nickolay" title="View profile: Nickolay">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nickolay" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Nickolay</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ptak82" title="View profile: Ptak82">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ptak82" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ptak82</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/NickolayBot" title="View profile: NickolayBot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="NickolayBot" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">NickolayBot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/BenoitL" title="View profile: BenoitL">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="BenoitL" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">BenoitL</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/GT" title="View profile: GT">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="GT" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">GT</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dria" title="View profile: Dria">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dria" data-src="../../../../../../secure.gravatar.com/avatar/c6c044311a2c98b383718e00964cda726aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dria</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Baris" title="View profile: Baris">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Baris" data-src="../../../../../../secure.gravatar.com/avatar/1963d43b45a0e9fcdf52dd561e79bf146aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Baris</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JesseW" title="View profile: JesseW">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JesseW" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">JesseW</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Example_1:_height_and_width" rel="internal">Example 1: height and width</a></li><li><a href="#Example_2:_Image_Attributes" rel="internal">Example 2: Image Attributes</a></li><li><a href="#Example_3:_Manipulating_Styles" rel="internal">Example 3: Manipulating Styles</a></li><li><a href="#Example_4:_Using_Stylesheets" rel="internal">Example 4: Using Stylesheets</a></li><li><a href="#Example_5:_Event_Propagation" rel="internal">Example 5: Event Propagation</a></li><li><a href="#Example_6:_getComputedStyle" rel="internal">Example 6: getComputedStyle</a></li><li><a href="#Example_7:_Displaying_Event_Object_Properties" rel="internal">Example 7: Displaying Event Object Properties</a></li><li><a href="#Example_8:_Using_the_DOM_Table_Interface" rel="internal">Example 8: Using the DOM Table Interface</a><ol><li><a href="#Notes" rel="internal">Notes</a></li></ol></li><li><a href="#Subnav" rel="internal">Subnav</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>This chapter provides some longer examples of web and XML development using the DOM. Wherever possible, the examples use common APIs, tricks, and patterns in JavaScript for manipulating the document object.</p>
+
+<h2 name="Example_1:_height_and_width" id="Example_1:_height_and_width">Example 1: height and width</h2>
+
+<p>The following example shows the use of the <code>height</code> and <code>width</code> properties alongside images of varying dimensions:</p>
+
+<pre class="brush:html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;title&gt;width/height example&lt;/title&gt;
+&lt;script&gt;
+function init() {
+  var arrImages = new Array(3);
+
+  arrImages[0] = document.getElementById("image1");
+  arrImages[1] = document.getElementById("image2");
+  arrImages[2] = document.getElementById("image3");
+
+  var objOutput = document.getElementById("output");
+  var strHtml = "&lt;ul&gt;";
+
+  for (var i = 0; i &lt; arrImages.length; i++) {
+    strHtml += "&lt;li&gt;image" + (i+1) + 
+            ": height=" + arrImages[i].height + 
+            ", width=" + arrImages[i].width + 
+            ", style.height=" + arrImages[i].style.height + 
+            ", style.width=" + arrImages[i].style.width + 
+            "&lt;\/li&gt;";
+  }
+
+  strHtml += "&lt;\/ul&gt;";
+
+  objOutput.innerHTML = strHtml;
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onload="init();"&gt;
+
+&lt;p&gt;Image 1: no height, width, or style 
+  &lt;img id="image1" src="http://www.mozilla.org/images/mozilla-banner.gif"&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Image 2: height="50", width="500", but no style 
+  &lt;img id="image2"
+       src="http://www.mozilla.org/images/mozilla-banner.gif" 
+       height="50" width="500"&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Image 3: no height, width, but style="height: 50px; width: 500px;"
+  &lt;img id="image3"
+       src="http://www.mozilla.org/images/mozilla-banner.gif" 
+       style="height: 50px; width: 500px;"&gt;
+&lt;/p&gt;
+
+&lt;div id="output"&gt; &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 name="Example_2:_Image_Attributes" id="Example_2:_Image_Attributes">Example 2: Image Attributes</h2>
+
+<pre class="brush:html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;title&gt;Modifying an image border&lt;/title&gt;
+
+&lt;script&gt;
+function setBorderWidth(width) {
+  document.getElementById("img1").style.borderWidth = width + "px";
+}
+&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;p&gt;
+  &lt;img id="img1"
+       src="image1.gif"
+       style="border: 5px solid green;"
+       width="100" height="100" alt="border test"&gt;
+&lt;/p&gt;
+
+&lt;form name="FormName"&gt;
+  &lt;input type="button" value="Make border 20px-wide" onclick="setBorderWidth(20);" /&gt;
+  &lt;input type="button" value="Make border 5px-wide"  onclick="setBorderWidth(5);" /&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 name="Example_3:_Manipulating_Styles" id="Example_3:_Manipulating_Styles">Example 3: Manipulating Styles</h2>
+
+<p>In this simple example, some basic style properties of an HTML paragraph element are accessed using the style object on the element and that object's CSS style properties, which can be retrieved and set from the DOM. In this case, you are manipulating the individual styles directly. In the next example (see Example 4), you can use stylesheets and their rules to change styles for whole documents.</p>
+
+<pre class="brush:html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;title&gt;Changing color and font-size example&lt;/title&gt;
+
+&lt;script&gt;
+function changeText() {
+  var p = document.getElementById("pid");
+
+  p.style.color = "blue"
+  p.style.fontSize = "18pt"
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;p id="pid" onclick="window.location.href = 'http://www.cnn.com/';"&gt;linker&lt;/p&gt;
+
+&lt;form&gt;
+  &lt;p&gt;&lt;input value="rec" type="button" onclick="changeText();" /&gt;&lt;/p&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 name="Example_4:_Using_Stylesheets" id="Example_4:_Using_Stylesheets">Example 4: Using Stylesheets</h2>
+
+<p>The styleSheets property on the document object returns a list of the stylesheets that have been loaded on that document. You can access these stylesheets and their rules individually using the stylesheet, style, and CSSRule objects, as demonstrated in this example, which prints out all of the style rule selectors to the console.</p>
+
+<pre class="brush:js">var ss = document.styleSheets;
+
+for(var i = 0; i &lt; ss.length; i++) {
+  for(var j = 0; j &lt; ss[i].cssRules.length; j++) {
+    dump( ss[i].cssRules[j].selectorText + "\n" );
+  }
+}</pre>
+
+<p>For a document with a single stylesheet in which the following three rules are defined:</p>
+
+<pre class="brush:css">body { background-color: darkblue; }
+p { font-face: Arial; font-size: 10pt; margin-left: .125in; }
+#lumpy { display: none; }
+</pre>
+
+<p>This script outputs the following:</p>
+
+<pre>BODY
+P
+#LUMPY
+</pre>
+
+<h2 name="Example_5:_Event_Propagation" id="Example_5:_Event_Propagation">Example 5: Event Propagation</h2>
+
+<p>This example demonstrates how events fire and are handled in the DOM in a very simple way. When the BODY of this HTML document loads, an event listener is registered with the top row of the TABLE. The event listener handles the event by executing the function stopEvent, which changes the value in the bottom cell of the table.</p>
+
+<p>However, stopEvent also calls an event object method, <a href="../Event/stopPropagation.html" title="Prevents further propagation of the current event."><code>event.stopPropagation</code></a>, which keeps the event from bubbling any further up into the DOM. Note that the table itself has an <a href="../Element/onclick.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>onclick</code></a> event handler that ought to display a message when the table is clicked. But the stopEvent method has stopped propagation, and so after the data in the table is updated, the event phase is effectively ended, and an alert box is displayed to confirm this.</p>
+
+<pre class="brush:html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;title&gt;Event Propagation&lt;/title&gt;
+
+&lt;style&gt;
+#t-daddy { border: 1px solid red }
+#c1 { background-color: pink; }
+&lt;/style&gt;
+
+&lt;script&gt;
+function stopEvent(ev) {
+  c2 = document.getElementById("c2");
+  c2.innerHTML = "hello";
+
+  // this ought to keep t-daddy from getting the click.
+  ev.stopPropagation();
+  alert("event propagation halted.");
+}
+
+function load() {
+  elem = document.getElementById("tbl1");
+  elem.addEventListener("click", stopEvent, false);
+}
+&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body onload="load();"&gt;
+
+&lt;table id="t-daddy" onclick="alert('hi');"&gt;
+  &lt;tr id="tbl1"&gt;
+    &lt;td id="c1"&gt;one&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td id="c2"&gt;two&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 name="Example_6:_getComputedStyle" id="Example_6:_getComputedStyle">Example 6: getComputedStyle</h2>
+
+<p>This example demonstrates how the <a href="../Window/getComputedStyle.html" title="The Window.getComputedStyle() method gives the values of all the CSS properties of an element after applying the active stylesheets and resolving any basic computation those values may contain."><code>window.getComputedStyle</code></a> method can be used to get the styles of an element that are not set using the <code>style</code> attribute or with JavaScript (e.g., <code>elt.style.backgroundColor="rgb(173, 216, 230)"</code>). These latter types of styles can be retrieved with the more direct <a href="../Element/style.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>elt.style</code></a> property, whose properties are listed in the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference">DOM CSS Properties List</a>.</p>
+
+<p><code>getComputedStyle()</code> returns a <code>ComputedCSSStyleDeclaration</code> object, whose individual style properties can be referenced with this object's <code>getPropertyValue()</code> method, as the following example document shows.</p>
+
+<pre class="brush:html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+
+&lt;title&gt;getComputedStyle example&lt;/title&gt;
+
+&lt;script&gt;
+function cStyles() {
+  var RefDiv = document.getElementById("d1");
+  var txtHeight = document.getElementById("t1");
+  var h_style = document.defaultView.getComputedStyle(RefDiv, null).getPropertyValue("height");
+
+  txtHeight.value = h_style;
+
+  var txtWidth = document.getElementById("t2");
+  var w_style = document.defaultView.getComputedStyle(RefDiv, null).getPropertyValue("width");
+
+  txtWidth.value = w_style;
+
+  var txtBackgroundColor = document.getElementById("t3");
+  var b_style = document.defaultView.getComputedStyle(RefDiv, null).getPropertyValue("background-color");
+
+  txtBackgroundColor.value = b_style;
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+#d1 {
+  margin-left: 10px;
+  background-color: rgb(173, 216, 230); 
+  height: 20px;
+  max-width: 20px;
+}
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;div id="d1"&gt;&amp;nbsp;&lt;/div&gt;
+
+&lt;form action=""&gt;
+  &lt;p&gt;
+    &lt;button type="button" onclick="cStyles();"&gt;getComputedStyle&lt;/button&gt;
+    height&lt;input id="t1" type="text" value="1" /&gt;
+    max-width&lt;input id="t2" type="text" value="2" /&gt;
+    bg-color&lt;input id="t3" type="text" value="3" /&gt;
+  &lt;/p&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 name="Example_7:_Displaying_Event_Object_Properties" id="Example_7:_Displaying_Event_Object_Properties">Example 7: Displaying Event Object Properties</h2>
+
+<p>This example uses DOM methods to display all the properties of the <a href="../GlobalEventHandlers/onload.html" title="An event handler for the load event of a window."><code>window.onload</code></a> <a href="../Event.html" title="The Event interface represents any event of the DOM. It contains common properties and methods to any event."><code>event</code></a> object and their values in a table. It also shows a useful technique of using a for..in loop to iterate over the properties of an object to get their values.</p>
+
+<p>The properties of event objects differs greatly between browsers, the <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html" class="external">W3C DOM 2 Events Specification</a> lists the standard properties, however many browsers have extended these greatly.</p>
+
+<p>Put the following code into a blank text file and load it into a variety of browsers, you'll be surprised at the different number and names of properties. You might also like to add some elements in the page and call this function from different event handlers.</p>
+
+<pre class="brush:html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;meta charset="utf-8"/&gt;
+&lt;title&gt;Show Event properties&lt;/title&gt;
+
+&lt;style&gt;
+table { border-collapse: collapse; }
+thead { font-weight: bold; }
+td { padding: 2px 10px 2px 10px; }
+
+.odd { background-color: #efdfef; }
+.even { background-color: #ffffff; }
+&lt;/style&gt;
+
+&lt;script&gt;
+
+function showEventProperties(e) {
+&nbsp; function addCell(row, text) {
+&nbsp;&nbsp;&nbsp; var cell = row.insertCell(-1);
+&nbsp;&nbsp;&nbsp; cell.appendChild(document.createTextNode(text));
+&nbsp; }
+
+&nbsp; var e = e || window.event;
+&nbsp; document.getElementById('eventType').innerHTML = e.type;
+
+&nbsp; var table = document.createElement('table');
+&nbsp; var thead = table.createTHead();
+&nbsp; var row = thead.insertRow(-1);
+&nbsp; var lableList = ['#', 'Property', 'Value'];
+&nbsp; var len = lableList.length;
+
+&nbsp; for (var i=0; i&lt;len; i++) {
+&nbsp;&nbsp;&nbsp; addCell(row, lableList[i]);
+&nbsp; }
+
+&nbsp; var tbody = document.createElement('tbody');
+&nbsp; table.appendChild(tbody);
+
+&nbsp; for (var p in e) {
+&nbsp;&nbsp;&nbsp; row = tbody.insertRow(-1);
+&nbsp;&nbsp;&nbsp; row.className = (row.rowIndex % 2)? 'odd':'even';
+&nbsp;&nbsp;&nbsp; addCell(row, row.rowIndex);
+&nbsp;&nbsp;&nbsp; addCell(row, p);
+&nbsp;&nbsp;&nbsp; addCell(row, e[p]);
+&nbsp; }
+
+&nbsp; document.body.appendChild(table);
+}
+
+window.onload = function(event){
+&nbsp; showEventProperties(event);
+}
+&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;h1&gt;Properties of the DOM &lt;span id="eventType"&gt;&lt;/span&gt; Event Object&lt;/h1&gt;&nbsp;&nbsp; &nbsp;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</pre>
+
+<h2 name="Example_8:_Using_the_DOM_Table_Interface" id="Example_8:_Using_the_DOM_Table_Interface">Example 8: Using the DOM Table Interface</h2>
+
+<p>The DOM HTMLTableElement interface provides some convenience methods for creating and manipulating tables. Two frequently used methods are <a href="../HTMLTableElement/insertRow.html" title="The HTMLTableElement.insertRow() method inserts a new row in the table."><code>HTMLTableElement.insertRow</code></a> and <a href="../TableRow/insertCell.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>tableRow.insertCell</code></a>.</p>
+
+<p>To add a row and some cells to an existing table:</p>
+
+<pre class="brush:html">&lt;table id="table0"&gt;
+ &lt;tr&gt;
+  &lt;td&gt;Row 0 Cell 0&lt;/td&gt;
+  &lt;td&gt;Row 0 Cell 1&lt;/td&gt;
+ &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;script&gt;
+var table = document.getElementById('table0');
+var row = table.insertRow(-1);
+var cell,
+    text;
+
+for (var i = 0; i &lt; 2; i++) {
+  cell = row.insertCell(-1);
+  text = 'Row ' + row.rowIndex + ' Cell ' + i;
+  cell.appendChild(document.createTextNode(text));
+}
+&lt;/script&gt;
+</pre>
+
+<h3 name="Notes" id="Notes">Notes</h3>
+
+<ul>
+ <li>A table's <a href="../Element/innerHTML.html" title="The Element.innerHTML property sets or gets the HTML syntax describing the element's descendants."><code>innerHTML</code></a> property should never be used to modify a table, although you can use it to write an entire table or the content of a cell.</li>
+ <li>If DOM Core methods <a href="../Document/createElement.html" title="In an HTML document, the Document.createElement() method creates the specified HTML element or an HTMLUnknownElement if the given element name isn't a known one."><code>document.createElement</code></a> and <a href="../Node/appendChild.html" title="The Node.appendChild() method adds a node to the end of the list of children of a specified parent node. If the given child is a reference to an existing node in the document, appendChild() moves it from its current position to the new position (i.e. there is no requirement to remove the node from its parent node before appending it to some other node)."><code>Node.appendChild</code></a> are used to create rows and cells, IE requires that they are appended to a tbody element, whereas other browsers will allow appending to a table element (the rows will be added to the last tbody element).</li>
+ <li>There are a number of other convenience methods belonging to the <a href="../HTMLTableElement.html#Methods">table interface</a> that can be used for creating and modifying tables.</li>
+</ul>
+
+<!-- -->
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../../tag/DOM.html">DOM</a></li>
+              <li><a href="../../../tag/DOM%20Reference.html">DOM Reference</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/AlfredoLlaquet">AlfredoLlaquet</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kosvrouvas">kosvrouvas</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/xfq">xfq</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/hectorsan68">hectorsan68</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/MalcolmInglis">MalcolmInglis</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ziyunfei">ziyunfei</a>,             <a href="https://developer.mozilla.org/en-US/profiles/RobG">RobG</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Tetrix">Tetrix</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Adenevens">Adenevens</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Gabrielsroka">Gabrielsroka</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Donspeck">Donspeck</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jabez">Jabez</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Nickolay">Nickolay</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ptak82">Ptak82</a>,             <a href="https://developer.mozilla.org/en-US/profiles/NickolayBot">NickolayBot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/BenoitL">BenoitL</a>,             <a href="https://developer.mozilla.org/en-US/profiles/GT">GT</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dria">Dria</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Baris">Baris</a>,             <a href="https://developer.mozilla.org/en-US/profiles/JesseW">JesseW</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/AlfredoLlaquet">AlfredoLlaquet</a>,
+                      <time datetime="2015-08-10T07:13:21-07:00">Aug 10, 2015, 7:13:21 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ul>
+ <li><a href="../Document_Object_Model.html">DOM Reference</a></li>
+ <li><a href="Introduction.html">Introduction to the DOM</a></li>
+ <li><a href="Events.html">Events and the DOM</a></li>
+ <li><a href="Examples.html">Examples</a></li>
+</ul>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Document_Object_Model/Examples$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Document_Object_Model/Examples$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Document_Object_Model/Examples" selected="">
+          English (US)
+        </option>
+                  <option value="/es/docs/Referencia_DOM_de_Gecko/Ejemplos">
+            Español
+          </option>          <option value="/fr/docs/Web/API/R%C3%A9f%C3%A9rence_du_DOM_Gecko/Exemples">
+            Français
+          </option>          <option value="/it/docs/Reference_del_DOM_di_Gecko/Esempi">
+            Italiano
+          </option>          <option value="/ja/docs/DOM/DOM_Reference/Examples">
+            日本語
+          </option>          <option value="/pl/docs/Dokumentacja_Gecko_DOM/Przyk%C5%82ady_u%C5%BCycia_DOM">
+            Polski
+          </option>          <option value="/zh-CN/docs/Web/API/Document_Object_Model/Examples">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:16:29 GMT -->
+</body></html>

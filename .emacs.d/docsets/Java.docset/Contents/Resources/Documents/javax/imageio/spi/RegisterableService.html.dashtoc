@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"onDeregistration(ServiceRegistry, Class)","path":"onDeregistration-javax.imageio.spi.ServiceRegistry-java.lang.Class-","entryType":"Method"},{"name":"onRegistration(ServiceRegistry, Class)","path":"onRegistration-javax.imageio.spi.ServiceRegistry-java.lang.Class-","entryType":"Method"}]}

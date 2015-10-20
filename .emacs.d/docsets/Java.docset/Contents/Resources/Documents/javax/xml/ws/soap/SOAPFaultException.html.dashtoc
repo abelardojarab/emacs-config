@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"SOAPFaultException(SOAPFault)","path":"SOAPFaultException-javax.xml.soap.SOAPFault-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getFault()","path":"getFault--","entryType":"Method"}]}

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Modules","isHeader":true},{"name":"tty","path":"\/\/apple_ref\/Module\/tty","entryType":"Module"},{"name":"Functions","isHeader":true},{"name":"setcbreak","path":"\/\/apple_ref\/Function\/tty.setcbreak","entryType":"Function"},{"name":"setraw","path":"\/\/apple_ref\/Function\/tty.setraw","entryType":"Function"}],"title":"tty"}

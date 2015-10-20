@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"Instrument(Soundbank, Patch, String, Class)","path":"Instrument-javax.sound.midi.Soundbank-javax.sound.midi.Patch-java.lang.String-java.lang.Class-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getPatch()","path":"getPatch--","entryType":"Method"}]}

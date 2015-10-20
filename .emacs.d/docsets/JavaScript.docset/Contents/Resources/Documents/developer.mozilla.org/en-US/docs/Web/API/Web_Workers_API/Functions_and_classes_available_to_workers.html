@@ -1,0 +1,937 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:12:34 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Functions and classes available to Web Workers</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers$json">
+  <link rel="canonical" href="Functions_and_classes_available_to_workers.html">
+
+            <link rel="alternate" hreflang="af" href="https://developer.mozilla.org/af/docs/Web/API/Worker/Functions_and_classes_available_to_workers" title="Functions and classes available to Web Workers">
+          <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/Worker/Functions_and_classes_available_to_workers" title="Fonctions et classes disponibles dans les Web Workers">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Functions and classes available to Web Workers">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers">
+  <meta name="twitter:title" content="Functions and classes available to Web Workers">
+    <meta property="og:description" content="In addition to the standard JavaScript set of functions (such as String, Array, Object, JSON etc), there are a variety of functions available from the DOM to workers. This article provides a list of those.">
+  <meta name="description" content="In addition to the standard JavaScript set of functions (such as String, Array, Object, JSON etc), there are a variety of functions available from the DOM to workers. This article provides a list of those.">
+  <meta name="twitter:description" content="In addition to the standard JavaScript set of functions (such as String, Array, Object, JSON etc), there are a variety of functions available from the DOM to workers. This article provides a list of those.">
+  
+      
+  </head>
+<body data-slug="Web/API/Web_Workers_API/Functions_and_classes_available_to_workers" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Workers_API%2FFunctions_and_classes_available_to_workers" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Workers_API%2FFunctions_and_classes_available_to_workers" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/af/docs/Web/API/Worker/Functions_and_classes_available_to_workers" title="Functions and classes available to Web Workers">Afrikaans</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/Worker/Functions_and_classes_available_to_workers" title="Fonctions et classes disponibles dans les Web Workers">Français</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Web_Workers_API.html" rel="v:url" property="v:title">Web Workers API</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Functions and classes available to Web Workers</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Functions and classes available to Web Workers</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 22 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/tresdin" title="View profile: tresdin">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tresdin" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tresdin</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/EvanDotPro" title="View profile: EvanDotPro">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="EvanDotPro" data-src="../../../../../../secure.gravatar.com/avatar/5fac6a9353bbc9235568e920cdd400f66aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">EvanDotPro</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Zearin_Galaurum" title="View profile: Zearin_Galaurum">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Zearin_Galaurum" data-src="../../../../../../secure.gravatar.com/avatar/70f5e0c17e73bf19fc7eb1a944f8e2d86aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Zearin_Galaurum</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Demurgos" title="View profile: Demurgos">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Demurgos" data-src="../../../../../../secure.gravatar.com/avatar/6ff0fe386907a96072ef7b70e7cc11d06aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Demurgos</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/eminemence" title="View profile: eminemence">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="eminemence" data-src="../../../../../../secure.gravatar.com/avatar/00cf3b1965530f4c90384cf17f0269746aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">eminemence</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ben_a_adams" title="View profile: ben_a_adams">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ben_a_adams" data-src="../../../../../../secure.gravatar.com/avatar/38980d692c0ec5158fb2298a6a6be8f16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ben_a_adams</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/lorchard_mozilla" title="View profile: lorchard_mozilla">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lorchard_mozilla" data-src="../../../../../../secure.gravatar.com/avatar/78b60251f049f67800b11ddc445a930e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">lorchard_mozilla</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sundays211" title="View profile: Sundays211">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sundays211" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sundays211</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/thattomperson-home" title="View profile: thattomperson-home">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="thattomperson-home" data-src="../../../../../../secure.gravatar.com/avatar/aee49c05bee7f9bdae222de9a95799c86aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">thattomperson-home</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Agamemnus" title="View profile: Agamemnus">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Agamemnus" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Agamemnus</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/propaganda23" title="View profile: propaganda23">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="propaganda23" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">propaganda23</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kirbysayshi" title="View profile: kirbysayshi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kirbysayshi" data-src="../../../../../../secure.gravatar.com/avatar/b430141a8ee7c3c6b47a79efbcd435de6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kirbysayshi</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fusionchess" title="View profile: fusionchess">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fusionchess" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fusionchess</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/evilpie" title="View profile: evilpie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="evilpie" data-src="../../../../../../secure.gravatar.com/avatar/6bb31f7207fc068158047b9c8ad4592d6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">evilpie</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sicking" title="View profile: Sicking">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sicking" data-src="../../../../../../secure.gravatar.com/avatar/12de552ffa2a81f8a03733071b70caaa6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sicking</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ebidel" title="View profile: ebidel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ebidel" data-src="../../../../../../secure.gravatar.com/avatar/e7948aac7c52b26470be80311873a3986aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ebidel</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/grendel" title="View profile: grendel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="grendel" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">grendel</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Comparison_of_the_properties_and_methods_of_the_different_type_of_workers" rel="internal">Comparison of the properties and methods of the different type of workers</a></li><li><a href="#APIs_available_in_workers" rel="internal">APIs available in workers</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>In addition to the standard <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a> set of functions (such as <a href="../../JavaScript/Reference/Global_Objects/String.html" title="The String global object is a constructor for strings, or a sequence of characters."><code>String</code></a>, <a href="../../JavaScript/Reference/Global_Objects/Array.html" title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects."><code>Array</code></a>, <a href="../../JavaScript/Reference/Global_Objects/Object.html" title="The Object constructor creates an object wrapper."><code>Object</code></a>, <a href="../../JavaScript/Reference/Global_Objects/JSON.html" title="The JSON object contains methods for parsing JavaScript Object Notation (JSON) and converting values to JSON. It can't be called or constructed, and aside from its two method properties it has no interesting functionality of its own."><code>JSON</code></a> etc), there are a variety of functions available from the DOM to workers. This article provides a list of those.</p>
+
+<p><strong>Workers run in <span class="new">another global context</span>, <a href="../DedicatedWorkerGlobalScope.html" title="The DedicatedWorkerGlobalScope object (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers."><code>DedicatedWorkerGlobalScope</code></a> different from the current window</strong>. By default methods and properties of <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a> are not available to them, but <a href="../DedicatedWorkerGlobalScope.html" title="The DedicatedWorkerGlobalScope object (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers."><code>DedicatedWorkerGlobalScope</code></a>, like <code>Window</code>, implements <a href="../WindowTimers.html" title="WindowTimers contains utility methods to set and clear timers."><code>WindowTimers</code></a> and <a href="../WindowBase64.html" title="The WindowBase64 helper contains utility methods to convert data to and from base64, a binary-to-text encoding scheme. For example it is used in data URIs."><code>WindowBase64</code></a>.</p>
+
+<h2 id="Comparison_of_the_properties_and_methods_of_the_different_type_of_workers">Comparison of the properties and methods of the different type of workers</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header">Function</td>
+   <td class="header">Dedicated workers</td>
+   <td class="header">Shared workers</td>
+   <td class="header">Service workers</td>
+   <td class="header">Chrome workers <span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></td>
+   <td class="header">Outside workers</td>
+  </tr>
+  <tr>
+   <td><a href="../WindowBase64/atob.html" title="The WindowBase64.atob()&nbsp;function decodes a string of data which has been encoded using base-64 encoding. You can use the window.btoa() method to encode and transmit data which may otherwise cause communication problems, then transmit it and use the window.atob() method to decode the data again. For example, you can encode, transmit, and decode control characters such as ASCII values 0 through 31."><code>atob()</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a></td>
+  </tr>
+  <tr>
+   <td><a href="../WindowBase64/btoa.html" title="Creates a base-64 encoded ASCII string from a &quot;string&quot; of binary data."><code>btoa()</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a></td>
+  </tr>
+  <tr>
+   <td><a href="../WindowTimers/clearInterval.html" title="Cancels repeated action which was set up using setInterval."><code>clearInterval()</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a></td>
+  </tr>
+  <tr>
+   <td><a href="../WindowTimers/clearTimeout.html" title="Clears the delay set by WindowTimers.setTimeout()."><code>clearTimeout()</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a></td>
+  </tr>
+  <tr>
+   <td><a href="../Window/dump.html" title="Prints messages to the (native) console."><code>dump()</code></a> <span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a></td>
+  </tr>
+  <tr>
+   <td><a href="../WindowTimers/setInterval.html" title="Calls a function or executes a code snippet repeatedly, with a fixed time delay between each call to that function. Returns an intervalID."><code>setInterval()</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a></td>
+  </tr>
+  <tr>
+   <td><a href="../WindowTimers/setTimeout.html" title="Calls a function or executes a code snippet after a specified delay."><code>setTimeout()</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>Window</code></a></td>
+  </tr>
+  <tr>
+   <td><a href="../WorkerGlobalScope/importScripts.html" title="The importScripts() method of the WorkerGlobalScope interface imports one or more scripts into the worker's scope."><code>importScripts()</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>no</td>
+  </tr>
+  <tr>
+   <td><a href="../WorkerGlobalScope/close.html" title="The close() method of the WorkerGlobalScope interface discards any tasks queued in the WorkerGlobalScope's event loop, effectively closing this particular scope."><code>close()</code></a> <span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, on <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>yes, but is a no-op.</td>
+   <td>Unknown</td>
+   <td>no</td>
+  </tr>
+  <tr>
+   <td><a href="../DedicatedWorkerGlobalScope/postMessage.html" title="The postMessage() method of the DedicatedWorkerGlobalScope interface sends a message to the main thread that spawned it. This accepts a single parameter, which is the data to send to the worker. The data may be any value or JavaScript object handled by the structured clone algorithm, which includes cyclical references."><code>postMessage()</code></a></td>
+   <td>yes, on <a href="../DedicatedWorkerGlobalScope.html" title="The DedicatedWorkerGlobalScope object (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers."><code>DedicatedWorkerGlobalScope</code></a></td>
+   <td>no</td>
+   <td>no</td>
+   <td>Unknown</td>
+   <td>no</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="APIs_available_in_workers">APIs available in workers</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header">Function</td>
+   <td class="header">Functionality</td>
+   <td class="header">Support in Gecko (Firefox)</td>
+   <td class="header">Support in IE</td>
+   <td class="header">Support in Blink (Chrome and Opera)</td>
+   <td class="header">Support in WebKit (Safari)</td>
+  </tr>
+  <tr>
+   <td><a href="../Broadcast_Channel_API.html" title="The Broadcast Channel API allows simple communication between browsing contexts (that is windows, tabs, frames, or iframes) with the same origin (usually pages from the same site)."><code>Broadcast Channel API</code></a></td>
+   <td>Allows simple communication between <a href="https://developer.mozilla.org/en-US/docs/Glossary/browsing_context" class="glossaryLink" title="browsing contexts: A browsing context is the environment in which a browser displays a Document (normally a tab nowadays, but possibly also a window or a frame within a page).">browsing contexts</a> (that is <em>windows</em>, <em>tabs</em>, <em>frames</em>, or <em>iframes</em>) with the same <a href="https://developer.mozilla.org/en-US/docs/Glossary/origin" class="glossaryLink" title="origin: The origin of web content is defined by the scheme (protocol), host (domain), and port of the URL used to access it. Two objects have the same origin only when the scheme, host, and port match.">origin</a> (usually pages from the same site).</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/38" title="Released on 2015-05-19.">38</a> (38)</td>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><span style="color: #f00;">Not&nbsp;supported</span></span></td>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><span style="color: #f00;">Not&nbsp;supported</span></span></td>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><span style="color: #f00;">Not&nbsp;supported</span></span></td>
+  </tr>
+  <tr>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><a href="../Cache.html" title="The Cache interface of the ServiceWorker API represents the storage for Request / Response object pairs that are cached as part of the ServiceWorker life cycle."><code>Cache</code></a></span></td>
+   <td>Cache API<span style="background-color: rgba(212, 221, 228, 0.14902);">&nbsp;provides the ability to programmatically</span> control cache storage associated with current origin.</td>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></span></td>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><span style="color: #f00;">Not&nbsp;supported</span></span></td>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);">43</span></td>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></span></td>
+  </tr>
+  <tr>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><a href="../Channel_Messaging_API.html" title="The Channel Messaging API allows two separate scripts running in different browsing contexts attached to the same document (e.g., two IFrames, or the main document and an IFrame, two documents via a SharedWorker, or two workers) to communicate directly, passing messages between one another through two-way channels (or pipes) with a port at each end."><code>Channel Messaging API</code></a></span></td>
+   <td>Allows two separate scripts running in different browsing contexts attached to the same document (e.g., two IFrames, or the main document and an IFrame, two documents via a <a href="../SharedWorker.html" title="The SharedWorker interface represents a specific kind of worker that can be accessed from several browsing contexts, such as several windows, iframes or even workers. They implement an interface different than dedicated workers and have a different global scope, SharedWorkerGlobalScope."><code>SharedWorker</code></a>, or two workers) to communicate directly via two ports.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/41" title="Released on 2015-09-22.">41</a> (41)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><span style="background-color: rgba(212, 221, 228, 0.14902);"><a href="../Console.html" title="The console object provides access to the browser's debugging console (e.g., the Web Console in Firefox). The specifics of how it works vary from browser to browser, but there is a de facto set of features that are typically provided."><code>Console API</code></a></span></td>
+   <td>Provides access to the browser's debugging console (e.g., the <a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console">Web Console</a> in Firefox). The specifics of how it works vary from browser to browser, but there is a <em>de facto</em> set of features that are typically provided.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/38" title="Released on 2015-05-19.">38</a> (38)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../Data_Store_API.html" title="The Data Store API was created to allow multiple Firefox OS apps, with potentially different data structures and storage mechanisms, to create, maintain and share the same data objects efficiently between one another. Each app can then import the data into its own local IndexedDB to index according to their specific query needs. This is not necessary however, and you can just write directly to the Data Store API data store."><code>Data Store</code></a></td>
+   <td>A powerful, flexible storage mechanism for multiple Firefox OS applications to use to store and share data between one another quickly, efficiently, and securely.</td>
+   <td>Only in Firefox OS internal (certified) applications, since v1.0.1.</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../DOMRequest.html" title="A DOMRequest object represents an ongoing operation. It provides callbacks that are called when the operation completes, as well as a reference to the operation's result. A DOM method that initiates an ongoing operation may return a DOMRequest object that you can use to monitor the progress of that operation."><code>DOMRequest</code></a> and <a href="../DOMCursor.html" title="A DOMCursor object represents an ongoing operation over a list of results. It is an enhanced DOMRequest that allows to iterate through a list of results asynchronously. Each time its continue() method is called, the DOMCursor tries to reach the next result in the list and calls its result's success or error accordingly."><code>DOMCursor</code></a></td>
+   <td>Respectively, these objects represents an ongoing operation (with listeners for reacting to the operation completely successfully, or failing, for example), and an ongoing operation over a list of results.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/41" title="Released on 2015-09-22.">41</a> (41)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><a href="../Fetch_API.html" title="The Fetch API provides an interface for&nbsp;fetching resources (e.g., across the network.) It will seem familiar to anyone who has used XMLHttpRequest, but the new API provides a more powerful and flexible feature set."><code>Fetch</code></a></td>
+   <td>The Fetch spec provides an up-to-date definition of, and API for, fetching resources (e.g. across the network.)</td>
+   <td>Mostly in <a href="https://developer.mozilla.org/en-US/Firefox/Releases/34" title="Released on 2014-12-01.">34</a> (34) behind pref, although a few features are later.</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>42<br>
+    41 behind pref</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../FileReaderSync.html" title="The FileReaderSync interface allows to read File or Blob objects in a synchronous way."><code>FileReaderSync</code></a></td>
+   <td>This API allows synchronous read of <a href="../Blob.html" title="A Blob object represents a file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system."><code>Blob</code></a> and <a href="../File.html" title="The File interface provides information about files and allows to access their content."><code>File</code></a> objects. This is an API that works only in workers.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/8" title="Released on 2011-11-08.">8</a> (8)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../FormData.html" title="XMLHttpRequest Level 2 adds support for the new FormData interface. FormData objects provide a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest send()&nbsp;method."><code>FormData</code></a></td>
+   <td><code>FormData</code> objects provide a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest <a href="../../../DOM/XMLHttpRequest.png" title="XMLHttpRequest#send()"><code>send()</code></a>&nbsp;method.</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span> (should be in <a href="https://developer.mozilla.org/en-US/Firefox/Releases/39" title="Released on 2015-06-30.">39</a> (39))</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><a href="../ImageData.html" title="The ImageData interface represents the underlying pixel data of an area of a &lt;canvas&gt; element. It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData()."><code>ImageData</code></a></td>
+   <td>The underlying pixel data of an area of a <a href="../Canvas_API.html" title="Added in HTML5, the HTML &lt;canvas&gt; element can be used to draw graphics via scripting in JavaScript. For example, it can be used to draw graphs, make photo compositions, create animations or even do real-time video processing or rendering."><code>canvas</code></a> element. Manipulating such data can be a complex task better suited to be delegated to a Web Worker.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/25" title="Released on 2013-10-29.">25</a> (25)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../IndexedDB_API.html" title="IndexedDB is a low-level&nbsp;API for client-side storage of significant amounts of structured data, which also enables high performance searches of this data using indexes. While DOM Storage is useful for storing smaller amounts of data, it is less useful for storing larger amounts of structured data. IndexedDB provides a solution. This is the main landing page for MDN's IndexedDB coverage — here we provide links to the full API reference and usage guides, browser support details, and some explanation of key concepts."><code>IndexedDB</code></a></td>
+   <td>Database to store records holding simple values and hierarchical objects.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/37" title="Released on 2015-04-07.">37</a> (37),&nbsp; <a href="https://developer.mozilla.org/en-US/Firefox/Releases/42" title="Released on 2015-11-03.">42</a> (42) for <a href="../IDBCursorWithValue.html" title=""><code>IDBCursorWithValue</code></a>.</td>
+   <td>10.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>7.1</td>
+  </tr>
+  <tr>
+   <td><a href="../Notifications_API.html" title="The Notifications API allows web pages to control the display of system notifications to the end user — these are outside the top-level browsing context viewport, so therefore can be displayed even the user has switched tabs or moved to a different app. The API is designed to be compatible with existing notification systems across different platforms."><code>Notifications</code></a></td>
+   <td>Allows web pages to control the display of system notifications to the end user</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/41" title="Released on 2015-09-22.">41</a> (41)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><a href="../Performance.html" title="The Performance interface represents timing-related performance information for the given page."><code>Performance</code></a></td>
+   <td>The <strong><code>Performance</code></strong> interface represents timing-related performance information for the given page.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/34" title="Released on 2014-12-01.">34.0</a> (34.0)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>33.0</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../JavaScript/Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future."><code>Promise</code></a></td>
+   <td>JavaScript objects that allow you to write asynchronous functions.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/28" title="Released on 2014-03-18.">28</a> (28)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../ServiceWorkerRegistration.html" title="The ServiceWorkerRegistion interface of the ServiceWorker API represents the service worker registration. You register a service worker to control one or more pages that share the same origin."><code>ServiceWorkerRegistration</code></a></td>
+   <td>You can register a service worker from inside a standard worker, and use associated functionality.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/40" title="Released on 2015-08-11.">40</a> (40)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../TextEncoder.html" title="The TextEncoder interface represents an encoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, ... An encoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays."><code>TextEncoder</code></a> and <a href="../TextDecoder.html" title="The TextDecoder interface represents a decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, ... A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays."><code>TextDecoder</code></a></td>
+   <td>Create and return a new <a href="../TextEncoder.html" title="The TextEncoder interface represents an encoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, ... An encoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays."><code>TextEncoder</code></a>, or respectively <a href="../TextDecoder.html" title="The TextDecoder interface represents a decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, ... A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays."><code>TextDecoder</code></a>, allowing to encode or decode strings into specific encodings.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/20" title="Released on 2013-04-02.">20</a> (20)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../URL.html" title="The URL interface represent an object providing static methods used for creating object URLs."><code>URL</code></a></td>
+   <td>Workers can use the static methods <a href="https://developer.mozilla.org/en-US/docs/URL.createObjectURL" title="/en-US/docs/DOM/window.URL.createObjectURL">URL.createObjectURL</a> and <a href="../URL/revokeObjectURL.html" title="/en-US/docs/DOM/window.URL.revokeObjectURL">URL.revokeObjectURL</a> with <a href="../Blob.html" title="A Blob object represents a file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system."><code>Blob</code></a> objects accesible to the worker.<br>
+    Workers can also create a new URL using the <a href="../URL/URL.html" title="The URL() constructor returns a newly created URL object representing the URL defined by the parameters."><code>URL()</code></a> constructor and call any normal method on the returned object.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/21" title="Released on 2013-05-14.">21</a> (21) and <a href="https://developer.mozilla.org/en-US/Firefox/Releases/26" title="Released on 2013-12-10.">26</a> (26) for URL() constructor</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../WebSocket.html" title="The WebSocket object provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection."><code>WebSocket</code></a></td>
+   <td>Creates and returns a new <a href="../WebSocket.html" title="The WebSocket object provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection."><code>WebSocket</code></a>&nbsp; object; this mimics the behavior of the standard <code>WebSocket()</code> constructor.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/37" title="Released on 2015-04-07.">37</a> (37)</td>
+   <td>11.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../Worker.html" title="The Worker interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker()&nbsp;constructor and specifying a script to be run in the worker thread."><code>Worker</code></a></td>
+   <td>Creates a new <a href="../Worker.html" title="The Worker interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker()&nbsp;constructor and specifying a script to be run in the worker thread."><code>Worker</code></a>. Yes, workers can spawn more workers.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/3.5" title="Released on 2009-06-30.">3.5</a> (1.9.1)</td>
+   <td>10.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> See <a href="http://code.google.com/p/chromium/issues/detail?id=31666" rel="external" class="external" title="http://code.google.com/p/chromium/issues/detail?id=31666">crbug.com/31666</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>WorkerGlobalScope</code></a></td>
+   <td>The global scope of workers. This objects defines <a href="#workerscope">worker-specific functions</a>.</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>10.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../WorkerLocation.html" title="The WorkerLocation interface defines the absolute location of the script executed by the Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.location property obtained by calling window.self.location."><code>WorkerLocation</code></a></td>
+   <td>The subset of the <a href="../Location.html" title="The Location interface represents the location of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively."><code>Location</code></a> interface available to workers.</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/3.6" title="Released on 2010-01-21.">3.6</a> (1.9.2)</td>
+   <td>10.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../WorkerNavigator.html" title="The WorkerNavigator interface represents a subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator."><code>WorkerNavigator</code></a></td>
+   <td>The subset of the <a href="../Navigator.html" title="The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities."><code>Navigator</code></a> interface available to workers.</td>
+   <td>Basic implementation <span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span><br>
+    <a href="../NavigatorID/appCodeName.html" title="The NavigatorID.appCodeName always returns 'Mozilla', on any browser. This property is kept only for compatibility purposes."><code>appCodeName</code></a>, <a href="../NavigatorID/product.html" title="The NavigatorID.product property returns the product name of the current browser."><code>product</code></a>, <a href="../NavigatorID/taintEnabled.html" title="The NavigatorID.taintEnabled() method always returns false."><code>taintEnabled()</code></a>: <a href="https://developer.mozilla.org/en-US/Firefox/Releases/28" title="Released on 2014-03-18.">28</a> (28)<br>
+    <a href="../NavigatorOnLine/onLine.html" title="Returns the online status of the browser. The property returns a boolean value, with true meaning online and false meaning offline. The property sends updates whenever the browser's ability to connect to the network changes. The update occurs when the user follows links or when a script requests a remote page. For example, the property should return false when users click links soon after they lose internet connection."><code>onLine</code></a>: <a href="https://developer.mozilla.org/en-US/Firefox/Releases/29" title="Released on 2014-04-29.">29</a> (29)<br>
+    <a href="../NavigatorLanguage.html" title="NavigatorLanguage contains methods and properties related to the language of the navigator."><code>NavigatorLanguage</code></a>: <span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><a href="../NavigatorID/appName.html" title="The NavigatorID.appName property returns the name of the browser. The HTML5 specification also allows any browser to return &quot;Netscape&quot; here, for compatibility reasons."><code>appName</code></a>, <a href="../NavigatorID/appVersion.html" title="Returns the version of the browser as a string. It may be either a plain version number, like &quot;5.0&quot;, or a version number followed by more detailed information. The HTML5 specification also allows any browser to return &quot;4.0&quot;, for compatibility reasons."><code>appName</code></a>, <a href="../NavigatorOnLine/onLine.html" title="Returns the online status of the browser. The property returns a boolean value, with true meaning online and false meaning offline. The property sends updates whenever the browser's ability to connect to the network changes. The update occurs when the user follows links or when a script requests a remote page. For example, the property should return false when users click links soon after they lose internet connection."><code>onLine</code></a>, <a href="../NavigatorID/platform.html" title="Returns a string representing the platform of the browser. The specification allows browsers to always return the empty string, so don't rely on this property to get a reliable answer."><code>platform</code></a>, <a href="../NavigatorID/userAgent.html" title="The NavigatorID.userAgent read-only property returns the user agent string for the current browser."><code>userAgent</code></a>: 10.0<br>
+    Other: <span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../XMLHttpRequest.html" title="XMLHttpRequest is a JavaScript object that was designed by Microsoft and adopted by Mozilla, Apple, and Google. It's now being standardized in the W3C. It provides an easy way to retrieve data from a URL without having to do a full page refresh. A Web page can update just a part of the page without disrupting what the user is doing. &nbsp;XMLHttpRequest&nbsp;is used heavily in AJAX programming."><code>XMLHttpRequest</code></a></td>
+   <td>Creates and returns a new <a href="../XMLHttpRequest.html" title="XMLHttpRequest is a JavaScript object that was designed by Microsoft and adopted by Mozilla, Apple, and Google. It's now being standardized in the W3C. It provides an easy way to retrieve data from a URL without having to do a full page refresh. A Web page can update just a part of the page without disrupting what the user is doing. &nbsp;XMLHttpRequest&nbsp;is used heavily in AJAX programming."><code>XMLHttpRequest</code></a>&nbsp; object; this mimics the behavior of the standard <code>XMLHttpRequest()</code> constructor. Note that the <code>responseXML</code> and <code>channel</code> attributes on <code>XMLHttpRequest</code> always return <code>null</code>.</td>
+   <td>
+    <p>Basic: <a href="https://developer.mozilla.org/en-US/Firefox/Releases/3.5" title="Released on 2009-06-30.">3.5</a> (1.9.1)</p>
+
+    <p><a href="../XMLHttpRequest/response.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>response</code></a> and <a href="../XMLHttpRequest/responseType.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>responseType</code></a> are available since <a href="https://developer.mozilla.org/en-US/Firefox/Releases/10" title="Released on 2012-01-31.">10</a> (10)</p>
+
+    <p><a href="../XMLHttpRequest/timeout.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>timeout</code></a> and <a href="../XMLHttpRequest/ontimeout.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>ontimeout</code></a> are available since <a href="https://developer.mozilla.org/en-US/Firefox/Releases/13" title="Released on 2012-06-05.">13</a> (13)</p>
+   </td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="https://developer.mozilla.org/En/Using_web_workers" title="https://developer.mozilla.org/En/Using_web_workers">Using web workers</a></li>
+ <li><a href="../Worker.html" title="The Worker interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker()&nbsp;constructor and specifying a script to be run in the worker thread."><code>Worker</code></a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/web">web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tresdin">tresdin</a>,             <a href="https://developer.mozilla.org/en-US/profiles/EvanDotPro">EvanDotPro</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Zearin_Galaurum">Zearin_Galaurum</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Demurgos">Demurgos</a>,             <a href="https://developer.mozilla.org/en-US/profiles/eminemence">eminemence</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ben_a_adams">ben_a_adams</a>,             <a href="https://developer.mozilla.org/en-US/profiles/lorchard_mozilla">lorchard_mozilla</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sundays211">Sundays211</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/thattomperson-home">thattomperson-home</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Agamemnus">Agamemnus</a>,             <a href="https://developer.mozilla.org/en-US/profiles/propaganda23">propaganda23</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kirbysayshi">kirbysayshi</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fusionchess">fusionchess</a>,             <a href="https://developer.mozilla.org/en-US/profiles/evilpie">evilpie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sicking">Sicking</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ebidel">ebidel</a>,             <a href="https://developer.mozilla.org/en-US/profiles/grendel">grendel</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2015-09-17T06:00:44-07:00">Sep 17, 2015, 6:00:44 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers" selected="">
+          English (US)
+        </option>
+                  <option value="/af/docs/Web/API/Worker/Functions_and_classes_available_to_workers">
+            Afrikaans
+          </option>          <option value="/fr/docs/Web/API/Worker/Functions_and_classes_available_to_workers">
+            Français
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:12:45 GMT -->
+</body></html>

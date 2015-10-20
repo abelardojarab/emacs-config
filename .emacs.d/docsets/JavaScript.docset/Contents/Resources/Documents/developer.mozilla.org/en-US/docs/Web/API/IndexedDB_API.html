@@ -1,0 +1,1014 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:33:59 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>IndexedDB</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API$json">
+  <link rel="canonical" href="IndexedDB_API.html">
+
+            <link rel="alternate" hreflang="bn-BD" href="https://developer.mozilla.org/bn-BD/docs/IndexedDB" title="ইনডেক্সডডিবি">
+          <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/IndexedDB" title="IndexedDB">
+          <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/IndexedDB-840092-dup" title="IndexedDB">
+          <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/IndexedDB" title="IndexedDB">
+          <link rel="alternate" hreflang="it" href="https://developer.mozilla.org/it/docs/Web/API/IndexedDB_API" title="IndexedDB">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/IndexedDB" title="IndexedDB">
+          <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/IndexedDB" title="IndexedDB">
+          <link rel="alternate" hreflang="nl" href="https://developer.mozilla.org/nl/docs/IndexedDB" title="IndexedDB">
+          <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/IndexedDB" title="IndexedDB">
+          <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/IndexedDB" title="IndexedDB">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API" title="IndexedDB">
+          <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/IndexedDB" title="IndexedDB">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="IndexedDB">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">
+  <meta name="twitter:title" content="IndexedDB">
+    <meta property="og:description" content="IndexedDB is a low-level&nbsp;API for client-side storage of significant amounts of structured data, which also enables high performance searches of this data using indexes. While DOM Storage is useful for storing smaller amounts of data, it is less useful for storing larger amounts of structured data. IndexedDB provides a solution. This is the main landing page for MDN's IndexedDB coverage — here we provide links to the full API reference and usage guides, browser support details, and some explanation of key concepts.">
+  <meta name="description" content="IndexedDB is a low-level&nbsp;API for client-side storage of significant amounts of structured data, which also enables high performance searches of this data using indexes. While DOM Storage is useful for storing smaller amounts of data, it is less useful for storing larger amounts of structured data. IndexedDB provides a solution. This is the main landing page for MDN's IndexedDB coverage — here we provide links to the full API reference and usage guides, browser support details, and some explanation of key concepts.">
+  <meta name="twitter:description" content="IndexedDB is a low-level&nbsp;API for client-side storage of significant amounts of structured data, which also enables high performance searches of this data using indexes. While DOM Storage is useful for storing smaller amounts of data, it is less useful for storing larger amounts of structured data. IndexedDB provides a solution. This is the main landing page for MDN's IndexedDB coverage — here we provide links to the full API reference and usage guides, browser support details, and some explanation of key concepts.">
+  
+      
+  </head>
+<body data-slug="Web/API/IndexedDB_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/IndexedDB_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FIndexedDB_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/IndexedDB_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FIndexedDB_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/bn-BD/docs/IndexedDB" title="ইনডেক্সডডিবি">বাংলা (বাংলাদেশ)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/IndexedDB" title="IndexedDB">Deutsch</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/IndexedDB-840092-dup" title="IndexedDB">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/IndexedDB" title="IndexedDB">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/it/docs/Web/API/IndexedDB_API" title="IndexedDB">Italiano</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/IndexedDB" title="IndexedDB">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/IndexedDB" title="IndexedDB">한국어</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/nl/docs/IndexedDB" title="IndexedDB">Nederlands</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/IndexedDB" title="IndexedDB">Português (do&nbsp;Brasil)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/IndexedDB" title="IndexedDB">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API" title="IndexedDB">中文 (简体)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/IndexedDB" title="IndexedDB">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">IndexedDB</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>IndexedDB</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 41 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jpmedley" title="View profile: jpmedley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jpmedley" data-src="../../../../../secure.gravatar.com/avatar/fde784135f738cc182672e703dea9a4b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jpmedley</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kornel" title="View profile: Kornel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kornel" data-src="../../../../../secure.gravatar.com/avatar/f0a29af415477aa8c498a4f41ffe66406aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Kornel</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jeffmcmahan" title="View profile: jeffmcmahan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jeffmcmahan" data-src="../../../../../secure.gravatar.com/avatar/0ac25d6760d8c90c0f89a1eca3a90c8a6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jeffmcmahan</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/nescalante" title="View profile: nescalante">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nescalante" data-src="../../../../../secure.gravatar.com/avatar/693217df01eab93b5bde09b261e348626aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">nescalante</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mardeg" title="View profile: Mardeg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mardeg" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mardeg</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/realityking" title="View profile: realityking">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="realityking" data-src="../../../../../secure.gravatar.com/avatar/cab39d7e547423f2a0c72823eeec95b26aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">realityking</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/mxnd" title="View profile: mxnd">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mxnd" data-src="../../../../../secure.gravatar.com/avatar/d33dd35d078ff5b131f7011220b5058a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mxnd</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Cykelero" title="View profile: Cykelero">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Cykelero" data-src="../../../../../secure.gravatar.com/avatar/408cf55301f3f3fe7e7e2898a4f065b36aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Cykelero</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jessevdk" title="View profile: jessevdk">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jessevdk" data-src="../../../../../secure.gravatar.com/avatar/1922c864e647bf792748c78e8d0b8d796aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jessevdk</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/PikadudeNo1" title="View profile: PikadudeNo1">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="PikadudeNo1" data-src="../../../../../secure.gravatar.com/avatar/76cc624761cc33e51d63c2a1a2d3c17f6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">PikadudeNo1</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kyaw" title="View profile: Kyaw">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kyaw" data-src="../../../../../secure.gravatar.com/avatar/6c0f846c53067579dbc302f12fa2b9096aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Kyaw</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/classam" title="View profile: classam">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="classam" data-src="../../../../../secure.gravatar.com/avatar/06673f216ab336e11d907e7db850b9056aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">classam</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/madarche" title="View profile: madarche">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="madarche" data-src="../../../../../secure.gravatar.com/avatar/a15ce308d52c691ba765d0ac972aac876aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">madarche</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/abhishekp" title="View profile: abhishekp">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="abhishekp" data-src="../../../../../secure.gravatar.com/avatar/0bd34589c7998a3ca0e17af9c3585e936aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">abhishekp</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/timlongyi" title="View profile: timlongyi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="timlongyi" data-src="../../../../../secure.gravatar.com/avatar/bf9c71f2325b5156644b3e3c80715d376aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">timlongyi</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/vecio" title="View profile: vecio">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="vecio" data-src="../../../../../secure.gravatar.com/avatar/8042491f13a3a828fcdd2a13290ef77d6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">vecio</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Huan" title="View profile: Huan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Huan" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Huan</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jchris" title="View profile: jchris">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jchris" data-src="../../../../../secure.gravatar.com/avatar/f777974f516d310ba223829dba857f8c6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jchris</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/haboqueferus" title="View profile: haboqueferus">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="haboqueferus" data-src="../../../../../secure.gravatar.com/avatar/87d659da4bb92cd4d843829b58b3e6b66aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">haboqueferus</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/princetoad%40gmail.com" title="View profile: princetoad@gmail.com">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="princetoad@gmail.com" data-src="../../../../../secure.gravatar.com/avatar/99b8ff24ef13eabedf5be491ded302276aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">princetoad@gmail.com</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/markg" title="View profile: markg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="markg" data-src="../../../../../secure.gravatar.com/avatar/a6bdd84b4732a2c3c7ecadd886b3c64a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">markg</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/claudepache" title="View profile: claudepache">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="claudepache" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">claudepache</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/julienw" title="View profile: julienw">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="julienw" data-src="../../../../../secure.gravatar.com/avatar/a2b625f331361a7110da59a907d79e956aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">julienw</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ianbicking" title="View profile: ianbicking">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ianbicking" data-src="../../../../../secure.gravatar.com/avatar/a9058aef70de6fff4e3b8100c8f0eba86aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ianbicking</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/scottrowe" title="View profile: scottrowe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="scottrowe" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">scottrowe</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dgrogan" title="View profile: dgrogan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dgrogan" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dgrogan</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/cgack" title="View profile: cgack">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cgack" data-src="../../../../../secure.gravatar.com/avatar/691460b4005b0c16bcb96dcdf1f0e02d6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cgack</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Parashuram" title="View profile: Parashuram">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Parashuram" data-src="../../../../../secure.gravatar.com/avatar/61089262f3c80cac51d2c4ba138eec3a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Parashuram</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/grendel" title="View profile: grendel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="grendel" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">grendel</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/saneyuki_s" title="View profile: saneyuki_s">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="saneyuki_s" data-src="../../../../../secure.gravatar.com/avatar/556a5d28eaa01979e031a3250d5f24766aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">saneyuki_s</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/khuey" title="View profile: khuey">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="khuey" data-src="../../../../../secure.gravatar.com/avatar/051b4b44328266ffe5679934c2a62c576aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">khuey</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jonathanac" title="View profile: Jonathanac">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jonathanac" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jonathanac</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sdwilsh" title="View profile: sdwilsh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sdwilsh" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">sdwilsh</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/noob" title="View profile: noob">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="noob" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">noob</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/flodby" title="View profile: flodby">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="flodby" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">flodby</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Key_concepts_and_usage" rel="internal">Key concepts and usage</a><ol><li><a href="#Synchronous_and_asynchronous" rel="internal">Synchronous and asynchronous</a></li><li><a href="#Storage_limits_and_eviction_criteria" rel="internal">Storage limits and eviction criteria</a></li></ol></li><li><a href="#IndexedDB_Interfaces" rel="internal">IndexedDB Interfaces</a><ol><li><a href="#Connecting_to_a_database" rel="internal">Connecting to a database</a></li><li><a href="#Retrieving_and_modifying_data" rel="internal">Retrieving and modifying data</a></li><li><a href="#Custom_event_interfaces" rel="internal">Custom event interfaces</a></li><li><a href="#Obsolete_interfaces" rel="internal">Obsolete interfaces</a></li></ol></li><li><a href="#Example" rel="internal">Examples</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>IndexedDB is a low-level&nbsp;API for client-side storage of significant amounts of structured data, which also enables high performance searches of this data using indexes. While <a href="Web_Storage_API.html" title="en-US/docs/DOM/Storage">DOM Storage</a> is useful for storing smaller amounts of data, it is less useful for storing larger amounts of structured data. IndexedDB provides a solution. This is the main landing page for MDN's IndexedDB coverage — here we provide links to the full API reference and usage guides, browser support details, and some explanation of key concepts.</p>
+
+<p></p><div class="note"><strong>Note:</strong>&nbsp;This feature is available in <a href="Web_Workers_API.html">Web Workers</a>.</div><p></p>
+
+<div class="note">
+<p>IndexedDB API is powerful, but may seem too complicated for simple cases. If you'd prefer a simple API, try libraries such as&nbsp;<a href="http://mozilla.github.io/localForage/" class="external">localForage</a>&nbsp;and <a href="http://www.dexie.org/" class="external">dexie.js</a> that make IndexedDB more user-friendly.</p>
+</div>
+
+<h2 id="Key_concepts_and_usage">Key concepts and usage</h2>
+
+<p>IndexedDB is a transactional database system, like a SQL-based RDBMS; however whereas the latter uses tables with fixed columns, IndexedDB is a JavaScript-based object-oriented database. IndexedDB lets you store and retrieve objects that are indexed with a <strong>key</strong>; any objects supported by the <a href="Web_Workers_API/Structured_clone_algorithm.html">structured clone algorithm</a> can be stored. You need to specify the database schema, open a connection to your database, and then retrieve and update data within a series of <strong>transactions</strong>.</p>
+
+<ul>
+ <li>Read more about the <a href="IndexedDB_API/Basic_Concepts_Behind_IndexedDB.html">Concepts behind IndexedDB</a></li>
+ <li>Learn to use IndexedDB asynchronously from first principles with our <a href="IndexedDB_API/Using_IndexedDB.html">Using IndexedDB</a> guide</li>
+ <li>Find developer recommendations for making web apps work offline at our <a href="https://developer.mozilla.org/en-US/Apps/Build/Offline">Offline Apps</a> page.</li>
+</ul>
+
+<div class="note">
+<p><strong>Note</strong>: Like most web storage solutions, IndexedDB follows a <a href="http://www.w3.org/Security/wiki/Same_Origin_Policy" class="external" title="http://www.w3.org/Security/wiki/Same_Origin_Policy">same-origin policy</a>. So while you can access stored data within a domain, you cannot access data across different domains.</p>
+</div>
+
+<h3 id="Synchronous_and_asynchronous">Synchronous and asynchronous</h3>
+
+<p>Operations performed using IndexedDB are done asynchronously, so as not to block applications. IndexedDB originally included both an asynchronous API and a synchronous API; the synchronous API being intended for use only with <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Performance/Using_web_workers">Web Workers</a>. The synchronous version was removed from the spec because its need was questionable, however it may be reintroduced in the future if there is enough demand from web developers.</p>
+
+<h3 id="Storage_limits_and_eviction_criteria">Storage limits and eviction criteria</h3>
+
+<p>There are a number of web technologies that store data of one kind or another on the client&nbsp;side (i.e. on your local disk), IndexedDB being the most commonly talked about one. The process by which the browser works out how much space to allocate to web data storage and what to delete when that limit is reached is not simple, and differs between browsers. <a href="IndexedDB_API/Browser_storage_limits_and_eviction_criteria.html">Browser storage limits and eviction criteria</a> attempts to explain how this works, at least in the case of Firefox.</p>
+
+<p>Details on how other browsers deal with this will be added as soon as more information is obtained.</p>
+
+<h2 id="IndexedDB_Interfaces">IndexedDB Interfaces</h2>
+
+<p>To get access to a database, call <a href="IDBFactory/open.html"><code>open()</code></a> on the <a href="IDBEnvironment/indexedDB.html"><code>indexedDB</code></a> attribute of a <a href="Window.html" title="en-US/docs/DOM/window">window</a> object. This method returns an <a href="IDBRequest.html" title="The request object does not initially contain any information about the result of the operation, but once information becomes available, an event is fired on the request, and the information becomes available through the properties of the IDBRequest instance."><code>IDBRequest</code></a> object; asynchronous operations communicate to the calling application by firing events on <a href="IDBRequest.html" title="The request object does not initially contain any information about the result of the operation, but once information becomes available, an event is fired on the request, and the information becomes available through the properties of the IDBRequest instance."><code>IDBRequest</code></a> objects.</p>
+
+<h3 id="Connecting_to_a_database">Connecting to a database</h3>
+
+<dl>
+ <dt><a href="IDBEnvironment.html" title="The IDBEnvironment interface of the IndexedDB API contains the indexedDB property, which provides access to IndexedDB functionality. It is the top level IndexedDB interface implemented by the window and Worker objects."><code>IDBEnvironment</code></a></dt>
+ <dd>Provides access to IndexedDB functionality. It is implemented by the <a href="Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>window</code></a> and <a href="Worker.html" title="The Worker interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker()&nbsp;constructor and specifying a script to be run in the worker thread."><code>worker</code></a> objects.</dd>
+ <dt><a href="IDBFactory.html" title="In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.)"><code>IDBFactory</code></a></dt>
+ <dd>Provides access to a database. This is the interface implemented by the global object <a href="IDBEnvironment/indexedDB.html"><code>indexedDB</code></a> and is therefore the entry point for the API.</dd>
+ <dt><a href="IDBOpenDBRequest.html" title="Inherits from: IDBRequest"><code>IDBOpenDBRequest</code></a></dt>
+ <dd>Represents a request to open a database.</dd>
+ <dt><a href="IDBDatabase.html" title="Inherits from: EventTarget"><code>IDBDatabase</code></a></dt>
+ <dd>Represents a connection to a database. It's the only way to get a transaction on the database.</dd>
+</dl>
+
+<dl>
+ <dt><a href="IDBRequest.html" title="The request object does not initially contain any information about the result of the operation, but once information becomes available, an event is fired on the request, and the information becomes available through the properties of the IDBRequest instance."><code>IDBRequest</code></a></dt>
+ <dd>Generic interface that handles database requests and provides access to results.</dd>
+</dl>
+
+<h3 id="Retrieving_and_modifying_data">Retrieving and modifying data</h3>
+
+<dl>
+ <dt><a href="IDBTransaction.html" title="Inherits from: EventTarget"><code>IDBTransaction</code></a></dt>
+ <dd>Represents a transaction. You create a transaction on a database, specify the scope (such as which object stores you want to access), and determine the kind of access (read only or readwrite) that you want.</dd>
+ <dt><a href="IDBObjectStore.html" title="This example shows a variety of different uses of ObjectStores, from updating the data structure with IDBObjectStore.createIndex&nbsp;inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our&nbsp;To-do Notifications&nbsp;app (view example live.)"><code>IDBObjectStore</code></a></dt>
+ <dd>Represents an object store that allows access to a set of data in an IndexedDB database, looked up via primary key.</dd>
+ <dt><a href="IDBIndex.html" title="You can retrieve records in an object store through the primary key or by using an index. An index lets you look up records in an object store using properties of the values in the object stores records other than the primary key"><code>IDBIndex</code></a></dt>
+ <dd>Also allows access to a subset of data in an IndexedDB database, but uses an index to retrieve the record(s) rather than the primary key. This is sometimes faster than using <a href="IDBObjectStore.html" title="This example shows a variety of different uses of ObjectStores, from updating the data structure with IDBObjectStore.createIndex&nbsp;inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our&nbsp;To-do Notifications&nbsp;app (view example live.)"><code>IDBObjectStore</code></a>.</dd>
+ <dt><a href="IDBCursor.html" title="The IDBCursor interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database."><code>IDBCursor</code></a></dt>
+ <dd>Iterates over object stores and indexes.</dd>
+ <dt><a href="IDBCursorWithValue.html" title=""><code>IDBCursorWithValue</code></a></dt>
+ <dd>Iterates over object stores and indexes and returns the cursor's current value.</dd>
+ <dt><a href="IDBKeyRange.html" title="A key range can be a single value or a range with upper and lower bounds or endpoints. If the key range has both upper and lower bounds, then it is bounded; if it has no bounds, it is unbounded. A bounded key range can either be open (the endpoints are excluded) or closed (the endpoints are included). To retrieve all keys within a certain range, you can use the following code constructs:"><code>IDBKeyRange</code></a></dt>
+ <dd>Defines a key range that can be used to retrieve data from a database in a certain range.</dd>
+ <dt><a href="IDBLocaleAwareKeyRange.html" title="This interface inherits all the methods of its parent interface, IDBKeyRange."><code>IDBLocaleAwareKeyRange</code></a> <span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></dt>
+ <dd>Defines a key range that can be used to retrieve data from a database in a certain range, sorted acording to the rules of the locale specified for a certain index (see <a href="IDBObjectStore/createIndex.html#Parameters"><code>createIndex()</code>'s optionalParameters</a>.).</dd>
+</dl>
+
+<h3 id="Custom_event_interfaces">Custom event interfaces</h3>
+
+<p>This specification fires events with the following custom interface:</p>
+
+<dl>
+ <dt><a href="IDBVersionChangeEvent.html" title="The IDBVersionChangeEvent interface of the IndexedDB&nbsp;API indicates that the version of the database has changed, as the result of an IDBOpenDBRequest.onupgradeneeded event handler function."><code>IDBVersionChangeEvent</code></a></dt>
+ <dd>The <code>IDBVersionChangeEvent</code> interface indicates that the version of the database has changed, as the result of an <a href="IDBOpenDBRequest/onupgradeneeded.html" title="In the following example you can see the onupgradeneeded handler being used to update the database structure if a database with a higher version number is loaded. For a full working example, see our To-do Notifications app (view example live.)"><code>IDBOpenDBRequest.onupgradeneeded</code></a> event handler function.</dd>
+</dl>
+
+<h3 id="Obsolete_interfaces">Obsolete interfaces</h3>
+
+<p>An early version of the specification also defined these now removed interfaces. They are still documented in case you need to update previously written&nbsp;code:</p>
+
+<dl>
+ <dt><a href="IDBVersionChangeRequest.html" title="The IDBVersionChangeRequest interface the IndexedDB API represents a request to change the version of a database. It is used only by the setVersion() method of IDBDatabase."><code>IDBVersionChangeRequest</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Represents a request to change the version of a database. The way to change the version of the database has since changed (by calling <a href="IDBFactory/open.html" title="If an error occurs while the database connection is being opened, then an error event is fired on the request object returned from this method."><code>IDBFactory.open</code></a> without also calling <a href="IDBDatabase/setVersion.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>IDBDatabase.setVersion</code></a>), and the interface <a href="IDBOpenDBRequest.html" title="Inherits from: IDBRequest"><code>IDBOpenDBRequest</code></a> now has the functionality of the removed <a href="IDBVersionChangeRequest.html" title="The IDBVersionChangeRequest interface the IndexedDB API represents a request to change the version of a database. It is used only by the setVersion() method of IDBDatabase."><code>IDBVersionChangeRequest</code></a>.</dd>
+ <dt><a href="IDBDatabaseException.html" title="In the IndexedDB API, an IDBDatabaseException object represents exception conditions that can be encountered while performing database operations."><code>IDBDatabaseException</code></a>&nbsp; <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Represents exception conditions that can be encountered while performing database operations.</dd>
+ <dt><a href="IDBTransactionSync.html" title="The IDBTransactionSync interface of the IndexedDB&nbsp;API provides a synchronous transaction on a database. When an application creates an IDBTransactionSync object, it blocks until the browser is able to reserve the require database objects."><code>IDBTransactionSync</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Sync version of <a href="IDBTransaction.html" title="Inherits from: EventTarget"><code>IDBTransaction</code></a>.</dd>
+ <dt><a href="IDBObjectStoreSync.html" title="The IDBObjectStoreSync interface of the IndexedDB API provides synchronous access to an object store of a database."><code>IDBObjectStoreSync</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Sync version of <a href="IDBObjectStore.html" title="This example shows a variety of different uses of ObjectStores, from updating the data structure with IDBObjectStore.createIndex&nbsp;inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our&nbsp;To-do Notifications&nbsp;app (view example live.)"><code>IDBObjectStore</code></a>.</dd>
+ <dt><a href="IDBIndexSync.html" title="The IDBIndexSync interface of the IndexedDB API provides synchronous access to an index in a database."><code>IDBIndexSync</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Sync version of <a href="IDBIndex.html" title="You can retrieve records in an object store through the primary key or by using an index. An index lets you look up records in an object store using properties of the values in the object stores records other than the primary key"><code>IDBIndex</code></a>.</dd>
+ <dt><a href="IDBFactorySync.html" title="The IDBFactorySync interface of the IndexedDB&nbsp;API provide a synchronous means of accessing the capabilities of indexed databases."><code>IDBFactorySync</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Sync version of <a href="IDBFactory.html" title="In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.)"><code>IDBFactory</code></a>.</dd>
+ <dt><a href="IDBEnvironmentSync.html" title="The Unimplemented IDBEnvironmentSync interface of the IndexedDB API will be implemented by worker objects."><code>IDBEnvironmentSync</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Sync version of <a href="IDBEnvironment.html" title="The IDBEnvironment interface of the IndexedDB API contains the indexedDB property, which provides access to IndexedDB functionality. It is the top level IndexedDB interface implemented by the window and Worker objects."><code>IDBEnvironment</code></a>.</dd>
+ <dt><a href="IDBDatabaseSync.html" title="The DatabaseSync interface in the IndexedDB API represents a synchronous connection to a database."><code>IDBDatabaseSync</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Sync version of <a href="IDBDatabase.html" title="Inherits from: EventTarget"><code>IDBDatabase</code></a>.</dd>
+ <dt><a href="IDBCursorSync.html" title="The IDBCursorSync interface of the IndexedDB API represents a cursor for iterating over multiple records in a database. You can have only one instance of IDBCursorSync representing a cursor, but you can have an unlimited number of cursors at the same time. Operations are performed on the underlying index or object store. It enables an application to synchronously process all the records in the cursor's range."><code>IDBCursorSync</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Sync version of <a href="IDBCursor.html" title="The IDBCursor interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database."><code>IDBCursor</code></a>.</dd>
+</dl>
+
+<h2 name="Example" id="Example">Examples</h2>
+
+<ul>
+ <li><a href="https://developer.mozilla.org/en-US/demos/detail/elibri" title="https://developer.mozilla.org/en-US/demos/detail/elibri">eLibri:</a> A powerful library and eBook reader application, written by Marco Castelluccio, winner of the IndexedDB Mozilla DevDerby.</li>
+ <li><a href="https://github.com/chrisdavidmills/to-do-notifications/tree/gh-pages" class="external">To-do Notifications</a> (<a href="http://mdn.github.io/to-do-notifications/" class="external">view example live</a>): The reference application for the examples in the reference docs.</li>
+ <li><a href="http://hacks.mozilla.org/2012/02/storing-images-and-files-in-indexeddb/" class="external" title="http://hacks.mozilla.org/2012/02/storing-images-and-files-in-indexeddb/">Storing images and files in IndexedDB</a></li>
+</ul>
+
+<h2 name="Browser_compatibility" id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>
+    <p>23.0 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span><br>
+     24</p>
+   </td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/10" title="Released on 2012-01-31.">10.0</a> (10.0) <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span><br>
+    <a href="https://developer.mozilla.org/en-US/Firefox/Releases/16" title="Released on 2012-10-09.">16.0</a> (16.0)</td>
+   <td>10, partial</td>
+   <td>15</td>
+   <td>7.1</td>
+  </tr>
+  <tr>
+   <td>Available in workers</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/37" title="Released on 2015-04-07.">37.0</a> (37.0)[1]</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>IDBLocaleAwareKeyRange</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/43" title="Released on 2015-12-15.">43.0</a> (43.0)<sup>[2]</sup></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>4.4</td>
+   <td>22.0 (22.0)</td>
+   <td>1.0.1</td>
+   <td>10</td>
+   <td>22</td>
+   <td>8</td>
+  </tr>
+  <tr>
+   <td>Available in workers</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>37.0 (37.0)<sup>[1]</sup></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>IDBLocaleAwareKeyRange</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>43.0 (43.0)<sup>[2]</sup></td>
+   <td>2.5<sup>[2]</sup></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<ul>
+ <li>[1]: <a href="IDBCursorWithValue.html" title=""><code>IDBCursorWithValue</code></a> is not available in workers until <a href="https://developer.mozilla.org/en-US/Firefox/Releases/42" title="Released on 2015-11-03.">42.0</a> (42.0).</li>
+ <li>[2]: This feature is currently hidden behind a flag — to enable it and experiment, go to about:config and enable dom.indexedDB.experimental.</li>
+</ul>
+
+<div class="note">
+<p><strong>Note</strong>: Some older browsers don't support IndexedDB but <a href="http://caniuse.com/sql-storage" class="external" title="http://caniuse.com/sql-storage">do support WebSQL</a>. One way around this problem is to use an IndexedDB Polyfill or Shim that falls back to <a href="http://www.w3.org/TR/webdatabase/" class="external">WebSQL</a> or even <a href="Web_Storage_API.html#localStorage">localStorage</a> for non-supporting browsers. The best available polyfill at present is <a href="https://github.com/mozilla/localForage" class="external">localForage</a>.</p>
+</div>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/IndexedDB/#idl-def-IDBEnvironment" class="external" lang="en" hreflang="en">Indexed Database API<br><small lang="en-US">The definition of 'IDBEnvironment' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="http://mozilla.github.io/localForage/" class="external">localForage</a>: A Polyfill providing a simple name:value syntax for client-side data storage, which uses IndexedDB in the background, but falls back to WebSQL and then localStorage in browsers that don't support IndexedDB.</li>
+ <li><a href="http://www.dexie.org/" class="external">dexie.js</a>: A wrapper for IndexedDB that allows much faster code development via nice, simple syntax.</li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Advanced">Advanced</a></li>
+              <li><a href="../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Database">Database</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/IndexedDB">IndexedDB</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/indexeddb">indexeddb</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Landing">Landing</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Storage">Storage</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Kornel">Kornel</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jeffmcmahan">jeffmcmahan</a>,             <a href="https://developer.mozilla.org/en-US/profiles/nescalante">nescalante</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mardeg">Mardeg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/realityking">realityking</a>,             <a href="https://developer.mozilla.org/en-US/profiles/mxnd">mxnd</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Cykelero">Cykelero</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jessevdk">jessevdk</a>,             <a href="https://developer.mozilla.org/en-US/profiles/PikadudeNo1">PikadudeNo1</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Kyaw">Kyaw</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/classam">classam</a>,             <a href="https://developer.mozilla.org/en-US/profiles/madarche">madarche</a>,             <a href="https://developer.mozilla.org/en-US/profiles/abhishekp">abhishekp</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/timlongyi">timlongyi</a>,             <a href="https://developer.mozilla.org/en-US/profiles/vecio">vecio</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Huan">Huan</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jchris">jchris</a>,             <a href="https://developer.mozilla.org/en-US/profiles/haboqueferus">haboqueferus</a>,             <a href="https://developer.mozilla.org/en-US/profiles/princetoad%40gmail.com">princetoad@gmail.com</a>,             <a href="https://developer.mozilla.org/en-US/profiles/markg">markg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/claudepache">claudepache</a>,             <a href="https://developer.mozilla.org/en-US/profiles/julienw">julienw</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ianbicking">ianbicking</a>,             <a href="https://developer.mozilla.org/en-US/profiles/scottrowe">scottrowe</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dgrogan">dgrogan</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cgack">cgack</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Parashuram">Parashuram</a>,             <a href="https://developer.mozilla.org/en-US/profiles/grendel">grendel</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/saneyuki_s">saneyuki_s</a>,             <a href="https://developer.mozilla.org/en-US/profiles/khuey">khuey</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jonathanac">Jonathanac</a>,             <a href="https://developer.mozilla.org/en-US/profiles/sdwilsh">sdwilsh</a>,             <a href="https://developer.mozilla.org/en-US/profiles/noob">noob</a>,             <a href="https://developer.mozilla.org/en-US/profiles/flodby">flodby</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>,
+                      <time datetime="2015-09-23T11:18:17-07:00">Sep 23, 2015, 11:18:17 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="IndexedDB_API.html">IndexedDB API</a></strong></li><li data-default-state="open"><a href="#"><strong>Guides</strong></a><ol><li><a href="IndexedDB_API/Basic_Concepts_Behind_IndexedDB.html" title="This introduction discusses essential concepts and terminology in IndexedDB. It gives you the big picture and explains key concepts.">Basic concepts</a></li><li><a href="IndexedDB_API/Browser_storage_limits_and_eviction_criteria.html" title="There are a number of web technologies that store data of one kind or another on the client-side (i.e. on your local disk.) The process by which the browser works out how much space to allocate to web data storage and what to delete when that limit is reached is not simple, and differs between browsers. This article attempts to explain how this all works.">Browser storage limits and eviction criteria</a></li><li><a href="IndexedDB_API/Using_IndexedDB.html" title="This tutorial walks you through using the asynchronous API of IndexedDB. If you are not familiar with IndexedDB, you should first read Basic Concepts About IndexedDB.">Using IndexedDB</a></li><li><a href="IndexedDB_API/Using_IndexedDB_in_chrome.html" title="The indexedDB API is typically used to store data in the user's browser from content JavaScript.&nbsp; (See Using IndexedDB for an overview.)&nbsp; However, the APIs can be also be accessed from system-privileged JavaScript using the Components.utils.importGlobalProperties() function:">Using IndexedDB in chrome</a></li><li><a href="https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB/Using_JavaScript_Generators_in_Firefox" title="Generators can be used to simplify asynchronous code in Firefox by opting in to using JavaScript version 1.7 or later. You can opt in in HTML as follows:">Using JavaScript Generators in Firefox</a></li></ol></li><li data-default-state="open"><a href="#"><strong>Interfaces</strong></a><ol><li><a href="IDBCursor.html"><code>IDBCursor</code></a></li><li><a href="IDBCursorSync.html"><code>IDBCursorSync</code></a></li><li><a href="IDBCursorWithValue.html"><code>IDBCursorWithValue</code></a></li><li><a href="IDBDatabase.html"><code>IDBDatabase</code></a></li><li><a href="IDBDatabaseException.html"><code>IDBDatabaseException</code></a></li><li><a href="IDBDatabaseSync.html"><code>IDBDatabaseSync</code></a></li><li><a href="IDBEnvironment.html"><code>IDBEnvironment</code></a></li><li><a href="IDBEnvironmentSync.html"><code>IDBEnvironmentSync</code></a></li><li><a href="IDBFactory.html"><code>IDBFactory</code></a></li><li><a href="IDBFactorySync.html"><code>IDBFactorySync</code></a></li><li><a href="IDBIndex.html"><code>IDBIndex</code></a></li><li><a href="IDBIndexSync.html"><code>IDBIndexSync</code></a></li><li><a href="IDBKeyRange.html"><code>IDBKeyRange</code></a></li><li><a href="IDBObjectStore.html"><code>IDBObjectStore</code></a></li><li><a href="IDBObjectStoreSync.html"><code>IDBObjectStoreSync</code></a></li><li><a href="IDBOpenDBRequest.html"><code>IDBOpenDBRequest</code></a></li><li><a href="IDBRequest.html"><code>IDBRequest</code></a></li><li><a href="IDBTransaction.html"><code>IDBTransaction</code></a></li><li><a href="IDBTransactionSync.html"><code>IDBTransactionSync</code></a></li><li><a href="IDBVersionChangeEvent.html"><code>IDBVersionChangeEvent</code></a></li><li><a href="IDBVersionChangeRequest.html"><code>IDBVersionChangeRequest</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../Events/upgradeneeded.html"><code>upgradeneeded</code></a></li><li><a href="../Events/complete.html"><code>complete</code></a></li><li><a href="../Events/abort.html"><code>abort</code></a></li><li><a href="../Events/success.html"><code>success</code></a></li><li><a href="../Events/error.html"><code>error</code></a></li><li><a href="../Events/blocked.html"><code>blocked</code></a></li><li><a href="../Events/versionchange.html"><code>versionchange</code></a></li><li><a href="../Events/close.html"><code>close</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/IndexedDB_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/IndexedDB_API$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/IndexedDB_API" selected="">
+          English (US)
+        </option>
+                  <option value="/bn-BD/docs/IndexedDB">
+            বাংলা (বাংলাদেশ)
+          </option>          <option value="/de/docs/IndexedDB">
+            Deutsch
+          </option>          <option value="/es/docs/IndexedDB-840092-dup">
+            Español
+          </option>          <option value="/fr/docs/IndexedDB">
+            Français
+          </option>          <option value="/it/docs/Web/API/IndexedDB_API">
+            Italiano
+          </option>          <option value="/ja/docs/IndexedDB">
+            日本語
+          </option>          <option value="/ko/docs/IndexedDB">
+            한국어
+          </option>          <option value="/nl/docs/IndexedDB">
+            Nederlands
+          </option>          <option value="/pt-BR/docs/IndexedDB">
+            Português (do&nbsp;Brasil)
+          </option>          <option value="/ru/docs/IndexedDB">
+            Русский
+          </option>          <option value="/zh-CN/docs/Web/API/IndexedDB_API">
+            中文 (简体)
+          </option>          <option value="/zh-TW/docs/IndexedDB">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 14:34:17 GMT -->
+</body></html>

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"ActivateFailedException(String)","path":"ActivateFailedException-java.lang.String-","entryType":"Constructor"},{"name":"ActivateFailedException(String, Exception)","path":"ActivateFailedException-java.lang.String-java.lang.Exception-","entryType":"Constructor"}]}

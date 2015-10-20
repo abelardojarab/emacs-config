@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"JMXServerErrorException(String, Error)","path":"JMXServerErrorException-java.lang.String-java.lang.Error-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getCause()","path":"getCause--","entryType":"Method"}]}

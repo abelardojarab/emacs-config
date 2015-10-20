@@ -1,0 +1,968 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/APi?page=4 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:15:54 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: APi</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: APi" href="../feeds/atom/tag/APi-2">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/APi?page=4" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FAPi%3Fpage%3D4" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/APi?page=4" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FAPi%3Fpage%3D4" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: APi</h1>
+                <ol class="pagination">
+      <li class="prev">
+      <a href="APi9ba9-2.html?page=3">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="APi2679-2.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="APi4658-2.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="APi9ba9-2.html?page=3">3</a>
+    </li>
+      <li class="selected">
+      <a href="APifdb0-2.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="APiaf4d-2.html?page=5">5</a>
+    </li>
+      <li>
+      <a href="APic575-2.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="APi235c-2.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="APifdfa-2.html?page=8">8</a>
+    </li>
+              <li class="skip">…</li>
+        <li><a href="APib385-2.html?page=30">30</a></li>
+        <li class="next">
+      <a href="APiaf4d-2.html?page=5">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 2973 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="../Web/API/BluetoothStatusChangedEvent/address.html">Web/API/BluetoothStatusChangedEvent/address</a>
+                                  <small>The address property represents the address of the device for which the status has changed in the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothStatusChangedEvent/status.html">Web/API/BluetoothStatusChangedEvent/status</a>
+                                  <small>The status property indicates if the connection is active (true) or not (false).</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Body.html">Web/API/Body</a>
+                                  <small>The Body mixin of the Fetch API represents the body of the response/request, allowing you to ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Body/arrayBuffer.html">Web/API/Body/arrayBuffer</a>
+                                  <small>The arrayBuffer() method of the Body mixin takes a Response stream and reads it to completion. It ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Body/blob.html">Web/API/Body/blob</a>
+                                  <small>The blob() method of the Body mixin takes a Response stream and reads it to completion. It returns ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Body/bodyUsed.html">Web/API/Body/bodyUsed</a>
+                                  <small>The bodyUsed read-only property of the Body mixin contains a Boolean that indicates whether the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Body/formData.html">Web/API/Body/formData</a>
+                                  <small>The formData() method of the Body mixin takes a Response stream and reads it to completion. It ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Body/json.html">Web/API/Body/json</a>
+                                  <small>The json() method of the Body mixin takes a Response stream and reads it to completion. It returns ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Body/text.html">Web/API/Body/text</a>
+                                  <small>The text() method of the Body mixin takes a Response stream and reads it to completion. It returns ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BroadcastChannel.html">Web/API/BroadcastChannel</a>
+                                  <small>The BroadcastChannel interface represents a named channel that any browsing context of a given ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BroadcastChannel/BroadcastChannel.html">Web/API/BroadcastChannel/BroadcastChannel</a>
+                                  <small>The BroadcastChannel() constructor creates a new BroadcastChannel and connects it to the underlying ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BroadcastChannel/close.html">Web/API/BroadcastChannel/close</a>
+                                  <small>The BroadcastChannel.close() terminates the connection to the underlying channel, allowing the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BroadcastChannel/onmessage.html">Web/API/BroadcastChannel/onmessage</a>
+                                  <small>The BroadcastChannel.onmessage event handler is a property that specifies the function to execute ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BroadcastChannel/postMessage.html">Web/API/BroadcastChannel/postMessage</a>
+                                  <small>The BroadcastChannel.postMessage() sends a message, which can be of any kind of Object, to each ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Broadcast_Channel_API.html">Web/API/Broadcast_Channel_API</a>
+                                  <small>The Broadcast Channel API allows simple communication between browsing contexts (that is windows, ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ByteString.html">Web/API/ByteString</a>
+                                  <small>ByteString is a UTF-8 String that corresponds to the set of all possible sequences of bytes. ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Cache.html">Web/API/Cache</a>
+                                  <small>The Cache interface of the ServiceWorker API represents the storage for Request / Response object ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Cache/add.html">Web/API/Cache/add</a>
+                                  <small>The add() method of the Cache interface takes a URL, retrieves it and adds the resulting response ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Cache/addAll.html">Web/API/Cache/addAll</a>
+                                  <small>The addAll() method of the Cache interface takes an array of URLS, retrieves them, and adds the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Cache/delete.html">Web/API/Cache/delete</a>
+                                  <small>The delete() method of the Cache interface finds the Cache entry whose key is the request, and if ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Cache/keys.html">Web/API/Cache/keys</a>
+                                  <small>The keys() method of the Cache interface returns a Promise that resolves to an array of Cache keys.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Cache/match.html">Web/API/Cache/match</a>
+                                  <small>The match() method of the Cache interface returns a Promise that resolves to the Response ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Cache/matchAll.html">Web/API/Cache/matchAll</a>
+                                  <small>The matchAll() method of the Cache interface returns a Promise that resolves to an array of all ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Cache/put.html">Web/API/Cache/put</a>
+                                  <small>The put() method of the Cache interface allows key/value pairs to be added to the current Cache ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CacheStorage.html">Web/API/CacheStorage</a>
+                                  <small>The CacheStorage interface of the ServiceWorker API represents the storage for Cache objects. It ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CacheStorage/delete.html">Web/API/CacheStorage/delete</a>
+                                  <small>The delete () method of the CacheStorage interface finds the Cache object matching the cacheName, ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CacheStorage/has.html">Web/API/CacheStorage/has</a>
+                                  <small>The has() method of the CacheStorage interface returns a Promise that resolves to true if a Cache ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CacheStorage/keys.html">Web/API/CacheStorage/keys</a>
+                                  <small>The keys () method of the CacheStorage interface returns a Promise that will resolve with an array ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CacheStorage/match.html">Web/API/CacheStorage/match</a>
+                                  <small>The match() method of the CacheStorage interface checks if a given Request is a key in any of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CacheStorage/open.html">Web/API/CacheStorage/open</a>
+                                  <small>The open() method of the CacheStorage interface returns a Promise that resolves to the Cache object ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CallEvent.html">Web/API/CallEvent</a>
+                                  <small>The CallEvent interface of the Web Telephony API represents events related to telephone calls.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CallEvent/call.html">Web/API/CallEvent/call</a>
+                                  <small>The call read-only property of the CallEvent interface returns a TelephonyCall object indicating ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities.html">Web/API/CameraCapabilities</a>
+                                  <small>The CameraControl.capabilities property returns a CameraCapabilities object, which describes all ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/effects.html">Web/API/CameraCapabilities/effects</a>
+                                  <small>The effects property value is an Array identifying the effects (such as normal, sepia, mono, etc.) ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/fileFormats.html">Web/API/CameraCapabilities/fileFormats</a>
+                                  <small>The fileFormats property is an Array identifying the file formats supported by the camera, such as ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/flashModes.html">Web/API/CameraCapabilities/flashModes</a>
+                                  <small>The flashModes property is an Array of strings identifying each of the flash modes supported by the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/focusModes.html">Web/API/CameraCapabilities/focusModes</a>
+                                  <small>The focusModes property is an Array of strings identifying each of the focus modes supported by the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/maxExposureCompensation.html">Web/API/CameraCapabilities/maxExposureCompensation</a>
+                                  <small>The maxExposureCompensation property is a number that defines the maximum supported exposure ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/maxFocusAreas.html">Web/API/CameraCapabilities/maxFocusAreas</a>
+                                  <small>The maxFocusAreas property is a number that defines the maximum number of focus areas supported by ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/maxMeteringAreas.html">Web/API/CameraCapabilities/maxMeteringAreas</a>
+                                  <small>The maxMeteringAreas property is a number that defines the maximum number of metering areas ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/minExposureCompensation.html">Web/API/CameraCapabilities/minExposureCompensation</a>
+                                  <small>The minExposureCompensation property is a number that defines the minimum supported exposure ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/pictureSizes.html">Web/API/CameraCapabilities/pictureSizes</a>
+                                  <small>The pictureSizes property is an Array of objects containing the height and width properties ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/previewSizes.html">Web/API/CameraCapabilities/previewSizes</a>
+                                  <small>The previewSizes property is an Array of objects containing the height and width properties ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/recorderProfiles.html">Web/API/CameraCapabilities/recorderProfiles</a>
+                                  <small>The recorderProfiles property is an object with attributes for each of the supported recorder ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/sceneModes.html">Web/API/CameraCapabilities/sceneModes</a>
+                                  <small>The sceneModes property is an Array identifying each of the scene modes supported by the camera ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/stepExposureCompensation.html">Web/API/CameraCapabilities/stepExposureCompensation</a>
+                                  <small>The stepExposureCompensation property is a number that defines the exposure compensation minimum ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/videoSizes.html">Web/API/CameraCapabilities/videoSizes</a>
+                                  <small>The videoSizes property is an Array of objects containing the height and width properties supported ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/whiteBalanceModes.html">Web/API/CameraCapabilities/whiteBalanceModes</a>
+                                  <small>The whiteBalanceModes property is an Array of strings identifiers for each white balance mode ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraCapabilities/zoomRatios.html">Web/API/CameraCapabilities/zoomRatios</a>
+                                  <small>The zoomRatios property is an Array of numbers representing all the supported zoom ratios. If the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl.html">Web/API/CameraControl</a>
+                                  <small>When you use the CameraManager.getCamera() method to get a reference to a camera, you specify a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/autoFocus.html">Web/API/CameraControl/autoFocus</a>
+                                  <small>This method attempts to focus the camera. If the camera is able to attempt to focus, a success ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/capabilities.html">Web/API/CameraControl/capabilities</a>
+                                  <small>The capabilities property return a CameraCapabilities object, which describes the capabilities of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/effect.html">Web/API/CameraControl/effect</a>
+                                  <small>The effect property is a string defining the effect to be used by the camera. When set, its value ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/exposureCompensation.html">Web/API/CameraControl/exposureCompensation</a>
+                                  <small>The exposureCompensation property value is a number used to compensate the camera exposure.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/flashMode.html">Web/API/CameraControl/flashMode</a>
+                                  <small>The flashMode property value is a string that defines how the flash, if any, is to be used. When ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/focalLength.html">Web/API/CameraControl/focalLength</a>
+                                  <small>The focalLength property value is a read-only property that returns a number that expresses the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/focusAreas.html">Web/API/CameraControl/focusAreas</a>
+                                  <small>The focusAreas property is an Array of one or more Area objects that define where the camera will ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/focusDistanceFar.html">Web/API/CameraControl/focusDistanceFar</a>
+                                  <small>The focusDistanceFar property value is a distance in meters used with ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/focusDistanceNear.html">Web/API/CameraControl/focusDistanceNear</a>
+                                  <small>The focusDistanceNear property value is a distance in meters used with ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/focusDistanceOptimum.html">Web/API/CameraControl/focusDistanceOptimum</a>
+                                  <small>The focusDistanceOptimum property value is the distance in meters where the subject appears ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/focusMode.html">Web/API/CameraControl/focusMode</a>
+                                  <small>The focusMode property value is a string that defines which kind of focus mode the camera should ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/getPreviewStream.html">Web/API/CameraControl/getPreviewStream</a>
+                                  <small>This method is used to configure and access a MediaStream from the camera. The resulting stream is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/getPreviewStreamVideoMode.html">Web/API/CameraControl/getPreviewStreamVideoMode</a>
+                                  <small>This method is used to configure and access a MediaStream from the camera. You use the resulting ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/meteringAreas.html">Web/API/CameraControl/meteringAreas</a>
+                                  <small>The meteringAreas property is an Array of one or more Area objects that define where the camera ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/onClosed.html">Web/API/CameraControl/onClosed</a>
+                                  <small>The onClosed property is used to set an event handler that will track when a new CameraControl ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/onRecorderStateChange.html">Web/API/CameraControl/onRecorderStateChange</a>
+                                  <small>The onRecorderStateChange property is used to set an event handler to listen to the recorder state ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/onShutter.html">Web/API/CameraControl/onShutter</a>
+                                  <small>The onShutter property is used to set an event handler for the camera's "shutter" event, to trigger ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/pauseRecording.html">Web/API/CameraControl/pauseRecording</a>
+                                  <small>The pauseRecording() method of the CameraControl interface is used to pause the recording of a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/release.html">Web/API/CameraControl/release</a>
+                                  <small>Releases the camera so that other applications can use it. You should call this whenever the camera ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/resumePreview.html">Web/API/CameraControl/resumePreview</a>
+                                  <small>This method is used to resume the preview stream.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/resumeRecording.html">Web/API/CameraControl/resumeRecording</a>
+                                  <small>The resumeRecording() method of the CameraControl interface is used to resume the recording of a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/sceneMode.html">Web/API/CameraControl/sceneMode</a>
+                                  <small>The sceneMode property value is a string that defines the quality of exposure to use while taking ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/setExposureCompensation.html">Web/API/CameraControl/setExposureCompensation</a>
+                                  <small>This method is used to change the exposure compensation value.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/startRecording.html">Web/API/CameraControl/startRecording</a>
+                                  <small>This method is used to start recording a video file on the device; the video is stored as a 3gp ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/stopRecording.html">Web/API/CameraControl/stopRecording</a>
+                                  <small>Stops recording video on the device; you should call this at some point after calling ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/takePicture.html">Web/API/CameraControl/takePicture</a>
+                                  <small>Captures a still image from the camera and passes it as a Blob to a success callback handler, which ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/whiteBalanceMode.html">Web/API/CameraControl/whiteBalanceMode</a>
+                                  <small>The whiteBalanceMode property value is a string that defines the white balance mode to use. When ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraControl/zoom.html">Web/API/CameraControl/zoom</a>
+                                  <small>The zoom property value is a number that defines the zoom factor that is to be used when taking ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraManager.html">Web/API/CameraManager</a>
+                                  <small>The CameraManager interface provides access to any cameras available on the device being used.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraManager/getCamera.html">Web/API/CameraManager/getCamera</a>
+                                  <small>This method is used to access to one of the cameras available on the device based on its ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CameraManager/getListOfCameras.html">Web/API/CameraManager/getListOfCameras</a>
+                                  <small>This method is used to get an Array of identifiers of all the cameras available on the device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Camera_API.html">Web/API/Camera_API</a>
+                                  <small>The Camera API allows applications to manage the camera of the device. It allows them to take ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasGradient.html">Web/API/CanvasGradient</a>
+                                  <small>The CanvasGradient interface represents an opaque object describing a gradient. It is returned by ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasGradient/addColorStop.html">Web/API/CanvasGradient/addColorStop</a>
+                                  <small>The CanvasGradient.addColorStop() method adds a new stop, defined by an offset and a color, to the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasImageSource.html">Web/API/CanvasImageSource</a>
+                                  <small>CanvasImageSource is a helper type representing any objects of one of the following types: ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasPattern.html">Web/API/CanvasPattern</a>
+                                  <small>The CanvasPattern interface represents an opaque object describing a pattern, based on an image, a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasPattern/setTransform.html">Web/API/CanvasPattern/setTransform</a>
+                                  <small>The CanvasPattern.setTransform() method uses an SVGMatrix object as the pattern's transformation ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D.html">Web/API/CanvasRenderingContext2D</a>
+                                  <small>The CanvasRenderingContext2D interface provides the 2D rendering context for the drawing surface of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/addHitRegion.html">Web/API/CanvasRenderingContext2D/addHitRegion</a>
+                                  <small>The CanvasRenderingContext2D.addHitRegion() method of the Canvas 2D API adds a hit region to the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/arc.html">Web/API/CanvasRenderingContext2D/arc</a>
+                                  <small>The CanvasRenderingContext2D.arc() method of the Canvas 2D API adds an arc to the path which is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/arcTo.html">Web/API/CanvasRenderingContext2D/arcTo</a>
+                                  <small>The CanvasRenderingContext2D.arcTo() method of the Canvas 2D API adds an arc to the path with the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/asyncDrawXULElement.html">Web/API/CanvasRenderingContext2D/asyncDrawXULElement</a>
+                                  <small>The non-standard and internal only CanvasRenderingContext2D.asyncDrawXULElement() method of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/beginPath.html">Web/API/CanvasRenderingContext2D/beginPath</a>
+                                  <small>The CanvasRenderingContext2D.beginPath() method of the Canvas 2D API starts a new path by emptying ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/bezierCurveTo.html">Web/API/CanvasRenderingContext2D/bezierCurveTo</a>
+                                  <small>The CanvasRenderingContext2D.bezierCurveTo() method of the Canvas 2D API adds a cubic Bézier curve ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/canvas.html">Web/API/CanvasRenderingContext2D/canvas</a>
+                                  <small>The CanvasRenderingContext2D.canvas property is a read-only reference to the HTMLCanvasElement ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/clearHitRegions.html">Web/API/CanvasRenderingContext2D/clearHitRegions</a>
+                                  <small>The CanvasRenderingContext2D.clearHitRegions() method of the Canvas 2D API removes all hit regions ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/clearRect.html">Web/API/CanvasRenderingContext2D/clearRect</a>
+                                  <small>The CanvasRenderingContext2D.clearRect() method of the Canvas 2D API sets all pixels in the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/clip.html">Web/API/CanvasRenderingContext2D/clip</a>
+                                  <small>The CanvasRenderingContext2D.clip() method of the Canvas 2D API turns the path currently being ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/closePath.html">Web/API/CanvasRenderingContext2D/closePath</a>
+                                  <small>The CanvasRenderingContext2D.closePath() method of the Canvas 2D API causes the point of the pen to ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/CanvasRenderingContext2D/createImageData.html">Web/API/CanvasRenderingContext2D/createImageData</a>
+                                  <small>The CanvasRenderingContext2D.createImageData() method of the Canvas 2D API creates a new, blank ...</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+      <li class="prev">
+      <a href="APi9ba9-2.html?page=3">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="APi2679-2.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="APi4658-2.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="APi9ba9-2.html?page=3">3</a>
+    </li>
+      <li class="selected">
+      <a href="APifdb0-2.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="APiaf4d-2.html?page=5">5</a>
+    </li>
+      <li>
+      <a href="APic575-2.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="APi235c-2.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="APifdfa-2.html?page=8">8</a>
+    </li>
+              <li class="skip">…</li>
+        <li><a href="APib385-2.html?page=30">30</a></li>
+        <li class="next">
+      <a href="APiaf4d-2.html?page=5">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="4">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/APi?page=4 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:15:54 GMT -->
+</body></html>

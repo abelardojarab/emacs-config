@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"SSLSessionBindingEvent(SSLSession, String)","path":"SSLSessionBindingEvent-javax.net.ssl.SSLSession-java.lang.String-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getName()","path":"getName--","entryType":"Method"},{"name":"getSession()","path":"getSession--","entryType":"Method"}]}

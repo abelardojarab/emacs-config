@@ -1,0 +1,968 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/APi?page=2 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:15:54 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: APi</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: APi" href="../feeds/atom/tag/APi-2">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/APi?page=2" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FAPi%3Fpage%3D2" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/APi?page=2" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FAPi%3Fpage%3D2" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: APi</h1>
+                <ol class="pagination">
+      <li class="prev">
+      <a href="APi2679-2.html?page=1">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="APi2679-2.html?page=1">1</a>
+    </li>
+      <li class="selected">
+      <a href="APi4658-2.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="APi9ba9-2.html?page=3">3</a>
+    </li>
+      <li>
+      <a href="APifdb0-2.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="APiaf4d-2.html?page=5">5</a>
+    </li>
+      <li>
+      <a href="APic575-2.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="APi235c-2.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="APifdfa-2.html?page=8">8</a>
+    </li>
+              <li class="skip">…</li>
+        <li><a href="APib385-2.html?page=30">30</a></li>
+        <li class="next">
+      <a href="APi9ba9-2.html?page=3">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 2973 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="../Web/API/AudioContext/createChannelMerger.html">Web/API/AudioContext/createChannelMerger</a>
+                                  <small>A ChannelMergerNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createChannelSplitter.html">Web/API/AudioContext/createChannelSplitter</a>
+                                  <small>A ChannelSplitterNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createConvolver.html">Web/API/AudioContext/createConvolver</a>
+                                  <small>A ConvolverNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createDelay.html">Web/API/AudioContext/createDelay</a>
+                                  <small>A DelayNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createDynamicsCompressor.html">Web/API/AudioContext/createDynamicsCompressor</a>
+                                  <small>Compression lowers the volume of the loudest parts of the signal and raises the volume of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createGain.html">Web/API/AudioContext/createGain</a>
+                                  <small>A GainNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createJavaScriptNode.html">Web/API/AudioContext/createJavaScriptNode</a>
+                                  <small>The following script illustrates the use of createJavaScriptNode() :</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createMediaElementSource.html">Web/API/AudioContext/createMediaElementSource</a>
+                                  <small>For more details about media element audio source nodes, check out the MediaElementAudioSourceNode ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createMediaStreamDestination.html">Web/API/AudioContext/createMediaStreamDestination</a>
+                                  <small>The MediaStream is created when the node is created and is accessible via the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createMediaStreamSource.html">Web/API/AudioContext/createMediaStreamSource</a>
+                                  <small>For more details about media stream audio source nodes, check out the MediaStreamAudioSourceNode ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createOscillator.html">Web/API/AudioContext/createOscillator</a>
+                                  <small>An OscillatorNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createPanner.html">Web/API/AudioContext/createPanner</a>
+                                  <small>The panner node is spatialized in relation to the AudioContext's AudioListener (defined by the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createPeriodicWave.html">Web/API/AudioContext/createPeriodicWave</a>
+                                  <small>A PeriodicWave.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createScriptProcessor.html">Web/API/AudioContext/createScriptProcessor</a>
+                                  <small>A ScriptProcessorNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createStereoPanner.html">Web/API/AudioContext/createStereoPanner</a>
+                                  <small>A StereoPannerNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createWaveShaper.html">Web/API/AudioContext/createWaveShaper</a>
+                                  <small>A WaveShaperNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createWaveTable.html">Web/API/AudioContext/createWaveTable</a>
+                                  <small></small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/currentTime.html">Web/API/AudioContext/currentTime</a>
+                                  <small>A double.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/decodeAudioData.html">Web/API/AudioContext/decodeAudioData</a>
+                                  <small>This is the preferred method of creating an audio source for Web Audio API from an audio track.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/destination.html">Web/API/AudioContext/destination</a>
+                                  <small>An AudioDestinationNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/listener.html">Web/API/AudioContext/listener</a>
+                                  <small>An AudioListener object.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/mozAudioChannelType.html">Web/API/AudioContext/mozAudioChannelType</a>
+                                  <small>The readonly mozAudioChannelType property of the AudioContext interface can be used to set the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/onstatechange.html">Web/API/AudioContext/onstatechange</a>
+                                  <small>The following snippet is taken from our AudioContext states demo (see it running live.) The ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/resume.html">Web/API/AudioContext/resume</a>
+                                  <small>The resume() method of the AudioContext Interface resumes the progression of time in an audio ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/sampleRate.html">Web/API/AudioContext/sampleRate</a>
+                                  <small>A floating point number.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/state.html">Web/API/AudioContext/state</a>
+                                  <small>A DOMString. Possible values are:</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/suspend.html">Web/API/AudioContext/suspend</a>
+                                  <small>The suspend() method of the AudioContext Interface suspends the progression of time in the audio ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioDestinationNode.html">Web/API/AudioDestinationNode</a>
+                                  <small>AudioDestinationNode has no output (as it is the output, no more AudioNode can be linked after it ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioDestinationNode/maxChannelCount.html">Web/API/AudioDestinationNode/maxChannelCount</a>
+                                  <small>An unsigned long.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioListener.html">Web/API/AudioListener</a>
+                                  <small>It is important to note that there is only one listener per context and that it isn't an AudioNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioListener/dopplerFactor.html">Web/API/AudioListener/dopplerFactor</a>
+                                  <small>A double.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioListener/setOrientation.html">Web/API/AudioListener/setOrientation</a>
+                                  <small>Void.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioListener/setPosition.html">Web/API/AudioListener/setPosition</a>
+                                  <small>Void.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioListener/speedOfSound.html">Web/API/AudioListener/speedOfSound</a>
+                                  <small>The speedOfSound property of the AudioListener interface is a double value representing the speed ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode.html">Web/API/AudioNode</a>
+                                  <small>The AudioNode interface is a generic interface for representing an audio processing module like an ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/channelCount.html">Web/API/AudioNode/channelCount</a>
+                                  <small>channelCount 's usage and precise definition depend on the value of AudioNode.channelCountMode :</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/channelCountMode.html">Web/API/AudioNode/channelCountMode</a>
+                                  <small>The possible values of channelCountMode and their meanings are:</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/channelInterpretation.html">Web/API/AudioNode/channelInterpretation</a>
+                                  <small>When the amount of channels doesn't match between an input and an output, up- or down-mixing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/connect(AudioNode).html">Web/API/AudioNode/connect(AudioNode)</a>
+                                  <small>Void.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/connect(AudioParam).html">Web/API/AudioNode/connect(AudioParam)</a>
+                                  <small>It is possible to connect an AudioNode output to more than one AudioParam, and more than one ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/context.html">Web/API/AudioNode/context</a>
+                                  <small>An AudioContext object.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/disconnect.html">Web/API/AudioNode/disconnect</a>
+                                  <small>Void.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/numberOfInputs.html">Web/API/AudioNode/numberOfInputs</a>
+                                  <small>An integer.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioNode/numberOfOutputs.html">Web/API/AudioNode/numberOfOutputs</a>
+                                  <small>An integer.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam.html">Web/API/AudioParam</a>
+                                  <small>There are two kinds of AudioParam, a-rate and k-rate parameters:</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam/cancelScheduledValues.html">Web/API/AudioParam/cancelScheduledValues</a>
+                                  <small>void.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam/defaultValue.html">Web/API/AudioParam/defaultValue</a>
+                                  <small>A float.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam/exponentialRampToValueAtTime.html">Web/API/AudioParam/exponentialRampToValueAtTime</a>
+                                  <small>void.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam/linearRampToValueAtTime.html">Web/API/AudioParam/linearRampToValueAtTime</a>
+                                  <small>NOTE: both the example and live example are incorrect, see ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam/setTargetAtTime.html">Web/API/AudioParam/setTargetAtTime</a>
+                                  <small>The change starts at the time specified in startTime and exponentially moves towards the value ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam/setValueAtTime.html">Web/API/AudioParam/setValueAtTime</a>
+                                  <small>void.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam/setValueCurveAtTime.html">Web/API/AudioParam/setValueCurveAtTime</a>
+                                  <small>void.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioParam/value.html">Web/API/AudioParam/value</a>
+                                  <small>Though value can be set, any modifications happening while there are automation events scheduled — ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioProcessingEvent.html">Web/API/AudioProcessingEvent</a>
+                                  <small>The Web Audio API AudioProcessingEvent represents events that occur when a ScriptProcessorNode ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Audio_Channels_API.html">Web/API/Audio_Channels_API</a>
+                                  <small>The AudioChannels API is a Firefox OS-only feature allowing you to place your app audio content ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Audio_Channels_API/Using_the_AudioChannels_API.html">Web/API/Audio_Channels_API/Using_the_AudioChannels_API</a>
+                                  <small>The different audio channels are as follows:</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager.html">Web/API/BatteryManager</a>
+                                  <small>The BatteryManager interface provides ways to get information about the system's battery charge ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager/charging.html">Web/API/BatteryManager/charging</a>
+                                  <small>A Boolean value indicating whether or not the device's battery is currently being charged.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager/chargingTime.html">Web/API/BatteryManager/chargingTime</a>
+                                  <small>Indicates the amount of time, in seconds, that remain until the battery is fully charged.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager/dischargingTime.html">Web/API/BatteryManager/dischargingTime</a>
+                                  <small>Indicates the amount of time, in seconds, that remains until the battery is fully discharged.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager/level.html">Web/API/BatteryManager/level</a>
+                                  <small>Indicates the current battery charge level as a value between 0.0 and 1.0.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager/onchargingchange.html">Web/API/BatteryManager/onchargingchange</a>
+                                  <small>Specifies an event listener to receive chargingchange events. These events occur when the battery ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager/onchargingtimechange.html">Web/API/BatteryManager/onchargingtimechange</a>
+                                  <small>Specifies an event listener to receive chargingtimechange events. These events occur when the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager/ondischargingtimechange.html">Web/API/BatteryManager/ondischargingtimechange</a>
+                                  <small>Specifies an event listener to receive dischargingtimechange events. These events occur when the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BatteryManager/onlevelchange.html">Web/API/BatteryManager/onlevelchange</a>
+                                  <small>Specifies an event listener to receive levelchange events. These events occur when the battery ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Battery_Status_API.html">Web/API/Battery_Status_API</a>
+                                  <small>The Battery Status API, more often referred to as the Battery API, provides information about the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BeforeInstallPromptEvent.html">Web/API/BeforeInstallPromptEvent</a>
+                                  <small>The BeforeInstallPromptEvent is passed into the onbeforeinstallprompt handler and displatched when ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BeforeUnloadEvent.html">Web/API/BeforeUnloadEvent</a>
+                                  <small>The beforeunload event is fired when the window, the document and its resources are about to be ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BiquadFilterNode.html">Web/API/BiquadFilterNode</a>
+                                  <small>The BiquadFilterNode interface represents a simple low-order filter, and is created using the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BiquadFilterNode/detune.html">Web/API/BiquadFilterNode/detune</a>
+                                  <small>An a-rate AudioParam.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BiquadFilterNode/frequency.html">Web/API/BiquadFilterNode/frequency</a>
+                                  <small>An AudioParam.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BiquadFilterNode/gain.html">Web/API/BiquadFilterNode/gain</a>
+                                  <small>An AudioParam.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BiquadFilterNode/getFrequencyResponse.html">Web/API/BiquadFilterNode/getFrequencyResponse</a>
+                                  <small>A BiquadFilterNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BiquadFilterNode/Q.html">Web/API/BiquadFilterNode/Q</a>
+                                  <small>An AudioParam.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BiquadFilterNode/type.html">Web/API/BiquadFilterNode/type</a>
+                                  <small>A string (enum) representing a BiquadFilterType.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Blob.html">Web/API/Blob</a>
+                                  <small>A Blob object represents a file-like object of immutable, raw data. Blobs represent data that isn't ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Blob/Blob.html">Web/API/Blob/Blob</a>
+                                  <small>The Blob() constructor returns a new Blob object. The content of the blob consists of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Blob/size.html">Web/API/Blob/size</a>
+                                  <small>The Blob.size property returns the size of the file in bytes.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Blob/slice.html">Web/API/Blob/slice</a>
+                                  <small>The slice is used to create a new Blob object containing the data in the specified range of bytes ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Blob/type.html">Web/API/Blob/type</a>
+                                  <small>The type property of a Blob object provides the MIME type of the file. It returns an empty ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BlobBuilder.html">Web/API/BlobBuilder</a>
+                                  <small>The BlobBuilder interface provides an easy way to construct Blob objects. Just create a BlobBuilder ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BlobEvent.html">Web/API/BlobEvent</a>
+                                  <small>The BlobEvent interface represents events associated with a Blob. These blobs are typically, but ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BlobEvent/BlobEvent.html">Web/API/BlobEvent/BlobEvent</a>
+                                  <small>The BlobEvent() constructor returns a newly created BlobEvent object with an associated Blob.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BlobEvent/data.html">Web/API/BlobEvent/data</a>
+                                  <small>The BlobEvent.data read-only property represents a Blob associated with the event.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapterEvent_(Firefox_OS).html">Web/API/BluetoothAdapterEvent_(Firefox_OS)</a>
+                                  <small>The BluetoothAdapterEvent interface of the Web Bluetooth API provides access to a BluetoothAdapter ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS).html">Web/API/BluetoothAdapter_(Firefox_OS)</a>
+                                  <small>The BluetoothAdapter interface of the Web Bluetooth API is used to handle all the operations ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/address.html">Web/API/BluetoothAdapter_(Firefox_OS)/address</a>
+                                  <small>The address property value provides the address of the device's adapter on the Bluetooth ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/answerWaitingCall.html">Web/API/BluetoothAdapter_(Firefox_OS)/answerWaitingCall</a>
+                                  <small>The answerWaitingCall method is used to allow HFP devices to answer a pending incoming call on a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/class.html">Web/API/BluetoothAdapter_(Firefox_OS)/class</a>
+                                  <small>The class property value provides the Bluetooth "Class of Device" number of the device's adapter. ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/confirmReceivingFile.html">Web/API/BluetoothAdapter_(Firefox_OS)/confirmReceivingFile</a>
+                                  <small>The confirmReceivingFile method is used to accept or reject the incoming file transfer request ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/connect.html">Web/API/BluetoothAdapter_(Firefox_OS)/connect</a>
+                                  <small>The connect method is used to connect the device's adapter to a specific service of a remote device.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/connectSco.html">Web/API/BluetoothAdapter_(Firefox_OS)/connectSco</a>
+                                  <small>The connectSco method is used to allow the device to enable the SCO connection to broadcast and ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/devices.html">Web/API/BluetoothAdapter_(Firefox_OS)/devices</a>
+                                  <small>The devices property gives direct access to all the Bluetooth devices discovered in the area ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/disconnect.html">Web/API/BluetoothAdapter_(Firefox_OS)/disconnect</a>
+                                  <small>The disconnect method is used to disconnect the device's adapter from a specific service of a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/disconnectSco.html">Web/API/BluetoothAdapter_(Firefox_OS)/disconnectSco</a>
+                                  <small>The disconnectSco method is used to allow the device to disable the SCO connection with the remote ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/discoverable.html">Web/API/BluetoothAdapter_(Firefox_OS)/discoverable</a>
+                                  <small>The discoverable property indicates if the device is discoverable (true) or not (false) by other ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/discoverableTimeout.html">Web/API/BluetoothAdapter_(Firefox_OS)/discoverableTimeout</a>
+                                  <small>The discoverableTimeout property indicates how long (in seconds) the device remains discoverable.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/discovering.html">Web/API/BluetoothAdapter_(Firefox_OS)/discovering</a>
+                                  <small>The discovering property indicates if the device is in the process of discovering (true) or not ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/getConnectedDevices.html">Web/API/BluetoothAdapter_(Firefox_OS)/getConnectedDevices</a>
+                                  <small>The getConnectedDevices method is used to retrieve the full list of all devices connected with a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/BluetoothAdapter_(Firefox_OS)/getPairedDevices.html">Web/API/BluetoothAdapter_(Firefox_OS)/getPairedDevices</a>
+                                  <small>The getPairedDevices method is used to retrieve the full list of all devices paired with the ...</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+      <li class="prev">
+      <a href="APi2679-2.html?page=1">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="APi2679-2.html?page=1">1</a>
+    </li>
+      <li class="selected">
+      <a href="APi4658-2.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="APi9ba9-2.html?page=3">3</a>
+    </li>
+      <li>
+      <a href="APifdb0-2.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="APiaf4d-2.html?page=5">5</a>
+    </li>
+      <li>
+      <a href="APic575-2.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="APi235c-2.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="APifdfa-2.html?page=8">8</a>
+    </li>
+              <li class="skip">…</li>
+        <li><a href="APib385-2.html?page=30">30</a></li>
+        <li class="next">
+      <a href="APi9ba9-2.html?page=3">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="2">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/APi?page=2 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:15:54 GMT -->
+</body></html>

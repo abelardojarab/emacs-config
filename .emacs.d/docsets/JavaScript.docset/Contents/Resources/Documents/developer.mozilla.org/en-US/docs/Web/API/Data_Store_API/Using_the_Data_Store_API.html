@@ -1,0 +1,834 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:53:19 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Using the Data Store API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API$json">
+  <link rel="canonical" href="Using_the_Data_Store_API.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Using the Data Store API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API">
+  <meta name="twitter:title" content="Using the Data Store API">
+    <meta property="og:description" content="To explain the main functionality of Data Store, we have build two examples that work together (you can download these from Github using the code below, and experiment with them as you wish):">
+  <meta name="description" content="To explain the main functionality of Data Store, we have build two examples that work together (you can download these from Github using the code below, and experiment with them as you wish):">
+  <meta name="twitter:description" content="To explain the main functionality of Data Store, we have build two examples that work together (you can download these from Github using the code below, and experiment with them as you wish):">
+  
+      
+  </head>
+<body data-slug="Web/API/Data_Store_API/Using_the_Data_Store_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FData_Store_API%2FUsing_the_Data_Store_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FData_Store_API%2FUsing_the_Data_Store_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Data_Store_API.html" rel="v:url" property="v:title">Data Store API</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Using the Data Store API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Using the Data Store API</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 3 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/avik" title="View profile: avik">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="avik" data-src="../../../../../../secure.gravatar.com/avatar/41783cbc96716f2ee0ae16a860dd97d26aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">avik</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Our_examples" rel="internal">Our examples</a></li><li><a href="#Setting_the_correct_permissions_in_the_manifest" rel="internal">Setting the correct permissions in the manifest</a><ol><li><a href="#Privileged_homescreen_apps" rel="internal">Privileged homescreen apps</a></li></ol></li><li><a href="#Initializing_the_data_store" rel="internal">Initializing the data store</a></li><li><a href="#Adding_contacts_to_the_data_store" rel="internal">Adding contacts to the data store</a></li><li><a href="#Syncing_data_store_changes" rel="internal">Syncing data store changes</a></li><li><a href="#Adding_user_data_to_the_datastore" rel="internal">Adding user data to the datastore</a></li><li><a href="#Removing_data_from_the_data_store" rel="internal">Removing data from the data store</a></li><li><a href="#The_viewer_app_syncing_data_from_the_editor_app" rel="internal">The viewer app: syncing data from the editor app</a><ol><li><a href="#Quicklinks" rel="internal">Quicklinks</a></li></ol></li>
+                </ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><div class="overheadIndicator nonStandard nonStandardHeader"> 
+      <p><strong><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span> Non-standard</strong><br> 
+      This feature is not on a current W3C standards track, but it is supported on the Firefox OS platform. Although implementations may change in the future and it is not supported widely across browsers, it is suitable for use in code dedicated to Firefox OS apps.</p> 
+      </div> <div class="warning"> 
+    <p style="text-align: center;">This API is available on <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a> for <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Security/Application_security">internal applications</a> only.</p> 
+</div></div>
+
+<div class="summary">
+<p>The Data Store API is a Firefox OS-only API for client-side data storage. It is designed to work alongside other client-side storage mechanisms to provide data that can be read and written to by multiple apps. In this article we'll cover the basics of how to use this API to build up some examples.</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: The Data Store API is available in <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Performance/Using_web_workers">Web Workers</a>, from Firefox 32 onwards (Firefox OS 2.0; see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=949325" class="external" title="FIXED: C++ wrapper to support DataStore API on the worker">bug&nbsp;949325</a>.)</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: The Data Store API should not be confused with the <a href="../Device_Storage_API.html">Device Storage API</a>, which is for accessing (reading and writing to) the device's file system(s) — internal memory, SDCards, etc. — manipulating the files contained within.</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: Be aware that to test data store examples you need to make sure your apps are internal/certified (see above for manifest fields needed), and use App Manager or WebIDE to simulate an environment where a internal/certified app can be run. Follow these links to find out how to do this using each tool: <a href="https://developer.mozilla.org/en-US/Firefox_OS/Using_the_App_Manager#Debugging_Certified_Apps_2">App Manager: Debugging Certified Apps</a> and <a href="https://developer.mozilla.org/en-US/docs/Tools/WebIDE#Debugging_certified_apps_%28including_main_process%29">WebIDE: Debugging Certified Apps</a>.</p>
+</div>
+
+<h2 id="Our_examples">Our examples</h2>
+
+<p>To explain the main functionality of Data Store, we have build two examples that work together (you can download these from Github using the code below, and experiment with them as you wish):</p>
+
+<p><a href="https://github.com/mdn/data-store-contacts-editor" class="external">Contacts Editor</a>: This app populates a data store called 'contacts' with some sample data, and also allows you to enter new contacts as you wish. You can also delete contacts.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/8885/contacts-editor.png" style="display: block; height: 543px; margin: 0px auto; width: 700px;" alt="a table showing contact information including names, phone numbers, etc."><br>
+ <br>
+ <a href="https://github.com/mdn/data-store-contacts-viewer" class="external">Contacts Viewer</a>: This app reads the same 'contacts' data store, but does not change the data in any way. It shows the available contacts in a list, and also plots their location on a Google map.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/8887/contacts-viewer.png" style="display: block; height: 543px; margin: 0px auto; width: 700px;" alt="a two panel user interface with contact names on the left, and a map showing contact location on the right."></p>
+
+<h2 id="Setting_the_correct_permissions_in_the_manifest">Setting the correct permissions in the manifest</h2>
+
+<p>Both apps are very similar in terms of their <a href="https://developer.mozilla.org/en-US/Apps/Build/Manifest">manifest.webapp</a> structure, containing the usual <code>name</code>, <code>description</code>, <code>icons</code>, etc. What is more interesting is that each one contains a <code>type</code> field to specify that this app is certified and should be treated like so:</p>
+
+<pre class="brush: json">"type": "certified"</pre>
+
+<p>In addition, we've specified the following field to lock the apps' orientation into landscape, as things like lists and tables look bad on really narrow screen sizes:</p>
+
+<pre class="brush: json">"orientation": "landscape"</pre>
+
+<p>Where things differ between the two apps is the datastore permissions. The Contacts Editor owns the data store, so uses the <code>datastores-owned</code> field to declare this:</p>
+
+<pre class="brush: json">"datastores-owned": {
+  "contacts": {
+    "access" : "readwrite",
+    "description": "The contacts data store for the Data Store API Contacts Editor."
+  }
+}</pre>
+
+<p>In actual fact, this is all you need to do to create the contacts data store: with this permission specified, the store is created when the device is booted up with the app present on it.</p>
+
+<p>Now on to the Contacts Viewer app — this is not the data store owner, so it instead uses the <code>datastores-access</code> field:</p>
+
+<pre class="brush: json">"datastores-access": {
+  "contacts": {
+    "access" : "readonly",
+    "description": "The contacts data store owned by the Data Store API Contacts Editor, here we are just accessing it readonly to read and display the data."
+  }
+}</pre>
+
+<p>Note how in this case the access is set to readonly, although this app could request readwrite if it wanted to. However, if the owner of the datastore had readonly access, this app would only have a maximum of readonly, even if it specified readwrite.</p>
+
+<h3 id="Privileged_homescreen_apps">Privileged homescreen apps</h3>
+
+<p>As of Firefox 42, the Data Store API is available to privileged homescreen apps. This is so that 3rd party homescreen apps can access the same data stores as the default homescreen app and provide equivalent functionality (see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1181329" class="external" title="FIXED: [User Story] Make DataStore available to privileged homescreen apps">bug&nbsp;1181329</a> for feature implementation details.) This means you need to include the following <code>type</code> field in such apps:</p>
+
+<pre class="brush: json">"type": "privileged"</pre>
+
+<p>You need to also include the <code>datastores-access</code> field so that your 3rd party homescreen can access the same datastores as the default homescreen (see the <a href="https://github.com/mozilla-b2g/gaia/blob/master/apps/homescreen/manifest.webapp#L30-L43" class="external">homescreen source code</a>):</p>
+
+<pre class="brush: json">"datastores-access": {
+&nbsp; "bookmarks_store": {
+&nbsp;&nbsp;&nbsp; "readonly": true,
+&nbsp;&nbsp;&nbsp; "description": "View bookmarks."
+&nbsp; },
+&nbsp; "places": {
+&nbsp;&nbsp;&nbsp; "readonly": true,
+&nbsp;&nbsp;&nbsp; "description": "View data about browsing history."
+&nbsp; },
+&nbsp; "icons": {
+&nbsp;&nbsp;&nbsp; "readonly": true,
+&nbsp;&nbsp;&nbsp; "description": "Retrieve cached website icons."
+&nbsp; }
+},</pre>
+
+<p>Finally, you need to have the following <code>role</code> field set:</p>
+
+<pre class="brush: json">"role": "homescreen",</pre>
+
+<h2 id="Initializing_the_data_store">Initializing the data store</h2>
+
+<p>Now let's study the Contacts Editor app in detail, to see how it works.</p>
+
+<p>As we said earlier, the contacts data store has already been created by the inclusion of the <code>datastores-owned</code> field in the manifest. If you don't see any data appearing in the app, then try restarting the simulator/device you are using and trying again. The data store is only created when the app is booted up with the app present on it, so this is how you emulate that.</p>
+
+<p>To access the data store in the first place, you need to use the <a href="../Navigator/getDataStores.html" title="The navigator.getDataStores() method provides access to a list of the Data Store API data stores available on the device."><code>navigator.getDataStores</code></a> method, which returns a promise. The promise resolves with an array of all the data stores on the device that have the name provided as the method's argument, in this case contacts. Since there is usually only one datastore with each name, you can access this specific data store inside the promise with <code>contacts[0]</code>. This is a <a href="../DataStore.html" title="The DataStore interface of the Data Store API represents a retrieved set of data, and includes standard properties for accessing the store's name, owner, etc., methods for reading, modifying and syncing data, and the onchange event handler for reacting to changes to the data."><code>DataStore</code></a> object that can be used to manipulate the Data Store we want to work with.<br>
+ <br>
+ The next thing we do is to use the <a href="../DataStore/getLength.html" title="The getLength() method of the DataStore interface returns the number of records stored in the current data store."><code>DataStore.getLength</code></a> method immediately inside the promise to return another promise. This promise resolves with a double indicating the number of records in the data store. We use this to check whether the data store has no records in it. If so, we loop through an array of default records called <code>contactsInit</code> and add each one to the data store using the <code>addContact()</code> function.</p>
+
+<p>If the store has got some records in it already we don't need to initialize the data store like this, and instead create a cursor using the <a href="../DataStore/sync.html" title="The sync() method of the DataStore interface opens a cursor that allows you to step through any changes that have taken place in the data store going back to a particular revision ID, and run code in response to different types of change."><code>DataStore.sync</code></a> method then run through reinitializing the data display using the <code>runNextTask()</code> function.</p>
+
+<pre class="brush: js">navigator.getDataStores('contacts').then(function(stores) {
+  stores[0].getLength().then(function(storeLength) {
+    if(storeLength == 0) {
+      for(i = 0; i &lt; contactsInit.length; i++) {
+        addContact(stores[0],contactsInit[i]);  
+      };
+    } else {
+      var cursor = stores[0].sync();
+      runNextTask(cursor);
+    }
+  });
+});</pre>
+
+<h2 id="Adding_contacts_to_the_data_store">Adding contacts to the data store</h2>
+
+<p>In the <code>addContact()</code> function, we use the <a href="../DataStore/add.html" title="The add() method of the DataStore interface adds a new record to the data store; if the record you are attempting to add already exists, it will throw an exception."><code>DataStore.add</code></a> method to add the current data object (<code>obj</code>) to the data store. This method also returns a promise, which resolves with the <code>id</code> of the newly added record. When this occurs we create a table row, populate it with that record's data, and add it to the data table in the app's UI so we can see the change visually too.</p>
+
+<p>The last thing we do here is add the <code>id</code> of the current record to the table row inside a <code>data-id</code> attribute, and attach an <code>onclick</code> handler to the table row so that when a row is tapped in the UI the <code>deleteItem()</code> function is invoked, which handles deleting both the row from the UI, and the corresponding record from the data store.</p>
+
+<pre class="brush: js">function addContact(store, obj) {
+  store.add(obj).then(function(id) {
+    var tableRow = document.createElement('tr');
+    tableRow.innerHTML = '&lt;td&gt;' + obj.lName +
+                         '&lt;/td&gt;&lt;td&gt;' + obj.fName +
+                         '&lt;/td&gt;&lt;td&gt;' + obj.phone +
+                         '&lt;/td&gt;&lt;td&gt;' + obj.email +
+                         '&lt;/td&gt;&lt;td&gt;' + obj.address + '&lt;/td&gt;';
+    tBody.appendChild(tableRow);
+    var myId = id;
+    console.log(myId);
+    tableRow.setAttribute('data-id', myId);
+
+    tableRow.onclick = function(event) {
+      deleteItem(event);
+    }
+  });
+}</pre>
+
+<h2 id="Syncing_data_store_changes">Syncing data store changes</h2>
+
+<p>To sync the data an app has access to when the data store is changed, you generally use the <a href="../DataStore/sync.html" title="The sync() method of the DataStore interface opens a cursor that allows you to step through any changes that have taken place in the data store going back to a particular revision ID, and run code in response to different types of change."><code>DataStore.sync</code></a> method, which creates a cursor you can use to go through each task that's happened to the data store since it was created — such as adding records, updating, deleting, etc.<br>
+ <br>
+ Data Store also has the <a href="../DataStore/onchange.html" title="The onchange event handler of the DataStore interface fires when a change is made to the data store. Its main use is to synchronize different apps that are using the data store when a change is made. When fired, this event returns a DataStoreChangeEvent, which can be used to handle the change that was just made. Alternatively, when the event fires you could create a DataStoreCursor and iterate through all the records, if needed."><code>DataStore.onchange</code></a> event handler available, which you can use to fire a sync operation whenever the data store is changed (and whatever else you want.) We'll see that in action later, when we look at the Contacts Viewer app. In this case, we only want to fire the sync operation whenever the app starts up and the data store isn't empty, in which case we just want to go through each item added to the store and display them in our contacts table.<br>
+ <br>
+ Earlier on, we invoked the <code>runNextTask()</code> function and passed it the cursor. To deal with the first task, we run the <a href="../DataStoreCursor/next.html" title="The next() method of the DataStoreCursor interface makes a request to retrieve information about the next operation that changes a record in the data store. Returns a promise of type DataStoreTask."><code>DataStoreCursor.next</code></a> method, which returns a promise resolving with a <a href="../DataStoreTask.html" title="The DataStoreTask interface of the Data Store API represents a record changed in the data store when a DataStoreCursor is used to iterate through the data store's change history."><code>DataStoreTask</code></a> object representing the current task we want to deal with — in this case, the task of adding the first record to the data store.</p>
+
+<pre class="brush: js">function runNextTask(cursor) {
+ cursor.next().then(function(task) {
+   manageTask(cursor, task);
+ });
+}</pre>
+
+<p>We then invoke the <code>manageTask()</code> function, passing it the current task and the cursor. This runs through each task in the cursor, checking each one and then running the next task by recursively calling <code>runNextTask()</code> again.</p>
+
+<p>If the <a href="../DataStoreTask/operation.html" title="The operation read-only property of the DataStoreTask interface returns the type of operation that represents the current change that has been made to the data store."><code>DataStoreTask.operation</code></a> type is <code>done</code>, we've reached the end of the cursor so we stop cycling through. If the task type is <code>add</code>, we run the <code>displayExisting()</code> function, passing it the <a href="../DataStoreTask/id.html" title="The id read-only property of the DataStoreTask interface returns the identifier of the changed record in the data store. This must return null if the operation is cleared or done."><code>DataStoreTask.id</code></a> and <a href="../DataStoreTask/data.html" title="The data read-only property of the DataStoreChangeEvent interface returns the data stored in the changed record in the data store. Must return null if the operation is clear or done."><code>DataStoreTask.data</code></a> to use for redisplaying the data. We don't care about other task types for this particular app.</p>
+
+<pre class="brush: js">function manageTask(cursor, task) {
+  if (task.operation == 'done') {
+    // Finished adding contacts!
+    return;
+  }
+
+  if (task.operation == 'add') {
+    // Add the contacts that are different to how it was before
+    displayExisting(task.id, task.data);
+  }
+
+  runNextTask(cursor);
+}</pre>
+
+<p>If you look at the <code>displayExisting()</code> function in the code, you'll notice that it is very similar to the <code>addContact()</code> function we discussed earlier, except that in this case we don't have to access the data store — we've already got the data we want to display from the task item.</p>
+
+<div class="note">
+<p><strong>Note</strong>: The <a href="../DataStore/sync.html" title="The sync() method of the DataStore interface opens a cursor that allows you to step through any changes that have taken place in the data store going back to a particular revision ID, and run code in response to different types of change."><code>DataStore.sync</code></a> method can optionally be passed a <code>revisionId</code>, which can be grabbed from <a href="../DataStore/revisionId.html" title="The revisionId read-only property of the DataStore interface returns the current data store's current revision ID. This ID can be tracked, allowing you to synchronize apps using the data store to this point in its history."><code>DataStore.revisionId</code></a> — this <code>id</code> represents the state of the database at that point, in the same way as different revisions in a versioning system. If you want to sync all changes from a certain point in the data store history, pass it the <code>revisionId</code> from that point. If you don't pass it a <code>revisionId</code>, it just syncs all changes from the very beginning of the data store's history.</p>
+</div>
+
+<h2 id="Adding_user_data_to_the_datastore">Adding user data to the datastore</h2>
+
+<p>When a user submits the form, the <code>addUserData()</code> function is run to add the contact data to the data store and display it in the table. After a bit of (very basic!) error handling, we create a <code>tempDataobject</code> to insert into the data store, clear the form fields ready for the next contact to be entered, and then call the contacts data store and invoke the <code>addContact()</code> function again, as before:</p>
+
+<pre class="brush: js">function addUserData(event) {
+  event.preventDefault();
+
+  if(lNameInput.value == '' || fNameInput.value == '' || phoneInput.value == '' || emailInput.value == '' || addressInput.value == '' || latInput.value == '' || longInput.value == '') {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  var tempData = { lName:lNameInput.value, fName:fNameInput.value, phone:phoneInput.value , email:emailInput.value, address:addressInput.value, lat:latInput.value, long:longInput.value }
+  lNameInput.value = '';
+  fNameInput.value = '';
+  phoneInput.value = '';
+  emailInput.value = '';
+  addressInput.value = '';
+  latInput.value = '';
+  longInput.value = '';
+
+  navigator.getDataStores('contacts').then(function(stores) {
+    addContact(stores[0],tempData);
+  });
+}
+
+form.addEventListener('submit',addUserData,false);</pre>
+
+<h2 id="Removing_data_from_the_data_store">Removing data from the data store</h2>
+
+<p>The only function we've not discussed so far from Contacts Editor is <code>deleteItem()</code>, invoked when a row is clicked on. This quite simply:</p>
+
+<ul>
+ <li>Grabs the <code>id</code> from the table row's <code>data-id</code> attribute, making sure to turn it into a number so data store can understand it as an <code>id</code>.</li>
+ <li>Gets the data store and runs the <a href="../DataStore/remove.html" title="The remove() method of the DataStore interface deletes one or more objects from the current data store."><code>DataStore.remove</code></a> method, passing it the <code>id</code> we grabbed earlier to remove the correct record from the store.</li>
+ <li>Deletes the actual table row for the display table. That horrible line of code is correct: in JavaScript, there is no 'removeSelf' DOM method, so you have to ask the parent node to delete the current child.</li>
+</ul>
+
+<pre class="brush: js">function deleteItem(event) {
+  var id = Number(event.target.parentNode.getAttribute('data-id'));
+
+  navigator.getDataStores('contacts').then(function(stores) {
+    stores[0].remove(id).then(function(success) {
+      if (success) {
+        console.log('The object has been deleted.');
+      } else {
+        console.log('The object has failed to be deleted.');
+      };
+    });
+  });  
+ 
+  event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+};</pre>
+
+<h2 id="The_viewer_app_syncing_data_from_the_editor_app">The viewer app: syncing data from the editor app</h2>
+
+<p>We're not going to go through every part of the Contacts Viewer application, because a lot of the code is very similar to what we've already seen. One part that is different is that when the app is first initialized, we not only run the syncing mechanism (just like we did in Contact Editor), but we also include that same code again, wrapped in a <a href="../DataStore/onchange.html" title="The onchange event handler of the DataStore interface fires when a change is made to the data store. Its main use is to synchronize different apps that are using the data store when a change is made. When fired, this event returns a DataStoreChangeEvent, which can be used to handle the change that was just made. Alternatively, when the event fires you could create a DataStoreCursor and iterate through all the records, if needed."><code>DataStore.onchange</code></a> event handler:</p>
+
+<pre class="brush: js">stores[0].onchange = function() {
+  contactList.innerHTML = '';
+  var cursor = stores[0].sync();
+  runNextTask(cursor);
+}</pre>
+
+<p>This is so that, if the Contacts Editor app makes a change to the contacts data store, we can sync the display in this app.</p>
+
+<section id="Quick_Links"><!-- --></section>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/B2G">B2G</a></li>
+              <li><a href="../../../tag/Data%20Store%20API.html">Data Store API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Database">Database</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Firefox OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/guide">guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Storage">Storage</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/avik">avik</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,
+                      <time datetime="2015-09-07T09:33:57-07:00">Sep 7, 2015, 9:33:57 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    
+
+
+<ol>
+ <li data-default-state="open"><strong><a href="#">Guides</a></strong>
+
+  <ol>
+   <li><a href="Using_the_Data_Store_API.html">Using the Data Store API</a></li>
+  </ol>
+ </li>
+ <li data-default-state="open"><strong><a href="#">Examples</a></strong>
+  <ol>
+   <li><a href="https://github.com/mdn/data-store-contacts-editor">Data Store Contacts Editor</a></li>
+   <li><a href="https://github.com/mdn/data-store-contacts-viewer">Data Store Contacts Viewer</a></li>
+  </ol>
+ </li>
+ <li data-default-state="open"><strong><a href="#">Interfaces</a></strong>
+  <ol>
+   <li><a href="../DataStore.html" title="The DataStore interface of the Data Store API represents a retrieved set of data, and includes standard properties for accessing the store's name, owner, etc., methods for reading, modifying and syncing data, and the onchange event handler for reacting to changes to the data."><code>DataStore</code></a></li>
+   <li><a href="../DataStoreCursor.html" title="The DataStoreCursor interface of the Data Store API represents a cursor that allows apps to iterate through a list of DataStoreTask objects representing the change history of the data store, for use when synchronizing the data."><code>DataStoreCursor</code></a></li>
+   <li><a href="../DataStoreChangeEvent.html" title="The DataStoreChangeEvent interface of the Data Store API represents the event related to a record changed in the data store, i.e. this is returned once a change is made and the change event is fired (see DataStore.onchange for the handler)."><code>DataStoreChangeEvent</code></a></li>
+   <li><a href="../DataStoreTask.html" title="The DataStoreTask interface of the Data Store API represents a record changed in the data store when a DataStoreCursor is used to iterate through the data store's change history."><code>DataStoreTask</code></a></li>
+  </ol>
+ </li>
+</ol>
+
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Data_Store_API/Using_the_Data_Store_API by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:53:20 GMT -->
+</body></html>

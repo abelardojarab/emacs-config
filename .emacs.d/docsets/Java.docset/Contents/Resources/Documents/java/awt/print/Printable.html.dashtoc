@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"print(Graphics, PageFormat, int)","path":"print-java.awt.Graphics-java.awt.print.PageFormat-int-","entryType":"Method"},{"name":"Fields","isHeader":true},{"name":"NO_SUCH_PAGE","path":"NO_SUCH_PAGE","entryType":"Field"},{"name":"PAGE_EXISTS","path":"PAGE_EXISTS","entryType":"Field"}]}

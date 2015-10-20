@@ -1,0 +1,927 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:32:22 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Array.prototype.every()</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every$json">
+  <link rel="canonical" href="every.html">
+
+            <link rel="alternate" hreflang="es" href="../../../../../../../es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/every.html" title="Array.prototype.every()">
+          <link rel="alternate" hreflang="fr" href="../../../../../../../fr/docs/Web/JavaScript/Reference/Objets_globaux/Array/every.html" title="Array.prototype.every()">
+          <link rel="alternate" hreflang="ja" href="../../../../../../../ja/docs/Web/JavaScript/Reference/Global_Objects/Array/every.html" title="Array.prototype.every()">
+          <link rel="alternate" hreflang="pl" href="../../../../../../../pl/docs/Web/JavaScript/Referencje/Obiekty/Array/every.html" title="Array.prototype.every()">
+          <link rel="alternate" hreflang="ro" href="../../../../../../../ro/docs/Web/JavaScript/Reference/Global_Objects/Array/every.html" title="Array.prototype.every()">
+          <link rel="alternate" hreflang="ru" href="../../../../../../../ru/docs/Web/JavaScript/Reference/Global_Objects/Array/every.html" title="Array.prototype.every()">
+          <link rel="alternate" hreflang="zh-CN" href="../../../../../../../zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/every.html" title="Array.prototype.every()">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Array.prototype.every()">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every">
+  <meta name="twitter:title" content="Array.prototype.every()">
+    <meta property="og:description" content="The every() method tests whether all elements in the array pass the test implemented by the provided function.">
+  <meta name="description" content="The every() method tests whether all elements in the array pass the test implemented by the provided function.">
+  <meta name="twitter:description" content="The every() method tests whether all elements in the array pass the test implemented by the provided function.">
+  
+      
+  </head>
+<body data-slug="Web/JavaScript/Reference/Global_Objects/Array/every" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FArray%2Fevery" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FArray%2Fevery" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="../../../../../../../es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/every.html" title="Array.prototype.every()">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../fr/docs/Web/JavaScript/Reference/Objets_globaux/Array/every.html" title="Array.prototype.every()">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../ja/docs/Web/JavaScript/Reference/Global_Objects/Array/every.html" title="Array.prototype.every()">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../pl/docs/Web/JavaScript/Referencje/Obiekty/Array/every.html" title="Array.prototype.every()">Polski</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../ro/docs/Web/JavaScript/Reference/Global_Objects/Array/every.html" title="Array.prototype.every()">Română</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../ru/docs/Web/JavaScript/Reference/Global_Objects/Array/every.html" title="Array.prototype.every()">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../../../zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/every.html" title="Array.prototype.every()">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="v:url" property="v:title">JavaScript</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../../Reference.html" rel="v:url" property="v:title">JavaScript reference</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../Global_Objects.html" rel="v:url" property="v:title">Standard built-in objects</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Array.html" rel="v:url" property="v:title">Array</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Array.prototype.every()</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Array.prototype.every()</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 31 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/lattice" title="View profile: lattice">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lattice" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">lattice</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/RainbowDangerDash" title="View profile: RainbowDangerDash">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="RainbowDangerDash" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">RainbowDangerDash</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight" title="View profile: SphinxKnight">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SphinxKnight" data-src="../../../../../../../../secure.gravatar.com/avatar/8fb358ea9b7af22f5021a29e122ea0696aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">SphinxKnight</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mingun" title="View profile: Mingun">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mingun" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mingun</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/rwaldron" title="View profile: rwaldron">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rwaldron" data-src="../../../../../../../../secure.gravatar.com/avatar/36c697d974542aadaee06a0f39cb14376aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">rwaldron</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/SteveCoffman" title="View profile: SteveCoffman">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SteveCoffman" data-src="../../../../../../../../secure.gravatar.com/avatar/43911aa51a7822d5dfb6b2b7e136be026aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">SteveCoffman</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/baj_boxsheep" title="View profile: baj_boxsheep">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="baj_boxsheep" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">baj_boxsheep</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Imphil" title="View profile: Imphil">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Imphil" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Imphil</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/XXXPaulXXX" title="View profile: XXXPaulXXX">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="XXXPaulXXX" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">XXXPaulXXX</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Waldo" title="View profile: Waldo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Waldo" data-src="../../../../../../../../secure.gravatar.com/avatar/d26a0ca7ae1134e0e1dbdddf82e289296aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Waldo</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/madarche" title="View profile: madarche">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="madarche" data-src="../../../../../../../../secure.gravatar.com/avatar/a15ce308d52c691ba765d0ac972aac876aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">madarche</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../../../../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/brianrush" title="View profile: brianrush">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="brianrush" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">brianrush</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/joshuacc" title="View profile: joshuacc">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="joshuacc" data-src="../../../../../../../../secure.gravatar.com/avatar/76f885c3945aa47590c9b2fa8366c53d6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">joshuacc</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/trevorh" title="View profile: trevorh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="trevorh" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">trevorh</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/m_gol" title="View profile: m_gol">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="m_gol" data-src="../../../../../../../../secure.gravatar.com/avatar/72ea0622f7b690ed82f5261b16ff8cef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">m_gol</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jdalton" title="View profile: jdalton">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jdalton" data-src="../../../../../../../../secure.gravatar.com/avatar/299a3d891ff1920b69c364d0610070436aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jdalton</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/evilpie" title="View profile: evilpie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="evilpie" data-src="../../../../../../../../secure.gravatar.com/avatar/6bb31f7207fc068158047b9c8ad4592d6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">evilpie</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/cwest" title="View profile: cwest">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cwest" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cwest</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Inimino" title="View profile: Inimino">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Inimino" data-src="../../../../../../../../secure.gravatar.com/avatar/e4e997037a6341e7881816db5ef23ba76aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Inimino</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sevenspade" title="View profile: Sevenspade">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sevenspade" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sevenspade</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jesse" title="View profile: Jesse">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jesse" data-src="../../../../../../../../secure.gravatar.com/avatar/d2dc9227eafcd0ec5ba3712ee4f19b756aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jesse</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ptak82" title="View profile: Ptak82">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ptak82" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ptak82</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/PointedEars" title="View profile: PointedEars">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="PointedEars" data-src="../../../../../../../../secure.gravatar.com/avatar/49bd4f3c77b9bbe7030aff15ea4c794e6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">PointedEars</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Maian" title="View profile: Maian">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Maian" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Maian</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Wladimir_Palant" title="View profile: Wladimir_Palant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Wladimir_Palant" data-src="../../../../../../../../secure.gravatar.com/avatar/7806629160a492b05d21fd738953a4cf6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Wladimir_Palant</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a><ol><li><a href="#Parameters" rel="internal">Parameters</a></li></ol></li><li><a href="#Description" rel="internal">Description</a></li><li><a href="#Examples" rel="internal">Examples</a><ol><li><a href="#Testing_size_of_all_array_elements" rel="internal">Testing size of all array elements</a></li><li><a href="#Using_arrow_functions" rel="internal">Using arrow functions</a></li></ol></li><li><a href="#Polyfill" rel="internal">Polyfill</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>The <code><strong>every()</strong></code> method tests whether all elements in the array pass the test implemented by the provided function.</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><code><var>arr</var>.every(<var>callback</var>[, <var>thisArg</var>])</code></pre>
+
+<h3 id="Parameters">Parameters</h3>
+
+<dl>
+ <dt><code>callback</code></dt>
+ <dd>Function to test for each element, taking three arguments:
+ <dl>
+  <dt><code>currentValue</code> (required)</dt>
+  <dd>The current element being processed in the array.</dd>
+  <dt><code>index</code> (optional)</dt>
+  <dd>The index of the current element being processed in the array.</dd>
+  <dt><code>array</code> (optional)</dt>
+  <dd>The array <code>every</code> was called upon.</dd>
+ </dl>
+ </dd>
+ <dt><code>thisArg</code></dt>
+ <dd>Optional. Value to use as <code>this</code> when executing <code>callback</code>.</dd>
+</dl>
+
+<h2 id="Description">Description</h2>
+
+<p>The <code>every</code> method executes the provided <code>callback</code> function once for each element present in the array until it finds one where <code>callback</code> returns a <em>falsy</em> value (a value that becomes false when converted to a Boolean). If such an element is found, the <code>every</code> method immediately returns <code>false</code>. Otherwise, if <code>callback</code> returned a true value for all elements, <code>every</code> will return <code>true</code>. <code>callback</code> is invoked only for indexes of the array which have assigned values; it is not invoked for indexes which have been deleted or which have never been assigned values.</p>
+
+<p><code>callback</code> is invoked with three arguments: the value of the element, the index of the element, and the Array object being traversed.</p>
+
+<p>If a <code>thisArg</code> parameter is provided to <code>every</code>, it will be passed to <code>callback</code> when invoked, for use as its <code>this</code> value. Otherwise, the value <code>undefined</code> will be passed for use as its <code>this</code> value.&nbsp; The <code>this</code> value ultimately observable by <code>callback</code> is determined according to <a href="../../Operators/this.html">the usual rules for determining the <code>this</code> seen by a function</a>.</p>
+
+<p><code>every</code> does not mutate the array on which it is called.</p>
+
+<p>The range of elements processed by <code>every</code> is set before the first invocation of <code>callback</code>. Elements which are appended to the array after the call to <code>every</code> begins will not be visited by <code>callback</code>. If existing elements of the array are changed, their value as passed to <code>callback</code> will be the value at the time <code>every</code> visits them; elements that are deleted are not visited.</p>
+
+<p><code>every</code> acts like the "for all" quantifier in mathematics. In particular, for an empty array, it returns true. (It is <a href="http://en.wikipedia.org/wiki/Vacuous_truth#Vacuous_truths_in_mathematics" class="external">vacuously true</a> that all elements of the <a href="http://en.wikipedia.org/wiki/Empty_set#Common_problems" class="external">empty set</a> satisfy any given condition.)</p>
+
+<h2 id="Examples">Examples</h2>
+
+<h3 id="Testing_size_of_all_array_elements">Testing size of all array elements</h3>
+
+<p>The following example tests whether all elements in the array are bigger than 10.</p>
+
+<pre class="brush: js">function isBigEnough(element, index, array) {
+  return element &gt;= 10;
+}
+[12, 5, 8, 130, 44].every(isBigEnough);   // false
+[12, 54, 18, 130, 44].every(isBigEnough); // true
+</pre>
+
+<h3 id="Using_arrow_functions">Using arrow functions</h3>
+
+<p><a href="../../Functions/Arrow_functions.html">Arrow functions</a> provide a shorter syntax for the same test.</p>
+
+<pre class="brush: js">[12, 5, 8, 130, 44].every(elem =&gt; elem &gt;= 10); // false
+[12, 54, 18, 130, 44].every(elem =&gt; elem &gt;= 10); // true</pre>
+
+<h2 id="Polyfill">Polyfill</h2>
+
+<p><code>every</code> was added to the ECMA-262 standard in the 5th edition; as such it may not be present in other implementations of the standard. You can work around this by inserting the following code at the beginning of your scripts, allowing use of <code>every</code> in implementations which do not natively support it. This algorithm is exactly the one specified in ECMA-262, 5th edition, assuming&nbsp;<code>Object</code>&nbsp;and&nbsp;<code>TypeError</code>&nbsp;have their original values and that&nbsp;<code>callbackfn.call</code>&nbsp;evaluates to the original value of <a href="../Function/call.html" title="The call() method calls a function with a given this value and arguments provided individually."><code>Function.prototype.call</code></a></p>
+
+<pre class="brush: js">if (!Array.prototype.every) {
+  Array.prototype.every = function(callbackfn, thisArg) {
+    'use strict';
+    var T, k;
+
+    if (this == null) {
+      throw new TypeError('this is null or not defined');
+    }
+
+    // 1. Let O be the result of calling ToObject passing the this 
+    //    value as the argument.
+    var O = Object(this);
+
+    // 2. Let lenValue be the result of calling the Get internal method
+    //    of O with the argument "length".
+    // 3. Let len be ToUint32(lenValue).
+    var len = O.length &gt;&gt;&gt; 0;
+
+    // 4. If IsCallable(callbackfn) is false, throw a TypeError exception.
+    if (typeof callbackfn !== 'function') {
+      throw new TypeError();
+    }
+
+    // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+    if (arguments.length &gt; 1) {
+      T = thisArg;
+    }
+
+    // 6. Let k be 0.
+    k = 0;
+
+    // 7. Repeat, while k &lt; len
+    while (k &lt; len) {
+
+      var kValue;
+
+      // a. Let Pk be ToString(k).
+      //   This is implicit for LHS operands of the in operator
+      // b. Let kPresent be the result of calling the HasProperty internal 
+      //    method of O with argument Pk.
+      //   This step can be combined with c
+      // c. If kPresent is true, then
+      if (k in O) {
+
+        // i. Let kValue be the result of calling the Get internal method
+        //    of O with argument Pk.
+        kValue = O[k];
+
+        // ii. Let testResult be the result of calling the Call internal method
+        //     of callbackfn with T as the this value and argument list 
+        //     containing kValue, k, and O.
+        var testResult = callbackfn.call(T, kValue, k, O);
+
+        // iii. If ToBoolean(testResult) is false, return false.
+        if (!testResult) {
+          return false;
+        }
+      }
+      k++;
+    }
+    return true;
+  };
+}
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.4.4.16" class="external" lang="en" hreflang="en">ECMAScript 5.1 (ECMA-262)<br><small lang="en-US">The definition of 'Array.prototype.every' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Initial definition. Implemented in JavaScript 1.6.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-262/6.0/#sec-array.prototype.every" class="external" lang="en" hreflang="en">ECMAScript 2015 (6th Edition, ECMA-262)<br><small lang="en-US">The definition of 'Array.prototype.every' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/1.5" title="Released on 2005-11-25.">1.5</a> (1.8)</td>
+   <td>9</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>1.0 (1.8)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="forEach.html" title="The forEach() method executes a provided function once per array element."><code>Array.prototype.forEach()</code></a></li>
+ <li><a href="some.html" title="The some() method tests whether some element in the array passes the test implemented by the provided function."><code>Array.prototype.some()</code></a></li>
+ <li><a href="../TypedArray/every.html" title="The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). TypedArray is one of the typed array types here."><code>TypedArray.prototype.every()</code></a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Array">Array</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/ECMAScript5">ECMAScript5</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript 1.6">JavaScript 1.6</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Method">Method</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/polyfill">polyfill</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Prototype">Prototype</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/prototype">prototype</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/lattice">lattice</a>,             <a href="https://developer.mozilla.org/en-US/profiles/RainbowDangerDash">RainbowDangerDash</a>,             <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight">SphinxKnight</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mingun">Mingun</a>,             <a href="https://developer.mozilla.org/en-US/profiles/rwaldron">rwaldron</a>,             <a href="https://developer.mozilla.org/en-US/profiles/SteveCoffman">SteveCoffman</a>,             <a href="https://developer.mozilla.org/en-US/profiles/baj_boxsheep">baj_boxsheep</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Imphil">Imphil</a>,             <a href="https://developer.mozilla.org/en-US/profiles/XXXPaulXXX">XXXPaulXXX</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Waldo">Waldo</a>,             <a href="https://developer.mozilla.org/en-US/profiles/madarche">madarche</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/brianrush">brianrush</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/joshuacc">joshuacc</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/trevorh">trevorh</a>,             <a href="https://developer.mozilla.org/en-US/profiles/m_gol">m_gol</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jdalton">jdalton</a>,             <a href="https://developer.mozilla.org/en-US/profiles/evilpie">evilpie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cwest">cwest</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Inimino">Inimino</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sevenspade">Sevenspade</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jesse">Jesse</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ptak82">Ptak82</a>,             <a href="https://developer.mozilla.org/en-US/profiles/PointedEars">PointedEars</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Maian">Maian</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Wladimir_Palant">Wladimir_Palant</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,
+                      <time datetime="2015-08-25T02:52:36-07:00">Aug 25, 2015, 2:52:36 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../index.html">Standard built-in objects</a></strong></li><li><strong><a href="../Array.html"><code>Array</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="prototype.html" title="The Array.prototype property represents the prototype for the Array constructor."><code>Array.prototype</code></a></li><li><a href="length.html" title="The length property represents an unsigned, 32-bit integer that&nbsp;is always numerically greater than the highest index in the array."><code>Array.prototype.length</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="from.html" title="The Array.from() method creates a new Array instance from an array-like or iterable object."><code>Array.from()</code></a></li><li><a href="isArray.html" title="The Array.isArray() method returns true if an object is an array, false if it is not."><code>Array.isArray()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="observe.html" title="The Array.observe() method is used for asynchronously observing changes to Arrays, similar to Object.observe() for objects. It provides a stream of changes in order of occurrence. It's equivalent to Object.observe() invoked with the accept type list [&quot;add&quot;, &quot;update&quot;, &quot;delete&quot;, &quot;splice&quot;]."><code>Array.observe()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="of.html" title="The Array.of() method creates a new Array instance with a variable number of arguments, regardless of number or type of the arguments."><code>Array.of()</code></a></li><li><a href="concat.html" title="The concat() method returns a new array comprised of the array on which it is called joined with the array(s) and/or value(s) provided as arguments."><code>Array.prototype.concat()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="copyWithin.html" title="The copyWithin() method copies the sequence of array elements within the array to the position starting at target. The copy is taken from the index positions of the second and third arguments start and end. The end argument is optional and defaults to the length of the array."><code>Array.prototype.copyWithin()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="entries.html" title="The entries() method returns a new Array Iterator object that contains the key/value pairs for each index in the array."><code>Array.prototype.entries()</code></a></li><li><em><code>Array.prototype.every()</code></em></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="fill.html" title="The fill() method fills all the elements of an array from a start index to an end index with a static value."><code>Array.prototype.fill()</code></a></li><li><a href="filter.html" title="The filter() method creates a new array with all elements that pass the test implemented by the provided function."><code>Array.prototype.filter()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="find.html" title="The find() method returns a value in the array, if an element in the array satisfies the provided testing function. Otherwise undefined is returned."><code>Array.prototype.find()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="findIndex.html" title="The findIndex() method returns an index in the array, if an element in the array satisfies the provided testing function. Otherwise -1 is returned."><code>Array.prototype.findIndex()</code></a></li><li><a href="forEach.html" title="The forEach() method executes a provided function once per array element."><code>Array.prototype.forEach()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="includes.html" title="The includes() method determines whether an array includes a certain element, returning true or false as appropriate."><code>Array.prototype.includes()</code></a></li><li><a href="indexOf.html" title="The indexOf() method returns the first index at which a given element can be found in the array, or -1 if it is not present."><code>Array.prototype.indexOf()</code></a></li><li><a href="join.html" title="The join() method joins all elements of an array into a string."><code>Array.prototype.join()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="keys.html" title="The keys() method returns a new Array Iterator that contains the keys for each index in the array."><code>Array.prototype.keys()</code></a></li><li><a href="lastIndexOf.html" title="The lastIndexOf() method returns the last index at which a given element can be found in the array, or -1 if it is not present. The array is searched backwards, starting at fromIndex."><code>Array.prototype.lastIndexOf()</code></a></li><li><a href="map.html" title="The map() method creates a new array with the results of calling a provided function on every element in this array."><code>Array.prototype.map()</code></a></li><li><a href="pop.html" title="The pop() method removes the last element from an array and returns that element."><code>Array.prototype.pop()</code></a></li><li><a href="push.html" title="The push() method adds one or more elements to the end of an array and returns the new length of the array."><code>Array.prototype.push()</code></a></li><li><a href="Reduce-2.html" title="The reduce() method applies a function against an accumulator and each value of the array (from left-to-right) to reduce it to a single value."><code>Array.prototype.reduce()</code></a></li><li><a href="ReduceRight-2.html" title="The reduceRight() method applies a function against an accumulator and each value of the array (from right-to-left) has to reduce it to a single value."><code>Array.prototype.reduceRight()</code></a></li><li><a href="reverse.html" title="The reverse() method reverses an array in place. The first array element becomes the last and the last becomes the first."><code>Array.prototype.reverse()</code></a></li><li><a href="shift.html" title="The shift() method removes the first element from an array and returns that element. This method changes the length of the array."><code>Array.prototype.shift()</code></a></li><li><a href="slice.html" title="The slice() method returns a shallow copy of a portion of an array into a new array object."><code>Array.prototype.slice()</code></a></li><li><a href="some.html" title="The some() method tests whether some element in the array passes the test implemented by the provided function."><code>Array.prototype.some()</code></a></li><li><a href="sort.html" title="The sort() method sorts the elements of an array in place and returns the array. The sort is not necessarily stable. The default sort order is according to string Unicode code points."><code>Array.prototype.sort()</code></a></li><li><a href="splice.html" title="The splice() method changes the content of an array by removing existing elements and/or adding new elements."><code>Array.prototype.splice()</code></a></li><li><a href="toLocaleString.html" title="The toLocaleString() method returns a string representing the elements of the array. The elements are converted to Strings using their toLocaleString methods and these Strings are separated by a locale-specific String (such as a comma “,”)."><code>Array.prototype.toLocaleString()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="toSource.html" title="The toSource() method returns a string representing the source code of the array."><code>Array.prototype.toSource()</code></a></li><li><a href="toString.html" title="The toString() method returns a string representing the specified array and its elements."><code>Array.prototype.toString()</code></a></li><li><a href="unshift.html" title="The unshift() method adds one or more elements to the beginning of an array and returns the new length of the array."><code>Array.prototype.unshift()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="values.html" title="The values() method returns a new Array Iterator object that contains the values for each index in the array."><code>Array.prototype.values()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="%40%40iterator-2.html" title="The initial value of the @@iterator property is the same function object as the initial value of the values() property."><code>Array.prototype[@@iterator]()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="unobserve.html" title="The Array.unobserve() method is used to remove observers set by Array.observe()."><code>Array.unobserve()</code></a></li></ol></li><li><strong>Inheritance:</strong></li><li><strong><a href="../Function.html"><code>Function</code></a></strong></li><li><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Function/arguments.html" title="The function.arguments property refers to an an array-like object corresponding to the arguments passed to a function. Use the simple variable arguments instead."><code>Function.arguments</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../Function/arity.html" title="The arity property used to return the number of arguments expected by the function, however, it no longer exists and has been replaced by the Function.prototype.length property."><code>Function.arity</code></a></s></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Function/caller.html" title="The function.caller property returns the function that invoked the specified function."><code>Function.caller</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Function/displayName.html" title="The function.displayName property returns the display name of the function."><code>Function.displayName</code></a></li><li><a href="../Function/length.html" title="The length property specifies the number of arguments expected by the function."><code>Function.length</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Function/name.html" title="The function.name property returns the name of the function."><code>Function.name</code></a></li><li><a href="../Function/prototype.html" title="The Function.prototype property represents the Function prototype object."><code>Function.prototype</code></a></li></ol></li><li><a href="#"><strong>Methods</strong></a><ol><li><a href="../Function/apply.html" title="The apply() method calls a function with a given this value and arguments provided as an array (or an array-like object)."><code>Function.prototype.apply()</code></a></li><li><a href="../Function/bind.html" title="The bind() method creates a new function that, when called, has its this keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called."><code>Function.prototype.bind()</code></a></li><li><a href="../Function/call.html" title="The call() method calls a function with a given this value and arguments provided individually."><code>Function.prototype.call()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Function/isGenerator.html" title="The isGenerator() method determines whether or not a function is a generator."><code>Function.prototype.isGenerator()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Function/toSource.html" title="The toSource() method returns a string representing the source code of the object."><code>Function.prototype.toSource()</code></a></li><li><a href="../Function/toString.html" title="The toString() method returns a string representing the source code of the function."><code>Function.prototype.toString()</code></a></li></ol></li><li><strong><a href="../Object.html"><code>Object</code></a></strong></li><li><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../Object/count.html" title="The __count__ property used to store the count of enumerable properties on the object, but it has been removed."><code>Object.prototype.__count__</code></a></s></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../Object/noSuchMethod.html" title="The __noSuchMethod__ property references a function to be executed when a non-existent method is called on an object."><code>Object.prototype.__noSuchMethod__</code></a></s></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../Object/Parent.html" title="The __parent__ property used to point to an object's context, but it has been removed."><code>Object.prototype.__parent__</code></a></s></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Object/proto.html" title="The __proto__ property of Object.prototype is an accessor property (a getter function and a setter function) that exposes the internal [[Prototype]] (either an object or null) of the object through which it is accessed."><code>Object.prototype.__proto__</code></a></li><li><a href="../Object/constructor.html" title="Returns a reference to the Object function that created the instance's prototype. Note that the value of this property is a reference to the function itself, not a string containing the function's name. The value is only read-only for primitive values such as&nbsp;1,&nbsp;true and&nbsp;&quot;test&quot;."><code>Object.prototype.constructor</code></a></li></ol></li><li><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/__defineGetter__.html" title="The __defineGetter__ method binds an object's property to a function to be called when that property is looked up."><code>Object.prototype.__defineGetter__()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/__defineSetter__.html" title="The __defineSetter__ method binds an object's property to a function to be called when an attempt is made to set that property."><code>Object.prototype.__defineSetter__()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Object/__lookupGetter__.html" title="The __lookupGetter__ method returns the function bound as a getter to the specified property."><code>Object.prototype.__lookupGetter__()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Object/__lookupSetter__.html" title="The __lookupSetter__ method returns the function bound as a setter to the specified property."><code>Object.prototype.__lookupSetter__()</code></a></li><li><a href="../Object/hasOwnProperty.html" title="The hasOwnProperty() method returns a boolean indicating whether the object has the specified property."><code>Object.prototype.hasOwnProperty()</code></a></li><li><a href="../Object/isPrototypeOf.html" title="The isPrototypeOf() method tests for an object in another object's prototype chain."><code>Object.prototype.isPrototypeOf()</code></a></li><li><a href="../Object/propertyIsEnumerable.html" title="The propertyIsEnumerable() method returns a Boolean indicating whether the specified property is enumerable."><code>Object.prototype.propertyIsEnumerable()</code></a></li><li><a href="../Object/toLocaleString.html" title="The toLocaleString() method returns a string representing the object. This method is meant to be overridden by derived objects for locale-specific purposes."><code>Object.prototype.toLocaleString()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/toSource.html" title="The toSource() method returns a string representing the source code of the object."><code>Object.prototype.toSource()</code></a></li><li><a href="../Object/toString.html" title="The toString() method returns a string representing object."><code>Object.prototype.toString()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/unwatch.html" title="The unwatch() method removes a watchpoint set with the watch() method."><code>Object.prototype.unwatch()</code></a></li><li><a href="../Object/valueOf.html" title="The valueOf() method returns the primitive value of the specified object."><code>Object.prototype.valueOf()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Object/watch.html" title="The watch() method watches for a property to be assigned a value and runs a function when that occurs."><code>Object.prototype.watch()</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every" selected="">
+          English (US)
+        </option>
+                  <option value="/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/every">
+            Español
+          </option>          <option value="/fr/docs/Web/JavaScript/Reference/Objets_globaux/Array/every">
+            Français
+          </option>          <option value="/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/every">
+            日本語
+          </option>          <option value="/pl/docs/Web/JavaScript/Referencje/Obiekty/Array/every">
+            Polski
+          </option>          <option value="/ro/docs/Web/JavaScript/Reference/Global_Objects/Array/every">
+            Română
+          </option>          <option value="/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/every">
+            Русский
+          </option>          <option value="/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/every">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:32:30 GMT -->
+</body></html>

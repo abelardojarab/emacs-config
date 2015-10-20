@@ -1,0 +1,2498 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Doc_status by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:01:03 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Documentation status</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Doc_status$json">
+  <link rel="canonical" href="Doc_status.html">
+
+            <link rel="alternate" hreflang="ar" href="https://developer.mozilla.org/ar/docs/Web/API/Doc_status" title="Documentation status">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Documentation status">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Doc_status">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Doc_status">
+  <meta name="twitter:title" content="Documentation status">
+    <meta property="og:description" content="As documentation is moving forward, this page will be updated accordingly:&nbsp;APIs that are fully documented are pushed at the bottom of the page and ongoing documentation is put on top.">
+  <meta name="description" content="As documentation is moving forward, this page will be updated accordingly:&nbsp;APIs that are fully documented are pushed at the bottom of the page and ongoing documentation is put on top.">
+  <meta name="twitter:description" content="As documentation is moving forward, this page will be updated accordingly:&nbsp;APIs that are fully documented are pushed at the bottom of the page and ongoing documentation is put on top.">
+  
+      
+  </head>
+<body data-slug="Web/API/Doc_status" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Doc_status" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FDoc_status" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Doc_status" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FDoc_status" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/ar/docs/Web/API/Doc_status" title="Documentation status">عربي</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Doc_status$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Doc_status$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Doc_status$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Documentation status</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Documentation status</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 14 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow" title="View profile: AFBarstow">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AFBarstow" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">AFBarstow</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/johnshih" title="View profile: johnshih">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="johnshih" data-src="../../../../../secure.gravatar.com/avatar/51297df383e6bc5944afaad9a5a980da6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">johnshih</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/daviddoran" title="View profile: daviddoran">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="daviddoran" data-src="../../../../../secure.gravatar.com/avatar/39394c565113660f020a5bdbc5517ea66aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">daviddoran</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/FredB" title="View profile: FredB">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="FredB" data-src="../../../../../secure.gravatar.com/avatar/ae5b9bd466dae65a6be4e9ff223d2b2a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">FredB</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ptheriault" title="View profile: ptheriault">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ptheriault" data-src="../../../../../secure.gravatar.com/avatar/9a0a16bc1cb5b0144e373deb8e3578046aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ptheriault</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/markg" title="View profile: markg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="markg" data-src="../../../../../secure.gravatar.com/avatar/a6bdd84b4732a2c3c7ecadd886b3c64a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">markg</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Ongoing_documentation_work" rel="internal">Ongoing documentation work</a><ol><li><a href="#Update_Required" rel="internal">Update Required</a></li><li><a href="#Network_APIs" rel="internal">Network APIs</a></li><li><a href="#Data_Management_APIs" rel="internal">Data Management APIs</a></li><li><a href="#Other_APIs" rel="internal">Other APIs</a></li></ol></li><li><a href="#Dev-doc-needed" rel="internal">Dev-doc-needed</a></li><li><a href="#Implementation_in_progress" rel="internal">Implementation in progress</a></li><li><a href="#Documentation_complete" rel="internal">Documentation complete</a><ol><li><a href="#Web_content_or_installed_APIs" rel="internal">Web content or installed APIs</a></li><li><a href="#Privileged_APIs" rel="internal">Privileged APIs</a></li><li><a href="#Certified_APIs" rel="internal">Certified APIs</a></li></ol></li><li><a href="#Discontinued_APIs" rel="internal">Discontinued APIs</a></li><li><a href="#Document_status_overview" rel="internal">Document status overview</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>As documentation is moving forward, this page will be updated accordingly:&nbsp;APIs that are fully documented are pushed at the bottom of the page and ongoing documentation is put on top.</p>
+
+<h2 id="Ongoing_documentation_work">Ongoing documentation work</h2>
+
+<p>See the <a href="https://wiki.mozilla.org/WebAPI/Docs_schedule" class="external" title="https://wiki.mozilla.org/WebAPI/Docs_schedule">WebAPI doc schedule</a> for details on our schedule for completing this content.</p>
+
+<h3 id="Update_Required">Update Required</h3>
+
+<p>The support for <a href="../JavaScript/Reference/Global_Objects/Promise.html" title="The Promise interface represents a proxy for a value not necessarily known at its creation time. It allows you to associate handlers to an asynchronous action's eventual success or failure. This lets asynchronous methods return values like synchronous methods: instead of the final value, the asynchronous method returns a promise of having a value at some point in the future."><code>Promise</code></a> as been landed (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=856410" class="external" title="FIXED: Implement promises">bug&nbsp;856410</a>). When turn on on B2G (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=897913" class="external" title="FIXED: Turn on Promise for b2g">bug&nbsp;897913</a>), it will have many impacts on Web APIs' documentation. This need to be tracked carfully.</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(255, 255, 153);">WebTelephony (support for Conf Call)</td>
+   <td style="background-color: rgb(255, 255, 153);">Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Telephony" rel="tag" hreflang="en-US">Telephony</a></td>
+   <td style="background-color: rgb(255, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=772765" class="external" title="FIXED: B2G telephony: support conference calls">bug&nbsp;772765</a></td>
+   <td style="background-color: rgb(255, 255, 153);">Needs extension and update</td>
+   <td style="background-color: rgb(255, 255, 153);">Landed FxOS 1.2 only. Certified Apps only</td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Network Stats API</td>
+   <td style="background-color: rgb(204, 255, 153);"><span style="font-size: 14px; line-height: 1.572;">Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Network Stats" rel="tag" hreflang="en-US">Network Stats</a></span></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=858003" class="external" title="FIXED: (b2g-NetworkStats) [meta] B2G Network Stats API">bug&nbsp;858003</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=858005" class="external" title="FIXED: B2G Network Stats: Add support to usage alarms">bug&nbsp;858005</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=887699" class="external" title="FIXED: B2G Network Stats: support multiple SIM">bug&nbsp;887699</a></td>
+   <td style="background-color: rgb(204, 255, 153);">Needs update</td>
+   <td style="background-color: rgb(204, 255, 153);">Not landed yet</td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Notification API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Notification/get.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>Notification.get</code></a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Notifications" rel="tag" hreflang="en-US">Notifications</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=899574" class="external" title="FIXED: Notification API follow-up: provide a way to get current Notification objects">bug&nbsp;899574</a></td>
+   <td style="background-color: rgb(204, 255, 153);">Needs update</td>
+   <td style="background-color: rgb(204, 255, 153);">Not landed yet</td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Network_APIs">Network APIs</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(255, 255, 153);">Mobile Connection API</td>
+   <td style="background-color: rgb(255, 255, 153);"><a href="Window/navigator/mozMobileConnection-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozMobileConnection</code></a><br>
+    <a href="MozMobileConnection.html" title="This API is used to get information about the current mobile voice and data connection states of the device. It is accessible through navigator.mozMobileConnections, which returns an array of MozMobileConnection objects."><code>MozMobileConnection</code></a><br>
+    <a href="MozMobileConnectionInfo.html" title="The MozMobileConnectionInfo interface allows to access connection information for voice or data. The navigator.mozMobileConnection uses it through its voice and data properties."><code>MozMobileConnectionInfo</code></a><br>
+    <a href="MozMobileICCInfo.html" title="The MozMobileICCInfo interface allow to access access to information stored in the device's ICC card. The navigator.mozMobileConnection uses it through its iccInfo property."><code>MozMobileICCInfo</code></a><br>
+    <a href="MozMobileNetworkInfo.html" title="The MozMobileNetworkInfo interface allows access to information related to the network carrier. The navigator.mozMobileConnection uses it through its voice.network and data.network properties."><code>MozMobileNetworkInfo</code></a><br>
+    <a href="MozMobileCFInfo.html" title="The MozMobileCFInfo interface defines options used to retrieve or define call forwarding settings."><code>MozMobileCFInfo</code></a><br>
+    <a href="MozMobileCellInfo.html" title="The MozMobileCellInfo interface allow to access to cell location information."><code>MozMobileCellInfo</code></a><br>
+    Introductory article: <a href="Mobile_Connection_API.html" title="/en-US/docs/WebAPI/Mobile_Connection">Mobile Connection</a><br>
+    <br>
+    Paused:<br>
+    <a href="MozIccManager.html" title="The MozIccManager interface gives access to ICC related functionalities."><code>MozIccManager</code></a><br>
+    <a href="MozStkCommandEvent.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>MozStkCommandEvent</code></a><br>
+    <br>
+    Tag: <em>none yet</em></td>
+   <td style="background-color: rgb(255, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729173" class="external" title="FIXED: WebMobileConnection">bug&nbsp;729173</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=857414" class="external" title="FIXED: [meta] B2G RIL: Move all icc/sim-related stuff from mozMobileConnection to mozIccManager">bug&nbsp;857414</a></td>
+   <td style="background-color: rgb(255, 255, 153);">partial</td>
+   <td style="background-color: rgb(255, 255, 153);">Paused: The STK stack is a big piece and needs further investigation. It doesn't look like a high priority API to document.<br>
+    <br>
+    Tech review of everything not related to STK asked to Vicamo Yang and Ken Chang.<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMMobileConnection.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMMobileConnection.idl">MobileConnection</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebMobileConnection" class="external" title="https://wiki.mozilla.org/WebAPI/WebMobileConnection">WebMobileConnection</a></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Data_Management_APIs">Data Management APIs</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(255, 255, 153);">IndexedDB</td>
+   <td style="background-color: rgb(255, 255, 153);"><a href="IDBEnvironment/indexedDB.html" title="An IDBFactory object."><code>window.indexedDB</code></a><br>
+    IndexedDB root page: <a href="https://developer.mozilla.org/en-US/docs/IndexedDB" title="/en-US/docs/IndexedDB">/IndexedDB</a></td>
+   <td style="background-color: rgb(255, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=553412" class="external" title="FIXED: Implement Indexed Database API">bug&nbsp;553412</a></td>
+   <td style="background-color: rgb(255, 255, 153);">almost done</td>
+   <td style="background-color: rgb(255, 255, 153);">The whole documentation lives under /IndexedDB. Shouldn't we moved it under /Web ?<br>
+    <br>
+    We are waiting the end of the switch to WebIDL to update the documentation<br>
+    <br>
+    Spec: <a href="http://www.w3.org/TR/IndexedDB/" class="external" title="http://www.w3.org/TR/IndexedDB/">http://www.w3.org/TR/IndexedDB/</a> (the <a href="https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html" class="external" title="https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html">draft</a> is more accurate)</td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Other_APIs">Other APIs</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">Inter-App communication API</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=876397" class="external" title="FIXED: Inter-App Communication API">bug&nbsp;876397</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">WikiMo: <a href="https://wiki.mozilla.org/WebAPI/Inter_App_Communication_Alt_proposal" class="external" title="https://wiki.mozilla.org/WebAPI/Inter_App_Communication_Alt_proposal">Inter-App Communication</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 255, 153);"><a href="../Apps/JavaScript_API.png" title="Apps/Apps_JavaScript_API">Open WebApps</a></td>
+   <td style="background-color: rgb(255, 255, 153);">&nbsp;</td>
+   <td style="background-color: rgb(255, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=697006" class="external" title="FIXED: Add desktop support for the Open Web Apps API">bug&nbsp;697006</a></td>
+   <td style="background-color: rgb(255, 255, 153);">almost done</td>
+   <td style="background-color: rgb(255, 255, 153);">Needs some clean up</td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 255, 153);">Voicemail API</td>
+   <td style="background-color: rgb(255, 255, 153);"><a href="Window/navigator/mozVoicemail.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozVoicemail</code></a><br>
+    <a href="MozVoicemail.html" title="The MozVoicemail interface allows access to the information regarding the voicemail features available through the RIL of a Firefox OS device."><code>MozVoicemail</code></a><br>
+    <a href="MozVoicemailEvent.html" title="The MozVoicemailEvent API provides access to the event information when a statuschange event is triggered."><code>MozVoicemailEvent</code></a><br>
+    <a href="MozVoicemailStatus.html" title="The MozVoicemailStatus API provides access to a voicemail status."><code>MozVoicemailStatus</code></a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/voicemail" rel="tag" hreflang="en-US">voicemail</a></td>
+   <td style="background-color: rgb(255, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=773068" class="external" title="FIXED: B2G Voicemail: API to retrieve Voicemail number">bug&nbsp;773068</a></td>
+   <td style="background-color: rgb(255, 255, 153);">Partial</td>
+   <td style="background-color: rgb(255, 255, 153);">The basic reference documentation is okay but it still need some proper introductory article. It also requires to make the difference between the FxOS 1.0 and 1.3 API (enhancement for multi-sim cards)<br>
+    <br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebVoicemail" rel="external" class="external">WebVoicemail</a>, <a href="https://wiki.mozilla.org/WebAPI/WebVoicemail/Multi-SIM" class="external">WebVoicemail (multi SIM)</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">Microphone API</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=894848" class="external" title="FIXED: [User Story] [Media Recording] Microphone API">bug&nbsp;894848</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">Landed in B2G 1.2</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Dev-doc-needed">Dev-doc-needed</h2>
+
+<p><a href="https://bugzilla.mozilla.org/buglist.cgi?keywords=dev-doc-needed&amp;resolution=FIXED&amp;resolution=INVALID&amp;resolution=WONTFIX&amp;resolution=DUPLICATE&amp;resolution=WORKSFORME&amp;resolution=INCOMPLETE&amp;resolution=SUPPORT&amp;resolution=EXPIRED&amp;resolution=MOVED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;product=Core&amp;component=JavaScript%20Engine" class="external">View on Bugzilla</a>.</p>
+
+<div><p><strong>Found 65 bugs.</strong></p> 
+ 
+<table class="standard-table"> 
+    <thead> 
+        <tr> 
+            <th>Bug</th> 
+             
+                    <th>summary</th> 
+                 
+                    <th>target_milestone</th> 
+                 
+        </tr> 
+    </thead> 
+<tbody> 
+ 
+ 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1181561" class="external">1181561</a></td> 
+     
+            <td>Exposing a kill switch enabling/disabling API</td> 
+         
+            <td>FxOS-S6 (04Sep)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=900551" class="external">900551</a></td> 
+     
+            <td>Provide a mechanism to get/set shared background image for privileged apps using mozSettings</td> 
+         
+            <td>2.1 S4 (12sep)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=846200" class="external">846200</a></td> 
+     
+            <td>Support for granting the 'settings' permission on a per-permission basis</td> 
+         
+            <td>2.1 S3 (29aug)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=878533" class="external">878533</a></td> 
+     
+            <td>WebSMS: Move SmsFilter to WebIDL dictionary</td> 
+         
+            <td>2.1 S3 (29aug)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=745283" class="external">745283</a></td> 
+     
+            <td>Expose a client UDP datagram socket API to web applications</td> 
+         
+            <td>2.1 S3 (29aug)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=855952" class="external">855952</a></td> 
+     
+            <td>[DeviceStorage] support append file operation on b2g device</td> 
+         
+            <td>2.0 S4 (20june)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=983747" class="external">983747</a></td> 
+     
+            <td>[Browser API] Add a method to download a file</td> 
+         
+            <td>2.0 S4 (20june)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=814637" class="external">814637</a></td> 
+     
+            <td>WebIccManager API: support multiple sim cards</td> 
+         
+            <td>1.3 Sprint 5 - 11/22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=814629" class="external">814629</a></td> 
+     
+            <td>[DSDS] WebMobileConnection API: support multiple sim cards</td> 
+         
+            <td>1.3 Sprint 5 - 11/22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=885679" class="external">885679</a></td> 
+     
+            <td>B2G MMS: Add 'subject' to {Thread} object.</td> 
+         
+            <td>1.3 Sprint 4 - 11/8</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=885701" class="external">885701</a></td> 
+     
+            <td>[DOMRequest] Implement DOMRequestService.fireDetailedError</td> 
+         
+            <td>1.1 QE3 (26jun)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=813978" class="external">813978</a></td> 
+     
+            <td>B2G SMS: getMessages cursor is slow when SMS database contains large number of messages</td> 
+         
+            <td>B2G C4 (2jan on)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=823974" class="external">823974</a></td> 
+     
+            <td>Geolocation should require a manifest entry for apps</td> 
+         
+            <td>B2G C4 (2jan on)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=778093" class="external">778093</a></td> 
+     
+            <td>B2G RIL: support Cell Broadcast</td> 
+         
+            <td>B2G C2 (20nov-10dec)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=775997" class="external">775997</a></td> 
+     
+            <td>Message app crashes when run OOP</td> 
+         
+            <td>B2G C1 (to 19nov)</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=805130" class="external">805130</a></td> 
+     
+            <td>Add error codes for validation failures in navigator.mozPay()</td> 
+         
+            <td>---</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=857414" class="external">857414</a></td> 
+     
+            <td>[meta] B2G RIL: Move all icc/sim-related stuff from mozMobileConnection to mozIccManager</td> 
+         
+            <td>---</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=902565" class="external">902565</a></td> 
+     
+            <td>this.done in cursor callback of naviagtor.getDeviceStorage("sdcard").enumerate is undefined</td> 
+         
+            <td>---</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=856971" class="external">856971</a></td> 
+     
+            <td>WebSMS: s/nsIDOMMozSmsFilter/nsIDOMMozMobileMessageFilter for a generic term</td> 
+         
+            <td>---</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1137557" class="external">1137557</a></td> 
+     
+            <td>CompositionManager and forms.js should be redesigned with nsITextInputProcessor for conforming to DOM Level 3 Events (D3E)</td> 
+         
+            <td>mozilla43</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1204618" class="external">1204618</a></td> 
+     
+            <td>[DeviceStorage] Add a new API to query the current low-disk-space status</td> 
+         
+            <td>mozilla43</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1037329" class="external">1037329</a></td> 
+     
+            <td>[b2g] Implement SystemUpdate WebAPI</td> 
+         
+            <td>mozilla42</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1036604" class="external">1036604</a></td> 
+     
+            <td>Add VRDevice interface and getVRDevices</td> 
+         
+            <td>mozilla36</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1022193" class="external">1022193</a></td> 
+     
+            <td>Add a "forceIdSelection" to navigator.getMobileIdAssertion</td> 
+         
+            <td>mozilla33</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=987954" class="external">987954</a></td> 
+     
+            <td>[Camera][Gecko] Remove last direct JS_*() calls from DOMCameraControl.cpp</td> 
+         
+            <td>mozilla32</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=988469" class="external">988469</a></td> 
+     
+            <td>MSISDN verification API for privileged apps</td> 
+         
+            <td>mozilla32</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=960426" class="external">960426</a></td> 
+     
+            <td>Support Network Information API in Firefox OS</td> 
+         
+            <td>mozilla31</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=876980" class="external">876980</a></td> 
+     
+            <td>Expose mozAlarms API to installed apps on Firefox desktop</td> 
+         
+            <td>mozilla31</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=910412" class="external">910412</a></td> 
+     
+            <td>Change DeviceStorage API to use FileSystem API spec</td> 
+         
+            <td>mozilla30</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811635" class="external">811635</a></td> 
+     
+            <td>B2G Wifi: Support Wifi Direct</td> 
+         
+            <td>mozilla29</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=858005" class="external">858005</a></td> 
+     
+            <td>B2G Network Stats: Add support to usage alarms</td> 
+         
+            <td>mozilla28</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=903403" class="external">903403</a></td> 
+     
+            <td>[sms][mms] Make getSegmentInfoForText() Asynchronous to Improve Typing Performance</td> 
+         
+            <td>mozilla26</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=876397" class="external">876397</a></td> 
+     
+            <td>Inter-App Communication API</td> 
+         
+            <td>mozilla26</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=883923" class="external">883923</a></td> 
+     
+            <td>Provide a Fuzzy Matcher API for phone numbers</td> 
+         
+            <td>mozilla26</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=772765" class="external">772765</a></td> 
+     
+            <td>B2G telephony: support conference calls</td> 
+         
+            <td>mozilla26</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=850140" class="external">850140</a></td> 
+     
+            <td>B2G MMS: implement MmsService.handleDeliveryIndication() to handle delivery report</td> 
+         
+            <td>mozilla25</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=876936" class="external">876936</a></td> 
+     
+            <td>Alarm API should immediately fire alarms set in the 'past' rather than error.</td> 
+         
+            <td>mozilla24</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=823958" class="external">823958</a></td> 
+     
+            <td>There is no way to know if navigator.mozTelephony is ready to access calls infos</td> 
+         
+            <td>mozilla24</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=860585" class="external">860585</a></td> 
+     
+            <td>B2G RIL: Move cardLock related API from mozMobileConnection to mozIccManager</td> 
+         
+            <td>mozilla24</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=858416" class="external">858416</a></td> 
+     
+            <td>Device Storage - Create a composite interface</td> 
+         
+            <td>mozilla23</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=847741" class="external">847741</a></td> 
+     
+            <td>B2G RIL: Move mozContact.getSimContacts to IccManager</td> 
+         
+            <td>mozilla23</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=849739" class="external">849739</a></td> 
+     
+            <td>B2G MMS: provide nsIDOMMobileMessageManager.getThreads()</td> 
+         
+            <td>mozilla23</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=854790" class="external">854790</a></td> 
+     
+            <td>B2G SMS &amp; MMS: support filtering by thread ID</td> 
+         
+            <td>mozilla23</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=843445" class="external">843445</a></td> 
+     
+            <td>B2G MMS: provide nsIDOMMobileMessageManager.retrieveMMS() to retrieve MMS for the deferred retrieval mode</td> 
+         
+            <td>mozilla23</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=847738" class="external">847738</a></td> 
+     
+            <td>B2G MMS: provide nsIDOMMobileMessageManager.getMessage()</td> 
+         
+            <td>mozilla22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=847756" class="external">847756</a></td> 
+     
+            <td>B2G MMS: provide nsIDOMMobileMessageManager.markMessageRead()</td> 
+         
+            <td>mozilla22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=849741" class="external">849741</a></td> 
+     
+            <td>B2G MMS: provide nsIDOMMobileMessageManager.onreceived event</td> 
+         
+            <td>mozilla22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=850530" class="external">850530</a></td> 
+     
+            <td>B2G MMS: Use the same attribute name for delivery (s/state/delivery) like SMS</td> 
+         
+            <td>mozilla22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=840780" class="external">840780</a></td> 
+     
+            <td>(webicc) WebICC - Secure Elements</td> 
+         
+            <td>mozilla22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=844431" class="external">844431</a></td> 
+     
+            <td>B2G MMS: provide nsIDOMMobileMessageManager interface (with sendMMS() first)</td> 
+         
+            <td>mozilla22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=847736" class="external">847736</a></td> 
+     
+            <td>B2G MMS: provide nsIDOMMobileMessageManager.delete()</td> 
+         
+            <td>mozilla22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=810067" class="external">810067</a></td> 
+     
+            <td>B2G MMS: support automatic/manual/never retrieval modes</td> 
+         
+            <td>mozilla22</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=834595" class="external">834595</a></td> 
+     
+            <td>Create a device storage api which only returns media state (ready, unavailable, etc..)</td> 
+         
+            <td>mozilla21</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=804754" class="external">804754</a></td> 
+     
+            <td>B2G MMS: support UAProfile in HTTP header</td> 
+         
+            <td>mozilla20</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811605" class="external">811605</a></td> 
+     
+            <td>B2G RIL: enable ril debugging output in run-time</td> 
+         
+            <td>mozilla19</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=795047" class="external">795047</a></td> 
+     
+            <td>Wifi: Add support for scan_ssid to search for hidden networks</td> 
+         
+            <td>mozilla18</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=791935" class="external">791935</a></td> 
+     
+            <td>B2G STK: Implement 'MT Call Event', 'Call Connected' and 'Call Disconnected' Envelope commands</td> 
+         
+            <td>mozilla18</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777665" class="external">777665</a></td> 
+     
+            <td>[b2g-bluetooth] hook up to settings API</td> 
+         
+            <td>mozilla18</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=787420" class="external">787420</a></td> 
+     
+            <td>B2G RIL: add setting for switching between 2G/3G</td> 
+         
+            <td>mozilla18</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715788" class="external">715788</a></td> 
+     
+            <td>Add A-GPS support for gonk</td> 
+         
+            <td>mozilla17</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=736710" class="external">736710</a></td> 
+     
+            <td>Voicemail API based on SMS Message Waiting</td> 
+         
+            <td>mozilla17</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761482" class="external">761482</a></td> 
+     
+            <td>WebMobileConnection: make {voice|data}.operator an nsIDOMMozMobileOperatorInfo</td> 
+         
+            <td>mozilla16</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=738528" class="external">738528</a></td> 
+     
+            <td>Android still image support for getUserMedia</td> 
+         
+            <td>mozilla16</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=759637" class="external">759637</a></td> 
+     
+            <td>B2G RIL: Add DOM APIs for automatic and manual network selection mode</td> 
+         
+            <td>mozilla16</td> 
+          
+</tr> 
+ 
+<tr> 
+    <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729173" class="external">729173</a></td> 
+     
+            <td>WebMobileConnection</td> 
+         
+            <td>mozilla14</td> 
+          
+</tr> 
+ 
+ 
+</tbody> 
+</table></div>
+
+<h2 id="Implementation_in_progress">Implementation in progress</h2>
+
+<p>Those are APIs in progress. They are <strong>NOT</strong> ready to be documented yet.</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">AudioChannels</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1113086" class="external" title="FIXED: Implement AudioChannel API into BrowserElement">bug&nbsp;1113086</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=876631" class="external" title="AudioChannelService refactoring">bug&nbsp;876631</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">WikiMo: <a href="https://wiki.mozilla.org/WebAPI/AudioChannels" class="external" title="https://wiki.mozilla.org/WebAPI/AudioChannels">AudioChannels</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">DataStore</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=871445" class="external" title="FIXED: DataStore API">bug&nbsp;871445</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">WikiMo: <a href="https://wiki.mozilla.org/WebAPI/DataStore" class="external" title="https://wiki.mozilla.org/WebAPI/DataStore">DataStore</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">Virtual Keyboard API</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=737110" class="external" title="Input Method API, previously known as Virtual Keyboard API">bug&nbsp;737110</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">WikiMo: <a href="https://wiki.mozilla.org/WebAPI/KeboardIME" class="external" title="https://wiki.mozilla.org/WebAPI/KeboardIME">KeboardIME</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">WebNFC</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674741" class="external" title="FIXED: WebNFC (near-field communication)">bug&nbsp;674741</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebNFC" class="external" title="https://wiki.mozilla.org/WebAPI/WebNFC">WebNFC</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">WebUSB</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674718" class="external" title="WebUSB">bug&nbsp;674718</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebUSB" class="external" title="https://wiki.mozilla.org/WebAPI/WebUSB">WebUSB</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">Speaker Manager API</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><span class="moz-txt-link-freetext"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=854753" class="external" title="FIXED: [B2G][Audio] Implement SpeakerManager API">bug&nbsp;854753</a></span></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">WikiMo: unknown</td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);"><span id="summary_alias_container"><span id="short_desc_nonedit_display">FM RDS (extension of FM API)</span></span></td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=864327" class="external" title="FIXED: Support of FM RDS in WebAPI">bug&nbsp;864327</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://groups.google.com/forum/#!topic/mozilla.dev.webapi/viKr7qCiKaM_)" class="external" title="https://groups.google.com/forum/#!topic/mozilla.dev.webapi/viKr7qCiKaM_)">WebAPI forum</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">ServiceWorker API</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=903441" class="external" title="[meta] Implement Service Workers">bug&nbsp;903441</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://github.com/slightlyoff/ServiceWorker" class="external">Github</a></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Documentation_complete">Documentation complete</h2>
+
+<h3 id="Web_content_or_installed_APIs">Web content or installed APIs</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Alarm API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozAlarms.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozAlarms</code></a><br>
+    <a href="MozAlarmsManager.html" title="The MozAlarmsManager API allows to schedule notifications or applications to be started at a specific time."><code>MozAlarmsManager</code></a><br>
+    Introductory article: <a href="Alarm_API.html" title="https://developer.mozilla.org/en-US/docs/WebAPI/Alarm">Alarm</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/alarm" rel="tag" hreflang="en-US">alarm</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=749551" class="external" title="FIXED: Alarm API">bug&nbsp;749551</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Needs editorial review and technical review.<br>
+    <br>
+    Discuss with Mounir and Genelian about the spec. It is not stable enough to plan any change in the current implementation.<br>
+    <br>
+    Spec: <a href="http://www.w3.org/TR/web-alarms/" class="external" title="http://www.w3.org/TR/web-alarms/">http://www.w3.org/TR/web-alarms/</a><br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/alarm/nsIDOMAlarmsManager.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/alarm/nsIDOMAlarmsManager.idl">MozAlarmsManager</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/AlarmAPI" class="external" title="https://wiki.mozilla.org/WebAPI/AlarmAPI">AlarmAPI</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Ambient Light Events</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="DeviceLightEvent.html" title="The DeviceLightEvent provides web developers with information from photo sensors or similiar detectors about ambient light levels near the device. For example this may be useful to adjust the screen's brightness based on the current ambient light level in order to save energy or provide better readability."><code>DeviceLightEvent</code></a><br>
+    <a href="Window/ondevicelight.html" title="Specifies an event listener to receive devicelight events. These events occur when the device's light level sensor detects a change in the intensity of the ambient light level."><code>window.ondevicelight</code></a><br>
+    <code><a href="../Events/devicelight.html" title="/en-US/docs/Web/Events/devicelight">devicelight</a></code> event<br>
+    Introductory article: <a href="Ambient_Light_Events.html" title="/en-US/docs/WebAPI/Ambient_Light">Using Light Events</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Ambient Light" rel="tag" hreflang="en-US">Ambient Light</a><br>
+    <br>
+    Postoned documentation because the API is at risk:<br>
+    <s><a href="LightLevelEvent.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>LightLevelEvent</code></a><br>
+    <a href="Window/onlightlevel.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.onlightlevel</code></a><br>
+    <code><a href="../Events/lightlevel.html" class="new" title="/en-US/docs/Web/Events/lightlevel">lightlevel</a></code> event</s></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=738465" class="external" title="FIXED: implement device light sensor">bug&nbsp;738465</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=842952" class="external" title="Implement the LightLevelEvent Interface">bug&nbsp;842952</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);"><s>Discussed with Doug Turner about the state of the spec and the implementation of <a href="LightLevelEvent.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>LightLevelEvent</code></a>: even if it's not implemented yet, we should document the <a href="LightLevelEvent.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>LightLevelEvent</code></a> interface</s><br>
+    <br>
+    Discussed with Annvek the <a href="http://lists.w3.org/Archives/Public/public-device-apis/2013Apr/0048.html" class="external" title="http://lists.w3.org/Archives/Public/public-device-apis/2013Apr/0048.html">opportunity to drop</a> <a href="LightLevelEvent.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>LightLevelEvent</code></a> from the spec.<br>
+    <br>
+    Spec: <a href="http://www.w3.org/TR/ambient-light/" class="external" title="http://www.w3.org/TR/ambient-light/">http://www.w3.org/TR/ambient-light/</a> (the <a href="https://dvcs.w3.org/hg/dap/raw-file/tip/light/Overview.html" class="external" title="https://dvcs.w3.org/hg/dap/raw-file/tip/light/Overview.html">draft</a> is more accurate)<br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/events/nsIDOMDeviceLightEvent.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/events/nsIDOMDeviceLightEvent.idl">DeviceLightEvent</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Battery Status API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/battery.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.battery</code></a><br>
+    <a href="BatteryManager.html" title="The BatteryManager interface provides ways to get information about the system's battery charge level."><code>BatteryManager</code></a><br>
+    <code><a href="../Events/chargingchange.html" title="/en-US/docs/Web/Events/chargingchange">chargingchange</a></code> event<br>
+    <code><a href="../Events/chargingtimechange.html" title="/en-US/docs/Web/Events/chargingtimechange">chargingtimechange</a></code> event<br>
+    <code><a href="../Events/dischargingtimechange.html" title="/en-US/docs/Web/Events/dischargingtimechange">dischargingtimechange</a></code> event<br>
+    <code><a href="../Events/levelchange.html" title="/en-US/docs/Web/Events/levelchange">levelchange</a></code> event<br>
+    Introductory article: <a href="Battery_Status_API.html" title="/en-US/docs/WebAPI/Battery_Status">Battery Status</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Battery" rel="tag" hreflang="en-US">Battery</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=678694" class="external" title="FIXED: Battery API">bug&nbsp;678694</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Don't be fooled by the <a href="BatteryManager.html" title="/en-US/docs/Web/API/BatteryManager">BatteryManager</a> red link, it's just due to migration from DOM to Web/API within the domxref template.<br>
+    <br>
+    Needs editorial review<br>
+    <br>
+    Spec: <a href="http://www.w3.org/TR/battery-status/" class="external" title="http://www.w3.org/TR/battery-status/">http://www.w3.org/TR/battery-status/</a> (the <a href="https://dvcs.w3.org/hg/dap/raw-file/tip/battery/Overview.html" class="external" title="https://dvcs.w3.org/hg/dap/raw-file/tip/battery/Overview.html">draft</a> is more accurate)<br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/webidl/BatteryManager.webidl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/webidl/BatteryManager.webidl">BatteryManager</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Device Orientation</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="DeviceOrientationEvent.html" title="The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page."><code>DeviceOrientationEvent</code></a><br>
+    <a href="DeviceMotionEvent.html" title="The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation."><code>DeviceMotionEvent</code></a><br>
+    <a href="Window/ondeviceorientation.html" title="An event handler for the deviceorientation events sent to the window."><code>window.ondeviceorientation</code></a><br>
+    <a href="Window/ondevicemotion.html" title="An event handler for the devicemotion events sent to the window."><code>window.ondevicemotion</code></a><br>
+    <code><a href="../Events/deviceorientation.html" title="/en-US/docs/Web/Events/deviceorientation">deviceorientation</a></code> event<br>
+    <code><a href="../Events/devicemotion.html" title="/en-US/docs/Web/Events/devicemotion">devicemotion</a></code> event<br>
+    Introductory article: <a href="Detecting_device_orientation.html" title="/en-US/docs/WebAPI/Detecting_device_orientation">Detecting device orientation</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Device Orientation" rel="tag" hreflang="en-US">Device Orientation</a><br>
+    <br>
+    Unimplemented but in the spec<br>
+    <a href="Window/oncompassneedscalibration.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.oncompassneedscalibration</code></a><br>
+    <code><a href="../Events/compassneedscalibration.html" class="new" title="/en-US/docs/Web/Events/compassneedscalibration">compassneedscalibration</a></code> event</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=615597" class="external" title="FIXED: Implement the W3C DeviceOrientation Event Specification">bug&nbsp;615597</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">The introductory still need a quick technical review.<br>
+    <br>
+    Spec: <a href="http://www.w3.org/TR/orientation-event/" class="external" title="http://www.w3.org/TR/orientation-event/">http://www.w3.org/TR/orientation-event/</a> (the <a href="http://dev.w3.org/geo/api/spec-source-orientation.html" class="external" title="http://dev.w3.org/geo/api/spec-source-orientation.html">draft</a> is more accurate)<br>
+    MXR: <a href="https://mxr.mozilla.org/mozilla-central/source/dom/interfaces/events/nsIDOMDeviceOrientationEvent.idl" class="external" title="https://mxr.mozilla.org/mozilla-central/source/dom/interfaces/events/nsIDOMDeviceOrientationEvent.idl">DeviceOrientationEvent</a>, <a href="https://mxr.mozilla.org/mozilla-central/source/dom/interfaces/events/nsIDOMDeviceMotionEvent.idl" class="external" title="https://mxr.mozilla.org/mozilla-central/source/dom/interfaces/events/nsIDOMDeviceMotionEvent.idl">DeviceMotion</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/ScreenOrientation" class="external" title="https://wiki.mozilla.org/WebAPI/ScreenOrientation">ScreenOrientation</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">FileHandle API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="FileHandle.html" title="The FileHandle interface provides access in read or write mode to a file, dealing with all the necessary locks."><code>FileHandle</code></a><br>
+    <a href="LockedFile.html" title="The LockedFile interface provides tools to deal with a given file with all the necessary locks."><code>LockedFile</code></a><br>
+    <a href="FileRequest.html" title="The FileRequest interface extends the DOMRequest interface to provide some extra properties necessary for the LockedFile objects."><code>FileRequest</code></a><br>
+    Introductory article: <a href="File_Handle_API.html" title="/en-US/docs/WebAPI/FileHandle">FileHandle API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Files" rel="tag" hreflang="en-US">Files</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726593" class="external" title="FIXED: Implement FileHandle">bug&nbsp;726593</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Still need technical review<br>
+    <br>
+    <a href="IDBDatabase/mozCreateFileHandle.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>IDBDatabase.mozCreateFileHandle</code></a> need to be documented but it is not urgent as it is a transitory API and it does not do anything special (it's just a factory to get <a href="FileHandle.html" title="The FileHandle interface provides access in read or write mode to a file, dealing with all the necessary locks."><code>FileHandle</code></a> objects)<br>
+    <br>
+    Spec(?): <a href="http://dev.w3.org/2006/webapi/FileAPI/" class="external" title="http://dev.w3.org/2006/webapi/FileAPI/">http://dev.w3.org/2006/webapi/FileAPI/</a> <a href="http://w3c.github.io/filesystem-api/Overview.html" class="external">http://w3c.github.io/filesystem-api/Overview.html</a><br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMFileHandle.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMFileHandle.idl">FileHandle</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMLockedFile.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMLockedFile.idl">LockedFile</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMFileRequest.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMFileRequest.idl">FileRequest</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/FileHandleAPI" class="external">FileHandleAPI</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Geolocation API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="NavigatorGeolocation.html" title="NavigatorGeolocation contains a creation method allowing objects implementing it to obtain a Geolocation instance."><code>NavigatorGeolocation</code></a> (incl. methods/properties)<br>
+    <a href="Geolocation.html" title="The Geolocation interface represents an object able to programmatically obtain the position of the device. It gives Web content access to the location of the device. This allows a Web site or app to offer customized results based on the user's location."><code>Geolocation</code></a> (incl. methods/properties)<br>
+    <a href="Position.html" title="The Position interface represents the position of the concerned device at a given time. The position, represented by a Coordinates object, comprehends the 2D position of the device, on a spheroid representing the Earth, but also its altitude and its speed."><code>Position</code></a> (incl. methods/properties)<br>
+    <a href="Coordinates.html" title="The Coordinates interface represents the position and altitude of the device on Earth, as well as the accuracy with which these properties are calculated."><code>Coordinates</code></a> (incl. methods/properties)<br>
+    <a href="PositionError.html" title="The PositionError interface represents the reason of an error occurring when using the geolocating device."><code>PositionError</code></a> (incl. methods/properties)<br>
+    <a href="PositionOptions.html" title="The PositionOptions interface describes an object containing option properties to pass as a parameter of Geolocation.getCurrentPosition() and Geolocation.watchPosition()."><code>PositionOptions</code></a> (incl. methods/properties)<br>
+    Introductory article: <a href="Geolocation/Using_geolocation.html" title="/en-US/docs/Using_geolocation">Using geolocation</a><br>
+    <br>
+    Tag: <a href="../../tag/Geolocation%20API.html" rel="tag" hreflang="en-US">Geolocation API</a></td>
+   <td style="background-color: rgb(204, 255, 153);">&nbsp;</td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Editorial review complete.<br>
+    <br>
+    Spec: <a href="http://www.w3.org/TR/geolocation-API/" class="external" title="http://www.w3.org/TR/geolocation-API/">http://www.w3.org/TR/geolocation-API/</a><br>
+    <br>
+    Maybe add basic examples?</td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Network Information API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="NetworkInformation/connection.html" title="The NetworkInformation.connection read-only property represents a Connection containing information about the system's connection, such as the current bandwidth of the user's device or whether the connection is metered. This could be used to select high definition content or low definition content based on the user's connection."><code>NetworkInformation.connection</code></a><br>
+    <a href="NetworkInformation.html" title="The NetworkInformation interface contains methods and properties related to the network type of the browser."><code>NetworkInformation</code></a><br>
+    Introductory article: <a href="Network_Information_API.html" title="/en-US/docs/WebAPI/Network_Information">Network Information</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Network Information" rel="tag" hreflang="en-US">Network Information</a></td>
+   <td style="background-color: rgb(204, 255, 153);">
+    <p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=677166" class="external" title="FIXED: Implement Network Status API">bug&nbsp;677166</a> <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=713199" class="external" title="[b2g] Network API: Gonk backend">bug&nbsp;713199</a><br>
+     <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=960426" class="external" title="FIXED: Support Network Information API in Firefox OS">bug&nbsp;960426</a><br>
+     &nbsp;</p>
+   </td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Spec: <a href="http://www.w3.org/TR/notifications" class="external">http://w3c.github.io/netinfo/</a><br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMConnection.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMConnection.idl">Connection</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Notification API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Notification-2.html" title="The Notification interface of the Notifications API is used to configure and display desktop notifications to the user."><code>Notification</code></a><br>
+    Introductory article:&nbsp;<a href="Notifications_API/Using_the_Notifications_API.html">Using Web Notifications</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Notifications" rel="tag" hreflang="en-US">Notifications</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=782211" class="external" title="FIXED: Implement notification API spec">bug&nbsp;782211</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Spec:&nbsp;<a href="http://www.w3.org/TR/notifications/" class="external" title="http://www.w3.org/TR/notifications/">http://www.w3.org/TR/notifications/</a>&nbsp;(W3C&nbsp;<a href="https://dvcs.w3.org/hg/notifications/raw-file/tip/Overview.html" class="external" title="https://dvcs.w3.org/hg/notifications/raw-file/tip/Overview.html">draft</a>, WHATWG&nbsp;<a href="http://notifications.spec.whatwg.org/" class="external" title="http://notifications.spec.whatwg.org/">draft</a>)<br>
+    MXR:&nbsp;<a href="https://mxr.mozilla.org/mozilla-central/source/dom/webidl/Notification.webidl" class="external" title="https://mxr.mozilla.org/mozilla-central/source/dom/webidl/Notification.webidl">Notification</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Pointer Lock API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Element/requestPointerLock.html" title="The Element.requestPointerLock() method allows to asynchronously ask for the pointer to be locked on the given element."><code>Element.requestPointerLock()</code></a><br>
+    <a href="Document/pointerLockElement.html" title="The pointerLockElement property provides the element set as the target for mouse events while the pointer is locked. It is null if lock is pending, pointer is unlocked, or the target is in another document."><code>Document.pointerLockElement</code></a><br>
+    <a href="Document/exitPointerLock.html" title="The exitPointerLock asynchronously releases a pointer lock previously requested through Element.requestPointerLock."><code>Document.exitPointerLock()</code></a><br>
+    <a href="MouseEvent.html" title="The MouseEvent interface represents events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown."><code>MouseEvent</code></a><br>
+    <a href="MouseEvent/movementX.html" title="The MouseEvent.movementX read-only property provides the shift in the X coordinate of the mouse pointer between that event and the previous mousemove event. In other words, the value of that property is computed that way : currentEvent.movementX = currentEvent.screenX - previousEvent.screenX."><code>MouseEvent.movementX</code></a><br>
+    <a href="MouseEvent/movementY.html" title="The MouseEvent.movementY read-only property provides the shift in the Y coordinate of the mouse pointer between that event and the previous mousemove event. In other words, the value of that property is computed that way : currentEvent.movementY = currentEvent.screenY - previousEvent.screenY."><code>MouseEvent.movementY</code></a><br>
+    Introductory article: <a href="Pointer_Lock_API.html" title="/en-US/docs/WebAPI/Pointer_Lock">Pointer Lock API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/mouse lock" rel="tag" hreflang="en-US">mouse lock</a><br>
+    &nbsp;</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=633602" class="external" title="FIXED: Implement Pointer Lock (Mouse Lock) API">bug&nbsp;633602</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Spec: <a href="http://www.w3.org/TR/pointerlock/" class="external" title="http://www.w3.org/TR/pointerlock/">http://www.w3.org/TR/pointerlock/</a> (the <a href="https://dvcs.w3.org/hg/pointerlock/raw-file/default/index.html" class="external" title="https://dvcs.w3.org/hg/pointerlock/raw-file/default/index.html">draft</a> is more accurate)</td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Proximity Events</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="DeviceProximityEvent.html" title="The DeviceProximityEvent interface provides information about the distance of a nearby physical object using the proximity sensor of a device."><code>DeviceProximityEvent</code></a><br>
+    <a href="UserProximityEvent.html" title="The UserProximityEvent indicates whether a nearby physical object is present by using the proximity sensor of a device."><code>UserProximityEvent</code></a><br>
+    <a href="Window/ondeviceproximity.html" title="Specifies an event listener to receive deviceproximity events. These events occur when the device sensor detects that an object becomes closer to or farther from the device."><code>window.ondeviceproximity</code></a><br>
+    <a href="Window/onuserproximity.html" title="The Window.onuserproxymity property represents an EventHandler, that is a function to be called when the userproximity event occurs. These events are of type UserProximityEvent and occur when the the device sensor detects that an object becomes nearby."><code>window.onuserproximity</code></a><br>
+    <code><a href="../Events/deviceproximity.html" title="/en-US/docs/Web/Events/deviceproximity">deviceproximity</a></code> event<br>
+    <code><a href="../Events/userproximity.html" title="/en-US/docs/Web/Events/userproximity">userproximity</a></code> event<br>
+    Introductory article: <a href="Proximity_Events.html" title="/en-US/docs/WebAPI/Proximity">Proximity API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Proximity" rel="tag" hreflang="en-US">Proximity</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=738131" class="external" title="FIXED: implement device proximity">bug&nbsp;738131</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Still needs some review here and there but it shouldn't be really troublesome.<br>
+    <br>
+    Spec: <a href="http://www.w3.org/TR/proximity/" class="external" title="http://www.w3.org/TR/proximity/">http://www.w3.org/TR/proximity/</a> (the <a href="https://dvcs.w3.org/hg/dap/raw-file/default/proximity/Overview.html" class="external" title="https://dvcs.w3.org/hg/dap/raw-file/default/proximity/Overview.html">draft</a> is more accurate)</td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Screen Orientation</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Screen/orientation.html" title="The Screen.orientation property give the current orientation of the screen."><code>Screen.orientation</code></a><br>
+    <a href="Screen/lockOrientation.html" title="The lockOrientation method locks the screen into the specified orientation."><code>Screen.lockOrientation()</code></a><br>
+    <a href="Screen/unlockOrientation.html" title="The Screen.unlockOrientation method removes all the previous screen locks set by the page/app."><code>Screen.unlockOrientation()</code></a><br>
+    <a href="Screen/onorientationchange.html" title="An event handler for the orientationchange events sent to the screen object."><code>Screen.onorientationchange</code></a><br>
+    <code><a href="../Events/orientationchange.html" title="/en-US/docs/Web/Events/orientationchange">orientationchange</a></code> event<br>
+    Introductory article: <a href="https://developer.mozilla.org/en-US/docs/Managing_screen_orientation" title="/en-US/docs/Managing_screen_orientation">Managing screen orientation</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Screen Orientation" rel="tag" hreflang="en-US">Screen Orientation</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=720794" class="external" title="FIXED: Screen Orientation API: implement reading and event">bug&nbsp;720794</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=740188" class="external" title="FIXED: Screen Orientation API: implement locking">bug&nbsp;740188</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=673922" class="external" title="FIXED: Screen Orientation API">bug&nbsp;673922</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Spec: <a href="http://www.w3.org/TR/screen-orientation/" class="external" title="http://www.w3.org/TR/screen-orientation/">http://www.w3.org/TR/screen-orientation/</a><br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/webidl/Screen.webidl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/webidl/Screen.webidl">Screen</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/ScreenOrientation" class="external" title="https://wiki.mozilla.org/WebAPI/ScreenOrientation">ScreenOrientation</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Simple Push Notification API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/push.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.push</code></a><br>
+    <a href="PushManager.html" title="The PushManager interface of the Push API provides a way to receive notifications from third-party servers as well as request URLs for push notifications."><code>PushManager</code></a><br>
+    Introductory article: <a href="Simple_Push_API.html" title="/en-US/docs/WebAPI/Simple_Push">Simple Push API</a><br>
+    <br>
+    Tag: <a href="../../tag/Simple%20Push%20API.html" rel="tag" hreflang="en-US">Simple Push API</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=831816" class="external" title="Push Notification">bug&nbsp;831816</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=822712" class="external" title="FIXED: Simple Push notifications for B2G">bug&nbsp;822712</a><br>
+    ---<br>
+    See also :<br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=747907" class="external" title="Meta: Push Notifications">bug&nbsp;747907</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763198" class="external" title="B2G push notification">bug&nbsp;763198</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Simpler push API for B2G.<br>
+    <br>
+    It seams it completely replace the original <a href="https://wiki.mozilla.org/WebAPI/PushAPI" class="external" title="https://wiki.mozilla.org/WebAPI/PushAPI">Push API</a> (see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=776501" class="external" title="[Security Review] Push Notification API">bug&nbsp;776501</a>)<br>
+    <br>
+    Spec: <a href="https://dvcs.w3.org/hg/push/raw-file/default/index.html" class="external" title="https://dvcs.w3.org/hg/push/raw-file/default/index.html">https://dvcs.w3.org/hg/push/raw-file/default/index.html</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/SimplePush" class="external" title="https://wiki.mozilla.org/WebAPI/SimplePush">SimplePush</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">URL API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="URL.html" title="The URL interface represent an object providing static methods used for creating object URLs."><code>URL</code></a><br>
+    <a href="URL/URL.html" title="The URL() constructor returns a newly created URL object representing the URL defined by the parameters."><code>URL()</code></a><br>
+    <a href="URL/createObjectURL.html" title="The URL.createObjectURL() static method creates a DOMString containing an URL representing the object given in parameter. The URL lifetime is tied to the document in the window on which it was created. The new object URL represents the specified File object or Blob object."><code>URL.createObjectURL()</code></a><br>
+    <a href="URL/revokeObjectURL.html" title="The URL.revokeObjectURL() static method releases an existing object URL which was previously created by calling window.URL.createObjectURL().&nbsp; Call this method when you've finished using a object URL, in order to let the browser know it doesn't need to keep the reference to the file any longer."><code>URL.revokeObjectURL()</code></a><br>
+    <a href="URLUtils.html" title="The URLUtils interface defines utility methods to work with URLs."><code>URLUtils</code></a><br>
+    <a href="URLUtils/protocol.html" title="The URLUtils.protocol property is a DOMString representing the protocol scheme of the URL, including the final ':'."><code>URLUtils.protocol</code></a><br>
+    <a href="URLUtils/host.html" title="The URLUtils.host property is a DOMString containing the host, that is the hostname, and then, if the port of the URL is nonempty, a ':', and the port of the URL."><code>URLUtils.host</code></a><br>
+    <a href="URLUtils/hostname.html" title="The URLUtils.hostname property is a DOMString containing the domain of the URL."><code>URLUtils.hostname</code></a><br>
+    <a href="URLUtils/port.html" title="The URLUtils.port property is a DOMString containing the port number of the URL."><code>URLUtils.port</code></a><br>
+    <a href="URLUtils/pathname.html" title="The URLUtils.pathname property is a DOMString containing an initial '/' followed by the path of the URL."><code>URLUtils.pathname</code></a><br>
+    <a href="URLUtils/search.html" title="The URLUtils.search property is a DOMString containing a '?' followed by the parameters of the URL."><code>URLUtils.search</code></a><br>
+    <a href="URLUtils/hash.html" title="The URLUtils.hash property returns a DOMString containing a '#' followed by the fragment identifier of the URL."><code>URLUtils.hash</code></a><br>
+    <a href="URLUtils/username.html" title="The URLUtils.username property is a DOMString containing the username specified before the domain name."><code>URLUtils.username</code></a><br>
+    <a href="URLUtils/password.html" title="The URLUtils.password property is a DOMString containing the password specified before the domain name."><code>URLUtils.password</code></a><br>
+    <a href="URLUtils/origin.html" title="The URLUtils.origin read-only property is a DOMString containing the Unicode serialization of the origin of the represented URL, that is, for http and https, the scheme followed by '://', followed by the domain, followed by ':', followed by the port (the default port, 80 and 443 respectively, if explicitely specified). For URL using file: scheme, the value is browser dependant."><code>URLUtils.origin</code></a><br>
+    <a href="URLUtils/toString.html" title="The URLUtils.toString() stringifier method returns a DOMString containing the whole URL. It is a read-only version of URLUtilsReadOnly.href."><code>URLUtils.toString()</code></a><br>
+    <a href="URLUtilsReadOnly.html" title="The URLUtilsReadOnly interface defines utility methods to work with URLs. It defines only non-modifying methods intended to be used on data that cannot be changed."><code>URLUtilsReadOnly</code></a><br>
+    <a href="URLUtilsReadOnly/protocol.html" title="The URLUtilsReadOnly.protocol read-only property returns a DOMString containing the protocol scheme of the URL, including the final ':'."><code>URLUtilsReadOnly.protocol</code></a><br>
+    <a href="URLUtilsReadOnly/host.html" title="The URLUtilsReadOnly.host read-only property returns a DOMString containing the host, that is the hostname, a ':', and the port of the URL."><code>URLUtilsReadOnly.host</code></a><br>
+    <a href="URLUtilsReadOnly/hostname.html" title="The URLUtilsReadOnly.hostname read-only property returns a DOMString containing the domain of the URL."><code>URLUtilsReadOnly.hostname</code></a><br>
+    <a href="URLUtilsReadOnly/port.html" title="The URLUtilsReadOnly.port read-only property returns a DOMString containing the port number of the URL."><code>URLUtilsReadOnly.port</code></a><br>
+    <a href="URLUtilsReadOnly/pathname.html" title="The URLUtilsReadOnly.pathname read-only property returns a DOMString containing an initial '/' followed by the path of the URL."><code>URLUtilsReadOnly.pathname</code></a><br>
+    <a href="URLUtilsReadOnly/search.html" title="The URLUtilsReadOnly.search read-only property returns a DOMString containing a '?' followed by the parameters of the URL."><code>URLUtilsReadOnly.search</code></a><br>
+    <a href="URLUtilsReadOnly/hash.html" title="The URLUtilsReadOnly.hash read-only property returns a DOMString containing a '#' followed by the fragment identifier of the URL. The hash is not percent encoded."><code>URLUtilsReadOnly.hash</code></a><br>
+    <a href="URLUtilsReadOnly/toString.html" title="The URLUtilsReadOnly.toString() stringifier method returns a DOMString containing the whole URL. It is a synonym for URLUtilsReadOnly.href."><code>URLUtilsReadOnly.toString()</code></a><br>
+    <a href="Location.html" title="The Location interface represents the location of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively."><code>Location</code></a> (adaptation)<br>
+    <a href="WorkerLocation.html" title="The WorkerLocation interface defines the absolute location of the script executed by the Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.location property obtained by calling window.self.location."><code>WorkerLocation</code></a> (adaptation)<br>
+    <a href="HTMLAnchorElement.html" title="The HTMLAnchorElement interface represents hyperlink elements and provides special properties and methods (beyond those of the regular HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of such elements."><code>HTMLAnchorElement</code></a> (adaptation)<br>
+    <a href="HTMLAreaElement.html" title="The HTMLAreaElement interface provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of area elements."><code>HTMLAreaElement</code></a> (adaptation)<br>
+    <a href="URLQuery.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>URLQuery</code></a> &lt;--- not yet landed!!<br>
+    Introductory article: none, pretty obvious<br>
+    <br>
+    Tag: <a href="../../tag/URL%20API.html" rel="tag" hreflang="en-US">URL API</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=813253" class="external" title="FIXED: URL.createobjectURL in WebWorker">bug&nbsp;813253</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=887364" class="external" title="FIXED: Implement URL API">bug&nbsp;887364</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=828261" class="external" title="FIXED: Implement `window.location.origin`.">bug&nbsp;828261</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=839912" class="external" title="FIXED: Implement URLUtils interface">bug&nbsp;839912</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=887836" class="external" title="FIXED: Implement URLSearchParams">bug&nbsp;887836</a> (URLQuery)</td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Spec: <a href="http://url.spec.whatwg.org/" class="external" title="http://url.spec.whatwg.org/">http://url.spec.whatwg.org/</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Vibration API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Navigator/vibrate.html" title="The Navigator.vibrate() method pulses the vibration hardware on the device, if such hardware exists. If the device doesn't support vibration, this method has no effect. If a vibration pattern is already in progress when this method is called, the previous pattern is halted and the new one begins instead."><code>Navigator.vibrate()</code></a><br>
+    Introductory article: <a href="Vibration_API.html" title="/docs/WebAPI/Vibration">Vibration</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Vibration" rel="tag" hreflang="en-US">Vibration</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=679966" class="external" title="FIXED: WebVibrator">bug&nbsp;679966</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Spec: <a href="http://www.w3.org/TR/vibration/" class="external" title="http://www.w3.org/TR/vibration/">http://www.w3.org/TR/vibration/</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Web activities</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="MozActivity.html" title="The MozActivity interface allows apps to delegate an activity to another app."><code>MozActivity</code></a><br>
+    <a href="MozActivityOptions.html" title="The MozActivityOptions interface allows apps to declare the activity they want to create and also to access information of activities they want to handle."><code>MozActivityOptions</code></a><br>
+    <a href="MozActivityRequestHandler.html" title="The MozActivityRequestHandler interface allows apps that handle activities to access and interact with the request made by a third party app that tries to delegate an activity."><code>MozActivityRequestHandler</code></a><br>
+    <a href="Window/navigator/mozSetMessageHandler-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozSetMessageHandler()</code></a><br>
+    <a href="Window/navigator/mozHasPendingMessage.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozHasPendingMessage()</code></a><br>
+    Introductory article: <a href="Web_Activities.html" title="WebAPI/Web_Activities">Web Activities</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Web Activities" rel="tag" hreflang="en-US">Web Activities</a><br>
+    <br>
+    Postponed API:<br>
+    <s><a href="MozActivityHandlerDescription.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>MozActivityHandlerDescription</code></a></s><br>
+    <s><a href="Window/navigator/mozRegisterActivityHandler.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozRegisterActivityHandler()</code></a></s><br>
+    <s><a href="Window/navigator/mozUnregisterActivityHandler.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozUnregisterActivityHandler()</code></a></s><br>
+    <s><a href="Window/navigator/mozIsActivityHandlerRegistered.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozIsActivityHandlerRegistered()</code></a></s></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715814" class="external" title="FIXED: Web Activities">bug&nbsp;715814</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=776027" class="external" title="FIXED: Add Web Activities support to Android">bug&nbsp;776027</a> for Android<br>
+    <br>
+    Si also <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=755245" class="external" title="FIXED: Implement System Message Handler">bug&nbsp;755245</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Technical review performed by Mounir Lamouri<br>
+    Needs editorial review<br>
+    <br>
+    Discuss the API with Vivien.<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMActivity.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMActivity.idl">Activity</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMActivityOptions.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMActivityOptions.idl">ActivityOptions</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMActivityHandlerDescription.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMActivityHandlerDescription.idl">ActivityHandlerDescription</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMActivityRequestHandler.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMActivityRequestHandler.idl">ActivityRequestHandler</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMNavigatorActivities.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/activities/interfaces/nsIDOMNavigatorActivities.idl">NavigatorActivities</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/messages/interfaces/nsIDOMNavigatorSystemMessages.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/messages/interfaces/nsIDOMNavigatorSystemMessages.idl">NavigatorSystemMessages</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebActivities" class="external" title="https://wiki.mozilla.org/WebAPI/WebActivities">WebActivities</a><br>
+    <br>
+    <a href="https://github.com/DavidBruant/MozApps/tree/locally" class="external" title="https://github.com/DavidBruant/MozApps/tree/locally">Started some app pair.</a> It doesn't work (on FirefoxOS simulator), don't know why exactly. <a href="https://groups.google.com/forum/?fromgroups=#!topic/mozilla.dev.webapi/bqLecX0eDAE" class="external" title="https://groups.google.com/forum/?fromgroups=#!topic/mozilla.dev.webapi/bqLecX0eDAE">Asked for some help</a>. Not conclusive yet</td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">WebFM API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozFMRadio-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozFMRadio</code></a><br>
+    <a href="FMRadio.html" title="The WebFM API provides access to the device FM radio. This interface lets you turn the FM radio on and off and tune it to different stations. It is accessible through the navigator.mozFMRadio property."><code>FMRadio</code></a><br>
+    Introductory article: <a href="WebFM_API.html" title="https://developer.mozilla.org/en-US/docs/WebAPI/WebFM_API">WebFM API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/WebFM" rel="tag" hreflang="en-US">WebFM</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=749053" class="external" title="FIXED: FM radio support">bug&nbsp;749053</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=779500" class="external" title="FIXED: WebFM">bug&nbsp;779500</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">The events name still need to be documented but as they have nothing special it's not a high priority.<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/fm/nsIDOMFMRadio.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/fm/nsIDOMFMRadio.idl">FMRadio</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">WebPayment</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozPay.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozPay()</code></a><br>
+    Introductary article: <a href="https://developer.mozilla.org/en-US/docs/Apps/Publishing/In-app_payments" title="/en-US/docs/Apps/Publishing/In-app_payments">In-app payment</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Web Payment" rel="tag" hreflang="en-US">Web Payment</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767818" class="external" title="FIXED: Implement navigator.mozPay">bug&nbsp;767818</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Maybe we could write something on <em>How to sign a JWT server side</em>.<br>
+    <br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebPayment" class="external" title="https://wiki.mozilla.org/WebAPI/WebPayment">WebPayment</a></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Privileged_APIs">Privileged APIs</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Browser API</td>
+   <td style="background-color: rgb(204, 255, 153);">Introductory article: <a href="Using_the_Browser_API.html" title="/en-US/docs/WebAPI/Browser">Using the Browser API</a><br>
+    <br>
+    Extentions to iframe:<br>
+    <a href="HTMLIFrameElement/reload.html" title="The reload method is used to reload the content of the &lt;iframe&gt;."><code>HTMLIFrameElement.reload</code></a><br>
+    <a href="HTMLIFrameElement/stop.html" title="The stop method is used to stop loading the content of the &lt;iframe&gt;."><code>HTMLIFrameElement.stop</code></a><br>
+    <a href="HTMLIFrameElement/getCanGoBack.html" title="The getCanGoBack method is used to know if it's possible to go back in the navigation history of the browser &lt;iframe&gt;."><code>HTMLIFrameElement.getCanGoBack</code></a><br>
+    <a href="HTMLIFrameElement/goBack.html" title="The goBack method is used to navigate backwards in the browser &lt;iframe&gt;'s history."><code>HTMLIFrameElement.goBack</code></a><br>
+    <a href="HTMLIFrameElement/getCanGoForward.html" title="The getCanGoForward method is used to know if it's possible to go forward in the navigation history of the browser &lt;iframe&gt;."><code>HTMLIFrameElement.getCanGoForward</code></a><br>
+    <a href="HTMLIFrameElement/goForward.html" title="The goForward method is used to navigate forward in the browser &lt;iframe&gt;'s history."><code>HTMLIFrameElement.goForward</code></a><br>
+    <a href="HTMLIFrameElement/setVisible.html" title="The setVisible method is used to change the visibility state of the browser &lt;iframe&gt;."><code>HTMLIFrameElement.setVisible</code></a><br>
+    <a href="HTMLIFrameElement/getVisible.html" title="The getVisible method is used to request the current visible state of the browser &lt;iframe&gt;."><code>HTMLIFrameElement.getVisible</code></a><br>
+    <a href="HTMLIFrameElement/purgeHistory.html" title="The purgeHistory method is used to clear the browsing history associated with the browser &lt;iframe&gt;. It doesn't delete cookies or anything like that; just the history data."><code>HTMLIFrameElement.purgeHistory</code></a><br>
+    <a href="HTMLIFrameElement/sendMouseEvent.html" title="The sendMouseEvent method allows to fake a mouse event and send it to the browser &lt;iframe&gt;'s content."><code>HTMLIFrameElement.sendMouseEvent</code></a><br>
+    <a href="HTMLIFrameElement/sendTouchEvent.html" title="The sendTouchEvent method allows to fake a touch event and send it to the browser &lt;iframe&gt;'s content."><code>HTMLIFrameElement.sendTouchEvent</code></a><br>
+    <a href="HTMLIFrameElement/addNextPaintListener.html" title="The addNextPaintListener method is used to define a handler to listen the next MozAfterPaint event coming from the browser &lt;iframe&gt;."><code>HTMLIFrameElement.addNextPaintListener</code></a><br>
+    <a href="HTMLIFrameElement/removeNextPaintListener.html" title="The removeNextPaintListener method is used to remove a handler previously set with the addNextPaintListener method."><code>HTMLIFrameElement.removeNextPaintListener</code></a><br>
+    <a href="HTMLIFrameElement/getScreenshot.html" title="The getScreenshot() method lets you request a screenshot of an &lt;iframe&gt;, scaled to fit within a specified maximum width and height; the image may be cropped if necessary but will not be squished vertically or horizontally.."><code>HTMLIFrameElement.getScreenshot</code></a><br>
+    <br>
+    Events<br>
+    <code><a href="../Events/mozbrowserasyncscroll.html" title="/en-US/docs/Web/Events/mozbrowserasyncscroll">mozbrowserasyncscroll</a></code><br>
+    <code><a href="../Events/mozbrowserclose.html" title="/en-US/docs/Web/Events/mozbrowserclose">mozbrowserclose</a></code><br>
+    <code><a href="../Events/mozbrowsercontextmenu.html" title="/en-US/docs/Web/Events/mozbrowsercontextmenu">mozbrowsercontextmenu</a></code><br>
+    <code><a href="../Events/mozbrowsererror.html" title="/en-US/docs/Web/Events/mozbrowsererror">mozbrowsererror</a></code><br>
+    <code><a href="../Events/mozbrowsericonchange.html" title="/en-US/docs/Web/Events/mozbrowsericonchange">mozbrowsericonchange</a></code><br>
+    <code><a href="../Events/mozbrowserloadend.html" title="/en-US/docs/Web/Events/mozbrowserloadend">mozbrowserloadend</a></code><br>
+    <code><a href="../Events/mozbrowserloadstart.html" title="/en-US/docs/Web/Events/mozbrowserloadstart">mozbrowserloadstart</a></code><br>
+    <code><a href="../Events/mozbrowserlocationchange.html" title="/en-US/docs/Web/Events/mozbrowserlocationchange">mozbrowserlocationchange</a></code><br>
+    <code><a href="../Events/mozbrowseropenwindow.html" title="/en-US/docs/Web/Events/mozbrowseropenwindow">mozbrowseropenwindow</a></code><br>
+    <code><a href="../Events/mozbrowsersecuritychange.html" title="/en-US/docs/Web/Events/mozbrowsersecuritychange">mozbrowsersecuritychange</a></code><br>
+    <code><a href="../Events/mozbrowsershowmodalprompt.html" title="/en-US/docs/Web/Events/mozbrowsershowmodalprompt">mozbrowsershowmodalprompt</a></code><br>
+    <code><a href="../Events/mozbrowsertitlechange.html" title="/en-US/docs/Web/Events/mozbrowsertitlechange">mozbrowsertitlechange</a></code><br>
+    <code><a href="../Events/mozbrowserusernameandpasswordrequired.html" title="/en-US/docs/Web/Events/mozbrowserusernameandpasswordrequired">mozbrowserusernameandpasswordrequired</a></code><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Browser" rel="tag" hreflang="en-US">Browser</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=693515" class="external" title="Browser API">bug&nbsp;693515</a></td>
+   <td style="background-color: rgb(204, 255, 153);">Done</td>
+   <td style="background-color: rgb(204, 255, 153);">Still need editorial and technical reviews<br>
+    <br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/BrowserAPI" class="external" title="https://wiki.mozilla.org/WebAPI/BrowserAPI">BrowserAPI</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Contacts API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozContacts.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozContacts</code></a><br>
+    <a href="MozContact.html" title="The MozContact interface is used to describe a single contact in the device's contact database."><code>mozContact</code></a><br>
+    <a href="ContactManager.html" title="The ContactManager interface is used to access and manage the contact available on the device."><code>ContactManager</code></a><br>
+    <a href="MozContactChangeEvent.html" title="The MozContactChangeEvent interface provides information about the contact that has changed. It inherits from the Event interface."><code>MozContactChangeEvent</code></a><br>
+    Introductory article: <a href="Contacts_API.html" title="/en-US/docs/WebAPI/Contacts">Contacts API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Contact" rel="tag" hreflang="en-US">Contact</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674720" class="external" title="FIXED: WebContacts (or Contacts+)">bug&nbsp;674720</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">
+    <p>Needs a quick technical review<br>
+     <br>
+     Spec: <a href="http://www.w3.org/TR/contacts-manager-api/" class="external" title="http://www.w3.org/TR/contacts-manager-api/">http://www.w3.org/TR/contacts-manager-api/</a><br>
+     MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/contacts/nsIDOMContactManager.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/contacts/nsIDOMContactManager.idl">ContactManager</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/contacts/nsIDOMContactProperties.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/contacts/nsIDOMContactProperties.idl">ContactProperties</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/contacts/nsIDOMMozContactChangeEvent.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/contacts/nsIDOMMozContactChangeEvent.idl">ContactChangeEvent</a><br>
+     WikiMo: <a href="https://wiki.mozilla.org/WebAPI/ContactsAPI" class="external" title="https://wiki.mozilla.org/WebAPI/ContactsAPI">ContactsAPI</a></p>
+
+    <p>Also see the <a href="https://air.mozilla.org/intern-presentation-tully/" class="external" title="https://air.mozilla.org/intern-presentation-tully/">intern presentation on Mozilla Air</a>.</p>
+   </td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Device Storage API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/getDeviceStorages-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.getDeviceStorages()</code></a><br>
+    <a href="Window/navigator/getDeviceStorage.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.getDeviceStorage()</code></a><br>
+    <a href="DeviceStorage.html" title="The DeviceStorage interface is used to access files on a specific storage area available on the device. A storage area is, in essence, a file system repository even if it hides the reality of the underlying file system."><code>DeviceStorage</code></a><br>
+    <a href="DeviceStorageChangeEvent.html" title="The DeviceStorageChangeEvent provides information about any change made to a file inside a given storage area. It extends the Event interface."><code>DeviceStorageChangeEvent</code></a><br>
+    Introductory article: <a href="Device_Storage_API.html" title="/en-US/docs/WebAPI/Device_Storage">Device Storage</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Device Storage" rel="tag" hreflang="en-US">Device Storage</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717103" class="external" title="FIXED: MediaStorage API">bug&nbsp;717103</a></td>
+   <td style="background-color: rgb(204, 255, 153);">Done</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/getDeviceStorages-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>getDeviceStorages</code></a> needs some investigation but it doesn't look urgente.<br>
+    <br>
+    Technical review asked to Doug Turner.<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/devicestorage/nsIDOMDeviceStorage.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/devicestorage/nsIDOMDeviceStorage.idl">DeviceStorage</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/DeviceStorageAPI" class="external" title="https://wiki.mozilla.org/WebAPI/DeviceStorageAPI">DeviceStorageAPI</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">TCP Socket API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozTCPSocket.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozTCPSocket</code></a><br>
+    <a href="TCPSocket.html" title="The TCPSocket interface provides access to a raw TCP socket."><code>TCPSocket</code></a><br>
+    <a href="TCPServerSocket.html" title="The TCPServerSocket interface provides an API to handle a persistent server that will listen for incoming connections on a given port."><code>TCPServerSocket</code></a><br>
+    Introductory article: <a href="TCP_Socket_API.html" title="/en-US/docs/WebAPI/TCP_Socket">TCP Socket API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/TCP Socket" rel="tag" hreflang="en-US">TCP Socket</a></td>
+   <td style="background-color: rgb(204, 255, 153);">(FxOS 1.0)<br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=733573" class="external" title="FIXED: Expose a client TCP socket API to web applications">bug&nbsp;733573</a><br>
+    ------------<br>
+    (FxOS 1.2)<br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=797561" class="external" title="FIXED: Expose a server tcp socket API to web applications">bug&nbsp;797561</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=784816" class="external" title="FIXED: Implement startTLS for MozTCPSocket">bug&nbsp;784816</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Still needs review.<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMTCPSocket.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMTCPSocket.idl">TCPSocket</a></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Certified_APIs">Certified APIs</h3>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Camera API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozCameras.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozCameras</code></a><br>
+    <a href="CameraManager.html" title="The CameraManager interface provides access to any cameras available on the device being used."><code>CameraManager</code></a><br>
+    <a href="CameraControl.html" title="When you use the CameraManager.getCamera() method to get a reference to a camera, you specify a callback function to be invoked on success. That function receives as a parameter a CameraControl object. You can use its methods and properties to manage and make use of the camera."><code>CameraControl</code></a><br>
+    <a href="CameraCapabilities.html" title="The CameraControl.capabilities property returns a CameraCapabilities object, which describes all the camera's capabilities."><code>CameraCapabilities</code></a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/camera" rel="tag" hreflang="en-US">camera</a></td>
+   <td style="background-color: rgb(204, 255, 153);">&nbsp;</td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Tech review perform by Mike Habicher<br>
+    <br>
+    Properties need an editorial review<br>
+    <br>
+    Maybe needs an introductory article.<br>
+    <br>
+    ML: <a href="https://groups.google.com/d/msg/mozilla.dev.webapi/YNJcHcBQihw/OMKim6NOO3MJ" class="external" title="https://groups.google.com/d/msg/mozilla.dev.webapi/YNJcHcBQihw/OMKim6NOO3MJ">Discussion thread</a><br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/camera/nsIDOMCameraManager.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/camera/nsIDOMCameraManager.idl">CameraManager</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Idle API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/addIdleObserver-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.addIdleObserver</code></a><br>
+    <a href="Window/navigator/removeIdleObserver.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.removeIdleObserver</code></a><br>
+    Introductory article: <a href="Idle_API.html" title="/en-US/docs/WebAPI/Idle">Idle API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Idle" rel="tag" hreflang="en-US">Idle</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715041" class="external" title="FIXED: Add API for content to be notified on &quot;OS idle&quot;">bug&nbsp;715041</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Needs editorial review.<br>
+    <br>
+    Spec: Not yet (part of <a href="http://www.w3.org/2012/sysapps/" class="external" title="http://www.w3.org/2012/sysapps/">sysapps</a>)<br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/IdleAPI" class="external" title="https://wiki.mozilla.org/WebAPI/IdleAPI">IdleAPI</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Network Stats API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozNetworkStats.html" title="The MozNetworkStatsManager interface provides methods and properties to monitor data usage."><code>navigator.mozNetworkStats</code></a><br>
+    <a href="MozNetworkStats.html" title="The MozNetworkStats object gives access to statistics about the data usage for a given network."><code>MozNetworkStats</code></a><br>
+    <a href="MozNetworkStatsData.html" title="The MozNetworkStatsData objects represent a chunk of data usage statistics."><code>MozNetworkStatsData</code></a><br>
+    <a href="MozNetworkStatsManager.html" title="The MozNetworkStatsManager interface provides methods and properties to monitor data usage."><code>MozNetworkStatsManager</code></a><br>
+    Introductory article:&nbsp;<a href="Network_Stats_API.html" title="/en-US/docs/WebAPI/Network_Stats">Network stats</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Network Stats" rel="tag" hreflang="en-US">Network Stats</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=746069" class="external" title="FIXED: Expose coarse-grained network usage stats to (privileged) web content">bug&nbsp;746069</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">MXR:&nbsp;<a href="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMNetworkStats.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMNetworkStats.idl">NetworkStats</a>,&nbsp;<a href="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMNetworkStatsManager.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMNetworkStatsManager.idl">NetworkStatsManager</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Permissions API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozPermissionSettings.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozPermissionSettings</code></a><br>
+    <a href="PermissionSettings.html" title="The PermissionSettings interface provides ways to let the user manage all the permissions requested by all apps on a Firefox OS device."><code>PermissionSettings</code></a><br>
+    Introductory article: <a href="Permissions_API.html" title="/en-US/docs/WebAPI/Permissions">Permissions API</a><br>
+    &nbsp;</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707625" class="external" title="[WebAPI] Proper WebAPI permissions manager">bug&nbsp;707625</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=770731" class="external" title="FIXED: Expose JS API for modifying app permissions">bug&nbsp;770731</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/permission/nsIDOMPermissionSettings.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/permission/nsIDOMPermissionSettings.idl">PermissionSettings</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Power Management API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozPower.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozPower</code></a><br>
+    <a href="PowerManager.png" title="The documentation about this has not yet been written; please consider contributing!"><code>PowerManager</code></a><br>
+    <a href="Window/navigator/requestWakeLock.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.requestWakeLock</code></a><br>
+    Introductory article: <a href="Power_Management_API.html" title="/en-US/docs/WebAPI/Power_Management">Power Management</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Power Management" rel="tag" hreflang="en-US">Power Management</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=708964" class="external" title="FIXED: Create API to manage the power usage of the device">bug&nbsp;708964</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Tech review perform by Justin Lebar.<br>
+    <br>
+    Needs an editorial review<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/power/nsIDOMPowerManager.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/power/nsIDOMPowerManager.idl">PowerManager</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/PowerManagementAPI" class="external" title="https://wiki.mozilla.org/WebAPI/PowerManagementAPI">PowerManagementAPI</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Settings API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozSettings.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozSettings</code></a><br>
+    <a href="SettingsManager.html" title="Provides access to the device's settings."><code>SettingsManager</code></a><br>
+    <a href="SettingsLock.html" title="The SettingsLock interface represents a lock on settings. it allows a script to modify settings asynchronously, but in a safe way: ordering is guaranteed and the no other script will modify the settings until the modification are done (the next lock objects will start processing after it has been closed)."><code>SettingsLock</code></a><br>
+    <a href="MozSettingsEvent.html" title="The MozSettingsEvent represents a settingchange event, providing information about a change to the value of a setting on the device. It extends the DOM Event interface."><code>MozSettingsEvent</code></a><br>
+    Introductory article: <a href="Settings_API.html" title="/en-US/docs/WebAPI/Settings">Settings API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Settings" rel="tag" hreflang="en-US">Settings</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=678695" class="external" title="FIXED: Settings API">bug&nbsp;678695</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">Tech review perform by Gregor Wagner<br>
+    <br>
+    Needs editorial review<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/settings/nsIDOMSettingsManager.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/settings/nsIDOMSettingsManager.idl">SettingsManager</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/SettingsAPI" class="external" title="https://wiki.mozilla.org/WebAPI/SettingsAPI">SettingsAPI</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">Time/Clock API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozTime.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozTime</code></a><br>
+    <a href="MozTimeManager.html" title="The MozTimeManager interface is used to set the system time on a device."><code>MozTimeManager</code></a><br>
+    <a href="Window/onmoztimechange.html" title="An event handler for the moztimechange events sent to the window."><code>window.onmoztimechange</code></a><br>
+    <code><a href="../Events/moztimechange.html" class="new" title="/en-US/docs/Web/Events/moztimechange">moztimechange</a></code> event<br>
+    Introductory article: <a href="Time_and_Clock_API.html" title="/en-US/docs/WebAPI/Time_and_Clock">Time and Clock</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Time" rel="tag" hreflang="en-US">Time</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=714357" class="external" title="API to enumerate available timezones and set timezone">bug&nbsp;714357</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=714358" class="external" title="FIXED: Time API: notification and datetime set">bug&nbsp;714358</a> (notification upon time change)</td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">The <code><a href="../Events/moztimechange.html" class="new" title="/en-US/docs/Web/Events/moztimechange">moztimechange</a></code> event still need to be documented but as it has nothing special it's not a high priority.<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/time/nsIDOMTimeManager.idl" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/time/nsIDOMTimeManager.idl">TimeManager</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">WebBluetooth</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozBluetooth.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozBluetooth</code></a><br>
+    <a href="BluetoothManager_(Firefox_OS)-2.html" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothManager</code></a><br>
+    <a href="BluetoothAdapter_(Firefox_OS)-2.html" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothAdapter</code></a><br>
+    <a href="BluetoothDevice.html" title="The BluetoothDevice interface of the Web Bluetooth API&nbsp;represents a Bluetooth device inside a particular script execution environment."><code>BluetoothDevice</code></a><br>
+    <a href="BluetoothDeviceEvent_(Firefox_OS)-2.html" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothDeviceEvent</code></a><br>
+    <a href="BluetoothStatusChangedEvent.html" title="The BluetoothStatusChangedEvent API provides access to information regarding any change to the status of a Bluetooth device."><code>BluetoothStatusChangedEvent</code></a><br>
+    Introductory article: <a href="Web_Bluetooth_API.html" title="/en-US/docs/WebAPI/WebBluetooth">WebBluetooth</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Web Bluetooth" rel="tag" hreflang="en-US">Web Bluetooth</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674737" class="external" title="WebBluetooth">bug&nbsp;674737</a></td>
+   <td style="background-color: rgb(204, 255, 153);">Done</td>
+   <td style="background-color: rgb(204, 255, 153);">Technical review ask to Eric Chou<br>
+    <br>
+    The introductory article only conver pairing, therefor it serously need to be improved. However, the API should be rework for Firefox 1.4 so maybe it is wise to delay until that.<br>
+    <br>
+    MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/bluetooth/" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/bluetooth/">bluetooth</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebBluetooth" class="external" title="https://wiki.mozilla.org/WebAPI/WebBluetooth">WebBluetooth</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">WebSMS</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozMobileMessage-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozMobileMessage</code></a><br>
+    <a href="MozSmsMessage.html" title="The DOM MozSmsMessage object represents an SMS text message and has all the information about sender, recipient, body text and date of the message itself."><code>MozSmsMessage</code></a><br>
+    <a href="MozSmsEvent.html" title="The DOM MozSmsEvent represents events related to WebSMS text messages."><code>MozSmsEvent</code></a><br>
+    <a href="MozSmsFilter.html" title="The MozSmsFilter interface provides a way to filter out MozSmsMessage or MozMmsMessage objects through the MozMobileMessageManager.getMessages() method."><code>MozSmsFilter</code></a><br>
+    <a href="MozSmsSegmentInfo.html" title="The DOM MozSmsSegmentInfo interface provides information about how a string of text will be automatically split into segments. Each segment represents a single SMS of a multi-part SMS message."><code>MozSmsSegmentInfo</code></a><br>
+    <a href="MozMobileMessageManager.html" title="Provides support for sending and managing both MMS and SMS messages on a device with WebSMS."><code>MozMobileMessageManager</code></a><br>
+    <a href="MozMmsMessage.html" title="Technical review completed."><code>MozMmsMessage</code></a><br>
+    <a href="MozMmsEvent.html" title="Technical review completed."><code>MozMmsEvent</code></a><br>
+    <a href="MozMobileMessageThread.html" title="The DOM MozMobileMessageThread object represents a thread of messages."><code>MozMobileMessageThread</code></a><br>
+    Introductory article: <a href="../../WebAPI/WebSMS.png" title="API/WebSMS">WebSMS</a><br>
+    <br>
+    Deprecated:<br>
+    <a href="Navigator/mozSms.html" title="Returns an SmsManager object you can use to receive and send SMS messages."><code>navigator.mozSms</code></a><br>
+    <a href="MozSmsManager.html" title="Provides support for sending and managing SMS messages on a device with WebSMS."><code>MozSmsManager</code></a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/WebSMS" rel="tag" hreflang="en-US">WebSMS</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674725" class="external" title="FIXED: WebSMS (or Messaging+)">bug&nbsp;674725</a><br>
+    ---<br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=903403" class="external" title="FIXED: [sms][mms] Make getSegmentInfoForText() Asynchronous to Improve Typing Performance">bug&nbsp;903403</a></td>
+   <td style="background-color: rgb(204, 255, 153);">Done</td>
+   <td style="background-color: rgb(204, 255, 153);">Spec: <a href="http://www.w3.org/2012/sysapps/messaging/" class="external" title="http://www.w3.org/2012/sysapps/messaging/">Messaging API</a> (Editor's draft)<br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebSMS" class="external" title="https://wiki.mozilla.org/WebAPI/WebSMS">WebSMS</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">WebTelephony</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozTelephony.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozTelephony</code></a><br>
+    <a href="Telephony.html" title="The Telephony interface of the Web Telephony API provides support for dialing, answering, and managing phone calls on a device with telephony support."><code>Telephony</code></a><br>
+    <a href="TelephonyCall.html" title="The TelephonyCall interface of the Web Telephony API represents one telephone call, providing information about the call and offering mechanisms for controlling it and detecting changes to its status."><code>TelephonyCall</code></a><br>
+    <a href="CallEvent.html" title="The CallEvent interface of the Web Telephony API represents events related to telephone calls."><code>CallEvent</code></a><br>
+    Introductory article: <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Telephony" title="WebAPI/WebTelephony">WebTelephony</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Telephony/Introduction_to_WebTelephony" title="/en-US/docs/API/WebTelephony/Introduction_to_WebTelephony">introduction to WebTelephony</a> and <a href="../Guide/API/Telephony/Using_the_Telephony_API.html" title="/en-US/docs/Web/Guide/Telephony/Using_the_Telephony_API">Using the Telephony API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/Telephony" rel="tag" hreflang="en-US">Telephony</a></td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674726" class="external" title="FIXED: WebTelephony">bug&nbsp;674726</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">The <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Telephony/Introduction_to_WebTelephony" title="/en-US/docs/Web/Guide/Telephony/Introduction_to_WebTelephony">Introduction to WebTelephony</a> and <a href="../Guide/API/Telephony/Using_the_Telephony_API.html" title="/en-US/docs/Web/Guide/Telephony/Using_the_Telephony_API">Using the Telephony API</a> articles need to be seriously reworked.<br>
+    <br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/WebTelephony" class="external" title="https://wiki.mozilla.org/WebAPI/WebTelephony">WebTelephony</a></td>
+  </tr>
+  <tr>
+   <td style="background-color: rgb(204, 255, 153);">WiFi Information API</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="Window/navigator/mozWifiManager-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozWifiManager</code></a><br>
+    <a href="WifiManager.html" title="The WifiManager API provides access to the wifi device capability."><code>WifiManager</code></a><br>
+    <a href="MozWifiConnectionInfoEvent.html" title="The MozWifiConnectionInfoEvent interface provides developers with information regarding the state of the current Wifi connection."><code>MozWifiConnectionInfoEvent</code></a><br>
+    <a href="MozWifiStatusChangeEvent.html" title="The MozWifiStatusChangeEvent interface provides developers with information regarding the current status of the Wifi connection."><code>MozWifiStatusChangeEvent</code></a><br>
+    Introductory article: <a href="WiFi_Information_API.html" title="/en-US/docs/WebAPI/WiFi_Information">Wifi Information API</a><br>
+    <br>
+    Tag: <a href="https://developer.mozilla.org/en-US/docs/tag/WiFi" rel="tag" hreflang="en-US">WiFi</a>?</td>
+   <td style="background-color: rgb(204, 255, 153);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717123" class="external" title="[meta] B2G WiFi">bug&nbsp;717123</a><br>
+    <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=864932" class="external" title="FIXED: Rewrite wifi workers in C++">bug&nbsp;864932</a></td>
+   <td style="background-color: rgb(204, 255, 153);">done</td>
+   <td style="background-color: rgb(204, 255, 153);">MXR: <a href="http://mxr.mozilla.org/mozilla-central/source/dom/wifi/" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/wifi/">dom/wifi</a></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Discontinued_APIs">Discontinued APIs</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">API Name</th>
+   <th scope="row">Entry Points</th>
+   <th scope="row">Bugs</th>
+   <th scope="row">Doc status</th>
+   <th scope="row">Notes</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="background-color: rgb(255, 204, 204);">Archive API</td>
+   <td style="background-color: rgb(255, 204, 204);">&nbsp;</td>
+   <td style="background-color: rgb(255, 204, 204);"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=772434" class="external" title="FIXED: Blob support for Zip file contents">bug&nbsp;772434</a></td>
+   <td style="background-color: rgb(255, 204, 204);">none</td>
+   <td style="background-color: rgb(255, 204, 204);">Discuss the API with Mounir Lamouri: this API is not active by default in any build and there is discussion to figure if it must be kept or not.<br>
+    <br>
+    MXR: <a href="https://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMArchiveReader.idl" class="external" title="https://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMArchiveReader.idl">ArchiveReader</a>, <a href="https://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMArchiveRequest.idl" class="external" title="https://mxr.mozilla.org/mozilla-central/source/dom/file/nsIDOMArchiveRequest.idl">ArchiveRequest</a>, <a href="http://mxr.mozilla.org/mozilla-central/source/dom/file/test/test_archivereader.html?force=1" class="external" title="http://mxr.mozilla.org/mozilla-central/source/dom/file/test/test_archivereader.html?force=1">Tests</a><br>
+    WikiMo: <a href="https://wiki.mozilla.org/WebAPI/ArchiveAPI" rel="external" class="external" title="https://wiki.mozilla.org/WebAPI/ArchiveAPI">ArchiveAPI</a></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Document_status_overview">Document status overview</h2>
+
+<p></p><table class="docstatussummary standard-table"> 
+  <thead> 
+    <tr> 
+        <th>Section</th> 
+        <th>Pages</th> 
+        <th>No tags</th> 
+        <th>Needs* tags</th> 
+        <th>Editorial reviews</th> 
+        <th>Technical reviews</th> 
+        <th>Outdated pages</th> 
+        <th>Dev-doc-needed bugs</th> 
+        <th>Documentation requests</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/CSSOM.html">API: CSSOM </a></td> 
+            <td>109</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">58 (54%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (1%)</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">9 (9%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">6 (6%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (1%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/Canvas.html">API: Canvas </a></td> 
+            <td>119</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (1%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (1%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/DOM.html">API: DOM </a></td> 
+            <td>710</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">95 (14%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">64 (10%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">154 (22%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">4 (1%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">204 (29%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">22 (4%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/Device_API.html">API: Device API </a></td> 
+            <td>80</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">39 (49%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (2%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">65 (82%)</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">5 (7%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/File_API.html">API: File API </a></td> 
+            <td>33</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">2 (7%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (4%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (4%)</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">3 (10%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/Firefox_OS.html">API: Firefox OS APIs</a></td> 
+            <td>656</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">9 (2%)</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">37 (6%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">222 (34%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">5 (1%)</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/HTML_API.html">API: HTML API </a></td> 
+            <td>313</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">160 (52%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">2 (1%)</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">17 (6%)</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">20 (7%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">64 (21%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">3 (1%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/IndexedDB.html">API: IndexedDB </a></td> 
+            <td>111</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">4 (4%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">2 (2%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">4 (4%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">19 (18%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (1%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/SVG_API.html">API: SVG API </a></td> 
+            <td>82</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">78 (96%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (2%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/ServiceWorkers.html">API: ServiceWorkers </a></td> 
+            <td>100</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">6 (6%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">11 (11%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">67 (67%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/WebAudio.html">API: WebAudio </a></td> 
+            <td>155</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">2 (2%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">2 (2%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">48 (31%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (1%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">5 (4%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/WebGL.html">API: WebGL </a></td> 
+            <td>32</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">3 (10%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">30 (94%)</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/WebRTC.html">API: WebRTC </a></td> 
+            <td>88</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">2 (3%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (2%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">2 (3%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">17 (20%)</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">6 (7%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/WebSockets.html">API: WebSockets </a></td> 
+            <td>7</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">3 (43%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">1 (15%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">8 (115%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">3 (43%)</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/WebVR.html">API: WebVR </a></td> 
+            <td>39</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">37 (95%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">37 (95%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+        </tr> 
+     
+        <tr> 
+            <td><a href="../../MDN/Doc_status/API/WebWorkers.html">API: WebWorkers </a></td> 
+            <td>35</td> 
+             
+                <td style="background-color: none;">n/a</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">1 (3%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">6 (18%)</td> 
+             
+                <td style="background-color: rgb(204, 255, 153);">0 (0%)</td> 
+             
+                <td style="background-color: rgb(255, 255, 153);">2 (6%)</td> 
+             
+                <td style="background-color: rgb(255, 204, 204);">4 (12%)</td> 
+             
+        </tr> 
+     
+    <tr> 
+        <td><strong>Total</strong></td> 
+        <td><strong>2669</strong></td> 
+        <td><strong>0</strong></td> 
+        <td><strong>462</strong></td> 
+        <td><strong>159</strong></td> 
+        <td><strong>570</strong></td> 
+        <td><strong>31</strong></td> 
+        <td><strong>420</strong></td> 
+        <td><strong>48</strong></td> 
+    </tr> 
+</tbody> 
+</table><p></p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=673923" class="external" title="https://bugzilla.mozilla.org/show_bug.cgi?id=673923">Meta bug on Bugzilla</a></li>
+ <li><a href="https://wiki.mozilla.org/WebAPI" class="external" title="https://wiki.mozilla.org/WebAPI">https://wiki.mozilla.org/WebAPI</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Project:Subject-matter_experts" title="https://developer.mozilla.org/en-US/docs/Project:Subject-matter_experts">Subject experts</a></li>
+ <li><a href="https://github.com/mozilla-b2g/gaia" class="external" title="https://github.com/mozilla-b2g/gaia">Some app examples in Gaia</a></li>
+ <li><a href="https://docs.google.com/spreadsheet/ccc?key=0AiBigu584YY7dGlNSlY0QzhJb3M5anRBa1gxalV0Y3c#gid=13" class="external" title="https://docs.google.com/spreadsheet/ccc?key=0AiBigu584YY7dGlNSlY0QzhJb3M5anRBa1gxalV0Y3c#gid=13">Milestone document</a></li>
+ <li><a href="https://docs.google.com/spreadsheet/ccc?key=0Akyz_Bqjgf5pdENVekxYRjBTX0dCXzItMnRyUU1RQ0E#gid=0" class="external" title="https://docs.google.com/spreadsheet/ccc?key=0Akyz_Bqjgf5pdENVekxYRjBTX0dCXzItMnRyUU1RQ0E#gid=0">Permissions</a></li>
+ <li><a href="https://etherpad.mozilla.org/gaia-activities-audit" class="external" title="https://etherpad.mozilla.org/gaia-activities-audit">Gaia Web Activities Audit</a></li>
+ <li><a href="https://wiki.mozilla.org/Gaia/System/Activities" class="external" title="https://wiki.mozilla.org/Gaia/System/Activities">Gaia/System/Activities</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Apps/App_permissions" title="/en-US/docs/Apps/App_permissions">App Permissions</a></li>
+ <li>WebAPI Team activities
+  <ul>
+   <li><a href="https://etherpad.mozilla.org/webapi-meetingnotes" class="external">https://etherpad.mozilla.org/webapi-meetingnotes</a></li>
+   <li><a href="https://etherpad.mozilla.org/webapi-status" class="external">https://etherpad.mozilla.org/webapi-status</a></li>
+   <li><a href="https://wiki.mozilla.org/WebAPI/PlannedWork" class="external">https://wiki.mozilla.org/WebAPI/PlannedWork</a></li>
+   <li><a href="https://wiki.mozilla.org/Platform/#Meeting_Notes" class="external" title="https://wiki.mozilla.org/Platform/#Meeting_Notes">The platform meeting notes</a></li>
+  </ul>
+ </li>
+</ul>
+
+<p>&lt;object type="cosymantecnisbfw" id="SILOBFWOBJECTID" cotype="cs" style="width: 0px; height: 0px; display: block;"&gt;&lt;/object&gt;</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Documentation status">Documentation status</a></li>
+              <li><a href="../../tag/WebAPI.html">WebAPI</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow">AFBarstow</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/johnshih">johnshih</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/daviddoran">daviddoran</a>,             <a href="https://developer.mozilla.org/en-US/profiles/FredB">FredB</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ptheriault">ptheriault</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/markg">markg</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow">AFBarstow</a>,
+                      <time datetime="2015-09-23T03:59:32-07:00">Sep 23, 2015, 3:59:32 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Doc_status$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Doc_status$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Doc_status" selected="">
+          English (US)
+        </option>
+                  <option value="/ar/docs/Web/API/Doc_status">
+            عربي
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Doc_status by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:01:34 GMT -->
+</body></html>

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"error(SAXParseException)","path":"error-org.xml.sax.SAXParseException-","entryType":"Method"},{"name":"fatalError(SAXParseException)","path":"fatalError-org.xml.sax.SAXParseException-","entryType":"Method"},{"name":"warning(SAXParseException)","path":"warning-org.xml.sax.SAXParseException-","entryType":"Method"}]}

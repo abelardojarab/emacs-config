@@ -1,0 +1,829 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:10:15 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Porting webkitAudioContext code to standards based AudioContext</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext$json">
+  <link rel="canonical" href="Porting_webkitAudioContext_code_to_standards_based_AudioContext.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Porting webkitAudioContext code to standards based AudioContext">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext">
+  <meta name="twitter:title" content="Porting webkitAudioContext code to standards based AudioContext">
+    <meta property="og:description" content="The Web Audio standard was first implemented in WebKit, and the implementation was built in parallel with the work on the specification of the API.&nbsp; As the specification evolved and changes were made to the spec, some of the old implementation pieces were not removed from the WebKit (and Blink) implementations due to backwards compatibility reasons.&nbsp; New engines implementing the Web Audio spec (such as Gecko) will only implement the official, final version of the specification, which means that code using webkitAudioContext or old naming conventions in the Web Audio specification may not immediately work out of the box in a compliant Web Audio implementation.&nbsp; This article attempts to summarize the areas where developers are likely to encounter these problems and provide examples on how to port such code to standards based AudioContext, which will work across different browser engines.">
+  <meta name="description" content="The Web Audio standard was first implemented in WebKit, and the implementation was built in parallel with the work on the specification of the API.&nbsp; As the specification evolved and changes were made to the spec, some of the old implementation pieces were not removed from the WebKit (and Blink) implementations due to backwards compatibility reasons.&nbsp; New engines implementing the Web Audio spec (such as Gecko) will only implement the official, final version of the specification, which means that code using webkitAudioContext or old naming conventions in the Web Audio specification may not immediately work out of the box in a compliant Web Audio implementation.&nbsp; This article attempts to summarize the areas where developers are likely to encounter these problems and provide examples on how to port such code to standards based AudioContext, which will work across different browser engines.">
+  <meta name="twitter:description" content="The Web Audio standard was first implemented in WebKit, and the implementation was built in parallel with the work on the specification of the API.&nbsp; As the specification evolved and changes were made to the spec, some of the old implementation pieces were not removed from the WebKit (and Blink) implementations due to backwards compatibility reasons.&nbsp; New engines implementing the Web Audio spec (such as Gecko) will only implement the official, final version of the specification, which means that code using webkitAudioContext or old naming conventions in the Web Audio specification may not immediately work out of the box in a compliant Web Audio implementation.&nbsp; This article attempts to summarize the areas where developers are likely to encounter these problems and provide examples on how to port such code to standards based AudioContext, which will work across different browser engines.">
+  
+      
+  </head>
+<body data-slug="Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Audio_API%2FPorting_webkitAudioContext_code_to_standards_based_AudioContext" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Audio_API%2FPorting_webkitAudioContext_code_to_standards_based_AudioContext" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Web_Audio_API.html" rel="v:url" property="v:title">Web Audio API</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Porting webkitAudioContext code to standards based AudioContext</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Porting webkitAudioContext code to standards based AudioContext</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 6 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Cwiiis" title="View profile: Cwiiis">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Cwiiis" data-src="../../../../../../secure.gravatar.com/avatar/1c509df09fc0b1c63500acc279c093dc6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Cwiiis</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ehsan" title="View profile: Ehsan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ehsan" data-src="../../../../../../secure.gravatar.com/avatar/5aef682fbfd7590b9d85d6e8dbab10eb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ehsan</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/padenot" title="View profile: padenot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="padenot" data-src="../../../../../../secure.gravatar.com/avatar/56566788314477c51b94743ea7f684946aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">padenot</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/cwilso" title="View profile: cwilso">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cwilso" data-src="../../../../../../secure.gravatar.com/avatar/f42ace1f6e35d42dadfe3136e498fe2b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cwilso</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Changes_to_the_creator_methods" rel="internal">Changes to the creator methods</a></li><li><a href="#Changes_to_methods_used_to_start.2Fstop_AudioBufferSourceNode_and_OscillatorNode" rel="internal">Changes to methods used to start/stop AudioBufferSourceNode and OscillatorNode</a></li><li><a href="#Removal_of_the_synchronous_AudioContext.createBuffer_method" rel="internal">Removal of the synchronous AudioContext.createBuffer method</a></li><li><a href="#Renaming_of_AudioParam.setTargetValueAtTime" rel="internal">Renaming of AudioParam.setTargetValueAtTime</a></li><li><a href="#Changes_to_some_of_the_enumerated_values_in_the_API" rel="internal">Changes to some of the enumerated values in the API</a><ol><li><a href="#OscillatorNode.type" rel="internal">OscillatorNode.type</a></li><li><a href="#BiquadFilterNode.type" rel="internal">BiquadFilterNode.type</a></li><li><a href="#PannerNode.panningModel" rel="internal">PannerNode.panningModel</a></li><li><a href="#PannerNode.distanceModel" rel="internal">PannerNode.distanceModel</a></li></ol></li><li><a href="#Removal_of_AudioBufferSourceNode.gain" rel="internal">Removal of AudioBufferSourceNode.gain</a></li><li><a href="#Removal_of_AudioBuffer.gain" rel="internal">Removal of AudioBuffer.gain</a></li><li><a href="#Removal_of_AudioBufferSourceNode.looping" rel="internal">Removal of AudioBufferSourceNode.looping</a></li><li><a href="#Removal_of_AudioBufferSourceNode.playbackState_and_OscillatorNode.playbackState" rel="internal">Removal of AudioBufferSourceNode.playbackState and OscillatorNode.playbackState</a></li><li><a href="#Removal_of_AudioContext.activeSourceCount" rel="internal">Removal of AudioContext.activeSourceCount</a></li><li><a href="#Renaming_of_WaveTable" rel="internal">Renaming of WaveTable</a></li><li><a href="#Removal_of_some_of_the_AudioParam_read-only_attributes" rel="internal">Removal of some of the AudioParam read-only attributes</a></li><li><a href="#Removal_of_MediaElementAudioSourceNode.mediaElement" rel="internal">Removal of MediaElementAudioSourceNode.mediaElement</a></li><li><a href="#Removal_of_MediaStreamAudioSourceNode.mediaStream" rel="internal">Removal of MediaStreamAudioSourceNode.mediaStream</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div class="summary">
+ <p><span class="seoSummary">The Web Audio standard was first implemented in <a class="external" href="http://webkit.org/" title="http://webkit.org/">WebKit</a>, and the implementation was built in parallel with the work on the <a class="external" href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html" title="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">specification</a> of the API.&nbsp; As the specification evolved and changes were made to the spec, some of the old implementation pieces were not removed from the WebKit (and Blink) implementations due to backwards compatibility reasons.&nbsp; New engines implementing the Web Audio spec (such as Gecko) will only implement the official, final version of the specification, which means that code using webkitAudioContext or old naming conventions in the Web Audio specification may not immediately work out of the box in a compliant Web Audio implementation.&nbsp; This article attempts to summarize the areas where developers are likely to encounter these problems and provide examples on how to port such code to standards based AudioContext, which will work across different browser engines.</span></p>
+</div>
+<div class="note">
+ <p><strong>Note</strong>: There is a library called <a class="external" href="https://github.com/cwilso/webkitAudioContext-MonkeyPatch">webkitAudioContext monkeypatch</a>, which automatically fixes some of these changes to make most code targetting <code>webkitAudioContext</code> to work on the standards based <code>AudioContext</code> out of the box, but it currently doesn't handle all of the cases below.&nbsp; Please consult the <a class="external" href="https://github.com/cwilso/webkitAudioContext-MonkeyPatch/blob/gh-pages/README.md" title="https://github.com/cwilso/webkitAudioContext-MonkeyPatch/blob/gh-pages/README.md">README file</a> for that library to see a list of APIs that are automatically handled by it.</p>
+</div>
+<h2 id="Changes_to_the_creator_methods">Changes to the creator methods</h2>
+<p>Three of the creator methods on <code>webkitAudioContext</code> have been renamed in <a href="../AudioContext.html" title="The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode. An audio context controls both the creation of the nodes it contains and the execution of the audio processing, or decoding. You need to create an AudioContext before you do anything else, as everything happens inside a context."><code>AudioContext</code></a>.</p>
+<ul>
+ <li><code>createGainNode()</code> has been renamed to <a class="new" href="../createGain.html" title="The documentation about this has not yet been written; please consider contributing!"><code>createGain</code></a>.</li>
+ <li><code>createDelayNode()</code> has been renamed to <a class="new" href="../createDelay.html" title="The documentation about this has not yet been written; please consider contributing!"><code>createDelay</code></a>.</li>
+ <li><code>createJavaScriptNode()</code> has been renamed to <a class="new" href="../createScriptProcessor.html" title="The documentation about this has not yet been written; please consider contributing!"><code>createScriptProcessor</code></a>.</li>
+</ul>
+<p>These are simple renames that were made in order to improve the consistency of these method names on <a href="../AudioContext.html" title="The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode. An audio context controls both the creation of the nodes it contains and the execution of the audio processing, or decoding. You need to create an AudioContext before you do anything else, as everything happens inside a context."><code>AudioContext</code></a>.&nbsp; If your code uses either of these names, like in the example below :</p>
+<pre class="brush: js">// Old method names
+var gain = context.createGainNode();
+var delay = context.createDelayNode();
+var js = context.createJavascriptNode(1024);
+</pre>
+<p>you can simply rename the methods to look like this:</p>
+<pre class="brush: js">// New method names
+var gain = context.createGain();
+var delay = context.createDelay();
+var js = context.createScriptProcessor(1024);
+</pre>
+<p>The semantics of these methods remain the same in the renamed versions.</p>
+<h2 id="Changes_to_methods_used_to_start.2Fstop_AudioBufferSourceNode_and_OscillatorNode">Changes to methods used to start/stop AudioBufferSourceNode and OscillatorNode</h2>
+<p>In <code>webkitAudioContext</code>, there are two ways to start and stop <a href="../AudioBufferSourceNode.html" title="The AudioBufferSourceNode interface represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It is an AudioNode that acts as an audio source."><code>AudioBufferSourceNode</code></a> and <a href="../OscillatorNode.html" title="The&nbsp;OscillatorNode&nbsp;interface represents a periodic waveform, like a sine wave. It is an AudioNode audio-processing module that causes a given&nbsp;frequency&nbsp;of sine wave to be created."><code>OscillatorNode</code></a>: the <code>noteOn()</code> and <code>noteOff()</code> methods, and the <code>start()</code> and <code>stop()</code> methods.&nbsp; (<a class="new" href="../AudioBufferSourceNode_.html" title="The documentation about this has not yet been written; please consider contributing!"><code>AudioBufferSourceNode </code></a>has yet another way of starting output: the <code>noteGrainOn()</code> method.)&nbsp; The <code>noteOn()</code>/<code>noteGrainOn()</code>/<code>noteOff()</code> methods were the original way to start/stop output in these nodes, and in the newer versions of the specification, the <code>noteOn()</code> and <code>noteGrainOn()</code> methods were consolidated into a single <code>start()</code> method, and the <code>noteOff()</code> method was renamed to the <code>stop()</code> method.</p>
+<p>In order to port your code, you can just rename the method that you're using.&nbsp; For example, if you have code like the below:</p>
+<pre class="brush: js">var osc = context.createOscillator();
+osc.noteOn(1);
+osc.noteOff(1.5);
+
+var src = context.createBufferSource();
+src.noteGrainOn(1, 0.25);
+src.noteOff(2);
+</pre>
+<p>you can simply change it like this in order to port it to the standard AudioContext API:</p>
+<pre class="brush: js">var osc = context.createOscillator();
+osc.start(1);
+osc.stop(1.5);
+
+var src = context.createBufferSource();
+src.start(1, 0.25);
+src.stop(2);</pre>
+<h2 id="Removal_of_the_synchronous_AudioContext.createBuffer_method">Removal of the synchronous AudioContext.createBuffer method</h2>
+<p>In the old WebKit implementation of Web Audio, there were two versions of <code>createBuffer()</code>, one which created an initially empty buffer, and one which took an existing <a href="../../JavaScript/Reference/Global_Objects/ArrayBuffer.html" title="The ArrayBuffer is a data type that is used to represent a generic, fixed-length binary data buffer. You can't directly manipulate the contents of an ArrayBuffer; instead, you create an ArrayBufferView object which represents the buffer in a specific format, and use that to read and write the contents of the buffer."><code>ArrayBuffer</code></a> containing encoded audio, decoded it and returned the result in the form of an <a href="../AudioBuffer.html" title="The AudioBuffer interface represents a short audio asset residing in memory, created from an audio file using the AudioContext.createBuffer() method. Once decoded into this form, the audio can then be put into an AudioBufferSourceNode."><code>AudioBuffer</code></a>.&nbsp; The latter version of <code>createBuffer()</code> was potentially expensive, because it had to decode the audio buffer synchronously, and with the buffer being arbitrarily large, it could take a lot of time for this method to complete its work, and no other part of your web page's code could execute in the mean time.</p>
+<p>Because of these problems, this version of the <code>createBuffer()</code> method has been removed, and you should use the asynchronous <code>decodeAudioData()</code> method instead.</p>
+<p>The example below shows old code which downloads an audio file over the network, and then decoded it using <code>createBuffer()</code>:</p>
+<pre class="brush: js">var xhr = new XMLHttpRequest();
+xhr.open("GET", "/path/to/audio.ogg", true);
+xhr.responseType = "arraybuffer";
+xhr.send();
+xhr.onload = function() {
+  var decodedBuffer = context.createBuffer(xhr.response, false);
+  if (decodedBuffer) {
+    // Decoding was successful, do something useful with the audio buffer
+  } else {
+    alert("Decoding the audio buffer failed");
+  }
+};
+</pre>
+<p>Converting this code to use <code>decodeAudioData()</code> is relatively simple, as can be seen below:</p>
+<pre class="brush: js">var xhr = new XMLHttpRequest();
+xhr.open("GET", "/path/to/audio.ogg", true);
+xhr.responseType = "arraybuffer";
+xhr.send();
+xhr.onload = function() {
+  context.decodeAudioData(xhr.response, function onSuccess(decodedBuffer) {
+    // Decoding was successful, do something useful with the audio buffer
+  }, function onFailure() {
+    alert("Decoding the audio buffer failed");
+  });
+};</pre>
+<p>Note that the <code>decodeAudioData()</code> method is asynchronous, which means that it will return immediately, and then when the decoding finishes, one of the success or failure callback functions will get called depending on whether the audio decoding was successful.&nbsp; This means that you may need to restructure your code to run the part which happened after the <code>createBuffer()</code> call in the success callback, as you can see in the example above.</p>
+<h2 id="Renaming_of_AudioParam.setTargetValueAtTime">Renaming of AudioParam.setTargetValueAtTime</h2>
+<p>The <code>setTargetValueAtTime()</code> method on the <a href="../AudioParam.html" title="The AudioParam interface represents an audio-related parameter, like one of an AudioNode. It can be set to a specific value or a change in value, and can be scheduled to happen at a specific time and following a specific pattern."><code>AudioParam</code></a> interface has been renamed to <code>setTargetAtTime()</code>.&nbsp; This is also a simple rename to improve the understandability of the API, and the semantics of the method are the same.&nbsp; If your code is using <code>setTargetValueAtTime()</code>, you can simply rename it to use <code>setTargetAtTime()</code>. For example, if we have code that looks like this:</p>
+<pre class="brush: js">  var gainNode = context.createGain();
+  gainNode.gain.setTargetValueAtTime(0.0, 10.0, 1.0);
+</pre>
+<p>you can rename the method, and be compliant with the standard, like so:</p>
+<pre class="brush: js">  var gainNode = context.createGain();
+  gainNode.gain.setTargetAtTime(0.0, 10.0, 1.0);
+</pre>
+<h2 id="Changes_to_some_of_the_enumerated_values_in_the_API">Changes to some of the enumerated values in the API</h2>
+<p>The original <code>webkitAudioContext</code> API used C-style number based enumerated values in the API.&nbsp; Those values have since been changed to use the Web IDL based enumerated values, which should be familiar because they are similar to things like the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-type" title="/en-US/docs/Web/HTML/Element/input#attr-type">HTMLInputElement.type</a> property.</p>
+<h3 id="OscillatorNode.type">OscillatorNode.type</h3>
+<p><a href="../OscillatorNode.html" title="The&nbsp;OscillatorNode&nbsp;interface represents a periodic waveform, like a sine wave. It is an AudioNode audio-processing module that causes a given&nbsp;frequency&nbsp;of sine wave to be created."><code>OscillatorNode</code></a>'s type property has been changed to use Web IDL enums.&nbsp; Old code using <code>webkitAudioContext</code> can be ported to standards based <a href="../AudioContext.html" title="The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode. An audio context controls both the creation of the nodes it contains and the execution of the audio processing, or decoding. You need to create an AudioContext before you do anything else, as everything happens inside a context."><code>AudioContext</code></a> like below:</p>
+<pre class="brush: js">// Old webkitAudioContext code:
+var osc = context.createOscillator();
+osc.type = osc.SINE;     // sine waveform
+osc.type = osc.SQUARE;   // square waveform
+osc.type = osc.SAWTOOTH; // sawtooth waveform
+osc.type = osc.TRIANGLE; // triangle waveform
+osc.setWaveTable(table);
+var isCustom = (osc.type == osc.CUSTOM); // isCustom will be true
+
+// New standard AudioContext code:
+var osc = context.createOscillator();
+osc.type = "sine";       // sine waveform
+osc.type = "square";     // square waveform
+osc.type = "sawtooth";   // sawtooth waveform
+osc.type = "triangle";   // triangle waveform
+osc.setPeriodicWave(table);  // Note: setWaveTable has been renamed to setPeriodicWave!
+var isCustom = (osc.type == "custom"); // isCustom will be true
+</pre>
+<h3 id="BiquadFilterNode.type">BiquadFilterNode.type</h3>
+<p><a href="../BiquadFilterNode.html" title="The BiquadFilterNode interface represents a simple low-order filter. It is an AudioNode that can represent different kinds of filters, tone control devices or graphic equalizers. A BiquadFilterNode always has exactly one input and one output."><code>BiquadFilterNode</code></a>'s type property has been changed to use Web IDL enums.&nbsp; Old code using <code>webkitAudioContext</code> can be ported to standards based <a href="../AudioContext.html" title="The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode. An audio context controls both the creation of the nodes it contains and the execution of the audio processing, or decoding. You need to create an AudioContext before you do anything else, as everything happens inside a context."><code>AudioContext</code></a> like below:</p>
+<pre class="brush: js">// Old webkitAudioContext code:
+var filter = context.createBiquadFilter();
+filter.type = filter.LOWPASS;   // lowpass filter
+filter.type = filter.HIGHPASS;  // highpass filter
+filter.type = filter.BANDPASS;  // bandpass filter
+filter.type = filter.LOWSHELF;  // lowshelf filter
+filter.type = filter.HIGHSHELF; // highshelf filter
+filter.type = filter.PEAKING;   // peaking filter
+filter.type = filter.NOTCH;     // notch filter
+filter.type = filter.ALLPASS;   // allpass filter
+
+// New standard AudioContext code:
+var filter = context.createBiquadFilter();
+filter.type = "lowpass";        // lowpass filter
+filter.type = "highpass";       // highpass filter
+filter.type = "bandpass";       // bandpass filter
+filter.type = "lowshelf";       // lowshelf filter
+filter.type = "highshelf";      // highshelf filter
+filter.type = "peaking";        // peaking filter
+filter.type = "notch";          // notch filter
+filter.type = "allpass";        // allpass filter
+</pre>
+<h3 id="PannerNode.panningModel">PannerNode.panningModel</h3>
+<p><a href="../PannerNode.html" title="The PannerNode interface represents the behavior of a signal in space. It is an AudioNode audio-processing module describing its position with right-hand Cartesian coordinates, its movement using a velocity vector and its directionality using a directionality cone."><code>PannerNode</code></a>'s panningModel property has been changed to use Web IDL enums.&nbsp; Old code using <code>webkitAudioContext</code> can be ported to standards based <a href="../AudioContext.html" title="The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode. An audio context controls both the creation of the nodes it contains and the execution of the audio processing, or decoding. You need to create an AudioContext before you do anything else, as everything happens inside a context."><code>AudioContext</code></a> like below:</p>
+<pre class="brush: js">// Old webkitAudioContext code:
+var panner = context.createPanner();
+panner.panningModel = panner.EQUALPOWER;  // equalpower panning
+panner.panningModel = panner.HRTF;        // HRTF panning
+
+// New standard AudioContext code:
+var panner = context.createPanner();
+panner.panningModel = "equalpower";       // equalpower panning
+panner.panningModel = "HRTF";             // HRTF panning
+</pre>
+<h3 id="PannerNode.distanceModel">PannerNode.distanceModel</h3>
+<p><a href="../PannerNode.html" title="The PannerNode interface represents the behavior of a signal in space. It is an AudioNode audio-processing module describing its position with right-hand Cartesian coordinates, its movement using a velocity vector and its directionality using a directionality cone."><code>PannerNode</code></a>'s <code>distanceModel</code> property has been changed to use Web IDL enums.&nbsp; Old code using <code>webkitAudioContext</code> can be ported to standards based <a href="../AudioContext.html" title="The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode. An audio context controls both the creation of the nodes it contains and the execution of the audio processing, or decoding. You need to create an AudioContext before you do anything else, as everything happens inside a context."><code>AudioContext</code></a> like below:</p>
+<pre class="brush: js">// Old webkitAudioContext code:
+var panner = context.createPanner();
+panner.distanceModel = panner.LINEAR_DISTANCE;      // linear distance model
+panner.distanceModel = panner.INVERSE_DISTANCE;     // inverse distance model
+panner.distanceModel = panner.EXPONENTIAL_DISTANCE; // exponential distance model
+
+// Mew standard AudioContext code:
+var panner = context.createPanner();
+panner.distanceModel = "linear";                    // linear distance model
+panner.distanceModel = "inverse";                   // inverse distance model
+panner.distanceModel = "exponential";               // exponential distance model
+</pre>
+<h2 id="Removal_of_AudioBufferSourceNode.gain">Removal of AudioBufferSourceNode.gain</h2>
+<p>The <code>gain</code> attribute of <a href="../AudioBufferSourceNode.html" title="The AudioBufferSourceNode interface represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It is an AudioNode that acts as an audio source."><code>AudioBufferSourceNode</code></a> has been removed.&nbsp; The same functionality can be achieved by connecting the <a href="../AudioBufferSourceNode.html" title="The AudioBufferSourceNode interface represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It is an AudioNode that acts as an audio source."><code>AudioBufferSourceNode</code></a> to a gain node.&nbsp; See the following example:</p>
+<pre class="brush: js">// Old webkitAudioContext code:
+var src = context.createBufferSource();
+src.buffer = someBuffer;
+src.gain.value = 0.5;
+src.connect(context.destination);
+src.noteOn(0);
+
+// New standard AudioContext code:
+var src = context.createBufferSource();
+src.buffer = someBuffer;
+var gain = context.createGain();
+src.connect(gain);
+gain.gain.value = 0.5;
+gain.connect(context.destination);
+src.start(0);
+</pre>
+<h2 id="Removal_of_AudioBuffer.gain">Removal of AudioBuffer.gain</h2>
+<p>The <code>gain</code> attribute of <a href="../AudioBuffer.html" title="The AudioBuffer interface represents a short audio asset residing in memory, created from an audio file using the AudioContext.createBuffer() method. Once decoded into this form, the audio can then be put into an AudioBufferSourceNode."><code>AudioBuffer</code></a> has been removed.&nbsp; The same functionality can be achieved by connecting the <a href="../AudioBufferSourceNode.html" title="The AudioBufferSourceNode interface represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It is an AudioNode that acts as an audio source."><code>AudioBufferSourceNode</code></a> that owns the buffer to a gain node.&nbsp; See the following example:</p>
+<pre class="brush: js">// Old webkitAudioContext code:
+var src = context.createBufferSource();
+src.buffer = someBuffer;
+src.buffer.gain = 0.5;
+src.connect(context.destination);
+src.noteOn(0);
+
+// New standard AudioContext code:
+var src = context.createBufferSource();
+src.buffer = someBuffer;
+var gain = context.createGain();
+src.connect(gain);
+gain.gain.value = 0.5;
+gain.connect(context.destination);
+src.start(0);
+</pre>
+<h2 id="Removal_of_AudioBufferSourceNode.looping">Removal of AudioBufferSourceNode.looping</h2>
+<p>The <code>looping</code> attribute of <a href="../AudioBufferSourceNode.html" title="The AudioBufferSourceNode interface represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It is an AudioNode that acts as an audio source."><code>AudioBufferSourceNode</code></a> has been removed.&nbsp; This attribute was an alias of the <code>loop</code> attribute, so you can just use the <code>loop</code> attribute instead. Instead of having code like this:</p>
+<pre class="brush: js">var source = context.createBufferSource();
+source.looping = true;
+</pre>
+<p>you can change it to respect the last version of the specification:</p>
+<pre class="brush: js">var source = context.createBufferSource();
+source.loop = true;
+</pre>
+<p>Note, the <code>loopStart</code> and <code>loopEnd</code> attributes are not supported in <code>webkitAudioContext</code>.</p>
+<h2 id="Removal_of_AudioBufferSourceNode.playbackState_and_OscillatorNode.playbackState">Removal of AudioBufferSourceNode.playbackState and OscillatorNode.playbackState</h2>
+<p>The <code>playbackState</code> attribute of <a href="../AudioBufferSourceNode.html" title="The AudioBufferSourceNode interface represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It is an AudioNode that acts as an audio source."><code>AudioBufferSourceNode</code></a> and <a href="../OscillatorNode.html" title="The&nbsp;OscillatorNode&nbsp;interface represents a periodic waveform, like a sine wave. It is an AudioNode audio-processing module that causes a given&nbsp;frequency&nbsp;of sine wave to be created."><code>OscillatorNode</code></a> has been removed.&nbsp; Depending on why you used this attribute, you can use the following techniques to get the same information:</p>
+<ul>
+ <li>If you need to compare this attribute to <code>UNSCHEDULED_STATE</code>, you can basically remember whether you've called <code>start()</code> on the node or not.</li>
+ <li>If you need to compare this attribute to <code>SCHEDULED_STATE</code>, you can basically remember whether you've called <code>start()</code> on the node or not.&nbsp; You can compare the value of <a href="../AudioContext/currentTime.html" title="A double."><code>AudioContext.currentTime</code></a> to the first argument passed to <code>start()</code> to know whether playback has started or not.</li>
+ <li>If you need to compare this attribute to <code>PLAYING_STATE</code>, you can compare the value of <a href="../AudioContext/currentTime.html" title="A double."><code>AudioContext.currentTime</code></a> to the first argument passed to <code>start()</code> to know whether playback has started or not.</li>
+ <li>If you need to know when playback of the node is finished (which is the most significant use case of <code>playbackState</code>), there is a new ended event which you can use to know when playback is finished.&nbsp; Please see this code example:</li>
+</ul>
+<pre class="brush: js">// Old webkitAudioContext code:
+var src = context.createBufferSource();
+// Some time later...
+var isFinished = (src.playbackState == src.FINISHED_STATE);
+
+// New AudioContext code:
+var src = context.createBufferSource();
+function endedHandler(event) {
+  isFinished = true;
+}
+var isFinished = false;
+src.onended = endedHandler;
+</pre>
+<p>The exact same changes have been applied to both <a href="../AudioBufferSourceNode.html" title="The AudioBufferSourceNode interface represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It is an AudioNode that acts as an audio source."><code>AudioBufferSourceNode</code></a> and <a href="../OscillatorNode.html" title="The&nbsp;OscillatorNode&nbsp;interface represents a periodic waveform, like a sine wave. It is an AudioNode audio-processing module that causes a given&nbsp;frequency&nbsp;of sine wave to be created."><code>OscillatorNode</code></a>, so you can apply the same techniques to both kinds of nodes.</p>
+<h2 id="Removal_of_AudioContext.activeSourceCount">Removal of AudioContext.activeSourceCount</h2>
+<p>The <code>activeSourceCount</code> attribute has been removed from <a href="../AudioContext.html" title="The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode. An audio context controls both the creation of the nodes it contains and the execution of the audio processing, or decoding. You need to create an AudioContext before you do anything else, as everything happens inside a context."><code>AudioContext</code></a>.&nbsp; If you need to count the number of playing source nodes, you can maintain the count by handling the ended event on the source nodes, as shown above.</p>
+<p>Code using the <code>activeSourceCount</code> attribute of the <a href="../AudioContext.html" title="The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode. An audio context controls both the creation of the nodes it contains and the execution of the audio processing, or decoding. You need to create an AudioContext before you do anything else, as everything happens inside a context."><code>AudioContext</code></a>, like this snippet:</p>
+<pre class="brush: js">  var src0 = context.createBufferSource();
+  var src1 = context.createBufferSource();
+  // Set buffers and other parameters...
+  src0.start(0);
+  src1.start(0);
+  // Some time later...
+  console.log(context.activeSourceCount);
+</pre>
+<p>could be rewritten like that:</p>
+<pre class="brush: js">  // Array to track the playing source nodes:
+  var sources = [];
+  // When starting the source, put it at the end of the array,
+  // and set a handler to make sure it gets removed when the
+  // AudioBufferSourceNode reaches its end.
+  // First argument is the AudioBufferSourceNode to start, other arguments are
+  // the argument to the |start()| method of the AudioBufferSourceNode.
+  function startSource() {
+    var src = arguments[0];
+    var startArgs = Array.prototype.slice.call(arguments, 1);
+    src.onended = function() {
+      sources.splice(sources.indexOf(src), 1);
+    }
+    sources.push(src);
+    src.start.apply(src, startArgs);
+  }
+  function activeSources() {
+    return sources.length;
+  }
+  var src0 = context.createBufferSource();
+  var src0 = context.createBufferSource();
+  // Set buffers and other parameters...
+  startSource(src0, 0);
+  startSource(src1, 0);
+  // Some time later, query the number of sources...
+  console.log(activeSources());
+</pre>
+<h2 id="Renaming_of_WaveTable">Renaming of WaveTable</h2>
+<p>The <a class="new" href="../WaveTable.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WaveTable</code></a> interface has been renamed to <a class="new" href="../PeriodicWave.html" title="The documentation about this has not yet been written; please consider contributing!"><code>PeriodicWave</code></a>.&nbsp; Here is how you can port old code using <code>WaveTable</code> to the standard AudioContext API:</p>
+<pre class="brush: js">// Old webkitAudioContext code:
+var osc = context.createOscillator();
+var table = context.createWaveTable(realArray, imaginaryArray);
+osc.setWaveTable(table);
+
+// New standard AudioContext code:
+var osc = context.createOscillator();
+var table = context.createPeriodicWave(realArray, imaginaryArray);
+osc.setPeriodicWave(table);
+</pre>
+<h2 id="Removal_of_some_of_the_AudioParam_read-only_attributes">Removal of some of the AudioParam read-only attributes</h2>
+<p>The following read-only attributes have been removed from AudioParam: <code>name</code>, <code>units</code>, <code>minValue</code>, and <code>maxValue</code>.&nbsp; These used to be informational attributes.&nbsp; Here is some information on how you can get these values if you need them:</p>
+<ul>
+ <li>The <code>name</code> attribute is a string representing the name of the <a href="../AudioParam.html" title="The AudioParam interface represents an audio-related parameter, like one of an AudioNode. It can be set to a specific value or a change in value, and can be scheduled to happen at a specific time and following a specific pattern."><code>AudioParam</code></a> object.&nbsp; For example, the name of <a class="new" href="../GainNode/gain.html" title="The documentation about this has not yet been written; please consider contributing!"><code>GainNode.gain</code></a> is <code>"gain"</code>.&nbsp; You can simply track where the <a href="../AudioParam.html" title="The AudioParam interface represents an audio-related parameter, like one of an AudioNode. It can be set to a specific value or a change in value, and can be scheduled to happen at a specific time and following a specific pattern."><code>AudioParam</code></a> object is coming from in your code if you need this information.</li>
+ <li>The <code>minValue</code> and <code>maxValue</code> attributes are read-only values representing the nominal range for the <a href="../AudioParam.html" title="The AudioParam interface represents an audio-related parameter, like one of an AudioNode. It can be set to a specific value or a change in value, and can be scheduled to happen at a specific time and following a specific pattern."><code>AudioParam</code></a>.&nbsp; For example, for <a href="../GainNode.html" title="The GainNode interface represents a change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same amount of channels."><code>GainNode</code></a>, these values are 0 and 1, respectively.&nbsp; Note that these bounds are not enforced by the engine, and are merely used for informational purposes.&nbsp; As an example, it's perfectly valid to set a gain value to 2, or even -1.&nbsp; In order to find out these nominal values, you can consult the <a class="external" href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html" title="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">specification</a>.</li>
+ <li>The <code>units</code> attribute as implemented in <code>webkitAudioContext</code> implementations is unused, and always returns 0.&nbsp; There is no reason why you should need this attribute.</li>
+</ul>
+<h2 id="Removal_of_MediaElementAudioSourceNode.mediaElement">Removal of MediaElementAudioSourceNode.mediaElement</h2>
+<p>The <code>mediaElement</code> attribute of <a href="../MediaElementAudioSourceNode.html" title="The MediaElementAudioSourceNode interface represents an audio source consisting of an HTML5 &lt;audio&gt; or &lt;video&gt; element. It is an AudioNode that acts as an audio source."><code>MediaElementAudioSourceNode</code></a> has been removed.&nbsp; You can keep a reference to the media element used to create this node if you need to access it later.</p>
+<h2 id="Removal_of_MediaStreamAudioSourceNode.mediaStream">Removal of MediaStreamAudioSourceNode.mediaStream</h2>
+<p>The <code>mediaStream</code> attribute of <a href="../MediaStreamAudioSourceNode.html" title="The MediaStreamAudioSourceNode interface represents an audio source consisting of a WebRTC MediaStream (such as a webcam or microphone.) It is an AudioNode that acts as an audio source."><code>MediaStreamAudioSourceNode</code></a> has been removed.&nbsp; You can keep a reference to the media stream used to create this node if you need to access it later.</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/porting">porting</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="../../../tag/Web%20Audio%20API.html">Web Audio API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/webkitAudioContext">webkitAudioContext</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/Cwiiis">Cwiiis</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ehsan">Ehsan</a>,             <a href="https://developer.mozilla.org/en-US/profiles/padenot">padenot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cwilso">cwilso</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Cwiiis">Cwiiis</a>,
+                      <time datetime="2014-07-31T09:43:05-07:00">Jul 31, 2014, 9:43:05 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:10:19 GMT -->
+</body></html>

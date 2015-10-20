@@ -1,0 +1,970 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/WebAPI?page=4 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:48:20 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: WebAPI</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: WebAPI" href="../feeds/atom/tag/WebAPI">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/WebAPI?page=4" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FWebAPI%3Fpage%3D4" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/WebAPI?page=4" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FWebAPI%3Fpage%3D4" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: WebAPI</h1>
+                <ol class="pagination">
+      <li class="prev">
+      <a href="WebAPI9ba9.html?page=3">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="WebAPI2679.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="WebAPI4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="WebAPI9ba9.html?page=3">3</a>
+    </li>
+      <li class="selected">
+      <a href="WebAPIfdb0.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="WebAPIaf4d.html?page=5">5</a>
+    </li>
+      <li>
+      <a href="WebAPIc575.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="WebAPI235c.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="WebAPIfdfa.html?page=8">8</a>
+    </li>
+      <li>
+      <a href="WebAPI0b08.html?page=9">9</a>
+    </li>
+          <li class="next">
+      <a href="WebAPIaf4d.html?page=5">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 813 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="../Web/API/MozContact/name.html">Web/API/MozContact/name</a>
+                                  <small>The name property is a list of all the possible names use to identify the contact. It's equivalent ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/nickname.html">Web/API/MozContact/nickname</a>
+                                  <small>The nickname property is a list of all the possible nicknames for the contact.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/note.html">Web/API/MozContact/note</a>
+                                  <small>The note property is a list of arbitrary notes related to the contact.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/org.html">Web/API/MozContact/org</a>
+                                  <small>The org property is a list of all the possible organizations the contact is affiliated with.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/photo.html">Web/API/MozContact/photo</a>
+                                  <small>The photo property is a list of images for the contact.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/published.html">Web/API/MozContact/published</a>
+                                  <small>The published property provides the date of when the contact was stored for the first time on the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/sex.html">Web/API/MozContact/sex</a>
+                                  <small>The sex property represents the actual sex of the contact.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/tel.html">Web/API/MozContact/tel</a>
+                                  <small>The tel property is a list of all the possible phone numbers for the contact.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/updated.html">Web/API/MozContact/updated</a>
+                                  <small>The updated property provides the date of when the contact was updated for the last time on the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContact/url.html">Web/API/MozContact/url</a>
+                                  <small>The url property is a list of all the possible URLs for the contact.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContactChangeEvent.html">Web/API/MozContactChangeEvent</a>
+                                  <small>The MozContactChangeEvent interface provides information about the contact that has changed. It ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContactChangeEvent/contactID.html">Web/API/MozContactChangeEvent/contactID</a>
+                                  <small>The contactID property represents the unique ID of the contact that has been changed.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozContactChangeEvent/reason.html">Web/API/MozContactChangeEvent/reason</a>
+                                  <small>The reason property indicates what kind of change was made to the contact.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozIccManager.html">Web/API/MozIccManager</a>
+                                  <small>The MozIccManager interface gives access to ICC related functionalities.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozIccManager/onstkcommand.html">Web/API/MozIccManager/onstkcommand</a>
+                                  <small>The onstkcommand property specifies an event listener to receive stkcommand events. These events ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozIccManager/onstksessionend.html">Web/API/MozIccManager/onstksessionend</a>
+                                  <small>The onstksessionend property specifies an event listener to receive stksessionend events. These ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozIccManager/sendStkResponse.html">Web/API/MozIccManager/sendStkResponse</a>
+                                  <small>The sendStkResponse method is used to send a response back to ICC after an attempt to execute STK ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsEvent.html">Web/API/MozMmsEvent</a>
+                                  <small>The DOM MozMmsEvent represents events related to WebSMS MMS messages.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsEvent/message.html">Web/API/MozMmsEvent/message</a>
+                                  <small>The message property is the MozMmsMessage from which the event originated.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage.html">Web/API/MozMmsMessage</a>
+                                  <small>The DOM MozMmsMessage object represents an MMS message and has all the information about sender, ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/attachments.html">Web/API/MozMmsMessage/attachments</a>
+                                  <small>The attachments property gives access to the list of all the MMS attachments (resources necessary ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/delivery.html">Web/API/MozMmsMessage/delivery</a>
+                                  <small>The delivery property represents the current state of the message delivery from the device ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/deliveryStatus.html">Web/API/MozMmsMessage/deliveryStatus</a>
+                                  <small>The deliveryStatus property represents the current state of the message delivery from the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/expiryDate.html">Web/API/MozMmsMessage/expiryDate</a>
+                                  <small>The expiryDate property represents the expiry date for an MMS to be manually downloaded.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/id.html">Web/API/MozMmsMessage/id</a>
+                                  <small>The id property represents the unique id of the message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/read.html">Web/API/MozMmsMessage/read</a>
+                                  <small>The read property indicates if the message has been read (true) or not (false).</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/receivers.html">Web/API/MozMmsMessage/receivers</a>
+                                  <small>The receivers property provides the list of all receivers for a given message. Each receiver is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/sender.html">Web/API/MozMmsMessage/sender</a>
+                                  <small>The sender property provides the phone number of the sender of a given message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/smil.html">Web/API/MozMmsMessage/smil</a>
+                                  <small>The smil property represents a stringified version of the SMIL content of the message (an MMS is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/subject.html">Web/API/MozMmsMessage/subject</a>
+                                  <small>The subject property is a string representing the subject of the message (in many cases, its title).</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/threadId.html">Web/API/MozMmsMessage/threadId</a>
+                                  <small>The threadId property represents the id of the thread the message is part of.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/timestamp.html">Web/API/MozMmsMessage/timestamp</a>
+                                  <small>The timestamp property represents the timestamp of a given message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMmsMessage/type.html">Web/API/MozMmsMessage/type</a>
+                                  <small>The type property represents the type of the message. It provides a convenient way to be sure that ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCellInfo.html">Web/API/MozMobileCellInfo</a>
+                                  <small>The MozMobileCellInfo interface allow to access to cell location information.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCellInfo/gsmCellId.html">Web/API/MozMobileCellInfo/gsmCellId</a>
+                                  <small>gsmCellId is a read-only property that provides the mobile Cell ID for the current GSM / WCDMA ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCellInfo/gsmLocationAreaCode.html">Web/API/MozMobileCellInfo/gsmLocationAreaCode</a>
+                                  <small>gsmLocationAreaCode is a read-only property that provides the mobile Location Area Code (LAC) for ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCFInfo.html">Web/API/MozMobileCFInfo</a>
+                                  <small>The MozMobileCFInfo interface defines options used to retrieve or define call forwarding settings.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCFInfo/action.html">Web/API/MozMobileCFInfo/action</a>
+                                  <small>action is a read-only property that indicates what to do with the call forwarding rule.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCFInfo/active.html">Web/API/MozMobileCFInfo/active</a>
+                                  <small>active is a read-only property that indicates whether call forwarding is active (true) or not ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCFInfo/number.html">Web/API/MozMobileCFInfo/number</a>
+                                  <small>number is a read-only property that indicates the phone number where to forward the calls.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCFInfo/reason.html">Web/API/MozMobileCFInfo/reason</a>
+                                  <small>reason is a read-only property that indicates the reason the call is being forwarded.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCFInfo/serviceClass.html">Web/API/MozMobileCFInfo/serviceClass</a>
+                                  <small>serviceClass is a read-only property that represents the service for which the call forward is set ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileCFInfo/timeSeconds.html">Web/API/MozMobileCFInfo/timeSeconds</a>
+                                  <small>timeSeconds is a read-only property representing the time in seconds to wait before a call is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection.html">Web/API/MozMobileConnection</a>
+                                  <small>This API is used to get information about the current mobile voice and data connection states of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/cancelMMI.html">Web/API/MozMobileConnection/cancelMMI</a>
+                                  <small>The cancelMMI method cancels the current MMI request if one exists.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/cardState.html">Web/API/MozMobileConnection/cardState</a>
+                                  <small>The cardState is a read-only property that indicates the state of the device's ICC card.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/data.html">Web/API/MozMobileConnection/data</a>
+                                  <small>The data is a read-only property that gives access to information about the device's data ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/getCallForwardingOption.html">Web/API/MozMobileConnection/getCallForwardingOption</a>
+                                  <small>The getCallForwardingOption method is used to query current options for call forwarding.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/getCardLock.html">Web/API/MozMobileConnection/getCardLock</a>
+                                  <small>The getCardLock method is used to find out about the status of an integrated circuit card (ICC) ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/getNetworks.html">Web/API/MozMobileConnection/getNetworks</a>
+                                  <small>The getNetworks method is used to search for available networks.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/icc.html">Web/API/MozMobileConnection/icc</a>
+                                  <small>The icc is a read-only property that gives access to ICC related funcionality.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/iccInfo.html">Web/API/MozMobileConnection/iccInfo</a>
+                                  <small>The iccInfo is a read-only property that gives access to information stored in the device's ICC ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/networkSelectionMode.html">Web/API/MozMobileConnection/networkSelectionMode</a>
+                                  <small>The networkSelectionMode is a read-only property that indicates the selection mode of the voice and ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/oncardstatechange.html">Web/API/MozMobileConnection/oncardstatechange</a>
+                                  <small>The oncardstatechange property specifies an event listener to receive cardstatechange events. These ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/oncfstatechange.html">Web/API/MozMobileConnection/oncfstatechange</a>
+                                  <small>The oncfstatechange property specifies an event listener to receive cfstatechange events. These ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/ondatachange.html">Web/API/MozMobileConnection/ondatachange</a>
+                                  <small>The ondatachange property specifies an event listener to receive datachange events. These events ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/ondataerror.html">Web/API/MozMobileConnection/ondataerror</a>
+                                  <small>The ondataerror property specifies an event listener to receive dataerror events. These events ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/onicccardlockerror.html">Web/API/MozMobileConnection/onicccardlockerror</a>
+                                  <small>The onicccardlockerror property specifies an event listener to receive icccardlockerror events. ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/oniccinfochange.html">Web/API/MozMobileConnection/oniccinfochange</a>
+                                  <small>The oniccinfochange property specifies an event listener to receive iccinfochange events. These ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/onussdreceived.html">Web/API/MozMobileConnection/onussdreceived</a>
+                                  <small>The onussdreceived property specifies an event listener to receive ussdreceived events. These ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/onvoicechange.html">Web/API/MozMobileConnection/onvoicechange</a>
+                                  <small>The onvoicechange property specifies an event listener to receive voicechange events. These events ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/selectNetwork.html">Web/API/MozMobileConnection/selectNetwork</a>
+                                  <small>The selectNetwork method is used to manually select a network, overriding the radio's current ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/selectNetworkAutomatically.html">Web/API/MozMobileConnection/selectNetworkAutomatically</a>
+                                  <small>The selectNetworkAutomatically method is used to tell the radio to automatically select a network.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/sendMMI.html">Web/API/MozMobileConnection/sendMMI</a>
+                                  <small>The sendMMI method is used to send an MMI code.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/setCallForwardingOption.html">Web/API/MozMobileConnection/setCallForwardingOption</a>
+                                  <small>The setCallForwardingOption method is used to configure call forward options.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/setCardLock.html">Web/API/MozMobileConnection/setCardLock</a>
+                                  <small>The setCardLock method is used to set or modify the state of a card lock.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/unlockCardLock.html">Web/API/MozMobileConnection/unlockCardLock</a>
+                                  <small>The unlockCardLock method is used to unlock a card lock.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnection/voice.html">Web/API/MozMobileConnection/voice</a>
+                                  <small>The voice is a read-only property that gives access to information about the voice connection.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo.html">Web/API/MozMobileConnectionInfo</a>
+                                  <small>The MozMobileConnectionInfo interface allows to access connection information for voice or data. ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/cell.html">Web/API/MozMobileConnectionInfo/cell</a>
+                                  <small>cell is a read-only property that gives access to cell location information.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/connected.html">Web/API/MozMobileConnectionInfo/connected</a>
+                                  <small>connected is a read-only property that indicates whether the connection is ready (true) or not ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/emergencyCallsOnly.html">Web/API/MozMobileConnectionInfo/emergencyCallsOnly</a>
+                                  <small>emergencyCallsOnly is a read-only property that indicates whether only emergency calls are possible.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/lastKnownMcc.html">Web/API/MozMobileConnectionInfo/lastKnownMcc</a>
+                                  <small>lastKnownMcc is a read-only property that represents the Mobile Country Code (MCC) of the last ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/network.html">Web/API/MozMobileConnectionInfo/network</a>
+                                  <small>network is a read-only property that gives access to the network operator information.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/relSignalStrength.html">Web/API/MozMobileConnectionInfo/relSignalStrength</a>
+                                  <small>relSignalStrength is a read-only property that gives the signal strength, represented linearly as a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/roaming.html">Web/API/MozMobileConnectionInfo/roaming</a>
+                                  <small>roaming is a read-only property that indicates whether the connection is going through a foreign ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/signalStrength.html">Web/API/MozMobileConnectionInfo/signalStrength</a>
+                                  <small>signalStrength is a read-only property that gives the signal strength in dBm.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/state.html">Web/API/MozMobileConnectionInfo/state</a>
+                                  <small>state is a read-only property that gives the state of the connection.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileConnectionInfo/type.html">Web/API/MozMobileConnectionInfo/type</a>
+                                  <small>type is a read-only property that gives the type of connection.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo.html">Web/API/MozMobileICCInfo</a>
+                                  <small>The MozMobileICCInfo interface allow to access access to information stored in the device's ICC ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/iccid.html">Web/API/MozMobileICCInfo/iccid</a>
+                                  <small>iccid is a read-only property representing the Integrated Circuit Card (ICC) Identifier.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/isDisplayNetworkNameRequired.html">Web/API/MozMobileICCInfo/isDisplayNetworkNameRequired</a>
+                                  <small>isDisplayNetworkNameRequired is a read-only property that indicates the Network name must be a part ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/isDisplaySpnRequired.html">Web/API/MozMobileICCInfo/isDisplaySpnRequired</a>
+                                  <small>isDisplaySpnRequired is a read-only property that indicates the Service provider name must be a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/mcc.html">Web/API/MozMobileICCInfo/mcc</a>
+                                  <small>mcc is a read-only property representing the Mobile Country Code (MCC) of the subscriber's home ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/mnc.html">Web/API/MozMobileICCInfo/mnc</a>
+                                  <small>mnc is a read-only property representing the Mobile Network Code (MNC) of the subscriber's home ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/msisdn.html">Web/API/MozMobileICCInfo/msisdn</a>
+                                  <small>msisdn is a read-only property representing the Mobile Station ISDN Number (MSISDN) of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileICCInfo/spn.html">Web/API/MozMobileICCInfo/spn</a>
+                                  <small>spn is a read-only property representing the Service Provider Name (SPN) of the subscriber's home ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager.html">Web/API/MozMobileMessageManager</a>
+                                  <small>Provides support for sending and managing both MMS and SMS messages on a device with WebSMS.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/delete.html">Web/API/MozMobileMessageManager/delete</a>
+                                  <small>The delete method is used to delete a given message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/getMessage.html">Web/API/MozMobileMessageManager/getMessage</a>
+                                  <small>The getMessage method is used to access a given SMS message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/getMessages.html">Web/API/MozMobileMessageManager/getMessages</a>
+                                  <small>The getMessages method is used to access a list of messages.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/getSegmentInfoForText.html">Web/API/MozMobileMessageManager/getSegmentInfoForText</a>
+                                  <small>The getSegmentInfoForText method is used to get the information necessary to create a multi-part ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/getThreads.html">Web/API/MozMobileMessageManager/getThreads</a>
+                                  <small>The getThreads method is used to iterate through a list of MozMobileMessageThread objects. Each of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/markMessageRead.html">Web/API/MozMobileMessageManager/markMessageRead</a>
+                                  <small>The markMessageRead method is used to change the read state of a given message.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/ondeliveryerror.html">Web/API/MozMobileMessageManager/ondeliveryerror</a>
+                                  <small>Specifies an event listener to receive deliveryerror events. These events occur when an SMS or MMS ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/ondeliverysuccess.html">Web/API/MozMobileMessageManager/ondeliverysuccess</a>
+                                  <small>Specifies an event listener to receive deliverysuccess events. These events occur when an SMS or ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onfailed.html">Web/API/MozMobileMessageManager/onfailed</a>
+                                  <small>Specifies an event listener to receive failed events. These events occur when an SMS or MMS has ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onreceived.html">Web/API/MozMobileMessageManager/onreceived</a>
+                                  <small>Specifies an event listener to receive received events. These events occur when an SMS or MMS is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onretrieving.html">Web/API/MozMobileMessageManager/onretrieving</a>
+                                  <small>Specifies an event listener to receive retrieving events. These events occur when an SMS or MMS ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/MozMobileMessageManager/onsending.html">Web/API/MozMobileMessageManager/onsending</a>
+                                  <small>Specifies an event listener to receive sending events. These events occur when an SMS or MMS enters ...</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+      <li class="prev">
+      <a href="WebAPI9ba9.html?page=3">
+        Previous
+      </a>
+    </li>
+          <li>
+      <a href="WebAPI2679.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="WebAPI4658.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="WebAPI9ba9.html?page=3">3</a>
+    </li>
+      <li class="selected">
+      <a href="WebAPIfdb0.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="WebAPIaf4d.html?page=5">5</a>
+    </li>
+      <li>
+      <a href="WebAPIc575.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="WebAPI235c.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="WebAPIfdfa.html?page=8">8</a>
+    </li>
+      <li>
+      <a href="WebAPI0b08.html?page=9">9</a>
+    </li>
+          <li class="next">
+      <a href="WebAPIaf4d.html?page=5">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="4">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/WebAPI?page=4 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 15:48:20 GMT -->
+</body></html>

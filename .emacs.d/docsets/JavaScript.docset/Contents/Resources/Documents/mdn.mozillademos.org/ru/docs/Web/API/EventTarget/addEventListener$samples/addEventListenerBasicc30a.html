@@ -1,0 +1,28 @@
+<html><!-- Mirrored from mdn.mozillademos.org/ru/docs/Web/API/EventTarget/addEventListener$samples/addEventListenerBasic?revision=904419 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 20:17:46 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body>
+                    <table id="outside">
+    <tbody><tr><td id="t1">one</td></tr>
+    <tr><td id="t2">two</td></tr>
+</tbody></table>
+                            <script type="text/javascript">
+                // Функция изменяет содержимое t2
+function modifyText() {
+  var t2 = document.getElementById("t2");
+  if (t2.firstChild.nodeValue == "three") {
+    t2.firstChild.nodeValue = "two";
+  } else {
+    t2.firstChild.nodeValue = "three";
+  }
+}
+
+// Добавляет слушателя событий для таблицы
+var el = document.getElementById("outside");
+el.addEventListener("click", modifyText, false);
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/ru/docs/Web/API/EventTarget/addEventListener$samples/addEventListenerBasic?revision=904419 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 20:17:46 GMT -->
+</body></html>

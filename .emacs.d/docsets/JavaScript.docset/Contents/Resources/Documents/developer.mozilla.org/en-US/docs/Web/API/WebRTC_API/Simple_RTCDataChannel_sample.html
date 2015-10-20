@@ -1,0 +1,872 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:11:16 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>A simple RTCDataChannel sample</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample$json">
+  <link rel="canonical" href="Simple_RTCDataChannel_sample.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="A simple RTCDataChannel sample">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample">
+  <meta name="twitter:title" content="A simple RTCDataChannel sample">
+    <meta property="og:description" content="The RTCDataChannel interface is a feature of the WebRTC API which lets you open a channel between two peers over which you may send and receive arbitrary data. The API is intentionally similar to the WebSocket API, so that the same programming model can be used for each.">
+  <meta name="description" content="The RTCDataChannel interface is a feature of the WebRTC API which lets you open a channel between two peers over which you may send and receive arbitrary data. The API is intentionally similar to the WebSocket API, so that the same programming model can be used for each.">
+  <meta name="twitter:description" content="The RTCDataChannel interface is a feature of the WebRTC API which lets you open a channel between two peers over which you may send and receive arbitrary data. The API is intentionally similar to the WebSocket API, so that the same programming model can be used for each.">
+  
+      
+  </head>
+<body data-slug="Web/API/WebRTC_API/Simple_RTCDataChannel_sample" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebRTC_API%2FSimple_RTCDataChannel_sample" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebRTC_API%2FSimple_RTCDataChannel_sample" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../WebRTC_API.html" rel="v:url" property="v:title">WebRTC API</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">A simple RTCDataChannel sample</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>A simple RTCDataChannel sample</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 2 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#The_HTML" rel="internal">The HTML</a></li><li><a href="#The_JavaScript_code" rel="internal">The JavaScript code</a><ol><li><a href="#Starting_up" rel="internal">Starting up</a></li><li><a href="#Establishing_a_connection" rel="internal">Establishing a connection</a><ol><li><a href="#Set_up_the_local_peer" rel="internal">Set up the local peer</a></li><li><a href="#Set_up_the_remote_peer" rel="internal">Set up the remote peer</a></li><li><a href="#Set_up_the_ICE_candidates" rel="internal">Set up the ICE candidates</a></li><li><a href="#Start_the_connection_attempt" rel="internal">Start the connection attempt</a></li><li><a href="#Handling_successful_peer_connection" rel="internal">Handling successful peer connection</a></li><li><a href="#Connecting_the_data_channel" rel="internal">Connecting the data channel</a></li></ol></li><li><a href="#Handling_channel_status_changes" rel="internal">Handling channel status changes</a></li><li><a href="#Sending_messages" rel="internal">Sending messages</a></li><li><a href="#Receiving_messages" rel="internal">Receiving messages</a></li><li><a href="#Disconnecting_the_peers" rel="internal">Disconnecting the peers</a></li></ol></li><li><a href="#Next_steps" rel="internal">Next steps</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><section id="Quick_Links"><!-- --></section><p></p>
+
+<p>The <a href="../RTCDataChannel.html" title="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection."><code>RTCDataChannel</code></a> interface is a feature of the <a href="../WebRTC_API.html">WebRTC API</a> which lets you open a channel between two peers over which you may send and receive arbitrary data. The API is intentionally similar to the <a href="../WebSocket_API.html">WebSocket API</a>, so that the same programming model can be used for each.</p>
+
+<p>In this example, we will open an <a href="../RTCDataChannel.html" title="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection."><code>RTCDataChannel</code></a> connection linking two elements on the same page. While that's obviously a contrived scenario, it's useful for demonstrating the flow of connecting two peers. We'll cover the mechanics of accomplishing the connection and transmitting and receiving data, but we will save the bits about locating and linking to a remote computer for another example.</p>
+
+<h2 id="The_HTML">The HTML</h2>
+
+<p>First, let's take a quick look at the <a href="https://github.com/mdn/samples-server/tree/master/s/webrtc-simple-datachannel/index.html" class="external">HTML that's needed</a>. There's nothing incredibly complicated here. First, we have a couple of buttons for establishing and closing the connection:</p>
+
+<pre class="brush: html">&lt;button id="connectButton" name="connectButton" class="buttonleft"&gt;
+&nbsp; Connect
+&lt;/button&gt;
+&lt;button id="disconnectButton" name="disconnectButton" class="buttonright" disabled&gt;
+&nbsp; Disconnect
+&lt;/button&gt;</pre>
+
+<p>Then there's a box which contains the text input box into which the user can type a message to transmit, with a button to send the entered text. This <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div" title="The HTML &lt;div&gt; element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as &lt;article&gt; or &lt;nav&gt;) is appropriate."><code>&lt;div&gt;</code></a> will be the first peer in the channel.</p>
+
+<pre class="brush: html">&nbsp; &lt;div class="messagebox"&gt;
+&nbsp;&nbsp;&nbsp; &lt;label for="message"&gt;Enter a message:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;input type="text" name="message" id="message" placeholder="Message text"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputmode="latin" size=60 maxlength=120 disabled&gt;
+&nbsp;&nbsp;&nbsp; &lt;/label&gt;
+&nbsp;&nbsp;&nbsp; &lt;button id="sendButton" name="sendButton" class="buttonright" disabled&gt;
+      Send
+    &lt;/button&gt;
+&nbsp; &lt;/div&gt;</pre>
+
+<p>Finally, there's the little box into which we'll insert the messages. This <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div" title="The HTML &lt;div&gt; element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as &lt;article&gt; or &lt;nav&gt;) is appropriate."><code>&lt;div&gt;</code></a> block will be the second peer.</p>
+
+<pre class="brush: html">&lt;div class="messagebox" id="receivebox"&gt;
+  &lt;p&gt;Messages received:&lt;/p&gt;
+&lt;/div&gt;</pre>
+
+<h2 id="The_JavaScript_code">The JavaScript code</h2>
+
+<p>While you can just <a href="https://github.com/mdn/samples-server/tree/master/s/webrtc-simple-datachannel/main.js" class="external">look at the code itself on GitHub</a>, below we'll review the parts of the code that do the heavy lifting.</p>
+
+<p>The WebRTC API makes heavy use of <a href="../../JavaScript/Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise&nbsp;represents a value &nbsp;+ time.&nbsp;A Promise is in one of these&nbsp;states:"><code>Promise</code></a>s. They make it very easy to chain the steps of the connection process together; if you haven't already read up on this functionality of <a href="../../JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla.html">ECMAScript 2015</a> (also known as ES6), you should read up on them. Similarly, this example uses <a href="../../JavaScript/Reference/Functions/Arrow_functions.html">arrow functions</a> to simplify syntax.</p>
+
+<h3 id="Starting_up">Starting up</h3>
+
+<p>When the script is run, we set up an <code><a href="../../Events/load.html" title="/en-US/docs/Web/Events/load">load</a></code> event listener, so that once the page is fully loaded, our <code>startup()</code> function is called.</p>
+
+<pre class="brush: js">function startup() {
+  connectButton = document.getElementById('connectButton');
+  disconnectButton = document.getElementById('disconnectButton');
+  sendButton = document.getElementById('sendButton');
+  messageInputBox = document.getElementById('message');
+  receiveBox = document.getElementById('receivebox');
+
+  // Set event listeners for user interface widgets
+
+  connectButton.addEventListener('click', connectPeers, false);
+  disconnectButton.addEventListener('click', disconnectPeers, false);
+  sendButton.addEventListener('click', sendMessage, false);
+}</pre>
+
+<p>This is quite straightforward. We grab references to all the page elements we'll need to access, then set <a href="../EventListener.html" title="This method is called whenever an event occurs of the type for which the EventListener interface was registered."><code>event listeners</code></a> on the three buttons.</p>
+
+<h3 id="Establishing_a_connection">Establishing a connection</h3>
+
+<p>When the user clicks the "Connect" button, the <code>connectPeers()</code> method is called. We're going to break this up and look at it a bit at a time, for clarity.</p>
+
+<div class="note">
+<p><strong>Note:</strong> Even though both ends of our connection will be on the same page, we're going to refer to the one that starts the connection as the "local" one, and to the other as the "remote" end.</p>
+</div>
+
+<h4 id="Set_up_the_local_peer">Set up the local peer</h4>
+
+<pre class="brush: js">    localConnection = new RTCPeerConnection();
+
+&nbsp;&nbsp;&nbsp; sendChannel = localConnection.createDataChannel("sendChannel");
+&nbsp;&nbsp;&nbsp; sendChannel.onopen = handleSendChannelStatusChange;
+&nbsp;&nbsp;&nbsp; sendChannel.onclose = handleSendChannelStatusChange;
+</pre>
+
+<p>The first step is to create the "local" end of the connection. This is the peer that will send out the connection request.&nbsp; The next step is to create the <a href="../RTCDataChannel.html" title="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection."><code>RTCDataChannel</code></a> by calling <a href="../RTCPeerConnection/createDataChannel.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCPeerConnection.createDataChannel()</code></a> and set up event listeners to monitor the channel so that we know when it's opened and closed (that is, when the channel is connected or disconnected within that peer connection).</p>
+
+<p>It's important to keep in mind that each end of the channel has its own <a href="../RTCDataChannel.html" title="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection."><code>RTCDataChannel</code></a> object.</p>
+
+<h4 id="Set_up_the_remote_peer">Set up the remote peer</h4>
+
+<pre class="brush: js">remoteConnection = new RTCPeerConnection();
+remoteConnection.ondatachannel = receiveChannelCallback;</pre>
+
+<p>The remote end is set up similarly, except that we don't need to explicitly create an <a href="../RTCDataChannel.html" title="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection."><code>RTCDataChannel</code></a> ourselves, since we're going to be connected through the channel established above. Instead, we set up a <code><a href="../../Events/datachannel.html" title="/en-US/docs/Web/Events/datachannel">datachannel</a></code> event handler; this will be called when the data channel is opened; this handler will receive an <code>RTCDataChannel</code> object; you'll see this below.</p>
+
+<h4 id="Set_up_the_ICE_candidates">Set up the ICE candidates</h4>
+
+<p>The next step is to set up each connection with ICE candidate listeners; these will be called when there's a new ICE candidate to tell the other side about.</p>
+
+<div class="note">
+<p><strong>Note:</strong> In a real-world scenario in which the two peers aren't running in the same context, the process is a bit more involved; each side provides, one at a time, a suggested way to connect (for example, UDP, UDP with a relay, TCP, etc.) by calling <a href="../RTCPeerConnection/addIceCandidate.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCPeerConnection.addIceCandidate()</code></a>, and they go back and forth until agreement is reached. But here, we just accept the first offer on each side, since there's no actual networking involved.</p>
+</div>
+
+<pre class="brush: js">    localConnection.onicecandidate = e =&gt; !e.candidate
+        || remoteConnection.addIceCandidate(e.candidate)
+        .catch(handleAddCandidateError);
+
+    remoteConnection.onicecandidate = e =&gt; !e.candidate
+        || localConnection.addIceCandidate(e.candidate)
+        .catch(handleAddCandidateError);</pre>
+
+<p>We configure each <a href="../RTCPeerConnection.html" title="The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It is used to handle efficient streaming of data between the two peers."><code>RTCPeerConnection</code></a> to have an event handler for the <code><a href="../../Events/icecandidate.html" title="/en-US/docs/Web/Events/icecandidate">icecandidate</a></code> event.</p>
+
+<h4 id="Start_the_connection_attempt">Start the connection attempt</h4>
+
+<p>The last thing we need to do in order to begin connecting our peers is to create a connection offer.</p>
+
+<pre class="brush: js">    localConnection.createOffer()
+    .then(offer =&gt; localConnection.setLocalDescription(offer))
+    .then(() =&gt; remoteConnection.setRemoteDescription(localConnection.localDescription))
+    .then(() =&gt; remoteConnection.createAnswer())
+    .then(answer =&gt; remoteConnection.setLocalDescription(answer))
+    .then(() =&gt; localConnection.setRemoteDescription(remoteConnection.localDescription))
+    .catch(handleCreateDescriptionError);</pre>
+
+<p>Let's go through this line by line and decipher what it means.</p>
+
+<ol>
+ <li>First, we call <a href="../RTCPeerConnection/createOffer.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCPeerConnection.createOffer()</code></a> method to create an <a href="https://developer.mozilla.org/en-US/docs/Glossary/SDP" class="glossaryLink" title="SDP: SDP (Session Description Protocol) is the standard describing a peer-to-peer connection. SDP contains the codec, source address, and timing information of audio and video.">SDP</a> (Session Description Protocol) blob describing the connection we want to make. This method accepts, optionally, an object with constraints to be met for the connection to meet your needs, such as whether the connection should support audio, video, or both. In our simple example, we don't have any constraints.</li>
+ <li>If the offer is created successfully, we pass the blob along to the local connection's <a href="../RTCPeerConnection/setLocalDescription.html" title="The RTCPeerConnection.setLocalDescription() method changes the local description associated with the connection. The description defines the properties of the connection like its codec. The connection is affected by this change and must be able to support both old and new descriptions. The method takes three parameters, a RTCSessionDescription object to set, and two callbacks, one called if the change of description succeeds, another called if it failed."><code>RTCPeerConnection.setLocalDescription()</code></a> method. This configures the local end of the connection.</li>
+ <li>The next step is to connect the local peer to the remote by telling the remote peer about it. This is done by calling <code>remoteConnection.</code><a href="../RTCPeerConnection/setRemoteDescription.html" title="The RTCPeerConnection.setRemoteDescription() method changes the remote description associated with the connection. The description defines the properties of the connection like its codec. The connection is affected by this change and must be able to support both old and new descriptions. The method takes three parameters, a RTCSessionDescription object to set, and two callbacks, one called if the change of description succeeds, another called if it failed."><code>RTCPeerConnection.setRemoteDescription()</code></a>. Now the <code>remoteConnection</code> knows about the connection that's being built.</li>
+ <li>That means it's time for the remote peer to reply. It does so by calling its <a href="../RTCPeerConnection/createAnswer.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>createAnswer()</code></a> method. This generates a blob of SDP which describes the connection the remote peer is willing and able to establish. This configuration lies somewhere in the union of options that both peers can support.</li>
+ <li>Once the answer has been created, it's passed into the remoteConnection by calling <a href="../RTCPeerConnection/setLocalDescription.html" title="The RTCPeerConnection.setLocalDescription() method changes the local description associated with the connection. The description defines the properties of the connection like its codec. The connection is affected by this change and must be able to support both old and new descriptions. The method takes three parameters, a RTCSessionDescription object to set, and two callbacks, one called if the change of description succeeds, another called if it failed."><code>RTCPeerConnection.setLocalDescription()</code></a>. That establishes the remote's end of the connection (which, to the remote peer, is its local end. This stuff can be confusing, but you get used to it.</li>
+ <li>Finally, the local connection's remote description is set to refer to the remote peer by calling localConnection's <a href="../RTCPeerConnection/setRemoteDescription.html" title="The RTCPeerConnection.setRemoteDescription() method changes the remote description associated with the connection. The description defines the properties of the connection like its codec. The connection is affected by this change and must be able to support both old and new descriptions. The method takes three parameters, a RTCSessionDescription object to set, and two callbacks, one called if the change of description succeeds, another called if it failed."><code>RTCPeerConnection.setRemoteDescription()</code></a>.</li>
+ <li>The <code>catch()</code> calls a routine that handles any errors that occur.</li>
+</ol>
+
+<div class="note">
+<p><strong>Note:</strong> Once again, this process is not a real-world implementation; in normal usage, there's two chunks of code running on two machines, interacting and negotiating the connection.</p>
+</div>
+
+<h4 id="Handling_successful_peer_connection">Handling successful peer connection</h4>
+
+<p>As each side of the peer-to-peer connection is successfully linked up, the corresponding <a href="../RTCPeerConnection.html" title="The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It is used to handle efficient streaming of data between the two peers."><code>RTCPeerConnection</code></a>'s <code><a href="../../Events/icecandidate.html" title="/en-US/docs/Web/Events/icecandidate">icecandidate</a></code> event is fired. These handlers can do whatever's needed, but in this example, all we need to do is update the user interface:</p>
+
+<pre class="brush: js">  function handleLocalAddCandidateSuccess() {
+    connectButton.disabled = true;
+  }
+ 
+  function handleRemoteAddCandidateSuccess() {
+    disconnectButton.disabled = false;
+  }</pre>
+
+<p>The only thing we do here is disable the "Connect" button when the local peer is connected and enable the "Disconnect" button when the remote peer connects.</p>
+
+<h4 id="Connecting_the_data_channel">Connecting the data channel</h4>
+
+<p>Once the <a href="../RTCPeerConnection.html" title="The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It is used to handle efficient streaming of data between the two peers."><code>RTCPeerConnection</code></a> is open, the <code><a href="../../Events/datachannel.html" title="/en-US/docs/Web/Events/datachannel">datachannel</a></code> event is sent to the remote to complete the process of opening the data channel; this invokes our <code>receiveChannelCallback()</code> method, which looks like this:</p>
+
+<pre class="brush: js">  function receiveChannelCallback(event) {
+    receiveChannel = event.channel;
+    receiveChannel.onmessage = handleReceiveMessage;
+    receiveChannel.onopen = handleReceiveChannelStatusChange;
+    receiveChannel.onclose = handleReceiveChannelStatusChange;
+  }</pre>
+
+<p>The <code><a href="../../Events/datachannel.html" title="/en-US/docs/Web/Events/datachannel">datachannel</a></code> event includes, in its channel property, a reference to a <a href="../RTCDataChannel.html" title="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection."><code>RTCDataChannel</code></a> representing the remote peer's end of the channel. This is saved, and we set up, on the channel, event listeners for the events we want to handle. Once this is done, our <code>handleReceiveMessage()</code> method will be called each time data is received by the remote peer, and the <code>handleReceiveChannelStatusChange()</code> method will be called any time the channel's connection state changes, so we can react when the channel is fully opened and when it's closed.</p>
+
+<h3 id="Handling_channel_status_changes">Handling channel status changes</h3>
+
+<p>Both our local and remote peers use a single method to handle events indicating a change in the status of the channel's connection.</p>
+
+<p>When the local peer experiences an open or close event, the <code>handleSendChannelStatusChange()</code> method is called:</p>
+
+<pre class="brush: js">  function handleSendChannelStatusChange(event) {
+    if (sendChannel) {
+      var state = sendChannel.readyState;
+    
+      if (state === "open") {
+        messageInputBox.disabled = false;
+        messageInputBox.focus();
+        sendButton.disabled = false;
+        disconnectButton.disabled = false;
+        connectButton.disabled = true;
+      } else {
+        messageInputBox.disabled = true;
+        sendButton.disabled = true;
+        connectButton.disabled = false;
+        disconnectButton.disabled = true;
+      }
+    }
+  }</pre>
+
+<p>If the channel's state has changed to "open", that indicates that we have finished establishing the link between the two peers. The user interface is updated correspondingly by enabling the text input box for the message to send, focusing the input box so that the user can immediately begin to type, enabling the "Send" and "Disconnect" buttons, now that they're usable, and disabling the "Connect" button, since it is not needed when the conneciton is open.</p>
+
+<p>If the state has changed to "closed", the opposite set of actions occurs: the input box and "Send" button are disabled, the "Connect" button is enabled so that the user can open a new connection if they wish to do so, and the "Disconnect" button is disabled, since it's not useful when no connection exists.</p>
+
+<p>Our example's remote peer, on the other hand, ignores the status change events, except for logging the event to the console:</p>
+
+<pre class="brush: js">  function handleReceiveChannelStatusChange(event) {
+    if (receiveChannel) {
+      console.log("Receive channel's status has changed to " +
+                  receiveChannel.readyState);
+    }
+  }</pre>
+
+<p>The <code>handleReceiveChannelStatusChange()</code> method receives as an input parameter the event which occurred; this will be an <a href="../RTCDataChannelEvent.html" title="The RTCDataChannelEvent interface represents events that occurs while attaching a RTCDataChannel to a RTCPeerConnection. The only event sent with this interface is datachannel."><code>RTCDataChannelEvent</code></a>.</p>
+
+<h3 id="Sending_messages">Sending messages</h3>
+
+<p>When the user presses the "Send" button, the sendMessage() method we've established as the handler for the button's <code><a href="../../Events/click.html" title="/en-US/docs/Web/Events/click">click</a></code> event is called. That method is simple enough:</p>
+
+<pre class="brush: js">  function sendMessage() {
+    var message = messageInputBox.value;
+    sendChannel.send(message);
+    
+    messageInputBox.value = "";
+    messageInputBox.focus();
+  }</pre>
+
+<p>First, the text of the message is fetched from the input box's <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-value">value</a></code> attribute. This is then sent to the remote peer by calling <a href="../RTCDataChannel/send.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>sendChannel.send()</code></a>. That's all there is to it! The rest of this method is just some user experience sugar -- the input box is emptied and re-focused so the user can immediately begin typing another message.</p>
+
+<h3 id="Receiving_messages">Receiving messages</h3>
+
+<p>When a "message" event occurs on the remote channel, our <code>handleReceiveMessage()</code> method is called as the event handler.</p>
+
+<pre class="brush: js">  function handleReceiveMessage(event) {
+    var el = document.createElement("p");
+    var txtNode = document.createTextNode(event.data);
+    
+    el.appendChild(txtNode);
+    receiveBox.appendChild(el);
+  }</pre>
+
+<p>This method simply performs some basic <a href="../../../Glossary/DOM.html" class="glossaryLink" title="DOM: The DOM (Document Object Model) is an API that represents and&nbsp;interacts with any HTML or XML&nbsp;document. The DOM is a document model loaded in the browser and representing the document as a node tree,&nbsp;where each node represents part of the&nbsp;document (e.g. an element, text string, or comment).">DOM</a> injection; it creates a new <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/p" title="The HTML &lt;p&gt; element (or HTML Paragraph Element) represents a paragraph of text."><code>&lt;p&gt;</code></a> (paragraph) element, then creates a new <a href="../Text.html" title="The Text interface represents the textual content of Element or Attr.&nbsp; If an element has no markup within its content, it has a single child implementing Text that contains the element's text.&nbsp; However, if the element contains markup, it is parsed into information items and Text nodes that form its children."><code>Text</code></a> node containing the message text, which is received in the event's <code>data</code> property. This text node is appended as a child of the new element, which is then inserted into the <code>receiveBox</code> block, thereby causing it to draw in the browser window.</p>
+
+<h3 id="Disconnecting_the_peers">Disconnecting the peers</h3>
+
+<p>When the user clicks the "Disconnect" button, the <code>disconnectPeers()</code> method previously set as that button's handler is called.</p>
+
+<pre class="brush: js">  function disconnectPeers() {
+ 
+    // Close the RTCDataChannels if they're open.
+    
+    sendChannel.close();
+    receiveChannel.close();
+    
+    // Close the RTCPeerConnections
+    
+    localConnection.close();
+    remoteConnection.close();
+
+    sendChannel = null;
+    receiveChannel = null;
+    localConnection = null;
+    remoteConnection = null;
+    
+    // Update user interface elements
+    
+    connectButton.disabled = false;
+    disconnectButton.disabled = true;
+    sendButton.disabled = true;
+    
+    messageInputBox.value = "";
+    messageInputBox.disabled = true;
+  }
+</pre>
+
+<p>This starts by closing each peer's <a href="../RTCDataChannel.html" title="The RTCDataChannel interface represents a bi-directional data channel between two peers of a connection."><code>RTCDataChannel</code></a>, then, similarly, each <a href="../RTCPeerConnection.html" title="The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It is used to handle efficient streaming of data between the two peers."><code>RTCPeerConnection</code></a>. Then all the saved references to these objects are set to <code>null</code> to avoid accidental reuse, and the user interface is updated to reflect the fact that the connection has been closed.</p>
+
+<h2 id="Next_steps">Next steps</h2>
+
+<p>You should <a href="http://mdn-samples.mozilla.org/s/webrtc-simple-datachannel" class="external">try out this example</a> and take a look at the <a href="https://github.com/mdn/samples-server/tree/master/s/webrtc-simple-datachannel" class="external">webrtc-simple-datachannel</a> source code, available on GitHub.</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Communication">Communication</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/communication">communication</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Example">Example</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Tutorial">Tutorial</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebRTC">WebRTC</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,
+                      <time datetime="2015-07-06T14:31:34-07:00">Jul 6, 2015, 2:31:34 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="../WebRTC_API.html"><strong>WebRTC API</strong></a></li> 
+  <li data-default-state="open"><a href="#"><strong>WebRTC Guides</strong></a> 
+   <ol> 
+     <li><a href="Architecture.html">WebRTC Architecture</a></li> 
+     <li><a href="WebRTC_Basics-2.html">WebRTC Basics</a></li> 
+     <li><a href="Protocols.html">WebRTC Protocols</a></li> 
+     <li><a href="Connectivity.html">Dealing with connectivity</a></li> 
+     <li><a href="Overview.html">Overview of WebRTC interfaces</a></li> 
+     <li><a href="Session_lifetime.html">Lifetime of a WebRTC Session</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>WebRTC Tutorials</strong></a> 
+   <ol> 
+    <li><a href="adapter.html">Interoperability with adapter.js</a></li> 
+    <li><a href="Taking_still_photos.html">Taking still photos from the camera</a></li> 
+    <li><a href="Simple_RTCDataChannel_sample.html">A simple data channel example</a></li> 
+</ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>Interfaces</strong></a> 
+   <ol> 
+    <li><a href="../RTCPeerConnection.html" title="The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It is used to handle efficient streaming of data between the two peers."><code>RTCPeerConnection</code></a></li> 
+    <li><a href="../RTCSessionDescription.html" title="The RTCSessionDescription interface represents the parameters of a session. It consists of the kind of description, which part of a offer/answer negotiation it describes and of the SDP descriptor of the session."><code>RTCSessionDescription</code></a></li> 
+    <li><a href="../RTCIceCandidate-2.html" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCIceCandidate</code></a></li> 
+    <li><a href="../RTCPeerConnectionIceEvent.html" title="The RTCPeerConnectionIceEvent interface represents events that occurs in relation to ICE candidates with the target, usually a RTCPeerConnection. Only one event is of this type: icecandidate."><code>RTCPeerConnectionIceEvent</code></a></li> 
+    <li><a href="../MessageEvent.html" title="A MessageEvent is the interface representing a message received by a target, being a WebSocket or a WebRTC RTCDataChannel"><code>MessageEvent</code></a></li> 
+    <li><a href="../MediaStream.html" title="The MediaStream interface represents a stream of media content. A stream consists of several tracks, like video or audio tracks."><code>MediaStream</code></a></li> 
+    <li><a href="../RTCStatsReport.html" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCStatsReport</code></a></li> 
+    <li><a href="../RTCIdentityEvent.html" title="The RTCIdentityEvent interface represents events that indicates that the identity provider (IdP) associated with the target, usually a RTCPeerConnection, have generated an identity assertion. The only event sent with this type is identityresult."><code>RTCIdentityEvent</code></a></li> 
+    <li><a href="../RTCIdentityErrorEvent.html" title="The RTCIdentityErrorEvent interface represents events that indicates that the identity provider (IdP) associated with the target, usually a RTCPeerConnection, have encountered an error. Two events are sent with this type: idpassertionerror and idpvalidationerror."><code>RTCIdentityErrorEvent</code></a></li> 
+    <li><a href="../MediaStreamEvent.html" title="The MediaStreamEvent interface represents events that occurs in relation to a MediaStream. Two events of this type can be thrown: addstream and removestream."><code>MediaStreamEvent</code></a></li> 
+    <li><a href="../MediaStreamTrack.html" title="The MediaStream interface represents a stream of media content. A stream consists of several tracks, like video or audio tracks."><code>MediaStreamTrack</code></a></li> 
+    <li><a href="../MediaDevices.html" title="The MediaDevices interface provides access to connected media input devices like cameras and microphones, as well as screensharing."><code>MediaDevices</code></a></li> 
+    <li> 
+   </li></ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebRTC">Pages tagged "WebRTC"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="../../../MDN/Doc_status/API/WebRTC.html">WebRTC doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:11:16 GMT -->
+</body></html>

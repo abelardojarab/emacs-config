@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"RuntimePermission(String)","path":"RuntimePermission-java.lang.String-","entryType":"Constructor"},{"name":"RuntimePermission(String, String)","path":"RuntimePermission-java.lang.String-java.lang.String-","entryType":"Constructor"}]}

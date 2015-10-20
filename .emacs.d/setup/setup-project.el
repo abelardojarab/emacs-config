@@ -155,18 +155,18 @@
 (require 'cmake-ide)
 (cmake-ide-setup)
 
-;; cmake IDE
+;; helm dash
 (add-to-list 'load-path "~/.emacs.d/helm-dash")
 (require 'helm-dash)
 (setq helm-dash-min-length 2)
 (setq helm-dash-docsets-path (expand-file-name "~/.emacs.d/docsets"))
-(setq helm-dash-common-docsets '("C" "C++" "Python" "Java"))
+(setq helm-dash-common-docsets '("C++" "Qt"))
 
 (defun my/dash-path (docset)
-  (if (string= docset "OpenGL_4")
-      (concat (concat helm-dash-docsets-path "/") "OpenGL4.docset")
-    (if (string= docset "Emacs_Lisp")
-        (concat (concat helm-dash-docsets-path "/") "Emacs Lisp.docset")
+  (if (string= docset "Python_2")
+      (concat (concat helm-dash-docsets-path "/") "Python_2.docset")
+    (if (string= docset "Qt_4")
+        (concat (concat helm-dash-docsets-path "/") "Qt.docset")
       (concat
        (concat
         (concat
@@ -179,18 +179,23 @@
 
 (defun c-doc-hook ()
   (interactive)
-  (setq-local helm-dash-docsets '("C" "C++")))
+  (setq-local helm-dash-docsets '("C" "C++" "Qt")))
 (add-hook 'c-mode-common-hook 'c-doc-hook)
-
-(defun emacs-doc-hook ()
-  (interactive)
-  (setq-local helm-dash-docsets '("Emacs_Lisp")))
-(add-hook 'emacs-lisp-mode-hook 'emacs-doc-hook)
 
 (defun python-doc-hook ()
   (interactive)
-  (setq-local helm-dash-docsets '("Python")))
+  (setq-local helm-dash-docsets '("Python_2")))
 (add-hook 'python-mode-hook 'python-doc-hook)
+
+(defun java-doc-hook ()
+  (interactive)
+  (setq-local helm-dash-docsets '("Java")))
+(add-hook 'java-mode-hook 'java-doc-hook)
+
+(defun js2-doc-hook ()
+  (interactive)
+  (setq-local helm-dash-docsets '("JavaScript" "NodeJS")))
+(add-hook 'js2-mode-hook 'js2-doc-hook)
 
 (provide 'setup-project)
 ;;; setup-project.el ends here

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QWaitCondition","path":"QWaitCondition","entryType":"Function"},{"name":"~QWaitCondition","path":"dtor.QWaitCondition","entryType":"Function"},{"name":"wait","path":"wait","entryType":"Function"},{"name":"wakeAll","path":"wakeAll","entryType":"Function"},{"name":"wakeOne","path":"wakeOne","entryType":"Function"}]}

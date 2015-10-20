@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"MBeanRegistrationException(Exception)","path":"MBeanRegistrationException-java.lang.Exception-","entryType":"Constructor"},{"name":"MBeanRegistrationException(Exception, String)","path":"MBeanRegistrationException-java.lang.Exception-java.lang.String-","entryType":"Constructor"}]}

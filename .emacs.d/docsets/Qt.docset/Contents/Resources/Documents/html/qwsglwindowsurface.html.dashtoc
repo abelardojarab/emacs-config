@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QWSGLWindowSurface","path":"QWSGLWindowSurface","entryType":"Function"},{"name":"~QWSGLWindowSurface","path":"dtor.QWSGLWindowSurface","entryType":"Function"},{"name":"context","path":"context","entryType":"Function"},{"name":"setContext","path":"setContext","entryType":"Function"}]}

@@ -1,0 +1,1271 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Activities by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:10:08 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Web Activities</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Activities$json">
+  <link rel="canonical" href="Web_Activities.html">
+
+            <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/Web_Activities" title="Web アクティビティ">
+          <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/WebAPI/Web_Activities" title="Web Activities">
+          <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/WebAPI/Web_Activities" title="Web Activities">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Web Activities">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Activities">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Activities">
+  <meta name="twitter:title" content="Web Activities">
+    <meta property="og:description" content="Web activities define a way for applications to delegate an activity to another (usually user-chosen) application.">
+  <meta name="description" content="Web activities define a way for applications to delegate an activity to another (usually user-chosen) application.">
+  <meta name="twitter:description" content="Web activities define a way for applications to delegate an activity to another (usually user-chosen) application.">
+  
+      
+  </head>
+<body data-slug="Web/API/Web_Activities" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Web_Activities" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Activities" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Web_Activities" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Activities" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/Web_Activities" title="Web アクティビティ">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/WebAPI/Web_Activities" title="Web Activities">Português (do&nbsp;Brasil)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/WebAPI/Web_Activities" title="Web Activities">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Activities$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Activities$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Activities$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Web Activities</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Web Activities</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 25 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mahdi" title="View profile: Mahdi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mahdi" data-src="../../../../../secure.gravatar.com/avatar/0c861f36ff63edadc0d3dc8d26328e5c6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mahdi</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/GuanWen" title="View profile: GuanWen">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="GuanWen" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">GuanWen</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/andregarzia" title="View profile: andregarzia">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="andregarzia" data-src="../../../../../secure.gravatar.com/avatar/b8948eca9c9d50202774e970d8410cef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">andregarzia</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/KitaitiMakoto" title="View profile: KitaitiMakoto">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="KitaitiMakoto" data-src="../../../../../secure.gravatar.com/avatar/c92b13d1da1201790c0ee606a3f8fe6b6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">KitaitiMakoto</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kaustavdm" title="View profile: kaustavdm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kaustavdm" data-src="../../../../../secure.gravatar.com/avatar/e6bb8ce8bbf0791641ce65e8fadd13bb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kaustavdm</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/japas88" title="View profile: japas88">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="japas88" data-src="../../../../../secure.gravatar.com/avatar/4791a0cc4d0e6d0ec568c4cfd56952196aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">japas88</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight" title="View profile: SphinxKnight">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SphinxKnight" data-src="../../../../../secure.gravatar.com/avatar/8fb358ea9b7af22f5021a29e122ea0696aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">SphinxKnight</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AndrewSutherland" title="View profile: AndrewSutherland">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AndrewSutherland" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">AndrewSutherland</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AlexFunk" title="View profile: AlexFunk">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AlexFunk" data-src="../../../../../secure.gravatar.com/avatar/89164490b92b390ebaaad5ac7006b4576aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">AlexFunk</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jdover" title="View profile: jdover">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jdover" data-src="../../../../../secure.gravatar.com/avatar/31951f315d9c56ceac4c20009be0808b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jdover</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/julienw" title="View profile: julienw">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="julienw" data-src="../../../../../secure.gravatar.com/avatar/a2b625f331361a7110da59a907d79e956aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">julienw</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sole" title="View profile: Sole">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sole" data-src="../../../../../secure.gravatar.com/avatar/4ae094cd79788a2077f1b8dbd07a7c3f6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sole</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JulianNeal" title="View profile: JulianNeal">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JulianNeal" data-src="../../../../../secure.gravatar.com/avatar/47b180ea050bafdb549104506235a0c06aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">JulianNeal</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ranbena" title="View profile: ranbena">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ranbena" data-src="../../../../../secure.gravatar.com/avatar/ff4fc00e6f14d683b3bc5a1714619e926aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ranbena</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/daviddoran" title="View profile: daviddoran">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="daviddoran" data-src="../../../../../secure.gravatar.com/avatar/39394c565113660f020a5bdbc5517ea66aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">daviddoran</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mounirlamouri" title="View profile: mounirlamouri">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mounirlamouri" data-src="../../../../../secure.gravatar.com/avatar/f3bc800fde3724f78dc9e01e97b4f2e16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">mounirlamouri</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tofumatt" title="View profile: tofumatt">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tofumatt" data-src="../../../../../secure.gravatar.com/avatar/4a1b8066eff77b9b5a3b82c64ce140b36aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tofumatt</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/wbamberg" title="View profile: wbamberg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wbamberg" data-src="../../../../../secure.gravatar.com/avatar/576b94c81f8ad97e58d63f12e5fdb00c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">wbamberg</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/markg" title="View profile: markg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="markg" data-src="../../../../../secure.gravatar.com/avatar/a6bdd84b4732a2c3c7ecadd886b3c64a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">markg</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/nikhilm" title="View profile: nikhilm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nikhilm" data-src="../../../../../secure.gravatar.com/avatar/9d2d8883a6f23209c0ae4f093e1a8a276aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">nikhilm</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Activities" rel="internal">Activities</a></li><li><a href="#Registering_an_App_as_an_activity_handler" rel="internal">Registering an App as an activity handler</a><ol><li><a href="#Register_an_activity" rel="internal">Register an activity</a><ol><li><a href="#App_manifest_(a.k.a._declaration_registration)" rel="internal">App manifest (a.k.a. declaration registration)</a></li><li><a href="#Dynamic_registration" rel="internal">Dynamic registration</a></li><li><a href="#Activity_handler_description" rel="internal">Activity handler description</a></li></ol></li></ol></li><li><a href="#Handle_an_activity" rel="internal">Handle an activity</a></li><li><a href="#Starting_an_activity" rel="internal">Starting an activity</a><ol><li><a href="#Further_information_contact_retrieval" rel="internal">Further information: contact retrieval</a></li><li><a href="#Firefox_OS_activities" rel="internal">Firefox OS activities</a></li><li><a href="#Firefox_for_Android_activities" rel="internal">Firefox for Android activities</a></li></ol></li><li><a href="#Specification" rel="internal">Specification</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><div class="overheadIndicator nonStandard nonStandardHeader"> 
+      <p><strong><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span> Non-standard</strong><br> 
+      This feature is not on a current W3C standards track, but it is supported on the Firefox OS platform. Although implementations may change in the future and it is not supported widely across browsers, it is suitable for use in code dedicated to Firefox OS apps.</p> 
+      </div><p></p>
+
+<div class="warning">
+<p style="text-align: center;">This API is available to installed code running on Firefox for Android, and is intended for use by Firefox for Android Webapps in Firefox for Android 32+.</p>
+</div>
+
+<div class="summary">
+<p><span class="seoSummary">Web activities define a way for applications to delegate an activity to another (usually user-chosen) application.</span></p>
+</div>
+
+<p>Web activities are currently enabled on Firefox OS only, and the full specification is <a href="https://wiki.mozilla.org/WebAPI/WebActivities" class="external" title="https://wiki.mozilla.org/WebAPI/WebActivities">available on WikiMo</a>.</p>
+
+<h2 id="Activities">Activities</h2>
+
+<p>An activity is something a user wants to do: pick an image, send an e-mail, etc. App authors may want to define an app that can handle an activity or that can delegate to an activity.</p>
+
+<h2 id="Registering_an_App_as_an_activity_handler">Registering an App as an activity handler</h2>
+
+<p>App authors can build an app that will handle one or more activities. That means that the app will be callable by another app to perform some specific actions defined by the activity. For example, let's pretend we want to build a photo manager. It could be used by another application to pick a photo. As an activity handler our app will become part of the other application's workflow.</p>
+
+<h3 id="Register_an_activity">Register an activity</h3>
+
+<p>There is currently only one way to register an app as an activity handler: declaring it in the app manifest.</p>
+
+<div class="note">
+<p><strong>Note:</strong> Any application can register itself as an activity handler for any existing activity or create its own activity. In both cases it's done the same way within the app manifest. However, when creating a new activity, it is considered best practice to avoid activities' name collisions by prefixing the name of the new activity with a URL (e.g.,<em>example.org/myActivity</em> or<em>org.example.myActivity</em> ).</p>
+</div>
+
+<h4 id="App_manifest_(a.k.a._declaration_registration)">App manifest (a.k.a. declaration registration)</h4>
+
+<p>We have to use the <a href="https://developer.mozilla.org/en-US/docs/Apps/Manifest" title="/en-US/docs/Apps/Manifest">app manifest</a> to express that our app is expected to handle an activity as in this example:</p>
+
+<pre class="brush: js">{
+  // Other App Manifest related stuff
+
+  // Activity registration
+  "activities": {
+
+    // The name of the activity to handle (here "pick")
+    "pick": {
+      "href": "./pick.html",
+      "disposition": "inline",
+      "filters": {
+        "type": ["image/*","image/jpeg","image/png"]
+      },
+      "returnValue": true
+    }
+  }
+}
+</pre>
+
+<h4 id="Dynamic_registration">Dynamic registration</h4>
+
+<p>There are plans to let an app register itself dynamically by using the <a href="Window/navigator.html" title="The Window.navigator read-only property returns a reference to the Navigator object, which can be queried for information about the application running the script."><code>navigator</code></a> object. However, this API is not available yet. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=775181" class="external" title="Implement navigator.* for Web Activities">bug&nbsp;775181</a> to follow the work about that specific API.</p>
+
+<h4 id="Activity_handler_description">Activity handler description</h4>
+
+<dl>
+ <dt><code>href</code></dt>
+ <dd>When another app or Web page initiates an activity that is supported by this app, if this app is chosen to perform the activity, this specifies the page that will be opened. It will be opened in the manner specified by the <code>disposition</code> property.
+ <div class="note"><strong>Note:</strong> The URL of this page is restricted by the rules of the <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy" title="/en-US/docs/JavaScript/Same_origin_policy_for_JavaScript">same origin policy</a>.</div>
+ </dd>
+</dl>
+
+<dl>
+ <dt><code>disposition</code> <span class="inlineIndicator optional optionalInline">Optional</span></dt>
+</dl>
+
+<dl>
+ <dd>Specifies how the page specified in <code>href</code> is presented when an activity is invoked. The value, if specified, must be one of the following (if omitted, defaults to <code>window</code>):
+
+ <ul>
+  <li><strong><code>window</code></strong> - The page handling the activity is opened in a new "window" (on a mobile device this view will replace the original app that requested the activity). The page must call <a href="Window/navigator/mozSetMessageHandler-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozSetMessageHandler()</code></a> for each activity it supports and subsequently execute the activity for which it receives a message.</li>
+  <li><strong><code>inline</code></strong> - The page that handles the activity will open in an overlay (on a mobile device this will be rendered in a popup over the original app that requested the activity). Subsequent behavior is exactly the same as if <code>disposition</code> were <code>window</code>.</li>
+ </ul>
+ </dd>
+</dl>
+
+<dl>
+ <dt><code>returnValue</code> <span class="inlineIndicator optional optionalInline">Optional</span></dt>
+ <dd>States if the activity will return a value or not. If an application doesn't plan to return a value, the UA may send a <em>success</em> event as soon as an application has been picked. If a value is expected, the activity handler must call <a href="MozActivityRequestHandler/postResult.html" title="The postResult method is used to send back an answer to the app that made the activity request."><code>MozActivityRequestHandler.postResult()</code></a> if the activity is successful or <a href="MozActivityRequestHandler/postError.html" title="The postError method is used to send back an error message to the app that made the activity request."><code>MozActivityRequestHandler.postError()</code></a> if the activity fails (where <a href="MozActivityRequestHandler.html" title="The MozActivityRequestHandler interface allows apps that handle activities to access and interact with the request made by a third party app that tries to delegate an activity."><code>MozActivityRequestHandler</code></a> is the type of the first argument provided to the function specified within <a href="Window/navigator/mozSetMessageHandler-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>mozSetMessageHandler</code></a> by the activity handler). The <em>success</em> or <em>error</em> event will be respectively fired after <a href="MozActivityRequestHandler/postResult.html" title="The postResult method is used to send back an answer to the app that made the activity request."><code>postResult</code></a> or <a href="MozActivityRequestHandler/postError.html" title="The postError method is used to send back an error message to the app that made the activity request."><code>postError</code></a> has been called by the activity handler.</dd>
+</dl>
+
+<dl>
+ <dt><code>filters</code> <span class="inlineIndicator optional optionalInline">Optional</span></dt>
+ <dd>A dictionary where each property of which specifies a filter. These filters will be applied while determining apps suitable for handling a given activity. Filter names are free-form text and should mirror <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>data</code></a> properties' names from <a href="MozActivityOptions.html" title="The MozActivityOptions interface allows apps to declare the activity they want to create and also to access information of activities they want to handle."><code>MozActivityOptions</code></a>. Filters' values are either a basic value (string or number), an array of basic values, or a filter definition object. An activity will be considered as able to handle an activity only if the filters are all satisfied.</dd>
+</dl>
+
+<p>The way filters are handled depend on each filter value:</p>
+
+<ul>
+ <li>If the filter value is a basic value, the corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property is optional but if the property exist it must have the same value as the one provided by the filter.</li>
+ <li>If the filter value is an array of basic values, the corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property is optional but if the property exists its value must be equal to one of the values available in the array provided by the filter.</li>
+ <li>If the filter value is a filter definition object, the filter will be satisfied if the corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property follows the rules defined by the object. A filter definition object can have the following properties:
+  <ul>
+   <li><code>required</code>: A boolean that indicates if the corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property must exist (<code>true</code>) or not (<code>false</code>).</li>
+   <li><code>value</code>: A basic value or an array of basic value. The corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property value must be equal to one of the values defined in the filter.</li>
+   <li><code>min</code>: If the expected value is a number, the corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property value must be greater than or equal to that value.</li>
+   <li><code>max</code>: If the expected value is a number, the corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property value must be lesser than or equal to that value.</li>
+   <li><code>pattern</code>: A string pattern following the <a href="../JavaScript/Guide/Regular_Expressions.html" title="/en-US/docs/JavaScript/Guide/Regular_Expressions">JavaScript regular expression</a> syntax. The corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property value must match that pattern. <strong>This is supported in Firefox OS from v1.2.</strong></li>
+   <li><code>patternFlags</code>: If the <code>pattern</code> property is used, this property can be used to provide some extra regular expression flag such as <code>i</code> or <code>g</code>. <strong>This is supported in Firefox OS from v1.2.</strong></li>
+   <li><code>regexp</code>: A string containing a regexp litteral following the <a href="../JavaScript/Guide/Regular_Expressions.html" title="/en-US/docs/JavaScript/Guide/Regular_Expressions">JavaScript regular expression</a> syntax. The corresponding <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>MozActivityOptions.data</code></a> property value must match that pattern. In contrary to the pattern flag, this can match only part of the value, therefore you must use the metacharacters ^ and $ to respectively match the start and the end of the string. <strong>This is supported in Firefox OS v1.0 and v1.1 only.</strong> Therefore you're advised to use both <code>pattern</code> and <code>regexp</code>.</li>
+  </ul>
+ </li>
+</ul>
+
+<h2 id="Handle_an_activity">Handle an activity</h2>
+
+<p>Once our application is declared as an activity handler, we have to make it concrete by performing some actions when receiving an activity request from another app.</p>
+
+<p>To handle the activity, we have to register a function that will perform all the necessary actions. To do so, we need to set a message handler with <a href="Window/navigator/mozSetMessageHandler-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozSetMessageHandler()</code></a>, specifically assigned to the <code>'activity'</code> message (and not the name of the activity). A <a href="MozActivityRequestHandler.html" title="The MozActivityRequestHandler interface allows apps that handle activities to access and interact with the request made by a third party app that tries to delegate an activity."><code>MozActivityRequestHandler</code></a> object is passed as an argument of the activity handler function.</p>
+
+<pre class="brush: js">navigator.mozSetMessageHandler('activity', function(activityRequest) {
+  // Do something to handle the activity
+});</pre>
+
+<p>As the activity handler function is performing an action, it will use the activity request to retrieve information about the activity and to send back an answer if necessary.</p>
+
+<p>The app that calls the activity has to provide some data (see below). This data can be reached through the request's <a href="MozActivityRequestHandler/source.html" title="The source property returns a MozActivityOptions object, which provides information about the activity request."><code>source</code></a> properties which is a <a href="MozActivityOptions.html" title="The MozActivityOptions interface allows apps to declare the activity they want to create and also to access information of activities they want to handle."><code>MozActivityOptions</code></a> object. This object provides the <a href="MozActivityOptions/name.html" title="The name property returns a string representing the name of the associated activity. See MozActivityOptions to read in which context MozActivityOptions is being used."><code>name</code></a> of the activity call and the associated <a href="MozActivityOptions/data.html" title="The data property returns an arbitrary object representing any data passed with the activity."><code>data</code></a>.</p>
+
+<pre class="brush: js">navigator.mozSetMessageHandler('activity', function(activityRequest) {
+  var option = activityRequest.source;
+
+  if (option.name === "pick") {
+    // Do something to handle the activity
+  }
+});</pre>
+
+<p>Once we have performed all the actions to handle the activity, we can call the request's <a href="MozActivityRequestHandler/postResult.html" title="The postResult method is used to send back an answer to the app that made the activity request."><code>postResult()</code></a> method to send the result back to the app that delegated the activity.</p>
+
+<p>If something goes wrong we can call the request's <a href="MozActivityRequestHandler/postError.html" title="The postError method is used to send back an error message to the app that made the activity request."><code>postError()</code></a> method to send back an error message about the activity.</p>
+
+<pre class="brush: js">navigator.mozSetMessageHandler('activity', function(activityRequest) {
+  var option = activityRequest.source;
+
+  if (option.name === "pick") {
+    // Do something to handle the activity
+    ...
+
+    // Send back the result
+    if (picture) {
+      activityRequest.postResult({
+        type: picture.type,
+        blob: picture
+      });
+    } else {
+      activityRequest.postError("Unable to provide a picture");
+    }
+  }
+});</pre>
+
+<div class="note">
+<p><strong>Note:</strong> UA is expected to send an error anyway at some point if neither <a href="MozActivityRequestHandler/postError.html" title="The postError method is used to send back an error message to the app that made the activity request."><code>postError()</code></a> nor <a href="MozActivityRequestHandler/postResult.html" title="The postResult method is used to send back an answer to the app that made the activity request."><code>postResult()</code></a> are called--for example, if the user leaves the application (closes the tab on desktop or goes back to the home screen on a mobile device).</p>
+</div>
+
+<h2 id="Starting_an_activity">Starting an activity</h2>
+
+<p>On the other side of <em>Web Activities</em>, there are apps that want to delegate an activity to our app. To perform such delegation, the apps have to call an activity by instantiating a <a href="MozActivity.html" title="The MozActivity interface allows apps to delegate an activity to another app."><code>MozActivity</code></a> object. Such objects are nothing less than <a href="DOMRequest.html" title="A DOMRequest object represents an ongoing operation. It provides callbacks that are called when the operation completes, as well as a reference to the operation's result. A DOM method that initiates an ongoing operation may return a DOMRequest object that you can use to monitor the progress of that operation."><code>DOMRequest</code></a> objects that allow to wait for any response from the activity handler. As soon as the object is constructed, the activity is started, and the UI is shown to the user as soon as possible.</p>
+
+<pre id=".C2.A0" class="brush: js">var activity = new MozActivity({
+  // Ask for the "pick" activity
+  name: "pick",
+
+  // Provide the data required by the filters of the activity
+  data: {
+    type: "image/jpeg"
+  }
+});
+
+activity.onsuccess = function() {
+  var picture = this.result;
+  console.log("A picture has been retrieved");
+};
+
+activity.onerror = function() {
+  console.log(this.error);
+};
+</pre>
+
+<h3 id="Further_information_contact_retrieval">Further information: contact retrieval</h3>
+
+<p>In Firefox OS 1.3 and below, picking contacts is handled like like:</p>
+
+<pre class="brush: js">switch (this.activityDataType) {
+  case 'webcontacts/tel':
+    type = 'contact';
+    dataSet = theContact.tel;
+    noDataStr = _('no_contact_phones');
+    break;
+  case 'webcontacts/contact':
+    type = 'number';
+    dataSet = theContact.tel;
+    noDataStr = _('no_contact_phones');
+    break;
+  case 'webcontacts/email':
+    type = 'email';
+    dataSet = theContact.email;
+    noDataStr = _('no_contact_email');
+    break;
+}</pre>
+
+<p>If you want a persons name and telephone number you can then use:</p>
+
+<pre class="brush: js">var pick = new MozActivity({
+  name: "pick",
+  data: {
+    type: "webcontacts/contact"
+  }
+});
+
+pick.onsuccess = function () {
+  console.log("got contact");
+  var contact = this.result;
+  if( contact ){
+    console.log( "Name " + contact.name + " number "+ contact.number );
+  }
+};</pre>
+
+<p>In Firefox OS 2.0+ we added a field that if you use webcontacts/contact you can get the whole contact:</p>
+
+<pre class="brush: js">var pick = new MozActivity({
+  name: "pick",
+  data: {
+    type: "webcontacts/contact",
+    fullContact: "true"
+  }
+});</pre>
+
+<p>This returns is a <code>Contact</code> Object, which you can use the properties of directly:</p>
+
+<pre class="brush: js">pick.onsuccess = function (Contact) {
+  console.log( "Name " + Contact.name + " number "+ Contact.number );
+};</pre>
+
+<h3 id="Firefox_OS_activities">Firefox OS activities</h3>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Platform/Gaia" title="/en-US/docs/Mozilla/Firefox_OS/Platform/Gaia">Gaia</a>, the native interface for Firefox OS, provides many built-in applications that define basic activities. Those activities are the following:</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Name</th>
+   <th scope="col">Application</th>
+   <th scope="col">Expected Data (filters)</th>
+   <th scope="col">Comments</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><code>browse</code></td>
+   <td>Gallery</td>
+   <td>
+    <pre class="brush: js">type: "photos"</pre>
+   </td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><code>configure</code></td>
+   <td>Settings</td>
+   <td>
+    <pre class="brush: js">target: "device"</pre>
+   </td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><code>costcontrol/balance</code></td>
+   <td>Costcontrol</td>
+   <td>None</td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><code>costcontrol/data_usage</code></td>
+   <td>Costcontrol</td>
+   <td>None</td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><code>costcontrol/telephony</code></td>
+   <td>Costcontrol</td>
+   <td>None</td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><code>dial</code></td>
+   <td>Communication</td>
+   <td>
+    <pre class="brush: js">type: "webtelephony/number",
+number: { 
+  regexp: "^[\\d\\s+#*().-]{0,50}$"
+}</pre>
+   </td>
+   <td>Used when an app wants to pass a phone call.</td>
+  </tr>
+  <tr>
+   <td rowspan="3" colspan="1"><code>new</code></td>
+   <td>Communication</td>
+   <td>
+    <pre class="brush: js">type: "webcontacts/contact"</pre>
+   </td>
+   <td>Used when an app wants to create a new contact entry.</td>
+  </tr>
+  <tr>
+   <td>Email</td>
+   <td>
+    <pre class="brush: js">type: "mail"</pre>
+   </td>
+   <td>
+    <p>Used when an app wants to send a new Email.&nbsp; The e-mail app can parse <a href="http://tools.ietf.org/html/rfc6068" class="external">mailto URI</a> strings provided as either a "url" or "URI" property.&nbsp; Attachments can be provided by populating parallel "blobs" and "filenames" arrays where then nth filename corresponds to the nth blob.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>SMS</td>
+   <td>
+    <pre id="LC48" class="brush: js">type: "websms/sms",
+number: {
+  regexp: "^[\\w\\s+#*().-]{0,50}$"
+}</pre>
+   </td>
+   <td>Used when an app wants to send an SMS.</td>
+  </tr>
+  <tr>
+   <td colspan="1">nfc-ndef-discovered</td>
+   <td>n/a</td>
+   <td>None</td>
+   <td>Used when an app wants to exchange data/tags with an app on another device.</td>
+  </tr>
+  <tr>
+   <td rowspan="4" colspan="1"><code>open</code></td>
+   <td>Communication</td>
+   <td>
+    <pre class="brush: js">type: "webcontacts/contact"</pre>
+   </td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td>Gallery</td>
+   <td>
+    <pre class="brush: js">type: [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/bmp"
+]</pre>
+   </td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td>Music</td>
+   <td>
+    <pre class="brush: js">type: [
+  "audio/mpeg",
+  "audio/ogg",
+  "audio/mp4"
+]</pre>
+   </td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td>Video</td>
+   <td>
+    <pre class="brush: js">type: [
+  "video/webm",
+  "video/mp4",
+  "video/3gpp",
+  "video/youtube"
+]</pre>
+
+    <p>Also expect a <code>blob</code> property which is a <a href="Blob.html" title="A Blob object represents a file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system."><code>Blob</code></a> object.</p>
+   </td>
+   <td>Used when an app wants to display a video (the <code>view</code> activity allows to do the same).</td>
+  </tr>
+  <tr>
+   <td rowspan="2" colspan="1"><code>pick</code></td>
+   <td>Camera, Gallery, Wallpaper</td>
+   <td>
+    <pre class="brush: js">type: ["image/*", "image/jpeg"]</pre>
+   </td>
+   <td>Used when an app wants to get a picture.</td>
+  </tr>
+  <tr>
+   <td>Communication</td>
+   <td>
+    <pre class="brush: js">type: [
+  "webcontacts/contact",
+  "webcontacts/email"
+]</pre>
+
+    <p>as of Firefox OS 2.0, you can specify a fullContact: "true" field to return a complete contact object that you can access the properties of directly:</p>
+
+    <pre class="brush: js">type: [
+  "webcontacts/contact",
+  fullContact: "true"
+]</pre>
+   </td>
+   <td>Used when an app wants to retrieve some contact information or an e-mail.</td>
+  </tr>
+  <tr>
+   <td><code>record</code></td>
+   <td>Camera</td>
+   <td>
+    <pre class="brush: js">type: ["photos", "videos"]</pre>
+   </td>
+   <td>Used when an app wants to record some video.</td>
+  </tr>
+  <tr>
+   <td><code>save-bookmark</code></td>
+   <td>Homescreen</td>
+   <td>
+    <pre id="LC46" class="brush: js">type: "url",
+url: {
+  required:true,
+  regexp:/^https?:/
+}</pre>
+   </td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td rowspan="2" colspan="1"><code>share</code></td>
+   <td>Bluetooth</td>
+   <td>
+    <pre class="brush: js">number: 1
+</pre>
+   </td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td>Email, Wallpaper</td>
+   <td>
+    <pre class="brush: js">type: "image/*"</pre>
+   </td>
+   <td>Used when an app wants to share an image.</td>
+  </tr>
+  <tr>
+   <td rowspan="4" colspan="1"><code>view</code></td>
+   <td>Browser</td>
+   <td>
+    <pre class="brush: js">type: "url"
+url: {
+  required: true,
+  regexp: /^https?:.{1,16384}$/
+}</pre>
+   </td>
+   <td>Used when an app wants to open a URL.</td>
+  </tr>
+  <tr>
+   <td>Email</td>
+   <td>
+    <pre id="LC64" class="brush: js">type: "url",
+url: {
+  required:true,
+  regexp: "^mailto:"
+}</pre>
+   </td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td>PDFs</td>
+   <td>
+    <pre class="brush: js">type: "application/pdf"</pre>
+   </td>
+   <td>Used when an app wants to display the content of a PDF document.</td>
+  </tr>
+  <tr>
+   <td>Video</td>
+   <td>
+    <pre class="brush: js">type: [
+  "video/webm",
+  "video/mp4",
+  "video/3gpp",
+  "video/youtube"
+]</pre>
+
+    <p>Also expect a <code>url</code> property which is a string.</p>
+   </td>
+   <td>Used when an app wants to display a video (the <code>open</code> activity allows to do the same).</td>
+  </tr>
+  <tr>
+   <td><code>update</code></td>
+   <td>Communication</td>
+   <td>
+    <pre class="brush: js">type: "webcontacts/contact"</pre>
+   </td>
+   <td>Used when an app wants to update a contact.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Firefox_for_Android_activities">Firefox for Android activities</h3>
+
+<p>Firefox for Android 32+ allows installed webapps using the WebappRT to launch native Android intents via Web Activities. For security reasons, only explicitly mapped activities / intents are supported. Those activities are the following:</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th colspan="2">MozActivity</th>
+   <th colspan="4">Android Intent</th>
+  </tr>
+  <tr>
+   <th>Name</th>
+   <th>Expected Data</th>
+   <th>Action</th>
+   <th>Extras</th>
+   <th>MIME</th>
+   <th>URI</th>
+  </tr>
+  <tr>
+   <td><code>dial</code></td>
+   <td>
+    <pre class="brush: js">type: "webtelephony/number",
+number: "+11234567890"</pre>
+   </td>
+   <td><code>DIAL</code></td>
+   <td>&nbsp;</td>
+   <td>&nbsp;</td>
+   <td><code>tel:+11234567890</code></td>
+  </tr>
+  <tr>
+   <td><code>open</code></td>
+   <td>
+    <pre class="brush: js">type: "image/jpeg",
+uri: "http://mozilla.org/image.jpg"</pre>
+   </td>
+   <td><code>VIEW</code></td>
+   <td>&nbsp;</td>
+   <td><code>image/jpeg</code></td>
+   <td><code>http://mozilla.org/image.jpg</code></td>
+  </tr>
+  <tr>
+   <td><code>pick</code></td>
+   <td>
+    <pre class="brush: js">type: "image/jpeg"</pre>
+   </td>
+   <td><code>GET_CONTENT</code></td>
+   <td>&nbsp;</td>
+   <td><code>image/jpeg</code></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td rowspan="2"><code>send</code></td>
+   <td>
+    <pre class="brush: js">type: "text/plain",
+text: "my message"</pre>
+   </td>
+   <td><code>SEND</code></td>
+   <td><code>TEXT: "my message"</code></td>
+   <td><code>text/plain</code></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td>
+    <pre class="brush: js">type: "text/html",
+html_text: "&lt;strong&gt;my&lt;/strong&gt; message"</pre>
+   </td>
+   <td><code>SEND</code></td>
+   <td><code>HTML_TEXT: "&lt;strong&gt;my&lt;/strong&gt; message"</code></td>
+   <td><code>text/html</code></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td rowspan="2"><code>view</code></td>
+   <td>
+    <pre class="brush: js">type: "url",
+url: "http://mozilla.org/"</pre>
+   </td>
+   <td><code>VIEW</code></td>
+   <td>&nbsp;</td>
+   <td>&nbsp;</td>
+   <td><code>http://mozilla.org/</code></td>
+  </tr>
+  <tr>
+   <td>
+    <pre class="brush: js">type: "url",
+uri: "mailto:user@mozilla.org"</pre>
+   </td>
+   <td><code>VIEW</code></td>
+   <td>&nbsp;</td>
+   <td>&nbsp;</td>
+   <td><code>mailto:user@mozilla.org</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<div class="note">
+<p><strong>Note</strong>: As of Firefox 41, Firefox for Android also supports loading of <a href="https://developer.chrome.com/multidevice/android/intents" class="external">Android URI Intents</a>. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=851693" class="external" title="FIXED: Allow loading URI Intents">bug&nbsp;851693</a>.</p>
+</div>
+
+<h2 id="Specification">Specification</h2>
+
+<p><em>Web Activities</em> is not part of any specification. However, it has some overlap with the proposed <a href="https://dvcs.w3.org/hg/web-intents/raw-file/tip/spec/Overview-respec.html" class="external" title="http://www.w3.org/TR/web-intents/">Web Intents</a> specification. Mozilla actually proposed <em>Web Activities</em> as <a href="https://wiki.mozilla.org/WebAPI/WebActivities" class="external" title="https://wiki.mozilla.org/WebAPI/WebActivities">a counter proposal</a> to <em>Web Intents</em>. For more information about this, see discussion on the <a href="http://lists.w3.org/Archives/Public/public-web-intents/2012Jun/0061.html" class="external" title="http://lists.w3.org/Archives/Public/public-web-intents/2012Jun/0061.html">Web Intents Task Force ML</a>.</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="MozActivity.html" title="The MozActivity interface allows apps to delegate an activity to another app."><code>MozActivity</code></a></li>
+ <li><a href="MozActivityRequestHandler.html" title="The MozActivityRequestHandler interface allows apps that handle activities to access and interact with the request made by a third party app that tries to delegate an activity."><code>MozActivityRequestHandler</code></a></li>
+ <li><a href="MozActivityOptions.html" title="The MozActivityOptions interface allows apps to declare the activity they want to create and also to access information of activities they want to handle."><code>MozActivityOptions</code></a></li>
+ <li><a href="Window/navigator/mozSetMessageHandler-2.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozSetMessageHandler()</code></a></li>
+ <li><a href="https://hacks.mozilla.org/2013/01/introducing-web-activities/" class="external" title="https://hacks.mozilla.org/2013/01/introducing-web-activities/">Introducing Web Activities</a></li>
+ <li><a href="https://github.com/soapdog/firefoxos-sample-app-image-uploader" class="external" title="Firefox OS Image Uploader Sample App">Firefox OS Image Uploader Sample App</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../tag/API.html">API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/B2G">B2G</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Firefox OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/guide">guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Non Standard">Non Standard</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web Activities">Web Activities</a></li>
+              <li><a href="../../tag/WebAPI.html">WebAPI</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mahdi">Mahdi</a>,             <a href="https://developer.mozilla.org/en-US/profiles/GuanWen">GuanWen</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/andregarzia">andregarzia</a>,             <a href="https://developer.mozilla.org/en-US/profiles/KitaitiMakoto">KitaitiMakoto</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kaustavdm">kaustavdm</a>,             <a href="https://developer.mozilla.org/en-US/profiles/japas88">japas88</a>,             <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight">SphinxKnight</a>,             <a href="https://developer.mozilla.org/en-US/profiles/AndrewSutherland">AndrewSutherland</a>,             <a href="https://developer.mozilla.org/en-US/profiles/AlexFunk">AlexFunk</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jdover">jdover</a>,             <a href="https://developer.mozilla.org/en-US/profiles/julienw">julienw</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sole">Sole</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/JulianNeal">JulianNeal</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ranbena">ranbena</a>,             <a href="https://developer.mozilla.org/en-US/profiles/daviddoran">daviddoran</a>,             <a href="https://developer.mozilla.org/en-US/profiles/mounirlamouri">mounirlamouri</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tofumatt">tofumatt</a>,             <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/markg">markg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>,             <a href="https://developer.mozilla.org/en-US/profiles/nikhilm">nikhilm</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2015-09-18T04:41:05-07:00">Sep 18, 2015, 4:41:05 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="Web_Activities.html">Web Activities</a></strong></li><li data-default-state="open"><a href="#"><strong>Interfaces</strong></a><ol><li><a href="MozActivity.html"><code>MozActivity</code></a></li><li><a href="MozActivityRequestHandler.html"><code>MozActivityRequestHandler</code></a></li><li><a href="MozActivityOptions.html"><code>MozActivityOptions</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="Navigator/mozSetMessageHandler.html"><code>Navigator.mozSetMessageHandler</code></a></li></ol></li></ol>
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Web_Activities$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Web_Activities$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Web_Activities" selected="">
+          English (US)
+        </option>
+                  <option value="/ja/docs/Web/API/Web_Activities">
+            日本語
+          </option>          <option value="/pt-BR/docs/WebAPI/Web_Activities">
+            Português (do&nbsp;Brasil)
+          </option>          <option value="/zh-TW/docs/WebAPI/Web_Activities">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Activities by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:10:15 GMT -->
+</body></html>

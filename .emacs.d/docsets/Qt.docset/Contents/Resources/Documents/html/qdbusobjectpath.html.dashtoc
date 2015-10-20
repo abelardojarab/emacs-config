@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QDBusObjectPath","path":"QDBusObjectPath","entryType":"Function"},{"name":"path","path":"path","entryType":"Function"},{"name":"setPath","path":"setPath","entryType":"Function"},{"name":"operator=","path":"operator-eq","entryType":"Function"}]}

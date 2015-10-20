@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"ActivationGroup_Stub(RemoteRef)","path":"ActivationGroup_Stub-java.rmi.server.RemoteRef-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"newInstance(ActivationID, ActivationDesc)","path":"newInstance-java.rmi.activation.ActivationID-java.rmi.activation.ActivationDesc-","entryType":"Method"}]}

@@ -1,0 +1,1 @@
+{"entries":[{"name":"Constructors","isHeader":true},{"name":"JAXBResult(JAXBContext)","path":"JAXBResult-javax.xml.bind.JAXBContext-","entryType":"Constructor"},{"name":"JAXBResult(Unmarshaller)","path":"JAXBResult-javax.xml.bind.Unmarshaller-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getResult()","path":"getResult--","entryType":"Method"}]}

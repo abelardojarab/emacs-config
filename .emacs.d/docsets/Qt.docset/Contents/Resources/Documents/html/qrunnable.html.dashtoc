@@ -1,0 +1,1 @@
+{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QRunnable","path":"QRunnable","entryType":"Function"},{"name":"~QRunnable","path":"dtor.QRunnable","entryType":"Function"},{"name":"autoDelete","path":"autoDelete","entryType":"Function"},{"name":"run","path":"run","entryType":"Function"},{"name":"setAutoDelete","path":"setAutoDelete","entryType":"Function"}]}

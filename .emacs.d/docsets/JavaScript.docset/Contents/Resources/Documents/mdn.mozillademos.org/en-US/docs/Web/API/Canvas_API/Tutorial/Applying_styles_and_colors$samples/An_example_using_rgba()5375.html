@@ -1,0 +1,33 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors$samples/An_example_using_rgba()?revision=912475 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:08:15 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body>
+                    <canvas id="canvas" width="150" height="150"></canvas>
+                            <script type="text/javascript">
+                function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+
+  // Draw background
+  ctx.fillStyle = 'rgb(255,221,0)';
+  ctx.fillRect(0,0,150,37.5);
+  ctx.fillStyle = 'rgb(102,204,0)';
+  ctx.fillRect(0,37.5,150,37.5);
+  ctx.fillStyle = 'rgb(0,153,255)';
+  ctx.fillRect(0,75,150,37.5);
+  ctx.fillStyle = 'rgb(255,51,0)';
+  ctx.fillRect(0,112.5,150,37.5);
+
+  // Draw semi transparent rectangles
+  for (var i=0;i<10;i++){
+    ctx.fillStyle = 'rgba(255,255,255,'+(i+1)/10+')';
+    for (var j=0;j<4;j++){
+      ctx.fillRect(5+i*14,5+j*37.5,14,27.5);
+    }
+  }
+} draw();
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors$samples/An_example_using_rgba()?revision=912475 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 19:08:15 GMT -->
+</body></html>

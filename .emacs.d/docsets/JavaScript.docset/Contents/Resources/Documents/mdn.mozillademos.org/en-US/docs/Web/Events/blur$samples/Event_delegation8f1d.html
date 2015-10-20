@@ -1,0 +1,22 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/Events/blur$samples/Event_delegation?revision=922861 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:49:59 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body>
+                    <form id="form">
+  <input type="text" placeholder="text input">
+  <input type="password" placeholder="password">
+</form>
+                            <script type="text/javascript">
+                var form = document.getElementById("form");
+form.addEventListener("focus", function( event ) {
+  event.target.style.background = "pink";    
+}, true);
+form.addEventListener("blur", function( event ) {
+  event.target.style.background = "";    
+}, true);
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/Events/blur$samples/Event_delegation?revision=922861 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:49:59 GMT -->
+</body></html>

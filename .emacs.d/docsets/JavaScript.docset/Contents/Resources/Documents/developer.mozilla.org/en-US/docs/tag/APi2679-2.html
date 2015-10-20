@@ -1,0 +1,958 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/tag/APi?page=1 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:15:54 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Articles tagged: APi</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+          <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+          <link rel="alternate" type="application/atom+xml" title="Articles tagged: APi" href="../feeds/atom/tag/APi-2">
+  
+      
+  </head>
+<body class="">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/tag/APi?page=1" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FAPi%3Fpage%3D1" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/tag/APi?page=1" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2Ftag%2FAPi%3Fpage%3D1" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+    <div id="document-list" class="boxed">
+      <h1>Articles tagged: APi</h1>
+                <ol class="pagination">
+          <li class="selected">
+      <a href="APi2679-2.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="APi4658-2.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="APi9ba9-2.html?page=3">3</a>
+    </li>
+      <li>
+      <a href="APifdb0-2.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="APiaf4d-2.html?page=5">5</a>
+    </li>
+      <li>
+      <a href="APic575-2.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="APi235c-2.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="APifdfa-2.html?page=8">8</a>
+    </li>
+              <li class="skip">…</li>
+        <li><a href="APib385-2.html?page=30">30</a></li>
+        <li class="next">
+      <a href="APi4658-2.html?page=2">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+        <p>Found 2973 documents.</p>
+        <ul class="document-list">
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/adData">adData</a>
+                                  <small>The BluetoothDevice.adData read-only property returns&nbsp;instance of BluetoothAdvertisingData ...</small>
+                            </li>
+                      <li>
+              <a href="../Archive/Web/Old_Proxy_API.html">Archive/Web/Old_Proxy_API</a>
+                                  <small>Proxies are objects for which the programmer has to define the semantics in JavaScript. The default ...</small>
+                            </li>
+                      <li>
+              <a href="../Extensions/Using_the_DOM_File_API_in_chrome_code.html">Extensions/Using_the_DOM_File_API_in_chrome_code</a>
+                                  <small>If you want to use the DOM&nbsp;File API in chrome code, you can do so without restriction. In fact, you ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Glossary/Guard">Glossary/Guard</a>
+                                  <small>Guard is a feature of Headers objects (as defined in the Fetch spec, which affects whether methods ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Glossary/IndexedDB">Glossary/IndexedDB</a>
+                                  <small>IndexedDB is a Web API for storing large data structures within browsers and indexing them for ...</small>
+                            </li>
+                      <li>
+              <a href="../MDN/Contribute/Howto/Write_an_API_reference.html">MDN/Contribute/Howto/Write_an_API_reference</a>
+                                  <small>This guide takes you through all you need to know to write an API reference on MDN.</small>
+                            </li>
+                      <li>
+              <a href="../../Add-ons/Firefox_for_Android/API/NativeWindow/contextmenus.html">Mozilla/Add-ons/Firefox_for_Android/API/NativeWindow/contextmenus</a>
+                                  <small>Returns a reference to the NativeWindow.contextmenus object, which can be used to add items to the ...</small>
+                            </li>
+                      <li>
+              <a href="../../Add-ons/Firefox_for_Android/API/NativeWindow/menu.html">Mozilla/Add-ons/Firefox_for_Android/API/NativeWindow/menu</a>
+                                  <small>Returns a reference to the NativeWindow.menu object, which can be used to add items to the main ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPAnyCallbackStruct">Mozilla/Add-ons/Plugins/Reference/NPAnyCallbackStruct</a>
+                                  <small>Contains information required during embedded mode printing.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_DestroyStream">Mozilla/Add-ons/Plugins/Reference/NPN_DestroyStream</a>
+                                  <small>Closes and deletes a stream.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_GetURL">Mozilla/Add-ons/Plugins/Reference/NPN_GetURL</a>
+                                  <small>Asks the browser to create a stream for the specified URL.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_MemFlush">Mozilla/Add-ons/Plugins/Reference/NPN_MemFlush</a>
+                                  <small>Requests that the browser free a specified amount of memory.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_ReloadPlugins">Mozilla/Add-ons/Plugins/Reference/NPN_ReloadPlugins</a>
+                                  <small>Reloads all of the installed plugins.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_RequestRead">Mozilla/Add-ons/Plugins/Reference/NPN_RequestRead</a>
+                                  <small>Requests a range of bytes from a seekable stream. This initiates a read operation; the actual data ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_Status">Mozilla/Add-ons/Plugins/Reference/NPN_Status</a>
+                                  <small>Lets a plug-in display a message on the browser's status line.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_UserAgent">Mozilla/Add-ons/Plugins/Reference/NPN_UserAgent</a>
+                                  <small>Returns the browser's user agent field. This can be used to handle variations in different browsers ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_Version">Mozilla/Add-ons/Plugins/Reference/NPN_Version</a>
+                                  <small>Lets plugins obtain version information, both of the plug-in API and of the browser itself.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPN_Write">Mozilla/Add-ons/Plugins/Reference/NPN_Write</a>
+                                  <small>Pushes data into a stream produced by the plug-in and consumed by the browser.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPP">Mozilla/Add-ons/Plugins/Reference/NPP</a>
+                                  <small>Represents a single instance of a plug-in. You specify one of these to any NPAPI function that ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPRegion">Mozilla/Add-ons/Plugins/Reference/NPRegion</a>
+                                  <small>Represents a platform-defined region of a page.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Plugins/Reference/NPSetWindowCallbackStruct">Mozilla/Add-ons/Plugins/Reference/NPSetWindowCallbackStruct</a>
+                                  <small>Contains information about the plug-in's Unix window environment.</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Platform/Settings_list">Mozilla/Firefox_OS/Platform/Settings_list</a>
+                                  <small>Firefox OS offers a number of settings that configure the device and its built-in features. These ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Screencast_series%3A_App_Basics_for_Firefox_OS">Mozilla/Firefox_OS/Screencast_series:_App_Basics_for_Firefox_OS</a>
+                                  <small>Firefox OS is an operating system that brings the Web to mobile devices. Instead of being a new OS ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/JavaScript_code_modules/PromiseWorker.html">Mozilla/JavaScript_code_modules/PromiseWorker.jsm</a>
+                                  <small>A PromiseWorker is a ChromeWorker except instead of calling postMessage() to send a message, you ...</small>
+                            </li>
+                      <li>
+              <a href="../../Marketplace/Marketplace_APIs.html">Mozilla/Marketplace/Marketplace_APIs</a>
+                                  <small>Links to the main references covering Mozilla's Firefox Marketplace APIs, with which you can handle ...</small>
+                            </li>
+                      <li>
+              <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSPR/Reference/PRInt16">Mozilla/Projects/NSPR/Reference/PRInt16</a>
+                                  <small>Guaranteed to be a signed 16-bit integer on all platforms.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/Criteria.html">Mozilla/Projects/Social_API/Criteria</a>
+                                  <small>This article describes the set of requirements a social provider must meet in order to be exposed ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/MozSocial.html">Mozilla/Projects/Social_API/MozSocial</a>
+                                  <small>The MozSocial object, returned by the navigator.mozSocial property, is available within the social ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/MozSocial/closePanel.html">Mozilla/Projects/Social_API/MozSocial/closePanel</a>
+                                  <small>Closes the currently open social panel on the parent social media provider panel.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/MozSocial/getAttention.html">Mozilla/Projects/Social_API/MozSocial/getAttention</a>
+                                  <small>Performs some, possibly platform-specific, action designed to get the user's attention. This might ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/MozSocial/getWorker.html">Mozilla/Projects/Social_API/MozSocial/getWorker</a>
+                                  <small>Returns a reference to the service worker for the social media service. Once you have this, you use ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/MozSocial/isVisible.html">Mozilla/Projects/Social_API/MozSocial/isVisible</a>
+                                  <small>Indicates whether or not the social media provider's content sidebar is currently visible.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/MozSocial/openChatWindow.html">Mozilla/Projects/Social_API/MozSocial/openChatWindow</a>
+                                  <small>Opens a chat window, anchored to the bottom of the browser window. Each chat window is typically a ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/MozSocial/openPanel.html">Mozilla/Projects/Social_API/MozSocial/openPanel</a>
+                                  <small>Opens a flyout panel attached to the social media provider's sidebar at a given vertical offset.</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/MozSocial/share.html">Mozilla/Projects/Social_API/MozSocial/share</a>
+                                  <small>Initiates a share action via the SocialAPI Share panel.&nbsp; One argument is passed, an object ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/Social_API/Service_worker_API_reference.html">Mozilla/Projects/Social_API/Service_worker_API_reference</a>
+                                  <small>A Service Worker inherits all the limitations and behaviors available to HTML5 Shared Workers. It ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/Internals/GC/Statistics_API.html">Mozilla/Projects/SpiderMonkey/Internals/GC/Statistics_API</a>
+                                  <small>Each time a garbage collection occurs, SpiderMonkey keeps track of how long each phase of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSFunction.html">Mozilla/Projects/SpiderMonkey/JSAPI_reference/JSFunction</a>
+                                  <small>JSFunction is a type in the JSAPI. The APIs JS_NewFunction, JS_DefineFunction, JS_CompileFunction, ...</small>
+                            </li>
+                      <li>
+              <a href="../Mozilla/Projects/SpiderMonkey/Parser_API.html">Mozilla/Projects/SpiderMonkey/Parser_API</a>
+                                  <small>Example:</small>
+                            </li>
+                      <li>
+              <a href="../Plugins/Guide/Browser_Side_Plug-in_API.html">Plugins/Guide/Browser_Side_Plug-in_API</a>
+                                  <small>This chapter describes methods in the plug-in API that are available from the browser. The names of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API.html">Web/API</a>
+                                  <small>When writing code for the Web using JavaScript, there are a great many APIs available. Below is a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AbstractWorker.html">Web/API/AbstractWorker</a>
+                                  <small>The AbstractWorker interface of the Web Workers API abstracts properties and methods common to all ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AbstractWorker/onerror.html">Web/API/AbstractWorker/onerror</a>
+                                  <small>The AbstractWorker.onerror property of the AbstractWorker interface represents an EventHandler, ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Alarm_API.html">Web/API/Alarm_API</a>
+                                  <small>The Alarm API allows applications to schedule actions to be run in the future. For example, some ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode.html">Web/API/AnalyserNode</a>
+                                  <small>The AnalyserNode interface represents a node able to provide real-time frequency and time-domain ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/fftSize.html">Web/API/AnalyserNode/fftSize</a>
+                                  <small>The fftSize property of the AnalyserNode interface is an unsigned long value representing the size ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/frequencyBinCount.html">Web/API/AnalyserNode/frequencyBinCount</a>
+                                  <small>The frequencyBinCount property of the AnalyserNode interface is an unsigned long value half that of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/getByteFrequencyData.html">Web/API/AnalyserNode/getByteFrequencyData</a>
+                                  <small>A Uint8Array.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/getByteTimeDomainData.html">Web/API/AnalyserNode/getByteTimeDomainData</a>
+                                  <small>A Uint8Array.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/getFloatFrequencyData.html">Web/API/AnalyserNode/getFloatFrequencyData</a>
+                                  <small>A Float32Array.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/getFloatTimeDomainData.html">Web/API/AnalyserNode/getFloatTimeDomainData</a>
+                                  <small>A Float32Array.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/maxDecibels.html">Web/API/AnalyserNode/maxDecibels</a>
+                                  <small>The maxDecibels property of the AnalyserNode interface Is a double value representing the maximum ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/minDecibels.html">Web/API/AnalyserNode/minDecibels</a>
+                                  <small>The minDecibels property of the AnalyserNode interface Is a double value representing the minimum ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnalyserNode/smoothingTimeConstant.html">Web/API/AnalyserNode/smoothingTimeConstant</a>
+                                  <small>The smoothingTimeConstant property of the AnalyserNode interface is a double value representing the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Animation.html">Web/API/Animation</a>
+                                  <small>The Animation interface represents a single animation player and provides playback controls and a ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Animation/currentTime.html">Web/API/Animation/currentTime</a>
+                                  <small>The Animation.currentTime property returns or sets the current time of the animation if it is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Animation/finish.html">Web/API/Animation/finish</a>
+                                  <small>An InvalidState error is raised if the player's playback rate is 0 or the player's playback rate is ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Animation/play.html">Web/API/Animation/play</a>
+                                  <small>The following example uses play() to toggle from a "before" image to an "after" image. This could ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Animation/playbackRate.html">Web/API/Animation/playbackRate</a>
+                                  <small>The Animation.playbackRate property returns or sets the playback rate of the animation.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Animation/playState.html">Web/API/Animation/playState</a>
+                                  <small>The Animation.playState read-only property is an enumerated value describing the playback state of ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Animation/reverse.html">Web/API/Animation/reverse</a>
+                                  <small>The following example uses reverse() to toggle from an "after" image to a "before" image. This ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Animation/startTime.html">Web/API/Animation/startTime</a>
+                                  <small>The Animation.startTime property returns or sets the scheduled time when an animation's playback ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnimationEvent.html">Web/API/AnimationEvent</a>
+                                  <small>The AnimationEvent interface represents events providing information related to animations.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnimationEvent/AnimationEvent.html">Web/API/AnimationEvent/AnimationEvent</a>
+                                  <small>The AnimationEvent() constructor returns a newly created AnimationEvent, representing an event in ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnimationEvent/animationName.html">Web/API/AnimationEvent/animationName</a>
+                                  <small>The AnimationEvent.animationName read-only property is a DOMString containing the value of the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnimationEvent/elapsedTime.html">Web/API/AnimationEvent/elapsedTime</a>
+                                  <small>The AnimationEvent.elapsedTime read-only property is a float giving the amount of time the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnimationEvent/initAnimationEvent.html">Web/API/AnimationEvent/initAnimationEvent</a>
+                                  <small>The AnimationEvent.initAnimationEvent() method Initializes an animation event created using the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AnimationEvent/pseudoElement.html">Web/API/AnimationEvent/pseudoElement</a>
+                                  <small>The AnimationEvent.pseudoElement read-only property is a DOMString, starting with '::', containing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Apps/mgmt.html">Web/API/Apps/mgmt</a>
+                                  <small>Provides support for controlling Open Web apps in a browser.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/ArrayBufferView.html">Web/API/ArrayBufferView</a>
+                                  <small>ArrayBufferView is a helper type representing any of the following JavaScript TypedArray types:</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/Attr.html">Web/API/Attr</a>
+                                  <small>This type represents a DOM element's attribute as an object. In most DOM methods, you will probably ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBuffer.html">Web/API/AudioBuffer</a>
+                                  <small>Objects of these types are designed to hold small audio snippets, typically less than 45&nbsp;s. For ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBuffer/copyFromChannel.html">Web/API/AudioBuffer/copyFromChannel</a>
+                                  <small>The copyFromChannel() method of the AudioBuffer interface copies the samples from the specified ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBuffer/copyToChannel.html">Web/API/AudioBuffer/copyToChannel</a>
+                                  <small>The copyToChannel() method of the AudioBuffer interface copies the samples to the specified channel ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBuffer/duration.html">Web/API/AudioBuffer/duration</a>
+                                  <small>A double.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBuffer/getChannelData.html">Web/API/AudioBuffer/getChannelData</a>
+                                  <small>A Float32Array.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBuffer/length.html">Web/API/AudioBuffer/length</a>
+                                  <small>A float.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBuffer/numberOfChannels.html">Web/API/AudioBuffer/numberOfChannels</a>
+                                  <small>An integer.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBuffer/sampleRate.html">Web/API/AudioBuffer/sampleRate</a>
+                                  <small>A float.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode.html">Web/API/AudioBufferSourceNode</a>
+                                  <small>The AudioBufferSourceNode interface represents an audio source consisting of in-memory audio data, ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/buffer.html">Web/API/AudioBufferSourceNode/buffer</a>
+                                  <small>If the buffer property is set to the value NULL, it defines a single channel of silence.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/detune.html">Web/API/AudioBufferSourceNode/detune</a>
+                                  <small>The detune property of the AudioBufferSourceNode interface is an k-rate AudioParam representing ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/loop.html">Web/API/AudioBufferSourceNode/loop</a>
+                                  <small>The loop property's default value is false.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/loopEnd.html">Web/API/AudioBufferSourceNode/loopEnd</a>
+                                  <small>The loopEnd property's default value is 0.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/loopStart.html">Web/API/AudioBufferSourceNode/loopStart</a>
+                                  <small>The loopStart property's default value is 0.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/onended.html">Web/API/AudioBufferSourceNode/onended</a>
+                                  <small>The onended event handler of the AudioBufferSourceNode contains the callback associated with the ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/playbackRate.html">Web/API/AudioBufferSourceNode/playbackRate</a>
+                                  <small>The default value is 1.0. When set to another value, the AudioBufferSourceNode resamples the audio ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/start.html">Web/API/AudioBufferSourceNode/start</a>
+                                  <small>The most simple example just starts the audio buffer playing from the beginning — you don't need to ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioBufferSourceNode/stop.html">Web/API/AudioBufferSourceNode/stop</a>
+                                  <small>The most simple example just stops the audio buffer playing immediately — you don't need to specify ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioChannelManager.html">Web/API/AudioChannelManager</a>
+                                  <small>The AudioChannelManager interface of the AudioChannels API includes features for managing your ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioChannelManager/headphones.html">Web/API/AudioChannelManager/headphones</a>
+                                  <small>The headphones read-only property of the AudioChannelManager interface returns a Boolean that ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioChannelManager/onheadphoneschange.html">Web/API/AudioChannelManager/onheadphoneschange</a>
+                                  <small>The onheadphoneschange event handler of the AudioChannelManager interface fires when the device's ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioChannelManager/telephonySpeaker.html">Web/API/AudioChannelManager/telephonySpeaker</a>
+                                  <small>The telephonySpeaker property of the AudioChannelManager interface returns a Boolean that allows ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioChannelManager/volumeControlChannel.html">Web/API/AudioChannelManager/volumeControlChannel</a>
+                                  <small>The volumeControlChannel property of the AudioChannelManager interface returns a DOMString that ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext.html">Web/API/AudioContext</a>
+                                  <small>An AudioContext can be a target of events, therefore it implements the EventTarget interface.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/close.html">Web/API/AudioContext/close</a>
+                                  <small>The close() method of the AudioContext Interface closes the audio context, releasing any system ...</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createAnalyser.html">Web/API/AudioContext/createAnalyser</a>
+                                  <small>An AnalyserNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createBiquadFilter.html">Web/API/AudioContext/createBiquadFilter</a>
+                                  <small>A BiquadFilterNode.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createBuffer.html">Web/API/AudioContext/createBuffer</a>
+                                  <small>An AudioBuffer.</small>
+                            </li>
+                      <li>
+              <a href="../Web/API/AudioContext/createBufferSource.html">Web/API/AudioContext/createBufferSource</a>
+                                  <small>An AudioBufferSourceNode.</small>
+                            </li>
+                  </ul>
+          <ol class="pagination">
+          <li class="selected">
+      <a href="APi2679-2.html?page=1">1</a>
+    </li>
+      <li>
+      <a href="APi4658-2.html?page=2">2</a>
+    </li>
+      <li>
+      <a href="APi9ba9-2.html?page=3">3</a>
+    </li>
+      <li>
+      <a href="APifdb0-2.html?page=4">4</a>
+    </li>
+      <li>
+      <a href="APiaf4d-2.html?page=5">5</a>
+    </li>
+      <li>
+      <a href="APic575-2.html?page=6">6</a>
+    </li>
+      <li>
+      <a href="APi235c-2.html?page=7">7</a>
+    </li>
+      <li>
+      <a href="APifdfa-2.html?page=8">8</a>
+    </li>
+              <li class="skip">…</li>
+        <li><a href="APib385-2.html?page=30">30</a></li>
+        <li class="next">
+      <a href="APi4658-2.html?page=2">
+        Next
+      </a>
+    </li>
+    </ol>
+
+
+          </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+          <input type="hidden" name="page" value="1">
+        <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>                        </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+  
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/tag/APi?page=1 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 16:15:54 GMT -->
+</body></html>

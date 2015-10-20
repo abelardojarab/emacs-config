@@ -1,0 +1,1 @@
+{"entries":[{"name":"Methods","isHeader":true},{"name":"getBindingID()","path":"getBindingID--","entryType":"Method"},{"name":"getHandlerChain()","path":"getHandlerChain--","entryType":"Method"},{"name":"setHandlerChain(List)","path":"setHandlerChain-java.util.List-","entryType":"Method"}]}
