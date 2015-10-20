@@ -588,10 +588,6 @@
  uniquify-after-kill-buffer-p t       ;; rename after killing uniquified
  uniquify-ignore-buffers-re "^\\*")  ;; don't muck with special buffers
 
-;; Ethan whitepsace, the remove trailing whitespace causes problem with buffer-modified-p
-(add-to-list 'load-path "~/.emacs.d/whitespace-cleanup-mode")
-(require 'whitespace-cleanup-mode)
-
 ;; More exhaustive cleaning of white space
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 

@@ -303,6 +303,7 @@ Argument COMMAND is the command to use for compiling the target."
   "Get the system include path used by project THIS."
   (let* ((fromconfig (call-next-method))
 	 (prefs (ede-arduino-sync))
+	 ;; Pull libs from installed libraries
 	 (iphardware (expand-file-name "hardware/arduino/cores/arduino"
 				       (ede-arduino-find-install)))
 	 (libs (ede-arduino-guess-libs))
@@ -310,8 +311,17 @@ Argument COMMAND is the command to use for compiling the target."
 		  (lambda (lib)
 		    (expand-file-name (concat "libraries/" lib)
 				      (ede-arduino-find-install)))
-		  libs)))
-    (append (cons iphardware iplibs) fromconfig)))
+		  libs))
+	 ;; Also pull libs from sketchbook
+	 (sketchroot (and prefs (oref prefs sketchbook)))
+	 (sblibs (mapcar
+		  (lambda (lib)
+		    (expand-file-name (concat "libraries/" lib)
+				      sketchroot))
+		  libs))
+	 )
+
+    (append (cons iphardware iplibs) sblibs fromconfig)))
 
 ;;; Config File support
 ;;

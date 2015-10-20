@@ -1,6 +1,6 @@
 ;;; semantic/bovine/c.by -- LL grammar for C/C++ language specification
 
-;; Copyright (C) 1999-2012, 2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2012, 2014, 2015 Free Software Foundation, Inc.
 ;;
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;;         David Ponce <david@dponce.com>
@@ -241,20 +241,24 @@ extern-c-contents
   ;
 
 extern-c
-  : EXTERN C semantic-list
+  : EXTERN c-or-cpp opt-extern-c-contents
  ;; Extern C commands which contain a list need to have the
  ;; entries of the list extracted, and spliced into the main
  ;; list of entries.  This must be done via the function
  ;; that expands singular nonterminals, such as int x,y;
-    (TAG "C" 'extern :members (EXPANDFULL $3 extern-c-contents) )
-  | EXTERN CPP semantic-list
-    (TAG "C" 'extern :members (EXPANDFULL $3 extern-c-contents) )
-  | EXTERN C
- ;; A plain extern "C" call should add something to the token,
- ;; but just strip it from the buffer here for now.
-    ( nil )
-  | EXTERN CPP
-    ( nil )
+    (TAG (car $2) 'extern :members $3)
+  ;
+
+c-or-cpp
+  : C
+  | CPP
+  ;
+
+opt-extern-c-contents
+  : semantic-list
+    (EXPANDFULL $1 extern-c-contents)
+  | ;; EMPTY
+    ()
   ;
 
 macro
@@ -424,19 +428,14 @@ opt-enum-type
 
 typesimple
   : struct-or-class opt-class opt-name opt-template-specifier
-    opt-class-parents semantic-list
+    opt-class-parents typesimple-opt-subparts
     (TYPE-TAG (car $3) (car $1)
-          (let ((semantic-c-classname (cons (car ,$3) (car ,$1))))
-            (EXPANDFULL $6 classsubparts))
-          $5
-          :template-specifier $4
-          :parent (car ,$2))
-  | struct-or-class opt-class opt-name opt-template-specifier
-    opt-class-parents
-    (TYPE-TAG (car $3) (car $1) nil $5
-              :template-specifier $4
-	      :prototype t
-              :parent (car ,$2))
+	      (let ((semantic-c-classname (cons (car ,$3) (car ,$1))))
+		(when $6 (EXPANDFULL (car $6) classsubparts)))
+	      $5
+	      :template-specifier $4
+	      :prototype (not (car $6))
+	      :parent (car ,$2))
   | UNION opt-class opt-name unionparts
     (TYPE-TAG (car $3) $1 $4 nil
               :parent (car ,$2))
@@ -452,11 +451,22 @@ typesimple
     (TYPE-TAG $5 $1 nil (list $3) )
   ;
 
-typedef-symbol-list
-  : typedefname COMA typedef-symbol-list
-    ( ,(cons $1 $3) )
-  | typedefname
+typesimple-opt-subparts
+  : semantic-list
     ( $1 )
+  | ;; EMPTY
+    ()
+  ;
+
+typedef-symbol-list
+  : typedefname typedef-symbol-list-opt-comma
+    ( ,(cons $1 $2) )
+  ;
+
+typedef-symbol-list-opt-comma
+  : COMA typedef-symbol-list
+    ( ,$2 )
+  | ;; EMPTY
   ;
 
 ;; TODO: Klaus Berndl: symbol -> namespace-symbol?!  Answer: Probably
@@ -474,15 +484,20 @@ struct-or-class
 type
   : typesimple SEMICOLON
     ( ,$1 )
+  | NAMESPACE type-namespace
+    ( ,$2 )
+  ;
+
+type-namespace
  ;; named namespaces like "namespace XXX {"
-  | NAMESPACE symbol namespaceparts
-    (TYPE-TAG $2 $1 $3 nil )
+  : symbol namespaceparts
+    (TYPE-TAG $1 "namespace" $2 nil )
  ;; unnamed namespaces like "namespace {"
-  | NAMESPACE namespaceparts
-    (TYPE-TAG "unnamed" $1 $2 nil )
+  | namespaceparts
+    (TYPE-TAG "unnamed" "namespace" $1 nil )
  ;; David Engster: namespace alias like "namespace foo = bar;"
-  | NAMESPACE symbol EQUAL typeformbase SEMICOLON
-    (TYPE-TAG $2 $1 (list (TYPE-TAG (car $4) $1 nil nil)) nil :kind 'alias )
+  | symbol EQUAL typeformbase SEMICOLON
+    (TYPE-TAG $1 "namespace" (list (TYPE-TAG (car $3) "namespace" nil nil)) nil :kind 'alias )
   ;
 
 ;; Klaus Berndl: We must parse "using namespace XXX" too
@@ -640,8 +655,6 @@ STARMOD
 declmods
   : DECLMOD declmods
     ( ,(cons ,(car ,$1) $2 ) )
-  | DECLMOD
-    ( ,$1 )
   | ;;EMPTY
     ()
   ;
@@ -711,11 +724,7 @@ typeformbase
     (TYPE-TAG $2 $1 nil nil )
   | builtintype
     ( ,$1 )
-  | symbol template-specifier
-    (TYPE-TAG $1 "class" nil nil :template-specifier $2)
- ;;| namespace-symbol opt-stars opt-template-specifier
- ;;| namespace-symbol opt-template-specifier
-  | namespace-symbol-for-typeformbase opt-template-specifier
+  | namespace-symbol opt-template-specifier
     (TYPE-TAG (car $1) "class" nil nil
 	      :template-specifier $2)
   | symbol
@@ -944,10 +953,15 @@ varname-opt-initializer
   ;
 
 varnamelist
-  : opt-ref varname varname-opt-initializer COMA varnamelist
-    ( ,(cons (append $2 $3) $5) )
-  | opt-ref varname varname-opt-initializer
-    ( (append $2 $3) )
+  : opt-ref varname varname-opt-initializer opt-varnamelist-more
+    ( ,(cons (append $2 $3) (car $4) ))
+  ;
+
+opt-varnamelist-more
+  : COMA varnamelist
+    ( $2 )
+  | ;; EMPTY
+    ()
   ;
 
 ;; Klaus Berndl: Is necessary to parse stuff like
@@ -958,26 +972,18 @@ varnamelist
 ;;     symbol<template-spec>::symbol1<template-spec1>::test_iterator
 ;; but better parsing too much than to less
 namespace-symbol
-  : symbol opt-template-specifier COLON COLON namespace-symbol
-    ( (concat $1 "::" (car $5)) )
-  | symbol opt-template-specifier
-    ( $1 )
-  ;
-
-;; Don't pull an optional template specifier at the end of the
-;; namespace symbol so that it can be picked up by the type.
-namespace-symbol-for-typeformbase
-  : symbol opt-template-specifier COLON COLON namespace-symbol-for-typeformbase
-    ( (concat $1 "::" (car $5)) )
+  : symbol opt-template-specifier opt-namespace-symbol-more
+    ( (concat $1 (car $3) ) )
+ ;; Don't accept template specifiers at the end.
   | symbol
     ( $1 )
   ;
-;; namespace-symbol
-;;   : symbol COLON COLON namespace-symbol
-;;     ( (concat $1 "::" (car $4)) )
-;;   | symbol
-;;     ( $1 )
-;;   ;
+
+opt-namespace-symbol-more
+  : COLON COLON namespace-symbol
+    ( (concat "::" (car $3)) )
+  ;
+
 
 namespace-opt-class
   : symbol COLON COLON namespace-opt-class
