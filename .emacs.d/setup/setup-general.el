@@ -246,13 +246,6 @@
     (split-window-sensibly window)))
 (setq split-window-preferred-function 'split-window-prefer-horizonally)
 
-;; windows handling
-(add-to-list 'load-path "~/.emacs.d/window-purpose")
-(require 'window-purpose)
-(purpose-mode)
-(setq purpose-preferred-prompt 'helm)
-(setq menu-bar-select-buffer-function 'switch-to-buffer)
-
 ;; Better help
 (require 'help-fns+)
 
