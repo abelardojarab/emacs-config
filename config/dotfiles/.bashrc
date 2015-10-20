@@ -130,9 +130,9 @@ export MGC_HOME=/opt/mentor/calibre/2007.1_17.18
 export MGLS_LICENSE_FILE=$HOME/flexlm/calibre.dat
 export LM_LICENSE_FILE=$HOME/flexlm/license.dat
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$CDS_ROOT/share/license/license.dat:$HOME/flexlm/cadence.dat:$HOME/flexlm/synopsys.dat:$HOME/flexlm/modelsim.dat:$HOME/flexlm/matlab.dat
-export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:/opt/cds/soc710/bin:/opt/synopsys/starrc/2012.12/bin:/opt/synopsys/hspice/H-2013.03-SP2/hspice/bin:/opt/synopsys/cosmosscope/H-2012.12/ai_bin:/opt/mentor/modelsim/6.5f/modeltech/bin:/opt/mentor/calibre/2007.1_17.18/bin:/opt/PyCharm/4.0.6/bin:/opt/IBM/SPSS/Statistics/22/bin:/opt/synopsys/icweb/G-2012.06-SP1/bin/amd64:/opt/synopsys/icvalidator/H-2013.06/bin/SUSE.64:$PYTHONPATH/bin:$PATH:~/workspace/frametools/bin
+export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:/opt/cds/soc710/bin:/opt/synopsys/starrc/2012.12/bin:/opt/synopsys/hspice/Z-2007.03/hspice/linux:/opt/synopsys/cosmosscope/H-2012.12/ai_bin:/opt/mentor/modelsim/6.5f/modeltech/bin:/opt/mentor/calibre/2007.1_17.18/bin:/opt/PyCharm/4.0.6/bin:/opt/IBM/SPSS/Statistics/22/bin:/opt/synopsys/icweb/G-2012.06-SP1/bin/amd64:/opt/synopsys/icvalidator/H-2013.06/bin/SUSE.64:$PYTHONPATH/bin:$PATH:~/workspace/frametools/bin
 export CDK_DIR=/opt/ncsu-cdk-1.6.0
 export PDK_DIR=/opt/FreePDK45
 export PDK_DIR_SC=/opt/FreePDK45StandardCells
-export _JAVA_OPTIONS="-Xmx4g -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
-export GDK_NATIVE_WINDOWS=1
+export _JAVA_OPTIONS="-Xmx4g -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Xms512m -Xmx1024m"
+export theHost=`hostname`
