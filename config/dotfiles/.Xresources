@@ -26,8 +26,23 @@ Xft.lcdfilter: lcddefault
 Xft.rgba: rgb
 
 ! Bigger font
-xterm*font:     *-fixed-*-*-*-20-*
-xterm*faceSize: 12
+xterm*utf8:       2
+xterm*termName:   xterm-256color
+xterm*faceName:   xft:Dejavu Sans Mono:pixelsize=16
+! xterm*font:     *-fixed-*-*-*-20-*
+! xterm*faceSize: 12
+
+! Fix up xterm's keybindings 
+xterm*VT100.translations:	#override \
+      <Key>BackSpace:    string(0x7F) \n\
+      <Key>Insert:       string(0x1b) string("[2~")\n\
+      <Key>Delete:       string(0x1b) string("[3~")\n\
+      <Key>Home:         string(0x1b) string("[1~")\n\
+      <Key>End:	     string(0x1b) string("[4~")\n\
+      <Key>Page_Up:      string(0x1b) string("[5~")\n\
+      <Key>Page_Down:    string(0x1b) string("[6~")\n\
+      <KeyPress>Prior : scroll-back(1,page)\n\
+      <KeyPress>Next : scroll-forw(1,page)
 
 ! Every shell is a login shell by default (for inclusion of all necessary environment variables)
 xterm*loginshell: true
@@ -35,11 +50,12 @@ xterm*loginshell: true
 ! Scrolling
 xterm*savelines: 16384
 xterm*Scrollbar*thickness: 2
-xterm*Scrollbar*background: #c6c6c6
-xterm*Scrollbar*foreground: #515151
+xterm*background:                       grey15
+xterm*foreground:                       grey75
+xterm*cursorColor:                      darkorange1
 
 ! double-click to select whole URLs :D
-xterm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
+xterm*charClass: 3:48,33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48,35:48,58:48,63:48,61:48,44:48,38:48,59:48
 
 ! extra choice
 xterm*eightBitInput: false
