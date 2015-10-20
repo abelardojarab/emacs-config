@@ -318,7 +318,7 @@ non-nil."
                   tx ty)
               ;; Next formulas discovered empiric on Windows host with default font.
               (setq tx (- (/ px fx) 4))
-              (setq ty (- (/ py fy) 8))
+              (setq ty (- (/ py fy) 6))
               (setq initial-frame-alist '((top . 2) (left . 2)))
               (add-to-list 'initial-frame-alist (cons 'width tx))
               (add-to-list 'initial-frame-alist (cons 'height ty))
