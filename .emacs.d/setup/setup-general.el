@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; Garbage collection
-(setq gc-cons-threshold 100000000)
+(setq gc-cons-threshold 120000000)
 
 ;; Missing variable
 (defvar scheme-imenu-generic-expression "")
@@ -392,10 +392,6 @@
 ;; Put something different in the scratch buffer
 (setq initial-scratch-message "Start typing...")
 
-;; Automatically reload files after they've been modified
-(global-auto-revert-mode 1)
-(setq auto-revert-verbose nil)
-
 ;; Bell instead of annoying beep
 (setq visible-bell t)
 
@@ -422,6 +418,7 @@
 
 ;; Auto-indent mode
 (add-to-list 'load-path "~/.emacs.d/auto-indent-mode")
+(setq auto-indent-indent-style 'conservative)
 (setq auto-indent-on-visit-file t) ;; do not indent when a file is visit
 (setq auto-indent-blank-lines-on-move nil)
 (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))

@@ -43,7 +43,6 @@
     (setq ac-sources '(ac-source-semantic
                        ac-source-words-in-same-mode-buffers
                        ac-source-gtags
-                       ac-source-etags
                        ac-source-dictionary))))
 (add-hook 'lisp-mode-hook 'my-lisp-mode-common-hook-func)
 

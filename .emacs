@@ -220,9 +220,6 @@ Defaults to `error'."
 ;; Setup bison/yacc/lex
 (require 'setup-bison)
 
-;; Setup csh and bash
-(require 'setup-cshandbash)
-
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
