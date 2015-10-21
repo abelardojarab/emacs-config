@@ -232,25 +232,21 @@
  ;; Windows
  ((equal system-type 'windows-nt)
   (global-set-key "\C-x\C-f" 'dlgopen-open-files)
-  (define-key menu-bar-file-menu [open-file] '("Open File..." . dlgopen-open-files))
-  ) ;; if
+  (define-key menu-bar-file-menu [open-file] '("Open File..." . dlgopen-open-files))) ;; if
 
  ;; Linux
  ((and (equal system-type 'gnu/linux)
        (executable-find "kdialog"))
   (global-set-key "\C-x\C-f" 'kde-open-file)
-  (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))
-  ) ;; if
+  (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))) ;; if
 
  ;; Mac
  ((equal system-type 'darwin)
   (global-set-key "\C-x\C-f" 'mac-open-file)
-  (define-key menu-bar-file-menu [open-file] '("Open File..." . mac-open-file))
-  ) ;; if
+  (define-key menu-bar-file-menu [open-file] '("Open File..." . mac-open-file))) ;; if
 
  (t
-  nil
-  )) ;; cond
+  nil)) ;; cond
 
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
@@ -344,8 +340,20 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
 ;; Scroll with the mouse
-(global-set-key [(mouse-5)] '(lambda () (interactive) (scroll-up 1)))
-(global-set-key [(mouse-4)] '(lambda () (interactive) (scroll-down 1)))
+(defun smooth-scroll (increment)
+  (scroll-up increment) (sit-for 0.05)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.05)
+  (scroll-up increment) (sit-for 0.05)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.05)
+  (scroll-up increment) (sit-for 0.06)
+  (scroll-up increment))
+
+(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 1)))
+(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll -1)))
 
 ;; Zoom in/out like feature, with mouse wheel
 (global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>

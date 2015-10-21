@@ -1,4 +1,4 @@
-# s.el [![Build Status](https://secure.travis-ci.org/magnars/s.el.png)](http://travis-ci.org/magnars/s.el)
+# s.el [![Build Status](https://secure.travis-ci.org/magnars/s.el.png)](http://travis-ci.org/magnars/s.el) [![Coverage Status](https://coveralls.io/repos/magnars/s.el/badge.svg?branch=master)](https://coveralls.io/r/magnars/s.el?branch=master)
 
 The long lost Emacs string manipulation library.
 
@@ -39,6 +39,12 @@ calculate the Levenshtein distance between two strings.
 * [string-utils](https://github.com/rolandwalker/string-utils) is another general string manipulation library.
 
 ## Changelist
+
+### From 1.9.0 to 1.10.0
+
+- Add `s-wrap` (Johan Andersson)
+- Add `s-split-up-to` (Matus Goljer)
+- Fix `s-reverse` for Unicode combining characters. (Christopher Wellons)
 
 ### From 1.8.0 to 1.9.0
 
@@ -131,7 +137,7 @@ Change `readme-template.md` or `examples-to-docs.el` instead.
 
 ## License
 
-Copyright (C) 2012 Magnar Sveen
+Copyright (C) 2012-2015 Magnar Sveen
 
 Authors: Magnar Sveen <magnars@gmail.com>
 Keywords: strings

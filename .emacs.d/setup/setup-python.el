@@ -68,11 +68,11 @@
 (setq py-shell-switch-buffers-on-execute-p t)
 (setq py-switch-buffers-on-execute-p t)
 
-;; split horizontally on execution
-(setq-default py-split-windows-on-execute-function 'split-window-horizontally)
-
 ;; try to automagically figure out indentation
 (setq py-smart-indentation t)
+
+;; split horizontally on execution
+(setq-default py-split-windows-on-execute-function 'split-window-horizontally)
 
 ;; in cedet semantic-python-get-system-include-path forces starting of the python interpreter
 (defun python-shell-internal-send-string (string) "")
@@ -81,8 +81,6 @@
 (add-hook 'python-mode-hook 'wisent-python-default-setup)
 
 ;; Jedi settings
-(add-to-list 'load-path "~/.emacs.d/ctable")
-(add-to-list 'load-path "~/.emacs.d/deferred")
 (add-to-list 'load-path "~/.emacs.d/python-environment")
 (add-to-list 'load-path "~/.emacs.d/epc")
 (add-to-list 'load-path "~/.emacs.d/jedi")
@@ -94,6 +92,7 @@
 (setq jedi:complete-on-dot t)
 (setq jedi:tooltip-method t)
 (add-hook 'python-mode-hook 'jedi-mode)
+(ac-flyspell-workaround)
 
 (provide 'setup-python)
 ;;; setup-python.el ends here

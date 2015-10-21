@@ -1,4 +1,4 @@
-# s.el [![Build Status](https://secure.travis-ci.org/magnars/s.el.png)](http://travis-ci.org/magnars/s.el)
+# s.el [![Build Status](https://secure.travis-ci.org/magnars/s.el.png)](http://travis-ci.org/magnars/s.el) [![Coverage Status](https://coveralls.io/repos/magnars/s.el/badge.svg?branch=master)](https://coveralls.io/r/magnars/s.el?branch=master)
 
 The long lost Emacs string manipulation library.
 
@@ -43,6 +43,7 @@ Or you can just dump `s.el` in your load path somewhere.
 * [s-concat](#s-concat-rest-strings) `(&rest strings)`
 * [s-prepend](#s-prepend-prefix-s) `(prefix s)`
 * [s-append](#s-append-suffix-s) `(suffix s)`
+* [s-wrap](#s-wrap-s-prefix-optional-suffix) `(s prefix &optional suffix)`
 
 ### To and from lists
 
@@ -307,6 +308,20 @@ Concatenate `s` and `suffix`.
 
 ```cl
 (s-append "abc" "def") ;; => "defabc"
+```
+
+### s-wrap `(s prefix &optional suffix)`
+
+Wrap string `s` with `prefix` and optionally `suffix`.
+
+Return string `s` with `prefix` prepended.  If `suffix` is present, it
+is appended, otherwise `prefix` is used as both prefix and
+suffix.
+
+```cl
+(s-wrap "[" "]" "foobar") ;; => "[foobar]"
+(s-wrap "(" "" "foobar") ;; => "(foobar"
+(s-wrap "" ")" "foobar") ;; => "foobar)"
 ```
 
 
@@ -825,6 +840,12 @@ calculate the Levenshtein distance between two strings.
 
 ## Changelist
 
+### From 1.9.0 to 1.10.0
+
+- Add `s-wrap` (Johan Andersson)
+- Add `s-split-up-to` (Matus Goljer)
+- Fix `s-reverse` for Unicode combining characters. (Christopher Wellons)
+
 ### From 1.8.0 to 1.9.0
 
 - Add `s-count-matches` (Lars Andersen)
@@ -916,7 +937,7 @@ Change `readme-template.md` or `examples-to-docs.el` instead.
 
 ## License
 
-Copyright (C) 2012 Magnar Sveen
+Copyright (C) 2012-2015 Magnar Sveen
 
 Authors: Magnar Sveen <magnars@gmail.com>
 Keywords: strings
