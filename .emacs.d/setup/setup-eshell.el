@@ -43,9 +43,10 @@
   (when (or (string-match ".*\\.alias" (buffer-file-name))
             (string-match ".*csh$" (file-name-extension (buffer-file-name))))
     (require 'csh-mode) ;; https://github.com/Tux/tcsh/blob/master/csh-mode.el
-    (setq-local indent-line-function 'csh-indent-line)
-    (setq-local indent-region-function 'csh-indent-region)))
+    (setq-local indent-line-function   #'csh-indent-line)
+    (setq-local indent-region-function #'csh-indent-region)))
 (add-hook 'sh-mode-hook #'my/tcsh-set-indent-functions)
+(add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions)
 (add-hook 'sh-mode-hook (lambda () (electric-mode -1)))
 
 (provide 'setup-eshell)
