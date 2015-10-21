@@ -11,7 +11,7 @@ fi
 export PATH="/opt/local/bin:/opt/local/sbin:${PATH}"
 
 # Make MacTeX override MacPorts
-export PATH="/usr/texbin":$PATH
+export PATH=/usr/texbin:/usr/local/texlive/2014/bin/x86_64-darwin:$PATH
 
 # Better compilation
 export CFLAGS="-I/opt/local/include -I/opt/X11/include ${CFLAGS}"
