@@ -196,9 +196,6 @@
 (org-ac/config-default)
 
 ;; font face setting
-(set-face-background 'ac-candidate-face "darkgray")
-(set-face-underline 'ac-candidate-face "gray")
-(set-face-background 'ac-selection-face "steelblue")
 (when (find-font (font-spec :name "Consolas"))
   (set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch :bold nil)
   (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch :bold nil))
