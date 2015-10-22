@@ -449,7 +449,7 @@
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
+(define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "M-o") 'popup-select-window)
 (define-key my-keys-minor-mode-map (kbd "C-`") 'psw-switch-function)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
@@ -458,10 +458,14 @@
 (define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
 
 ;; Good for navigating
-(define-key my-keys-minor-mode-map [(meta up)] 'psw-switch-buffer)
-(define-key my-keys-minor-mode-map [(meta down)] 'psw-switch-buffer)
-(define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
-(define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-function)
+(add-hook 'prog-mode-hook
+          (function
+           (lambda ()
+             (progn
+               (local-set-key [(meta up)] 'psw-switch-buffer)
+               (local-set-key [(meta down)] 'psw-switch-buffer)
+               (local-set-key [(meta left)] 'psw-switch-function)
+               (local-set-key [(meta right)] 'psw-switch-function)))))
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
