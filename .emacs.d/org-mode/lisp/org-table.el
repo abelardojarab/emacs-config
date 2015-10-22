@@ -47,12 +47,18 @@
 (declare-function org-element-map "org-element"
 		  (data types fun
 			&optional info first-match no-recursion with-affiliated))
+(declare-function org-element-parse-buffer "org-element"
+		  (&optional granularity visible-only))
 (declare-function org-element-property "org-element" (property element))
+(declare-function org-element-type "org-element" (element))
 
-(declare-function org-export-string-as "ox"
-		  (string backend &optional body-only ext-plist))
-(declare-function org-export-create-backend "ox")
-(declare-function org-export-get-backend "ox" (name))
+(declare-function org-export-create-backend "org-export" (&rest rest))
+(declare-function org-export-data-with-backend "org-export" (arg1 arg2 arg3))
+(declare-function org-export-first-sibling-p "org-export" (arg1 arg2))
+(declare-function org-export-get-backend "org-export" (arg1))
+(declare-function org-export-get-environment "org-export" (&optional arg1 arg2 arg3))
+(declare-function org-export-table-has-special-column-p "org-export" (arg1))
+(declare-function org-export-table-row-is-special-p "org-export" (arg1 arg2))
 
 (declare-function calc-eval "calc" (str &optional separator &rest args))
 
@@ -278,9 +284,9 @@ relies on the variables to be present in the list."
 
 (defcustom org-table-duration-custom-format 'hours
   "Format for the output of calc computations like $1+$2;t.
-The default value is 'hours, and will output the results as a
-number of hours.  Other allowed values are 'seconds, 'minutes and
-'days, and the output will be a fraction of seconds, minutes or
+The default value is `hours', and will output the results as a
+number of hours.  Other allowed values are `seconds', `minutes' and
+`days', and the output will be a fraction of seconds, minutes or
 days."
   :group 'org-table-calculation
   :version "24.1"
@@ -323,7 +329,7 @@ The car of each element is a name of a constant, without the `$' before it.
 The cdr is the value as a string.  For example, if you'd like to use the
 speed of light in a formula, you would configure
 
-  (setq org-table-formula-constants '((\"c\" . \"299792458.\")))
+  (setq org-table-formula-constants \\='((\"c\" . \"299792458.\")))
 
 and then use it in an equation like `$1*$c'.
 
@@ -337,7 +343,9 @@ Constants can also be defined on a per-file basis using a line like
 
 (defcustom org-table-allow-automatic-line-recalculation t
   "Non-nil means lines marked with |#| or |*| will be recomputed automatically.
-Automatically means when TAB or RET or C-c C-c are pressed in the line."
+\\<org-mode-map>\
+Automatically means when TAB or RET or \\[org-ctrl-c-ctrl-c] \
+are pressed in the line."
   :group 'org-table-calculation
   :type 'boolean)
 
@@ -555,9 +563,9 @@ slightly, to make sure a beginning of line in the first line is included.
 SEPARATOR specifies the field separator in the lines.  It can have the
 following values:
 
-'(4)     Use the comma as a field separator
-'(16)    Use a TAB as field separator
-'(64)    Prompt for a regular expression as field separator
+(4)     Use the comma as a field separator
+(16)    Use a TAB as field separator
+(64)    Prompt for a regular expression as field separator
 integer  When a number, use that many spaces as field separator
 regexp   When a regular expression, use it to match the separator
 nil      When nil, the command tries to be smart and figure out the
@@ -2560,14 +2568,14 @@ This function assumes the table is already analyzed (i.e., using
 	  (cond
 	   ((cdr (assoc ref org-table-named-field-locations)))
 	   ((string-match "\\`@\\([1-9][0-9]*\\)\\$\\([1-9][0-9]*\\)\\'" ref)
-	    (cons (condition-case nil
+	    (list (condition-case nil
 		      (aref org-table-dlines
 			    (string-to-number (match-string 1 ref)))
 		    (error (user-error "Invalid row number in %s" ref)))
 		  (string-to-number (match-string 2 ref))))
 	   (t (user-error "Unknown field: %s" ref))))
 	 (line (car coordinates))
-	 (column (cdr coordinates))
+	 (column (nth 1 coordinates))
 	 (create-new-column (if (functionp create-column-p)
 				(funcall create-column-p column)
 			      create-column-p)))
@@ -3029,7 +3037,7 @@ search, as a string."
 KEEP-EMPTY indicated to keep empty fields, default is to skip them.
 NUMBERS indicates that everything should be converted to numbers.
 LISPP non-nil means to return something appropriate for a Lisp
-list, 'literal is for the format specifier L."
+list, `literal' is for the format specifier L."
   ;; Calc nan (not a number) is used for the conversion of the empty
   ;; field to a reference for several reasons: (i) It is accepted in a
   ;; Calc formula (e. g. "" or "()" would result in a Calc error).
@@ -3384,7 +3392,7 @@ formulas that use a range of rows or columns, it may often be better
 to anchor the formula with \"I\" row markers, or to offset from the
 borders of the table using the @< @> $< $> makers."
   (let (n nmax len char (start 0))
-    (while (string-match "\\([@$]\\)\\(<+\\|>+\\)\\|\\(remote([^\)]+)\\)"
+    (while (string-match "\\([@$]\\)\\(<+\\|>+\\)\\|\\(remote([^)]+)\\)"
 			 s start)
       (if (match-end 3)
 	  (setq start (match-end 3))
@@ -3549,8 +3557,10 @@ Parameters get priority."
     (when (eq org-table-use-standard-references t)
       (org-table-fedit-toggle-ref-type))
     (org-goto-line startline)
-    (message "Edit formulas, finish with `C-c C-c' or `C-c ' '.  \
-See menu for more commands.")))
+    (message
+     (substitute-command-keys "\\<org-mode-map>\
+Edit formulas, finish with `\\[org-ctrl-c-ctrl-c]' or `\\[org-edit-special]'.  \
+See menu for more commands."))))
 
 (defun org-table-fedit-post-command ()
   (when (not (memq this-command '(lisp-complete-symbol)))
@@ -4772,72 +4782,87 @@ This may be either a string or a function of two arguments:
   example \"%s\\\\times10^{%s}\".  This may also be a property
   list with column numbers and format strings or functions.
   :fmt will still be applied after :efmt."
-  (let ((backend (plist-get params :backend))
-	;; Disable user-defined export filters and hooks.
-	(org-export-filters-alist nil)
-	(org-export-before-parsing-hook nil)
-	(org-export-before-processing-hook nil))
-    (when (and backend (symbolp backend) (not (org-export-get-backend backend)))
-      (user-error "Unknown :backend value"))
-    (when (or (not backend) (plist-get params :raw)) (require 'ox-org))
-    ;; Remove final newline.
-    (substring
-     (org-export-string-as
-      ;; Return TABLE as Org syntax.  Tolerate non-string cells.
-      (with-output-to-string
+  ;; Make sure `org-export-create-backend' is available.
+  (require 'ox)
+  (let* ((backend (plist-get params :backend))
+	 (custom-backend
+	  ;; Build a custom back-end according to PARAMS.  Before
+	  ;; defining a translator, check if there is anything to do.
+	  ;; When there isn't, let BACKEND handle the element.
+	  (org-export-create-backend
+	   :parent (or backend 'org)
+	   :transcoders
+	   `((table . ,(org-table--to-generic-table params))
+	     (table-row . ,(org-table--to-generic-row params))
+	     (table-cell . ,(org-table--to-generic-cell params))
+	     ;; Macros are not going to be expanded.  However, no
+	     ;; regular back-end has a transcoder for them.  We
+	     ;; provide one so they are not ignored, but displayed
+	     ;; as-is instead.
+	     (macro . (lambda (m c i) (org-element-macro-interpreter m nil))))))
+	 data info)
+    ;; Store TABLE as Org syntax in DATA.  Tolerate non-string cells.
+    ;; Initialize communication channel in INFO.
+    (with-temp-buffer
+      (let ((org-inhibit-startup t)) (org-mode))
+      (let ((standard-output (current-buffer)))
 	(dolist (e table)
 	  (cond ((eq e 'hline) (princ "|--\n"))
 		((consp e)
 		 (princ "| ") (dolist (c e) (princ c) (princ " |"))
 		 (princ "\n")))))
-      ;; Build a custom back-end according to PARAMS.  Before defining
-      ;; a translator, check if there is anything to do.  When there
-      ;; isn't, let BACKEND handle the element.
-      (org-export-create-backend
-       :parent (or backend 'org)
-       :filters
-       '((:filter-parse-tree
-	  ;; Handle :skip parameter.
-	  (lambda (tree backend info)
-	    (let ((skip (plist-get info :skip)))
-	      (when skip
-		(unless (wholenump skip) (user-error "Wrong :skip value"))
-		(let ((n 0))
-		  (org-element-map tree 'table-row
-		    (lambda (row)
-		      (if (>= n skip) t
-			(org-element-extract-element row)
-			(incf n)
-			nil))
-		    info t))
-		tree)))
-	  ;; Handle :skipcols parameter.
-	  (lambda (tree backend info)
-	    (let ((skipcols (plist-get info :skipcols)))
-	      (when skipcols
-		(unless (consp skipcols) (user-error "Wrong :skipcols value"))
-		(org-element-map tree 'table
-		  (lambda (table)
-		    (let ((specialp
-			   (org-export-table-has-special-column-p table)))
-		      (dolist (row (org-element-contents table))
-			(when (eq (org-element-property :type row) 'standard)
-			  (let ((c 1))
-			    (dolist (cell (nthcdr (if specialp 1 0)
-						  (org-element-contents row)))
-			      (when (memq c skipcols)
-				(org-element-extract-element cell))
-			      (incf c)))))))
-		  info)
-		tree)))))
-       :transcoders
-       `((table . ,(org-table--to-generic-table params))
-	 (table-row . ,(org-table--to-generic-row params))
-	 (table-cell . ,(org-table--to-generic-cell params))
-	 ;; Section.  Return contents to avoid garbage around table.
-	 (section . (lambda (s c i) c))))
-      'body-only (org-combine-plists params '(:with-tables t)))
-     0 -1)))
+      (setq data
+	    (org-element-map (org-element-parse-buffer) 'table
+	      #'identity nil t))
+      (setq info (org-export-get-environment backend nil params)))
+    (when (and backend (symbolp backend) (not (org-export-get-backend backend)))
+      (user-error "Unknown :backend value"))
+    (when (or (not backend) (plist-get info :raw)) (require 'ox-org))
+    ;; Handle :skip parameter.
+    (let ((skip (plist-get info :skip)))
+      (when skip
+	(unless (wholenump skip) (user-error "Wrong :skip value"))
+	(let ((n 0))
+	  (org-element-map data 'table-row
+	    (lambda (row)
+	      (if (>= n skip) t
+		(org-element-extract-element row)
+		(incf n)
+		nil))
+	    nil t))))
+    ;; Handle :skipcols parameter.
+    (let ((skipcols (plist-get info :skipcols)))
+      (when skipcols
+	(unless (consp skipcols) (user-error "Wrong :skipcols value"))
+	(org-element-map data 'table
+	  (lambda (table)
+	    (let ((specialp (org-export-table-has-special-column-p table)))
+	      (dolist (row (org-element-contents table))
+		(when (eq (org-element-property :type row) 'standard)
+		  (let ((c 1))
+		    (dolist (cell (nthcdr (if specialp 1 0)
+					  (org-element-contents row)))
+		      (when (memq c skipcols)
+			(org-element-extract-element cell))
+		      (incf c))))))))))
+    ;; Since we are going to export using a low-level mechanism,
+    ;; ignore special column and special rows manually.
+    (let ((special? (org-export-table-has-special-column-p data))
+	  ignore)
+      (org-element-map data (if special? '(table-cell table-row) 'table-row)
+	(lambda (datum)
+	  (when (if (eq (org-element-type datum) 'table-row)
+		    (org-export-table-row-is-special-p datum nil)
+		  (org-export-first-sibling-p datum nil))
+	    (push datum ignore))))
+      (setq info (plist-put info :ignore-list ignore)))
+    ;; We use a low-level mechanism to export DATA so as to skip all
+    ;; usual pre-processing and post-processing, i.e., hooks, filters,
+    ;; Babel code evaluation, include keywords and macro expansion,
+    ;; and filters.
+    (let ((output (org-export-data-with-backend data custom-backend info)))
+      ;; Remove final newline.
+      (if (org-string-nw-p output) (substring-no-properties output 0 -1) ""))))
 
 (defun org-table--generic-apply (value name &optional with-cons &rest args)
   (cond ((null value) nil)

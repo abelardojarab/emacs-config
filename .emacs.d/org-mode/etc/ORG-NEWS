@@ -1,13 +1,74 @@
 ORG NEWS -- history of user-visible changes.           -*- org -*-
 
 #+LINK: doc http://orgmode.org/worg/doc.html#%s
-#+LINK: git http://orgmode.org/w/?p=org-mode.git;a=commit;h=%s
+#+LINK: git http://orgmode.org/cgit.cgi/org-mode.git/commit/?id=%s
 
 Copyright (C) 2012-2015 Free Software Foundation, Inc.
 See the end of the file for license conditions.
 
-Please send Org bug reports to emacs-orgmode@gnu.org.
+Please send Org bug reports to mailto:emacs-orgmode@gnu.org.
 
+* Version 8.4
+** Incompatible changes
+*** ~org-agenda-repeating-timestamp-show-all~ is more selective
+The variable only applies to ~+~ repeaters, not ~.+~ nor ~++~.
+** New features
+*** Org linter
+~org-lint~ can check syntax and report common issues in Org documents.
+*** New option ~date-tree-last~ for ~org-agenda-insert-diary-strategy~
+When ~org-agenda-insert-diary-strategy~ is set to ~date-tree-last~, diary
+entries are added to last in the date tree.
+*** New option ~org-export-with-broken-links~
+This option tells the export process how to behave when encountering
+a broken internal link.  See its docstring for more information.
+*** New ~vbar~ entity
+~\vbar~ or ~\vbar{}~ will be exported unconditionnally as a =|=,
+unlike to existing ~\vert~, which is expanded as ~&vert;~ when using
+a HTML derived export back-end.
+*** Babel: support for Stan language
+New ob-stan.el library.
+
+Evaluating a Stan block can produce two different results.
+
+1. Dump the source code contents to a file.
+
+   This file can then be used as a variable in other blocks, which
+   allows interfaces like RStan to use the model.
+
+2. Compile the contents to a model file.
+
+   This provides access to the CmdStan interface.  To use this, set
+   ~org-babel-stan-cmdstan-directory~ and provide a ~:file~ argument
+   that does not end in ".stan".
+
+For more information and usage examples, visit
+http://orgmode.org/worg/org-contrib/babel/languages/ob-doc-stan.html
+*** New =#+latex_compiler= keyword to set LaTeX compiler.
+PDFLaTeX, XeLaTeX, and LuaLaTeX are supported.  See the manual for
+details.
+*** org-bbdb-anniversaries-future
+Used like org-bbdb-anniversaries, it provides a few days warning
+for upcoming anniversaries (default: 7 days).
+** New functions
+~org-show-children~ is a faster implementation of
+~outline-show-children~.
+** Removed functions
+*** ~org-element-remove-indentation~ in an obsolete alias for ~org-remove-indentation~
+** Removed options
+*** Remove ~org-list-empty-line-terminates-plain-lists~
+Two consecutive blank lines always terminate all levels of current
+plain list.
+*** ~fixltx2e~ is removed from ~org-latex-default-packages-alist~
+fixltx2e is obsolete, see LaTeX News 22.
+** Miscellaneous
+*** Beamer export back-ends uses ~org-latex-prefer-user-labels~
+*** ~:preparation-function~ called earlier during publishing 
+Functions in this list are called before any file is associated to the
+current projet.  Thus, they can be used to generate to be published
+Org files.
+*** Function ~org-remove-indentation~ changes.
+The new algorithm doesn't remove TAB characters not used for
+indentation.
 * Version 8.3
 
 ** Incompatible changes
@@ -25,7 +86,7 @@ The following function will repair them:
 #+BEGIN_SRC emacs-lisp
 (defun org-repair-property-drawers ()
   "Fix properties drawers in current buffer.
- Ignore non Org buffers."
+Ignore non Org buffers."
   (when (eq major-mode 'org-mode)
     (org-with-wide-buffer
      (goto-char (point-min))
@@ -51,7 +112,18 @@ The following function will repair them:
                            (match-beginning 0)
                            (min (1+ (match-end 0)) end)))
                   (unless (bolp) (insert "\n"))))))))))))
-#+END_SRC 
+#+END_SRC
+
+*** Using "COMMENT" is now equivalent to commenting with "#"
+
+If you used "COMMENT" in headlines to prevent a subtree from being
+exported, you can still do it but all information within the subtree
+is now commented out, i.e. no #+OPTIONS line will be parsed or taken
+into account when exporting.
+
+If you want to exclude a headline from export while using its contents
+for setting options, use =:noexport:= (see =org-export-exclude-tags=.)
+
 *** =#+CATEGORY= keywords no longer apply partially to document
 
 It was possible to use several such keywords and have them apply to
@@ -67,12 +139,13 @@ properties to set category for a subtree, e.g.,
    :CATEGORY: some category
    :END:
 #+END_SRC
+
 *** New variable to control visibility when revealing a location
 
-~org-show-following-heading~, ~org-show-siblings~,
-~org-show-entry-below~ and ~org-show-hierarchy-above~ no longer exist.
-Instead, visibility is controlled through a single variable:
-~org-show-context-detail~, which see.
+~org-show-following-heading~, ~org-show-siblings~, ~org-show-entry-below~
+and ~org-show-hierarchy-above~ no longer exist.  Instead, visibility is
+controlled through a single variable: ~org-show-context-detail~, which
+see.
 
 *** Replace disputed keys again when reading a date
 
@@ -85,7 +158,26 @@ Keybinding for reading date can be customized with a new variable
 *** No default title is provided when =TITLE= keyword is missing
 
 Skipping =TITLE= keyword no longer provides the current file name, or
-buffer name, as the title. Instead, simply ignore the title.
+buffer name, as the title.  Instead, simply ignore the title.
+
+*** Default bindings of =C-c C-n= and =C-c C-p= changed
+
+The key sequences =C-c C-n= and =C-c C-p= are now bound to
+~org-next-visible-heading~ and ~org-next-visible-heading~ respectively,
+rather than the =outline-mode= versions of these functions.  The Org
+version of these functions skips over inline tasks (and even-level
+headlines when ~org-odd-levels-only~ is set).
+
+*** ~org-element-context~ no longer return objects in keywords
+
+~org-element-context~ used to return objects on some keywords, i.e.,
+=TITLE=, =DATE= and =AUTHOR=.  It now returns only the keyword.
+
+*** ~org-timer-default-timer~ type changed from number to string
+
+If you have, in your configuration, something like =(setq
+org-timer-default-timer 10)= replace it with =(setq
+org-timer-default-timer "10")=.
 
 *** Functions signature changes
 
@@ -98,31 +190,12 @@ docstring for more information.
 - ~org-latex-format-headline-function~
 - ~org-latex-format-inlinetask-function~
 - ~org-link-search~
-
-*** Default bindings of =C-c C-n= and =C-c C-p= changed
-
-The key sequences =C-c C-n= and =C-c C-p= are now bound to
-~org-next-visible-heading~ and ~org-next-visible-heading~
-respectively, rather than the =outline-mode= versions of these
-functions.  The Org version of these functions skips over inline tasks
-(and even-level headlines when ~org-odd-levels-only~ is set).
-
-*** ~org-element-context~ no longer return objects in keywords
-
-~org-element-context~ used to return objects on some keywords, i.e.,
-=TITLE=, =DATE= and =AUTHOR=.  It now returns only the keyword.
+** New features
 
 *** Behavior of ~org-return~ changed
 
 If point is before or after the headline title, insert a new line
 without changing the headline.
-
-*** ~org-timer-default-timer~ type changed from number to string
-
-If you have, in your configuration, something like =(setq
-org-timer-default-timer 10)= replace it with =(setq
-org-timer-default-timer "10")=.
-** New features
 
 *** Hierarchies of tags
 The functionality of nesting tags in hierarchies is added to org-mode.
@@ -308,6 +381,15 @@ more features.  See docstring for details.
 
 Functions in this filter are applied on the body of the exported
 document, befor wrapping it within the template.
+
+*** New :environment parameter when exporting example blocks to LaTeX
+
+: #+ATTR_LATEX: :environment myverbatim
+: #+BEGIN_EXAMPLE
+: This sentence is false.
+: #+END_EXAMPLE
+
+will be exported using =@samp(myverbatim)= instead of =@samp(verbatim)=.
 
 *** Various improvements on radio tables
 
@@ -518,9 +600,14 @@ two of them, as if this option was nil (default value).
 
 *** ~org-export-with-creator~ is a boolean
 
-Special ~comment~ value is no longer allowed.  It is possible to use
-a body filter to add comments about the creator at the end of the
+Special ~comment~ value is no longer allowed.  It is possible to use a
+body filter to add comments about the creator at the end of the
 document instead.
+
+*** Removed option =org-html-use-unicode-chars=
+
+Setting this to non-nil was problematic as it converted characters
+everywhere in the buffer, possibly corrupting URLs.
 
 *** Removed option =org-babel-sh-command=
 
@@ -621,8 +708,7 @@ now.
 
 *** When exporting, throw an error on unresolved id/fuzzy links and code refs
 
-This helps spotting wrong links. 
-
+This helps spotting wrong links.
 * Version 8.2
 
 ** Incompatible changes
@@ -1865,7 +1951,7 @@ See http://orgmode.org/elpa/
 
 **** New =todo-unblocked= and =nottodo-unblocked= skip conditions
 
-     See the [[http://orgmode.org/w/?p%3Dorg-mode.git%3Ba%3Dcommit%3Bh%3Df426da][git commit]] for more explanations.
+     See the [[http://orgmode.org/cgit.cgi/org-mode.git/commit/?id=f426da][git commit]] for more explanations.
 
 **** Allow category filtering in the agenda
 
@@ -2182,7 +2268,7 @@ See http://orgmode.org/elpa/
      Thanks to Carsten for implementing this.
 
 **** ODT: Add support for ODT export in org-bbdb.el
-**** ODT: Add support for indented tables (see [[http://orgmode.org/w/?p%3Dorg-mode.git%3Ba%3Dcommit%3Bh%3De9fd33][this commit]] for details)
+**** ODT: Add support for indented tables (see [[http://orgmode.org/cgit.cgi/org-mode.git/commit/?id=e9fd33][this commit]] for details)
 **** ODT: Improve the conversion from ODT to other formats
 **** ASCII: Swap the level-1/level-2 characters to underline the headlines
 **** Support for Chinese, simplified Chinese, Russian, Ukrainian and Japanese

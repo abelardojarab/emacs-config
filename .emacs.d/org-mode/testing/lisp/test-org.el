@@ -286,6 +286,95 @@
   (should (equal (org-parse-time-string "<2012-03-29>" t)
 		 '(0 nil nil 29 3 2012 nil nil nil))))
 
+(ert-deftest test-org/closest-date ()
+  "Test `org-closest-date' specifications."
+  (require 'calendar)
+  ;; Time stamps without a repeater are returned unchanged.
+  (should
+   (equal
+    '(3 29 2012)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-29>" "<2014-03-04>" nil))))
+  ;; Time stamps with a null repeater are returned unchanged.
+  (should
+   (equal
+    '(3 29 2012)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-29 +0d>" "<2014-03-04>" nil))))
+  ;; Time stamps with a special repeater type are returned unchanged.
+  (should
+   (equal
+    '(3 29 2012)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-29 .+1d>" "<2014-03-04>" nil))))
+  (should
+   (equal
+    '(3 29 2012)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-29 ++1d>" "<2014-03-04>" nil))))
+  ;; if PREFER is set to `past' always return a date before, or equal
+  ;; to CURRENT.
+  (should
+   (equal
+    '(3 1 2014)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-29 +1m>" "<2014-03-04>" 'past))))
+  (should
+   (equal
+    '(3 4 2014)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-04 +1m>" "<2014-03-04>" 'past))))
+  ;; if PREFER is set to `future' always return a date before, or equal
+  ;; to CURRENT.
+  (should
+   (equal
+    '(3 29 2014)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-29 +1m>" "<2014-03-04>" 'future))))
+  (should
+   (equal
+    '(3 4 2014)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-04 +1m>" "<2014-03-04>" 'future))))
+  ;; If PREFER is neither `past' nor `future', select closest date.
+  (should
+   (equal
+    '(3 1 2014)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-29 +1m>" "<2014-03-04>" nil))))
+  (should
+   (equal
+    '(5 4 2014)
+    (calendar-gregorian-from-absolute
+     (org-closest-date "<2012-03-04 +1m>" "<2014-04-28>" nil))))
+  ;; Test "day" repeater.
+  (should
+   (equal '(3 8 2014)
+	  (calendar-gregorian-from-absolute
+	   (org-closest-date "<2014-03-04 +2d>" "<2014-03-09>" 'past))))
+  (should
+   (equal '(3 10 2014)
+	  (calendar-gregorian-from-absolute
+	   (org-closest-date "<2014-03-04 +2d>" "<2014-03-09>" 'future))))
+  ;; Test "month" repeater.
+  (should
+   (equal '(1 5 2015)
+	  (calendar-gregorian-from-absolute
+	   (org-closest-date "<2014-03-05 +2m>" "<2015-02-04>" 'past))))
+  (should
+   (equal '(3 29 2014)
+	  (calendar-gregorian-from-absolute
+	   (org-closest-date "<2012-03-29 +2m>" "<2014-03-04>" 'future))))
+  ;; Test "year" repeater.
+  (should
+   (equal '(3 5 2014)
+	  (calendar-gregorian-from-absolute
+	   (org-closest-date "<2014-03-05 +2y>" "<2015-02-04>" 'past))))
+  (should
+   (equal '(3 29 2014)
+	  (calendar-gregorian-from-absolute
+	   (org-closest-date "<2012-03-29 +2y>" "<2014-03-04>" 'future)))))
+
 
 ;;; Drawers
 
@@ -887,11 +976,30 @@
   (should
    (org-test-with-temp-text "Link [[target<point>]] <<target>>"
      (let ((org-return-follows-link t)
-	   (org-link-search-must-match-exact-headline nil)) (org-return))
+	   (org-link-search-must-match-exact-headline nil))
+       (org-return))
      (org-looking-at-p "<<target>>")))
   (should-not
    (org-test-with-temp-text "Link [[target<point>]] <<target>>"
      (let ((org-return-follows-link nil)) (org-return))
+     (org-looking-at-p "<<target>>")))
+  (should
+   (org-test-with-temp-text "* [[b][a<point>]]\n* b"
+     (let ((org-return-follows-link t)) (org-return))
+     (org-looking-at-p "* b")))
+  (should
+   (org-test-with-temp-text "Link [[target][/descipt<point>ion/]] <<target>>"
+     (let ((org-return-follows-link t)
+	   (org-link-search-must-match-exact-headline nil))
+       (org-return))
+     (org-looking-at-p "<<target>>")))
+  ;; When `org-return-follows-link' is non-nil, tolerate links and
+  ;; timestamps in comments, node properties, etc.
+  (should
+   (org-test-with-temp-text "# Comment [[target<point>]]\n <<target>>"
+     (let ((org-return-follows-link t)
+	   (org-link-search-must-match-exact-headline nil))
+       (org-return))
      (org-looking-at-p "<<target>>")))
   ;; However, do not open link when point is in a table.
   (should
@@ -939,6 +1047,12 @@
   (should
    (equal "\n* h"
 	  (org-test-with-temp-text "<point>* h"
+	    (org-return)
+	    (buffer-string))))
+  ;; Refuse to leave invalid headline in buffer.
+  (should
+   (equal "* h\n"
+	  (org-test-with-temp-text "*<point> h"
 	    (org-return)
 	    (buffer-string)))))
 
@@ -3050,12 +3164,34 @@ Paragraph<point>"
 	    (replace-regexp-in-string
 	     "\\( [.A-Za-z]+\\)>" "" (buffer-string)
 	     nil nil 1))))
+  (should
+   (equal "* H\n  Paragraph"
+	  (org-test-with-temp-text "\
+* H
+  CLOSED: [2015-06-25 Thu]
+  Paragraph<point>"
+	    (let ((org-adapt-indentation t))
+	      (org-add-planning-info nil nil 'closed))
+	    (replace-regexp-in-string
+	     "\\( [.A-Za-z]+\\)>" "" (buffer-string)
+	     nil nil 1))))
   ;; Remove closed when `org-adapt-indentation' is nil.
   (should
    (equal "* H\nDEADLINE: <2015-06-25>\nParagraph"
 	  (org-test-with-temp-text "\
 * H
 CLOSED: [2015-06-25 Thu] DEADLINE: <2015-06-25 Thu>
+Paragraph<point>"
+	    (let ((org-adapt-indentation nil))
+	      (org-add-planning-info nil nil 'closed))
+	    (replace-regexp-in-string
+	     "\\( [.A-Za-z]+\\)>" "" (buffer-string)
+	     nil nil 1))))
+  (should
+   (equal "* H\nParagraph"
+	  (org-test-with-temp-text "\
+* H
+  CLOSED: [2015-06-25 Thu]
 Paragraph<point>"
 	    (let ((org-adapt-indentation nil))
 	      (org-add-planning-info nil nil 'closed))
@@ -3320,7 +3456,7 @@ Paragraph<point>"
    (equal "* H"
 	  (org-test-with-temp-text "* TODO H"
 	    (cdr (assoc "ITEM" (org-entry-properties))))))
-  ;; Get "TODO" property.
+  ;; Get "TODO" property.  TODO keywords are case sensitive.
   (should
    (equal "TODO"
 	  (org-test-with-temp-text "* TODO H"
@@ -3332,6 +3468,9 @@ Paragraph<point>"
   (should-not
    (org-test-with-temp-text "* H"
      (assoc "TODO" (org-entry-properties nil "TODO"))))
+  (should-not
+   (org-test-with-temp-text "* todo H"
+     (assoc "TODO" (org-entry-properties nil "TODO"))))
   ;; Get "PRIORITY" property.
   (should
    (equal "A"
@@ -3341,9 +3480,10 @@ Paragraph<point>"
    (equal "A"
 	  (org-test-with-temp-text "* [#A] H"
 	    (cdr (assoc "PRIORITY" (org-entry-properties))))))
-  (should-not
-   (org-test-with-temp-text "* H"
-     (assoc "PRIORITY" (org-entry-properties nil "PRIORITY"))))
+  (should
+   (equal (char-to-string org-default-priority)
+	  (org-test-with-temp-text "* H"
+	    (cdr (assoc "PRIORITY" (org-entry-properties nil "PRIORITY"))))))
   ;; Get "FILE" property.
   (should
    (org-test-with-temp-text-in-file "* H\nParagraph"

@@ -1,6 +1,6 @@
 ;;; ob-C.el --- org-babel functions for C and similar languages
 
-;; Copyright (C) 2010-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric Schulte
 ;;      Thierry Banel
@@ -331,9 +331,9 @@ FORMAT can be either a format string or a function which is called with VAL."
 
 (defun org-babel-C-val-to-base-type (val)
   "Determine the base type of VAL which may be
-'integerp if all base values are integers
-'floatp if all base values are either floating points or integers
-'stringp otherwise."
+`integerp' if all base values are integers
+`floatp' if all base values are either floating points or integers
+`stringp' otherwise."
   (cond
    ((integerp val) 'integerp)
    ((floatp val) 'floatp)

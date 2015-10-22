@@ -921,14 +921,17 @@ channel."
 	     (format
 	      "[%s] %s"
 	      anchor
-	      (if (not dest) (org-ascii--translate "Unknown reference" info)
+	      (if (stringp dest)	; External file.
+		  dest
 		(format
 		 (org-ascii--translate "See section %s" info)
 		 (if (org-export-numbered-headline-p dest info)
 		     (mapconcat #'number-to-string
-				(org-export-get-headline-number dest info) ".")
+				(org-export-get-headline-number dest info)
+				".")
 		   (org-export-data (org-element-property :title dest) info)))))
-	     width info) "\n\n")))
+	     width info)
+	    "\n\n")))
 	;; Do not add a link that cannot be resolved and doesn't have
 	;; any description: destination is already visible in the
 	;; paragraph.

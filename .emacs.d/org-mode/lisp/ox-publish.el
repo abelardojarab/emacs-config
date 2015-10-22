@@ -67,7 +67,7 @@ produced.")
 
 (defcustom org-publish-project-alist nil
   "Association list to control publishing behavior.
-Each element of the alist is a publishing 'project.'  The CAR of
+Each element of the alist is a publishing project.  The CAR of
 each element is a string, uniquely identifying the project.  The
 CDR of each element is in one of the following forms:
 
@@ -75,12 +75,12 @@ CDR of each element is in one of the following forms:
    alternating keys and values, specifying parameters for the
    publishing process.
 
-     \(:property value :property value ... )
+     (:property value :property value ... )
 
 2. A meta-project definition, specifying of a list of
    sub-projects:
 
-     \(:components (\"project-1\" \"project-2\" ...))
+     (:components (\"project-1\" \"project-2\" ...))
 
 When the CDR of an element of org-publish-project-alist is in
 this second form, the elements of the list after `:components'
@@ -671,53 +671,52 @@ See `org-publish-projects'."
 (defun org-publish-projects (projects)
   "Publish all files belonging to the PROJECTS alist.
 If `:auto-sitemap' is set, publish the sitemap too.  If
-`:makeindex' is set, also produce a file theindex.org."
-  (mapc
-   (lambda (project)
-     ;; Each project uses its own cache file:
-     (org-publish-initialize-cache (car project))
-     (let* ((project-plist (cdr project))
-	    (exclude-regexp (plist-get project-plist :exclude))
-	    (sitemap-p (plist-get project-plist :auto-sitemap))
-	    (sitemap-filename (or (plist-get project-plist :sitemap-filename)
-				  "sitemap.org"))
-	    (sitemap-function (or (plist-get project-plist :sitemap-function)
-				  'org-publish-org-sitemap))
-	    (org-publish-sitemap-date-format
-	     (or (plist-get project-plist :sitemap-date-format)
-		 org-publish-sitemap-date-format))
-	    (org-publish-sitemap-file-entry-format
-	     (or (plist-get project-plist :sitemap-file-entry-format)
-		 org-publish-sitemap-file-entry-format))
-	    (preparation-function
-	     (plist-get project-plist :preparation-function))
-	    (completion-function (plist-get project-plist :completion-function))
-	    (files (org-publish-get-base-files project exclude-regexp))
-	    (theindex
+`:makeindex' is set, also produce a file \"theindex.org\"."
+  (dolist (project (org-publish-expand-projects projects))
+    (let ((project-plist (cdr project)))
+      (let ((preparation-function
+	     (plist-get project-plist :preparation-function)))
+	(when preparation-function (run-hooks 'preparation-function)))
+      ;; Each project uses its own cache file.
+      (org-publish-initialize-cache (car project))
+      (when  (plist-get project-plist :auto-sitemap)
+	(let ((sitemap-filename
+	       (or (plist-get project-plist :sitemap-filename)
+		   "sitemap.org"))
+	      (sitemap-function
+	       (or (plist-get project-plist :sitemap-function)
+		   #'org-publish-org-sitemap))
+	      (org-publish-sitemap-date-format
+	       (or (plist-get project-plist :sitemap-date-format)
+		   org-publish-sitemap-date-format))
+	      (org-publish-sitemap-file-entry-format
+	       (or (plist-get project-plist :sitemap-file-entry-format)
+		   org-publish-sitemap-file-entry-format)))
+	  (funcall sitemap-function project sitemap-filename)))
+      ;; Publish all files from PROJECT excepted "theindex.org".  Its
+      ;; publishing will be deferred until "theindex.inc" is
+      ;; populated.
+      (let ((theindex
 	     (expand-file-name "theindex.org"
-			       (plist-get project-plist :base-directory))))
-       (when preparation-function (run-hooks 'preparation-function))
-       (if sitemap-p (funcall sitemap-function project sitemap-filename))
-       ;; Publish all files from PROJECT excepted "theindex.org".  Its
-       ;; publishing will be deferred until "theindex.inc" is
-       ;; populated.
-       (dolist (file files)
-	 (unless (equal file theindex)
-	   (org-publish-file file project t)))
-       ;; Populate "theindex.inc", if needed, and publish
-       ;; "theindex.org".
-       (when (plist-get project-plist :makeindex)
-	 (org-publish-index-generate-theindex
-	  project (plist-get project-plist :base-directory))
-	 (org-publish-file theindex project t))
-       (when completion-function (run-hooks 'completion-function))
-       (org-publish-write-cache-file)))
-   (org-publish-expand-projects projects)))
+			       (plist-get project-plist :base-directory)))
+	    (exclude-regexp (plist-get project-plist :exclude)))
+	(dolist (file (org-publish-get-base-files project exclude-regexp))
+	  (unless (equal file theindex) (org-publish-file file project t)))
+	;; Populate "theindex.inc", if needed, and publish
+	;; "theindex.org".
+	(when (plist-get project-plist :makeindex)
+	  (org-publish-index-generate-theindex
+	   project (plist-get project-plist :base-directory))
+	  (org-publish-file theindex project t)))
+      (let ((completion-function
+	     (plist-get project-plist :completion-function)))
+	(when completion-function (run-hooks 'completion-function)))
+      (org-publish-write-cache-file))))
 
 (defun org-publish-org-sitemap (project &optional sitemap-filename)
   "Create a sitemap of pages in set defined by PROJECT.
 Optionally set the filename of the sitemap with SITEMAP-FILENAME.
-Default for SITEMAP-FILENAME is 'sitemap.org'."
+Default for SITEMAP-FILENAME is `sitemap.org'."
   (let* ((project-plist (cdr project))
 	 (dir (file-name-as-directory
 	       (plist-get project-plist :base-directory)))
