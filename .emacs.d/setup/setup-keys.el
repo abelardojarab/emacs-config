@@ -153,7 +153,6 @@
 ;; Bookmarks
 (global-set-key (kbd "<f2>")   'helm-bm)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
-(global-set-key (kbd "<A-f2>") 'bm-toggle)
 (global-set-key (kbd "<S-f2>") 'bm-next)
 
 ;; Highlight symbol at point
@@ -169,7 +168,6 @@
 
 ;; Helm semantic (switch function)
 (global-set-key (kbd "<f4>") 'helm-semantic-or-imenu)
-(global-set-key (kbd "C-<f4>") 'pws-switch-function)
 (define-key c-mode-base-map (kbd "S-<f4>") 'eassist-switch-h-cpp)
 (define-key c-mode-base-map (kbd "C-<f4>") 'dts-switch-between-header-and-source)
 
@@ -185,12 +183,10 @@
   (ispell-word))
 (global-set-key (kbd "<f6>") 'flyspell-check-next-highlighted-word)
 (global-set-key (kbd "C-<f6>") 'helm-flyspell-correct)
-(global-set-key (kbd "A-<f6>") 'helm-flyspell-correct)
 
 ;; Flycheck
 (global-set-key (kbd "<f7>") 'flycheck-next-error)
 (global-set-key (kbd "C-<f7>") 'helm-flycheck)
-(global-set-key (kbd "A-<f7>") 'helm-flycheck)
 
 ;; Code folding
 (defun toggle-selective-display ()
@@ -198,18 +194,15 @@
   (set-selective-display (if selective-display nil 1)))
 (global-set-key (kbd "<f8>") 'toggle-selective-display)
 (global-set-key (kbd "C-<f8>") 'fold-dwim-toggle)
-(global-set-key (kbd "A-<f8>") 'fold-dwim-toggle)
 
 ;; Org capture
 (global-set-key (kbd "<f9>") 'org-capture)
 (global-set-key (kbd "C-<f9>") 'org-projectile:project-todo-completing-read)
-(global-set-key (kbd "A-<f9>") 'org-projectile:project-todo-completing-read)
 
 ;; Hint: customize `magit-repo-dirs' so that you can
 ;; quickly open magit on any one of your projects.
 (global-set-key (kbd "<f10>") 'menu-bar-open)
 (global-set-key (kbd "C-<f10>") 'helm-ls-git-ls)
-(global-set-key (kbd "A-<f10>") 'magit-status)
 (global-set-key (kbd "S-<f10>") #'git-messenger:popup-message)
 
 ;; Toggle frame maximized
@@ -403,30 +396,33 @@
 ;; Tabbar
 (global-set-key [C-prior] 'tabbar-backward-tab)
 (global-set-key [C-next] 'tabbar-forward-tab)
+(global-set-key [C-home] 'tabbar-backward-group)
+(global-set-key [C-end] 'tabbar-forward-group)
+
+;; Alternative tabbar keys
+(global-set-key (kbd "C-x <up>") 'tabbar-backward-group)
+(global-set-key (kbd "C-x <down>") 'tabbar-forward-group)
+(global-set-key (kbd "C-x <right>") 'tabbar-forward-tab)
+(global-set-key (kbd "C-x <left>") 'tabbar-backward-tab)
 
 ;; Faster buffer switching
 (add-to-list 'load-path "~/.emacs.d/popup-switcher")
 (require 'popup-switcher)
-(define-key global-map (kbd "C-`") 'psw-switch-function)
+(global-set-key (kbd "M-o") 'psw-switch-function)
 
 ;; Select Window
 (require 'popup-select-window)
-(global-set-key (kbd "M-o") 'popup-select-window)
+(global-set-key (kbd "C-`") 'popup-select-window)
 
 ;; Jump between windows
-(global-set-key (kbd "C-x <up>") 'windmove-up)
-(global-set-key (kbd "C-x <down>") 'windmove-down)
-(global-set-key (kbd "C-x <right>") 'windmove-right)
-(global-set-key (kbd "C-x <left>") 'windmove-left)
+(global-set-key [C-up] 'windmove-up)
+(global-set-key [C-down] 'windmove-down)
+(global-set-key [C-left] 'windmove-left)
+(global-set-key [C-right] 'windmove-right)
 
 ;; Flycheck tips
-(define-key global-map (kbd "C-1") 'error-tip-cycle-dwim)
-(define-key global-map (kbd "C-2") 'error-tip-cycle-dwim-reverse)
-
-;; Drag stuff
-(add-to-list 'load-path "~/.emacs.d/drag-stuff")
-(require 'drag-stuff)
-(drag-stuff-global-mode t)
+(define-key global-map (kbd "C->") 'error-tip-cycle-dwim)
+(define-key global-map (kbd "C-<") 'error-tip-cycle-dwim-reverse)
 
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
@@ -451,11 +447,8 @@
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
-(define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
-(define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "<A-f2>") 'bm-next)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-3>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "M-o") 'popup-select-window)
 (define-key my-keys-minor-mode-map (kbd "C-`") 'psw-switch-function)
@@ -463,6 +456,12 @@
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'ibuffer)
 (define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
+
+;; Good for navigating
+(define-key my-keys-minor-mode-map [(meta up)] 'psw-switch-buffer)
+(define-key my-keys-minor-mode-map [(meta down)] 'psw-switch-buffer)
+(define-key my-keys-minor-mode-map [(meta left)] 'psw-switch-function)
+(define-key my-keys-minor-mode-map [(meta right)] 'psw-switch-function)
 
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
