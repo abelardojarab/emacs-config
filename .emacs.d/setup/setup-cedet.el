@@ -85,14 +85,10 @@
 ;; smart completions
 (setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
                  '())
-(setq-mode-local c-mode semanticdb-find-default-throttle
+(setq-mode-local lisp-mode semanticdb-find-default-throttle
                  '(project))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
                  '(project unloaded system recursive))
-(setq-mode-local lisp-mode semanticdb-find-default-throttle
-                 '(project))
-(setq-mode-local js2-mode semanticdb-find-default-throttle
-                 '(project))
 (setq-mode-local python-mode semanticdb-find-default-throttle
                  '(project unloaded system recursive))
 (setq-mode-local java-mode semanticdb-find-default-throttle

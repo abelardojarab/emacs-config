@@ -206,6 +206,7 @@ attention to case differences."
     javascript-jscs
     javascript-standard
     json-jsonlint
+    json-python-json
     less
     luacheck
     lua
@@ -415,6 +416,39 @@ If set to nil, do not show error tooltips."
                         flycheck-help-echo-all-error-messages)
                  (function :tag "Help echo function"))
   :package-version '(flycheck . "0.25")
+  :risky t)
+
+(defcustom flycheck-command-wrapper-function #'identity
+  "Function to modify checker commands before execution.
+
+The value of this option is a function which is given a list
+containing the full command of a syntax checker after
+substitution through `flycheck-substitute-argument' but before
+execution.  The function may return a new command for Flycheck to
+execute.
+
+The default value is `identity' which does not change the
+command.  You may provide your own function to run Flycheck
+commands through `bundle exec', `nix-shell' or similar wrappers."
+  :group 'flycheck
+  :type '(choice (const :tag "Do not modify commands" identity)
+                 (function :tag "Modify command with a custom function"))
+  :risky t)
+
+(defcustom flycheck-executable-find #'executable-find
+  "Function to search for executables.
+
+The value of this option is a function which is given the name or
+path of an executable and shall return the full path to the
+executable, or nil if the executable does not exit.
+
+The default is the standard `executable-find' function which
+searches `exec-path'.  You can customize this option to search
+for checkers in other environments such as bundle or NixOS
+sandboxes."
+  :group 'flycheck
+  :type '(choice (const :tag "Search executables in `exec-path'" executable-find)
+                 (function :tag "Search executables with a custom function"))
   :risky t)
 
 (defcustom flycheck-indication-mode 'left-fringe
@@ -3080,7 +3114,7 @@ The following PROPERTIES constitute an error level:
         (plist-get properties :compilation-level))
   (setf (get level 'flycheck-overlay-category)
         (plist-get properties :overlay-category))
-  (setf (get level 'flycheck-fringe-bitmap)
+  (setf (get level 'flycheck-fringe-bitmap-double-arrow)
         (plist-get properties :fringe-bitmap))
   (setf (get level 'flycheck-fringe-face)
         (plist-get properties :fringe-face))
@@ -3105,7 +3139,7 @@ The following PROPERTIES constitute an error level:
 
 (defun flycheck-error-level-fringe-bitmap (level)
   "Get the fringe bitmap for LEVEL."
-  (get level 'flycheck-fringe-bitmap))
+  (get level 'flycheck-fringe-bitmap-double-arrow))
 
 (defun flycheck-error-level-fringe-face (level)
   "Get the fringe face for LEVEL."
@@ -3137,6 +3171,26 @@ show the icon."
 
 
 ;;; Built-in error levels
+(when (fboundp 'define-fringe-bitmap)
+  (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
+    (vector #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b10011000
+            #b01101100
+            #b00110110
+            #b00011011
+            #b00110110
+            #b01101100
+            #b10011000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000)))
+
 (setf (get 'flycheck-error-overlay 'face) 'flycheck-error)
 (setf (get 'flycheck-error-overlay 'priority) 110)
 
@@ -3144,7 +3198,7 @@ show the icon."
   :severity 100
   :compilation-level 2
   :overlay-category 'flycheck-error-overlay
-  :fringe-bitmap 'exclamation-mark
+  :fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
   :fringe-face 'flycheck-fringe-error
   :error-list-face 'flycheck-error-list-error)
 
@@ -3155,7 +3209,7 @@ show the icon."
   :severity 10
   :compilation-level 1
   :overlay-category 'flycheck-warning-overlay
-  :fringe-bitmap 'question-mark
+  :fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
   :fringe-face 'flycheck-fringe-warning
   :error-list-face 'flycheck-error-list-warning)
 
@@ -3163,13 +3217,10 @@ show the icon."
 (setf (get 'flycheck-info-overlay 'priority) 90)
 
 (flycheck-define-error-level 'info
-  :severity -1
+  :severity -10
   :compilation-level 0
   :overlay-category 'flycheck-info-overlay
-  ;; Not exactly the right indicator, but looks pretty, and I prefer to use
-  ;; built-in bitmaps over diving into the hassle of messing around with custom
-  ;; fringe bitmaps
-  :fringe-bitmap 'empty-line
+  :fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
   :fringe-face 'flycheck-fringe-info
   :error-list-face 'flycheck-error-list-info)
 
@@ -3412,7 +3463,7 @@ Return the created overlay."
     (setf (overlay-get overlay 'help-echo) #'flycheck-help-echo)
     overlay))
 
-(defun flycheck-help-echo (window object pos)
+(defun flycheck-help-echo (_window object pos)
   "Construct a tooltip message.
 
 Most of the actual work is done by calling
@@ -4241,7 +4292,8 @@ default `:verify' function of command checkers."
           ;; guard against syntax checker tools which are not installed
           (plist-put properties :predicate
                      (lambda ()
-                       (and (executable-find (flycheck-checker-executable symbol))
+                       (and (funcall flycheck-executable-find
+                                     (flycheck-checker-executable symbol))
                             (or (not predicate) (funcall predicate))))))
 
     (apply #'flycheck-define-generic-checker symbol docstring
@@ -4489,6 +4541,8 @@ symbols in the command."
     (condition-case err
         (let* ((program (flycheck-checker-executable checker))
                (args (flycheck-checker-substituted-arguments checker))
+               (command (funcall flycheck-command-wrapper-function
+                                 (cons program args)))
                ;; Use pipes to receive output from the syntax checker.  They are
                ;; more efficient and more robust than PTYs, which Emacs uses by
                ;; default, and since we don't need any job control features, we
@@ -4504,7 +4558,7 @@ symbols in the command."
           ;; See https://github.com/flycheck/flycheck/issues/298 for an
           ;; example for such a conflict.
           (setq process (apply 'start-process (format "flycheck-%s" checker)
-                               nil program args))
+                               nil command))
           (setf (process-sentinel process) #'flycheck-handle-signal)
           (setf (process-filter process) #'flycheck-receive-checker-output)
           (set-process-query-on-exit-flag process nil)
@@ -4570,7 +4624,8 @@ symbols in the command."
 
 Return a list of `flycheck-verification-result' objects for
 CHECKER."
-  (let ((executable (executable-find (flycheck-checker-executable checker))))
+  (let ((executable (funcall flycheck-executable-find
+                             (flycheck-checker-executable checker))))
     (list
      (flycheck-verification-result-new
       :label "executable"
@@ -4694,9 +4749,9 @@ variable symbol for a syntax checker."
           (executable (if current-prefix-arg
                           nil
                         (read-file-name "Executable: " nil default-executable
-                                        nil nil #'executable-find))))
+                                        nil nil flycheck-executable-find))))
      (list checker executable)))
-  (when (and executable (not (executable-find executable)))
+  (when (and executable (not (funcall flycheck-executable-find executable)))
     (user-error "%s is no executable" executable))
   (let ((variable (flycheck-checker-executable-variable checker)))
     (set (make-local-variable variable) executable)))
@@ -6231,11 +6286,12 @@ Uses GCC's Fortran compiler gfortran.  See URL
             (eval flycheck-gfortran-args)
             source)
   :error-patterns
-  ((error line-start (file-name) ":" line "." column ":\n"
-          (= 3 (zero-or-more not-newline) "\n")
-          (or "Error" "Fatal Error") ": " (message) line-end)
-   (warning line-start (file-name) ":" line "." column ":\n"
-            (= 3 (zero-or-more not-newline) "\n")
+  ((error line-start (file-name) ":" line (or ":" ".") column (or ": " ":\n")
+          (or (= 3 (zero-or-more not-newline) "\n") "")
+          (or "Error" "Fatal Error") ": "
+          (message) line-end)
+   (warning line-start (file-name) ":" line (or ":" ".") column (or ": " ":\n")
+            (or (= 3 (zero-or-more not-newline) "\n") "")
             "Warning: " (message) line-end))
   :modes (fortran-mode f90-mode))
 
@@ -6312,14 +6368,35 @@ See URL `http://golang.org/cmd/go/' and URL
                    :message (if have-vet "present" "missing")
                    :face (if have-vet 'success '(bold error)))))))
 
+(flycheck-def-option-var flycheck-go-build-install-deps nil go-build
+  "Whether to install dependencies in `go build'.
+
+If non-nil automatically install dependencies with `go build'
+while syntax checking."
+  :type 'boolean
+  :safe #'booleanp
+  :package-version '(flycheck . "0.25"))
+
+(flycheck-def-option-var flycheck-go-build-tags nil go-build
+  "A list of tags for `go build'.
+
+Each item is a string with a tag to be given to `go build'."
+  :type '(repeat (string :tag "Tag"))
+  :safe #'flycheck-string-list-p
+  :package-version '(flycheck . "0.25"))
+
 (flycheck-define-checker go-build
   "A Go syntax and type checker using the `go build' command.
 
 See URL `http://golang.org/cmd/go'."
-  ;; We need to use `temporary-file-name' instead of `null-device', because Go
-  ;; can't write to the null device.  It's “too magic”.  See
-  ;; https://code.google.com/p/go/issues/detail?id=4851 for details.
-  :command ("go" "build" "-o" temporary-file-name)
+  ;; We need to use `temporary-file-name' instead of `null-device',
+  ;; because Go can't write to the null device.
+  ;; See https://github.com/golang/go/issues/4851
+  :command ("go" "build"
+            (option-flag "-i" flycheck-go-build-install-deps)
+            ;; multiple tags are listed as "dev debug ..."
+            (option-list "-tags=" flycheck-go-build-tags concat)
+            "-o" temporary-file-name)
   :error-patterns
   ((error line-start (file-name) ":" line ":"
           (optional column ":") " "
@@ -6610,6 +6687,9 @@ See URL `http://www.haskell.org/ghc/'."
 (flycheck-def-config-file-var flycheck-hlintrc haskell-hlint "HLint.hs"
   :safe #'stringp)
 
+(flycheck-def-args-var flycheck-hlint-args haskell-hlint
+  :package-version '(flycheck . "0.25"))
+
 (flycheck-def-option-var flycheck-hlint-language-extensions
     nil haskell-hlint
   "Extensions list to enable for hlint.
@@ -6658,19 +6738,18 @@ See URL `https://github.com/ndmitchell/hlint'."
             (option-list "-i=" flycheck-hlint-ignore-rules concat)
             (option-list "-h" flycheck-hlint-hint-packages concat)
             (config-file "-h" flycheck-hlintrc)
+            (eval flycheck-hlint-args)
             source-inplace)
   :error-patterns
   ((warning line-start
             (file-name) ":" line ":" column
             ": Warning: "
-            (message (one-or-more not-newline)
-                     (one-or-more "\n" (one-or-more not-newline)))
+            (message (one-or-more (and (one-or-more (not (any ?\n))) ?\n)))
             line-end)
    (error line-start
           (file-name) ":" line ":" column
           ": Error: "
-          (message (one-or-more not-newline)
-                   (one-or-more "\n" (one-or-more not-newline)))
+          (message (one-or-more (and (one-or-more (not (any ?\n))) ?\n)))
           line-end))
   :modes (haskell-mode literate-haskell-mode))
 
@@ -6848,6 +6927,29 @@ See URL `https://github.com/zaach/jsonlint'."
           ": line " line
           ", col " column ", "
           (message) line-end))
+  :error-filter
+  (lambda (errors)
+    (flycheck-sanitize-errors (flycheck-increment-error-columns errors)))
+  :predicate
+  (lambda ()
+    (or
+     (eq major-mode 'json-mode)
+     (and (buffer-file-name)
+          (string= (file-name-extension (buffer-file-name)) "json")))))
+
+(flycheck-define-checker json-python-json
+  "A JSON syntax checker using Python json.tool module.
+
+See URL `https://docs.python.org/3.5/library/json.html#command-line-interface'."
+  :command ("python" "-m" "json.tool" source
+            ;; Send the pretty-printed output to the null device
+            null-device)
+  :error-patterns
+  ((error line-start
+          (message) ": line " line " column " column
+          ;; Ignore the rest of the line which shows the char position.
+          (one-or-more not-newline)
+          line-end))
   :predicate
   (lambda ()
     (or
@@ -7289,6 +7391,9 @@ See URL `http://racket-lang.org/'."
   :command ("racket" "-f" source-inplace)
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ":" (message) line-end))
+  :error-filter (lambda (errors)
+                  (flycheck-sanitize-errors
+                   (flycheck-increment-error-columns errors)))
   :modes racket-mode)
 
 (flycheck-define-checker rpm-rpmlint
@@ -7606,15 +7711,6 @@ See URL `http://www.scala-lang.org/'."
   :safe #'stringp
   :package-version '(flycheck . "0.20"))
 
-(flycheck-def-option-var flycheck-scalastyle-jar nil scala-scalastyle
-  "The path to the main JAR file of Scalastyle.
-
-If this option is nil, or points to a non-existing file,
-`scala-scalastyle' can not be used."
-  :type '(file :must-match t)
-  :safe #'stringp
-  :package-version '(flycheck . "0.20"))
-
 (flycheck-define-checker scala-scalastyle
   "A Scala style checker using scalastyle.
 
@@ -7623,8 +7719,7 @@ Note that this syntax checker is not used if
 point to non-existing files.
 
 See URL `http://www.scalastyle.org'."
-  :command ("java"
-            (option "-jar" flycheck-scalastyle-jar)
+  :command ("scalastyle"
             (config-file "-c" flycheck-scalastylerc)
             source)
   :error-patterns
@@ -7639,26 +7734,11 @@ See URL `http://www.scalastyle.org'."
   :predicate
   ;; Inhibit this syntax checker if the JAR or the configuration are unset or
   ;; missing
-  (lambda () (and flycheck-scalastyle-jar flycheck-scalastylerc
-                  (file-exists-p flycheck-scalastyle-jar)
+  (lambda () (and flycheck-scalastylerc
                   (flycheck-locate-config-file flycheck-scalastylerc
                                                'scala-scalastyle)))
   :verify (lambda (checker)
             (list
-             (flycheck-verification-result-new
-              :label "JAR file"
-              :message (cond
-                        ((not flycheck-scalastyle-jar)
-                         "`flycheck-scalastyle-jar' not set")
-                        ((not (file-exists-p flycheck-scalastyle-jar))
-                         (format "file %s does not exist"
-                                 flycheck-scalastyle-jar))
-                        (t "present"))
-              :face (cond
-                     ((not flycheck-scalastyle-jar) '(bold warning))
-                     ((not (file-exists-p flycheck-scalastyle-jar))
-                      '(bold error))
-                     (t 'success)))
              (flycheck-verification-result-new
               :label "Configuration file"
               :message (cond

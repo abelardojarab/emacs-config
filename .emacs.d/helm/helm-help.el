@@ -224,7 +224,33 @@ On a symlinked directory a prefix arg will allow expanding to its true name.
 
 Note: The tree is reinitialized each time you enter a new tree with `C-j'
 or by entering some pattern in prompt.
- 
+
+*** Find file at point
+
+Helm is using `ffap' partially or completely to find file at point
+depending on value of `helm-ff-guess-ffap-filenames'.
+You can use full `ffap' by setting this to non-nil (annoying).
+Default value is nil which make `ffap' working partially.
+
+**** Find file at number line
+
+With something like this at point:
+
+    ~/elisp/helm/helm.el:1234
+
+Helm will find this file at line number 1234.
+
+**** Find url at point
+
+When an url is found at point, helm expand to that url only.
+Pressing RET jump to that url using `browse-url-browser-function'.
+
+**** Find mail at point
+
+When a mail address is found at point helm expand to this email address
+prefixed by \"mailto:\". Pressing RET open a message buffer with this mail
+address.
+
 *** Quick pattern expansion
 
 **** Enter `~/' at end of pattern to quickly reach home directory
@@ -260,7 +286,7 @@ NOTE: `C-u C-j' will display buffer directly.
 *** To browse images directories turn on `helm-follow-mode' and navigate with arrow keys
 
 You can also use `helm-follow-action-forward' and `helm-follow-action-backward'
-(`C-<down' and `C-<left>').
+\(`C-<down' and `C-<left>').
 
 *** You can turn off/on (toggle) autoupdate completion at any moment with `C-DEL'
 
@@ -362,6 +388,8 @@ in `helm-current-buffer' as default.
 \\[helm-ff-run-grep]\t\tRun Grep (C-u Recursive).
 \\[helm-ff-run-pdfgrep]\t\tRun Pdfgrep on marked files.
 \\[helm-ff-run-zgrep]\t\tRun zgrep (C-u Recursive).
+\\[helm-ff-run-grep-ag]\t\tRun AG grep on current directory.
+\\[helm-ff-run-git-grep]\t\tRun git-grep on current directory.
 \\[helm-ff-run-gid]\t\tRun gid (id-utils).
 \\[helm-ff-run-etags]\t\tRun Etags (C-u use thing-at-point `C-u C-u' reload cache)
 \\[helm-ff-run-rename-file]\t\tRename File (C-u Follow).
@@ -398,6 +426,7 @@ in `helm-current-buffer' as default.
 \\[helm-narrow-window]\t\tNarrow helm window.
 \\[helm-ff-run-toggle-basename]\t\tToggle basename/fullpath.
 \\[helm-ff-run-find-file-as-root]\t\tFind file as root.
+\\[helm-ff-run-find-alternate-file]\t\tFind alternate file.
 \\[helm-ff-run-insert-org-link]\t\tInsert org link.")
 
 ;;; Help for `helm-read-file-name'
@@ -408,20 +437,26 @@ in `helm-current-buffer' as default.
 
 ** Tips
 
-*** Enter `~/' at end of pattern to quickly reach home directory
+If you are here, you are probably using a vanilla command like `find-file'
+helmized by `helm-mode', this is cool, but it is even better for your file
+navigation to use `helm-find-files' which is fully featured.
 
-*** Enter `/' at end of pattern to quickly reach root of your file system
+*** Navigation
 
-*** Enter `./' at end of pattern to quickly reach `default-directory' (initial start of session)
+**** Enter `~/' at end of pattern to quickly reach home directory
+
+**** Enter `/' at end of pattern to quickly reach root of your file system
+
+**** Enter `./' at end of pattern to quickly reach `default-directory' (initial start of session)
 
 If you are in `default-directory' move cursor on top.
 
-*** Enter `../' at end of pattern will reach upper directory, moving cursor on top
+**** Enter `../' at end of pattern will reach upper directory, moving cursor on top
 
 NOTE: This different to using `C-l' in that `C-l' don't move cursor on top but stay on previous
 subdir name.
 
-*** You can complete with partial basename (start on third char entered)
+**** You can complete with partial basename (start on third char entered)
 
 E.g. \"fob\" or \"fbr\" will complete \"foobar\"
 but \"fb\" will wait for a third char for completing.
@@ -440,7 +475,7 @@ NOTE: `C-u C-j' will display buffer directly.
 
 **** To browse images directories turn on `helm-follow-mode' and navigate with arrow keys
 
-**** Delete characters
+*** Delete characters backward
 
 When you want to delete backward characters, e.g. to create a new file or directory,
 autoupdate may keep updating to an existent directory preventing you from doing so.
@@ -448,6 +483,8 @@ In this case, type C-<backspace> and then <backspace>.
 This should not be needed when copying/renaming files because autoupdate is disabled
 by default in that case.
 NOTE: On a terminal C-<backspace> may not work, use in this case C-c <backspace>.
+
+*** Create new directory and files
 
 **** Create a new directory and a new file at the same time
 
@@ -458,6 +495,10 @@ E.g. You can create \"~/new/newnew/newnewnew/my_newfile.txt\".
 **** To create a new directory, add a \"/\" at end of new name and press <RET>
 
 **** To create a new file just write the filename not ending with \"/\"
+
+_NOTE_: File and directory creation work only in some commands (e.g `find-file')
+and will not work in other commands where it is not intended to return a file or a directory
+\(e.g `list-directory').
 
 ** Commands
 \\<helm-read-file-map>

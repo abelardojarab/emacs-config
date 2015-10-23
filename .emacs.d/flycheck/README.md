@@ -2,7 +2,6 @@
 [![MELPA stable version](http://stable.melpa.org/packages/flycheck-badge.svg)](http://stable.melpa.org/#/flycheck)
 [![MELPA version](http://melpa.org/packages/flycheck-badge.svg)](http://melpa.org/#/flycheck)
 [![Manual](https://img.shields.io/badge/manual-latest-green.svg)][manual]
-[![Buy A Drink](https://img.shields.io/badge/Paypal-Buy%20a%20Drink-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BYNRV4RY2WG7L)
 [![Waffle Board](https://img.shields.io/badge/Board-ready-75AED9.svg)](https://waffle.io/flycheck/flycheck)
 
 # [![Flycheck Logo](https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/logo.png)](http://www.flycheck.org)
@@ -12,17 +11,11 @@ intended as replacement for the older Flymake extension which is part of GNU
 Emacs.
 
 It uses various syntax checking and linting tools to check the contents of
-buffers, and reports warnings and errors directly in the buffer, or in an
-optional error list.  The following screenshow shows Flycheck at work in a
-Haskell buffer, using GHC and Hlint for syntax checking:
+buffers, and reports warnings and errors directly in the buffer or in an
+optional error list:
 
-![](https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/screencast.gif)
+![](https://raw.githubusercontent.com/flycheck/flycheck/master/doc/images/flycheck-annotated.png)
 
-The color theme in this screencast is [Solarized Light][], with the the
-[Source Code Pro][] font.
-
-[Solarized Light]: https://github.com/bbatsov/solarized-emacs
-[Source Code Pro]: https://github.com/adobe-fonts/source-code-pro
 [COPYING]: https://github.com/flycheck/flycheck/blob/master/COPYING
 [manual]: http://www.flycheck.org/manual/latest/index.html
 
@@ -87,8 +80,8 @@ Documentation is available at http://www.flycheck.org:
 Support & Contribution
 ======================
 
-- [Gitter chat](https://gitter.im/flycheck/flycheck) and
-  [Issue Tracker](https://github.com/flycheck/flycheck/issues)
+- [Stack Exchange](https://emacs.stackexchange.com/questions/tagged/flycheck)
+- [Issue Tracker](https://github.com/flycheck/flycheck/issues)
 - [Waffle Board](http://waffle.io/flycheck/flycheck)
 - [Github](https://github.com/flycheck/flycheck)
 - [Contribution guidelines](https://github.com/flycheck/flycheck/blob/master/CONTRIBUTING.md)

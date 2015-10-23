@@ -41,7 +41,7 @@
   (helm-make-actions
     "Find file"                             'helm-find-many-files
     "Find file as root"                     'helm-find-file-as-root
-    "Find file other window"                'find-file-other-window
+    "Find file other window"                'helm-find-files-other-window
     "Find file other frame"                 'find-file-other-frame
     "Open dired in file's directory"        'helm-open-dired
     "Grep File(s) `C-u recurse'"            'helm-find-files-grep
@@ -107,7 +107,8 @@
 (defmethod helm--setup-source :before ((source helm-type-bookmark))
   (set-slot-value source 'action 'helm-type-bookmark-actions)
   (set-slot-value source 'keymap helm-bookmark-map)
-  (set-slot-value source 'help-message 'helm-bookmark-help-message))
+  (set-slot-value source 'help-message 'helm-bookmark-help-message)
+  (set-slot-value source 'migemo t))
 
 
 ;; Buffers

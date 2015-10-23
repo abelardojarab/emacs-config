@@ -56,6 +56,10 @@
       ps-landscape-mode nil    ; for two pages per page: t
       ps-number-of-columns 1)  ; for two pages per page: 2
 
+;; Namespace implementation
+(add-to-list 'load-path "~/.emacs.d/names")
+(require 'names)
+
 ;; Enable context menus
 (add-to-list 'load-path "~/.emacs.d/makey")
 (add-to-list 'load-path "~/.emacs.d/discover")
@@ -417,13 +421,6 @@
 (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
 (require 'auto-indent-mode)
 (auto-indent-global-mode)
-
-;; Aggresive indent mode
-(add-to-list 'load-path "~/.emacs.d/names")
-(add-to-list 'load-path "~/.emacs.d/aggressive-indent-mode")
-(require 'names)
-(require 'aggressive-indent)
-(add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)

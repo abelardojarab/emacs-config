@@ -315,6 +315,12 @@ respectively)
 @flyc{go-vet} provides the following option:
 
 @table @asis
+@flycoption flycheck-go-build-install-deps
+Whether to install dependencies while checking with @code{go build}.
+
+@flycoption flycheck-go-build-tags
+A list of tags for @code{go build}.
+
 @flycoption flycheck-go-vet-print-functions
 A list of print-like functions for go vet.  Go vet will check these
 functions for format string problems.
@@ -362,6 +368,9 @@ and @flyc{haskell-hlint} (style checker with
 following options:
 
 @table @asis
+@flycoption flycheck-hlint-args
+A list of additional arguments for Hlint.
+
 @flycoption flycheck-hlint-language-extensions
 Extensions list.
 
@@ -471,6 +480,9 @@ read configuration files:
 @itemize
 @item
 @flyc{json-jsonlint} (@uref{https://github.com/zaach/jsonlint,jsonlint})
+@item
+or @flyc{json-python-json}
+(@uref{https://docs.python.org/3.5/library/json.html,Python json.tool module})
 @end itemize
 
 @flyclanguage{Less}
@@ -522,7 +534,7 @@ The severity level for Perl::Critic, as integer for the
 @enumerate
 @item
 @flyc{php} (syntax check with
-@uref{https://metacpan.org/pod/Perl::Critic,PHP CLI})
+@uref{http://php.net/manual/en/features.commandline.php,PHP CLI})
 @item
 @flyc{php-phpmd} (code check with @uref{http://phpmd.org/,PHP Mess
 Detector})
@@ -606,7 +618,7 @@ On by default.
 @itemize
 @item
 @flyc{r-lintr} (syntax and style check with
-@uref{jimhester/lintr,lintr}), with the following options:
+@ghref{jimhester/lintr,lintr}), with the following options:
 
 @table @asis
 @flycoption flycheck-lintr-caching
@@ -744,15 +756,14 @@ Whether to enable the Compass CSS framework in SASS, via
 @uref{http://www.scalastyle.org/,Scalastyle})
 @end enumerate
 
-The @flyc{scala-scalastyle} syntax checker needs the following options:
+The @flyc{scala-scalastyle} syntax checker needs the following option:
 
 @table @asis
-@flycoption flycheck-scalastyle-jar
-The path to the main JAR file of Scalastyle.
 @flycconfigfile{flycheck-scalastylerc,Scalastyle}
 @end table
 
-If these options are not set, @flyc{scala-scalastyle} will not be used.
+If this option is not set, or if the configuration file was not found
+@flyc{scala-scalastyle} will not be used.
 
 @flyclanguage{SCSS}
 

@@ -6,8 +6,8 @@
 ;; URL: https://github.com/bbatsov/projectile
 ;; Created: 2011-31-07
 ;; Keywords: project, convenience
-;; Version: 0.12.0
-;; Package-Requires: ((helm "1.4.0") (projectile "0.12.0") (dash "1.5.0") (cl-lib "0.3"))
+;; Version: 0.13.0
+;; Package-Requires: ((helm "1.7.7") (projectile "0.13.0") (dash "1.5.0") (cl-lib "0.3"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -41,6 +41,7 @@
 
 (require 'projectile)
 (require 'cl-lib)
+(require 'grep)
 (require 'helm)
 (require 'helm-types)
 (require 'helm-locate)
@@ -50,6 +51,9 @@
 (declare-function eshell "eshell")
 (declare-function helm-do-ag "helm-ag")
 (defvar helm-ag-base-command)
+
+(defvar grep-find-ignored-directories)
+(defvar grep-find-ignored-files)
 
 (defgroup helm-projectile nil
   "Helm support for projectile."
@@ -79,7 +83,7 @@ This needs to be set before loading helm-projectile."
        `(define-key ,keymap ,key
           (lambda ()
             (interactive)
-            (helm-quit-and-execute-action ,def)))
+            (helm-exit-and-execute-action ,def)))
        ret)
       (setq key (pop bindings)
             def (pop bindings)))
@@ -152,14 +156,14 @@ DIR is the project root."
 DIR is the project root."
   (let ((helm--reading-passwd-or-string t)
         (default-directory dir))
-    (projectile-test-project helm-current-prefix-arg dir)))
+    (projectile-test-project helm-current-prefix-arg)))
 
 (defun helm-projectile-run-project (dir)
   "A Helm action for run a project.
 DIR is the project root."
   (let ((helm--reading-passwd-or-string t)
         (default-directory dir))
-    (projectile-run-project helm-current-prefix-arg dir)))
+    (projectile-run-project helm-current-prefix-arg)))
 
 (defun helm-projectile-remove-known-project (_ignore)
   "Delete selected projects.
@@ -186,7 +190,7 @@ It is there because Helm requires it."
       (kbd "C-d") #'dired
       (kbd "M-g") #'helm-projectile-vc
       (kbd "M-e") #'helm-projectile-switch-to-eshell
-      (kbd "C-s") #'helm-find-files-grep
+      (kbd "C-s") #'helm-projectile-grep
       (kbd "M-c") #'helm-projectile-compile-project
       (kbd "M-t") #'helm-projectile-test-project
       (kbd "M-r") #'helm-projectile-run-project
@@ -211,15 +215,16 @@ It is there because Helm requires it."
               ("Open Dired in project's directory `C-d'" . dired)
               ("Open project root in vc-dir or magit `M-g'" . helm-projectile-vc)
               ("Switch to Eshell `M-e'" . helm-projectile-switch-to-eshell)
-              ("Grep in projects `C-s'.  With C-u, recurse" . helm-find-files-grep)
+              ("Grep in projects `C-s'" . helm-projectile-grep)
               ("Compile project `M-c'. With C-u, new compile command"
                . helm-projectile-compile-project)
               ("Remove project(s) `M-D'" . helm-projectile-remove-known-project)))
   "Helm source for known projectile projects.")
 
-(define-key helm-etags-map (kbd "C-c p f") (lambda ()
-                                             (interactive)
-                                             (helm-run-after-quit 'helm-projectile-find-file nil)))
+(define-key helm-etags-map (kbd "C-c p f")
+  (lambda ()
+    (interactive)
+    (helm-run-after-exit 'helm-projectile-find-file nil)))
 
 (defun helm-projectile-find-files-eshell-command-on-file-action (_candidate)
   (interactive)
@@ -274,14 +279,14 @@ CANDIDATE is the selected file, but choose the marked files if available."
            (not helm-projectile-virtual-dired-remote-enable))
       (message "Virtual Dired manager is disabled in remote host. Enable with %s."
                (propertize "helm-projectile-virtual-dired-remote-enable" 'face 'font-lock-keyword-face))
-    (let ((new-name (completing-read "Select or enter a new buffer name: "
-                                     (helm-projectile-all-dired-buffers)))
-          (helm--reading-passwd-or-string t)
-          (files (-filter (lambda (f)
+    (let ((files (-filter (lambda (f)
                             (not (string= f "")))
                           (mapcar (lambda (file)
                                     (replace-regexp-in-string (projectile-project-root) "" file))
                                   (helm-marked-candidates :with-wildcard t))))
+          (new-name (completing-read "Select or enter a new buffer name: "
+                                     (helm-projectile-all-dired-buffers)))
+          (helm--reading-passwd-or-string t)
           (default-directory (projectile-project-root)))
       ;; create a unique buffer that is unique to any directory in default-directory
       ;; or opened buffer; when Dired is passed with a non-existence directory name,
@@ -304,14 +309,14 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
       (message "Virtual Dired manager is disabled in remote host. Enable with %s."
                (propertize "helm-projectile-virtual-dired-remote-enable" 'face 'font-lock-keyword-face))
     (if (eq (with-helm-current-buffer major-mode) 'dired-mode)
-        (let* ((helm--reading-passwd-or-string t)
+        (let* ((marked-files (helm-marked-candidates :with-wildcard t))
+               (helm--reading-passwd-or-string t)
                (root (projectile-project-root)) ; store root for later use
                (dired-buffer-name (or (and (eq major-mode 'dired-mode) (buffer-name))
                                       (completing-read "Select a Dired buffer:"
                                                        (helm-projectile-all-dired-buffers))))
                (dired-files (with-current-buffer dired-buffer-name
                               (helm-projectile-files-in-current-dired-buffer)))
-               (marked-files (helm-marked-candidates :with-wildcard t))
                (files (sort (mapcar (lambda (file)
                                       (replace-regexp-in-string (projectile-project-root) "" file))
                                     (cl-nunion (if marked-files
@@ -433,7 +438,6 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
                 (let ((projectile-require-project-root nil))
                   (projectile-all-project-files))
               (error nil)))
-    :coerce 'helm-projectile-coerce-file
     :keymap helm-find-files-map
     :help-message 'helm-ff-help-message
     :mode-line helm-read-file-name-mode-line-string
@@ -504,14 +508,14 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
                 (kbd "M-e")   #'helm-projectile-switch-to-eshell
                 (kbd "C-c f") #'helm-projectile-dired-files-new-action
                 (kbd "C-c a") #'helm-projectile-dired-files-add-action
-                (kbd "C-s")   #'helm-find-files-grep)
+                (kbd "C-s")   #'helm-projectile-grep)
               map)
     :help-message 'helm-ff-help-message
     :mode-line helm-read-file-name-mode-line-string
     :action '(("Open Dired" . helm-projectile-dired-find-dir)
               ("Open Dired in other window `C-c o'" . helm-projectile-dired-find-dir)
               ("Switch to Eshell `M-e'" . helm-projectile-switch-to-eshell)
-              ("Grep in projects `C-s C-u Recurse'" . helm-find-files-grep)
+              ("Grep in projects `C-s'" . helm-projectile-grep)
               ("Create Dired buffer from files `C-c f'" . helm-projectile-dired-files-new-action)
               ("Add files to Dired buffer `C-c a'" . helm-projectile-dired-files-add-action)))
   "Helm source for listing project directories.")
@@ -604,7 +608,7 @@ With a prefix ARG invalidates the cache first."
 
 (helm-projectile-command "switch-project" 'helm-source-projectile-projects "Switch to project: " t)
 (helm-projectile-command "find-file" helm-source-projectile-files-and-dired-list "Find file: ")
-(helm-projectile-command "find-file-in-known-projects" 'helm-source-projectile-files-in-all-projects-list "Find file in projects: ")
+(helm-projectile-command "find-file-in-known-projects" 'helm-source-projectile-files-in-all-projects-list "Find file in projects: " t)
 (helm-projectile-command "find-dir" helm-source-projectile-directories-and-dired-list "Find dir: ")
 (helm-projectile-command "recentf" 'helm-source-projectile-recentf-list "Recently visited file: ")
 (helm-projectile-command "switch-to-buffer" 'helm-source-projectile-buffers-list "Switch to buffer: ")
@@ -650,15 +654,16 @@ Other file extensions can be customized with the variable `projectile-other-file
                   :prompt (projectile-prepend-project-name "Find other file: ")))))
     (error "No other file found")))
 
-(defun helm-projectile-grep-or-ack (&optional use-ack-p ack-ignored-pattern ack-executable)
+(defun helm-projectile-grep-or-ack (&optional dir use-ack-p ack-ignored-pattern ack-executable)
   "Perform helm-grep at project root.
+DIR directory where to search
 USE-ACK-P indicates whether to use ack or not.
 ACK-IGNORED-PATTERN is a file regex to exclude from searching.
 ACK-EXECUTABLE is the actual ack binary name.
 It is usually \"ack\" or \"ack-grep\".
 If it is nil, or ack/ack-grep not found then use default grep command."
-  (let* ((default-directory (projectile-project-root))
-         (helm-ff-default-directory (projectile-project-root))
+  (let* ((default-directory (or dir (projectile-project-root)))
+         (helm-ff-default-directory default-directory)
          (follow (and helm-follow-mode-persistent
                       (assoc-default 'follow helm-source-grep)))
          (helm-grep-in-recurse t)
@@ -666,7 +671,9 @@ If it is nil, or ack/ack-grep not found then use default grep command."
          (helm-grep-ignored-directories (-union (projectile-ignored-directories-rel) grep-find-ignored-directories))
          (helm-grep-default-command (if use-ack-p
                                         (concat ack-executable " -H --no-group --no-color " ack-ignored-pattern " %p %f")
-                                      "grep -a -r %e -n%cH -e %p %f ."))
+                                      (if (and projectile-use-git-grep (eq (projectile-project-vcs) 'git))
+                                          "git --no-pager grep --no-color -n -e %p -- %f"
+                                        "grep -a -r %e -n%cH -e %p %f .")))
          (helm-grep-default-recurse-command helm-grep-default-command)
          (helm-source-grep
           (helm-build-async-source
@@ -703,7 +710,7 @@ If it is nil, or ack/ack-grep not found then use default grep command."
      :buffer (format "*helm %s*" (if use-ack-p
                                      "ack"
                                    "grep"))
-     :default-directory (projectile-project-root)
+     :default-directory default-directory
      :keymap helm-grep-map
      :history 'helm-grep-history
      :truncate-lines t)))
@@ -723,34 +730,33 @@ If it is nil, or ack/ack-grep not found then use default grep command."
   (helm-projectile-toggle -1))
 
 ;;;###autoload
-(defun helm-projectile-grep ()
-  "Helm version of projectile-grep."
+(defun helm-projectile-grep (&optional dir)
+  "Helm version of `projectile-grep'.
+DIR is the project root, if not set then current directory is used"
   (interactive)
-  (if (projectile-project-p)
-      (funcall'run-with-timer 0.01 nil
-                              #'helm-projectile-grep-or-ack nil)
-    (error "You're not in a project")))
+  (let ((project-root (or dir (projectile-project-root) (error "You're not in a project"))))
+    (funcall'run-with-timer 0.01 nil
+                              #'helm-projectile-grep-or-ack project-root nil)))
 
 ;;;###autoload
-(defun helm-projectile-ack ()
+(defun helm-projectile-ack (&optional dir)
   "Helm version of projectile-ack."
   (interactive)
-  (if (projectile-project-p)
-      (let ((ack-ignored (mapconcat
-                          'identity
-                          (-union (-map (lambda (path)
-                                          (concat "--ignore-dir=" (file-name-nondirectory (directory-file-name path))))
-                                        (projectile-ignored-directories))
-                                  (-map (lambda (path)
-                                          (concat "--ignore-file=match:" (shell-quote-argument path)))
-                                        (projectile-ignored-files))) " "))
-            (helm-ack-grep-executable (cond
-                                       ((executable-find "ack") "ack")
-                                       ((executable-find "ack-grep") "ack-grep")
-                                       (t (error "ack or ack-grep is not available.")))))
-        (funcall 'run-with-timer 0.01 nil
-                 #'helm-projectile-grep-or-ack t ack-ignored helm-ack-grep-executable))
-    (error "You're not in a project")))
+  (let ((project-root (or dir (projectile-project-root) (error "You're not in a project"))))
+    (let ((ack-ignored (mapconcat
+                        'identity
+                        (-union (-map (lambda (path)
+                                        (concat "--ignore-dir=" (file-name-nondirectory (directory-file-name path))))
+                                      (projectile-ignored-directories))
+                                (-map (lambda (path)
+                                        (concat "--ignore-file=match:" (shell-quote-argument path)))
+                                      (projectile-ignored-files))) " "))
+          (helm-ack-grep-executable (cond
+                                     ((executable-find "ack") "ack")
+                                     ((executable-find "ack-grep") "ack-grep")
+                                     (t (error "ack or ack-grep is not available.")))))
+      (funcall 'run-with-timer 0.01 nil
+               #'helm-projectile-grep-or-ack project-root t ack-ignored helm-ack-grep-executable))))
 
 ;;;###autoload
 (defun helm-projectile-ag (&optional options)
@@ -758,7 +764,7 @@ If it is nil, or ack/ack-grep not found then use default grep command."
   (interactive (if current-prefix-arg (list (read-string "option: " "" 'helm-ag-command-history))))
   (if (require 'helm-ag nil  'noerror)
       (if (projectile-project-p)
-          (let* ((grep-find-ignored-files (-union (projectile-ignored-files-rel)  grep-find-ignored-files))
+          (let* ((grep-find-ignored-files (-union (projectile-ignored-files-rel) grep-find-ignored-files))
                  (grep-find-ignored-directories (-union (projectile-ignored-directories-rel) grep-find-ignored-directories))
                  (ignored (mapconcat (lambda (i)
                                        (concat "--ignore " i))

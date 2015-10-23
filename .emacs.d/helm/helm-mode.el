@@ -29,8 +29,10 @@
 (defcustom helm-completing-read-handlers-alist
   '((describe-function . helm-completing-read-symbols)
     (describe-variable . helm-completing-read-symbols)
+    (describe-symbol . helm-completing-read-symbols)
     (debug-on-entry . helm-completing-read-symbols)
     (find-function . helm-completing-read-symbols)
+    (disassemble . helm-completing-read-symbols)
     (trace-function . helm-completing-read-symbols)
     (trace-function-foreground . helm-completing-read-symbols)
     (trace-function-background . helm-completing-read-symbols)
@@ -110,6 +112,14 @@ To fuzzy match `completion-at-point' and friends see
   :group 'helm-mode
   :type 'boolean)
 
+(defcustom helm-mode-minibuffer-setup-hook-black-list '(minibuffer-completion-help)
+  "Incompatible `minibuffer-setup-hook' functions go here.
+A list of symbols.
+Helm-mode is rejecting all lambda's, byte-code fns
+and all functions belonging in this list from `minibuffer-setup-hook'."
+  :group 'helm-mode
+  :type '(repeat (choice symbol)))
+
 
 (defvar helm-comp-read-map
   (let ((map (make-sparse-keymap)))
@@ -118,6 +128,13 @@ To fuzzy match `completion-at-point' and friends see
     (define-key map (kbd "<M-RET>") 'helm-cr-empty-string)
     map)
   "Keymap for `helm-comp-read'.")
+
+(defvar helm-comp-read-must-match-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "RET")
+      'helm-confirm-and-exit-minibuffer)
+    map)
+  "Keymap use as must-match-map in `helm-comp-read' and `helm-read-file-name'.")
 
 
 ;;; Internal
@@ -136,7 +153,7 @@ To fuzzy match `completion-at-point' and friends see
   (interactive)
   (with-helm-alive-p
     (helm-exit-and-execute-action
-     #'(lambda (_candidate)
+     (lambda (_candidate)
          (identity "")))))
 
 (defun helm-mode--keyboard-quit ()
@@ -386,11 +403,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
     (when (eq must-match 'confirm-after-completion)
       (setq must-match 'confirm))
     (let* ((minibuffer-completion-confirm must-match)
-           (must-match-map (when must-match
-                             (let ((map (make-sparse-keymap)))
-                               (define-key map (kbd "RET")
-                                 'helm-confirm-and-exit-minibuffer)
-                               map)))
+           (must-match-map (when must-match helm-comp-read-must-match-map))
            (loc-map (if must-match-map
                         (make-composed-keymap
                          must-match-map (or keymap helm-map))
@@ -553,19 +566,22 @@ that use `helm-comp-read' See `helm-M-x' for example."
     (prompt _collection test _require-match init
      hist default _inherit-input-method name buffer)
   "Specialized function for fast symbols completion in `helm-mode'."
+  (require 'helm-elisp)
   (or
    (helm
     :sources (helm-build-in-buffer-source name
                :init (lambda ()
-                       (require 'helm-elisp)
                        (helm-apropos-init (lambda (x)
                                             (and (funcall test x)
                                                  (not (keywordp x))))
                                           (or (car-safe default) default)))
                :filtered-candidate-transformer 'helm-apropos-default-sort-fn
                :fuzzy-match helm-mode-fuzzy-match
-               :persistent-action 'helm-lisp-completion-persistent-action
-               :persistent-help "Show brief doc in mode-line")
+               :persistent-action
+               (lambda (candidate)
+                 (helm-lisp-completion-persistent-action
+                  candidate name))
+               :persistent-help (helm-lisp-completion-persistent-help))
     :prompt prompt
     :buffer buffer
     :input init
@@ -676,11 +692,19 @@ See documentation of `completing-read' and `all-completions' for details."
          ;; calling `minibuffer-completion-help' or other minibuffer
          ;; functions we DONT WANT here, in these cases removing the hook
          ;; (a symbol) have no effect. Issue #448.
-         ;; But because `minibuffer-completion-table' and
+         ;; Because `minibuffer-completion-table' and
          ;; `minibuffer-completion-predicate' are not bound
-         ;; anymore here, these functions should have no effect now.
-         (minibuffer-setup-hook (remove 'minibuffer-completion-help
-                                        minibuffer-setup-hook))
+         ;; anymore here, these functions should have no effect now,
+         ;; except in some rare cases like in `woman-file-name',
+         ;; so remove all incompatible functions
+         ;; from `minibuffer-setup-hook' (Issue #1205, #1240).
+         ;; otherwise helm have not the time to close its initial session.
+         (minibuffer-setup-hook
+          (cl-loop for h in minibuffer-setup-hook
+                   unless (or (consp h) ; a lambda.
+                              (byte-code-function-p h)
+                              (memq h helm-mode-minibuffer-setup-hook-black-list))
+                   collect h))
          ;; Disable hack that could be used before `completing-read'.
          ;; i.e (push ?\t unread-command-events).
          unread-command-events)
@@ -807,11 +831,7 @@ Keys description:
          (hist (and history (helm-comp-read-get-candidates
                              history nil nil alistp)))
          (minibuffer-completion-confirm must-match)
-         (must-match-map (when must-match
-                           (let ((map (make-sparse-keymap)))
-                             (define-key map (kbd "RET")
-                               'helm-confirm-and-exit-minibuffer)
-                             map)))
+         (must-match-map (when must-match helm-comp-read-must-match-map))
          (cmap (if must-match-map
                    (make-composed-keymap
                     must-match-map helm-read-file-map)
@@ -1080,11 +1100,11 @@ Can be used as value for `completion-in-region-function'."
                                                                (sort candidates 'helm-generic-sort-fn))))
                                :exec-when-only-one t
                                :quit-when-no-cand
-                               #'(lambda ()
+                               (lambda ()
                                    ;; Delay message to overwrite "Quit".
                                    (run-with-timer
                                     0.01 nil
-                                    #'(lambda ()
+                                    (lambda ()
                                         (message "[No matches]")))
                                    t)   ; exit minibuffer immediately.
                                :must-match require-match))))

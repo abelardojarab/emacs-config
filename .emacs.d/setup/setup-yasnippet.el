@@ -43,17 +43,16 @@
 (define-key yas-minor-mode-map (kbd "<tab>") nil)
 (define-key yas-minor-mode-map (kbd "TAB") nil)
 
-;; Set Yasnippet's key binding to shift+tab
-(define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
-
 ;; Select a snippet with popup library
 (require 'dropdown-list)
-(setq yas-prompt-functions '(yas-dropdown-prompt yas-ido-prompt yas-completing-prompt yas-no-prompt))
+(setq yas-prompt-functions '(yas-dropdown-prompt
+                             yas-ido-prompt
+                             yas-completing-prompt
+                             yas-no-prompt))
 
 ;; Tweaking Yasnippet for Org mode
 (defun yas--org-very-safe-expand ()
   (let ((yas-fallback-behavior 'return-nil)) (yas-expand)))
-
 (add-hook 'org-mode-hook
           (lambda ()
             (make-variable-buffer-local 'yas-trigger-key)
@@ -73,11 +72,9 @@
   '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
 (define-auto-insert "\\.py"
   '(lambda () (yas--expand-by-uuid 'python-mode "import")))
-
 (defun autoinsert-yas-expand()
   "Replace text in yasnippet template."
   (yas-expand-snippet (buffer-string) (point-min) (point-max)))
-
 (define-auto-insert "\\.c$"  ["c-auto-insert" autoinsert-yas-expand])
 (define-auto-insert "\\.cpp$" ["c++-auto-insert" autoinsert-yas-expand])
 (define-auto-insert "\\.cs$" ["csharp-auto-insert" autoinsert-yas-expand])
@@ -96,13 +93,6 @@
         (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
         (delete-region (point-min) old-point-max)))))
 
-;; Get email from Magit if available
-(defun yas--magit-email-or-default ()
-  "Get email from GIT or use default"
-  (if (magit-get-top-dir ".")
-      (magit-get "user.email")
-    user-mail-address))
-
 ;; Auto-complete enhancement
 (defun yas/set-ac-modes ()
   "Add modes in `yas-snippet-dirs' to `ac-modes'. Call (yas/set-ac-modes) BEFORE (global-auto-complete-mode 1) or (ac-config-default)."
@@ -113,24 +103,6 @@
                                    (yas-snippet-dirs)))
             ac-modes))))
 (yas/set-ac-modes)
-
-;; Expand snippet synchronously
-(defvar yas/recursive-edit-flag nil)
-(defun yas-expand-sync ()
-  "Execute `yas-expand'. This function exits after expanding snippet."
-  (interactive)
-  (let ((yas/recursive-edit-flag t))
-    (call-interactively 'yas-expand)
-    (recursive-edit)))
-(defun yas-expand-snippet-sync (content &optional start end expand-env)
-  "Execute `yas-expand-snippet'. This function exits after expanding snippet."
-  (let ((yas/recursive-edit-flag t))
-    (yas-expand-snippet content start end expand-env)
-    (recursive-edit)))
-(defun yas/after-exit-snippet-hook--recursive-edit ()
-  (when yas/recursive-edit-flag
-    (throw 'exit nil)))
-(add-hook 'yas-after-exit-snippet-hook 'yas/after-exit-snippet-hook--recursive-edit)
 
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet.el ends here

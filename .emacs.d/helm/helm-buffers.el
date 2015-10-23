@@ -45,6 +45,13 @@ filtered from the list of candidates if the
   :type  '(repeat (choice regexp))
   :group 'helm-buffers)
 
+(defcustom helm-white-buffer-regexp-list nil
+  "The regexp list of not boring buffers.
+These buffers will be displayed even if they match one of
+`helm-boring-buffer-regexp-list'."
+  :type '(repeat (choice regexp))
+  :group 'helm-buffers)
+
 (defcustom helm-buffers-favorite-modes '(lisp-interaction-mode
                                          emacs-lisp-mode
                                          text-mode
@@ -212,6 +219,7 @@ Only buffer names are fuzzy matched when this is enabled,
                                   (with-helm-buffer
                                     (helm-force-update))))))
    (keymap :initform helm-buffer-map)
+   (migemo :initform 'nomultimatch)
    (volatile :initform t)
    (help-message :initform 'helm-buffer-help-message)
    (persistent-help
@@ -418,7 +426,7 @@ Should be called after others transformers i.e (boring buffers)."
   (if (string= helm-pattern "")
       candidates
     (sort candidates
-          #'(lambda (s1 s2)
+          (lambda (s1 s2)
               (< (string-width s1) (string-width s2))))))
 
 (defun helm-buffers-mark-similar-buffers-1 ()
@@ -474,14 +482,17 @@ i.e same color."
                 (and neg neg-test (not neg-test)))))))
 
 (defun helm-buffer--match-pattern (pattern candidate)
-  (let ((fun (if (and helm-buffers-fuzzy-matching
+  (let ((bfn (if (and helm-buffers-fuzzy-matching
+                      (not helm-migemo-mode)
                       (not (string-match "\\`\\^" pattern)))
                  #'helm--mapconcat-pattern
-                 #'identity)))
+                 #'identity))
+        (mfn (if helm-migemo-mode
+                 #'helm-mm-migemo-string-match #'string-match)))
     (if (string-match "\\`!" pattern)
-        (not (string-match (funcall fun (substring pattern 1))
-                           candidate))
-        (string-match (funcall fun pattern) candidate))))
+        (not (funcall mfn (funcall bfn (substring pattern 1))
+                      candidate))
+        (funcall mfn (funcall bfn pattern) candidate))))
 
 (defun helm-buffers--match-from-mjm (candidate)
   (let* ((cand (replace-regexp-in-string "^\\s-\\{1\\}" "" candidate))
@@ -519,7 +530,9 @@ i.e same color."
         (with-current-buffer buf
           (save-excursion
             (goto-char (point-min))
-            (re-search-forward regexp nil t)))
+            (if helm-migemo-mode
+                (helm-mm-migemo-forward regexp nil t)
+             (re-search-forward regexp nil t))))
         t)))
 
 (defun helm-buffers--match-from-directory (candidate)
@@ -817,7 +830,9 @@ Can be used by any source that list buffers."
 ;;
 ;;
 (defun helm-skip-boring-buffers (buffers _source)
-  (helm-skip-entries buffers helm-boring-buffer-regexp-list))
+  (helm-skip-entries buffers
+                     helm-boring-buffer-regexp-list
+                     helm-white-buffer-regexp-list))
 
 (defun helm-shadow-boring-buffers (buffers _source)
   "Buffers matching `helm-boring-buffer-regexp' will be

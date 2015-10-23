@@ -82,7 +82,7 @@ To customize the ANSI color in git-grep, GREP_COLORS have no effect,
 you will have to setup this in your .gitconfig:
 
     [color \"grep\"]
-	match = black yellow
+        match = black yellow
 
 where \"black\" is the foreground and \"yellow\" the background.
 See the git documentation for more infos.
@@ -167,9 +167,9 @@ If set to nil `doc-view-mode' will be used instead of an external command."
 
 (defcustom helm-grep-ignored-files
   (cons ".#*" (delq nil (mapcar (lambda (s)
-				  (unless (string-match-p "/\\'" s)
-				    (concat "*" s)))
-				completion-ignored-extensions)))
+                                  (unless (string-match-p "/\\'" s)
+                                    (concat "*" s)))
+                                completion-ignored-extensions)))
   "List of file names which `helm-grep' shall exclude."
   :group 'helm-grep
   :type '(repeat string))
@@ -179,6 +179,22 @@ If set to nil `doc-view-mode' will be used instead of an external command."
   "List of names of sub-directories which `helm-grep' shall not recurse into."
   :group 'helm-grep
   :type '(repeat string))
+
+(defcustom helm-grep-truncate-lines t
+  "When nil the grep line that appears will not be truncated."
+  :group 'helm-grep
+  :type 'boolean)
+
+(defcustom helm-grep-file-path-style 'basename
+  "File path display style when grep results are displayed.
+Possible value are:
+    basename: displays only the filename, none of the directory path
+    absolute: displays absolute path
+    relative: displays relative path from root grep directory."
+  :group 'helm-grep
+  :type '(choice (const :tag "Basename" basename)
+                 (const :tag "Absolute" absolute)
+                 (const :tag "Relative" relative)))
 
 
 ;;; Faces
@@ -330,7 +346,7 @@ It is intended to use as a let-bound variable, DON'T set this globaly.")
           (let ((files (if (file-remote-p in-directory)
                        ;; Grep don't understand tramp filenames
                        ;; use the local name.
-                       (mapcar #'(lambda (x)
+                       (mapcar (lambda (x)
                                    (file-remote-p x 'localname))
                                all-files)
                        all-files)))
@@ -365,7 +381,7 @@ It is intended to use as a let-bound variable, DON'T set this globaly.")
                              only-files default-directory))
          (ignored-files     (unless (helm-grep-use-ack-p)
                               (mapconcat
-                               #'(lambda (x)
+                               (lambda (x)
                                    (concat "--exclude="
                                            (shell-quote-argument x)))
                                helm-grep-ignored-files " ")))
@@ -373,7 +389,7 @@ It is intended to use as a let-bound variable, DON'T set this globaly.")
                               (mapconcat
                                ;; Need grep version >=2.5.4
                                ;; of Gnuwin32 on windoze.
-                               #'(lambda (x)
+                               (lambda (x)
                                    (concat "--exclude-dir="
                                            (shell-quote-argument x)))
                                helm-grep-ignored-directories " ")))
@@ -422,9 +438,10 @@ It is intended to use as a let-bound variable, DON'T set this globaly.")
       ;; Init sentinel.
       (set-process-sentinel
        (get-buffer-process helm-buffer)
-       #'(lambda (process event)
-           (let ((noresult (= (process-exit-status process) 1)))
-             (unless noresult
+       (lambda (process event)
+           (let* ((err      (process-exit-status process))
+                  (noresult (= err 1)))
+             (unless err
                (helm-process-deferred-sentinel-hook
                 process event (helm-default-directory)))
              (cond ((and noresult
@@ -432,7 +449,7 @@ It is intended to use as a let-bound variable, DON'T set this globaly.")
                          ;; that exit with code 1
                          ;; after a certain amount of results.
                          (not (with-helm-buffer helm-grep-use-zgrep)))
-                    (with-current-buffer helm-buffer
+                    (with-helm-buffer
                       (insert (concat "* Exit with code 1, no result found,"
                                       " Command line was:\n\n "
                                       (propertize helm-grep-last-cmd-line
@@ -564,7 +581,7 @@ If N is positive go forward otherwise go backward."
          (current-line-list  (helm-grep-split-line sel))
          (current-fname      (nth 0 current-line-list))
          (bob-or-eof         (if (eq n 1) 'eobp 'bobp))
-         (mark-maybe #'(lambda ()
+         (mark-maybe (lambda ()
                          (if allow-mode
                              (ignore)
                            (helm-mark-current-line)))))
@@ -788,7 +805,7 @@ Special commands:
                 :fc-transformer '(helm-adaptive-sort
                                   helm-grep-ack-types-transformer)
                 :buffer "*helm ack-types*")))
-    (mapconcat #'(lambda (type) (concat "--type=" type)) types " ")))
+    (mapconcat (lambda (type) (concat "--type=" type)) types " ")))
 
 
 ;;; grep extensions
@@ -862,7 +879,7 @@ in recurse, and ignoring EXTS, search being made on
                     (not (helm-grep-use-ack-p :where 'recursive))
                     (or exts (helm-grep-get-file-extensions targets))))
          (include-files (and exts
-                             (mapconcat #'(lambda (x)
+                             (mapconcat (lambda (x)
                                             (concat "--include="
                                                     (shell-quote-argument x)))
                                         (if (> (length exts) 1)
@@ -933,7 +950,7 @@ in recurse, and ignoring EXTS, search being made on
      :input input
      :keymap helm-grep-map
      :history 'helm-grep-history
-     :truncate-lines t)))
+     :truncate-lines helm-grep-truncate-lines)))
 
 
 
@@ -983,16 +1000,22 @@ in recurse, and ignoring EXTS, search being made on
                      (expand-file-name (car split) root)
                    (car-safe split)))
          (lineno (nth 1 split))
-         (str    (nth 2 split)))
-    (when (and fname lineno str)
-      (cons (concat (propertize (file-name-nondirectory fname)
-                                'face 'helm-grep-file
-                                'help-echo fname)
-                    ":"
-                    (propertize lineno 'face 'helm-grep-lineno)
-                    ":"
-                    (if ansi-p str (helm-grep-highlight-match str)))
-            line))))
+         (str    (nth 2 split))
+         (display-fname (cl-ecase helm-grep-file-path-style
+                          (basename (and fname (file-name-nondirectory fname)))
+                          (absolute fname)
+                          (relative (and fname root
+                                         (file-relative-name fname root))))))
+    (if (and display-fname lineno str)
+        (cons (concat (propertize display-fname
+                                  'face 'helm-grep-file
+                                  'help-echo fname)
+                      ":"
+                      (propertize lineno 'face 'helm-grep-lineno)
+                      ":"
+                      (if ansi-p str (helm-grep-highlight-match str)))
+              line)
+        "")))
 
 (defun helm-grep-filter-one-by-one (candidate)
   "`filter-one-by-one' transformer function for `helm-do-grep'."
@@ -1012,16 +1035,20 @@ in recurse, and ignoring EXTS, search being made on
   (let (beg end)
     (condition-case-unless-debug nil
         (with-temp-buffer
-          (insert str)
+          (insert (propertize str 'read-only nil)) ; Fix (#1176)
           (goto-char (point-min))
-          (cl-loop for reg in (if multi-match
-                                  ;; (m)occur.
-                                  (cl-loop for r in (helm-mm-split-pattern
-                                                     helm-pattern)
-                                           unless (string-match "\\`!" r)
-                                           collect r)
-                                  ;; async sources (grep, gid etc...)
-                                  (list helm-input))
+          (cl-loop for reg in
+                   (if multi-match
+                       ;; (m)occur.
+                       (cl-loop for r in (helm-mm-split-pattern
+                                          helm-pattern)
+                                unless (string-match "\\`!" r)
+                                collect
+                                (helm-aif (and helm-migemo-mode
+                                               (assoc r helm-mm--previous-migemo-info))
+                                    (cdr it) r))
+                       ;; async sources (grep, gid etc...)
+                       (list helm-input))
                    do
                    (while (and (re-search-forward reg nil t)
                                (> (- (setq end (match-end 0))
@@ -1090,7 +1117,7 @@ If a prefix arg is given run grep on all buffers ignoring non--file-buffers."
                                 default-directory))
          (fnargs   (helm-grep-prepare-candidates
                     (if (file-remote-p default-directory)
-                        (mapcar #'(lambda (x)
+                        (mapcar (lambda (x)
                                     (file-remote-p x 'localname))
                                 only-files)
                       only-files)
@@ -1109,7 +1136,7 @@ If a prefix arg is given run grep on all buffers ignoring non--file-buffers."
       (message nil)
       (set-process-sentinel
        (get-buffer-process helm-buffer)
-       #'(lambda (_process event)
+       (lambda (_process event)
            (if (string= event "finished\n")
                (with-helm-window
                  (setq mode-line-format
@@ -1165,7 +1192,7 @@ If a prefix arg is given run grep on all buffers ignoring non--file-buffers."
      "pdf-reader" nil
      (format-spec helm-pdfgrep-default-read-command
                   (list (cons ?f fname) (cons ?p pageno))))))
-
+
 ;;; AG - AT
 ;;
 ;;  https://github.com/ggreer/the_silver_searcher
@@ -1192,8 +1219,8 @@ You can use safely \"--color\" (default)."
 
 (defun helm-grep-ag-init (directory)
   (let ((cmd-line (format helm-grep-ag-command
-                          helm-pattern
-                          directory)))
+                          (shell-quote-argument helm-pattern)
+                          (shell-quote-argument directory))))
     (set (make-local-variable 'helm-grep-last-cmd-line) cmd-line)
     (prog1
         (start-process-shell-command
@@ -1246,11 +1273,47 @@ You can use safely \"--color\" (default)."
         :keymap helm-grep-map
         :buffer (format "*helm %s*" (helm-grep--ag-command))))
 
+;;; Git grep
+;;
+;;
+(defcustom helm-grep-git-grep-command
+  "git grep -n%cH --color=always --exclude-standard --no-index --full-name -e %p %f"
+  "The git grep default command line.
+The option \"--color=always\" can be used safely.
+The color of matched items can be customized in your .gitconfig
+See `helm-grep-default-command' for more infos.
+
+The \"--exclude-standard\" and \"--no-index\" switches allow
+skipping unwanted files specified in ~/.gitignore_global
+and searching files not already staged.
+You have also to enable this in global \".gitconfig\" with
+    \"git config --global core.excludesfile ~/.gitignore_global\"."
+  :group 'helm-grep
+  :type 'string)
+
+(defun helm-grep-git-1 (directory)
+  (require 'vc)
+  (let* ((helm-grep-default-command helm-grep-git-grep-command)
+         helm-grep-default-recurse-command
+         ;; Expand filename of each candidate with the git root dir.
+         ;; The filename will be in the help-echo prop.
+         (helm-grep-default-directory-fn (lambda ()
+                                           (vc-find-root directory ".git")))
+         (helm-ff-default-directory (funcall helm-grep-default-directory-fn)))
+    (helm-do-grep-1 '("--"))))
+
+
 ;;;###autoload
 (defun helm-do-grep-ag ()
   "Preconfigured helm for grepping with AG in `default-directory'."
   (interactive)
   (helm-grep-ag-1 default-directory))
+
+;;;###autoload
+(defun helm-grep-do-git-grep ()
+  "Preconfigured helm for git-grepping `default-directory'."
+  (interactive)
+  (helm-grep-git-1 default-directory))
 
 ;;;###autoload
 (defun helm-do-grep ()
@@ -1305,7 +1368,7 @@ See also `helm-do-grep-1'."
          (only (helm-read-file-name
                 "Search in file(s): "
                 :marked-candidates t
-                :test #'(lambda (file)
+                :test (lambda (file)
                           (or (string= (file-name-extension file) "pdf")
                               (string= (file-name-extension file) "PDF")
                               (file-directory-p file)))

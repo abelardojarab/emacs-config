@@ -583,6 +583,8 @@ and indicates these locations in the fringe according to
 How Flycheck highlights errors and warnings in the buffer:
 
 @table @code
+@item lines
+Highlight the whole line, ignoring any column information.
 @item columns
 Highlight the column of the error, if the error has a column, otherwise
 behave as @code{lines}.
@@ -1266,7 +1268,7 @@ Many linting tools provide a rich set of options to configure their
 analysis.  Flycheck makes it to define proper Emacs options and map them
 to options of commands.
 
-For instance, the @uref{bbatsov/rubocop, Rubocop} tool checks Ruby for
+For instance, the @ghref{bbatsov/rubocop, Rubocop} tool checks Ruby for
 semantic and stylistic issues.  Since style is mainly a matter of taste,
 it has a special linting mode in which all stylistic checks are disabled
 (error patterns omitted for readability):
@@ -1378,7 +1380,7 @@ whether a syntax checker is applicable for the current buffer.
 Frequently, we would like to use multiple syntax checkers in a buffer.
 For instance, we might want to check the syntax of a script with
 @code{sh-zsh} from the previous section, and then use
-@uref{koalaman/shellcheck/, Shellcheck} to check for questionable code
+@ghref{koalaman/shellcheck/, Shellcheck} to check for questionable code
 such as unquoted variable expansions, if there are no syntax errors.
 Flycheck supports this scenario by @emph{chaining} syntax checkers.
 
@@ -1469,6 +1471,16 @@ according to the result of the last syntax check.  Additionally,
 @code{flycheck-status-changed-functions} runs on every single status
 change of Flycheck, and provides a fine-grained reporting about what
 Flycheck is currently doing.
+
+@section Executables and commands
+
+Flycheck uses the function given by the option
+@code{flycheck-executable-find} to search for executables, and passes
+all syntax checker commands through
+@code{flycheck-command-wrapper-function} before running them.  These
+features let you adapt Flycheck to search executables and run commands
+in sandboxed environments such as @code{bundle exec} or
+@code{nix-shell}.
 
 @section Error processing
 

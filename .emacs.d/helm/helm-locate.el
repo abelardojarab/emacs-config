@@ -53,7 +53,7 @@ Normally you should not have to modify this yourself.
 If nil it will be calculated when `helm-locate' startup
 with these default values for different systems:
 
-Gnu/linux: \"locate %s -e -A %s\"
+Gnu/linux: \"locate %s -e -r %s\"
 berkeley-unix: \"locate %s %s\"
 windows-nt: \"es %s %s\"
 Others: \"locate %s %s\"
@@ -155,6 +155,19 @@ fall back to `default-directory' if FROM-FF is nil."
                  helm-ff-locate-db-filename
                  default-directory))))))
 
+
+(defun helm-locate-create-db-default-function (db-name directory)
+  "Default function used to create a locale locate db file.
+Argument DB-NAME name of the db file.
+Argument DIRECTORY root of file system subtree to scan."
+  (format helm-locate-create-db-command db-name directory))
+
+(defvar helm-locate-create-db-function
+  #'helm-locate-create-db-default-function
+  "Function used to create a locale locate db file.
+It should receive the same arguments as
+`helm-locate-create-db-default-function'.")
+
 (defun helm-locate-1 (&optional localdb init from-ff default)
   "Generic function to run Locate.
 Prefix arg LOCALDB when (4) search and use a local locate db file when it
@@ -165,13 +178,13 @@ INIT is a string to use as initial input in prompt.
 See `helm-locate-with-db' and `helm-locate'."
   (require 'helm-mode)
   (helm-locate-set-command)
-  (let ((pfn #'(lambda (candidate)
+  (let ((pfn (lambda (candidate)
                  (if (file-directory-p candidate)
                      (message "Error: The locate Db should be a file")
                    (if (= (shell-command
-                           (format helm-locate-create-db-command
-                                   candidate
-                                   helm-ff-default-directory))
+                           (funcall helm-locate-create-db-function
+                                    candidate
+                                    helm-ff-default-directory))
                           0)
                        (message "New locatedb file `%s' created" candidate)
                      (error "Failed to create locatedb file `%s'" candidate)))))
@@ -185,7 +198,7 @@ See `helm-locate-with-db' and `helm-locate'."
                                                           (or helm-ff-default-directory
                                                               default-directory))
                          :preselect helm-locate-db-file-regexp
-                         :test #'(lambda (x)
+                         :test (lambda (x)
                                    (if helm-locate-db-file-regexp
                                        ;; Select only locate db files and directories
                                        ;; to allow navigation.
@@ -270,7 +283,7 @@ See also `helm-locate'."
          cmd)
       (set-process-sentinel
        (get-buffer-process helm-buffer)
-       #'(lambda (_process event)
+       (lambda (_process event)
            (if (string= event "finished\n")
                (with-helm-window
                  (setq mode-line-format
@@ -312,9 +325,9 @@ See also `helm-locate'."
 (defun helm-locate-find-dbs-in-projects (&optional update)
   (let* ((pfn (lambda (candidate directory)
                 (unless (= (shell-command
-                            (format helm-locate-create-db-command
-                                    candidate
-                                    directory))
+                            (funcall helm-locate-create-db-function
+                                     candidate
+                                     directory))
                            0)
                   (error "Failed to create locatedb file `%s'" candidate)))))
     (cl-loop for p in helm-locate-project-list

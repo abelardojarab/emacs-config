@@ -35,24 +35,68 @@
 
 (setq load-prefer-newer t)              ; Don't load outdated bytecode
 
-(defvar temporary-package-directory
-  (make-temp-file "flycheck-package-dir-" 'directory))
-(add-hook 'kill-emacs-hook
-          (lambda ()
-            (delete-directory temporary-package-directory 'recursive)))
-
-(setq package-user-dir temporary-package-directory
+(setq package-user-dir (expand-file-name "init-elpa"
+                                         (file-name-directory load-file-name))
       package-check-signature nil)
-(add-to-list 'package-archives '("MELPA" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("MELPA" . "https://stable.melpa.org/packages/"))
 
 (package-initialize)
-(package-refresh-contents)
-(package-install 'flycheck)             ; Install to bring dependencies in
 
-(let* ((source-dir (locate-dominating-file load-file-name "flycheck.el")))
-  (load (expand-file-name "flycheck.el" source-dir)))
+(let* ((source-dir (locate-dominating-file load-file-name "flycheck.el"))
+       (flycheck-el (expand-file-name "flycheck.el" source-dir)))
+  ;; Install Flycheck to bring its dependencies in
+  (unless (package-installed-p 'flycheck)
+    (package-refresh-contents)
+    (package-install-file flycheck-el))
+  (load flycheck-el))
 
 (require 'flycheck)
 (global-flycheck-mode)
+
+;; Some little convenience, to this Emacs session at least half way bearable
+(require 'ido)
+(ido-mode t)
+(setq ido-enable-flex-matching t)
+
+;; Get rid of all the silly UI clutter of a default Emacs session and opt out of
+;; all the stupid startup and license messages
+(tool-bar-mode -1)
+(blink-cursor-mode -1)
+(setq ring-bell-function #'ignore
+      inhibit-startup-screen t
+      initial-scratch-message "")
+(fset 'yes-or-no-p #'y-or-n-p)
+(fset 'display-startup-echo-area-message #'ignore)
+
+;; Improve OS X key behaviour
+(when (eq system-type 'darwin)
+  (setq mac-option-modifier 'meta       ; Option is simply the natural Meta
+        mac-command-modifier 'meta      ; But command is a lot easier to hit
+        mac-right-command-modifier 'left
+        mac-right-option-modifier 'none ; Keep right option for accented input
+        mac-function-modifier 'hyper))
+
+(defun flycheck-prepare-screenshot (&optional hide-cursor)
+  "Prepare this Emacs session to make a nice screenshot.
+
+With prefix arg, hide the cursor, otherwise keep it."
+  (interactive "P")
+  ;; Reduce UI and disable cursor
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (setq-default truncate-lines t)
+  (when hide-cursor
+    (setq-default cursor-type nil))
+
+  (set-frame-font "Source Code Pro-13")
+  (set-frame-size (selected-frame) 750 560 'pixelwise)
+  ;; Tuck the error list to the bottom side window at a fixed height
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*Flycheck errors*")
+                 (display-buffer-reuse-window
+                  display-buffer-in-side-window)
+                 (side            . bottom)
+                 (reusable-frames . visible)
+                 (window-height   . 0.33))))
 
 ;;; init.el ends here

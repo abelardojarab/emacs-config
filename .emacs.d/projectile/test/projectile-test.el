@@ -127,7 +127,7 @@
 (ert-deftest projectile-test-parse-dirconfig-file ()
   (noflet ((file-exists-p (filename) t)
            (file-truename (filename) filename)
-           (insert-file-contents-literally
+           (insert-file-contents
             (filename)
             (save-excursion
               (insert
@@ -481,7 +481,7 @@
             (with-current-buffer (find-file-noselect (car test) t)
 	      (save-excursion
 		(re-search-forward sym)
-		(projectile-grep ?-)))))))))
+		(projectile-grep nil ?-)))))))))
 
 ;;;;;;;;; fresh tests
 
@@ -579,6 +579,16 @@
                    (projectile-get-other-files "src/test2.service.spec.js" source-tree)))
     ))
 
+(ert-deftest projectile-test-compilation-directory ()
+  (defun helper (project-root rel-dir)
+    (noflet ((projectile-project-root () project-root))
+            (let ((projectile-project-compilation-dir rel-dir))
+              (projectile-compilation-dir))))
+
+  (should (equal "/root/build/" (helper "/root/" "build")))
+  (should (equal "/root/build/" (helper "/root/" "build/")))
+  (should (equal "/root/build/" (helper "/root/" "./build")))
+  (should (equal "/root/local/build/" (helper "/root/" "local/build"))))
 
 (ert-deftest projectile-test-dirname-matching-count ()
   (should (equal 2

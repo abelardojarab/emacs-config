@@ -5,7 +5,7 @@
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; Maintainer: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/hydra
-;; Version: 0.13.2
+;; Version: 0.13.3
 ;; Keywords: bindings
 ;; Package-Requires: ((cl-lib "0.5"))
 
@@ -141,16 +141,16 @@ warn: keep KEYMAP and issue a warning instead of running the command."
   "Disable the current Hydra."
   (setq hydra-deactivate nil)
   (remove-hook 'pre-command-hook 'hydra--clearfun)
+  (if (fboundp 'remove-function)
+      (remove-function input-method-function #'hydra--imf)
+    (when hydra--input-method-function
+      (setq input-method-function hydra--input-method-function)
+      (setq hydra--input-method-function nil)))
   (dolist (frame (frame-list))
     (with-selected-frame frame
       (when overriding-terminal-local-map
         (internal-pop-keymap hydra-curr-map 'overriding-terminal-local-map)
         (unless hydra--ignore
-          (if (fboundp 'remove-function)
-              (remove-function input-method-function #'hydra--imf)
-            (when hydra--input-method-function
-              (setq input-method-function hydra--input-method-function)
-              (setq hydra--input-method-function nil)))
           (when hydra-curr-on-exit
             (let ((on-exit hydra-curr-on-exit))
               (setq hydra-curr-on-exit nil)
@@ -452,6 +452,11 @@ Return DEFAULT if PROP is not in H."
   (format (format "%%%ds: %%%ds" key-width (- -1 doc-width))
           key doc))
 
+(defun hydra--to-string (x)
+  (if (stringp x)
+      x
+    (eval x)))
+
 (defun hydra--hint (body heads)
   "Generate a hint for the echo area.
 BODY, and HEADS are parameters to `defhydra'."
@@ -467,41 +472,48 @@ BODY, and HEADS are parameters to `defhydra'."
              (cons (cadr h)
                    (cons pstr (cl-caddr h)))
              alist)))))
-
     (let ((keys (nreverse (mapcar #'cdr alist)))
-          (n-cols (plist-get (cddr body) :columns)))
-      (if n-cols
-          (let ((n-rows (1+ (/ (length keys) n-cols)))
-                (max-key-len (apply #'max (mapcar (lambda (x) (length (car x))) keys)))
-                (max-doc-len (apply #'max (mapcar (lambda (x) (length (cdr x))) keys))))
-            (concat
-             "\n"
-             (mapconcat #'identity
-                        (mapcar
-                         (lambda (x)
-                           (mapconcat
-                            (lambda (y)
-                              (and y
-                                   (funcall hydra-key-doc-function
-                                            (car y)
-                                            max-key-len
-                                            (cdr y)
-                                            max-doc-len))) x ""))
-                         (hydra--matrix keys n-cols n-rows))
-                        "\n")))
+          (n-cols (plist-get (cddr body) :columns))
+          res)
+      (setq res
+            (if n-cols
+                (let ((n-rows (1+ (/ (length keys) n-cols)))
+                      (max-key-len (apply #'max (mapcar (lambda (x) (length (car x))) keys)))
+                      (max-doc-len (apply #'max (mapcar (lambda (x)
+                                                          (length (hydra--to-string (cdr x)))) keys))))
+                  `(concat
+                    "\n"
+                    (mapconcat #'identity
+                               (mapcar
+                                (lambda (x)
+                                  (mapconcat
+                                   (lambda (y)
+                                     (and y
+                                          (funcall hydra-key-doc-function
+                                                   (car y)
+                                                   ,max-key-len
+                                                   (hydra--to-string (cdr y))
+                                                   ,max-doc-len))) x ""))
+                                ',(hydra--matrix keys n-cols n-rows))
+                               "\n")))
 
 
-        (concat
-         (mapconcat
-          (lambda (x)
-            (format
-             (if (> (length (cdr x)) 0)
-                 (concat hydra-head-format (cdr x))
-               "%s")
-             (car x)))
-          keys
-          ", ")
-         (if keys "." ""))))))
+              `(concat
+                (mapconcat
+                 (lambda (x)
+                   (let ((str (hydra--to-string (cdr x))))
+                     (format
+                      (if (> (length str) 0)
+                          (concat hydra-head-format str)
+                        "%s")
+                      (car x))))
+                 ',keys
+                 ", ")
+                ,(if keys "." ""))))
+      (if (cl-every #'stringp
+                    (mapcar 'cddr alist))
+          (eval res)
+        res))))
 
 (defvar hydra-fontify-head-function nil
   "Possible replacement for `hydra-fontify-head-default'.")
@@ -566,16 +578,18 @@ HEAD's binding is returned as a string wrapped with [] or {}."
 _NAME, BODY, DOCSTRING and HEADS are parameters of `defhydra'.
 The expressions can be auto-expanded according to NAME."
   (setq docstring (hydra--strip-align-markers docstring))
+  (setq docstring (replace-regexp-in-string "___" "_β_" docstring))
   (let ((rest (hydra--hint body heads))
         (start 0)
         varlist
         offset)
     (while (setq start
                  (string-match
-                  "\\(?:%\\( ?-?[0-9]*s?\\)\\(`[a-z-A-Z/0-9]+\\|(\\)\\)\\|\\(?:_\\( ?-?[0-9]*?\\)\\(\\[\\|]\\|[-[:alnum:] ~.,;:/|?<>={}*+#%@]+?\\)_\\)"
+                  "\\(?:%\\( ?-?[0-9]*s?\\)\\(`[a-z-A-Z/0-9]+\\|(\\)\\)\\|\\(?:_\\( ?-?[0-9]*?\\)\\(\\[\\|]\\|[-[:alnum:] ~.,;:/|?<>={}*+#%@!&]+?\\)_\\)"
                   docstring start))
       (cond ((eq ?_ (aref (match-string 0 docstring) 0))
              (let* ((key (match-string 4 docstring))
+                    (key (if (equal key "β") "_" key))
                     (head (assoc key heads)))
                (if head
                    (progn
@@ -610,11 +624,14 @@ The expressions can be auto-expanded according to NAME."
     (if (eq ?\n (aref docstring 0))
         `(concat (format ,(substring docstring 1) ,@(nreverse varlist))
                  ,rest)
-      `(format ,(replace-regexp-in-string
+      (let ((r `(replace-regexp-in-string
                  " +$" ""
-                 (concat docstring ": "
+                 (concat ,docstring ": "
                          (replace-regexp-in-string
-                          "\\(%\\)" "\\1\\1" rest)))))))
+                          "\\(%\\)" "\\1\\1" ,rest)))))
+        (if (stringp rest)
+            `(format ,(eval r))
+          `(format ,r))))))
 
 (defun hydra--complain (format-string &rest args)
   "Forward to (`message' FORMAT-STRING ARGS) unless `hydra-verbose' is nil."
@@ -962,7 +979,8 @@ result of `defhydra'."
                   (t
                    (let ((hint (cl-caddr h)))
                      (unless (or (null hint)
-                                 (stringp hint))
+                                 (stringp hint)
+                                 (stringp (eval hint)))
                        (setcdr (cdr h) (cons
                                         (hydra-plist-get-default body-plist :hint "")
                                         (cddr h)))))

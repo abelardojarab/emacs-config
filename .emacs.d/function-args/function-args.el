@@ -40,10 +40,18 @@
 ;; ——— Requires ————————————————————————————————————————————————————————————————
 (require 'cl-lib)
 (require 'cc-cmds)
+(require 'etags)
 (eval-when-compile
   (require 'cl))
 (require 'semantic/ia)
 (require 'semantic/db-find)
+(require 'semantic-directory)
+(defvar ivy-last)
+(declare-function ivy-read "ext:ivy")
+(declare-function ivy-state-window "ext:ivy")
+(declare-function helm "ext:helm")
+(declare-function helm-build-sync-source "ext:helm-source")
+(declare-function aya-expand "ext:auto-yasnippet")
 
 ;; ——— Customization ———————————————————————————————————————————————————————————
 (defgroup function-args nil
@@ -53,7 +61,8 @@
 
 (defgroup function-args-faces nil
   "Font-lock faces for `function-args'."
-  :prefix "fa-")
+  :prefix "fa-"
+  :group 'function-args)
 
 (defcustom fa-hint-position-below nil
   "Non-nil means hint will be shown below point (instead of above)."
@@ -76,6 +85,7 @@
   :type '(choice
           (const :tag "Name only" name)
           (const :tag "Name and parens" name-and-parens)
+          (const :tag "Name, space, parens" name-space-parens)
           (const :tag "Name and parens and hint" name-and-parens-and-hint)))
 
 (defconst fa-hint-dark-color "gray20")
@@ -516,6 +526,30 @@ When ARG is not nil offer only variables as candidates."
 (defcustom fa-do-comments nil
   "When non-nil, try to add the declaration comment to the overlay.")
 
+(defun fa-looking-back (x)
+  "Forward to `looking-back' X.
+Avoid byte compiler warnings."
+  (looking-back x (line-beginning-position)))
+
+(defun fa--in-comment-p ()
+  "Test if point is inside a comment."
+  (save-excursion
+    (unless (eolp)
+      (forward-char 1))
+    (nth 4 (syntax-ppss))))
+
+(defun fa--bounds-comment ()
+  (comment-beginning)
+  (comment-normalize-vars)
+  (beginning-of-line)
+  (let ((cs (comment-search-forward (line-end-position) t)))
+    (when cs
+      (goto-char cs)
+      (skip-syntax-backward " ")
+      (setq cs (point))
+      (comment-forward)
+      (cons cs (point)))))
+
 (defun fa-get-comment (x)
   "Try to extract the declaration comment from X.
 X is an element of `fa-lst'."
@@ -525,13 +559,15 @@ X is an element of `fa-lst'."
     (with-current-buffer (find-file-noselect file)
       (save-excursion
         (goto-char pos)
-        (cond ((looking-back "\\(\\*/\\)\n*")
-               (goto-char (match-end 1))
-               (let ((end (point)))
-                 (comment-search-backward (point-min) t)
+        (cond ((progn
+                 (skip-chars-backward " \t\n")
+                 (move-beginning-of-line 1)
+                 (forward-char 1)
+                 (fa--in-comment-p))
+               (let ((bnd (fa--bounds-comment)))
                  (buffer-substring
-                  (point)
-                  (- end 2)))))))))
+                  (car bnd)
+                  (cdr bnd)))))))))
 
 ;; ——— Pretty priting ——————————————————————————————————————————————————————————
 (defun fa-fancy-string (wspace)
@@ -610,7 +646,7 @@ It has the structure: (template type (file . position) arguments)."
         (r (semantic-tag-attributes tag))
         template-p type-p arguments-p constant-flag-p
         methodconst-flag-p typemodifiers-p constructor-flag-p
-        pointer-p template-specifier-p item)
+        pointer-p item)
     (while r
       (setq item (pop r))
       (case item
@@ -622,7 +658,6 @@ It has the structure: (template type (file . position) arguments)."
         (:typemodifiers (setq typemodifiers-p (pop r)))
         (:constructor-flag (setq constructor-flag-p (pop r)))
         (:pointer (setq pointer-p (pop r)))
-        (:template-specifier (setq template-specifier-p (pop r)))
         ((:prototype-flag
           :parent
           :operator-flag
@@ -630,7 +665,10 @@ It has the structure: (template type (file . position) arguments)."
           :pure-virtual-flag
           :throws
           :filename
-          :depth)
+          :depth
+          :template-specifier
+          :truefile
+          :file)
          (pop r))
         (t (error "Unknown token %s" item))))
     (let ((argument-conses (mapcar
@@ -669,9 +707,11 @@ It has the structure: (template type (file . position) arguments)."
                'font-lock-keyword-face))
          (if constructor-flag-p
              ""
-           (concat return-type " "))
+           (if (string-match "\\*$" return-type)
+               return-type
+             (concat return-type " ")))
          (propertize name 'face 'font-lock-function-name-face)
-         "("
+         " ("
          (mapconcat (lambda (x) (concat (car x) " " (cdr x)))
                     argument-conses
                     ", ")
@@ -755,9 +795,11 @@ TYPE and NAME are strings."
                             (setq type (car type))
                             (setq face 'fa-face-type-compound))
                            ((null type)
-                            (setq type "#define")))
+                            (setq type "#define")
+                            (setq face 'font-lock-preprocessor-face)))
                      (format "%s%s%s %s"
-                             (if (semantic-tag-get-attribute tag :constant-flag)
+                             (if (and (semantic-tag-get-attribute tag :constant-flag)
+                                      (not (equal type "#define")))
                                  (propertize "const " 'face 'font-lock-keyword-face)
                                "")
                              (propertize type 'face face)
@@ -801,23 +843,59 @@ TYPE and NAME are strings."
   (interactive)
   (moo-propose #'moo-variablep))
 
-(defun moo-jump-local ()
-  "Select a tag to jump to from tags defined in current buffer."
-  (interactive)
-  (let* ((tags (semantic-fetch-tags))
-         (preselect (moo-tag->str (semantic-current-tag)))
-         (preselect (when (stringp preselect)
-                      (regexp-quote preselect))))
+(defun moo-format-tag-line (str file)
+  (let ((width (window-width))
+        (col (max 70 (- (window-width) 20))))
+    (when (or (null file)
+              (not (file-exists-p file)))
+      (error "Bad tag: %s" str))
+    (when (> (length str) col)
+      (setq str
+            (concat (substring str 0 (- col 4))
+                    " ...")))
+    (format (format "%%s%% %ds" (- width
+                                   (length str)))
+            str
+            (file-name-nondirectory file))))
+
+(defvar moo-jump-local-cache (make-hash-table :test 'equal))
+
+(defun moo-jump-local (arg)
+  "Select a tag to jump to from tags defined in current buffer.
+When ARG is non-nil, regenerate tags."
+  (interactive "P")
+  (let* ((file-list (cl-remove-if
+                     (lambda (x)
+                       (string-match "^\\.#" x))
+                     (append (file-expand-wildcards "*.cc")
+                             (file-expand-wildcards "*.c")
+                             (file-expand-wildcards "*.hh")
+                             (file-expand-wildcards "*.h")
+                             (file-expand-wildcards "*.hpp"))))
+         (ready-tags
+          (or (and (null arg) (gethash file-list moo-jump-local-cache))
+              (let ((tags (sd-fetch-tags file-list)))
+                (when (memq major-mode '(c++-mode c-mode))
+                  (setq tags
+                        (delq nil
+                              (mapcar
+                               (lambda (x)
+                                 (let ((s (moo-tag->str x)))
+                                   (when s
+                                     (cons
+                                      (moo-format-tag-line
+                                       s (semantic-tag-get-attribute x :truefile))
+                                      x))))
+                               (moo-flatten-namepaces tags)))))
+                (puthash file-list tags moo-jump-local-cache)
+                tags)))
+         (preselect (car (semantic-current-tag)))
+         (preselect (and preselect
+                         (if (memq moo-select-method '(helm helm-fuzzy))
+                             (regexp-quote preselect)
+                           preselect))))
     (moo-select-candidate
-     (if (memq major-mode '(c++-mode c-mode))
-         (delq nil
-               (mapcar
-                (lambda (x)
-                  (let ((s (moo-tag->str x)))
-                    (when s
-                      (cons s x))))
-                (moo-flatten-namepaces tags)))
-       tags)
+     ready-tags
      #'moo-action-jump
      preselect)))
 
@@ -830,9 +908,9 @@ TYPE and NAME are strings."
   "Position the cursor at the `(', which is logically closest."
   (cond
     ((looking-at "("))
-    ((looking-back "(")
+    ((fa-looking-back "(")
      (backward-char))
-    ((looking-back "^\\([^(\n]*\\)([^(\n]*")
+    ((fa-looking-back "^\\([^(\n]*\\)([^(\n]*")
      (re-search-backward "("))
     ((looking-at "[^\n]*([^\n]*$")
      (re-search-forward "(")
@@ -840,8 +918,8 @@ TYPE and NAME are strings."
     (t
      (up-list)
      (backward-list)))
-  (unless (looking-back "^[ \t]*")
-    (while (looking-back " ")
+  (unless (fa-looking-back "^[ \t]*")
+    (while (fa-looking-back " ")
       (backward-char)))
   (point))
 
@@ -937,7 +1015,7 @@ Reverse direction when ARG is not nil."
   "Ensure `looking-back' STR and erase it.
 `case-fold-search' is set to nil."
   (let ((case-fold-search nil))
-    (if (looking-back str)
+    (if (fa-looking-back str)
         (delete-region (match-beginning 0) (match-end 0))
       (error "Can't erase %s" str))))
 
@@ -954,14 +1032,17 @@ PARAMS are passed further to `moo-action-insert'."
     ;; multiple candidates with different names
     (t
      (moo-select-candidate
-      (mapcar 'moo-tag->cons candidates)
+      (delq nil
+            (mapcar 'moo-tag->cons candidates))
       (lambda (x) (moo-action-insert x params prefix))))))
 
 (defun moo-tag->cons (tag)
   "Return for TAG a cons (TAG . STR).
 STR is the result of `moo-tag->str' on TAG,
 NAME is the TAG name."
-  (cons (moo-tag->str tag) tag))
+  (let ((tag-name (moo-tag->str tag)))
+    (when tag-name
+      (cons tag-name tag))))
 
 (defun moo-action-insert (candidate formatter &optional prefix)
   "Insert tag CANDIDATE.
@@ -974,6 +1055,9 @@ When PREFIX is not nil, erase it before inserting."
          (insert (semantic-tag-name candidate))
          (cl-case fa-insert-method
            (name)
+           (name-space-parens
+            (insert " ()")
+            (backward-char 1))
            (name-and-parens
             (insert "()")
             (backward-char 1))
@@ -990,6 +1074,8 @@ When PREFIX is not nil, erase it before inserting."
         (t
          (error "Unexpected"))))
 
+(defvar ivy-height)
+
 (defun moo-select-candidate (candidates action &optional preselect)
   (cond ((eq moo-select-method 'display-completion-list)
          (with-output-to-temp-buffer "*moo-jump*"
@@ -998,12 +1084,12 @@ When PREFIX is not nil, erase it before inserting."
 
         ((eq moo-select-method 'ivy)
          (require 'ivy)
-         (let ((ivy-height 20))
+         (let ((ivy-height 15))
            (ivy-read "tag: " candidates
                      :preselect preselect
-                     :action (lambda (x)
-                               (funcall
-                                action (cdr (assoc x candidates)))))))
+                     :action action
+                     :require-match t
+                     :sort nil)))
 
         ((prog1 (eq moo-select-method 'helm)
            (require 'helm)
@@ -1027,11 +1113,29 @@ When PREFIX is not nil, erase it before inserting."
         (t
          (error "Bad `moo-select-method': %S" moo-select-method))))
 
+(when (version< emacs-version "25.1")
+  (eval-after-load 'etags
+    '(add-to-list 'byte-compile-not-obsolete-vars 'find-tag-marker-ring)))
+
 (defun moo-action-jump (tag)
-  (when (semantic-tag-p tag)
-    (push-mark)
-    (semantic-go-to-tag tag)
-    (switch-to-buffer (current-buffer))))
+  (with-selected-window (cl-case moo-select-method
+                          (ivy
+                           (ivy-state-window ivy-last))
+                          ((helm helm-fuzzy)
+                           (selected-window))
+                          (t
+                           (selected-window)))
+    (if (semantic-tag-p tag)
+        (progn
+          (let ((file-name (semantic-tag-get-attribute tag :truefile))
+                (ov (semantic-tag-overlay tag)))
+            (ring-insert
+             find-tag-marker-ring (point-marker))
+            (find-file file-name)
+            (goto-char (if (overlayp ov)
+                           (overlay-start ov)
+                         (aref ov 0)))))
+      (error "Unexpected tag: %S" tag))))
 
 (defun moo-propose (pred)
   "Display a list of current class members that satisfy PRED."
@@ -1099,9 +1203,9 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
        (error "Multiple definitions for %s" str)))))
 
 (defun moo-complete-candidates-2 (prefix var-name)
-  (let* ((var-used-as-pointer-p (looking-back "->\\(?:[A-Za-z][A-Za-z_0-9]*\\)?"))
-         (var-used-as-classvar-p (looking-back "\\.\\(?:[A-Za-z][A-Za-z_0-9]*\\)?"))
-         (var-tag (if (looking-back (concat "::" prefix))
+  (let* ((var-used-as-pointer-p (fa-looking-back "->\\(?:[A-Za-z][A-Za-z_0-9]*\\)?"))
+         (var-used-as-classvar-p (fa-looking-back "\\.\\(?:[A-Za-z][A-Za-z_0-9]*\\)?"))
+         (var-tag (if (fa-looking-back (concat "::" prefix))
                       (save-excursion
                         (re-search-backward prefix)
                         (backward-char 2)
@@ -1125,7 +1229,7 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                            ;; this works sometimes
                            (moo-sname->tag var-name))))
                       ;; Type::member
-                      ((looking-back "::\\(?:[A-Za-z][A-Za-z_0-9]*\\)?")
+                      ((fa-looking-back "::\\(?:[A-Za-z][A-Za-z_0-9]*\\)?")
                        (if (moo-functionp var-tag)
                            (moo-sname->tag var-name)
                          var-tag))
@@ -1213,7 +1317,7 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                  (cond
                    ;; happens sometimes
                    ((stringp ctxt-type)
-                    (if (looking-back "\\()[ \n\t]*:[^;()]*\\)\\|,[^;()]*")
+                    (if (fa-looking-back "\\()[ \n\t]*:[^;()]*\\)\\|,[^;()]*")
                         (moo-tget-constructors (moo-sname->tag (car function)))
                       (fa-backward-char-skip<>)
                       (moo-tget-constructors (moo-ctxt-type))))
@@ -1221,7 +1325,7 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                          (cond
                            ;; variable init inside constructor
                            ((and (moo-variablep ctxt-type)
-                                 (looking-back ":[^;]*"))
+                                 (fa-looking-back ":[^;]*"))
                             (or (filter #'moo-constructorp
                                         (apply #'append
                                                (delq nil
@@ -1247,7 +1351,7 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                               (append (list ctxt-type)
                                       (moo-desperately-find-sname (car function))))))))
                    ;; global function invocation
-                   ((looking-back "\\(:?}\\|else\\|;\\|{\\|\\(:?//.*\\)\\)[ \t\n]*")
+                   ((fa-looking-back "\\(:?}\\|else\\|;\\|{\\|\\(:?//.*\\)\\)[ \t\n]*")
                     (cl-mapcan #'fa-process-tag-according-to-class
                                (moo-desperately-find-sname (car function))))
                    ;; try to match a variable with a constructor declaration:
@@ -1274,7 +1378,7 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                       (ctype (semantic-tag-get-attribute ctxt-type :type)))
                  (fa-backward-char-skip<> -1)
                  (cond
-                   ((looking-back "::")
+                   ((fa-looking-back "::")
                     (cl-delete-duplicates
                      (append
                       (fa-process (cadr function)
@@ -1286,7 +1390,7 @@ Optional PREDICATE is used to improve uniqueness of returned tag."
                        (moo-desperately-find-sname (car function))))
                      :test #'moo-tag-pos=))
                    ;; smart pointer?
-                   ((and (looking-back "->") (not (semantic-tag-get-attribute ctxt-type :pointer)))
+                   ((and (fa-looking-back "->") (not (semantic-tag-get-attribute ctxt-type :pointer)))
                     (let* ((type (semantic-tag-get-attribute ctxt-type :type))
                            (type-template
                             (semantic-tag-get-attribute (if (equal type "class") ctxt-type type)
@@ -1451,8 +1555,7 @@ Returns TAG if it's not a typedef."
         (car (moo-desperately-find-sname str-name)))))
 
 (defun moo-tvar->ttype (var-tag)
-  (let* ((var-name (car var-tag))
-         (type-attr (semantic-tag-get-attribute var-tag :type)))
+  (let ((type-attr (semantic-tag-get-attribute var-tag :type)))
     (when (consp type-attr)
       (let* ((var-stype (car type-attr))
              (type-tag (moo-stype->tag var-stype)))
@@ -1492,7 +1595,7 @@ Returns TAG if it's not a typedef."
                   (func tags out depth)
                 (dolist (tag tags)
                   (cond ((and (not moo-do-includes)
-                          (or (moo-includep tag) (moo-usingp tag)))
+                              (or (moo-includep tag) (moo-usingp tag)))
                          ;; skip
                          )
 
@@ -1500,7 +1603,10 @@ Returns TAG if it's not a typedef."
                          (setq out
                                (namespace-reduce
                                 func
-                                (semantic-tag-get-attribute tag :members)
+                                (let ((truefile (semantic-tag-get-attribute tag :truefile)))
+                                  (mapcar (lambda (x)
+                                            (semantic-tag-put-attribute x :truefile truefile))
+                                          (semantic-tag-get-attribute tag :members)))
                                 (funcall func out tag depth)
                                 (1+ depth))))
 
@@ -1511,7 +1617,7 @@ Returns TAG if it's not a typedef."
 (defun moo-find-sname-in-tags (stag tags)
   "Find tags named STAG in forest TAGS."
   (moo-namespace-reduce
-   (lambda (x y depth) (if (string= (car y) stag) (push y x) x))
+   (lambda (x y _depth) (if (string= (car y) stag) (push y x) x))
    tags))
 
 (defun moo-flatten-namepaces (tags)
@@ -1554,13 +1660,13 @@ Returns TAG if it's not a typedef."
               (up-list)
               (backward-list))
             ;; TODO take care of nested classes
-            (if (looking-back
+            (if (fa-looking-back
                  "\\(?:class\\|struct\\) \\([A-Za-z][A-Z_a-z0-9]*\\)[: \t\n]+[^{;]*?")
                 (progn
                   (goto-char (match-beginning 0))
                   (setq name (match-string-no-properties 1))
                   ;; try to match the template as well
-                  (when (looking-back ">[\n \t]*")
+                  (when (fa-looking-back ">[\n \t]*")
                     (let ((end (progn (goto-char (match-beginning 0)) (point)))
                           (beg (ignore-errors (forward-char) (backward-list) (point))))
                       (when end
@@ -1639,6 +1745,8 @@ At least what the syntax thinks is a list."
              (semantic-tag-get-attribute first :line))
          (semantic-tag-file-name first))))
 
+(defvar aya-current)
+
 (defun moo-doxygen ()
   "Generate a doxygen yasnippet and expand it with `aya-expand'.
 The point should be on the top-level function name."
@@ -1647,8 +1755,7 @@ The point should be on the top-level function name."
   (let ((tag (semantic-current-tag)))
     (unless (semantic-tag-of-class-p tag 'function)
       (error "Expected function, got %S" tag))
-    (let* ((name (semantic-tag-name tag))
-           (attrs (semantic-tag-attributes tag))
+    (let* ((attrs (semantic-tag-attributes tag))
            (args (plist-get attrs :arguments))
            (ord 1))
       (setq aya-current

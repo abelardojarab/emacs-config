@@ -1,6 +1,15 @@
 master (in development)
 =======================
 
+- **Breaking changes**:
+
+  - `scala-scalastyle` now expects a `scalastyle` executable in `exec-path`
+    [GH-763]
+
+- New syntax checkers:
+
+  - JSON with Python’s built-in `json` module [GH-758]
+
 - New features:
 
   - Add `flycheck-help-echo-function` to customize the Help Echo of Flycheck
@@ -8,6 +17,14 @@ master (in development)
   - Use symbolic error IDs in Pylint [GH-714]
   - Add `flycheck-pylint-use-symbolic-id` to disable symbolic IDs for Pylint
     [GH-714]
+  - Add `flycheck-command-wrapper-function` to wrap syntax checker commands
+    before execution [GH-629] [GH-752]
+  - Add `flycheck-executable-find` to customise how Flycheck searches
+    executables [GH-752]
+  - Add `flycheck-hlint-args` to pass additional arguments to hlint [GH-713]
+    [GH-762]
+  - Add `flycheck-go-build-tags` and `flycheck-go-install-depds` to specify tags
+    and automatically install dependencies with `go build` [GH-674]
 
 - Improvements:
 
@@ -17,10 +34,14 @@ master (in development)
   - Cache GHC output for faster syntax checking and better template haskell
     support [GH-708]
   - Fall back to `rst` if `rst-sphinx` is disabled [GH-745] [GH-746]
+  - New uniform fringe indicators [GH-750]
 
 - Bug fixes:
 
   - Fix error patterns of `coq` [GH-742]
+  - Support GFortran 5 [GH-751]
+  - Fix stack overflow when parsing hlint errors [GH-760]
+  - Fix error columns of jsonlint
 
 0.24 (Aug 15, 2015)
 ===================

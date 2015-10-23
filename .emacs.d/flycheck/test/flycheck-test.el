@@ -114,6 +114,21 @@ determined."
    "coqtop" "-v"))
 
 
+;;; Checkdoc quoting
+
+;; Emacs 24 uses good old Emacs ASCII quotes, but Emacs 25 has curly quotes.
+;; Here we work around these differences.
+
+(defconst flycheck-test-curly-quotes (version<= "25" emacs-version)
+  "Whether Emacs uses curly quotes.")
+
+(defun flycheck-test-fix-quotes (msg)
+  "Substitute curly quotes in MSG for older Emacs versions."
+  (if flycheck-test-curly-quotes msg
+    (replace-regexp-in-string (rx "‘" (group (1+ (not (any "’")))) "’")
+                              "`\\1'" msg 'fixedcase)))
+
+
 ;;; Code style
 (defmacro flycheck-test-def-indent-test (filename)
   "Define a test case for the indentation of FILENAME.
@@ -981,6 +996,15 @@ and extension, as in `file-name-base'."
     (let ((flycheck-disabled-checkers '(emacs-lisp)))
       (should-not (flycheck-may-use-checker 'emacs-lisp)))))
 
+(ert-deftest flycheck-may-use-checker/checks-executable ()
+  :tags '(checker-api)
+  (flycheck-ert-with-resource-buffer "checkers/emacs-lisp.el"
+    (emacs-lisp-mode)
+    (let* ((was-called nil)
+           (flycheck-executable-find (lambda (e) (setq was-called t))))
+      (should (flycheck-may-use-checker 'emacs-lisp))
+      (should was-called))))
+
 
 ;;; Generic syntax checkers
 (ert-deftest flycheck-checker-get/gets-a-property ()
@@ -1326,14 +1350,14 @@ and extension, as in `file-name-base'."
               :checker emacs-lisp-checkdoc))))))
 
 (ert-deftest flycheck-select-checker/selecting-sets-the-syntax-checker ()
-  :tags '(selection)
+  :tags '(selection checker-emacs-lisp-checkdoc)
   (flycheck-ert-with-temp-buffer
     (emacs-lisp-mode)
     (flycheck-select-checker 'emacs-lisp-checkdoc)
     (should (eq flycheck-checker 'emacs-lisp-checkdoc))))
 
 (ert-deftest flycheck-select-checker/unselecting-unsets-the-syntax-checker ()
-  :tags '(selection)
+  :tags '(selection checker-emacs-lisp-checkdoc)
   (flycheck-ert-with-temp-buffer
     (emacs-lisp-mode)
     (flycheck-select-checker 'emacs-lisp-checkdoc)
@@ -2046,7 +2070,7 @@ and extension, as in `file-name-base'."
   :tags '(error-level)
   (should (= (flycheck-error-level-severity 'error) 100))
   (should (eq (flycheck-error-level-fringe-bitmap 'error)
-              'exclamation-mark))
+              'flycheck-fringe-bitmap-double-arrow))
   (should (eq (flycheck-error-level-fringe-face 'error)
               'flycheck-fringe-error))
   (should (eq (flycheck-error-level-overlay-category 'error)
@@ -2057,7 +2081,8 @@ and extension, as in `file-name-base'."
 (ert-deftest flycheck-error-level-warning ()
   :tags '(error-level)
   (should (= (flycheck-error-level-severity 'warning) 10))
-  (should (eq (flycheck-error-level-fringe-bitmap 'warning) 'question-mark))
+  (should (eq (flycheck-error-level-fringe-bitmap 'warning)
+              'flycheck-fringe-bitmap-double-arrow))
   (should (eq (flycheck-error-level-fringe-face 'warning)
               'flycheck-fringe-warning))
   (should (eq (flycheck-error-level-overlay-category 'warning)
@@ -2067,8 +2092,9 @@ and extension, as in `file-name-base'."
 
 (ert-deftest flycheck-error-level-info ()
   :tags '(error-level)
-  (should (= (flycheck-error-level-severity 'info) -1))
-  (should (eq (flycheck-error-level-fringe-bitmap 'info) 'empty-line))
+  (should (= (flycheck-error-level-severity 'info) -10))
+  (should (eq (flycheck-error-level-fringe-bitmap 'info)
+              'flycheck-fringe-bitmap-double-arrow))
   (should (eq (flycheck-error-level-fringe-face 'info)
               'flycheck-fringe-info))
   (should (eq (flycheck-error-level-overlay-category 'info)
@@ -2258,7 +2284,7 @@ and extension, as in `file-name-base'."
                  (before-string (overlay-get overlay 'before-string))
                  (`(_ ,bitmap ,face) (get-text-property 0 'display before-string)))
       (should (eq face 'flycheck-fringe-info))
-      (should (eq bitmap 'empty-line)))))
+      (should (eq bitmap 'flycheck-fringe-bitmap-double-arrow)))))
 
 (ert-deftest flycheck-add-overlay/has-warning-fringe-icon ()
   :tags '(overlay)
@@ -2269,7 +2295,7 @@ and extension, as in `file-name-base'."
                  (before-string (overlay-get overlay 'before-string))
                  (`(_ ,bitmap ,face) (get-text-property 0 'display before-string)))
       (should (eq face 'flycheck-fringe-warning))
-      (should (eq bitmap 'question-mark)))))
+      (should (eq bitmap 'flycheck-fringe-bitmap-double-arrow)))))
 
 (ert-deftest flycheck-add-overlay/has-error-fringe-icon ()
   :tags '(overlay)
@@ -2280,7 +2306,7 @@ and extension, as in `file-name-base'."
                  (before-string (overlay-get overlay 'before-string))
                  (`(_ ,bitmap ,face) (get-text-property 0 'display before-string)))
       (should (eq face 'flycheck-fringe-error))
-      (should (eq bitmap 'exclamation-mark)))))
+      (should (eq bitmap 'flycheck-fringe-bitmap-double-arrow)))))
 
 (ert-deftest flycheck-add-overlay/has-left-fringe-icon ()
   :tags '(overlay)
@@ -2307,7 +2333,8 @@ and extension, as in `file-name-base'."
         (should (eq side 'right-fringe))))))
 
 (ert-deftest flycheck-add-overlay/right-position-in-narrowed-buffer ()
-  :tags '(overlay language-emacs-lisp checker-emacs-lisp)
+  :tags '(overlay language-emacs-lisp
+                  checker-emacs-lisp checker-emacs-lisp-checkdoc)
   "Test that all overlays are added at the right positions with narrowing in place."
   (flycheck-ert-with-resource-buffer "narrowing.el"
     (emacs-lisp-mode)
@@ -2324,13 +2351,16 @@ and extension, as in `file-name-base'."
     (widen)
     (should (= (length (flycheck-overlays-in (point-min) (point-max))) 4))
     (flycheck-ert-should-errors
-     '(9 1 warning "`message' called with 0 args to fill 1 format field(s)"
+     `(9 1 warning ,(flycheck-test-fix-quotes
+                     "‘message’ called with 0 args to fill 1 format field(s)")
          :checker emacs-lisp)
-     '(11 8 warning "`message' called with 0 args to fill 1 format field(s)"
+     `(11 8 warning ,(flycheck-test-fix-quotes
+                      "‘message’ called with 0 args to fill 1 format field(s)")
           :checker emacs-lisp)
      '(12 nil warning "First sentence should end with punctuation"
           :checker emacs-lisp-checkdoc)
-     '(15 1 warning "`message' called with 0 args to fill 1 format field(s)"
+     `(15 1 warning ,(flycheck-test-fix-quotes
+                      "‘message’ called with 0 args to fill 1 format field(s)")
           :checker emacs-lisp))))
 
 (ert-deftest flycheck-add-overlay/help-echo-is-error-message ()
@@ -3194,11 +3224,25 @@ evaluating BODY."
   :tags '(definition)
   (should-not (flycheck-command-argument-p '(foo bar))))
 
+(ert-deftest flycheck-start-command-checker/wraps-command ()
+  :tags '(command-checker)
+  (let* ((was-called 0)
+         (flycheck-command-wrapper-function (lambda (cmd)
+                                              (cl-incf was-called)
+                                              (cons "echo" cmd))))
+    ;; Since we just `echo' the command, there should be zero errors
+    (flycheck-ert-should-syntax-check
+     "checkers/emacs-lisp.el" 'emacs-lisp-mode)
+
+    ;; Called once for `emacs-lisp', and a second time for checkdoc
+    (should (equal was-called 2))))
+
 
 ;;; Executables of command checkers
 
 (ert-deftest flycheck-overridden-executable ()
-  :tags '(executables language-emacs-lisp checker-emacs-lisp)
+  :tags '(executables language-emacs-lisp
+                      checker-emacs-lisp checker-emacs-lisp-checkdoc)
   (let ((flycheck-emacs-lisp-executable (flycheck-ert-resource-filename
                                          "bin/dummy-emacs")))
     (flycheck-ert-should-syntax-check
@@ -4083,7 +4127,7 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
    '(4 8 error "module external_library is in file 'external_library.d' which cannot be read"
        :checker d-dmd)))
 
-(flycheck-ert-def-checker-test emacs-lisp emacs-lisp nil
+(flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp nil
   ;; Determine how the Emacs message for load file errors looks like: In Emacs
   ;; Snapshot, the message has three parts because the underlying file error is
   ;; contained in the message.  In stable release the file error itself is
@@ -4100,7 +4144,8 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
           :checker emacs-lisp-checkdoc)
      `(15 1 error ,msg :checker emacs-lisp))))
 
-(flycheck-ert-def-checker-test emacs-lisp emacs-lisp load-path
+(flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
+                               load-path
   (let ((flycheck-emacs-lisp-load-path (list (flycheck-ert-resource-filename
                                               "dummy-elpa/dummy-package-0.1"))))
     (flycheck-ert-should-syntax-check
@@ -4109,10 +4154,12 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
           :checker emacs-lisp-checkdoc)
      '(18 6 warning "message called with 0 arguments, but requires 1+"
           :checker emacs-lisp)
-     '(23 1 warning "the function `dummy-package-foo' might not be defined at runtime."
+     `(23 1 warning ,(flycheck-test-fix-quotes
+                      "the function ‘dummy-package-foo’ might not be defined at runtime.")
           :checker emacs-lisp))))
 
-(flycheck-ert-def-checker-test emacs-lisp emacs-lisp initialize-packages
+(flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
+                               initialize-packages
   (let ((flycheck-emacs-lisp-initialize-packages t)
         (flycheck-emacs-lisp-package-user-dir (flycheck-ert-resource-filename
                                                "dummy-elpa")))
@@ -4123,14 +4170,16 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
      '(18 6 warning "message called with 0 arguments, but requires 1+"
           :checker emacs-lisp))))
 
-(flycheck-ert-def-checker-test emacs-lisp emacs-lisp checks-compressed-file
+(flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
+                               checks-compressed-file
   (flycheck-ert-should-syntax-check
    "checkers/emacs-lisp.el.gz" 'emacs-lisp-mode
    '(12 nil warning "First sentence should end with punctuation"
         :checker emacs-lisp-checkdoc)
    '(16 6 warning "message called with 0 arguments, but requires 1+"
         :checker emacs-lisp)
-   '(21 1 warning "the function `dummy-package-foo' is not known to be defined."
+   `(21 1 warning ,(flycheck-test-fix-quotes
+                    "the function ‘dummy-package-foo’ is not known to be defined.")
         :checker emacs-lisp)))
 
 (flycheck-ert-def-checker-test emacs-lisp emacs-lisp sytnax-error
@@ -4139,7 +4188,8 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
      "checkers/emacs-lisp-syntax-error.el" 'emacs-lisp-mode
      '(3 1 error "End of file during parsing" :checker emacs-lisp))))
 
-(flycheck-ert-def-checker-test emacs-lisp emacs-lisp without-file-name
+(flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
+                               without-file-name
   ;; Regression test for checkdoc in buffers without file names. See
   ;; https://github.com/flycheck/flycheck/issues/73 and
   ;; https://github.com/bbatsov/prelude/issues/259
@@ -4152,7 +4202,7 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
     ;; names…
     (should flycheck-current-errors)))
 
-(flycheck-ert-def-checker-test emacs-lisp emacs-lisp
+(flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
                                does-not-check-autoloads-buffers
   ;; Regression test ensuring that Emacs Lisp won't check autoload buffers.
   ;; These buffers are temporary buffers created during package installation to
@@ -4163,13 +4213,13 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
     (should-not (flycheck-may-use-checker 'emacs-lisp))
     (should-not (flycheck-may-use-checker 'emacs-lisp-checkdoc))))
 
-(flycheck-ert-def-checker-test emacs-lisp emacs-lisp
+(flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
                                checkdoc-does-not-check-cask-files
   (flycheck-ert-with-file-buffer
       (expand-file-name "Cask" flycheck-test-source-directory)
     (should-not (flycheck-may-use-checker 'emacs-lisp-checkdoc))))
 
-(flycheck-ert-def-checker-test emacs-lisp emacs-lisp
+(flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
                                does-not-check-with-no-byte-compile
   ;; We need to use a hook here, because `no-byte-compile' seems to be
   ;; explicitly changed when loading Emacs Lisp files
@@ -4210,6 +4260,20 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
        :checker fortran-gfortran)
    '(3 1 error "Unclassifiable statement at (1)" :checker fortran-gfortran)))
 
+(flycheck-ert-def-checker-test fortran-gfortran fortran gfortran-5-error
+  (let ((flycheck-fortran-gfortran-executable "gfortran-5"))
+    (flycheck-ert-should-syntax-check
+     "checkers/fortran-error.f" '(fortran-mode f90-mode)
+     '(1 1 error "Non-numeric character in statement label at (1)"
+         :checker fortran-gfortran)
+     '(1 1 error "Unclassifiable statement at (1)" :checker fortran-gfortran)
+     '(2 1 error "Non-numeric character in statement label at (1)"
+         :checker fortran-gfortran)
+     '(2 1 error "Unclassifiable statement at (1)" :checker fortran-gfortran)
+     '(3 1 error "Non-numeric character in statement label at (1)"
+         :checker fortran-gfortran)
+     '(3 1 error "Unclassifiable statement at (1)" :checker fortran-gfortran))))
+
 (flycheck-ert-def-checker-test fortran-gfortran fortran free-form-error
   (let ((flycheck-gfortran-layout 'free))
     (flycheck-ert-should-syntax-check
@@ -4223,6 +4287,15 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
    '(1 20 warning "Unused dummy argument 'p' at (1)" :checker fortran-gfortran)
    '(18 9 warning "Same actual argument associated with INTENT(IN) argument 'a' and INTENT(OUT) argument 'b' at (1)"
         :checker fortran-gfortran)))
+
+(flycheck-ert-def-checker-test fortran-gfortran fortran gfortran-5-warning
+  (let ((flycheck-fortran-gfortran-executable "gfortran-5"))
+    (flycheck-ert-should-syntax-check
+     "checkers/fortran-warning.f90" '(fortran-mode f90-mode)
+     '(1 20 warning "Unused dummy argument ‘p’ at (1)"
+         :checker fortran-gfortran)
+     '(18 9 warning "Same actual argument associated with INTENT(IN) argument ‘a’ and INTENT(OUT) argument ‘b’ at (1)"
+          :checker fortran-gfortran))))
 
 (flycheck-ert-def-checker-test fortran-gfortran fortran specific-warnings
   (let ((flycheck-gfortran-warnings '("unused-dummy-argument")))
@@ -4654,8 +4727,14 @@ Why not:
 
 (flycheck-ert-def-checker-test json-jsonlint json nil
   (flycheck-ert-should-syntax-check
-   "checkers/json-jsonlint-error.json" 'text-mode
-   '(1 42 error "found: ',' - expected: 'EOF'." :checker json-jsonlint)))
+   "checkers/json-error.json" 'text-mode
+   '(1 44 error "found: ',' - expected: 'EOF'." :checker json-jsonlint)))
+
+(flycheck-ert-def-checker-test json-python-json json nil
+  (let ((flycheck-disabled-checkers '(json-jsonlint)))
+    (flycheck-ert-should-syntax-check
+     "checkers/json-error.json" 'text-mode
+     '(1 44 error "Extra data" :checker json-python-json))))
 
 (flycheck-ert-def-checker-test less less file-error
   (let* ((candidates (list (flycheck-ert-resource-filename "checkers/no-such-file.less")
@@ -5021,7 +5100,7 @@ Why not:
 (flycheck-ert-def-checker-test racket racket nil
   (flycheck-ert-should-syntax-check
    "checkers/racket-syntax-error.rkt" 'racket-mode
-   '(4 2 error "read: expected a `)' to close `('" :checker racket)))
+   '(4 3 error "read: expected a `)' to close `('" :checker racket)))
 
 (flycheck-ert-def-checker-test rpm-rpmlint rpm nil
   (flycheck-ert-should-syntax-check
@@ -5283,24 +5362,17 @@ Why not:
    '(3 nil error "identifier expected but '{' found." :checker scala)))
 
 (flycheck-ert-def-checker-test scala-scalastyle scala error
-  (let ((flycheck-scalastylerc "scalastyle.xml")
-        (flycheck-scalastyle-jar "/opt/scalastyle/scalastyle-batch.jar"))
+  (let ((flycheck-scalastylerc "scalastyle.xml"))
     (flycheck-ert-should-syntax-check
      "checkers/scala-scalastyle-style-error.scala" 'scala-mode
      '(6 5 error "Don't use println" :checker scala-scalastyle))))
 
 (flycheck-ert-def-checker-test scala-scalastyle scala warning
-  (let ((flycheck-scalastylerc "scalastyle.xml")
-        (flycheck-scalastyle-jar "/opt/scalastyle/scalastyle-batch.jar"))
+  (let ((flycheck-scalastylerc "scalastyle.xml"))
     (flycheck-ert-should-syntax-check
      "checkers/scala-scalastyle-style-warning.scala" 'scala-mode
      '(5 9 warning "Redundant braces after class definition"
          :checker scala-scalastyle))))
-
-(flycheck-ert-def-checker-test scala-scalastyle scala inhibited-without-jar
-  (let ((flycheck-scalastylerc "scalastyle.xml"))
-    (flycheck-ert-should-syntax-check
-     "checkers/scala-scalastyle-style-warning.scala" 'scala-mode)))
 
 (flycheck-ert-def-checker-test scss-lint scss nil
   (let ((flycheck-scss-lintrc "scss-lint.yml"))
