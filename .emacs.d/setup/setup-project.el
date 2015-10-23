@@ -167,7 +167,8 @@
                                  "Tcl"
                                  "R"
                                  "Bash"
-                                 "LaTeX"))
+                                 "LaTeX"
+                                 "C++"))
 
 (defun c-doc-hook ()
   (interactive)
