@@ -1,0 +1,92 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/nlme/html/plot.ACF.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:33:59 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Plot an ACF Object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for plot.ACF {nlme}"><tbody><tr><td>plot.ACF {nlme}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Plot an ACF Object</h2>
+
+<h3>Description</h3>
+
+<p>an <code>xyplot</code> of the autocorrelations versus the lags, with
+<code>type = "h"</code>, is produced. If <code>alpha &gt; 0</code>, curves
+representing the critical limits for a two-sided test of level
+<code>alpha</code> for the autocorrelations are added to the plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>## S3 method for class 'ACF'
+plot(x, alpha, xlab, ylab, grid, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>x</code></td>
+<td>
+<p>an object inheriting from class <code>ACF</code>,
+consisting of a data frame with two columns named <code>lag</code> and
+<code>ACF</code>, representing the autocorrelation values and the
+corresponding lags. 
+</p>
+</td></tr>
+<tr valign="top"><td><code>alpha</code></td>
+<td>
+<p>an optional numeric value with the significance level for
+testing if the autocorrelations are zero. Lines corresponding to the
+lower and upper critical values for a test of level <code>alpha</code> are
+added to the plot. Default is <code>0</code>, in which case no lines are
+plotted.
+</p>
+</td></tr>
+<tr valign="top"><td><code>xlab,ylab</code></td>
+<td>
+<p>optional character strings with the x- and y-axis
+labels. Default respectively to <code>"Lag"</code> and 
+<code>"Autocorrelation"</code>. 
+</p>
+</td></tr>
+<tr valign="top"><td><code>grid</code></td>
+<td>
+<p>an optional logical value indicating whether a grid should
+be added to plot. Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>optional arguments passed to the <code>xyplot</code> function.</p>
+</td></tr> 
+</tbody></table>
+
+
+<h3>Value</h3>
+
+<p>an <code>xyplot</code> Trellis plot.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>JosÃ© Pinheiro and Douglas Bates bates@stat.wisc.edu</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="ACF.html">ACF</a></code>, <code><a href="../../lattice/html/xyplot.html">xyplot</a></code></p>
+
+
+<h3>Examples</h3>
+
+<pre>fm1 &lt;- lme(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary)
+plot(ACF(fm1, maxLag = 10), alpha = 0.01)
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>nlme</em> version 3.1-121 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/nlme/html/plot.ACF.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:33:59 GMT -->
+
+</body></html>

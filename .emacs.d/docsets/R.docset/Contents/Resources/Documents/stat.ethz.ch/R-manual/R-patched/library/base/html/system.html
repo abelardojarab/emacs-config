@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/system.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:31:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head><title>Invoke a System Command</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for system {base}"><tr><td>system {base}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Invoke a System Command</h2>
+
+<h3>Description</h3>
+
+<p><code>system</code> invokes the OS command specified by <code>command</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+system(command, intern = FALSE,
+       ignore.stdout = FALSE, ignore.stderr = FALSE,
+       wait = TRUE, input = NULL, show.output.on.console = TRUE,
+       minimized = FALSE, invisible = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>command</code></td>
+<td>
+<p>the system command to be invoked, as a character string.</p>
+</td></tr>
+<tr valign="top"><td><code>intern</code></td>
+<td>
+<p>a logical (not <code>NA</code>) which indicates whether to
+capture the output of the command as an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> character vector.</p>
+</td></tr>
+<tr valign="top"><td><code>ignore.stdout, ignore.stderr</code></td>
+<td>
+<p>a logical (not <code>NA</code>)
+indicating whether messages written to &lsquo;<span class="file">stdout</span>&rsquo; or
+&lsquo;<span class="file">stderr</span>&rsquo; should be ignored.</p>
+</td></tr>
+<tr valign="top"><td><code>wait</code></td>
+<td>
+<p>a logical (not <code>NA</code>) indicating whether the <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
+interpreter should wait for the command to finish, or run it
+asynchronously.  This will be ignored (and the interpreter will
+always wait) if <code>intern = TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>input</code></td>
+<td>
+<p>if a character vector is supplied, this is copied one
+string per line to a temporary file, and the standard input of
+<code>command</code> is redirected to the file.</p>
+</td></tr>
+<tr valign="top"><td><code>show.output.on.console, minimized, invisible</code></td>
+<td>
+<p>arguments
+that are accepted on Windows but ignored on this platform, with a
+warning.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This interface has become rather complicated over the years: see
+<code><a href="system2.html">system2</a></code> for a more portable and flexible interface
+which is recommended for new code.
+</p>
+<p><code>command</code> is parsed as a command plus arguments separated by
+spaces.  So if the path to the command (or a single argument such as a
+file path) contains spaces, it must be quoted e.g. by
+<code><a href="shQuote.html">shQuote</a></code>.
+Unix-alikes pass the command line to a shell (normally &lsquo;<span class="file">/bin/sh</span>&rsquo;,
+and POSIX requires that shell), so <code>command</code> can be anything the
+shell regards as executable, including shell scripts, and it can
+contain multiple commands separated by <code>;</code>.
+</p>
+<p>On Windows, <code>system</code> does not use a shell and there is a separate
+function <code>shell</code> which passes command lines to a shell.
+</p>
+<p>If <code>intern</code> is <code>TRUE</code> then <code>popen</code> is used to invoke the
+command and the output collected, line by line, into an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
+<code><a href="character.html">character</a></code> vector.  If <code>intern</code> is <code>FALSE</code> then
+the C function <code>system</code> is used to invoke the command.
+</p>
+<p><code>wait</code> is implemented by appending <code>&amp;</code> to the command: this
+is in principle shell-dependent, but required by POSIX and so widely
+supported.
+</p>
+<p>The ordering of arguments after the first two has changed from time to
+time: it is recommended to name all arguments after the first.
+</p>
+<p>There are many pitfalls in using <code>system</code> to ascertain if a
+command can be run &mdash; <code><a href="Sys.which.html">Sys.which</a></code> is more suitable.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>intern = TRUE</code>, a character vector giving the output of the
+command, one line per character string.  (Output lines of more than
+8095 bytes will be split.)  If the command could not be run an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
+error is generated.
+If <code>command</code> runs but gives a non-zero exit status this will be
+reported with a warning and in the attribute <code>"status"</code> of the
+result: an attribute <code>"errmsg"</code> may also be available
+</p>
+<p>If <code>intern = FALSE</code>, the return value is an error code (<code>0</code>
+for success), given the invisible attribute (so needs to be printed
+explicitly).  If the command could not be run for any reason, the
+value is <code>127</code>.  Otherwise if <code>wait = TRUE</code> the value is the
+exit status returned by the command, and if <code>wait = FALSE</code> it is
+<code>0</code> (the conventional success value).
+</p>
+
+
+<h3>Stdout and stderr</h3>
+
+<p>For command-line <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>, error messages written to &lsquo;<span class="file">stderr</span>&rsquo; will be
+sent to the terminal unless <code>ignore.stderr = TRUE</code>.  They can be
+captured (in the most likely shells) by
+</p>
+<pre>    system("some command 2&gt;&amp;1", intern = TRUE)
+</pre>
+<p>For GUIs, what happens to output sent to &lsquo;<span class="file">stdout</span>&rsquo; or
+&lsquo;<span class="file">stderr</span>&rsquo; if <code>intern = FALSE</code> is interface-specific, and it
+is unsafe to assume that such messages will appear on a GUI console
+(they do on the OS X GUI's console, but not on some others).
+</p>
+
+
+<h3>Differences between Unix and Windows</h3>
+
+<p>How processes are launched differs fundamentally between Windows and
+Unix-alike operating systems, as do the higher-level OS functions on
+which this <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> function is built.  So it should not be surprising that
+there are many differences between OSes in how <code>system</code> behaves.
+For the benefit of programmers, the more important ones are summarized
+in this section.
+</p>
+
+<ul>
+<li><p> The most important difference is that on a Unix-alike
+<code>system</code> launches a shell which then runs <code>command</code>.  On
+Windows the command is run directly &ndash; use <code>shell</code> for an
+interface which runs <code>command</code> <em>via</em> a shell (by default
+the Windows shell <code>cmd.exe</code>, which has many differences from
+a POSIX shell).
+</p>
+<p>This means that it cannot be assumed that redirection or piping will
+work in <code>system</code> (redirection sometimes does, but we have seen
+cases where it stopped working after a Windows security patch), and
+<code><a href="system2.html">system2</a></code> (or <code>shell</code>) must be used on Windows.
+</p>
+</li>
+<li><p> What happens to <code>stdout</code> and <code>stderr</code> when not
+captured depends on how <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> is running: Windows batch commands behave
+like a Unix-alike, but from the Windows GUI they are
+generally lost.  <code>system(intern = TRUE)</code> captures &lsquo;<span class="file">stderr</span>&rsquo;
+when run from the Windows GUI console unless <code>ignore.stderr =
+      TRUE</code>.
+</p>
+</li>
+<li><p> The behaviour on error is different in subtle ways (and has
+differed between <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> versions).
+</p>
+</li>
+<li><p> The quoting conventions for <code>command</code> differ, but
+<code><a href="shQuote.html">shQuote</a></code> is a portable interface.
+</p>
+</li>
+<li><p> Arguments <code>show.output.on.console</code>, <code>minimized</code>,
+<code>invisible</code> only do something on Windows (and are most relevant
+to <code>Rgui</code> there).
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code>man system</code> and <code>man sh</code> for how this is implemented
+on the OS in use.
+</p>
+<p><code><a href="Platform.html">.Platform</a></code> for platform-specific variables.
+</p>
+<p><code><a href="connections.html">pipe</a></code> to set up a pipe connection.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# list all files in the current directory using the -F flag
+## Not run: system("ls -F")
+
+# t1 is a character vector, each element giving a line of output from who
+# (if the platform has who)
+t1 &lt;- try(system("who", intern = TRUE))
+
+try(system("ls fizzlipuzzli", intern = TRUE, ignore.stderr = TRUE))
+# zero-length result since file does not exist, and will give warning.
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>base</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/system.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:31:50 GMT -->
+</html>

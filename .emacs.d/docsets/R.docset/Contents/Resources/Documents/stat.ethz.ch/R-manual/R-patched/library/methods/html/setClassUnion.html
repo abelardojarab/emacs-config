@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/methods/html/setClassUnion.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:33:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head><title>Classes Defined as the Union of Other Classes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for setClassUnion {methods}"><tr><td>setClassUnion {methods}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Classes Defined as the Union of Other Classes</h2>
+
+<h3>Description</h3>
+
+<p>A class may be defined as the <em>union</em> of other classes; that
+is, as a virtual class defined as a superclass of several other
+classes. Class unions are useful in method signatures or as slots in
+other classes, when we want to allow one of several classes to be supplied.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+setClassUnion(name, members, where)
+isClassUnion(Class)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p> the name for the new union class. </p>
+</td></tr>
+<tr valign="top"><td><code>members</code></td>
+<td>
+<p> the classes that should be members of this union.</p>
+</td></tr>
+<tr valign="top"><td><code>where</code></td>
+<td>
+<p> where to save the new class definition; by default,
+the environment of the package in which the <code>setClassUnion</code>
+call appears, or the global environment if called outside of the
+source of a package.</p>
+</td></tr>
+<tr valign="top"><td><code>Class</code></td>
+<td>
+<p> the name or definition of a class.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The classes in <code>members</code> must be defined before creating the
+union.  However, members can be added later on to an existing
+union, as shown in the example below. Class unions can be
+members of other class unions.
+</p>
+<p>The prototype object in the class union definition will be
+<code>NULL</code> if class <code>"NULL"</code> is a member of the union and
+the prototype object of the first member class otherwise (as of
+version 2.15.0 of R; earlier versions had a <code>NULL</code> prototype even if
+that was not valid).
+</p>
+<p>Class unions are the only way to create a class that is extended by
+a class whose definition is sealed (for example, the
+basic datatypes or other classes defined in the base or methods
+package in R are sealed).  You cannot say <code>setIs("function", "other")</code>
+unless <code>"other"</code> is a class union.  In general, a
+<code>setIs</code> call of this form changes the definition of the
+first class mentioned (adding <code>"other"</code> to the list of
+superclasses contained in the definition of <code>"function"</code>).
+</p>
+<p>Class unions get around this by not modifying the first class
+definition, relying instead on storing information in the subclasses
+slot of the class union.  In order for this technique to work, the
+internal computations for expressions such as
+<code><a href="is.html">extends</a>(class1, class2)</code> work
+differently for class unions than for regular classes; specifically,
+they test whether any class is in common between the superclasses of
+<code>class1</code> and the subclasses of <code>class2</code>.
+</p>
+<p>The different behavior for class unions is made possible because the
+class definition object for class unions has itself a special class,
+<code>"ClassUnionRepresentation"</code>, an extension of class
+<code><a href="classRepresentation-class.html">classRepresentation</a></code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Chambers, John M. (2008)
+<em>Software for Data Analysis: Programming with R</em>
+Springer.  (For the R version.)
+</p>
+<p>Chambers, John M. (1998)
+<em>Programming with Data</em>
+Springer (For the original S4 version.)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## a class for either numeric or logical data
+setClassUnion("maybeNumber", c("numeric", "logical"))
+
+## use the union as the data part of another class
+setClass("withId", representation("maybeNumber", id = "character"))
+
+w1 &lt;- new("withId", 1:10, id = "test 1")
+w2 &lt;- new("withId", sqrt(w1)%%1 &lt; .01, id = "Perfect squares")
+
+## add class "complex" to the union "maybeNumber"
+setIs("complex", "maybeNumber")
+
+w3 &lt;- new("withId", complex(real = 1:10, imaginary = sqrt(1:10)))
+
+## a class union containing the existing class  union "OptionalFunction"
+setClassUnion("maybeCode",
+    c("expression", "language", "OptionalFunction"))
+
+is(quote(sqrt(1:10)), "maybeCode")  ## TRUE
+
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>methods</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/methods/html/setClassUnion.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:33:54 GMT -->
+</html>

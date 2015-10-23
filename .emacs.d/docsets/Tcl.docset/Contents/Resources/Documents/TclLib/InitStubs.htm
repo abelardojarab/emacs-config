@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_InitStubs manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl C API, version 8.6.0</a> <small>&gt;</small> InitStubs</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="InitStubs.htm#M2" NAME="L419">NAME</A>
+<DL><DD>Tcl_InitStubs &mdash; initialize the Tcl stubs mechanism</DD></DL>
+<DD><A HREF="InitStubs.htm#M3" NAME="L420">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>const char *
+<DD><B>Tcl_InitStubs</B>(<I>interp, version, exact</I>)
+</DL>
+<DD><A HREF="InitStubs.htm#M4" NAME="L421">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="InitStubs.htm#M5" NAME="L422">INTRODUCTION</A>
+<OL class="introduction">
+</OL>
+<OL class="introduction">
+</OL>
+<DD><A HREF="InitStubs.htm#M6" NAME="L423">DESCRIPTION</A>
+<DD><A HREF="InitStubs.htm#M7" NAME="L424">SEE ALSO</A>
+<DD><A HREF="InitStubs.htm#M8" NAME="L425">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_InitStubs &mdash; initialize the Tcl stubs mechanism
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+const char *<BR>
+<B>Tcl_InitStubs</B>(<I>interp, version, exact</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Tcl interpreter handle.
+<P><DT>const char <B>*version</B> (in)<DD>
+A version string consisting of one or more decimal numbers
+separated by dots.
+<P><DT>int <B>exact</B> (in)<DD>
+Non-zero means that only the particular version specified by
+<I>version</I> is acceptable.
+Zero means that versions newer than <I>version</I> are also
+acceptable as long as they have the same major version number
+as <I>version</I>.
+<P></DL>
+<H3><A NAME="M5">INTRODUCTION</A></H3>
+The Tcl stubs mechanism defines a way to dynamically bind
+extensions to a particular Tcl implementation at run time.
+This provides two significant benefits to Tcl users:
+<P>
+<OL class="introduction">
+<LI value="1">
+Extensions that use the stubs mechanism can be loaded into
+multiple versions of Tcl without being recompiled or
+relinked.
+<P><LI value="2">
+Extensions that use the stubs mechanism can be dynamically
+loaded into statically-linked Tcl applications.
+<P></OL>
+<P>
+The stubs mechanism accomplishes this by exporting function tables
+that define an interface to the Tcl API.  The extension then accesses
+the Tcl API through offsets into the function table, so there are no
+direct references to any of the Tcl library's symbols.  This
+redirection is transparent to the extension, so an extension writer
+can continue to use all public Tcl functions as documented.
+<P>
+The stubs mechanism requires no changes to applications incorporating
+Tcl interpreters.  Only developers creating C-based Tcl extensions
+need to take steps to use the stubs mechanism with their extensions.
+<P>
+Enabling the stubs mechanism for an extension requires the following
+steps:
+<P>
+<OL class="introduction">
+<LI value="1">
+Call <B>Tcl_InitStubs</B> in the extension before calling any other
+Tcl functions.
+<P><LI value="2">
+Define the <B>USE_TCL_STUBS</B> symbol.  Typically, you would include the
+<B>-DUSE_TCL_STUBS</B> flag when compiling the extension.
+<P><LI value="3">
+Link the extension with the Tcl stubs library instead of the standard
+Tcl library.  For example, to use the Tcl 8.1 ABI on Unix platforms,
+the library name is <I>libtclstub8.1.a</I>; on Windows platforms, the
+library name is <I>tclstub81.lib</I>.
+<P></OL>
+<P>
+If the extension also requires the Tk API, it must also call
+<B><A HREF="../TkLib/TkInitStubs.htm">Tk_InitStubs</A></B> to initialize the Tk stubs interface and link
+with the Tk stubs libraries.  See the <B><A HREF="../TkLib/TkInitStubs.htm">Tk_InitStubs</A></B> page for
+more information.
+<H3><A NAME="M6">DESCRIPTION</A></H3>
+<B>Tcl_InitStubs</B> attempts to initialize the stub table pointers
+and ensure that the correct version of Tcl is loaded.  In addition
+to an interpreter handle, it accepts as arguments a version number
+and a Boolean flag indicating whether the extension requires
+an exact version match or not.  If <I>exact</I> is 0, then the
+extension is indicating that newer versions of Tcl are acceptable
+as long as they have the same major version number as <I>version</I>;
+non-zero means that only the specified <I>version</I> is acceptable.
+<B>Tcl_InitStubs</B> returns a string containing the actual version
+of Tcl satisfying the request, or NULL if the Tcl version is not
+acceptable, does not support stubs, or any other error condition occurred.
+<H3><A NAME="M7">SEE ALSO</A></H3>
+<B><A HREF="../TkLib/TkInitStubs.htm">Tk_InitStubs</A></B>
+<H3><A NAME="M8">KEYWORDS</A></H3>
+<A href="../Keywords/S.htm#stubs">stubs</A>
+<div class="copy">Copyright &copy; 1998-1999 Scriptics Corporation
+</div>
+</BODY></HTML>

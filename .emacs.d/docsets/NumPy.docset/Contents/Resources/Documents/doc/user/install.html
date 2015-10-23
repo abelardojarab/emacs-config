@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Building and installing NumPy &mdash; NumPy v1.10 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="top" title="NumPy v1.10 Manual" href="../index.html" >
+    <link rel="up" title="Introduction" href="introduction.html" >
+    <link rel="next" title="How to find documentation" href="howtofind.html" >
+    <link rel="prev" title="What is NumPy?" href="whatisnumpy.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.10 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" >NumPy User Guide</a></li>
+          <li class="active"><a href="introduction.html" accesskey="U">Introduction</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="howtofind.html" title="How to find documentation"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="whatisnumpy.html" title="What is NumPy?"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Building and installing NumPy</a><ul>
+<li><a class="reference internal" href="#binary-installers">Binary installers</a><ul>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+<li><a class="reference internal" href="#linux">Linux</a></li>
+<li><a class="reference internal" href="#mac-os-x">Mac OS X</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-from-source">Building from source</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#basic-installation">Basic Installation</a><ul>
+<li><a class="reference internal" href="#parallel-builds">Parallel builds</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fortran-abi-mismatch">FORTRAN ABI mismatch</a><ul>
+<li><a class="reference internal" href="#choosing-the-fortran-compiler">Choosing the fortran compiler</a></li>
+<li><a class="reference internal" href="#how-to-check-the-abi-of-blas-lapack-atlas">How to check the ABI of blas/lapack/atlas</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#disabling-atlas-and-other-accelerated-libraries">Disabling ATLAS and other accelerated libraries</a></li>
+<li><a class="reference internal" href="#supplying-additional-compiler-flags">Supplying additional compiler flags</a></li>
+<li><a class="reference internal" href="#building-with-atlas-support">Building with ATLAS support</a><ul>
+<li><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="whatisnumpy.html"
+                        title="previous chapter">What is NumPy?</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="howtofind.html"
+                        title="next chapter">How to find documentation</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="building-and-installing-numpy">
+<h1>Building and installing NumPy<a class="headerlink" href="#building-and-installing-numpy" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="binary-installers">
+<h2>Binary installers<a class="headerlink" href="#binary-installers" title="Permalink to this headline">¶</a></h2>
+<p>In most use cases the best way to install NumPy on your system is by using an
+installable binary package for your operating system.</p>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>Good solutions for Windows are, <a class="reference external" href="https://www.enthought.com/products/canopy/">Enthought Canopy</a>, <a class="reference external" href="http://continuum.io/downloads.html">Anaconda</a> (which both provide binary installers
+for Windows, OS X and Linux) and <a class="reference external" href="http://www.pythonxy.com">Python (x, y)</a>.
+Both of these packages include Python, NumPy and many additional packages.</p>
+<p>A lightweight alternative is to download the Python
+installer from <a class="reference external" href="http://www.python.org">www.python.org</a> and the NumPy
+installer for your Python version from the Sourceforge <a href="#id4"><span class="problematic" id="id5">`download site
+&lt;http://sourceforge.net/projects/numpy/files/NumPy`_</span></a>.</p>
+<p>The NumPy installer includes binaries for different CPU&#8217;s (without SSE
+instructions, with SSE2 or with SSE3) and installs the correct one
+automatically. If needed, this can be bypassed from the command line with</p>
+<div class="highlight-python"><div class="highlight"><pre>numpy-&lt;1.y.z&gt;-superpack-win32.exe /arch nosse
+</pre></div>
+</div>
+<p>or <tt class="docutils literal"><span class="pre">sse2</span></tt> or <tt class="docutils literal"><span class="pre">sse3</span></tt> instead of <tt class="docutils literal"><span class="pre">nosse</span></tt>.</p>
+</div>
+<div class="section" id="linux">
+<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h3>
+<p>All major distributions provide packages for NumPy.  These are usually
+reasonably up-to-date, but sometimes lag behind the most recent NumPy release.</p>
+</div>
+<div class="section" id="mac-os-x">
+<h3>Mac OS X<a class="headerlink" href="#mac-os-x" title="Permalink to this headline">¶</a></h3>
+<p>Universal binary installers for NumPy are available from the <a href="#id6"><span class="problematic" id="id7">`download site
+&lt;http://sourceforge.net/projects/numpy/files/NumPy`_</span></a>, and wheel packages
+from PyPi.  With a recent version of <a href="#id8"><span class="problematic" id="id9">`pip`&lt;https://pip.pypa.io/en/latest/&gt;`_</span></a>
+this will give you a binary install (from the wheel packages) compatible with
+at python.org Python, Homebrew and MacPorts:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install numpy
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="building-from-source">
+<span id="id1"></span><h2>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h2>
+<p>A general overview of building NumPy from source is given here, with detailed
+instructions for specific platforms given seperately.</p>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>Building NumPy requires the following software installed:</p>
+<ol class="arabic">
+<li><p class="first">Python 2.6.x, 2.7.x, 3.2.x or newer</p>
+<p>On Debian and derivatives (Ubuntu): python, python-dev (or python3-dev)</p>
+<p>On Windows: the official python installer at
+<a class="reference external" href="http://www.python.org">www.python.org</a> is enough</p>
+<p>Make sure that the Python package distutils is installed before
+continuing. For example, in Debian GNU/Linux, installing python-dev
+also installs distutils.</p>
+<p>Python must also be compiled with the zlib module enabled. This is
+practically always the case with pre-packaged Pythons.</p>
+</li>
+<li><p class="first">Compilers</p>
+<p>To build any extension modules for Python, you&#8217;ll need a C compiler.
+Various NumPy modules use FORTRAN 77 libraries, so you&#8217;ll also need a
+FORTRAN 77 compiler installed.</p>
+<p>Note that NumPy is developed mainly using GNU compilers. Compilers from
+other vendors such as Intel, Absoft, Sun, NAG, Compaq, Vast, Porland,
+Lahey, HP, IBM, Microsoft are only supported in the form of community
+feedback, and may not work out of the box. GCC 4.x (and later) compilers
+are recommended.</p>
+</li>
+<li><p class="first">Linear Algebra libraries</p>
+<p>NumPy does not require any external linear algebra libraries to be
+installed. However, if these are available, NumPy&#8217;s setup script can detect
+them and use them for building. A number of different LAPACK library setups
+can be used, including optimized LAPACK libraries such as ATLAS, MKL or the
+Accelerate/vecLib framework on OS X.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="basic-installation">
+<h3>Basic Installation<a class="headerlink" href="#basic-installation" title="Permalink to this headline">¶</a></h3>
+<p>To install NumPy run:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py install
+</pre></div>
+</div>
+<p>To perform an in-place build that can be run from the source folder run:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py build_ext --inplace
+</pre></div>
+</div>
+<p>The NumPy build system uses <tt class="docutils literal"><span class="pre">distutils</span></tt> and <tt class="docutils literal"><span class="pre">numpy.distutils</span></tt>.
+<tt class="docutils literal"><span class="pre">setuptools</span></tt> is only used when building via <tt class="docutils literal"><span class="pre">pip</span></tt> or with <tt class="docutils literal"><span class="pre">python</span>
+<span class="pre">setupegg.py</span></tt>.  Using <tt class="docutils literal"><span class="pre">virtualenv</span></tt> should work as expected.</p>
+<p><em>Note: for build instructions to do development work on NumPy itself, see
+:ref:`development-environment`</em>.</p>
+<div class="section" id="parallel-builds">
+<span id="id3"></span><h4>Parallel builds<a class="headerlink" href="#parallel-builds" title="Permalink to this headline">¶</a></h4>
+<p>From NumPy 1.10.0 on it&#8217;s also possible to do a parallel build with:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py build -j 4 install --prefix $HOME/.local
+</pre></div>
+</div>
+<p>This will compile numpy on 4 CPUs and install it into the specified prefix.
+to perform a parallel in-place build, run:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py build_ext --inplace -j 4
+</pre></div>
+</div>
+<p>The number of build jobs can also be specified via the environment variable
+<tt class="docutils literal"><span class="pre">NPY_NUM_BUILD_JOBS</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="fortran-abi-mismatch">
+<h3>FORTRAN ABI mismatch<a class="headerlink" href="#fortran-abi-mismatch" title="Permalink to this headline">¶</a></h3>
+<p>The two most popular open source fortran compilers are g77 and gfortran.
+Unfortunately, they are not ABI compatible, which means that concretely you
+should avoid mixing libraries built with one with another. In particular, if
+your blas/lapack/atlas is built with g77, you <em>must</em> use g77 when building
+numpy and scipy; on the contrary, if your atlas is built with gfortran, you
+<em>must</em> build numpy/scipy with gfortran. This applies for most other cases
+where different FORTRAN compilers might have been used.</p>
+<div class="section" id="choosing-the-fortran-compiler">
+<h4>Choosing the fortran compiler<a class="headerlink" href="#choosing-the-fortran-compiler" title="Permalink to this headline">¶</a></h4>
+<p>To build with g77:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py build --fcompiler=gnu
+</pre></div>
+</div>
+<p>To build with gfortran:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py build --fcompiler=gnu95
+</pre></div>
+</div>
+<p>For more information see:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py build --help-fcompiler
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-check-the-abi-of-blas-lapack-atlas">
+<h4>How to check the ABI of blas/lapack/atlas<a class="headerlink" href="#how-to-check-the-abi-of-blas-lapack-atlas" title="Permalink to this headline">¶</a></h4>
+<p>One relatively simple and reliable way to check for the compiler used to build
+a library is to use ldd on the library. If libg2c.so is a dependency, this
+means that g77 has been used. If libgfortran.so is a a dependency, gfortran
+has been used. If both are dependencies, this means both have been used, which
+is almost always a very bad idea.</p>
+</div>
+</div>
+<div class="section" id="disabling-atlas-and-other-accelerated-libraries">
+<h3>Disabling ATLAS and other accelerated libraries<a class="headerlink" href="#disabling-atlas-and-other-accelerated-libraries" title="Permalink to this headline">¶</a></h3>
+<p>Usage of ATLAS and other accelerated libraries in Numpy can be disabled
+via:</p>
+<div class="highlight-python"><div class="highlight"><pre>BLAS=None LAPACK=None ATLAS=None python setup.py build
+</pre></div>
+</div>
+</div>
+<div class="section" id="supplying-additional-compiler-flags">
+<h3>Supplying additional compiler flags<a class="headerlink" href="#supplying-additional-compiler-flags" title="Permalink to this headline">¶</a></h3>
+<p>Additional compiler flags can be supplied by setting the <tt class="docutils literal"><span class="pre">OPT</span></tt>,
+<tt class="docutils literal"><span class="pre">FOPT</span></tt> (for Fortran), and <tt class="docutils literal"><span class="pre">CC</span></tt> environment variables.</p>
+</div>
+<div class="section" id="building-with-atlas-support">
+<h3>Building with ATLAS support<a class="headerlink" href="#building-with-atlas-support" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="ubuntu">
+<h4>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h4>
+<p>You can install the necessary package for optimized ATLAS with this command:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo apt-get install libatlas-base-dev
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2009, The Scipy community.
+      </li>
+      <li>
+      Last updated on Oct 18, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

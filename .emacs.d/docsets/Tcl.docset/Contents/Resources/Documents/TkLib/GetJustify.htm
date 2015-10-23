@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetJustifyFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetJustify</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetJustify.htm#M2" NAME="L333">NAME</A>
+<DL><DD>Tk_GetJustifyFromObj, Tk_GetJustify, Tk_NameOfJustify &mdash; translate between strings and justification styles</DD></DL>
+<DD><A HREF="GetJustify.htm#M3" NAME="L334">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetJustifyFromObj(</B><I>interp, objPtr, justifyPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetJustify(</B><I>interp, string, justifyPtr</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfJustify(</B><I>justify</I><B>)</B>
+</DL>
+<DD><A HREF="GetJustify.htm#M4" NAME="L335">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetJustify.htm#M5" NAME="L336">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="GetJustify.htm#M6" NAME="L337"><B>TK_JUSTIFY_LEFT</B></A>
+<DD><A HREF="GetJustify.htm#M7" NAME="L338"><B>TK_JUSTIFY_RIGHT</B></A>
+<DD><A HREF="GetJustify.htm#M8" NAME="L339"><B>TK_JUSTIFY_CENTER</B></A>
+</DL>
+<DD><A HREF="GetJustify.htm#M9" NAME="L340">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetJustifyFromObj, Tk_GetJustify, Tk_NameOfJustify &mdash; translate between strings and justification styles
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_GetJustifyFromObj(</B><I>interp, objPtr, justifyPtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_GetJustify(</B><I>interp, string, justifyPtr</I><B>)</B><BR>
+const char *<BR>
+<B>Tk_NameOfJustify(</B><I>justify</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting, or NULL.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*objPtr</B> (in/out)<DD>
+String value contains name of justification style - one of
+&#8220;<B>left</B>&#8221;,
+&#8220;<B>right</B>&#8221;,
+or
+&#8220;<B>center</B>&#8221;
+- or a unique abbreviation of one.
+The internal rep will be modified to cache corresponding justify value.
+<P><DT>const char <B>*string</B> (in)<DD>
+Same as <I>objPtr</I> except description of justification style is passed as
+a string.
+<P><DT>int <B>*justifyPtr</B> (out)<DD>
+Pointer to location in which to store justify value corresponding to
+<I>objPtr</I> or <I>string</I>.
+<P><DT>Tk_Justify <B>justify</B> (in)<DD>
+Justification style (one of the values listed below).
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetJustifyFromObj</B> places in <I>*justifyPtr</I> the justify value
+corresponding to <I>objPtr</I>'s value.
+This value will be one of the following:
+<P>
+<DL class="description">
+<DT><A NAME="M6"><B>TK_JUSTIFY_LEFT</B></A><DD>
+Means that the text on each line should start at the left edge of
+the line;  as a result, the right edges of lines may be ragged.
+<P><DT><A NAME="M7"><B>TK_JUSTIFY_RIGHT</B></A><DD>
+Means that the text on each line should end at the right edge of
+the line;  as a result, the left edges of lines may be ragged.
+<P><DT><A NAME="M8"><B>TK_JUSTIFY_CENTER</B></A><DD>
+Means that the text on each line should be centered;  as a result,
+both the left and right edges of lines may be ragged.
+<P></DL>
+<P>
+Under normal circumstances the return value is <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> and
+<I>interp</I> is unused.
+If <I>objPtr</I> does not contain a valid justification style
+or an abbreviation of one of these names, <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned,
+<I>*justifyPtr</I> is unmodified, and an error message is
+stored in <I>interp</I>'s result if <I>interp</I> is not NULL.
+<B>Tk_GetJustifyFromObj</B> caches information about the return
+value in <I>objPtr</I>, which speeds up future calls to
+<B>Tk_GetJustifyFromObj</B> with the same <I>objPtr</I>.
+<P>
+<B>Tk_GetJustify</B> is identical to <B>Tk_GetJustifyFromObj</B> except
+that the description of the justification is specified with a string instead
+of an object.  This prevents <B>Tk_GetJustify</B> from caching the
+return value, so <B>Tk_GetJustify</B> is less efficient than
+<B>Tk_GetJustifyFromObj</B>.
+<P>
+<B>Tk_NameOfJustify</B> is the logical inverse of <B>Tk_GetJustify</B>.
+Given a justify value it returns a statically-allocated string
+corresponding to <I>justify</I>.
+If <I>justify</I> is not a legal justify value, then
+&#8220;unknown justification style&#8221;
+is returned.
+<H3><A NAME="M9">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#center">center</A>, <A href="../Keywords/F.htm#fill">fill</A>, <A href="../Keywords/J.htm#justification">justification</A>, <A href="../Keywords/S.htm#string">string</A>
+<div class="copy">Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

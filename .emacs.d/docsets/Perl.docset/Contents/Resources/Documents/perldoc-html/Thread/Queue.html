@@ -1,0 +1,644 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Thread::Queue</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Thread::Queue</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-T.html">Core modules (T)</a> &gt;
+      
+    
+    Thread::Queue
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Thread::Queue</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#VERSION">VERSION</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#QUEUE-CREATION">QUEUE CREATION</a><li><a href="#BASIC-METHODS">BASIC METHODS</a><li><a href="#ADVANCED-METHODS">ADVANCED METHODS</a><li><a href="#NOTES">NOTES</a><li><a href="#LIMITATIONS">LIMITATIONS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#MAINTAINER">MAINTAINER</a><li><a href="#LICENSE">LICENSE</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Thread::Queue - Thread-safe queues</p>
+<a name="VERSION"></a><h1>VERSION</h1>
+<p>This document describes Thread::Queue version 3.05</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">strict</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">warnings</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">threads</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Thread::Queue</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$q</span> = <span class="w">Thread::Queue</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>    <span class="c"># A new empty queue</span></li><li></li><li>    <span class="c"># Worker thread</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$thr</span> = <span class="w">threads</span><span class="w">-&gt;create</span><span class="s">(</span></li><li>        <a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span></li><li>            <span class="c"># Thread will loop until no more work</span></li><li>            <a class="l_k" href="../functions/while.html">while</a> <span class="s">(</span><a class="l_k" href="../functions/defined.html">defined</a><span class="s">(</span><a class="l_k" href="../functions/my.html">my</a> <span class="i">$item</span> = <span class="i">$q</span><span class="i">-&gt;dequeue</span><span class="s">(</span><span class="s">)</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>                <span class="c"># Do work on $item</span></li><li>                ...</li><li>            <span class="s">}</span></li><li>        <span class="s">}</span></li><li>    <span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># Send work to the thread</span></li><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span><span class="i">$item1</span><span class="cm">,</span> ...<span class="s">)</span><span class="sc">;</span></li><li>    <span class="c"># Signal that there is no more work to be sent</span></li><li>    <span class="i">$q</span><span class="i">-&gt;end</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="c"># Join up with the thread when it finishes</span></li><li>    <span class="i">$thr</span><span class="i">-&gt;join</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    ...</li><li></li><li>    <span class="c"># Count of items in the queue</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$left</span> = <span class="i">$q</span><span class="i">-&gt;pending</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># Non-blocking dequeue</span></li><li>    <a class="l_k" href="../functions/if.html">if</a> <span class="s">(</span><a class="l_k" href="../functions/defined.html">defined</a><span class="s">(</span><a class="l_k" href="../functions/my.html">my</a> <span class="i">$item</span> = <span class="i">$q</span><span class="i">-&gt;dequeue_nb</span><span class="s">(</span><span class="s">)</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>        <span class="c"># Work on $item</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="c"># Blocking dequeue with 5-second timeout</span></li><li>    <a class="l_k" href="../functions/if.html">if</a> <span class="s">(</span><a class="l_k" href="../functions/defined.html">defined</a><span class="s">(</span><a class="l_k" href="../functions/my.html">my</a> <span class="i">$item</span> = <span class="i">$q</span><span class="i">-&gt;dequeue_timed</span><span class="s">(</span><span class="n">5</span><span class="s">)</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>        <span class="c"># Work on $item</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="c"># Get the second item in the queue without dequeuing anything</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$item</span> = <span class="i">$q</span><span class="i">-&gt;peek</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># Insert two items into the queue just behind the head</span></li><li>    <span class="i">$q</span><span class="i">-&gt;insert</span><span class="s">(</span><span class="n">1</span><span class="cm">,</span> <span class="i">$item1</span><span class="cm">,</span> <span class="i">$item2</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># Extract the last two items on the queue</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$item1</span><span class="cm">,</span> <span class="i">$item2</span><span class="s">)</span> = <span class="i">$q</span><span class="i">-&gt;extract</span><span class="s">(</span><span class="n">-2</span><span class="cm">,</span> <span class="n">2</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>This module provides thread-safe FIFO queues that can be accessed safely by
+any number of threads.</p>
+<p>Any data types supported by <a href="../threads/shared.html">threads::shared</a> can be passed via queues:</p>
+<ul>
+<li><a name="Ordinary-scalars"></a><b>Ordinary scalars</b>
+</li>
+<li><a name="Array-refs"></a><b>Array refs</b>
+</li>
+<li><a name="Hash-refs"></a><b>Hash refs</b>
+</li>
+<li><a name="Scalar-refs"></a><b>Scalar refs</b>
+</li>
+<li><a name="Objects-based-on-the-above"></a><b>Objects based on the above</b>
+</li>
+</ul>
+<p>Ordinary scalars are added to queues as they are.</p>
+<p>If not already thread-shared, the other complex data types will be cloned
+(recursively, if needed, and including any <code class="inline"><a class="l_k" href="../functions/bless.html">bless</a></code>ings and read-only
+settings) into thread-shared structures before being placed onto a queue.</p>
+<p>For example, the following would cause <a href="../Thread/Queue.html">Thread::Queue</a> to create a empty,
+shared array reference via <code class="inline"><span class="i">&amp;shared</span><span class="s">(</span><span class="s">[</span><span class="s">]</span><span class="s">)</span></code>
+, copy the elements 'foo', 'bar'
+and 'baz' from <code class="inline"><span class="i">@ary</span></code>
+ into it, and then place that shared reference onto
+the queue:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">@ary</span> = <span class="q">qw/foo bar baz/</span><span class="sc">;</span></li><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span>\<span class="i">@ary</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>However, for the following, the items are already shared, so their references
+are added directly to the queue, and no cloning takes place:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">@ary</span> <span class="co">:</span><span class="w">shared</span> = <span class="q">qw/foo bar baz/</span><span class="sc">;</span></li><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span>\<span class="i">@ary</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$obj</span> = <span class="i">&amp;shared</span><span class="s">(</span><span class="s">{</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$$obj</span>{<span class="q">'foo'</span>} = <span class="q">'bar'</span><span class="sc">;</span></li><li>    <span class="i">$$obj</span>{<span class="q">'qux'</span>} = <span class="n">99</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/bless.html">bless</a><span class="s">(</span><span class="i">$obj</span><span class="cm">,</span> <span class="q">'My::Class'</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span><span class="i">$obj</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>See <a href="#LIMITATIONS">LIMITATIONS</a> for caveats related to passing objects via queues.</p>
+<a name="QUEUE-CREATION"></a><h1>QUEUE CREATION</h1>
+<ul>
+<li><a name="-%3enew()"></a><b>-&gt;new()</b>
+<p>Creates a new empty queue.</p>
+</li>
+<li><a name="-%3enew(LIST)"></a><b>-&gt;new(LIST)</b>
+<p>Creates a new queue pre-populated with the provided list of items.</p>
+</li>
+</ul>
+<a name="BASIC-METHODS"></a><h1>BASIC METHODS</h1>
+<p>The following methods deal with queues on a FIFO basis.</p>
+<ul>
+<li><a name="-%3eenqueue(LIST)"></a><b>-&gt;enqueue(LIST)</b>
+<p>Adds a list of items onto the end of the queue.</p>
+</li>
+<li><a name="-%3edequeue()"></a><b>-&gt;dequeue()</b>
+</li>
+<li><a name="-%3edequeue(COUNT)"></a><b>-&gt;dequeue(COUNT)</b>
+<p>Removes the requested number of items (default is 1) from the head of the
+queue, and returns them.  If the queue contains fewer than the requested
+number of items, then the thread will be blocked until the requisite number
+of items are available (i.e., until other threads &lt;enqueue&gt; more items).</p>
+</li>
+<li><a name="-%3edequeue_nb()"></a><b>-&gt;dequeue_nb()</b>
+</li>
+<li><a name="-%3edequeue_nb(COUNT)"></a><b>-&gt;dequeue_nb(COUNT)</b>
+<p>Removes the requested number of items (default is 1) from the head of the
+queue, and returns them.  If the queue contains fewer than the requested
+number of items, then it immediately (i.e., non-blocking) returns whatever
+items there are on the queue.  If the queue is empty, then <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> is
+returned.</p>
+</li>
+<li><a name="-%3edequeue_timed(TIMEOUT)"></a><b>-&gt;dequeue_timed(TIMEOUT)</b>
+</li>
+<li><a name="-%3edequeue_timed(TIMEOUT%2c-COUNT)"></a><b>-&gt;dequeue_timed(TIMEOUT, COUNT)</b>
+<p>Removes the requested number of items (default is 1) from the head of the
+queue, and returns them.  If the queue contains fewer than the requested
+number of items, then the thread will be blocked until the requisite number of
+items are available, or until the timeout is reached.  If the timeout is
+reached, it returns whatever items there are on the queue, or <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> if the
+queue is empty.</p>
+<p>The timeout may be a number of seconds relative to the current time (e.g., 5
+seconds from when the call is made), or may be an absolute timeout in <i>epoch</i>
+seconds the same as would be used with
+<a href="../threads/shared.html#cond_timedwait-VARIABLE%2c-ABS_TIMEOUT">cond_timedwait()</a>.
+Fractional seconds (e.g., 2.5 seconds) are also supported (to the extent of
+the underlying implementation).</p>
+<p>If <code class="inline"><span class="w">TIMEOUT</span></code>
+ is missing, <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code>, or less than or equal to 0, then this call
+behaves the same as <code class="inline"><span class="w">dequeue_nb</span></code>
+.</p>
+</li>
+<li><a name="-%3epending()"></a><b>-&gt;pending()</b>
+<p>Returns the number of items still in the queue.  Returns <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> if the queue
+has been ended (see below), and there are no more items in the queue.</p>
+</li>
+<li><a name="-%3eend()"></a><b>-&gt;end()</b>
+<p>Declares that no more items will be added to the queue.</p>
+<p>All threads blocking on <code class="inline"><span class="i">dequeue</span><span class="s">(</span><span class="s">)</span></code>
+ calls will be unblocked with any
+remaining items in the queue and/or <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> being returned.  Any subsequent
+calls to <code class="inline"><span class="i">dequeue</span><span class="s">(</span><span class="s">)</span></code>
+ will behave like <code class="inline"><span class="i">dequeue_nb</span><span class="s">(</span><span class="s">)</span></code>
+.</p>
+<p>Once ended, no more items may be placed in the queue.</p>
+</li>
+</ul>
+<a name="ADVANCED-METHODS"></a><h1>ADVANCED METHODS</h1>
+<p>The following methods can be used to manipulate items anywhere in a queue.</p>
+<p>To prevent the contents of a queue from being modified by another thread
+while it is being examined and/or changed, <a href="../threads/shared.html#lock-VARIABLE">lock</a> the queue inside a local block:</p>
+<pre class="verbatim"><ol><li>    <span class="s">{</span></li><li>        <a class="l_k" href="../functions/lock.html">lock</a><span class="s">(</span><span class="i">$q</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># Keep other threads from changing the queue's contents</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$item</span> = <span class="i">$q</span><span class="i">-&gt;peek</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>        if <span class="s">(</span><span class="i">$item</span> ...<span class="s">)</span> <span class="s">{</span></li><li>            ...</li><li>        <span class="s">}</span></li><li>    <span class="s">}</span></li><li>    <span class="c"># Queue is now unlocked</span></li></ol></pre><ul>
+<li><a name="-%3epeek()"></a><b>-&gt;peek()</b>
+</li>
+<li><a name="-%3epeek(INDEX)"></a><b>-&gt;peek(INDEX)</b>
+<p>Returns an item from the queue without dequeuing anything.  Defaults to the
+the head of queue (at index position 0) if no index is specified.  Negative
+index values are supported as with <a href="../perldata.html#Subscripts">arrays</a> (i.e., -1
+is the end of the queue, -2 is next to last, and so on).</p>
+<p>If no items exists at the specified index (i.e., the queue is empty, or the
+index is beyond the number of items on the queue), then <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> is returned.</p>
+<p>Remember, the returned item is not removed from the queue, so manipulating a
+<code class="inline"><span class="w">peek</span></code>
+ed at reference affects the item on the queue.</p>
+</li>
+<li><a name="-%3einsert(INDEX%2c-LIST)"></a><b>-&gt;insert(INDEX, LIST)</b>
+<p>Adds the list of items to the queue at the specified index position (0
+is the head of the list).  Any existing items at and beyond that position are
+pushed back past the newly added items:</p>
+<pre class="verbatim"><ol><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span><span class="n">1</span><span class="cm">,</span> <span class="n">2</span><span class="cm">,</span> <span class="n">3</span><span class="cm">,</span> <span class="n">4</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$q</span><span class="i">-&gt;insert</span><span class="s">(</span><span class="n">1</span><span class="cm">,</span> <span class="q">qw/foo bar/</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="c"># Queue now contains:  1, foo, bar, 2, 3, 4</span></li></ol></pre><p>Specifying an index position greater than the number of items in the queue
+just adds the list to the end.</p>
+<p>Negative index positions are supported:</p>
+<pre class="verbatim"><ol><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span><span class="n">1</span><span class="cm">,</span> <span class="n">2</span><span class="cm">,</span> <span class="n">3</span><span class="cm">,</span> <span class="n">4</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$q</span><span class="i">-&gt;insert</span><span class="s">(</span><span class="n">-2</span><span class="cm">,</span> <span class="q">qw/foo bar/</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="c"># Queue now contains:  1, 2, foo, bar, 3, 4</span></li></ol></pre><p>Specifying a negative index position greater than the number of items in the
+queue adds the list to the head of the queue.</p>
+</li>
+<li><a name="-%3eextract()"></a><b>-&gt;extract()</b>
+</li>
+<li><a name="-%3eextract(INDEX)"></a><b>-&gt;extract(INDEX)</b>
+</li>
+<li><a name="-%3eextract(INDEX%2c-COUNT)"></a><b>-&gt;extract(INDEX, COUNT)</b>
+<p>Removes and returns the specified number of items (defaults to 1) from the
+specified index position in the queue (0 is the head of the queue).  When
+called with no arguments, <code class="inline"><span class="w">extract</span></code>
+ operates the same as <code class="inline"><span class="w">dequeue_nb</span></code>
+.</p>
+<p>This method is non-blocking, and will return only as many items as are
+available to fulfill the request:</p>
+<pre class="verbatim"><ol><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span><span class="n">1</span><span class="cm">,</span> <span class="n">2</span><span class="cm">,</span> <span class="n">3</span><span class="cm">,</span> <span class="n">4</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$item</span>  = <span class="i">$q</span><span class="i">-&gt;extract</span><span class="s">(</span><span class="n">2</span><span class="s">)</span>     <span class="c"># Returns 3</span></li><li>                                   <span class="c"># Queue now contains:  1, 2, 4</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">@items</span> = <span class="i">$q</span><span class="i">-&gt;extract</span><span class="s">(</span><span class="n">1</span><span class="cm">,</span> <span class="n">3</span><span class="s">)</span>  <span class="c"># Returns (2, 4)</span></li><li>                                   <span class="c"># Queue now contains:  1</span></li></ol></pre><p>Specifying an index position greater than the number of items in the
+queue results in <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> or an empty list being returned.</p>
+<pre class="verbatim"><ol><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span><span class="q">'foo'</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$nada</span> = <span class="i">$q</span><span class="i">-&gt;extract</span><span class="s">(</span><span class="n">3</span><span class="s">)</span>      <span class="c"># Returns undef</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">@nada</span> = <span class="i">$q</span><span class="i">-&gt;extract</span><span class="s">(</span><span class="n">1</span><span class="cm">,</span> <span class="n">3</span><span class="s">)</span>   <span class="c"># Returns ()</span></li></ol></pre><p>Negative index positions are supported.  Specifying a negative index position
+greater than the number of items in the queue may return items from the head
+of the queue (similar to <code class="inline"><span class="w">dequeue_nb</span></code>
+) if the count overlaps the head of the
+queue from the specified position (i.e. if queue size + index + count is
+greater than zero):</p>
+<pre class="verbatim"><ol><li>    <span class="i">$q</span><span class="i">-&gt;enqueue</span><span class="s">(</span><span class="q">qw/foo bar baz/</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">@nada</span> = <span class="i">$q</span><span class="i">-&gt;extract</span><span class="s">(</span><span class="n">-6</span><span class="cm">,</span> <span class="n">2</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># Returns ()         - (3+(-6)+2) &lt;= 0</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">@some</span> = <span class="i">$q</span><span class="i">-&gt;extract</span><span class="s">(</span><span class="n">-6</span><span class="cm">,</span> <span class="n">4</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># Returns (foo)      - (3+(-6)+4) &gt; 0</span></li><li>                                     <span class="c"># Queue now contains:  bar, baz</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">@rest</span> = <span class="i">$q</span><span class="i">-&gt;extract</span><span class="s">(</span><span class="n">-3</span><span class="cm">,</span> <span class="n">4</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># Returns (bar, baz) - (2+(-3)+4) &gt; 0</span></li></ol></pre></li>
+</ul>
+<a name="NOTES"></a><h1>NOTES</h1>
+<p>Queues created by <a href="../Thread/Queue.html">Thread::Queue</a> can be used in both threaded and
+non-threaded applications.</p>
+<a name="LIMITATIONS"></a><h1>LIMITATIONS</h1>
+<p>Passing objects on queues may not work if the objects' classes do not support
+sharing.  See <a href="../threads/shared.html#BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS in threads::shared</a> for more.</p>
+<p>Passing array/hash refs that contain objects may not work for Perl prior to
+5.10.0.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p>Thread::Queue Discussion Forum on CPAN:
+<a href="http://www.cpanforum.com/dist/Thread-Queue">http://www.cpanforum.com/dist/Thread-Queue</a></p>
+<p><a href="../threads.html">threads</a>, <a href="../threads/shared.html">threads::shared</a></p>
+<p>Sample code in the <i>examples</i> directory of this distribution on CPAN.</p>
+<a name="MAINTAINER"></a><h1>MAINTAINER</h1>
+<p>Jerry D. Hedden, &lt;jdhedden AT cpan DOT org&gt;</p>
+<a name="LICENSE"></a><h1>LICENSE</h1>
+<p>This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#VERSION">VERSION</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#QUEUE-CREATION">QUEUE CREATION</a><li><a href="#BASIC-METHODS">BASIC METHODS</a><li><a href="#ADVANCED-METHODS">ADVANCED METHODS</a><li><a href="#NOTES">NOTES</a><li><a href="#LIMITATIONS">LIMITATIONS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#MAINTAINER">MAINTAINER</a><li><a href="#LICENSE">LICENSE</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Thread::Queue';
+  perldoc.pageAddress = 'Thread/Queue.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

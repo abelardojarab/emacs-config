@@ -1,0 +1,147 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/utils/html/Rtangle.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:33:05 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>R Driver for Stangle</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for Rtangle {utils}"><tbody><tr><td>Rtangle {utils}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>R Driver for Stangle</h2>
+
+<h3>Description</h3>
+
+<p>A driver for <code><a href="Sweave.html">Stangle</a></code> that extracts <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> code chunks.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>Rtangle()
+RtangleSetup(file, syntax, output = NULL, annotate = TRUE,
+             split = FALSE, quiet = FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>file</code></td>
+<td>
+<p>Name of Sweave source file.  See the description of the
+corresponding argument of <code><a href="Sweave.html">Sweave</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>syntax</code></td>
+<td>
+<p>An object of class <code>SweaveSyntax</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>output</code></td>
+<td>
+<p>Name of output file used unless <code>split = TRUE</code>:
+see ‘Details’.</p>
+</td></tr>
+<tr valign="top"><td><code>annotate</code></td>
+<td>
+<p>By default, code chunks are separated by comment
+lines specifying the names and numbers of the code chunks.  If
+<code>FALSE</code> the decorating comments are omitted.</p>
+</td></tr>
+<tr valign="top"><td><code>split</code></td>
+<td>
+<p>Split output into a file for each code chunk?</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>If <code>TRUE</code> all progress messages are suppressed.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional named arguments setting defaults for further
+options.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p>Unless <code>split = TRUE</code>, the default name of the output file is
+<code>basename(file)</code> with an extension corresponding to the Sweave
+syntax (e.g., ‘<span class="file">Rnw</span>’, ‘<span class="file">Stex</span>’) replaced by ‘<span class="file">R</span>’.  File
+names <code>"stdout"</code> and <code>"stderr"</code> are interpreted as the
+output and message connection respectively.
+</p>
+<p>If splitting is selected (including by the options in the file), each
+chunk is written to a separate file with extension the name of the
+‘engine’ (default ‘<span class="file">.R</span>’).
+</p>
+<p>The annotation is of one of the forms
+</p>
+<pre>###################################################
+### code chunk number 3: viewport
+###################################################
+
+###################################################
+### code chunk number 18: grid.Rnw:647-648
+###################################################
+
+###################################################
+### code chunk number 19: trellisdata (eval = FALSE)
+###################################################
+</pre>
+<p>using either the chunk label or the file name and line numbers.
+</p>
+<p>Note that this driver does not simple extract the code chunks verbatim
+because code chunks can re-use earlier chunks.
+</p>
+
+
+<h3>Supported Options</h3>
+
+<p><code>Rtangle</code> supports the following options for code chunks (the
+values in parentheses show the default values):
+</p>
+
+<dl>
+<dt>engine:</dt><dd><p>character string (<code>"R"</code>).  Only chunks with
+<code>engine</code> equal to <code>"R"</code> or <code>"S"</code> are processed.</p>
+</dd>
+<dt>keep.source:</dt><dd><p>logical (<code>TRUE</code>).  If <code>keep.source ==
+      TRUE</code> the original source is copied to the file.  Otherwise,
+deparsed source is output.</p>
+</dd>
+<dt>eval:</dt><dd><p>logical (<code>TRUE</code>).  If <code>FALSE</code>, the code chunk
+is copied across but commented out.</p>
+</dd>
+<dt>prefix</dt><dd><p>Used if <code>split = TRUE</code>.  See <code>prefix.string</code>.</p>
+</dd>
+<dt>prefix.string:</dt><dd><p>a character string, default is the name of the
+source file (without extension).  Used if <code>split = TRUE</code> as
+the prefix for the filename if the chunk has no label, or if it
+has a label and <code>prefix = TRUE</code>.  Note that this is used as
+part of filenames, so needs to be portable.</p>
+</dd>
+<dt>show.line.nos</dt><dd><p>logical (<code>FALSE</code>).  Should the output be
+annotated with comments showing the line number of the first code line
+of the chunk?</p>
+</dd>
+</dl>
+
+
+
+<h3>Author(s)</h3>
+
+<p>Friedrich Leisch and R-core.</p>
+
+
+<h3>See Also</h3>
+
+<p>‘Sweave User Manual’, a vignette in
+the <span class="pkg">utils</span> package.
+</p>
+<p><code><a href="Sweave.html">Sweave</a></code>, <code><a href="RweaveLatex.html">RweaveLatex</a></code>
+</p>
+
+<hr><div style="text-align: center;">[Package <em>utils</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/utils/html/Rtangle.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:33:05 GMT -->
+
+</body></html>

@@ -1,0 +1,80 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/curlVersion.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:31:49 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Report Version of libcurl</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for libcurlVersion {base}"><tbody><tr><td>libcurlVersion {base}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>
+Report Version of libcurl
+</h2>
+
+<h3>Description</h3>
+
+<p>Report version of <code>libcurl</code> in use.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>libcurlVersion()
+</pre>
+
+
+<h3>Value</h3>
+
+<p>A character string, with value the <code>libcurl</code> version in use or
+<code>""</code> if none is.  If <code>libcurl</code> is available, has attributes
+</p>
+<table summary="R valueblock">
+<tbody><tr valign="top"><td><code>ssl_version</code></td>
+<td>
+<p>A character string naming the SSL implementation
+and version, possibly <code>"none"</code>.  It is intended for the version
+of OpenSSL used, but not all implementations of <code>libcurl</code> use
+OpenSSL — for example OS X reports <code>"SecureTranspart"</code>, its
+wrapper for SSL/TLS.</p>
+</td></tr>
+<tr valign="top"><td><code>libssh_version</code></td>
+<td>
+<p>A character string naming the <code>libssh</code> version,
+which may or may not be available (it is used for
+e.g. <code>scp</code> and <code>sftp</code> protocols). Where present,
+something like <code>"libssh2/1.5.0"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>protocols</code></td>
+<td>
+<p>A character vector of the names of supported
+protocols, also known as ‘schemes’ when part of a URL.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="extSoftVersion.html">extSoftVersion</a></code> for versions of other third-party
+software.
+</p>
+<p><code><a href="curlGetHeaders.html">curlGetHeaders</a></code>, <code><a href="../../utils/html/download.file.html">download.file</a></code> and
+<code><a href="connections.html">url</a></code> for functions which (optionally) use <code>libcurl</code>.
+</p>
+<p>http://curl.haxx.se/docs/sslcerts.html and
+http://curl.haxx.se/docs/ssl-compared.html for more details on
+SSL versions.  Normally <code>libcurl</code> used with <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> uses
+SecureTransport on OS X, OpenSSL on Windows and GnuTLS, NSS or OpenSSL
+on Unix-alikes.  (At the time of writing Debian-based Linuxen use
+GnuTLS, RedHat-based ones use NSS.)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>libcurlVersion()
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>base</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/curlVersion.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:31:49 GMT -->
+
+</body></html>

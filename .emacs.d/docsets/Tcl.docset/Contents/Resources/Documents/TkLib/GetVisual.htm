@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetVisual manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetVisual</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetVisual.htm#M2" NAME="L386">NAME</A>
+<DL><DD>Tk_GetVisual &mdash; translate from string to visual</DD></DL>
+<DD><A HREF="GetVisual.htm#M3" NAME="L387">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Visual *
+<DD><B>Tk_GetVisual(</B><I>interp, tkwin, string, depthPtr, colormapPtr</I><B>)</B>
+</DL>
+<DD><A HREF="GetVisual.htm#M4" NAME="L388">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetVisual.htm#M5" NAME="L389">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="GetVisual.htm#M6" NAME="L390"><I>class depth</I></A>
+<DD><A HREF="GetVisual.htm#M7" NAME="L391"><B>default</B></A>
+<DD><A HREF="GetVisual.htm#M8" NAME="L392"><I>pathName</I></A>
+<DD><A HREF="GetVisual.htm#M9" NAME="L393"><I>number</I></A>
+<DD><A HREF="GetVisual.htm#M10" NAME="L394"><B>best</B> ?<I>depth</I>?</A>
+<OL class="description">
+</OL>
+</DL>
+<DD><A HREF="GetVisual.htm#M11" NAME="L395">CREDITS</A>
+<DD><A HREF="GetVisual.htm#M12" NAME="L396">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetVisual &mdash; translate from string to visual
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+Visual *<BR>
+<B>Tk_GetVisual(</B><I>interp, tkwin, string, depthPtr, colormapPtr</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.
+<P><DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>tkwin</B> (in)<DD>
+Token for window in which the visual will be used.
+<P><DT>const char <B>*string</B> (in)<DD>
+String that identifies the desired visual.  See below for
+valid formats.
+<P><DT>int <B>*depthPtr</B> (out)<DD>
+Depth of returned visual gets stored here.
+<P><DT>Colormap <B>*colormapPtr</B> (out)<DD>
+If non-NULL then a suitable colormap for visual is found and its
+identifier is stored here.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetVisual</B> takes a string description of a visual and
+finds a suitable X Visual for use in <I>tkwin</I>, if there is one.
+It returns a pointer to the X Visual structure for the visual
+and stores the number of bits per pixel for it at <I>*depthPtr</I>.
+If <I>string</I> is unrecognizable or if no suitable visual could
+be found, then NULL is returned and <B>Tk_GetVisual</B> leaves
+an error message in interpreter <I>interp</I>'s result.
+If <I>colormap</I> is non-NULL then <B>Tk_GetVisual</B>
+also locates an appropriate colormap for use with the result visual
+and stores its X identifier at <I>*colormapPtr</I>.
+<P>
+The <I>string</I> argument specifies the desired visual in one
+of the following ways:
+<P>
+<DL class="description">
+<DT><A NAME="M6"><I>class depth</I></A><DD>
+The string consists of a class name followed by an integer depth,
+with any amount of white space (including none) in between.
+<I>class</I> selects what sort of visual is desired and must be one of
+<B>directcolor</B>, <B>grayscale</B>, <B>greyscale</B>, <B>pseudocolor</B>,
+<B>staticcolor</B>, <B>staticgray</B>, <B>staticgrey</B>, or
+<B>truecolor</B>, or a unique abbreviation.
+<I>depth</I> specifies how many bits per pixel are needed for the
+visual.
+If possible, <B>Tk_GetVisual</B> will return a visual with this depth;
+if there is no visual of the desired depth then <B>Tk_GetVisual</B>
+looks first for a visual with greater depth, then one with less
+depth.
+<P><DT><A NAME="M7"><B>default</B></A><DD>
+Use the default visual for <I>tkwin</I>'s screen.
+<P><DT><A NAME="M8"><I>pathName</I></A><DD>
+Use the visual for the window given by <I>pathName</I>.
+<I>pathName</I> must be the name of a window on the same screen
+as <I>tkwin</I>.
+<P><DT><A NAME="M9"><I>number</I></A><DD>
+Use the visual whose X identifier is <I>number</I>.
+<P><DT><A NAME="M10"><B>best</B> ?<I>depth</I>?</A><DD>
+Choose the
+&#8220;best possible&#8221;
+visual, using the following rules, in decreasing order of priority:
+<P>
+<OL class="description">
+<LI value="a">
+a visual that has exactly the desired depth is best, followed
+by a visual with greater depth than requested (but as little extra
+as possible), followed by a visual with less depth than requested
+(but as great a depth as possible);
+<P><LI value="b">
+if no <I>depth</I> is specified, then the deepest available visual
+is chosen;
+<P><LI value="c">
+<B>pseudocolor</B> is better than <B>truecolor</B> or <B>directcolor</B>,
+which are better than <B>staticcolor</B>, which is better than
+<B>staticgray</B> or <B>grayscale</B>;
+<P><LI value="d">
+the default visual for the screen is better than any other visual.
+<P></OL>
+<P></DL>
+<H3><A NAME="M11">CREDITS</A></H3>
+The idea for <B>Tk_GetVisual</B>, and the first implementation, came
+from Paul Mackerras.
+<H3><A NAME="M12">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#colormap">colormap</A>, <A href="../Keywords/S.htm#screen">screen</A>, <A href="../Keywords/V.htm#visual">visual</A>
+<div class="copy">Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

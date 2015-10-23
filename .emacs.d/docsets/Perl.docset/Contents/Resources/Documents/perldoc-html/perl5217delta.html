@@ -1,0 +1,977 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>perl5217delta</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="index-overview.html">Overview</a>
+                <li><a href="index-tutorials.html">Tutorials</a>
+                <li><a href="index-faq.html">FAQs</a>
+                <li><a href="index-history.html">History / Changes</a>
+                <li><a href="index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="index-language.html">Language</a>
+                <li><a href="index-functions.html">Functions</a>
+                <li><a href="perlop.html">Operators</a>
+                <li><a href="perlvar.html">Special Variables</a>
+                <li><a href="index-pragmas.html">Pragmas</a>
+                <li><a href="index-utilities.html">Utilities</a>
+                <li><a href="index-internals.html">Internals</a>
+                <li><a href="index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>perl5217delta</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="index.html">Home</a> &gt;
+    
+      
+        <a href="index-history.html">History / Changes</a> &gt;
+      
+    
+    perl5217delta
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>perl5217delta</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#Core-Enhancements">Core Enhancements</a><ul><li><a href="#faster-array-and-hash-lookups">faster array and hash lookups</a><li><a href="#fileno-now-works-on-directory-handles">fileno now works on directory handles</a></ul><li><a href="#Incompatible-Changes">Incompatible Changes</a><ul><li><a href="#%26-and-%5c%26-prototypes-accepts-only-subs">& and \& prototypes accepts only subs</a><li><a href="#use-encoding-is-now-lexical">use encoding is now lexical</a><li><a href="#List-slices-returning-empty-lists">List slices returning empty lists</a></ul><li><a href="#Deprecations">Deprecations</a><ul><li><a href="#Setting-%24%7b%5eENCODING%7d-to-anything-but-undef">Setting ${^ENCODING} to anything but undef</a></ul><li><a href="#Performance-Enhancements">Performance Enhancements</a><li><a href="#Modules-and-Pragmata">Modules and Pragmata</a><ul><li><a href="#Updated-Modules-and-Pragmata">Updated Modules and Pragmata</a></ul><li><a href="#Diagnostics">Diagnostics</a><ul><li><a href="#Changes-to-Existing-Diagnostics">Changes to Existing Diagnostics</a></ul><li><a href="#Platform-Support">Platform Support</a><ul><li><a href="#Platform-Specific-Notes">Platform-Specific Notes</a></ul><li><a href="#Internal-Changes">Internal Changes</a><li><a href="#Selected-Bug-Fixes">Selected Bug Fixes</a><li><a href="#Acknowledgements">Acknowledgements</a><li><a href="#Reporting-Bugs">Reporting Bugs</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>perl5217delta - what is new for perl v5.21.7</p>
+<a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>This document describes differences between the 5.21.6 release and the 5.21.7
+release.</p>
+<p>If you are upgrading from an earlier release such as 5.21.5, first read
+<a href="perl5216delta.html">perl5216delta</a>, which describes differences between 5.21.5 and 5.21.6.</p>
+<a name="Core-Enhancements"></a><h1>Core Enhancements</h1>
+<a name="faster-array-and-hash-lookups"></a><h2>faster array and hash lookups</h2>
+<p>Array and hash lookups (especially nested ones) that use only constants
+or simple variables as keys, are now considerably faster. See
+<a href="#Internal-Changes">Internal Changes</a> for more details.</p>
+<a name="fileno-now-works-on-directory-handles"></a><h2><code class="inline"><a class="l_k" href="functions/fileno.html">fileno</a></code> now works on directory handles</h2>
+<p>When the relevant support is available in the operating system, the
+<code class="inline"><a class="l_k" href="functions/fileno.html">fileno</a></code> builtin now works on directory handles, yielding the
+underlying file descriptor in the same way as for filehandles. On
+operating systems without such support, <code class="inline"><a class="l_k" href="functions/fileno.html">fileno</a></code> on a directory handle
+continues to return the undefined value, as before, but also sets <code class="inline"><span class="i">$!</span></code>
+ to
+indicate that the operation is not supported.</p>
+<p>Currently, this uses either a <code class="inline"><span class="w">dd_fd</span></code>
+ member in the OS <code class="inline"><span class="w">DIR</span></code>
+
+structure, or a dirfd(3) function as specified by POSIX.1-2008.</p>
+<a name="Incompatible-Changes"></a><h1>Incompatible Changes</h1>
+<a name="%26-and-%5c%26-prototypes-accepts-only-subs"></a><h2><code class="inline"><span class="i">&amp;</span></code>
+ and <code class="inline">\<span class="i">&amp;</span></code>
+ prototypes accepts only subs</h2>
+<p>The <code class="inline"><span class="i">&amp;</span></code>
+ prototype character now accepts only anonymous subs (<code class="inline"><a class="l_k" href="functions/sub.html">sub</a> <span class="s">{</span>...<span class="s">}</span></code>
+)
+and things beginning with <code class="inline">\<span class="i">&amp;</span></code>
+.  Formerly it erroneously also allowed
+<code class="inline"><a class="l_k" href="functions/undef.html">undef</a></code> and references to array, hashes, and lists.  [perl #4539]
+[perl #123062]</p>
+<p>The <code class="inline">\<span class="i">&amp;</span></code>
+ prototype was allowing subroutine calls, whereas now it only
+allows subroutines.  <code class="inline"><span class="i">&amp;foo</span></code>
+ is permitted.  <code class="inline"><span class="i">&amp;foo</span><span class="s">(</span><span class="s">)</span></code>
+ and <code class="inline"><span class="i">foo</span><span class="s">(</span><span class="s">)</span></code>
+ are not.
+[perl #77860]</p>
+<a name="use-encoding-is-now-lexical"></a><h2><code class="inline"><a class="l_k" href="functions/use.html">use</a> <span class="w">encoding</span></code>
+ is now lexical</h2>
+<p>The <a href="encoding.html">encoding</a> pragma's effect is now limited to lexical scope.  This
+pragma is deprecated, but in the meantime, it could adversely affect
+unrelated modules that are included in the same program.</p>
+<a name="List-slices-returning-empty-lists"></a><h2>List slices returning empty lists</h2>
+<p>List slices return an empty list now only if the original list was empty
+(or if there are no indices).  Formerly, a list slice would return an empty
+list if all indices fell outside the original list.  [perl #114498]</p>
+<a name="Deprecations"></a><h1>Deprecations</h1>
+<a name="Setting-%24%7b%5eENCODING%7d-to-anything-but-undef"></a><h2>Setting <code class="inline"><span class="i">$</span>{<span class="w">^ENCODING</span>}</code>
+ to anything but <code class="inline"><a class="l_k" href="functions/undef.html">undef</a></code></h2>
+<p>This variable allows Perl scripts to be written in a non-ASCII,
+non-UTF-8 encoding.  However, it affects all modules globally, leading
+to wrong answers and segmentation faults.  New scripts should be written
+in UTF-8; old scripts should be converted to UTF-8, which is easily done
+with the <a href="encoding.html">encoding</a> pragma.</p>
+<a name="Performance-Enhancements"></a><h1>Performance Enhancements</h1>
+<ul>
+<li>
+<p>Win32 Perl uses 8 KB less of per-process memory than before for every perl
+process of this version. This data is now memory mapped from disk and shared
+between perl processes from the same perl binary.</p>
+</li>
+<li>
+<p>If method and class names are known at compile time, hashes are precomputed
+to speed up run-time method lookup.  Also, compound method names like
+<code class="inline"><span class="w">SUPER::new</span></code>
+ are parsed at compile time, to save having to parse them at
+run time.</p>
+</li>
+</ul>
+<a name="Modules-and-Pragmata"></a><h1>Modules and Pragmata</h1>
+<a name="Updated-Modules-and-Pragmata"></a><h2>Updated Modules and Pragmata</h2>
+<ul>
+<li>
+<p>The PathTools module collection has been upgraded from 3.52 to 3.53.</p>
+<p>Don't turn leading <code class="inline"><span class="q">//</span></code>
+ into <code class="inline">/</code> on Cygwin. [perl #122635]</p>
+</li>
+<li>
+<p><a href="Archive/Tar.html">Archive::Tar</a> has been upgraded from version 2.02 to 2.04.</p>
+</li>
+<li>
+<p><a href="arybase.html">arybase</a> has been upgraded from version 0.08 to 0.09.</p>
+</li>
+<li>
+<p><a href="B.html">B</a> has been upgraded from version 1.53 to 1.54.</p>
+<p>Nulled COPs are now of class <code class="inline"><span class="w">B::COP</span></code>
+, rather than <code class="inline"><span class="w">B::OP</span></code>
+.</p>
+<p>B::REGEXP objects now provide a <code class="inline"><span class="w">qr_anoncv</span></code>
+ method for accessing the
+implicit CV associated with <code class="inline"><a class="l_k" href="functions/qr.html">qr//</a></code> things containing code blocks, and a
+<code class="inline"><span class="w">compflags</span></code>
+ method that returns the pertinent flags originating from the
+<code class="inline"><a class="l_k" href="functions/qr.html">qr//blahblah</a></code> op.</p>
+<p>B::PMOP now provides a <code class="inline"><span class="w">pmregexp</span></code>
+ method returning a B::REGEXP object.</p>
+<p>Two new classes, B::PADNAME and B::PADNAMELIST, have been introduced.</p>
+</li>
+<li>
+<p><a href="B/Concise.html">B::Concise</a> has been upgraded from version 0.995 to 0.996.</p>
+</li>
+<li>
+<p><a href="B/Deparse.html">B::Deparse</a> has been upgraded from version 1.30 to 1.31.</p>
+<p>BEGIN blocks at the end of the enclosing scope are now deparsed in the
+right place.  [perl #77452]</p>
+<p>BEGIN blocks were sometimes deparsed as __ANON__, but are now always called
+BEGIN.</p>
+<p>Lexical subroutines are now fully deparsed.  [perl #116553]</p>
+<p>Deparsing of <code class="inline"><span class="i">$lexical</span> =~ <span class="q">//</span></code>
+ was accidentally broken in 1.30 (perl
+5.21.6), omitting the <code class="inline"><span class="i">$lexical</span> =~</code>
+, but has now been fixed.</p>
+<p><code class="inline"><span class="w">Anything</span> =~ <span class="q">y///</span><span class="w">r</span></code>
+ with <code class="inline"><span class="q">/r</span></code>
+ no longer omits the left-hand operand.</p>
+<p>The op trees that make up regexp code blocks are now deparsed for real.
+Formerly, the original string that made up the regular expression was used.
+That caused problems with <code class="inline"><a class="l_k" href="functions/qr.html">qr/(?{<<heredoc})/</a></code> and multiline code blocks,
+which were deparsed incorrectly.  [perl #123217] [perl #115256]</p>
+<p><code class="inline"><span class="i">$;</span></code>
+ at the end of a statement no longer loses its semicolon.
+[perl #123357]</p>
+<p>Some cases of subroutine declarations stored in the stash in shorthand form
+were being omitted.</p>
+<p>Non-ASCII characters are now consistently escaped in strings, instead of
+some of the time.  (There are still outstanding problems with regular
+expressions and identifiers that have not been fixed.)</p>
+<p>When prototype sub calls are deparsed with <code class="inline"><span class="i">&amp;</span></code>
+ (e.g., under the <b>-P</b>
+option), <code class="inline"><a class="l_k" href="functions/scalar.html">scalar</a></code> is now added where appropriate, to force the scalar
+context implied by the prototype.</p>
+<p><code class="inline"><a class="l_k" href="functions/require.html">require(foo())</a></code>, <code class="inline"><a class="l_k" href="functions/do.html">do(foo())</a></code>, <code class="inline"><a class="l_k" href="functions/goto.html">goto(foo())</a></code> and similar constructs with
+loop controls are now deparsed correctly.  The outer parentheses are not
+optional.</p>
+<p>Whitespace is no longer escaped in regular expressions, because it was
+getting erroneously escaped within <code class="inline"><span class="s">(</span><span class="q">?x:...)</span></code>
+ sections.</p>
+<p><code class="inline"><a name="foo"></a>sub <span class="m">foo</span> <span class="s">{</span> <span class="i">foo</span><span class="s">(</span><span class="s">)</span> <span class="s">}</span></code>
+ is now deparsed with those mandatory parentheses.</p>
+<p><code class="inline"><span class="q">/@array/</span></code>
+ is now deparsed as a regular expression, and not just
+<code class="inline"><span class="i">@array</span></code>
+.</p>
+<p><code class="inline"><span class="q">/@{-}/</span></code>
+, <code class="inline"><span class="q">/@{+}/</span></code>
+ and <code class="inline"><span class="i">$#</span>{<span class="n">1</span>}</code>
+ are now deparsed with the braces, which
+are mandatory in these cases.</p>
+<p>In deparsing feature bundles, B::Deparse was emitting <code class="inline"><a class="l_k" href="functions/no.html">no</a> <span class="w">feature</span><span class="sc">;</span></code>
+ first
+instead of <code class="inline"><a class="l_k" href="functions/no.html">no</a> <span class="w">feature</span> <span class="q">&#39;:all&#39;</span><span class="sc">;</span></code>
+.  This has been fixed.</p>
+<p><code class="inline"><a class="l_k" href="functions/chdir.html">chdir</a> <span class="w">FH</span></code>
+ is now deparsed without quotation marks.</p>
+<p><code class="inline">\<a class="l_k" href="functions/my.html">my</a> <span class="i">@a</span></code>
+ is now deparsed without parentheses.  (Parenthese would flatten
+the array.)</p>
+<p><code class="inline"><a class="l_k" href="functions/system.html">system</a></code> and <code class="inline"><a class="l_k" href="functions/exec.html">exec</a></code> followed by a block are now deparsed correctly.
+Formerly there was an erroneous <code class="inline"><a class="l_k" href="functions/do.html">do</a></code> before the block.</p>
+<p><code class="inline"><a class="l_k" href="functions/use.html">use</a> <span class="w">constant</span> <span class="i">QR</span> <span class="cm">=&gt;</span> <span class="q">qr/.../</span><span class="w">flags</span></code>
+ followed by <code class="inline"><span class="q">&quot;&quot;</span> =~ <span class="w">QR</span></code>
+ is no longer
+without the flags.</p>
+</li>
+<li>
+<p><a href="charnames.html">charnames</a> has been upgraded from version 1.41 to 1.43.</p>
+</li>
+<li>
+<p><a href="Compress/Raw/Bzip2.html">Compress::Raw::Bzip2</a> has been upgraded from version 2.066 to 2.067.</p>
+</li>
+<li>
+<p><a href="Compress/Raw/Zlib.html">Compress::Raw::Zlib</a> has been upgraded from version 2.066 to 2.067.</p>
+</li>
+<li>
+<p><a href="Data/Dumper.html">Data::Dumper</a> has been upgraded from version 2.154 to 2.155.</p>
+</li>
+<li>
+<p><a href="DB_File.html">DB_File</a> has been upgraded from version 1.831 to 1.834.</p>
+</li>
+<li>
+<p><a href="Devel/Peek.html">Devel::Peek</a> has been upgraded from version 1.19 to 1.20.</p>
+</li>
+<li>
+<p><a href="Devel/PPPort.html">Devel::PPPort</a> has been upgraded from version 3.24 to 3.25.</p>
+</li>
+<li>
+<p><a href="DynaLoader.html">DynaLoader</a> has been upgraded from version 1.28 to 1.29.</p>
+</li>
+<li>
+<p><a href="Encode.html">Encode</a> has been upgraded from version 2.64 to 2.67.</p>
+</li>
+<li>
+<p><a href="Errno.html">Errno</a> has been upgraded from version 1.21 to 1.22.</p>
+</li>
+<li>
+<p><a href="ExtUtils/CBuilder.html">ExtUtils::CBuilder</a> has been upgraded from version 0.280220 to 0.280221.</p>
+</li>
+<li>
+<p><a href="ExtUtils/MakeMaker.html">ExtUtils::MakeMaker</a> has been upgraded from version 7.02 to 7.04.</p>
+</li>
+<li>
+<p><a href="ExtUtils/ParseXS.html">ExtUtils::ParseXS</a> has been upgraded from version 3.26 to 3.27.</p>
+<p>Only declare <code class="inline"><span class="w">file</span></code>
+ unused if we actually define it.</p>
+<p>Improve generated <code class="inline"><span class="w">RETVAL</span></code>
+ code generation to avoid repeated
+references to <code class="inline"><span class="i">ST</span><span class="s">(</span><span class="n">0</span><span class="s">)</span></code>
+.  [perl #123278]</p>
+<p>Broaden and document the <code class="inline"><span class="q">/OBJ$/</span></code>
+ to <code class="inline"><span class="q">/REF$/</span></code>
+ typemap optimization
+for the <code class="inline">DESTROY</code>
+ method.  [perl #123418]</p>
+</li>
+<li>
+<p><a href="feature.html">feature</a> has been upgraded from version 1.38 to 1.39.</p>
+</li>
+<li>
+<p><a href="File/Spec.html">File::Spec</a> has been upgraded from version 3.51 to 3.54.</p>
+</li>
+<li>
+<p><a href="Filter/Util/Call.html">Filter::Util::Call</a> has been upgraded from version 1.49 to 1.51.</p>
+</li>
+<li>
+<p><a href="HTTP/Tiny.html">HTTP::Tiny</a> has been upgraded from version 0.051 to 0.053.</p>
+</li>
+<li>
+<p><a href="IO.html">IO</a> has been upgraded from version 1.34 to 1.35.</p>
+</li>
+<li>
+<p>The IO::Compress module collection has been upgraded from version 2.066 to 2.067.</p>
+</li>
+<li>
+<p><a href="IO/Socket/IP.html">IO::Socket::IP</a> has been upgraded from version 0.32 to 0.34.</p>
+</li>
+<li>
+<p><a href="Locale/Codes.html">Locale::Codes</a> has been upgraded from version 3.32 to 3.33.</p>
+</li>
+<li>
+<p><a href="Locale/Maketext.html">Locale::Maketext</a> has been upgraded from version 1.25 to 1.26.</p>
+</li>
+<li>
+<p><a href="Module/CoreList.html">Module::CoreList</a> has been upgraded from version 5.20141120 to 5.20141220.</p>
+</li>
+<li>
+<p><a href="mro.html">mro</a> has been upgraded from version 1.16 to 1.17.</p>
+</li>
+<li>
+<p><a href="NDBM_File.html">NDBM_File</a> has been upgraded from version 1.13 to 1.14.</p>
+</li>
+<li>
+<p><a href="Opcode.html">Opcode</a> has been upgraded from version 1.29 to 1.30.</p>
+</li>
+<li>
+<p><a href="PerlIO/scalar.html">PerlIO::scalar</a> has been upgraded from version 0.20 to 0.21.</p>
+<p>Reading from a position well past the end of the scalar now correctly
+returns end of file.  [perl #123443]</p>
+<p>Seeking to a negative position still fails, but no longer leaves the
+file position set to a negation location.</p>
+<p><code class="inline"><a class="l_k" href="functions/eof.html">eof()</a></code> on a <code class="inline"><span class="w">PerlIO::scalar</span></code>
+ handle now properly returns true when
+the file position is past the 2GB mark on 32-bit systems.</p>
+</li>
+<li>
+<p><a href="Pod/Escapes.html">Pod::Escapes</a> has been upgraded from version 1.06 to 1.07.</p>
+</li>
+<li>
+<p><a href="POSIX.html">POSIX</a> has been upgraded from version 1.46 to 1.48.</p>
+</li>
+<li>
+<p><a href="SDBM_File.html">SDBM_File</a> has been upgraded from version 1.11 to 1.12.</p>
+</li>
+<li>
+<p><a href="Storable.html">Storable</a> has been upgraded from version 2.51 to 2.52.</p>
+</li>
+<li>
+<p><a href="strict.html">strict</a> has been upgraded from version 1.08 to 1.09.</p>
+</li>
+<li>
+<p><a href="Sys/Hostname.html">Sys::Hostname</a> has been upgraded from version 1.19 to 1.20.</p>
+</li>
+<li>
+<p><a href="Test/Simple.html">Test::Simple</a> has been upgraded from version 1.301001_075 to 1.301001_090.</p>
+</li>
+<li>
+<p><a href="threads.html">threads</a> has been upgraded from version 1.96 to 1.96_001.</p>
+</li>
+<li>
+<p><a href="Unicode/Collate.html">Unicode::Collate</a> has been upgraded from version 1.07 to 1.09.</p>
+</li>
+<li>
+<p><a href="XSLoader.html">XSLoader</a> has been upgraded from version 0.19 to 0.20</p>
+<p>Don't test twice for bootstrap file.</p>
+</li>
+</ul>
+<a name="Diagnostics"></a><h1>Diagnostics</h1>
+<p>The following additions or changes have been made to diagnostic output,
+including warnings and fatal error messages.  For the complete list of
+diagnostic messages, see <a href="perldiag.html">perldiag</a>.</p>
+<a name="Changes-to-Existing-Diagnostics"></a><h2>Changes to Existing Diagnostics</h2>
+<ul>
+<li>
+<p>"Variable %s will not stay shared" has been changed to say "Subroutine"
+when it is actually a lexical sub that will not stay shared.</p>
+</li>
+</ul>
+<a name="Platform-Support"></a><h1>Platform Support</h1>
+<a name="Platform-Specific-Notes"></a><h2>Platform-Specific Notes</h2>
+<a name="Win32"></a><h3>Win32</h3>
+<ul>
+<li>
+<p>Intel C builds are now always built with C99 mode on.</p>
+</li>
+</ul>
+<a name="Internal-Changes"></a><h1>Internal Changes</h1>
+<ul>
+<li>
+<p>The PADNAME and PADNAMELIST types are now separate types, and no longer
+simply aliases for SV and AV.  [perl #123223]</p>
+</li>
+<li>
+<p>Pad names are now always UTF8.  The <code class="inline"><span class="w">PadnameUTF8</span></code>
+ macro always returns
+true.  Previously, this was effectively the case already, but any support
+for two different internal representations of pad names has now been
+removed.</p>
+</li>
+<li>
+<p>The <code class="inline"><span class="w">OP_SIBLING</span></code>
+ and <code class="inline"><span class="w">OP_HAS_SIBLING</span></code>
+ macros added in an earlier 5.21.x
+release have been renamed <code class="inline"><span class="w">OpSIBLING</span></code>
+ and <code class="inline"><span class="w">OpHAS_SIBLING</span></code>
+, following the
+existing convention.</p>
+</li>
+<li>
+<p>A new op class, <code class="inline"><span class="w">UNOP_AUX</span></code>
+, has been added. This is a subclass of
+<code class="inline"><span class="w">UNOP</span></code>
+ with an <code class="inline"><span class="w">op_aux</span></code>
+ field added, which points to an array of unions
+of <code class="inline"><span class="w">UV</span></code>
+, <code class="inline"><span class="w">SV</span>*</code>
+ etc. It is intended for where an op needs to store more data
+than a simple <code class="inline"><span class="w">op_sv</span></code>
+ or whatever. Currently the only op of this type is
+<code class="inline"><span class="w">OP_MULTIDEREF</span></code>
+ (see below).</p>
+</li>
+<li>
+<p>A new op has been added, <code class="inline"><span class="w">OP_MULTIDEREF</span></code>
+, which performs one or more
+nested array and hash lookups where the key is a constant or simple
+variable. For example the expression <code class="inline"><span class="i">$a</span>[<span class="n">0</span>]{<span class="i">$k</span>}[<span class="i">$i</span>]</code>
+, which previously
+involved ten <code class="inline"><span class="w">rv2Xv</span></code>
+, <code class="inline"><span class="w">Xelem</span></code>
+, <code class="inline"><span class="w">gvsv</span></code>
+ and <code class="inline"><span class="w">const</span></code>
+ ops is now performed
+by a single <code class="inline"><span class="w">multideref</span></code>
+ op. It can also handle <code class="inline"><a class="l_k" href="functions/local.html">local</a></code>, <code class="inline"><a class="l_k" href="functions/exists.html">exists</a></code> and
+<code class="inline"><a class="l_k" href="functions/delete.html">delete</a></code>. A non-simple index expression, such as <code class="inline"><span class="s">[</span><span class="i">$i</span>+<span class="n">1</span><span class="s">]</span></code>
+ is still done
+using <code class="inline"><span class="w">aelem</span>/<span class="w">helem</span></code>
+, and single-level array lookup with a small constant
+index is still done using <code class="inline"><span class="w">aelemfast</span></code>
+.</p>
+</li>
+</ul>
+<a name="Selected-Bug-Fixes"></a><h1>Selected Bug Fixes</h1>
+<ul>
+<li>
+<p>On Win32, restoring in a child pseudo-process a variable that was
+<code class="inline"><a class="l_k" href="functions/local.html">local()</a></code>ed in a parent pseudo-process before the <code class="inline"><a class="l_k" href="functions/fork.html">fork</a></code> happened caused
+memory corruption and a crash in the child pseudo-process (and therefore OS
+process).  [perl #40565]</p>
+</li>
+<li>
+<p>Calling <code class="inline"><a class="l_k" href="functions/write.html">write</a></code> on a format with a <code class="inline">^<span class="i">**</span></code>
+ field could produce a panic
+in sv_chop() if there were insufficient arguments or if the variable
+used to fill the field was empty.  [perl #123245]</p>
+</li>
+<li>
+<p>Non-ASCII lexical sub names (use in error messages) on longer have extra
+junk on the end.</p>
+</li>
+<li>
+<p>The <code class="inline">\<span class="i">@</span></code>
+ subroutine prototype no longer flattens parenthesized arrays
+(taking a reference to each element), but takes a reference to the array
+itself.  [perl #47363]</p>
+</li>
+<li>
+<p>A block containing nothing except a C-style <code class="inline">for</code>
+ loop could corrupt the
+stack, causing lists outside the block to lose elements or have elements
+overwritten.  This could happen with <code class="inline"><a class="l_k" href="functions/map.html">map</a> <span class="s">{</span> <a class="l_k" href="functions/for.html">for</a><span class="s">(</span>...<span class="s">)</span><span class="s">{</span>...<span class="s">}</span> <span class="s">}</span> ...</code>
+ and with
+lists containing <code class="inline"><a class="l_k" href="functions/do.html">do</a> <span class="s">{</span> <a class="l_k" href="functions/for.html">for</a><span class="s">(</span>...<span class="s">)</span><span class="s">{</span>...<span class="s">}</span> <span class="s">}</span></code>
+.  [perl #123286]</p>
+</li>
+<li>
+<p><code class="inline"><a class="l_k" href="functions/scalar.html">scalar()</a></code> now propagates lvalue context, so that
+<code class="inline"><a class="l_k" href="functions/for.html">for</a><span class="s">(</span><a class="l_k" href="functions/scalar.html">scalar</a><span class="s">(</span><span class="i">$#foo</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span> ... <span class="s">}</span></code>
+ can modify <code class="inline"><span class="i">$#foo</span></code>
+ through <code class="inline"><span class="i">$_</span></code>
+.</p>
+</li>
+<li>
+<p><code class="inline"><a class="l_k" href="functions/qr.html">qr/@array(?{block})/</a></code> no longer dies with "Bizarre copy of ARRAY".
+[#123344]</p>
+</li>
+<li>
+<p><code class="inline"><a class="l_k" href="functions/eval.html">eval</a> <span class="q">&#39;$variable&#39;</span></code>
+ in nested named subroutines would sometimes look up a
+global variable even with a lexical variable in scope.</p>
+</li>
+<li>
+<p>In perl 5.20.0, <code class="inline"><a class="l_k" href="functions/sort.html">sort</a> <span class="i">CORE::fake</span></code>
+ where 'fake' is anything other than a
+keyword started chopping of the last 6 characters and treating the result
+as a sort sub name.  The previous behaviour of treating "CORE::fake" as a
+sort sub name has been restored.  [perl #123410]</p>
+</li>
+<li>
+<p>Outside of <code class="inline"><a class="l_k" href="functions/use.html">use</a> <span class="w">utf8</span></code>
+, a single-character Latin-1 lexical variable is
+disallowed.  The error message for it, "Can't use global $foo...", was
+giving garbage instead of the variable name.</p>
+</li>
+<li>
+<p><code class="inline"><a class="l_k" href="functions/readline.html">readline</a></code> on a nonexistent handle was causing <code class="inline"><span class="i">$</span>{<span class="w">^LAST_FH</span>}</code>
+ to produce a
+reference to an undefined scalar (or fail an assertion).  Now
+<code class="inline"><span class="i">$</span>{<span class="w">^LAST_FH</span>}</code>
+ ends up undefined.</p>
+</li>
+<li>
+<p><code class="inline"><span class="s">(</span>...<span class="s">)</span>x...</code>
+ in void context now applies scalar context to the left-hand
+argument, instead of the context the current sub was called in.
+[perl #123020]</p>
+</li>
+</ul>
+<a name="Acknowledgements"></a><h1>Acknowledgements</h1>
+<p>Perl 5.21.7 represents approximately 4 weeks of development since Perl 5.21.6
+and contains approximately 97,000 lines of changes across 640 files from 30
+authors.</p>
+<p>Excluding auto-generated files, documentation and release tools, there were
+approximately 26,000 lines of changes to 400 .pm, .t, .c and .h files.</p>
+<p>Perl continues to flourish into its third decade thanks to a vibrant community
+of users and developers. The following people are known to have contributed the
+improvements that became Perl 5.21.7:</p>
+<p>Aaron Crane, Aristotle Pagaltzis, Chad Granum, Chris 'BinGOs' Williams, Craig
+A. Berry, Dagfinn Ilmari Manns&#xe5;ker, Daniel Dragan, David Mitchell, Eric
+Herman, Father Chrysostomos, H.Merijn Brand, Hugo van der Sanden, James
+Raspass, Jarkko Hietaniemi, Jim Cromie, Karen Etheridge, Karl Williamson, kmx,
+Lukas Mai, Matthew Horsfall, Max Maischein, Petr P&#xed;sa&#x159;, Ricardo Signes,
+Shlomi Fish, Steffen M&#xfc;ller, Steve Hay, Sullivan Beck, syber, Todd Rinaldo,
+Tony Cook.</p>
+<p>The list above is almost certainly incomplete as it is automatically generated
+from version control history. In particular, it does not include the names of
+the (very much appreciated) contributors who reported issues to the Perl bug
+tracker.</p>
+<p>Many of the changes included in this version originated in the CPAN modules
+included in Perl's core. We're grateful to the entire CPAN community for
+helping Perl to flourish.</p>
+<p>For a more complete list of all of Perl's historical contributors, please see
+the <i>AUTHORS</i> file in the Perl source distribution.</p>
+<a name="Reporting-Bugs"></a><h1>Reporting Bugs</h1>
+<p>If you find what you think is a bug, you might check the articles recently
+posted to the comp.lang.perl.misc newsgroup and the perl bug database at
+https://rt.perl.org/ .  There may also be information at
+<a href="http://www.perl.org/">http://www.perl.org/</a> , the Perl Home Page.</p>
+<p>If you believe you have an unreported bug, please run the <a href="perlbug.html">perlbug</a> program
+included with your release.  Be sure to trim your bug down to a tiny but
+sufficient test case.  Your bug report, along with the output of <code class="inline"><span class="w">perl</span> -<span class="w">V</span></code>
+,
+will be sent off to perlbug@perl.org to be analysed by the Perl porting team.</p>
+<p>If the bug you are reporting has security implications, which make it
+inappropriate to send to a publicly archived mailing list, then please send it
+to perl5-security-report@perl.org.  This points to a closed subscription
+unarchived mailing list, which includes all the core committers, who will be
+able to help assess the impact of issues, figure out a resolution, and help
+co-ordinate the release of patches to mitigate or fix the problem across all
+platforms on which Perl is supported.  Please only use this address for
+security issues in the Perl core, not for modules independently distributed on
+CPAN.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p>The <i>Changes</i> file for an explanation of how to view exhaustive details on
+what changed.</p>
+<p>The <i>INSTALL</i> file for how to build Perl.</p>
+<p>The <i>README</i> file for general stuff.</p>
+<p>The <i>Artistic</i> and <i>Copying</i> files for copyright information.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#Core-Enhancements">Core Enhancements</a><ul><li><a href="#faster-array-and-hash-lookups">faster array and hash lookups</a><li><a href="#fileno-now-works-on-directory-handles">fileno now works on directory handles</a></ul><li><a href="#Incompatible-Changes">Incompatible Changes</a><ul><li><a href="#%26-and-%5c%26-prototypes-accepts-only-subs">& and \& prototypes accepts only subs</a><li><a href="#use-encoding-is-now-lexical">use encoding is now lexical</a><li><a href="#List-slices-returning-empty-lists">List slices returning empty lists</a></ul><li><a href="#Deprecations">Deprecations</a><ul><li><a href="#Setting-%24%7b%5eENCODING%7d-to-anything-but-undef">Setting ${^ENCODING} to anything but undef</a></ul><li><a href="#Performance-Enhancements">Performance Enhancements</a><li><a href="#Modules-and-Pragmata">Modules and Pragmata</a><ul><li><a href="#Updated-Modules-and-Pragmata">Updated Modules and Pragmata</a></ul><li><a href="#Diagnostics">Diagnostics</a><ul><li><a href="#Changes-to-Existing-Diagnostics">Changes to Existing Diagnostics</a></ul><li><a href="#Platform-Support">Platform Support</a><ul><li><a href="#Platform-Specific-Notes">Platform-Specific Notes</a></ul><li><a href="#Internal-Changes">Internal Changes</a><li><a href="#Selected-Bug-Fixes">Selected Bug Fixes</a><li><a href="#Acknowledgements">Acknowledgements</a><li><a href="#Reporting-Bugs">Reporting Bugs</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="index-overview.html">Overview</a>
+                <li><a href="index-tutorials.html">Tutorials</a>
+                <li><a href="index-faq.html">FAQs</a>
+                <li><a href="index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="index-language.html">Language</a>
+                <li><a href="index-functions.html">Functions</a>
+                <li><a href="perlop.html">Operators</a>
+                <li><a href="perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="index-modules-A.html">Modules</a>
+                <li><a href="index-pragmas.html">Pragmas</a>
+                <li><a href="index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="index-licence.html">License</a>
+                <li><a href="index-internals.html">Internals</a>
+                <li><a href="index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="static/exploreperl.js"></script>
+      <script language="JavaScript" src="static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(0);
+  perldoc.pageName    = 'perl5217delta';
+  perldoc.pageAddress = 'perl5217delta.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

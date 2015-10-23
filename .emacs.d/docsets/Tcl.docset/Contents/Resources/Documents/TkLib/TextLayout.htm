@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_ComputeTextLayout manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> TextLayout</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="TextLayout.htm#M2" NAME="L597">NAME</A>
+<DL><DD>Tk_ComputeTextLayout, Tk_FreeTextLayout, Tk_DrawTextLayout, Tk_UnderlineTextLayout, Tk_PointToChar, Tk_CharBbox, Tk_DistanceToTextLayout, Tk_IntersectTextLayout, Tk_TextLayoutToPostscript &mdash; routines to measure and display single-font, multi-line, justified text.</DD></DL>
+<DD><A HREF="TextLayout.htm#M3" NAME="L598">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_TextLayout
+<DD><B>Tk_ComputeTextLayout(</B><I>tkfont, string, numChars, wrapLength, justify, flags, widthPtr, heightPtr</I><B>)</B>
+<DD>void
+<DD><B>Tk_FreeTextLayout(</B><I>layout</I><B>)</B>
+<DD>void
+<DD><B>Tk_DrawTextLayout(</B><I>display, drawable, gc, layout, x, y, firstChar, lastChar</I><B>)</B>
+<DD>void
+<DD><B>Tk_UnderlineTextLayout(</B><I>display, drawable, gc, layout, x, y, underline</I><B>)</B>
+<DD>int
+<DD><B>Tk_PointToChar(</B><I>layout, x, y</I><B>)</B>
+<DD>int
+<DD><B>Tk_CharBbox(</B><I>layout, index, xPtr, yPtr, widthPtr, heightPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_DistanceToTextLayout(</B><I>layout, x, y</I><B>)</B>
+<DD>int
+<DD><B>Tk_IntersectTextLayout(</B><I>layout, x, y, width, height</I><B>)</B>
+<DD>void
+<DD><B>Tk_TextLayoutToPostscript(</B><I>interp, layout</I><B>)</B>
+</DL>
+<DD><A HREF="TextLayout.htm#M4" NAME="L599">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="TextLayout.htm#M5" NAME="L600">DESCRIPTION</A>
+<DD><A HREF="TextLayout.htm#M6" NAME="L601">DISPLAY MODEL</A>
+<DD><A HREF="TextLayout.htm#M7" NAME="L602">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_ComputeTextLayout, Tk_FreeTextLayout, Tk_DrawTextLayout, Tk_UnderlineTextLayout, Tk_PointToChar, Tk_CharBbox, Tk_DistanceToTextLayout, Tk_IntersectTextLayout, Tk_TextLayoutToPostscript &mdash; routines to measure and display single-font, multi-line, justified text.
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+Tk_TextLayout<BR>
+<B>Tk_ComputeTextLayout(</B><I>tkfont, string, numChars, wrapLength, justify, flags, widthPtr, heightPtr</I><B>)</B><BR>
+void<BR>
+<B>Tk_FreeTextLayout(</B><I>layout</I><B>)</B><BR>
+void<BR>
+<B>Tk_DrawTextLayout(</B><I>display, drawable, gc, layout, x, y, firstChar, lastChar</I><B>)</B><BR>
+void<BR>
+<B>Tk_UnderlineTextLayout(</B><I>display, drawable, gc, layout, x, y, underline</I><B>)</B><BR>
+int<BR>
+<B>Tk_PointToChar(</B><I>layout, x, y</I><B>)</B><BR>
+int<BR>
+<B>Tk_CharBbox(</B><I>layout, index, xPtr, yPtr, widthPtr, heightPtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_DistanceToTextLayout(</B><I>layout, x, y</I><B>)</B><BR>
+int<BR>
+<B>Tk_IntersectTextLayout(</B><I>layout, x, y, width, height</I><B>)</B><BR>
+void<BR>
+<B>Tk_TextLayoutToPostscript(</B><I>interp, layout</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TkLib/GetFont.htm">Tk_Font</A> <B>tkfont</B> (in)<DD>
+Font to use when constructing and displaying a text layout.  The
+<I>tkfont</I> must remain valid for the lifetime of the text layout.  Must
+have been returned by a previous call to <B><A HREF="../TkLib/GetFont.htm">Tk_GetFont</A></B>.
+<P><DT>const char <B>*string</B> (in)<DD>
+Potentially multi-line string whose dimensions are to be computed and
+stored in the text layout.  The <I>string</I> must remain valid for the
+lifetime of the text layout.  
+<P><DT>int <B>numChars</B> (in)<DD>
+The number of characters to consider from <I>string</I>.  If
+<I>numChars</I> is less than 0, then assumes <I>string</I> is null
+terminated and uses <B><A HREF="../TclLib/Utf.htm">Tcl_NumUtfChars</A></B> to determine the length of
+<I>string</I>.
+<P><DT>int <B>wrapLength</B> (in)<DD>
+Longest permissible line length, in pixels.  Lines in <I>string</I> will
+automatically be broken at word boundaries and wrapped when they reach
+this length.  If <I>wrapLength</I> is too small for even a single
+character to fit on a line, it will be expanded to allow one character to
+fit on each line.  If <I>wrapLength</I> is &lt;= 0, there is no automatic
+wrapping; lines will get as long as they need to be and only wrap if a
+newline/return character is encountered.
+<P><DT><A HREF="../TkLib/GetJustify.htm">Tk_Justify</A> <B>justify</B> (in)<DD>
+How to justify the lines in a multi-line text layout.  Possible values
+are <B>TK_JUSTIFY_LEFT</B>, <B>TK_JUSTIFY_CENTER</B>, or
+<B>TK_JUSTIFY_RIGHT</B>. If the text layout only occupies a single
+line, then <I>justify</I> is irrelevant.
+<P><DT>int <B>flags</B> (in)<DD>
+Various flag bits OR-ed together. <B>TK_IGNORE_TABS</B> means that tab
+characters should not be expanded to the next tab stop.
+<B>TK_IGNORE_NEWLINES</B> means that newline/return characters should
+not cause a line break.  If either tabs or newlines/returns are
+ignored, then they will be treated as regular characters, being
+measured and displayed in a platform-dependent manner as described in
+<B><A HREF="../TkLib/MeasureChar.htm">Tk_MeasureChars</A></B>, and will not have any special behaviors.
+<P><DT>int <B>*widthPtr</B> (out)<DD>
+If non-NULL, filled with either the width, in pixels, of the widest
+line in the text layout, or the width, in pixels, of the bounding box for the 
+character specified by <I>index</I>.
+<P><DT>int <B>*heightPtr</B> (out)<DD>
+If non-NULL, filled with either the total height, in pixels, of all
+the lines in the text layout, or the height, in pixels, of the bounding
+box for the character specified by <I>index</I>.
+<P><DT>Tk_TextLayout <B>layout</B> (in)<DD>
+A token that represents the cached layout information about the single-font,
+multi-line, justified piece of text.  This token is returned by
+<B>Tk_ComputeTextLayout</B>.
+<P><DT>Display <B>*display</B> (in)<DD>
+Display on which to draw.
+<P><DT>Drawable <B>drawable</B> (in)<DD>
+Window or pixmap in which to draw.
+<P><DT>GC <B>gc</B> (in)<DD>
+Graphics context to use for drawing text layout.  The font selected in
+this GC must correspond to the <I>tkfont</I> used when constructing the
+text layout.
+<P><DT>int <B>x, y</B> (in)<DD>
+Point, in pixels, at which to place the upper-left hand corner of the
+text layout when it is being drawn, or the coordinates of a point (with
+respect to the upper-left hand corner of the text layout) to check
+against the text layout.
+<P><DT>int <B>firstChar</B> (in)<DD>
+The index of the first character to draw from the given text layout.  
+The number 0 means to draw from the beginning.
+<P><DT>int <B>lastChar</B> (in)<DD>
+The index of the last character up to which to draw.  The character
+specified by <I>lastChar</I> itself will not be drawn.  A number less
+than 0 means to draw all characters in the text layout.
+<P><DT>int <B>underline</B> (in)<DD>
+Index of the single character to underline in the text layout, or a number
+less than 0 for no underline.
+<P><DT>int <B>index</B> (in)<DD>
+The index of the character whose bounding box is desired.  The bounding
+box is computed with respect to the upper-left hand corner of the text layout.
+<P><DT>int <B>*xPtr, *yPtr</B> (out)<DD>
+Filled with the upper-left hand corner, in pixels, of the bounding box
+for the character specified by <I>index</I>.  Either or both <I>xPtr</I>
+and <I>yPtr</I> may be NULL, in which case the corresponding value
+is not calculated.
+<P><DT>int <B>width, height</B> (in)<DD>
+Specifies the width and height, in pixels, of the rectangular area to 
+compare for intersection against the text layout.
+<P><DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (out)<DD>
+Postscript code that will print the text layout is appended to
+the result of interpreter <I>interp</I>.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These routines are for measuring and displaying single-font, multi-line,
+justified text.  To measure and display simple single-font, single-line
+strings, refer to the documentation for <B><A HREF="../TkLib/MeasureChar.htm">Tk_MeasureChars</A></B>.  There is
+no programming interface in the core of Tk that supports multi-font,
+multi-line text; support for that behavior must be built on top of
+simpler layers.  
+Note that unlike the lower level text display routines, the functions
+described here all operate on character-oriented lengths and indices
+rather than byte-oriented values.  See the description of
+<B><A HREF="../TclLib/Utf.htm">Tcl_UtfAtIndex</A></B> for more details on converting between character
+and byte offsets.
+<P>
+The routines described here are built on top of the programming interface
+described in the <B><A HREF="../TkLib/MeasureChar.htm">Tk_MeasureChars</A></B> documentation.  Tab characters and
+newline/return characters may be treated specially by these procedures,
+but all other characters are passed through to the lower level.
+<P>
+<B>Tk_ComputeTextLayout</B> computes the layout information needed to
+display a single-font, multi-line, justified <I>string</I> of text and
+returns a Tk_TextLayout token that holds this information.  This token is
+used in subsequent calls to procedures such as <B>Tk_DrawTextLayout</B>,
+<B>Tk_DistanceToTextLayout</B>, and <B>Tk_FreeTextLayout</B>.  The
+<I>string</I> and <I>tkfont</I> used when computing the layout must remain
+valid for the lifetime of this token.  
+<P>
+<B>Tk_FreeTextLayout</B> is called to release the storage associated with
+<I>layout</I> when it is no longer needed.  A <I>layout</I> should not be used
+in any other text layout procedures once it has been released. 
+<P>
+<B>Tk_DrawTextLayout</B> uses the information in <I>layout</I> to display a
+single-font, multi-line, justified string of text at the specified location.
+<P>
+<B>Tk_UnderlineTextLayout</B> uses the information in <I>layout</I> to
+display an underline below an individual character.  This procedure does
+not draw the text, just the underline.  To produce natively underlined
+text, an underlined font should be constructed and used.  All characters,
+including tabs, newline/return characters, and spaces at the ends of
+lines, can be underlined using this method.  However, the underline will
+never be drawn outside of the computed width of <I>layout</I>; the
+underline will stop at the edge for any character that would extend
+partially outside of <I>layout</I>, and the underline will not be visible
+at all for any character that would be located completely outside of the
+layout.
+<P>
+<B>Tk_PointToChar</B> uses the information in <I>layout</I> to determine the
+character closest to the given point.  The point is specified with respect
+to the upper-left hand corner of the <I>layout</I>, which is considered to be
+located at (0, 0).  Any point whose <I>y</I>-value is less that 0 will be
+considered closest to the first character in the text layout; any point
+whose <I>y</I>-value is greater than the height of the text layout will be
+considered closest to the last character in the text layout.  Any point
+whose <I>x</I>-value is less than 0 will be considered closest to the first
+character on that line; any point whose <I>x</I>-value is greater than the
+width of the text layout will be considered closest to the last character on
+that line.  The return value is the index of the character that was closest
+to the point, or one more than the index of any character (to indicate that
+the point was after the end of the string and that the corresponding caret
+would be at the end of the string).  Given a <I>layout</I> with no characters,
+the value 0 will always be returned, referring to a hypothetical zero-width
+placeholder character.
+<P>
+<B>Tk_CharBbox</B> uses the information in <I>layout</I> to return the
+bounding box for the character specified by <I>index</I>.  The width of the
+bounding box is the advance width of the character, and does not include any
+left or right bearing.  Any character that extends partially outside of 
+<I>layout</I> is considered to be truncated at the edge.  Any character
+that would be located completely outside of <I>layout</I> is considered to
+be zero-width and pegged against the edge.  The height of the bounding
+box is the line height for this font, extending from the top of the
+ascent to the bottom of the descent; information about the actual height
+of individual letters is not available.  For measurement purposes, a
+<I>layout</I> that contains no characters is considered to contain a
+single zero-width placeholder character at index 0.  If <I>index</I> was
+not a valid character index, the return value is 0 and <I>*xPtr</I>,
+<I>*yPtr</I>, <I>*widthPtr</I>, and <I>*heightPtr</I> are unmodified.
+Otherwise, if <I>index</I> did specify a valid, the return value is
+non-zero, and <I>*xPtr</I>, <I>*yPtr</I>, <I>*widthPtr</I>, and
+<I>*heightPtr</I> are filled with the bounding box information for the
+character.  If any of <I>xPtr</I>, <I>yPtr</I>, <I>widthPtr</I>, or
+<I>heightPtr</I> are NULL, the corresponding value is not calculated or
+stored.
+<P>
+<B>Tk_DistanceToTextLayout</B> computes the shortest distance in pixels from
+the given point (<I>x, y</I>) to the characters in <I>layout</I>.
+Newline/return characters and non-displaying space characters that occur at
+the end of individual lines in the text layout are ignored for hit detection
+purposes, but tab characters are not.  The return value is 0 if the point
+actually hits the <I>layout</I>.  If the point did not hit the <I>layout</I>
+then the return value is the distance in pixels from the point to the
+<I>layout</I>.
+<P>
+<B>Tk_IntersectTextLayout</B> determines whether a <I>layout</I> lies
+entirely inside, entirely outside, or overlaps a given rectangle.
+Newline/return characters and non-displaying space characters that occur
+at the end of individual lines in the <I>layout</I> are ignored for
+intersection calculations.  The return value is -1 if the <I>layout</I> is
+entirely outside of the rectangle, 0 if it overlaps, and 1 if it is
+entirely inside of the rectangle.
+<P>
+<B>Tk_TextLayoutToPostscript</B> outputs code consisting of a Postscript
+array of strings that represent the individual lines in <I>layout</I>.  It
+is the responsibility of the caller to take the Postscript array of
+strings and add some Postscript function operate on the array to render
+each of the lines.  The code that represents the Postscript array of
+strings is appended to interpreter <I>interp</I>'s result.
+<H3><A NAME="M6">DISPLAY MODEL</A></H3>
+When measuring a text layout, space characters that occur at the end of a
+line are ignored.  The space characters still exist and the insertion point
+can be positioned amongst them, but their additional width is ignored when
+justifying lines or returning the total width of a text layout.  All
+end-of-line space characters are considered to be attached to the right edge
+of the line; this behavior is logical for left-justified text and reasonable
+for center-justified text, but not very useful when editing right-justified
+text.  Spaces are considered variable width characters; the first space that
+extends past the edge of the text layout is clipped to the edge, and any
+subsequent spaces on the line are considered zero width and pegged against
+the edge.  Space characters that occur in the middle of a line of text are
+not suppressed and occupy their normal space width.
+<P>
+Tab characters are not ignored for measurement calculations.  If wrapping
+is turned on and there are enough tabs on a line, the next tab will wrap
+to the beginning of the next line.  There are some possible strange
+interactions between tabs and justification; tab positions are calculated
+and the line length computed in a left-justified world, and then the
+whole resulting line is shifted so it is centered or right-justified,
+causing the tab columns not to align any more.
+<P>
+When wrapping is turned on, lines may wrap at word breaks (space or tab
+characters) or newline/returns.  A dash or hyphen character in the middle
+of a word is not considered a word break.  <B>Tk_ComputeTextLayout</B>
+always attempts to place at least one word on each line.  If it cannot
+because the <I>wrapLength</I> is too small, the word will be broken and as
+much as fits placed on the line and the rest on subsequent line(s).  If
+<I>wrapLength</I> is so small that not even one character can fit on a
+given line, the <I>wrapLength</I> is ignored for that line and one
+character will be placed on the line anyhow.  When wrapping is turned
+off, only newline/return characters may cause a line break.  
+<P>
+When a text layout has been created using an underlined <I>tkfont</I>,
+then any space characters that occur at the end of individual lines,
+newlines/returns, and tabs will not be displayed underlined when 
+<B>Tk_DrawTextLayout</B> is called, because those characters are never
+actually drawn - they are merely placeholders maintained in the
+<I>layout</I>.  
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/F.htm#font">font</A>
+<div class="copy">Copyright &copy; 1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

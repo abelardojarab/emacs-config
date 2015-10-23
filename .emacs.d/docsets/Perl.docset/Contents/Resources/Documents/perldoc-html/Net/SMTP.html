@@ -1,0 +1,724 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Net::SMTP</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Net::SMTP</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-N.html">Core modules (N)</a> &gt;
+      
+    
+    Net::SMTP
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Net::SMTP</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#EXAMPLES">EXAMPLES</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#METHODS">METHODS</a><li><a href="#ADDRESSES">ADDRESSES</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Net::SMTP - Simple Mail Transfer Protocol Client</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Net::SMTP</span><span class="sc">;</span></li><li></li><li>    <span class="c"># Constructors</span></li><li>    <span class="i">$smtp</span> = <span class="w">Net::SMTP</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&#39;mailhost&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$smtp</span> = <span class="w">Net::SMTP</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&#39;mailhost&#39;</span><span class="cm">,</span> <span class="w">Timeout</span> <span class="cm">=&gt;</span> <span class="n">60</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>This module implements a client interface to the SMTP and ESMTP
+protocol, enabling a perl5 application to talk to SMTP servers. This
+documentation assumes that you are familiar with the concepts of the
+SMTP protocol described in RFC821.</p>
+<p>A new Net::SMTP object must be created with the <i>new</i> method. Once
+this has been done, all SMTP commands are accessed through this object.</p>
+<p>The Net::SMTP class is a subclass of Net::Cmd and IO::Socket::INET.</p>
+<a name="EXAMPLES"></a><h1>EXAMPLES</h1>
+<p>This example prints the mail domain name of the SMTP server known as mailhost:</p>
+<pre class="verbatim"><ol><li>    <span class="c">#!/usr/local/bin/perl -w</span></li><li></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Net::SMTP</span><span class="sc">;</span></li><li></li><li>    <span class="i">$smtp</span> = <span class="w">Net::SMTP</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&#39;mailhost&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$smtp</span><span class="i">-&gt;domain</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span></li><li>    <span class="i">$smtp</span><span class="i">-&gt;quit</span><span class="sc">;</span></li></ol></pre><p>This example sends a small message to the postmaster at the SMTP server
+known as mailhost:</p>
+<pre class="verbatim"><ol><li>    <span class="c">#!/usr/local/bin/perl -w</span></li><li></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Net::SMTP</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$smtp</span> = <span class="w">Net::SMTP</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&#39;mailhost&#39;</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">$smtp</span><span class="i">-&gt;mail</span><span class="s">(</span><span class="i">$ENV</span>{<span class="w">USER</span>}<span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/if.html">if</a> <span class="s">(</span><span class="i">$smtp</span><span class="i">-&gt;to</span><span class="s">(</span><span class="q">&#39;postmaster&#39;</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>     <span class="i">$smtp</span><span class="i">-&gt;data</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>     <span class="i">$smtp</span><span class="i">-&gt;datasend</span><span class="s">(</span><span class="q">&quot;To: postmaster\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>     <span class="i">$smtp</span><span class="i">-&gt;datasend</span><span class="s">(</span><span class="q">&quot;\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>     <span class="i">$smtp</span><span class="i">-&gt;datasend</span><span class="s">(</span><span class="q">&quot;A simple test message\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>     <span class="i">$smtp</span><span class="i">-&gt;dataend</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">}</span> <a class="l_k" href="../functions/else.html">else</a> <span class="s">{</span></li><li>     <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;Error: &quot;</span><span class="cm">,</span> <span class="i">$smtp</span><span class="i">-&gt;message</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="i">$smtp</span><span class="i">-&gt;quit</span><span class="sc">;</span></li></ol></pre><a name="CONSTRUCTOR"></a><h1>CONSTRUCTOR</h1>
+<ul>
+<li><a name="new-(-%5b-HOST-%5d-%5b%2c-OPTIONS-%5d-)"></a><b>new ( [ HOST ] [, OPTIONS ] )</b>
+<p>This is the constructor for a new Net::SMTP object. <code class="inline"><span class="w">HOST</span></code>
+ is the
+name of the remote host to which an SMTP connection is required.</p>
+<p>On failure <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> will be returned and <code class="inline"><span class="i">$@</span></code>
+ will contain the reason
+for the failure.</p>
+<p><code class="inline"><span class="w">HOST</span></code>
+ is optional. If <code class="inline"><span class="w">HOST</span></code>
+ is not given then it may instead be
+passed as the <code class="inline"><span class="w">Host</span></code>
+ option described below. If neither is given then
+the <code class="inline"><span class="w">SMTP_Hosts</span></code>
+ specified in <code class="inline"><span class="w">Net::Config</span></code>
+ will be used.</p>
+<p><code class="inline"><span class="w">OPTIONS</span></code>
+ are passed in a hash like fashion, using key and value pairs.
+Possible options are:</p>
+<p><b>Hello</b> - SMTP requires that you identify yourself. This option
+specifies a string to pass as your mail domain. If not given localhost.localdomain
+will be used.</p>
+<p><b>Host</b> - SMTP host to connect to. It may be a single scalar (hostname[:port]),
+as defined for the <code class="inline"><span class="w">PeerAddr</span></code>
+ option in <a href="../IO/Socket/INET.html">IO::Socket::INET</a>, or a reference to
+an array with hosts to try in turn. The <a href="#host">host</a> method will return the value
+which was used to connect to the host.
+Format - <code class="inline"><span class="w">PeerHost</span></code>
+ from <a href="../IO/Socket/INET.html">IO::Socket::INET</a> new method.</p>
+<p><b>Port</b> - port to connect to.
+Default - 25 for plain SMTP and 465 for immediate SSL.</p>
+<p><b>SSL</b> - If the connection should be done from start with SSL, contrary to later
+upgrade with <code class="inline"><span class="w">starttls</span></code>
+.
+You can use SSL arguments as documented in <a href="http://search.cpan.org/perldoc/IO::Socket::SSL">IO::Socket::SSL</a>, but it will
+usually use the right arguments already.</p>
+<p><b>LocalAddr</b> and <b>LocalPort</b> - These parameters are passed directly
+to IO::Socket to allow binding the socket to a local port.</p>
+<p><b>Timeout</b> - Maximum time, in seconds, to wait for a response from the
+SMTP server (default: 120)</p>
+<p><b>ExactAddresses</b> - If true the all ADDRESS arguments must be as
+defined by <code class="inline"><span class="w">addr</span>-<span class="w">spec</span></code>
+ in RFC2822. If not given, or false, then
+Net::SMTP will attempt to extract the address from the value passed.</p>
+<p><b>Debug</b> - Enable debugging information</p>
+<p>Example:</p>
+<pre class="verbatim"><ol><li>    <span class="i">$smtp</span> = <span class="w">Net::SMTP</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&#39;mailhost&#39;</span><span class="cm">,</span></li><li>                           <span class="w">Hello</span> <span class="cm">=&gt;</span> <span class="q">&#39;my.mail.domain&#39;</span><span class="cm">,</span></li><li>                           <span class="w">Timeout</span> <span class="cm">=&gt;</span> <span class="n">30</span><span class="cm">,</span></li><li>                           <span class="w">Debug</span>   <span class="cm">=&gt;</span> <span class="n">1</span><span class="cm">,</span></li><li>                          <span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># the same</span></li><li>    <span class="i">$smtp</span> = <span class="w">Net::SMTP</span><span class="w">-&gt;new</span><span class="s">(</span></li><li>                           <span class="w">Host</span> <span class="cm">=&gt;</span> <span class="q">&#39;mailhost&#39;</span><span class="cm">,</span></li><li>                           <span class="w">Hello</span> <span class="cm">=&gt;</span> <span class="q">&#39;my.mail.domain&#39;</span><span class="cm">,</span></li><li>                           <span class="w">Timeout</span> <span class="cm">=&gt;</span> <span class="n">30</span><span class="cm">,</span></li><li>                           <span class="w">Debug</span>   <span class="cm">=&gt;</span> <span class="n">1</span><span class="cm">,</span></li><li>                          <span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># the same with direct SSL</span></li><li>    <span class="i">$smtp</span> = <span class="w">Net::SMTP</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&#39;mailhost&#39;</span><span class="cm">,</span></li><li>			   <span class="w">Hello</span> <span class="cm">=&gt;</span> <span class="q">&#39;my.mail.domain&#39;</span><span class="cm">,</span></li><li>			   <span class="w">Timeout</span> <span class="cm">=&gt;</span> <span class="n">30</span><span class="cm">,</span></li><li>			   <span class="w">Debug</span>   <span class="cm">=&gt;</span> <span class="n">1</span><span class="cm">,</span></li><li>			   <span class="w">SSL</span>     <span class="cm">=&gt;</span> <span class="n">1</span><span class="cm">,</span></li><li>			  <span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># Connect to the default server from Net::config</span></li><li>    <span class="i">$smtp</span> = <span class="w">Net::SMTP</span><span class="w">-&gt;new</span><span class="s">(</span></li><li>                           <span class="w">Hello</span> <span class="cm">=&gt;</span> <span class="q">&#39;my.mail.domain&#39;</span><span class="cm">,</span></li><li>                           <span class="w">Timeout</span> <span class="cm">=&gt;</span> <span class="n">30</span><span class="cm">,</span></li><li>                          <span class="s">)</span><span class="sc">;</span></li></ol></pre></li>
+</ul>
+<a name="METHODS"></a><h1>METHODS</h1>
+<p>Unless otherwise stated all methods return either a <i>true</i> or <i>false</i>
+value, with <i>true</i> meaning that the operation was a success. When a method
+states that it returns a value, failure will be returned as <i>undef</i> or an
+empty list.</p>
+<p><code class="inline"><span class="w">Net::SMTP</span></code>
+ inherits from <code class="inline"><span class="w">Net::Cmd</span></code>
+ so methods defined in <code class="inline"><span class="w">Net::Cmd</span></code>
+ may
+be used to send commands to the remote SMTP server in addition to the methods
+documented here.</p>
+<ul>
+<li><a name="banner-()"></a><b>banner ()</b>
+<p>Returns the banner message which the server replied with when the
+initial connection was made.</p>
+</li>
+<li><a name="domain-()"></a><b>domain ()</b>
+<p>Returns the domain that the remote SMTP server identified itself as during
+connection.</p>
+</li>
+<li><a name="hello-(-DOMAIN-)"></a><b>hello ( DOMAIN )</b>
+<p>Tell the remote server the mail domain which you are in using the EHLO
+command (or HELO if EHLO fails).  Since this method is invoked
+automatically when the Net::SMTP object is constructed the user should
+normally not have to call it manually.</p>
+</li>
+<li><a name="host-()"></a><b>host ()</b>
+<p>Returns the value used by the constructor, and passed to IO::Socket::INET,
+to connect to the host.</p>
+</li>
+<li><a name="etrn-(-DOMAIN-)"></a><b>etrn ( DOMAIN )</b>
+<p>Request a queue run for the DOMAIN given.</p>
+</li>
+<li><a name="starttls-(-SSLARGS-)"></a><b>starttls ( SSLARGS )</b>
+<p>Upgrade existing plain connection to SSL.
+You can use SSL arguments as documented in <a href="http://search.cpan.org/perldoc/IO::Socket::SSL">IO::Socket::SSL</a>, but it will
+usually use the right arguments already.</p>
+</li>
+<li><a name="auth-(-USERNAME%2c-PASSWORD-)"></a><b>auth ( USERNAME, PASSWORD )</b>
+<p>Attempt SASL authentication. Requires Authen::SASL module.</p>
+</li>
+<li><a name="mail-(-ADDRESS-%5b%2c-OPTIONS%5d-)"></a><b>mail ( ADDRESS [, OPTIONS] )</b>
+</li>
+<li><a name="send-(-ADDRESS-)"></a><b>send ( ADDRESS )</b>
+</li>
+<li><a name="send_or_mail-(-ADDRESS-)"></a><b>send_or_mail ( ADDRESS )</b>
+</li>
+<li><a name="send_and_mail-(-ADDRESS-)"></a><b>send_and_mail ( ADDRESS )</b>
+<p>Send the appropriate command to the server MAIL, SEND, SOML or SAML. <code class="inline"><span class="w">ADDRESS</span></code>
+
+is the address of the sender. This initiates the sending of a message. The
+method <code class="inline"><span class="w">recipient</span></code>
+ should be called for each address that the message is to
+be sent to.</p>
+<p>The <code class="inline"><span class="w">mail</span></code>
+ method can some additional ESMTP OPTIONS which is passed
+in hash like fashion, using key and value pairs.  Possible options are:</p>
+<pre class="verbatim"><ol><li> <span class="w">Size</span>        <span class="cm">=&gt;</span> <span class="q">&lt;bytes&gt;</span></li><li> <span class="w">Return</span>      <span class="cm">=&gt;</span> <span class="q">&quot;FULL&quot;</span> | <span class="q">&quot;HDRS&quot;</span></li><li> <span class="w">Bits</span>        <span class="cm">=&gt;</span> <span class="q">&quot;7&quot;</span> | <span class="q">&quot;8&quot;</span> | <span class="q">&quot;binary&quot;</span></li><li> <span class="w">Transaction</span> <span class="cm">=&gt;</span> <span class="q">&lt;ADDRESS&gt;</span></li><li> <span class="w">Envelope</span>    <span class="cm">=&gt;</span> <span class="q">&lt;ENVID&gt;</span>     <span class="c"># xtext-encodes its argument</span></li><li> <span class="w">ENVID</span>       <span class="cm">=&gt;</span> <span class="q">&lt;ENVID&gt;</span>     <span class="c"># similar to Envelope, but expects argument encoded</span></li><li> <span class="w">XVERP</span>       <span class="cm">=&gt;</span> <span class="n">1</span></li><li> <span class="w">AUTH</span>        <span class="cm">=&gt;</span> <span class="q">&lt;submitter&gt;</span> <span class="c"># encoded address according to RFC 2554</span></li></ol></pre><p>The <code class="inline"><span class="w">Return</span></code>
+ and <code class="inline"><span class="w">Envelope</span></code>
+ parameters are used for DSN (Delivery
+Status Notification).</p>
+<p>The submitter address in <code class="inline"><span class="w">AUTH</span></code>
+ option is expected to be in a format as
+required by RFC 2554, in an RFC2821-quoted form and xtext-encoded, or &lt;&gt; .</p>
+</li>
+<li><a name="reset-()"></a><b>reset ()</b>
+<p>Reset the status of the server. This may be called after a message has been 
+initiated, but before any data has been sent, to cancel the sending of the
+message.</p>
+</li>
+<li><a name="recipient-(-ADDRESS-%5b%2c-ADDRESS%2c-%5b...%5d%5d-%5b%2c-OPTIONS-%5d-)"></a><b>recipient ( ADDRESS [, ADDRESS, [...]] [, OPTIONS ] )</b>
+<p>Notify the server that the current message should be sent to all of the
+addresses given. Each address is sent as a separate command to the server.
+Should the sending of any address result in a failure then the process is
+aborted and a <i>false</i> value is returned. It is up to the user to call
+<code class="inline"><a class="l_k" href="../functions/reset.html">reset</a></code> if they so desire.</p>
+<p>The <code class="inline"><span class="w">recipient</span></code>
+ method can also pass additional case-sensitive OPTIONS as an
+anonymous hash using key and value pairs.  Possible options are:</p>
+<pre class="verbatim"><ol><li>  Notify  =&gt; ['NEVER'] or ['SUCCESS','FAILURE','DELAY']  (see below)</li><li>  ORcpt   =&gt; &lt;ORCPT&gt;</li><li>  SkipBad =&gt; 1        (to ignore bad addresses)</li></ol></pre><p>If <code class="inline"><span class="w">SkipBad</span></code>
+ is true the <code class="inline"><span class="w">recipient</span></code>
+ will not return an error when a bad
+address is encountered and it will return an array of addresses that did
+succeed.</p>
+<pre class="verbatim"><ol><li>  <span class="i">$smtp</span><span class="i">-&gt;recipient</span><span class="s">(</span><span class="i">$recipient1</span><span class="cm">,</span><span class="i">$recipient2</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># Good</span></li><li>  <span class="i">$smtp</span><span class="i">-&gt;recipient</span><span class="s">(</span><span class="i">$recipient1</span><span class="cm">,</span><span class="i">$recipient2</span><span class="cm">,</span> <span class="s">{</span> <span class="w">SkipBad</span> <span class="cm">=&gt;</span> <span class="n">1</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># Good</span></li><li>  <span class="i">$smtp</span><span class="i">-&gt;recipient</span><span class="s">(</span><span class="i">$recipient1</span><span class="cm">,</span><span class="i">$recipient2</span><span class="cm">,</span> <span class="s">{</span> <span class="w">Notify</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">&#39;FAILURE&#39;</span><span class="cm">,</span><span class="q">&#39;DELAY&#39;</span><span class="s">]</span><span class="cm">,</span> <span class="w">SkipBad</span> <span class="cm">=&gt;</span> <span class="n">1</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># Good</span></li><li>  <span class="i">@goodrecips</span>=<span class="i">$smtp</span><span class="i">-&gt;recipient</span><span class="s">(</span><span class="i">@recipients</span><span class="cm">,</span> <span class="s">{</span> <span class="w">Notify</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">&#39;FAILURE&#39;</span><span class="s">]</span><span class="cm">,</span> <span class="w">SkipBad</span> <span class="cm">=&gt;</span> <span class="n">1</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># Good</span></li><li>  <span class="i">$smtp</span><span class="i">-&gt;recipient</span><span class="s">(</span><span class="q">&quot;$recipient,$recipient2&quot;</span><span class="s">)</span><span class="sc">;</span> <span class="c"># BAD</span></li></ol></pre><p>Notify is used to request Delivery Status Notifications (DSNs), but your
+SMTP/ESMTP service may not respect this request depending upon its version and
+your site's SMTP configuration.</p>
+<p>Leaving out the Notify option usually defaults an SMTP service to its default
+behavior equivalent to ['FAILURE'] notifications only, but again this may be
+dependent upon your site's SMTP configuration.</p>
+<p>The NEVER keyword must appear by itself if used within the Notify option and "requests
+that a DSN not be returned to the sender under any conditions."</p>
+<pre class="verbatim"><ol><li>  <span class="s">{</span><span class="w">Notify</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">&#39;NEVER&#39;</span><span class="s">]</span><span class="s">}</span></li><li></li><li>  <span class="i">$smtp</span><span class="i">-&gt;recipient</span><span class="s">(</span><span class="i">@recipients</span><span class="cm">,</span> <span class="s">{</span> <span class="w">Notify</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">&#39;NEVER&#39;</span><span class="s">]</span><span class="cm">,</span> <span class="w">SkipBad</span> <span class="cm">=&gt;</span> <span class="n">1</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># Good</span></li></ol></pre><p>You may use any combination of these three values 'SUCCESS','FAILURE','DELAY' in
+the anonymous array reference as defined by RFC3461 (see <a href="http://www.ietf.org/rfc/rfc3461.txt">http://www.ietf.org/rfc/rfc3461.txt</a>
+for more information.  Note: quotations in this topic from same.).</p>
+<p>A Notify parameter of 'SUCCESS' or 'FAILURE' "requests that a DSN be issued on
+successful delivery or delivery failure, respectively."</p>
+<p>A Notify parameter of 'DELAY' "indicates the sender's willingness to receive
+delayed DSNs.  Delayed DSNs may be issued if delivery of a message has been
+delayed for an unusual amount of time (as determined by the Message Transfer
+Agent (MTA) at which the message is delayed), but the final delivery status
+(whether successful or failure) cannot be determined.  The absence of the DELAY
+keyword in a NOTIFY parameter requests that a "delayed" DSN NOT be issued under
+any conditions."</p>
+<pre class="verbatim"><ol><li>  <span class="s">{</span><span class="w">Notify</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">&#39;SUCCESS&#39;</span><span class="cm">,</span><span class="q">&#39;FAILURE&#39;</span><span class="cm">,</span><span class="q">&#39;DELAY&#39;</span><span class="s">]</span><span class="s">}</span></li><li></li><li>  <span class="i">$smtp</span><span class="i">-&gt;recipient</span><span class="s">(</span><span class="i">@recipients</span><span class="cm">,</span> <span class="s">{</span> <span class="w">Notify</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">&#39;FAILURE&#39;</span><span class="cm">,</span><span class="q">&#39;DELAY&#39;</span><span class="s">]</span><span class="cm">,</span> <span class="w">SkipBad</span> <span class="cm">=&gt;</span> <span class="n">1</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># Good</span></li></ol></pre><p>ORcpt is also part of the SMTP DSN extension according to RFC3461.
+It is used to pass along the original recipient that the mail was first
+sent to.  The machine that generates a DSN will use this address to inform
+the sender, because he can't know if recipients get rewritten by mail servers.
+It is expected to be in a format as required by RFC3461, xtext-encoded.</p>
+</li>
+<li><a name="to-(-ADDRESS-%5b%2c-ADDRESS-%5b...%5d%5d-)"></a><b>to ( ADDRESS [, ADDRESS [...]] )</b>
+</li>
+<li><a name="cc-(-ADDRESS-%5b%2c-ADDRESS-%5b...%5d%5d-)"></a><b>cc ( ADDRESS [, ADDRESS [...]] )</b>
+</li>
+<li><a name="bcc-(-ADDRESS-%5b%2c-ADDRESS-%5b...%5d%5d-)"></a><b>bcc ( ADDRESS [, ADDRESS [...]] )</b>
+<p>Synonyms for <code class="inline"><span class="w">recipient</span></code>
+.</p>
+</li>
+<li><a name="data-(-%5b-DATA-%5d-)"></a><b>data ( [ DATA ] )</b>
+<p>Initiate the sending of the data from the current message.</p>
+<p><code class="inline"><span class="w">DATA</span></code>
+ may be a reference to a list or a list. If specified the contents
+of <code class="inline"><span class="w">DATA</span></code>
+ and a termination string <code class="inline"><span class="q">&quot;.\r\n&quot;</span></code>
+ is sent to the server. And the
+result will be true if the data was accepted.</p>
+<p>If <code class="inline"><span class="w">DATA</span></code>
+ is not specified then the result will indicate that the server
+wishes the data to be sent. The data must then be sent using the <code class="inline"><span class="w">datasend</span></code>
+
+and <code class="inline"><span class="w">dataend</span></code>
+ methods described in <a href="../Net/Cmd.html">Net::Cmd</a>.</p>
+</li>
+<li><a name="bdat-(-DATA-)"></a><b>bdat ( DATA )</b>
+</li>
+<li><a name="bdatlast-(-DATA-)"></a><b>bdatlast ( DATA )</b>
+<p>Use the alternate DATA command "BDAT" of the data chunking service extension
+defined in RFC1830 for efficiently sending large MIME messages.</p>
+</li>
+<li><a name="expand-(-ADDRESS-)"></a><b>expand ( ADDRESS )</b>
+<p>Request the server to expand the given address Returns an array
+which contains the text read from the server.</p>
+</li>
+<li><a name="verify-(-ADDRESS-)"></a><b>verify ( ADDRESS )</b>
+<p>Verify that <code class="inline"><span class="w">ADDRESS</span></code>
+ is a legitimate mailing address.</p>
+<p>Most sites usually disable this feature in their SMTP service configuration.
+Use "Debug =&gt; 1" option under new() to see if disabled.</p>
+</li>
+<li><a name="help-(-%5b-%24subject-%5d-)"></a><b>help ( [ $subject ] )</b>
+<p>Request help text from the server. Returns the text or undef upon failure</p>
+</li>
+<li><a name="quit-()"></a><b>quit ()</b>
+<p>Send the QUIT command to the remote SMTP server and close the socket connection.</p>
+</li>
+<li><a name="can_inet6-()"></a><b>can_inet6 ()</b>
+<p>Returns whether we can use IPv6.</p>
+</li>
+<li><a name="can_ssl-()"></a><b>can_ssl ()</b>
+<p>Returns whether we can use SSL.</p>
+</li>
+</ul>
+<a name="ADDRESSES"></a><h1>ADDRESSES</h1>
+<p>Net::SMTP attempts to DWIM with addresses that are passed. For
+example an application might extract The From: line from an email
+and pass that to mail(). While this may work, it is not recommended.
+The application should really use a module like <a href="http://search.cpan.org/perldoc/Mail::Address">Mail::Address</a>
+to extract the mail address and pass that.</p>
+<p>If <code class="inline"><span class="w">ExactAddresses</span></code>
+ is passed to the constructor, then addresses
+should be a valid rfc2821-quoted address, although Net::SMTP will
+accept the address surrounded by angle brackets.</p>
+<pre class="verbatim"><ol><li> funny user@domain      WRONG</li><li> "funny user"@domain    RIGHT, recommended</li><li> &lt;"funny user"@domain&gt;  OK</li></ol></pre><a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../Net/Cmd.html">Net::Cmd</a>,
+<a href="http://search.cpan.org/perldoc/IO::Socket::SSL">IO::Socket::SSL</a></p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Graham Barr &lt;<i>gbarr@pobox.com</i>&gt;</p>
+<p>Steve Hay &lt;<i>shay@cpan.org</i>&gt; is now maintaining libnet as of version
+1.22_02</p>
+<a name="COPYRIGHT"></a><h1>COPYRIGHT</h1>
+<p>Versions up to 2.31_1 Copyright (c) 1995-2004 Graham Barr. All rights reserved.
+Changes in Version 2.31_2 onwards Copyright (C) 2013-2014 Steve Hay.  All rights
+reserved.</p>
+<p>This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#EXAMPLES">EXAMPLES</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#METHODS">METHODS</a><li><a href="#ADDRESSES">ADDRESSES</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Net::SMTP';
+  perldoc.pageAddress = 'Net/SMTP.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

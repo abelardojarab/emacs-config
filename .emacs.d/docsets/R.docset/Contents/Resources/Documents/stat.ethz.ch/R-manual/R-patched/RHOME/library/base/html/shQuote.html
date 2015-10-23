@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/shQuote.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:09 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head><title>Quote Strings for Use in OS Shells</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for shQuote {base}"><tr><td>shQuote {base}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Quote Strings for Use in OS Shells</h2>
+
+<h3>Description</h3>
+
+<p>Quote a string to be passed to an operating system shell.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+shQuote(string, type = c("sh", "csh", "cmd"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>string</code></td>
+<td>
+<p>a character vector, usually of length one.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>character: the type of shell.  Partial matching is
+supported.  <code>"cmd"</code> refers to the Windows NT shell, and is the
+default under Windows.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The default type of quoting supported under Unix-alikes is that for
+the Bourne shell <code>sh</code>.  If the string does not contain single
+quotes, we can just surround it with single quotes.  Otherwise, the
+string is surrounded in double quotes, which suppresses all special
+meanings of metacharacters except dollar, backquote and backslash, so
+these (and of course double quote) are preceded by backslash.  This
+type of quoting is also appropriate for <code>bash</code>, <code>ksh</code> and
+<code>zsh</code>.
+</p>
+<p>The other type of quoting is for the C-shell (<code>csh</code> and
+<code>tcsh</code>).  Once again, if the string does not contain single
+quotes, we can just surround it with single quotes.  If it does
+contain single quotes, we can use double quotes provided it does not
+contain dollar or backquote (and we need to escape backslash,
+exclamation mark and double quote).  As a last resort, we need to
+split the string into pieces not containing single quotes and surround
+each with single quotes, and the single quotes with double quotes.
+</p>
+
+
+<h3>References</h3>
+
+<p>Loukides, M. <em>et al</em> (2002)
+<em>Unix Power Tools</em> Third Edition.  O'Reilly.  Section 27.12.
+</p>
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>Quotes</code> for quoting <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> code.
+</p>
+<p><code><a href="sQuote.html">sQuote</a></code> for quoting English text.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+test &lt;- "abc$def`gh`i\\j"
+cat(shQuote(test), "\n")
+## Not run: system(paste("echo", shQuote(test)))
+test &lt;- "don't do it!"
+cat(shQuote(test), "\n")
+
+tryit &lt;- paste("use the", sQuote("-c"), "switch\nlike this")
+cat(shQuote(tryit), "\n")
+## Not run: system(paste("echo", shQuote(tryit)))
+cat(shQuote(tryit, type = "csh"), "\n")
+
+## Windows-only example.
+perlcmd &lt;- 'print "Hello World\n";'
+## Not run: shell(paste("perl -e", shQuote(perlcmd, type = "cmd")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>base</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/shQuote.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:09 GMT -->
+</html>

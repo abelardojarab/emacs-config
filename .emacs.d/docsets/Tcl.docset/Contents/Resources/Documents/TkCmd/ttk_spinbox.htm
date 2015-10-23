@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>ttk::spinbox manual page - Tk Themed Widget</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk Commands, version 8.6.0</a> <small>&gt;</small> ttk_spinbox</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="ttk_spinbox.htm#M2" NAME="L2070">NAME</A>
+<DL><DD>ttk::spinbox &mdash; Selecting text field widget</DD></DL>
+<DD><A HREF="ttk_spinbox.htm#M3" NAME="L2071">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="ttk_spinbox.htm#M4" NAME="L2072">DESCRIPTION</A>
+<DD><A HREF="ttk_spinbox.htm#M5" NAME="L2073">STANDARD OPTIONS</A>
+<DL>
+<DD><A HREF="ttk_widget.htm#M-class">-class, undefined, undefined</A>
+<DD><A HREF="ttk_widget.htm#M-cursor">-cursor, cursor, Cursor</A>
+<DD><A HREF="ttk_widget.htm#M-style">-style, style, Style</A>
+<DD><A HREF="ttk_widget.htm#M-takefocus">-takefocus, takeFocus, TakeFocus</A>
+<DD><A HREF="ttk_entry.htm#M-validate">-validate, validate, Validate</A>
+<DD><A HREF="ttk_entry.htm#M-validatecommand">-validatecommand, validateCommand, ValidateCommand</A>
+<DD><A HREF="ttk_widget.htm#M-xscrollcommand">-xscrollcommand, xScrollCommand, ScrollCommand</A>
+</DL>
+<DD><A HREF="ttk_spinbox.htm#M6" NAME="L2074">WIDGET-SPECIFIC OPTIONS</A>
+<DL>
+<DD><A HREF="ttk_spinbox.htm#M7" NAME="L2075">-from, from, From</A>
+<DD><A HREF="ttk_spinbox.htm#M8" NAME="L2076">-to, to, To</A>
+<DD><A HREF="ttk_spinbox.htm#M9" NAME="L2077">-increment, increment, Increment</A>
+<DD><A HREF="ttk_spinbox.htm#M10" NAME="L2078">-values, values, Values</A>
+<DD><A HREF="ttk_spinbox.htm#M11" NAME="L2079">-wrap, wrap, Wrap</A>
+<DD><A HREF="ttk_spinbox.htm#M12" NAME="L2080">-format, format, Format</A>
+<DD><A HREF="ttk_spinbox.htm#M13" NAME="L2081">-command, command, Command</A>
+</DL>
+<DD><A HREF="ttk_spinbox.htm#M14" NAME="L2082">INDICES</A>
+<DD><A HREF="ttk_spinbox.htm#M15" NAME="L2083">VALIDATION</A>
+<DD><A HREF="ttk_spinbox.htm#M16" NAME="L2084">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="ttk_spinbox.htm#M17" NAME="L2085"><I>pathName </I><B>current </B><I>index</I></A>
+<DD><A HREF="ttk_spinbox.htm#M18" NAME="L2086"><I>pathName </I><B>get</B></A>
+<DD><A HREF="ttk_spinbox.htm#M19" NAME="L2087"><I>pathName </I><B>set </B><I>value</I></A>
+</DL>
+<DD><A HREF="ttk_spinbox.htm#M20" NAME="L2088">SEE ALSO</A>
+<DD><A HREF="ttk_spinbox.htm#M21" NAME="L2089">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+ttk::spinbox &mdash; Selecting text field widget
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>ttk::spinbox</B> <I>pathName </I>?<I>options</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+A <B>ttk::spinbox</B> widget is a <B><A HREF="../TkCmd/ttk_entry.htm">ttk::entry</A></B> widget with built-in
+up and down buttons that are used to either modify a numeric value or
+to select among a set of values. The widget implements all the features
+of the <B><A HREF="../TkCmd/ttk_entry.htm">ttk::entry</A></B> widget including support of the
+<B>-textvariable</B> option to link the value displayed by the widget
+to a Tcl variable.
+<H3><A NAME="M5">STANDARD OPTIONS</A></H3>
+<DL>
+<DT><B><A HREF="ttk_widget.htm#M-class">-class, undefined, undefined</A></B>
+<DT><B><A HREF="ttk_widget.htm#M-cursor">-cursor, cursor, Cursor</A></B>
+<DT><B><A HREF="ttk_widget.htm#M-style">-style, style, Style</A></B>
+<DT><B><A HREF="ttk_widget.htm#M-takefocus">-takefocus, takeFocus, TakeFocus</A></B>
+<DT><B><A HREF="ttk_entry.htm#M-validate">-validate, validate, Validate</A></B>
+<DT><B><A HREF="ttk_entry.htm#M-validatecommand">-validatecommand, validateCommand, ValidateCommand</A></B>
+<DT><B><A HREF="ttk_widget.htm#M-xscrollcommand">-xscrollcommand, xScrollCommand, ScrollCommand</A></B>
+</DL>
+<H3><A NAME="M6">WIDGET-SPECIFIC OPTIONS</A></H3>
+<DL>
+<DT>Command-Line Name: <B><A NAME="M7">-from</A></B>
+<DT>Database Name: <B>from</B>
+<DT>Database Class: <B>From</B>
+<DD>A floating-point value specifying the lowest value for the spinbox. This is
+used in conjunction with <B>-to</B> and <B>-increment</B> to set a numerical
+range.
+<P><DT>Command-Line Name: <B><A NAME="M8">-to</A></B>
+<DT>Database Name: <B>to</B>
+<DT>Database Class: <B>To</B>
+<DD>A floating-point value specifying the highest permissible value for the
+widget. See also <B>-from</B> and <B>-increment</B>.
+range.
+<P><DT>Command-Line Name: <B><A NAME="M9">-increment</A></B>
+<DT>Database Name: <B>increment</B>
+<DT>Database Class: <B>Increment</B>
+<DD>A floating-point value specifying the change in value to be applied each
+time one of the widget spin buttons is pressed. The up button applies a
+positive increment, the down button applies a negative increment.
+<P><DT>Command-Line Name: <B><A NAME="M10">-values</A></B>
+<DT>Database Name: <B>values</B>
+<DT>Database Class: <B>Values</B>
+<DD>This must be a Tcl list of values. If this option is set then this will
+override any range set using the <B>-from</B>, <B>-to</B> and 
+<B>-increment</B> options. The widget will instead use the values
+specified beginning with the first value.
+<P><DT>Command-Line Name: <B><A NAME="M11">-wrap</A></B>
+<DT>Database Name: <B>wrap</B>
+<DT>Database Class: <B>Wrap</B>
+<DD>Must be a proper boolean value.  If on, the spinbox will wrap around the
+values of data in the widget.
+<P><DT>Command-Line Name: <B><A NAME="M12">-format</A></B>
+<DT>Database Name: <B>format</B>
+<DT>Database Class: <B>Format</B>
+<DD>Specifies an alternate format to use when setting the string value
+when using the <B>-from</B> and <B>-to</B> range.
+This must be a format specifier of the form <B>%&lt;pad&gt;.&lt;pad&gt;f</B>,
+as it will format a floating-point number.
+<P><DT>Command-Line Name: <B><A NAME="M13">-command</A></B>
+<DT>Database Name: <B>command</B>
+<DT>Database Class: <B>Command</B>
+<DD>Specifies a Tcl command to be invoked whenever a spinbutton is invoked.
+</DL>
+<H3><A NAME="M14">INDICES</A></H3>
+See the <B><A HREF="../TkCmd/ttk_entry.htm">ttk::entry</A></B> manual for information about indexing characters.
+<H3><A NAME="M15">VALIDATION</A></H3>
+See the <B><A HREF="../TkCmd/ttk_entry.htm">ttk::entry</A></B> manual for information about using the 
+<B>-validate</B> and <B>-validatecommand</B> options.
+<H3><A NAME="M16">WIDGET COMMAND</A></H3>
+The following subcommands are possible for spinbox widgets in addition to
+the commands described for the <B><A HREF="../TkCmd/ttk_entry.htm">ttk::entry</A></B> widget:
+<P>
+<DL class="widget command">
+<DT><A NAME="M17"><I>pathName </I><B>current </B><I>index</I></A><DD>
+<P><DT><A NAME="M18"><I>pathName </I><B>get</B></A><DD>
+Returns the spinbox's current value.
+<P><DT><A NAME="M19"><I>pathName </I><B>set </B><I>value</I></A><DD>
+Set the spinbox string to <I>value</I>. If a <B>-format</B> option has
+been configured then this format will be applied. If formatting fails
+or is not set or the <B>-values</B> option has been used then the value
+is set directly.
+<P></DL>
+<H3><A NAME="M20">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/ttk_widget.htm">ttk::widget</A></B>, <B><A HREF="../TkCmd/ttk_entry.htm">ttk::entry</A></B>, <B><A HREF="../TkCmd/spinbox.htm">spinbox</A></B>
+<H3><A NAME="M21">KEYWORDS</A></H3>
+<A href="../Keywords/E.htm#entry">entry</A>, <A href="../Keywords/S.htm#spinbox">spinbox</A>, <A href="../Keywords/W.htm#widget">widget</A>, <A href="../Keywords/T.htm#text field">text field</A>
+<div class="copy">Copyright &copy; 2008 Pat Thoyts
+</div>
+</BODY></HTML>

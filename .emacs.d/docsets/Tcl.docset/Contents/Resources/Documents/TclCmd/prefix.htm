@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>prefix manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl Commands, version 8.6.0</a> <small>&gt;</small> prefix</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="prefix.htm#M2" NAME="L1393">NAME</A>
+<DL><DD>tcl::prefix &mdash; facilities for prefix matching</DD></DL>
+<DD><A HREF="prefix.htm#M3" NAME="L1394">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="prefix.htm#M4" NAME="L1395">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="prefix.htm#M5" NAME="L1396"><B>::tcl::prefix all</B> <I>table</I> <I>string</I></A>
+<DD><A HREF="prefix.htm#M6" NAME="L1397"><B>::tcl::prefix longest</B> <I>table</I> <I>string</I></A>
+<DD><A HREF="prefix.htm#M7" NAME="L1398"><B>::tcl::prefix match</B> ?<I>options</I>? <I>table</I> <I>string</I></A>
+<DL class="description">
+<DD><A HREF="prefix.htm#M8" NAME="L1399"><B>-exact</B></A>
+<DD><A HREF="prefix.htm#M9" NAME="L1400"><B>-message </B><I>string</I></A>
+<DD><A HREF="prefix.htm#M10" NAME="L1401"><B>-error </B><I>options</I></A>
+</DL>
+</DL>
+<DD><A HREF="prefix.htm#M11" NAME="L1402">EXAMPLES</A>
+<DD><A HREF="prefix.htm#M12" NAME="L1403">SEE ALSO</A>
+<DD><A HREF="prefix.htm#M13" NAME="L1404">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+tcl::prefix &mdash; facilities for prefix matching
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>::tcl::prefix all</B> <I>table</I> <I>string</I><BR>
+<B>::tcl::prefix longest</B> <I>table</I> <I>string</I><BR>
+<B>::tcl::prefix match</B> <I>?option ...?</I> <I>table</I> <I>string</I><BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+This document describes commands looking up a prefix in a list of strings.
+The following commands are supported:
+<P>
+<DL class="description">
+<DT><A NAME="M5"><B>::tcl::prefix all</B> <I>table</I> <I>string</I></A><DD>
+Returns a list of all elements in <I>table</I> that begin with the prefix
+<I>string</I>.
+<P><DT><A NAME="M6"><B>::tcl::prefix longest</B> <I>table</I> <I>string</I></A><DD>
+Returns the longest common prefix of all elements in <I>table</I> that
+begin with the prefix <I>string</I>.
+<P><DT><A NAME="M7"><B>::tcl::prefix match</B> ?<I>options</I>? <I>table</I> <I>string</I></A><DD>
+If <I>string</I> equals one element in <I>table</I> or is a prefix to exactly
+one element, the matched element is returned. If not, the result depends
+on the <B>-error</B> option. (It is recommended that the <I>table</I> be sorted
+before use with this subcommand, so that the list of matches presented in the
+error message also becomes sorted, though this is not strictly necessary for
+the operation of this subcommand itself.)
+<P>
+<DL class="description">
+<DT><A NAME="M8"><B>-exact</B></A><DD>
+Accept only exact matches.
+<P><DT><A NAME="M9"><B>-message </B><I>string</I></A><DD>
+Use <I>string</I> in the error message at a mismatch. Default is
+&#8220;option&#8221;.
+<P><DT><A NAME="M10"><B>-error </B><I>options</I></A><DD>
+The <I>options</I> are used when no match is found. If <I>options</I> is empty,
+no error is generated and an empty string is returned. Otherwise the
+<I>options</I> are used as <B><A HREF="../TclCmd/return.htm">return</A></B> options when generating the error
+message. The default corresponds to setting
+&#8220;-level 0&#8221;.
+Example: If
+&#8220;<B>-error</B> {-errorcode MyError -level 1}&#8221;
+is used, an error would be generated as:
+<P>
+<PRE>return -errorcode MyError -level 1 -code error &#92;
+       &quot;ambiguous option ...&quot;</PRE>
+<P></DL>
+<P></DL>
+<H3><A NAME="M11">EXAMPLES</A></H3>
+Basic use:
+<P>
+<PRE>namespace import ::tcl::prefix
+<B>prefix match</B> {apa bepa cepa} apa
+     <I><font size="+1">&#8594;</font> apa</I>
+<B>prefix match</B> {apa bepa cepa} a
+     <I><font size="+1">&#8594;</font> apa</I>
+<B>prefix match</B> -exact {apa bepa cepa} a
+     <I><font size="+1">&#8594;</font> bad option &quot;a&quot;: must be apa, bepa, or cepa</I>
+<B>prefix match</B> -message &quot;switch&quot; {apa ada bepa cepa} a
+     <I><font size="+1">&#8594;</font> ambiguous switch &quot;a&quot;: must be apa, ada, bepa, or cepa</I>
+<B>prefix longest</B> {fblocked fconfigure fcopy file fileevent flush} fc
+     <I><font size="+1">&#8594;</font> fco</I>
+<B>prefix all</B> {fblocked fconfigure fcopy file fileevent flush} fc
+     <I><font size="+1">&#8594;</font> fconfigure fcopy</I></PRE>
+<P>
+Simplifying option matching:
+<P>
+<PRE>array set opts {-apa 1 -bepa &quot;&quot; -cepa 0}
+foreach {arg val} $args {
+    set opts([<B>prefix match</B> {-apa -bepa -cepa} $arg]) $val
+}</PRE>
+<P>
+Creating a <B><A HREF="../TclCmd/switch.htm">switch</A></B> that supports prefixes:
+<P>
+<PRE>switch [<B>prefix match</B> {apa bepa cepa} $arg] {
+    apa  { }
+    bepa { }
+    cepa { }
+}</PRE>
+<H3><A NAME="M12">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/lsearch.htm">lsearch</A></B>, <B><A HREF="../TclCmd/namespace.htm">namespace</A></B>, <B><A HREF="../TclCmd/string.htm">string</A></B>, <B><A HREF="../TclLib/GetIndex.htm">Tcl_GetIndexFromObj</A></B>
+<H3><A NAME="M13">KEYWORDS</A></H3>
+<A href="../Keywords/P.htm#prefix">prefix</A>, <A href="../Keywords/T.htm#table lookup">table lookup</A>
+<div class="copy">Copyright &copy; 2008 Peter Spjuth &lt;pspjuth(at)users.sourceforge.net&gt;
+</div>
+</BODY></HTML>

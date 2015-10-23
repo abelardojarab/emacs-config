@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>copy manual page - TclOO Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl Commands, version 8.6.0</a> <small>&gt;</small> copy</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+oo::copy &mdash; create copies of objects and classes
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+package require TclOO<BR>
+<BR>
+<B>oo::copy</B><I> sourceObject </I>?<I>targetObject</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The <B>oo::copy</B> command creates a copy of an object or class. It takes the
+name of the object or class to be copied, <I>sourceObject</I>, and optionally
+the name of the object or class to create, <I>targetObject</I>, which will be
+resolved relative to the current namespace if not an absolute qualified name.
+If <I>targetObject</I> is omitted, a new name is chosen. The copied object will
+be of the same class as the source object, and will have all its per-object
+methods copied. If it is a class, it will also have all the class methods in
+the class copied, but it will not have any of its instances copied.
+<P>
+After the <I>targetObject</I> has been created and all definitions of its
+configuration (e.g., methods, filters, mixins) copied, the <B>&lt;cloned&gt;</B>
+method of <I>targetObject</I> will be invoked, to allow for customization of
+the created object such as installing related variable traces. The only
+argument given will be <I>sourceObject</I>. The default implementation of this
+method (in <B><A HREF="../TclCmd/object.htm">oo::object</A></B>) just copies the procedures and variables in the
+namespace of <I>sourceObject</I> to the namespace of <I>targetObject</I>. If
+this method call does not return a result that is successful (i.e., an error
+or other kind of exception) then the <I>targetObject</I> will be deleted and an
+error returned.
+<P>
+The result of the <B>oo::copy</B> command will be the fully-qualified name of
+the new object or class.
+<H3><A NAME="M5">EXAMPLES</A></H3>
+This example creates an object, copies it, modifies the source object, and
+then demonstrates that the copied object is indeed a copy.
+<P>
+<PRE>oo::object create src
+oo::objdefine src method msg {} {puts foo}
+<B>oo::copy</B> src dst
+oo::objdefine src method msg {} {puts bar}
+src msg              <I><font size="+1">&#8594;</font> prints &quot;bar&quot;</I>
+dst msg              <I><font size="+1">&#8594;</font> prints &quot;foo&quot;</I></PRE>
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/class.htm">oo::class</A></B>, <B><A HREF="../TclCmd/define.htm">oo::define</A></B>, <B><A HREF="../TclCmd/object.htm">oo::object</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#clone">clone</A>, <A href="../Keywords/C.htm#copy">copy</A>, <A href="../Keywords/D.htm#duplication">duplication</A>, <A href="../Keywords/O.htm#object">object</A>
+<div class="copy">Copyright &copy; 2007 Donal K. Fellows
+</div>
+</BODY></HTML>

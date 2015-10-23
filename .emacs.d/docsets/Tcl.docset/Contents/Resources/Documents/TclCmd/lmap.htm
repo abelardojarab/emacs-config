@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>lmap manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl Commands, version 8.6.0</a> <small>&gt;</small> lmap</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+lmap &mdash; Iterate over all elements in one or more lists and collect results
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>lmap </B><I>varname list body</I><BR>
+<B>lmap </B><I>varlist1 list1</I> ?<I>varlist2 list2 ...</I>? <I>body</I><BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The <B>lmap</B> command implements a loop where the loop variable(s) take on
+values from one or more lists, and the loop returns a list of results
+collected from each iteration.
+<P>
+In the simplest case there is one loop variable, <I>varname</I>, and one list,
+<I>list</I>, that is a list of values to assign to <I>varname</I>. The
+<I>body</I> argument is a Tcl script. For each element of <I>list</I> (in order
+from first to last), <B>lmap</B> assigns the contents of the element to
+<I>varname</I> as if the <B><A HREF="../TclCmd/lindex.htm">lindex</A></B> command had been used to extract the
+element, then calls the Tcl interpreter to execute <I>body</I>. If execution of
+the body completes normally then the result of the body is appended to an
+accumulator list. <B>lmap</B> returns the accumulator list.
+<P>
+In the general case there can be more than one value list (e.g., <I>list1</I>
+and <I>list2</I>), and each value list can be associated with a list of loop
+variables (e.g., <I>varlist1</I> and <I>varlist2</I>). During each iteration of
+the loop the variables of each <I>varlist</I> are assigned consecutive values
+from the corresponding <I>list</I>. Values in each <I>list</I> are used in order
+from first to last, and each value is used exactly once. The total number of
+loop iterations is large enough to use up all the values from all the value
+lists. If a value list does not contain enough elements for each of its loop
+variables in each iteration, empty values are used for the missing elements.
+<P>
+The <B><A HREF="../TclCmd/break.htm">break</A></B> and <B><A HREF="../TclCmd/continue.htm">continue</A></B> statements may be invoked inside
+<I>body</I>, with the same effect as in the <B><A HREF="../TclCmd/for.htm">for</A></B> and <B><A HREF="../TclCmd/foreach.htm">foreach</A></B>
+commands. In these cases the body does not complete normally and the result is
+not appended to the accumulator list.
+<H3><A NAME="M5">EXAMPLES</A></H3>
+Zip lists together:
+<P>
+<PRE>set list1 {a b c d}
+set list2 {1 2 3 4}
+set zipped [<B>lmap</B> a $list1 b $list2 {list $a $b}] 
+# The value of zipped is &quot;{a 1} {b 2} {c 3} {d 4}&quot;</PRE>
+<P>
+Filter a list to remove odd values:
+<P>
+<PRE>set values {1 2 3 4 5 6 7 8}
+proc isEven {n} {expr {($n % 2) == 0}}
+set goodOnes [<B>lmap</B> x $values {expr {
+    [isEven $x] ? $x : [continue]
+}}]
+# The value of goodOnes is &quot;2 4 6 8&quot;</PRE>
+<P>
+Take a prefix from a list based on the contents of the list:
+<P>
+<PRE>set values {8 7 6 5 4 3 2 1}
+proc isGood {counter} {expr {$n &gt; 3}}
+set prefix [<B>lmap</B> x $values {expr {
+    [isGood $x] ? $x : [break]
+}}]
+# The value of prefix is &quot;8 7 6 5 4&quot;</PRE>
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/break.htm">break</A></B>, <B><A HREF="../TclCmd/continue.htm">continue</A></B>, <B><A HREF="../TclCmd/for.htm">for</A></B>, <B><A HREF="../TclCmd/foreach.htm">foreach</A></B>, <B><A HREF="../TclCmd/while.htm">while</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/F.htm#foreach">foreach</A>, <A href="../Keywords/I.htm#iteration">iteration</A>, <A href="../Keywords/L.htm#list">list</A>, <A href="../Keywords/L.htm#loop">loop</A>, <A href="../Keywords/M.htm#map">map</A>
+<div class="copy">Copyright &copy; 2012 Trevor Davel
+</div>
+</BODY></HTML>

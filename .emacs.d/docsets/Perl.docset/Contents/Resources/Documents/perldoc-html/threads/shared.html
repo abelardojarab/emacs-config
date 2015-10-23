@@ -1,0 +1,720 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>threads::shared</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>threads::shared</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-pragmas.html">Pragmas</a> &gt;
+      
+    
+    threads::shared
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>threads::shared</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#VERSION">VERSION</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#EXPORT">EXPORT</a><li><a href="#FUNCTIONS">FUNCTIONS</a><li><a href="#OBJECTS">OBJECTS</a><li><a href="#NOTES">NOTES</a><li><a href="#WARNINGS">WARNINGS</a><li><a href="#BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#LICENSE">LICENSE</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>threads::shared - Perl extension for sharing data structures between threads</p>
+<a name="VERSION"></a><h1>VERSION</h1>
+<p>This document describes threads::shared version 1.48</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">threads</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">threads::shared</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$var</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">%hsh</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">@ary</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$scalar</span><span class="cm">,</span> <span class="i">@array</span><span class="cm">,</span> <span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">share</span><span class="s">(</span><span class="i">$scalar</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">share</span><span class="s">(</span><span class="i">@array</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">share</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="i">$var</span> = <span class="i">$scalar_value</span><span class="sc">;</span></li><li>  <span class="i">$var</span> = <span class="i">$shared_ref_value</span><span class="sc">;</span></li><li>  <span class="i">$var</span> = <span class="i">shared_clone</span><span class="s">(</span><span class="i">$non_shared_ref_value</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">$var</span> = <span class="i">shared_clone</span><span class="s">(</span><span class="s">{</span><span class="q">'foo'</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">qw/foo bar baz/</span><span class="s">]</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="i">$hsh</span>{<span class="q">'foo'</span>} = <span class="i">$scalar_value</span><span class="sc">;</span></li><li>  <span class="i">$hsh</span>{<span class="q">'bar'</span>} = <span class="i">$shared_ref_value</span><span class="sc">;</span></li><li>  <span class="i">$hsh</span>{<span class="q">'baz'</span>} = <span class="i">shared_clone</span><span class="s">(</span><span class="i">$non_shared_ref_value</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">$hsh</span>{<span class="q">'quz'</span>} = <span class="i">shared_clone</span><span class="s">(</span><span class="s">[</span><span class="n">1</span>..<span class="n">3</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="i">$ary</span>[<span class="n">0</span>] = <span class="i">$scalar_value</span><span class="sc">;</span></li><li>  <span class="i">$ary</span>[<span class="n">1</span>] = <span class="i">$shared_ref_value</span><span class="sc">;</span></li><li>  <span class="i">$ary</span>[<span class="n">2</span>] = <span class="i">shared_clone</span><span class="s">(</span><span class="i">$non_shared_ref_value</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">$ary</span>[<span class="n">3</span>] = <span class="i">shared_clone</span><span class="s">(</span><span class="s">[</span> <span class="s">{</span><span class="s">}</span><span class="cm">,</span> <span class="s">[</span><span class="s">]</span> <span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="s">{</span> <a class="l_k" href="../functions/lock.html">lock</a><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span> ...  <span class="s">}</span></li><li></li><li>  <span class="i">cond_wait</span><span class="s">(</span><span class="i">$scalar</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">cond_timedwait</span><span class="s">(</span><span class="i">$scalar</span><span class="cm">,</span> <a class="l_k" href="../functions/time.html">time</a><span class="s">(</span><span class="s">)</span> + <span class="n">30</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">cond_broadcast</span><span class="s">(</span><span class="i">@array</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">cond_signal</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$lockvar</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>  <span class="c"># condition var != lock var</span></li><li>  <span class="i">cond_wait</span><span class="s">(</span><span class="i">$var</span><span class="cm">,</span> <span class="i">$lockvar</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">cond_timedwait</span><span class="s">(</span><span class="i">$var</span><span class="cm">,</span> <a class="l_k" href="../functions/time.html">time</a><span class="s">(</span><span class="s">)</span>+<span class="n">30</span><span class="cm">,</span> <span class="i">$lockvar</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>By default, variables are private to each thread, and each newly created
+thread gets a private copy of each existing variable.  This module allows you
+to share variables across different threads (and pseudo-forks on Win32).  It
+is used together with the <a href="../threads.html">threads</a> module.</p>
+<p>This module supports the sharing of the following data types only:  scalars
+and scalar refs, arrays and array refs, and hashes and hash refs.</p>
+<a name="EXPORT"></a><h1>EXPORT</h1>
+<p>The following functions are exported by this module: <code class="inline"><span class="w">share</span></code>
+,
+<code class="inline"><span class="w">shared_clone</span></code>
+, <code class="inline"><span class="w">is_shared</span></code>
+, <code class="inline"><span class="w">cond_wait</span></code>
+, <code class="inline"><span class="w">cond_timedwait</span></code>
+, <code class="inline"><span class="w">cond_signal</span></code>
+
+and <code class="inline"><span class="w">cond_broadcast</span></code>
+</p>
+<p>Note that if this module is imported when <a href="../threads.html">threads</a> has not yet been loaded,
+then these functions all become no-ops.  This makes it possible to write
+modules that will work in both threaded and non-threaded environments.</p>
+<a name="FUNCTIONS"></a><h1>FUNCTIONS</h1>
+<ul>
+<li><a name="share-VARIABLE"></a><b>share VARIABLE</b>
+<p><code class="inline"><span class="w">share</span></code>
+ takes a variable and marks it as shared:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$scalar</span><span class="cm">,</span> <span class="i">@array</span><span class="cm">,</span> <span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">share</span><span class="s">(</span><span class="i">$scalar</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">share</span><span class="s">(</span><span class="i">@array</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">share</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p><code class="inline"><span class="w">share</span></code>
+ will return the shared rvalue, but always as a reference.</p>
+<p>Variables can also be marked as shared at compile time by using the
+<code class="inline"><span class="j">:</span><span class="w">shared</span></code>
+ attribute:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$var</span><span class="cm">,</span> <span class="i">%hash</span><span class="cm">,</span> <span class="i">@array</span><span class="s">)</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li></ol></pre><p>Shared variables can only store scalars, refs of shared variables, or
+refs of shared data (discussed in next section):</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$var</span><span class="cm">,</span> <span class="i">%hash</span><span class="cm">,</span> <span class="i">@array</span><span class="s">)</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$bork</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Storing scalars</span></li><li>  <span class="i">$var</span> = <span class="n">1</span><span class="sc">;</span></li><li>  <span class="i">$hash</span>{<span class="q">'foo'</span>} = <span class="q">'bar'</span><span class="sc">;</span></li><li>  <span class="i">$array</span>[<span class="n">0</span>] = <span class="n">1.5</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Storing shared refs</span></li><li>  <span class="i">$var</span> = \<span class="i">%hash</span><span class="sc">;</span></li><li>  <span class="i">$hash</span>{<span class="q">'ary'</span>} = \<span class="i">@array</span><span class="sc">;</span></li><li>  <span class="i">$array</span>[<span class="n">1</span>] = \<span class="i">$var</span><span class="sc">;</span></li><li></li><li>  <span class="c"># The following are errors:</span></li><li>  <span class="c">#   $var = \$bork;                    # ref of non-shared variable</span></li><li>  <span class="c">#   $hash{'bork'} = [];               # non-shared array ref</span></li><li>  <span class="c">#   push(@array, { 'x' =&gt; 1 });       # non-shared hash ref</span></li></ol></pre></li>
+<li><a name="shared_clone-REF"></a><b>shared_clone REF</b>
+<p><code class="inline"><span class="w">shared_clone</span></code>
+ takes a reference, and returns a shared version of its
+argument, performing a deep copy on any non-shared elements.  Any shared
+elements in the argument are used as is (i.e., they are not cloned).</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$cpy</span> = <span class="i">shared_clone</span><span class="s">(</span><span class="s">{</span><span class="q">'foo'</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">qw/foo bar baz/</span><span class="s">]</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Object status (i.e., the class an object is blessed into) is also cloned.</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$obj</span> = <span class="s">{</span><span class="q">'foo'</span> <span class="cm">=&gt;</span> <span class="s">[</span><span class="q">qw/foo bar baz/</span><span class="s">]</span><span class="s">}</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/bless.html">bless</a><span class="s">(</span><span class="i">$obj</span><span class="cm">,</span> <span class="q">'Foo'</span><span class="s">)</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$cpy</span> = <span class="i">shared_clone</span><span class="s">(</span><span class="i">$obj</span><span class="s">)</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><a class="l_k" href="../functions/ref.html">ref</a><span class="s">(</span><span class="i">$cpy</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="s">)</span><span class="sc">;</span>         <span class="c"># Outputs 'Foo'</span></li></ol></pre><p>For cloning empty array or hash refs, the following may also be used:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$var</span> = <span class="i">&amp;share</span><span class="s">(</span><span class="s">[</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># Same as $var = shared_clone([]);</span></li><li>  <span class="i">$var</span> = <span class="i">&amp;share</span><span class="s">(</span><span class="s">{</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># Same as $var = shared_clone({});</span></li></ol></pre><p>Not all Perl data types can be cloned (e.g., globs, code refs).  By default,
+<code class="inline"><span class="w">shared_clone</span></code>
+ will <a href="../Carp.html">croak</a> if it encounters such items.  To change
+this behaviour to a warning, then set the following:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$threads::shared::clone_warn</span> = <span class="n">1</span><span class="sc">;</span></li></ol></pre><p>In this case, <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> will be substituted for the item to be cloned.  If
+set to zero:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$threads::shared::clone_warn</span> = <span class="n">0</span><span class="sc">;</span></li></ol></pre><p>then the <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> substitution will be performed silently.</p>
+</li>
+<li><a name="is_shared-VARIABLE"></a><b>is_shared VARIABLE</b>
+<p><code class="inline"><span class="w">is_shared</span></code>
+ checks if the specified variable is shared or not.  If shared,
+returns the variable's internal ID (similar to
+<code class="inline"><span class="i">refaddr</span><span class="s">(</span><span class="s">)</span></code>
+ (see <a href="../Scalar/Util.html">Scalar::Util</a>).  Otherwise, returns <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code>.</p>
+<pre class="verbatim"><ol><li>  if <span class="s">(</span><span class="i">is_shared</span><span class="s">(</span><span class="i">$var</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>      <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><span class="q">&quot;\$var is shared\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="s">}</span> else <span class="s">{</span></li><li>      <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><span class="q">&quot;\$var is not shared\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="s">}</span></li></ol></pre><p>When used on an element of an array or hash, <code class="inline"><span class="w">is_shared</span></code>
+ checks if the
+specified element belongs to a shared array or hash.  (It does not check
+the contents of that element.)</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">%hash</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>  if <span class="s">(</span><span class="i">is_shared</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>      <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><span class="q">&quot;\%hash is shared\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="s">}</span></li><li></li><li>  <span class="i">$hash</span>{<span class="q">&#39;elem&#39;</span>} = <span class="n">1</span><span class="sc">;</span></li><li>  if <span class="s">(</span><span class="i">is_shared</span><span class="s">(</span><span class="i">$hash</span>{<span class="q">&#39;elem&#39;</span>}<span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>      <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><span class="q">&quot;\$hash{&#39;elem&#39;} is in a shared hash\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="s">}</span></li></ol></pre></li>
+<li><a name="lock-VARIABLE"></a><b>lock VARIABLE</b>
+<p><code class="inline"><a class="l_k" href="../functions/lock.html">lock</a></code> places a <b>advisory</b> lock on a variable until the lock goes out of
+scope.  If the variable is locked by another thread, the <code class="inline"><a class="l_k" href="../functions/lock.html">lock</a></code> call will
+block until it's available.  Multiple calls to <code class="inline"><a class="l_k" href="../functions/lock.html">lock</a></code> by the same thread from
+within dynamically nested scopes are safe -- the variable will remain locked
+until the outermost lock on the variable goes out of scope.</p>
+<p><code class="inline"><a class="l_k" href="../functions/lock.html">lock</a></code> follows references exactly <i>one</i> level:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">%hash</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$ref</span> = \<span class="i">%hash</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/lock.html">lock</a><span class="s">(</span><span class="i">$ref</span><span class="s">)</span><span class="sc">;</span>           <span class="c"># This is equivalent to lock(%hash)</span></li></ol></pre><p>Note that you cannot explicitly unlock a variable; you can only wait for the
+lock to go out of scope.  This is most easily accomplished by locking the
+variable inside a block.</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$var</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>  <span class="s">{</span></li><li>      <a class="l_k" href="../functions/lock.html">lock</a><span class="s">(</span><span class="i">$var</span><span class="s">)</span><span class="sc">;</span></li><li>      <span class="c"># $var is locked from here to the end of the block</span></li><li>      ...</li><li>  <span class="s">}</span></li><li>  <span class="c"># $var is now unlocked</span></li></ol></pre><p>As locks are advisory, they do not prevent data access or modification by
+another thread that does not itself attempt to obtain a lock on the variable.</p>
+<p>You cannot lock the individual elements of a container variable:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">%hash</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>  <span class="i">$hash</span>{<span class="q">&#39;foo&#39;</span>} = <span class="q">&#39;bar&#39;</span><span class="sc">;</span></li><li>  <span class="c">#lock($hash{&#39;foo&#39;});          # Error</span></li><li>  <a class="l_k" href="../functions/lock.html">lock</a><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span>                  <span class="c"># Works</span></li></ol></pre><p>If you need more fine-grained control over shared variable access, see
+<a href="../Thread/Semaphore.html">Thread::Semaphore</a>.</p>
+</li>
+<li><a name="cond_wait-VARIABLE"></a><b>cond_wait VARIABLE</b>
+</li>
+<li><a name="cond_wait-CONDVAR%2c-LOCKVAR"></a><b>cond_wait CONDVAR, LOCKVAR</b>
+<p>The <code class="inline"><span class="w">cond_wait</span></code>
+ function takes a <b>locked</b> variable as a parameter, unlocks
+the variable, and blocks until another thread does a <code class="inline"><span class="w">cond_signal</span></code>
+ or
+<code class="inline"><span class="w">cond_broadcast</span></code>
+ for that same locked variable.  The variable that
+<code class="inline"><span class="w">cond_wait</span></code>
+ blocked on is re-locked after the <code class="inline"><span class="w">cond_wait</span></code>
+ is satisfied.  If
+there are multiple threads <code class="inline"><span class="w">cond_wait</span></code>
+ing on the same variable, all but one
+will re-block waiting to reacquire the
+lock on the variable.  (So if you're only
+using <code class="inline"><span class="w">cond_wait</span></code>
+ for synchronization, give up the lock as soon as possible).
+The two actions of unlocking the variable and entering the blocked wait state
+are atomic, the two actions of exiting from the blocked wait state and
+re-locking the variable are not.</p>
+<p>In its second form, <code class="inline"><span class="w">cond_wait</span></code>
+ takes a shared, <b>unlocked</b> variable followed
+by a shared, <b>locked</b> variable.  The second variable is unlocked and thread
+execution suspended until another thread signals the first variable.</p>
+<p>It is important to note that the variable can be notified even if no thread
+<code class="inline"><span class="w">cond_signal</span></code>
+ or <code class="inline"><span class="w">cond_broadcast</span></code>
+ on the variable.  It is therefore
+important to check the value of the variable and go back to waiting if the
+requirement is not fulfilled.  For example, to pause until a shared counter
+drops to zero:</p>
+<pre class="verbatim"><ol><li>  <span class="s">{</span> <a class="l_k" href="../functions/lock.html">lock</a><span class="s">(</span><span class="i">$counter</span><span class="s">)</span><span class="sc">;</span> <span class="i">cond_wait</span><span class="s">(</span><span class="i">$counter</span><span class="s">)</span> until <span class="i">$counter</span> == <span class="n">0</span><span class="sc">;</span> <span class="s">}</span></li></ol></pre></li>
+<li><a name="cond_timedwait-VARIABLE%2c-ABS_TIMEOUT"></a><b>cond_timedwait VARIABLE, ABS_TIMEOUT</b>
+</li>
+<li><a name="cond_timedwait-CONDVAR%2c-ABS_TIMEOUT%2c-LOCKVAR"></a><b>cond_timedwait CONDVAR, ABS_TIMEOUT, LOCKVAR</b>
+<p>In its two-argument form, <code class="inline"><span class="w">cond_timedwait</span></code>
+ takes a <b>locked</b> variable and an
+absolute timeout in <i>epoch</i> seconds (see <a href="../functions/time.html">time</a>
+for more) as parameters, unlocks the variable, and blocks until the
+timeout is reached or another thread signals the variable.  A false value is
+returned if the timeout is reached, and a true value otherwise.  In either
+case, the variable is re-locked upon return.</p>
+<p>Like <code class="inline"><span class="w">cond_wait</span></code>
+, this function may take a shared, <b>locked</b> variable as an
+additional parameter; in this case the first parameter is an <b>unlocked</b>
+condition variable protected by a distinct lock variable.</p>
+<p>Again like <code class="inline"><span class="w">cond_wait</span></code>
+, waking up and reacquiring the lock are not atomic,
+and you should always check your desired condition after this function
+returns.  Since the timeout is an absolute value, however, it does not have to
+be recalculated with each pass:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/lock.html">lock</a><span class="s">(</span><span class="i">$var</span><span class="s">)</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$abs</span> = <a class="l_k" href="../functions/time.html">time</a><span class="s">(</span><span class="s">)</span> + <span class="n">15</span><span class="sc">;</span></li><li>  until <span class="s">(</span><span class="i">$ok</span> = <span class="i">desired_condition</span><span class="s">(</span><span class="i">$var</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>      <a class="l_k" href="../functions/last.html">last</a> if !<span class="i">cond_timedwait</span><span class="s">(</span><span class="i">$var</span><span class="cm">,</span> <span class="i">$abs</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="s">}</span></li><li>  <span class="c"># we got it if $ok, otherwise we timed out!</span></li></ol></pre></li>
+<li><a name="cond_signal-VARIABLE"></a><b>cond_signal VARIABLE</b>
+<p>The <code class="inline"><span class="w">cond_signal</span></code>
+ function takes a <b>locked</b> variable as a parameter and
+unblocks one thread that's <code class="inline"><span class="w">cond_wait</span></code>
+ing
+on that variable.  If more than one
+thread is blocked in a <code class="inline"><span class="w">cond_wait</span></code>
+ on that variable, only one (and which one
+is indeterminate) will be unblocked.</p>
+<p>If there are no threads blocked in a <code class="inline"><span class="w">cond_wait</span></code>
+ on the variable, the signal
+is discarded.  By always locking before
+signaling, you can (with care), avoid
+signaling before another thread has entered cond_wait().</p>
+<p><code class="inline"><span class="w">cond_signal</span></code>
+ will normally generate a warning if you attempt to use it on an
+unlocked variable.  On the rare occasions
+where doing this may be sensible, you
+can suppress the warning with:</p>
+<pre class="verbatim"><ol><li>  <span class="s">{</span> <a class="l_k" href="../functions/no.html">no</a> <span class="w">warnings</span> <span class="q">'threads'</span><span class="sc">;</span> <span class="i">cond_signal</span><span class="s">(</span><span class="i">$foo</span><span class="s">)</span><span class="sc">;</span> <span class="s">}</span></li></ol></pre></li>
+<li><a name="cond_broadcast-VARIABLE"></a><b>cond_broadcast VARIABLE</b>
+<p>The <code class="inline"><span class="w">cond_broadcast</span></code>
+ function works similarly to <code class="inline"><span class="w">cond_signal</span></code>
+.
+<code class="inline"><span class="w">cond_broadcast</span></code>
+, though, will unblock <b>all</b> the threads that are blocked in
+a <code class="inline"><span class="w">cond_wait</span></code>
+ on the locked variable, rather than only one.</p>
+</li>
+</ul>
+<a name="OBJECTS"></a><h1>OBJECTS</h1>
+<p><a href="../threads/shared.html">threads::shared</a> exports a version of <a href="../functions/bless.html">bless REF</a> that
+works on shared objects such that <i>blessings</i> propagate across threads.</p>
+<pre class="verbatim"><ol><li>  <span class="c"># Create a shared 'Foo' object</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$foo</span> <span class="co">:</span><span class="w">shared</span> = <span class="i">shared_clone</span><span class="s">(</span><span class="s">{</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/bless.html">bless</a><span class="s">(</span><span class="i">$foo</span><span class="cm">,</span> <span class="q">'Foo'</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Create a shared 'Bar' object</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$bar</span> <span class="co">:</span><span class="w">shared</span> = <span class="i">shared_clone</span><span class="s">(</span><span class="s">{</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/bless.html">bless</a><span class="s">(</span><span class="i">$bar</span><span class="cm">,</span> <span class="q">'Bar'</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Put 'bar' inside 'foo'</span></li><li>  <span class="i">$foo</span>-&gt;{<span class="q">'bar'</span>} = <span class="i">$bar</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Rebless the objects via a thread</span></li><li>  <span class="w">threads</span><span class="w">-&gt;create</span><span class="s">(</span><a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span></li><li>      <span class="c"># Rebless the outer object</span></li><li>      <a class="l_k" href="../functions/bless.html">bless</a><span class="s">(</span><span class="i">$foo</span><span class="cm">,</span> <span class="q">'Yin'</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>      <span class="c"># Cannot directly rebless the inner object</span></li><li>      <span class="c">#bless($foo-&gt;{'bar'}, 'Yang');</span></li><li></li><li>      <span class="c"># Retrieve and rebless the inner object</span></li><li>      <a class="l_k" href="../functions/my.html">my</a> <span class="i">$obj</span> = <span class="i">$foo</span>-&gt;{<span class="q">'bar'</span>}<span class="sc">;</span></li><li>      <a class="l_k" href="../functions/bless.html">bless</a><span class="s">(</span><span class="i">$obj</span><span class="cm">,</span> <span class="q">'Yang'</span><span class="s">)</span><span class="sc">;</span></li><li>      <span class="i">$foo</span>-&gt;{<span class="q">'bar'</span>} = <span class="i">$obj</span><span class="sc">;</span></li><li></li><li>  <span class="s">}</span><span class="s">)</span><span class="i">-&gt;join</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><a class="l_k" href="../functions/ref.html">ref</a><span class="s">(</span><span class="i">$foo</span><span class="s">)</span><span class="cm">,</span>          <span class="q">&quot;\n&quot;</span><span class="s">)</span><span class="sc">;</span>    <span class="c"># Prints 'Yin'</span></li><li>  <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><a class="l_k" href="../functions/ref.html">ref</a><span class="s">(</span><span class="i">$foo</span>-&gt;{<span class="q">'bar'</span>}<span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="s">)</span><span class="sc">;</span>    <span class="c"># Prints 'Yang'</span></li><li>  <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><a class="l_k" href="../functions/ref.html">ref</a><span class="s">(</span><span class="i">$bar</span><span class="s">)</span><span class="cm">,</span>          <span class="q">&quot;\n&quot;</span><span class="s">)</span><span class="sc">;</span>    <span class="c"># Also prints 'Yang'</span></li></ol></pre><a name="NOTES"></a><h1>NOTES</h1>
+<p><a href="../threads/shared.html">threads::shared</a> is designed to disable itself silently if threads are not
+available.  This allows you to write modules and packages that can be used
+in both threaded and non-threaded applications.</p>
+<p>If you want access to threads, you must <code class="inline"><a class="l_k" href="../functions/use.html">use</a> <span class="w">threads</span></code>
+ before you
+<code class="inline"><a class="l_k" href="../functions/use.html">use</a> <span class="w">threads::shared</span></code>
+.  <a href="../threads.html">threads</a> will emit a warning if you use it after
+<a href="../threads/shared.html">threads::shared</a>.</p>
+<a name="WARNINGS"></a><h1>WARNINGS</h1>
+<ul>
+<li><a name="cond_broadcast()-called-on-unlocked-variable"></a><b>cond_broadcast() called on unlocked variable</b>
+</li>
+<li><a name="cond_signal()-called-on-unlocked-variable"></a><b>cond_signal() called on unlocked variable</b>
+<p>See <a href="#cond_signal-VARIABLE">cond_signal VARIABLE</a>, above.</p>
+</li>
+</ul>
+<a name="BUGS-AND-LIMITATIONS"></a><h1>BUGS AND LIMITATIONS</h1>
+<p>When <code class="inline"><span class="w">share</span></code>
+ is used on arrays, hashes, array refs or hash refs, any data
+they contain will be lost.</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">@arr</span> = <span class="q">qw(foo bar baz)</span><span class="sc">;</span></li><li>  <span class="i">share</span><span class="s">(</span><span class="i">@arr</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="c"># @arr is now empty (i.e., == ());</span></li><li></li><li>  <span class="c"># Create a &#39;foo&#39; object</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$foo</span> = <span class="s">{</span> <span class="q">&#39;data&#39;</span> <span class="cm">=&gt;</span> <span class="n">99</span> <span class="s">}</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/bless.html">bless</a><span class="s">(</span><span class="i">$foo</span><span class="cm">,</span> <span class="q">&#39;foo&#39;</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Share the object</span></li><li>  <span class="i">share</span><span class="s">(</span><span class="i">$foo</span><span class="s">)</span><span class="sc">;</span>        <span class="c"># Contents are now wiped out</span></li><li>  <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><span class="q">&quot;ERROR: \$foo is empty\n&quot;</span><span class="s">)</span></li><li>      if <span class="s">(</span>! <a class="l_k" href="../functions/exists.html">exists</a><span class="s">(</span><span class="i">$foo</span>-&gt;{<span class="q">&#39;data&#39;</span>}<span class="s">)</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Therefore, populate such variables <b>after</b> declaring them as shared.  (Scalar
+and scalar refs are not affected by this problem.)</p>
+<p>It is often not wise to share an object unless the class itself has been
+written to support sharing.  For example, an object's destructor may get
+called multiple times, once for each thread's scope exit.  Another danger is
+that the contents of hash-based objects will be lost due to the above
+mentioned limitation.  See <i>examples/class.pl</i> (in the CPAN distribution of
+this module) for how to create a class that supports object sharing.</p>
+<p>Destructors may not be called on objects if those objects still exist at
+global destruction time.  If the destructors must be called, make sure
+there are no circular references and that nothing is referencing the
+objects, before the program ends.</p>
+<p>Does not support <code class="inline"><a class="l_k" href="../functions/splice.html">splice</a></code> on arrays.  Does not support explicitly changing
+array lengths via $#array -- use <code class="inline"><a class="l_k" href="../functions/push.html">push</a></code> and <code class="inline"><a class="l_k" href="../functions/pop.html">pop</a></code> instead.</p>
+<p>Taking references to the elements of shared arrays and hashes does not
+autovivify the elements, and neither does slicing a shared array/hash over
+non-existent indices/keys autovivify the elements.</p>
+<p><code class="inline"><span class="i">share</span><span class="s">(</span><span class="s">)</span></code>
+ allows you to <code class="inline"><span class="i">share</span><span class="s">(</span><span class="i">$hashref</span>-&gt;{<span class="w">key</span>}<span class="s">)</span></code>
+ and
+<code class="inline"><span class="i">share</span><span class="s">(</span><span class="i">$arrayref</span>-&gt;[<span class="w">idx</span>]<span class="s">)</span></code>
+ without giving any error message.  But the
+<code class="inline"><span class="i">$hashref</span>-&gt;{<span class="w">key</span>}</code>
+ or <code class="inline"><span class="i">$arrayref</span>-&gt;[<span class="w">idx</span>]</code>
+ is <b>not</b> shared, causing
+the error "lock can only be used on shared values" to occur when you attempt
+to <code class="inline"><a class="l_k" href="../functions/lock.html">lock($hashref->{key})</a></code> or <code class="inline"><a class="l_k" href="../functions/lock.html">lock($arrayref->[idx])</a></code> in another
+thread.</p>
+<p>Using <code class="inline"><span class="i">refaddr</span><span class="s">(</span><span class="s">)</span></code>
+ is unreliable for testing
+whether or not two shared references are equivalent (e.g., when testing for
+circular references).  Use <a href="#is_shared-VARIABLE">is_shared()</a>, instead:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">threads</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">threads::shared</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Scalar::Util</span> <span class="q">qw(refaddr)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># If ref is shared, use threads::shared's internal ID.</span></li><li>    <span class="c"># Otherwise, use refaddr().</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$addr1</span> = <span class="i">is_shared</span><span class="s">(</span><span class="i">$ref1</span><span class="s">)</span> || <span class="i">refaddr</span><span class="s">(</span><span class="i">$ref1</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$addr2</span> = <span class="i">is_shared</span><span class="s">(</span><span class="i">$ref2</span><span class="s">)</span> || <span class="i">refaddr</span><span class="s">(</span><span class="i">$ref2</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    if <span class="s">(</span><span class="i">$addr1</span> == <span class="i">$addr2</span><span class="s">)</span> <span class="s">{</span></li><li>        <span class="c"># The refs are equivalent</span></li><li>    <span class="s">}</span></li></ol></pre><p><a href="../functions/each.html">each HASH</a> does not work properly on shared references
+embedded in shared structures.  For example:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">%foo</span> <span class="co">:</span><span class="w">shared</span><span class="sc">;</span></li><li>    <span class="i">$foo</span>{<span class="q">'bar'</span>} = <span class="i">shared_clone</span><span class="s">(</span><span class="s">{</span><span class="q">'a'</span><span class="cm">=&gt;</span><span class="q">'x'</span><span class="cm">,</span> <span class="q">'b'</span><span class="cm">=&gt;</span><span class="q">'y'</span><span class="cm">,</span> <span class="q">'c'</span><span class="cm">=&gt;</span><span class="q">'z'</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    while <span class="s">(</span><a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$key</span><span class="cm">,</span> <span class="i">$val</span><span class="s">)</span> = <a class="l_k" href="../functions/each.html">each</a><span class="s">(</span><span class="i">%</span>{<span class="i">$foo</span>{<span class="q">'bar'</span>}}<span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>        ...</li><li>    <span class="s">}</span></li></ol></pre><p>Either of the following will work instead:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$ref</span> = <span class="i">$foo</span>{<span class="q">'bar'</span>}<span class="sc">;</span></li><li>    while <span class="s">(</span><a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$key</span><span class="cm">,</span> <span class="i">$val</span><span class="s">)</span> = <a class="l_k" href="../functions/each.html">each</a><span class="s">(</span><span class="i">%</span>{<span class="i">$ref</span>}<span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>        ...</li><li>    <span class="s">}</span></li><li></li><li>    foreach <a class="l_k" href="../functions/my.html">my</a> <span class="i">$key</span> <span class="s">(</span><a class="l_k" href="../functions/keys.html">keys</a><span class="s">(</span><span class="i">%</span>{<span class="i">$foo</span>{<span class="q">'bar'</span>}}<span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$val</span> = <span class="i">$foo</span>{<span class="q">'bar'</span>}{<span class="i">$key</span>}<span class="sc">;</span></li><li>        ...</li><li>    <span class="s">}</span></li></ol></pre><p>This module supports dual-valued variables created using <code class="inline"><span class="i">dualvar</span><span class="s">(</span><span class="s">)</span></code>
+ from
+<a href="../Scalar/Util.html">Scalar::Util</a>.  However, while <code class="inline"><span class="i">$!</span></code>
+ acts
+like a dualvar, it is implemented as a tied SV.  To propagate its value, use
+the follow construct, if needed:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$errno</span> <span class="co">:</span><span class="w">shared</span> = <span class="i">dualvar</span><span class="s">(</span><span class="i">$!</span><span class="cm">,</span><span class="i">$!</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>View existing bug reports at, and submit any new bugs, problems, patches, etc.
+to: <a href="http://rt.cpan.org/Public/Dist/Display.html?Name=threads-shared">http://rt.cpan.org/Public/Dist/Display.html?Name=threads-shared</a></p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../threads/shared.html">threads::shared</a> Discussion Forum on CPAN:
+<a href="http://www.cpanforum.com/dist/threads-shared">http://www.cpanforum.com/dist/threads-shared</a></p>
+<p><a href="../threads.html">threads</a>, <a href="../perlthrtut.html">perlthrtut</a></p>
+<p><a href="http://www.perl.com/pub/a/2002/06/11/threads.html">http://www.perl.com/pub/a/2002/06/11/threads.html</a> and
+<a href="http://www.perl.com/pub/a/2002/09/04/threads.html">http://www.perl.com/pub/a/2002/09/04/threads.html</a></p>
+<p>Perl threads mailing list:
+<a href="http://lists.perl.org/list/ithreads.html">http://lists.perl.org/list/ithreads.html</a></p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Artur Bergman &lt;sky AT crucially DOT net&gt;</p>
+<p>Documentation borrowed from the old Thread.pm.</p>
+<p>CPAN version produced by Jerry D. Hedden &lt;jdhedden AT cpan DOT org&gt;.</p>
+<a name="LICENSE"></a><h1>LICENSE</h1>
+<p>threads::shared is released under the same license as Perl.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#VERSION">VERSION</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#EXPORT">EXPORT</a><li><a href="#FUNCTIONS">FUNCTIONS</a><li><a href="#OBJECTS">OBJECTS</a><li><a href="#NOTES">NOTES</a><li><a href="#WARNINGS">WARNINGS</a><li><a href="#BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#LICENSE">LICENSE</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'threads::shared';
+  perldoc.pageAddress = 'threads/shared.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

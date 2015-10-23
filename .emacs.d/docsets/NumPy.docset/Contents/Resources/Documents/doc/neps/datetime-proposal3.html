@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>A (third) proposal for implementing some date/time types in NumPy</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" >
+    <link rel="top" title="NumPy v1.10 Manual" href="../index.html" >
+    <link rel="up" title="Numpy Enhancement Proposals" href="index.html" >
+    <link rel="next" title="Release Notes" href="../release.html" >
+    <link rel="prev" title="A proposal for implementing some date/time types in NumPy" href="datetime-proposal.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../index.html">NumPy v1.10 Manual</a></li>
+        
+
+          <li class="active"><a href="index.html" accesskey="U">Numpy Enhancement Proposals</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../release.html" title="Release Notes"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="datetime-proposal.html" title="A proposal for implementing some date/time types in NumPy"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">A (third) proposal for implementing some date/time types in NumPy</a><ul>
+<li><a class="reference internal" href="#executive-summary">Executive summary</a></li>
+<li><a class="reference internal" href="#types-proposed">Types proposed</a><ul>
+<li><a class="reference internal" href="#datetime64"><tt class="docutils literal"><span class="pre">datetime64</span></tt></a><ul>
+<li><a class="reference internal" href="#time-units">Time units</a></li>
+<li><a class="reference internal" href="#building-a-datetime64-dtype">Building a <tt class="docutils literal"><span class="pre">datetime64</span></tt> dtype</a></li>
+<li><a class="reference internal" href="#setting-and-getting-values">Setting and getting values</a></li>
+<li><a class="reference internal" href="#comparisons">Comparisons</a></li>
+<li><a class="reference internal" href="#compatibility-issues">Compatibility issues</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#timedelta64"><tt class="docutils literal"><span class="pre">timedelta64</span></tt></a><ul>
+<li><a class="reference internal" href="#id4">Time units</a></li>
+<li><a class="reference internal" href="#building-a-timedelta64-dtype">Building a <tt class="docutils literal"><span class="pre">timedelta64</span></tt> dtype</a></li>
+<li><a class="reference internal" href="#id5">Setting and getting values</a></li>
+<li><a class="reference internal" href="#id6">Comparisons</a></li>
+<li><a class="reference internal" href="#id7">Compatibility issues</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples-of-use">Examples of use</a></li>
+<li><a class="reference internal" href="#operating-with-date-time-arrays">Operating with date/time arrays</a><ul>
+<li><a class="reference internal" href="#datetime64-vs-datetime64"><tt class="docutils literal"><span class="pre">datetime64</span></tt> vs <tt class="docutils literal"><span class="pre">datetime64</span></tt></a><ul>
+<li><a class="reference internal" href="#casting-rules">Casting rules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datetime64-vs-timedelta64"><tt class="docutils literal"><span class="pre">datetime64</span></tt> vs <tt class="docutils literal"><span class="pre">timedelta64</span></tt></a><ul>
+<li><a class="reference internal" href="#id8">Casting rules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#timedelta64-vs-timedelta64"><tt class="docutils literal"><span class="pre">timedelta64</span></tt> vs <tt class="docutils literal"><span class="pre">timedelta64</span></tt></a><ul>
+<li><a class="reference internal" href="#id9">Casting rules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dtype-vs-time-units-conversions">dtype vs time units conversions</a></li>
+<li><a class="reference internal" href="#final-considerations">Final considerations</a><ul>
+<li><a class="reference internal" href="#why-the-origin-metadata-disappeared">Why the <tt class="docutils literal"><span class="pre">origin</span></tt> metadata disappeared</a></li>
+<li><a class="reference internal" href="#operations-with-mixed-time-units">Operations with mixed time units</a></li>
+<li><a class="reference internal" href="#why-there-is-not-a-quarter-time-unit">Why there is not a <tt class="docutils literal"><span class="pre">quarter</span></tt> time unit?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="datetime-proposal.html"
+                        title="previous chapter">A proposal for implementing some date/time types in NumPy</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../release.html"
+                        title="next chapter">Release Notes</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="a-third-proposal-for-implementing-some-date-time-types-in-numpy">
+<h1>A (third) proposal for implementing some date/time types in NumPy<a class="headerlink" href="#a-third-proposal-for-implementing-some-date-time-types-in-numpy" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Francesc Alted i Abad</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:faltet&#37;&#52;&#48;pytables&#46;com">faltet<span>&#64;</span>pytables<span>&#46;</span>com</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Ivan Vilata i Balaguer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:ivan&#37;&#52;&#48;selidor&#46;net">ivan<span>&#64;</span>selidor<span>&#46;</span>net</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2008-07-30</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="executive-summary">
+<h2>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h2>
+<p>A date/time mark is something very handy to have in many fields where
+one has to deal with data sets.  While Python has several modules that
+define a date/time type (like the integrated <tt class="docutils literal"><span class="pre">datetime</span></tt> <a class="footnote-reference" href="#id10" id="id1">[1]</a> or
+<tt class="docutils literal"><span class="pre">mx.DateTime</span></tt> <a class="footnote-reference" href="#id11" id="id2">[2]</a>), NumPy has a lack of them.</p>
+<p>In this document, we are proposing the addition of a series of date/time
+types to fill this gap.  The requirements for the proposed types are
+two-folded: 1) they have to be fast to operate with and 2) they have to
+be as compatible as possible with the existing <tt class="docutils literal"><span class="pre">datetime</span></tt> module that
+comes with Python.</p>
+</div>
+<div class="section" id="types-proposed">
+<h2>Types proposed<a class="headerlink" href="#types-proposed" title="Permalink to this headline">¶</a></h2>
+<p>To start with, it is virtually impossible to come up with a single
+date/time type that fills the needs of every case of use.  So, after
+pondering about different possibilities, we have stuck with <em>two</em>
+different types, namely <tt class="docutils literal"><span class="pre">datetime64</span></tt> and <tt class="docutils literal"><span class="pre">timedelta64</span></tt> (these names
+are preliminary and can be changed), that can have different time units
+so as to cover different needs.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">the time unit is conceived here as metadata that
+<em>complements</em> a date/time dtype, <em>without changing the base type</em>.  It
+provides information about the <em>meaning</em> of the stored numbers, not
+about their <em>structure</em>.</p>
+</div>
+<p>Now follows a detailed description of the proposed types.</p>
+<div class="section" id="datetime64">
+<h3><tt class="docutils literal"><span class="pre">datetime64</span></tt><a class="headerlink" href="#datetime64" title="Permalink to this headline">¶</a></h3>
+<p>It represents a time that is absolute (i.e. not relative).  It is
+implemented internally as an <tt class="docutils literal"><span class="pre">int64</span></tt> type.  The internal epoch is the
+POSIX epoch (see <a class="footnote-reference" href="#id12" id="id3">[3]</a>).  Like POSIX, the representation of a date
+doesn&#8217;t take leap seconds into account.</p>
+<p>In time unit <em>conversions</em> and time <em>representations</em> (but not in other
+time computations), the value -2**63 (0x8000000000000000) is interpreted
+as an invalid or unknown date, <em>Not a Time</em> or <em>NaT</em>.  See the section
+on time unit conversions for more information.</p>
+<div class="section" id="time-units">
+<h4>Time units<a class="headerlink" href="#time-units" title="Permalink to this headline">¶</a></h4>
+<p>It accepts different time units, each of them implying a different time
+span.  The table below describes the time units supported with their
+corresponding time spans.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="32%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2">Time unit</th>
+<th class="head">Time span (years)</th>
+</tr>
+<tr class="row-even"><th class="head">Code</th>
+<th class="head">Meaning</th>
+<th class="head">&nbsp;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td>Y</td>
+<td>year</td>
+<td>[9.2e18 BC, 9.2e18 AD]</td>
+</tr>
+<tr class="row-even"><td>M</td>
+<td>month</td>
+<td>[7.6e17 BC, 7.6e17 AD]</td>
+</tr>
+<tr class="row-odd"><td>W</td>
+<td>week</td>
+<td>[1.7e17 BC, 1.7e17 AD]</td>
+</tr>
+<tr class="row-even"><td>B</td>
+<td>business day</td>
+<td>[3.5e16 BC, 3.5e16 AD]</td>
+</tr>
+<tr class="row-odd"><td>D</td>
+<td>day</td>
+<td>[2.5e16 BC, 2.5e16 AD]</td>
+</tr>
+<tr class="row-even"><td>h</td>
+<td>hour</td>
+<td>[1.0e15 BC, 1.0e15 AD]</td>
+</tr>
+<tr class="row-odd"><td>m</td>
+<td>minute</td>
+<td>[1.7e13 BC, 1.7e13 AD]</td>
+</tr>
+<tr class="row-even"><td>s</td>
+<td>second</td>
+<td>[ 2.9e9 BC,  2.9e9 AD]</td>
+</tr>
+<tr class="row-odd"><td>ms</td>
+<td>millisecond</td>
+<td>[ 2.9e6 BC,  2.9e6 AD]</td>
+</tr>
+<tr class="row-even"><td>us</td>
+<td>microsecond</td>
+<td>[290301 BC, 294241 AD]</td>
+</tr>
+<tr class="row-odd"><td>c#</td>
+<td>ticks (100ns)</td>
+<td>[  2757 BC,  31197 AD]</td>
+</tr>
+<tr class="row-even"><td>ns</td>
+<td>nanosecond</td>
+<td>[  1678 AD,   2262 AD]</td>
+</tr>
+</tbody>
+</table>
+<p>The value of an absolute date is thus <em>an integer number of units of the
+chosen time unit</em> passed since the internal epoch.  When working with
+business days, Saturdays and Sundays are simply ignored from the count
+(i.e. day 3 in business days is not Saturday 1970-01-03, but Monday
+1970-01-05).</p>
+</div>
+<div class="section" id="building-a-datetime64-dtype">
+<h4>Building a <tt class="docutils literal"><span class="pre">datetime64</span></tt> dtype<a class="headerlink" href="#building-a-datetime64-dtype" title="Permalink to this headline">¶</a></h4>
+<p>The proposed ways to specify the time unit in the dtype constructor are:</p>
+<p>Using the long string notation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dtype</span><span class="p">(</span><span class="s">&#39;datetime64[us]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the short string notation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dtype</span><span class="p">(</span><span class="s">&#39;M8[us]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default is microseconds if no time unit is specified.  Thus, &#8216;M8&#8217; is equivalent to &#8216;M8[us]&#8217;</p>
+</div>
+<div class="section" id="setting-and-getting-values">
+<h4>Setting and getting values<a class="headerlink" href="#setting-and-getting-values" title="Permalink to this headline">¶</a></h4>
+<p>The objects with this dtype can be set in a series of ways:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">t</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;M8[s]&#39;</span><span class="p">)</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1199164176</span>    <span class="c"># assign to July 30th, 2008 at 17:31:00</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mo">01</span><span class="p">)</span> <span class="c"># with datetime module</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;2008-07-30T17:31:02&#39;</span>    <span class="c"># with ISO 8601</span>
+</pre></div>
+</div>
+<p>And can be get in different ways too:</p>
+<div class="highlight-python"><div class="highlight"><pre>str(t[0])  --&gt;  2008-07-30T17:31:00
+repr(t[1]) --&gt;  datetime64(1199164177, &#39;s&#39;)
+str(t[0].item()) --&gt; 2008-07-30 17:31:00  # datetime module object
+repr(t[0].item()) --&gt; datetime.datetime(2008, 7, 30, 17, 31)  # idem
+str(t)  --&gt;  [2008-07-30T17:31:00  2008-07-30T17:31:01  2008-07-30T17:31:02]
+repr(t)  --&gt;  array([1199164176, 1199164177, 1199164178],
+                    dtype=&#39;datetime64[s]&#39;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="comparisons">
+<h4>Comparisons<a class="headerlink" href="#comparisons" title="Permalink to this headline">¶</a></h4>
+<p>The comparisons will be supported too:</p>
+<div class="highlight-python"><div class="highlight"><pre>numpy.array([&#39;1980&#39;], &#39;M8[Y]&#39;) == numpy.array([&#39;1979&#39;], &#39;M8[Y]&#39;)
+--&gt; [False]
+</pre></div>
+</div>
+<p>or by applying broadcasting:</p>
+<div class="highlight-python"><div class="highlight"><pre>numpy.array([&#39;1979&#39;, &#39;1980&#39;], &#39;M8[Y]&#39;) == numpy.datetime64(&#39;1980&#39;, &#39;Y&#39;)
+--&gt; [False, True]
+</pre></div>
+</div>
+<p>The next should work too:</p>
+<div class="highlight-python"><div class="highlight"><pre>numpy.array([&#39;1979&#39;, &#39;1980&#39;], &#39;M8[Y]&#39;) == &#39;1980-01-01&#39;
+--&gt; [False, True]
+</pre></div>
+</div>
+<p>because the right hand expression can be broadcasted into an array of 2
+elements of dtype &#8216;M8[Y]&#8217;.</p>
+</div>
+<div class="section" id="compatibility-issues">
+<h4>Compatibility issues<a class="headerlink" href="#compatibility-issues" title="Permalink to this headline">¶</a></h4>
+<p>This will be fully compatible with the <tt class="docutils literal"><span class="pre">datetime</span></tt> class of the
+<tt class="docutils literal"><span class="pre">datetime</span></tt> module of Python only when using a time unit of
+microseconds.  For other time units, the conversion process will lose
+precision or will overflow as needed.  The conversion from/to a
+<tt class="docutils literal"><span class="pre">datetime</span></tt> object doesn&#8217;t take leap seconds into account.</p>
+</div>
+</div>
+<div class="section" id="timedelta64">
+<h3><tt class="docutils literal"><span class="pre">timedelta64</span></tt><a class="headerlink" href="#timedelta64" title="Permalink to this headline">¶</a></h3>
+<p>It represents a time that is relative (i.e. not absolute).  It is
+implemented internally as an <tt class="docutils literal"><span class="pre">int64</span></tt> type.</p>
+<p>In time unit <em>conversions</em> and time <em>representations</em> (but not in other
+time computations), the value -2**63 (0x8000000000000000) is interpreted
+as an invalid or unknown time, <em>Not a Time</em> or <em>NaT</em>.  See the section
+on time unit conversions for more information.</p>
+<div class="section" id="id4">
+<h4>Time units<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>It accepts different time units, each of them implying a different time
+span.  The table below describes the time units supported with their
+corresponding time spans.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="32%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2">Time unit</th>
+<th class="head">Time span</th>
+</tr>
+<tr class="row-even"><th class="head">Code</th>
+<th class="head">Meaning</th>
+<th class="head">&nbsp;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td>Y</td>
+<td>year</td>
+<td>+- 9.2e18 years</td>
+</tr>
+<tr class="row-even"><td>M</td>
+<td>month</td>
+<td>+- 7.6e17 years</td>
+</tr>
+<tr class="row-odd"><td>W</td>
+<td>week</td>
+<td>+- 1.7e17 years</td>
+</tr>
+<tr class="row-even"><td>B</td>
+<td>business day</td>
+<td>+- 3.5e16 years</td>
+</tr>
+<tr class="row-odd"><td>D</td>
+<td>day</td>
+<td>+- 2.5e16 years</td>
+</tr>
+<tr class="row-even"><td>h</td>
+<td>hour</td>
+<td>+- 1.0e15 years</td>
+</tr>
+<tr class="row-odd"><td>m</td>
+<td>minute</td>
+<td>+- 1.7e13 years</td>
+</tr>
+<tr class="row-even"><td>s</td>
+<td>second</td>
+<td>+- 2.9e12 years</td>
+</tr>
+<tr class="row-odd"><td>ms</td>
+<td>millisecond</td>
+<td>+- 2.9e9 years</td>
+</tr>
+<tr class="row-even"><td>us</td>
+<td>microsecond</td>
+<td>+- 2.9e6 years</td>
+</tr>
+<tr class="row-odd"><td>c#</td>
+<td>ticks (100ns)</td>
+<td>+- 2.9e4 years</td>
+</tr>
+<tr class="row-even"><td>ns</td>
+<td>nanosecond</td>
+<td>+- 292 years</td>
+</tr>
+<tr class="row-odd"><td>ps</td>
+<td>picosecond</td>
+<td>+- 106 days</td>
+</tr>
+<tr class="row-even"><td>fs</td>
+<td>femtosecond</td>
+<td>+- 2.6 hours</td>
+</tr>
+<tr class="row-odd"><td>as</td>
+<td>attosecond</td>
+<td>+- 9.2 seconds</td>
+</tr>
+</tbody>
+</table>
+<p>The value of a time delta is thus <em>an integer number of units of the
+chosen time unit</em>.</p>
+</div>
+<div class="section" id="building-a-timedelta64-dtype">
+<h4>Building a <tt class="docutils literal"><span class="pre">timedelta64</span></tt> dtype<a class="headerlink" href="#building-a-timedelta64-dtype" title="Permalink to this headline">¶</a></h4>
+<p>The proposed ways to specify the time unit in the dtype constructor are:</p>
+<p>Using the long string notation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dtype</span><span class="p">(</span><span class="s">&#39;timedelta64[us]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the short string notation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dtype</span><span class="p">(</span><span class="s">&#39;m8[us]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default is micro-seconds if no default is specified:  &#8216;m8&#8217; is equivalent to &#8216;m8[us]&#8217;</p>
+</div>
+<div class="section" id="id5">
+<h4>Setting and getting values<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p>The objects with this dtype can be set in a series of ways:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">t</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;m8[ms]&#39;</span><span class="p">)</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>    <span class="c"># assign to 12 ms</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">13000</span><span class="p">)</span>   <span class="c"># 13 ms</span>
+<span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;0:00:00.014&#39;</span>    <span class="c"># 14 ms</span>
+</pre></div>
+</div>
+<p>And can be get in different ways too:</p>
+<div class="highlight-python"><div class="highlight"><pre>str(t[0])  --&gt;  0:00:00.012
+repr(t[1]) --&gt;  timedelta64(13, &#39;ms&#39;)
+str(t[0].item()) --&gt; 0:00:00.012000   # datetime module object
+repr(t[0].item()) --&gt; datetime.timedelta(0, 0, 12000)  # idem
+str(t)     --&gt;  [0:00:00.012  0:00:00.014  0:00:00.014]
+repr(t)    --&gt;  array([12, 13, 14], dtype=&quot;timedelta64[ms]&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h4>Comparisons<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>The comparisons will be supported too:</p>
+<div class="highlight-python"><div class="highlight"><pre>numpy.array([12, 13, 14], &#39;m8[ms]&#39;) == numpy.array([12, 13, 13], &#39;m8[ms]&#39;)
+--&gt; [True, True, False]
+</pre></div>
+</div>
+<p>or by applying broadcasting:</p>
+<div class="highlight-python"><div class="highlight"><pre>numpy.array([12, 13, 14], &#39;m8[ms]&#39;) == numpy.timedelta64(13, &#39;ms&#39;)
+--&gt; [False, True, False]
+</pre></div>
+</div>
+<p>The next should work too:</p>
+<div class="highlight-python"><div class="highlight"><pre>numpy.array([12, 13, 14], &#39;m8[ms]&#39;) == &#39;0:00:00.012&#39;
+--&gt; [True, False, False]
+</pre></div>
+</div>
+<p>because the right hand expression can be broadcasted into an array of 3
+elements of dtype &#8216;m8[ms]&#8217;.</p>
+</div>
+<div class="section" id="id7">
+<h4>Compatibility issues<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<p>This will be fully compatible with the <tt class="docutils literal"><span class="pre">timedelta</span></tt> class of the
+<tt class="docutils literal"><span class="pre">datetime</span></tt> module of Python only when using a time unit of
+microseconds.  For other units, the conversion process will lose
+precision or will overflow as needed.</p>
+</div>
+</div>
+</div>
+<div class="section" id="examples-of-use">
+<h2>Examples of use<a class="headerlink" href="#examples-of-use" title="Permalink to this headline">¶</a></h2>
+<p>Here it is an example of use for the <tt class="docutils literal"><span class="pre">datetime64</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [5]: numpy.datetime64(42, &#39;us&#39;)
+Out[5]: datetime64(42, &#39;us&#39;)
+
+In [6]: print numpy.datetime64(42, &#39;us&#39;)
+1970-01-01T00:00:00.000042  # representation in ISO 8601 format
+
+In [7]: print numpy.datetime64(367.7, &#39;D&#39;)  # decimal part is lost
+1971-01-02  # still ISO 8601 format
+
+In [8]: numpy.datetime(&#39;2008-07-18T12:23:18&#39;, &#39;m&#39;)  # from ISO 8601
+Out[8]: datetime64(20273063, &#39;m&#39;)
+
+In [9]: print numpy.datetime(&#39;2008-07-18T12:23:18&#39;, &#39;m&#39;)
+Out[9]: 2008-07-18T12:23
+
+In [10]: t = numpy.zeros(5, dtype=&quot;datetime64[ms]&quot;)
+
+In [11]: t[0] = datetime.datetime.now()  # setter in action
+
+In [12]: print t
+[2008-07-16T13:39:25.315  1970-01-01T00:00:00.000
+ 1970-01-01T00:00:00.000  1970-01-01T00:00:00.000
+ 1970-01-01T00:00:00.000]
+
+In [13]: repr(t)
+Out[13]: array([267859210457, 0, 0, 0, 0], dtype=&quot;datetime64[ms]&quot;)
+
+In [14]: t[0].item()     # getter in action
+Out[14]: datetime.datetime(2008, 7, 16, 13, 39, 25, 315000)
+
+In [15]: print t.dtype
+dtype(&#39;datetime64[ms]&#39;)
+</pre></div>
+</div>
+<p>And here it goes an example of use for the <tt class="docutils literal"><span class="pre">timedelta64</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [5]: numpy.timedelta64(10, &#39;us&#39;)
+Out[5]: timedelta64(10, &#39;us&#39;)
+
+In [6]: print numpy.timedelta64(10, &#39;us&#39;)
+0:00:00.000010
+
+In [7]: print numpy.timedelta64(3600.2, &#39;m&#39;)  # decimal part is lost
+2 days, 12:00
+
+In [8]: t1 = numpy.zeros(5, dtype=&quot;datetime64[ms]&quot;)
+
+In [9]: t2 = numpy.ones(5, dtype=&quot;datetime64[ms]&quot;)
+
+In [10]: t = t2 - t1
+
+In [11]: t[0] = datetime.timedelta(0, 24)  # setter in action
+
+In [12]: print t
+[0:00:24.000  0:00:01.000  0:00:01.000  0:00:01.000  0:00:01.000]
+
+In [13]: print repr(t)
+Out[13]: array([24000, 1, 1, 1, 1], dtype=&quot;timedelta64[ms]&quot;)
+
+In [14]: t[0].item()     # getter in action
+Out[14]: datetime.timedelta(0, 24)
+
+In [15]: print t.dtype
+dtype(&#39;timedelta64[s]&#39;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="operating-with-date-time-arrays">
+<h2>Operating with date/time arrays<a class="headerlink" href="#operating-with-date-time-arrays" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="datetime64-vs-datetime64">
+<h3><tt class="docutils literal"><span class="pre">datetime64</span></tt> vs <tt class="docutils literal"><span class="pre">datetime64</span></tt><a class="headerlink" href="#datetime64-vs-datetime64" title="Permalink to this headline">¶</a></h3>
+<p>The only arithmetic operation allowed between absolute dates is the
+subtraction:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [10]: numpy.ones(3, &quot;M8[s]&quot;) - numpy.zeros(3, &quot;M8[s]&quot;)
+Out[10]: array([1, 1, 1], dtype=timedelta64[s])
+</pre></div>
+</div>
+<p>But not other operations:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [11]: numpy.ones(3, &quot;M8[s]&quot;) + numpy.zeros(3, &quot;M8[s]&quot;)
+TypeError: unsupported operand type(s) for +: &#39;numpy.ndarray&#39; and &#39;numpy.ndarray&#39;
+</pre></div>
+</div>
+<p>Comparisons between absolute dates are allowed.</p>
+<div class="section" id="casting-rules">
+<h4>Casting rules<a class="headerlink" href="#casting-rules" title="Permalink to this headline">¶</a></h4>
+<p>When operating (basically, only the subtraction will be allowed) two
+absolute times with different unit times, the outcome would be to raise
+an exception.  This is because the ranges and time-spans of the different
+time units can be very different, and it is not clear at all what time
+unit will be preferred for the user.  For example, this should be
+allowed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;M8[Y]&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;M8[Y]&quot;</span><span class="p">)</span>
+<span class="go">array([1, 1, 1], dtype=&quot;timedelta64[Y]&quot;)</span>
+</pre></div>
+</div>
+<p>But the next should not:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;M8[Y]&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;M8[ns]&quot;</span><span class="p">)</span>
+<span class="go">raise numpy.IncompatibleUnitError  # what unit to choose?</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="datetime64-vs-timedelta64">
+<h3><tt class="docutils literal"><span class="pre">datetime64</span></tt> vs <tt class="docutils literal"><span class="pre">timedelta64</span></tt><a class="headerlink" href="#datetime64-vs-timedelta64" title="Permalink to this headline">¶</a></h3>
+<p>It will be possible to add and subtract relative times from absolute
+dates:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [10]: numpy.zeros(5, &quot;M8[Y]&quot;) + numpy.ones(5, &quot;m8[Y]&quot;)
+Out[10]: array([1971, 1971, 1971, 1971, 1971], dtype=datetime64[Y])
+
+In [11]: numpy.ones(5, &quot;M8[Y]&quot;) - 2 * numpy.ones(5, &quot;m8[Y]&quot;)
+Out[11]: array([1969, 1969, 1969, 1969, 1969], dtype=datetime64[Y])
+</pre></div>
+</div>
+<p>But not other operations:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [12]: numpy.ones(5, &quot;M8[Y]&quot;) * numpy.ones(5, &quot;m8[Y]&quot;)
+TypeError: unsupported operand type(s) for *: &#39;numpy.ndarray&#39; and &#39;numpy.ndarray&#39;
+</pre></div>
+</div>
+<div class="section" id="id8">
+<h4>Casting rules<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<p>In this case the absolute time should have priority for determining the
+time unit of the outcome.  That would represent what the people wants to
+do most of the times.  For example, this would allow to do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s">&#39;1970-01-01&#39;</span><span class="p">,</span> <span class="s">&#39;1970-02-01&#39;</span><span class="p">,</span> <span class="s">&#39;1970-09-01&#39;</span><span class="p">],</span>
+<span class="go">dtype=&#39;datetime64[D]&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series2</span> <span class="o">=</span> <span class="n">series</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;Y&#39;</span><span class="p">)</span>  <span class="c"># Add 2 relative years</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series2</span>
+<span class="go">array([&#39;1972-01-01&#39;, &#39;1972-02-01&#39;, &#39;1972-09-01&#39;],</span>
+<span class="go">dtype=&#39;datetime64[D]&#39;)  # the &#39;D&#39;ay time unit has been chosen</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="timedelta64-vs-timedelta64">
+<h3><tt class="docutils literal"><span class="pre">timedelta64</span></tt> vs <tt class="docutils literal"><span class="pre">timedelta64</span></tt><a class="headerlink" href="#timedelta64-vs-timedelta64" title="Permalink to this headline">¶</a></h3>
+<p>Finally, it will be possible to operate with relative times as if they
+were regular int64 dtypes <em>as long as</em> the result can be converted back
+into a <tt class="docutils literal"><span class="pre">timedelta64</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [10]: numpy.ones(3, &#39;m8[us]&#39;)
+Out[10]: array([1, 1, 1], dtype=&quot;timedelta64[us]&quot;)
+
+In [11]: (numpy.ones(3, &#39;m8[M]&#39;) + 2) ** 3
+Out[11]: array([27, 27, 27], dtype=&quot;timedelta64[M]&quot;)
+</pre></div>
+</div>
+<p>But:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [12]: numpy.ones(5, &#39;m8&#39;) + 1j
+TypeError: the result cannot be converted into a ``timedelta64``
+</pre></div>
+</div>
+<div class="section" id="id9">
+<h4>Casting rules<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<p>When combining two <tt class="docutils literal"><span class="pre">timedelta64</span></tt> dtypes with different time units the
+outcome will be the shorter of both (&#8220;keep the precision&#8221; rule).  For
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [10]: numpy.ones(3, &#39;m8[s]&#39;) + numpy.ones(3, &#39;m8[m]&#39;)
+Out[10]: array([61, 61, 61],  dtype=&quot;timedelta64[s]&quot;)
+</pre></div>
+</div>
+<p>However, due to the impossibility to know the exact duration of a
+relative year or a relative month, when these time units appear in one
+of the operands, the operation will not be allowed:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [11]: numpy.ones(3, &#39;m8[Y]&#39;) + numpy.ones(3, &#39;m8[D]&#39;)
+raise numpy.IncompatibleUnitError  # how to convert relative years to days?
+</pre></div>
+</div>
+<p>In order to being able to perform the above operation a new NumPy
+function, called <tt class="docutils literal"><span class="pre">change_timeunit</span></tt> is proposed.  Its signature will
+be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">change_timeunit</span><span class="p">(</span><span class="n">time_object</span><span class="p">,</span> <span class="n">new_unit</span><span class="p">,</span> <span class="n">reference</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where &#8216;time_object&#8217; is the time object whose unit is to be changed,
+&#8216;new_unit&#8217; is the desired new time unit, and &#8216;reference&#8217; is an absolute
+date (NumPy datetime64 scalar) that will be used to allow the conversion
+of relative times in case of using time units with an uncertain number
+of smaller time units (relative years or months cannot be expressed in
+days).</p>
+<p>With this, the above operation can be done as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>In [10]: t_years = numpy.ones(3, &#39;m8[Y]&#39;)
+
+In [11]: t_days = numpy.change_timeunit(t_years, &#39;D&#39;, &#39;2001-01-01&#39;)
+
+In [12]: t_days + numpy.ones(3, &#39;m8[D]&#39;)
+Out[12]: array([366, 366, 366],  dtype=&quot;timedelta64[D]&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="dtype-vs-time-units-conversions">
+<h2>dtype vs time units conversions<a class="headerlink" href="#dtype-vs-time-units-conversions" title="Permalink to this headline">¶</a></h2>
+<p>For changing the date/time dtype of an existing array, we propose to use
+the <tt class="docutils literal"><span class="pre">.astype()</span></tt> method.  This will be mainly useful for changing time
+units.</p>
+<p>For example, for absolute dates:</p>
+<div class="highlight-python"><div class="highlight"><pre>In[10]: t1 = numpy.zeros(5, dtype=&quot;datetime64[s]&quot;)
+
+In[11]: print t1
+[1970-01-01T00:00:00  1970-01-01T00:00:00  1970-01-01T00:00:00
+ 1970-01-01T00:00:00  1970-01-01T00:00:00]
+
+In[12]: print t1.astype(&#39;datetime64[D]&#39;)
+[1970-01-01  1970-01-01  1970-01-01  1970-01-01  1970-01-01]
+</pre></div>
+</div>
+<p>For relative times:</p>
+<div class="highlight-python"><div class="highlight"><pre>In[10]: t1 = numpy.ones(5, dtype=&quot;timedelta64[s]&quot;)
+
+In[11]: print t1
+[1 1 1 1 1]
+
+In[12]: print t1.astype(&#39;timedelta64[ms]&#39;)
+[1000 1000 1000 1000 1000]
+</pre></div>
+</div>
+<p>Changing directly from/to relative to/from absolute dtypes will not be
+supported:</p>
+<div class="highlight-python"><div class="highlight"><pre>In[13]: numpy.zeros(5, dtype=&quot;datetime64[s]&quot;).astype(&#39;timedelta64&#39;)
+TypeError: data type cannot be converted to the desired type
+</pre></div>
+</div>
+<p>Business days have the peculiarity that they do not cover a continuous
+line of time (they have gaps at weekends).  Thus, when converting from
+any ordinary time to business days, it can happen that the original time
+is not representable.  In that case, the result of the conversion is
+<em>Not a Time</em> (<em>NaT</em>):</p>
+<div class="highlight-python"><div class="highlight"><pre>In[10]: t1 = numpy.arange(5, dtype=&quot;datetime64[D]&quot;)
+
+In[11]: print t1
+[1970-01-01  1970-01-02  1970-01-03  1970-01-04  1970-01-05]
+
+In[12]: t2 = t1.astype(&quot;datetime64[B]&quot;)
+
+In[13]: print t2  # 1970 begins in a Thursday
+[1970-01-01  1970-01-02  NaT  NaT  1970-01-05]
+</pre></div>
+</div>
+<p>When converting back to ordinary days, NaT values are left untouched
+(this happens in all time unit conversions):</p>
+<div class="highlight-python"><div class="highlight"><pre>In[14]: t3 = t2.astype(&quot;datetime64[D]&quot;)
+
+In[13]: print t3
+[1970-01-01  1970-01-02  NaT  NaT  1970-01-05]
+</pre></div>
+</div>
+</div>
+<div class="section" id="final-considerations">
+<h2>Final considerations<a class="headerlink" href="#final-considerations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="why-the-origin-metadata-disappeared">
+<h3>Why the <tt class="docutils literal"><span class="pre">origin</span></tt> metadata disappeared<a class="headerlink" href="#why-the-origin-metadata-disappeared" title="Permalink to this headline">¶</a></h3>
+<p>During the discussion of the date/time dtypes in the NumPy list, the
+idea of having an <tt class="docutils literal"><span class="pre">origin</span></tt> metadata that complemented the definition
+of the absolute <tt class="docutils literal"><span class="pre">datetime64</span></tt> was initially found to be useful.</p>
+<p>However, after thinking more about this, we found that the combination
+of an absolute <tt class="docutils literal"><span class="pre">datetime64</span></tt> with a relative <tt class="docutils literal"><span class="pre">timedelta64</span></tt> does offer
+the same functionality while removing the need for the additional
+<tt class="docutils literal"><span class="pre">origin</span></tt> metadata.  This is why we have removed it from this proposal.</p>
+</div>
+<div class="section" id="operations-with-mixed-time-units">
+<h3>Operations with mixed time units<a class="headerlink" href="#operations-with-mixed-time-units" title="Permalink to this headline">¶</a></h3>
+<p>Whenever an operation between two time values of the same dtype with the
+same unit is accepted, the same operation with time values of different
+units should be possible (e.g. adding a time delta in seconds and one in
+microseconds), resulting in an adequate time unit.  The exact semantics
+of this kind of operations is defined int the &#8220;Casting rules&#8221;
+subsections of the &#8220;Operating with date/time arrays&#8221; section.</p>
+<p>Due to the peculiarities of business days, it is most probable that
+operations mixing business days with other time units will not be
+allowed.</p>
+</div>
+<div class="section" id="why-there-is-not-a-quarter-time-unit">
+<h3>Why there is not a <tt class="docutils literal"><span class="pre">quarter</span></tt> time unit?<a class="headerlink" href="#why-there-is-not-a-quarter-time-unit" title="Permalink to this headline">¶</a></h3>
+<p>This proposal tries to focus on the most common used set of time units
+to operate with, and the <tt class="docutils literal"><span class="pre">quarter</span></tt> can be considered more of a derived
+unit.  Besides, the use of a <tt class="docutils literal"><span class="pre">quarter</span></tt> normally requires that it can
+start at whatever month of the year, and as we are not including support
+for a time <tt class="docutils literal"><span class="pre">origin</span></tt> metadata, this is not a viable venue here.
+Finally, if we were to add the <tt class="docutils literal"><span class="pre">quarter</span></tt> then people should expect to
+find a <tt class="docutils literal"><span class="pre">biweekly</span></tt>, <tt class="docutils literal"><span class="pre">semester</span></tt> or <tt class="docutils literal"><span class="pre">biyearly</span></tt> just to put some
+examples of other derived units, and we find this a bit too overwhelming
+for this proposal purposes.</p>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="http://docs.python.org/lib/module-datetime.html">http://docs.python.org/lib/module-datetime.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference external" href="http://www.egenix.com/products/python/mxBase/mxDateTime">http://www.egenix.com/products/python/mxBase/mxDateTime</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><a class="reference external" href="http://en.wikipedia.org/wiki/Unix_time">http://en.wikipedia.org/wiki/Unix_time</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2009, The Scipy community.
+      </li>
+      <li>
+      Last updated on Oct 18, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

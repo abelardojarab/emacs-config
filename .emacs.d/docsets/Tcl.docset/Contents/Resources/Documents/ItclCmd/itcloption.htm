@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>option manual page - [incr Tcl]</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">[incr Tcl] Package Commands, version 4.0.0</a> <small>&gt;</small> itcloption</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="itcloption.htm#M2" NAME="L141">NAME</A>
+<DL><DD>itcl::option &mdash; define options for extendedclass, widget or widgetadaptor</DD></DL>
+<DD><A HREF="itcloption.htm#M3" NAME="L142">WARNING!</A>
+<DD><A HREF="itcloption.htm#M4" NAME="L143">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="itcloption.htm#M5" NAME="L144">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="itcloption.htm#M6" NAME="L145"><B>-default</B><I> defvalue</I></A>
+<DD><A HREF="itcloption.htm#M7" NAME="L146"><B>-readonly</B></A>
+<DD><A HREF="itcloption.htm#M8" NAME="L147"><B>-cgetmethod</B><I> methodName</I></A>
+<DD><A HREF="itcloption.htm#M9" NAME="L148"><B>-cgetmethodvar</B><I> varName</I></A>
+<DD><A HREF="itcloption.htm#M10" NAME="L149"><B>-configuremethod</B><I> methodName</I></A>
+<DD><A HREF="itcloption.htm#M11" NAME="L150"><B>-configuremethodvar</B><I> varName</I></A>
+<DD><A HREF="itcloption.htm#M12" NAME="L151"><B>-validatemethod</B><I> methodName</I></A>
+<DD><A HREF="itcloption.htm#M13" NAME="L152"><B>-validatemethodvar</B><I> varName</I></A>
+</DL>
+<DD><A HREF="itcloption.htm#M14" NAME="L153">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+itcl::option &mdash; define options for extendedclass, widget or widgetadaptor
+<P>
+Parts of this description are &quot;borrowed&quot; from Tcl extension [snit], as the functionality is mostly identical.
+<H3><A NAME="M3">WARNING!</A></H3>
+This is new functionality in [incr Tcl] where the API can still change!!
+<H3><A NAME="M4">SYNOPSIS</A></H3>
+<B><A HREF="../TkCmd/option.htm">option </A></B><I>optionSpec</I> ?<I>defaultValue</I>?<BR>
+<B><A HREF="../TkCmd/option.htm">option </A></B><I>optionSpec</I> ?<I>options</I>?<BR>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+The <B><A HREF="../TkCmd/option.htm">option</A></B> command is used inside an <B>[incr&nbsp;Tcl]</B>
+extendedclass/widget/widgetadaptor definition to define options.
+<P>
+In the first form defines an option for instances of this type, and optionally
+gives it an initial value. The initial value defaults to the empty string if
+no defaultValue is specified.
+<P>
+An option defined in this way is said to be locally defined.
+The optionSpec is a list defining the option's name, resource name, and class
+name, e.g.:
+<P>
+<PRE>option {-font font Font} {Courier 12}</PRE>
+<P>
+The option name must begin with a hyphen, and must not contain any upper case
+letters. The resource name and class name are optional; if not specified,
+the resource name defaults to the option name, minus the hyphen, and the class
+name defaults to the resource name with the first letter capitalized. Thus, the
+following statement is equivalent to the previous example:
+<P>
+<PRE>option -font {Courier 12}</PRE>
+<P>
+See The Tk Option Database for more information about resource and class names.
+<P>
+Options are normally set and retrieved using the standard instance methods
+configure and cget; within instance code (method bodies, etc.), option values
+are available through the options array:
+<P>
+<PRE>set myfont $itcl_options(-font)</PRE>
+<P>
+In the second form you can define option handlers (e.g., -configuremethod),
+then it should probably use configure and cget to access its options to avoid
+subtle errors.
+<P>
+The option statement may include the following options:
+<P>
+<DL class="description">
+<DT><A NAME="M6"><B>-default</B><I> defvalue</I></A><DD>
+Defines the option's default value; the option's default value will be &quot;&quot;
+otherwise. 
+<P><DT><A NAME="M7"><B>-readonly</B></A><DD>
+The option is handled read-only -- it can only be set using configure at
+creation time, i.e., in the type's constructor. 
+<P><DT><A NAME="M8"><B>-cgetmethod</B><I> methodName</I></A><DD>
+Every locally-defined option may define a -cgetmethod; it is called when the
+option's value is retrieved using the cget method. Whatever the method's body
+returns will be the return value of the call to cget.
+<P>
+The named method must take one argument, the option name. For example, this
+code is equivalent to (though slower than) Itcl's default handling of cget:
+<P>
+<PRE>option -font -cgetmethod GetOption
+        method GetOption {option} {
+            return $itcl_options($option)
+        }</PRE>
+<P>Note that it's possible for any number of options to share a -cgetmethod.
+<P><DT><A NAME="M9"><B>-cgetmethodvar</B><I> varName</I></A><DD>
+That is very similar to -cgetmethod, the only difference is, one can define
+a variable, where to find the cgetmethod during runtime.
+<P><DT><A NAME="M10"><B>-configuremethod</B><I> methodName</I></A><DD>
+Every locally-defined option may define a -configuremethod; it is called
+when the option's value is set using the configure or configurelist
+methods. It is the named method's responsibility to save the option's
+value; in other words, the value will not be saved to the itcl_options()
+array unless the method saves it there.
+<P>
+The named method must take two arguments, the option name and its new value.
+For example, this code is equivalent to (though slower than) Itcl's default
+handling of configure:
+<P>
+<PRE>option -font -configuremethod SetOption
+        method SetOption {option value} {
+            set itcl_options($option) $value
+        }</PRE>
+<P>Note that it's possible for any number of options to share a single -configuremethod.
+<P><DT><A NAME="M11"><B>-configuremethodvar</B><I> varName</I></A><DD>
+That is very similar to -configuremethod, the only difference is, one can define
+a variable, where to find the configuremethod during runtime.
+<P><DT><A NAME="M12"><B>-validatemethod</B><I> methodName</I></A><DD>
+Every locally-defined option may define a -validatemethod; it is called when
+the option's value is set using the configure or configurelist methods, just
+before the -configuremethod (if any). It is the named method's responsibility
+to validate the option's new value, and to throw an error if the value is
+invalid.
+<P>
+The named method must take two arguments, the option name and its new value.
+For example, this code verifies that -flag's value is a valid Boolean value:
+<P>
+<PRE>option -font -validatemethod CheckBoolean
+        method CheckBoolean {option value} {
+            if {![string is boolean -strict $value]} {
+                error &quot;option $option must have a boolean value.&quot;
+            }
+        }</PRE>
+<P>Note that it's possible for any number of options to share a single -validatemethod.
+<P><DT><A NAME="M13"><B>-validatemethodvar</B><I> varName</I></A><DD>
+That is very similar to -validatemethod, the only difference is, one can define
+a variable, where to find the validatemethod during runtime.
+
+<P></DL>
+<H3><A NAME="M14">KEYWORDS</A></H3>
+<A href="../Keywords/O.htm#option">option</A>, <A href="../Keywords/W.htm#widget">widget</A>, <A href="../Keywords/W.htm#widgetadaptor">widgetadaptor</A>, <A href="../Keywords/E.htm#extendedclass">extendedclass</A>
+<div class="copy">Copyright &copy; 2008 Arnulf Wiedemann
+</div>
+</BODY></HTML>

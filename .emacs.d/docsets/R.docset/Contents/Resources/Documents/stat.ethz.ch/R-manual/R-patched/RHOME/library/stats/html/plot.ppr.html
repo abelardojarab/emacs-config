@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/stats/html/plot.ppr.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:59 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head><title>Plot Ridge Functions for Projection Pursuit Regression Fit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for plot.ppr {stats}"><tr><td>plot.ppr {stats}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Plot Ridge Functions for Projection Pursuit Regression Fit
+</h2>
+
+<h3>Description</h3>
+
+<p>Plot ridge functions for projection pursuit regression fit.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'ppr'
+plot(x, ask, type = "o", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>A fit of class <code>"ppr"</code> as produced by a call to <code>ppr</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>ask</code></td>
+<td>
+
+<p>the graphics parameter <code>ask</code>: see <code>par</code> for details.
+If set to <code>TRUE</code> will ask between the plot of each cross-section.
+</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+
+<p>the type of line to draw
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+
+<p>further graphical parameters
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>None
+</p>
+
+
+<h3>Side Effects</h3>
+
+<p>A series of plots are drawn on the current graphical device, one for
+each term in the fit.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="ppr.html">ppr</a></code>, <code><a href="../../graphics/html/par.html">par</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+require(graphics)
+
+with(rock, {
+area1 &lt;- area/10000; peri1 &lt;- peri/10000
+par(mfrow = c(3,2)) # maybe: , pty = "s")
+rock.ppr &lt;- ppr(log(perm) ~ area1 + peri1 + shape,
+                data = rock, nterms = 2, max.terms = 5)
+plot(rock.ppr, main = "ppr(log(perm)~ ., nterms=2, max.terms=5)")
+plot(update(rock.ppr, bass = 5), main = "update(..., bass = 5)")
+plot(update(rock.ppr, sm.method = "gcv", gcvpen = 2),
+     main = "update(..., sm.method=\"gcv\", gcvpen=2)")
+})
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>stats</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/stats/html/plot.ppr.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:59 GMT -->
+</html>

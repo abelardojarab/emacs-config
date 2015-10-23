@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_MapWindow manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> MapWindow</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_MapWindow, Tk_UnmapWindow &mdash; map or unmap a window
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+<A HREF="../TkLib/WindowId.htm">Tk_Window</A><BR>
+<B>Tk_MapWindow</B>(<I>tkwin</I>)<BR>
+<B>Tk_UnmapWindow</B>(<I>tkwin</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>tkwin</B> (in)<DD>
+Token for window.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These procedures may be used to map and unmap windows
+managed by Tk.  <B>Tk_MapWindow</B> maps the window given
+by <I>tkwin</I>, and also creates an X window corresponding
+to <I>tkwin</I> if it does not already exist.  See the
+<B><A HREF="../TkLib/CrtWindow.htm">Tk_CreateWindow</A></B> manual entry for information on
+deferred window creation.
+<B>Tk_UnmapWindow</B> unmaps <I>tkwin</I>'s window
+from the screen.
+<P>
+If <I>tkwin</I> is a child window (i.e. <B><A HREF="../TkLib/CrtWindow.htm">Tk_CreateWindow</A></B> was
+used to create a child window), then event handlers interested in map 
+and unmap events are invoked immediately.  If <I>tkwin</I> is not an 
+internal window, then the event handlers will be invoked later, after 
+X has seen the request and returned an event for it.
+<P>
+These procedures should be used in place of the X procedures
+<B>XMapWindow</B> and <B>XUnmapWindow</B>, since they update
+Tk's local data structure for <I>tkwin</I>.  Applications
+using Tk should not invoke <B>XMapWindow</B> and <B>XUnmapWindow</B>
+directly.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/M.htm#map">map</A>, <A href="../Keywords/U.htm#unmap">unmap</A>, <A href="../Keywords/W.htm#window">window</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

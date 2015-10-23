@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_AllocFontFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetFont</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetFont.htm#M2" NAME="L302">NAME</A>
+<DL><DD>Tk_AllocFontFromObj, Tk_GetFont, Tk_GetFontFromObj, Tk_NameOfFont, Tk_FreeFontFromObj, Tk_FreeFont &mdash; maintain database of fonts</DD></DL>
+<DD><A HREF="GetFont.htm#M3" NAME="L303">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_Font 
+<DD><B>Tk_AllocFontFromObj(</B><I>interp, tkwin, objPtr</I><B>)</B>
+<DD>Tk_Font 
+<DD><B>Tk_GetFont(</B><I>interp, tkwin, string</I><B>)</B> 
+<DD>Tk_Font 
+<DD><B>Tk_GetFontFromObj(</B><I>tkwin, objPtr</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfFont(</B><I>tkfont</I><B>)</B>
+<DD>Tk_Font 
+<DD><B>Tk_FreeFontFromObj(</B><I>tkwin, objPtr</I><B>)</B>
+<DD>void
+<DD><B>Tk_FreeFont(</B><I>tkfont</I><B>)</B>
+</DL>
+<DD><A HREF="GetFont.htm#M4" NAME="L304">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetFont.htm#M5" NAME="L305">DESCRIPTION</A>
+<DD><A HREF="GetFont.htm#M6" NAME="L306">SEE ALSO</A>
+<DD><A HREF="GetFont.htm#M7" NAME="L307">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_AllocFontFromObj, Tk_GetFont, Tk_GetFontFromObj, Tk_NameOfFont, Tk_FreeFontFromObj, Tk_FreeFont &mdash; maintain database of fonts
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+Tk_Font <BR>
+<B>Tk_AllocFontFromObj(</B><I>interp, tkwin, objPtr</I><B>)</B><BR>
+Tk_Font <BR>
+<B>Tk_GetFont(</B><I>interp, tkwin, string</I><B>)</B> <BR>
+Tk_Font <BR>
+<B>Tk_GetFontFromObj(</B><I>tkwin, objPtr</I><B>)</B><BR>
+const char *<BR>
+<B>Tk_NameOfFont(</B><I>tkfont</I><B>)</B><BR>
+Tk_Font <BR>
+<B>Tk_FreeFontFromObj(</B><I>tkwin, objPtr</I><B>)</B><BR>
+void<BR>
+<B>Tk_FreeFont(</B><I>tkfont</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.  If <B>NULL</B>, then no error
+messages are left after errors.
+<P><DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>tkwin</B> (in)<DD>
+Token for window in which font will be used.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*objPtr</B> (in/out)<DD>
+Gives name or description of font.  See documentation
+for the <B><A HREF="../TkCmd/font.htm">font</A></B> command for details on acceptable formats.
+Internal rep will be modified to cache corresponding Tk_Font.
+<P><DT>const char <B>*string</B> (in)<DD>
+Same as <I>objPtr</I> except description of font is passed as a string and
+resulting Tk_Font is not cached.
+<P><DT>Tk_Font <B>tkfont</B> (in)<DD>
+Opaque font token.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_AllocFontFromObj</B> finds the font indicated by <I>objPtr</I> and
+returns a token that represents the font.  The return value can be used
+in subsequent calls to procedures such as <B><A HREF="../TkLib/FontId.htm">Tk_GetFontMetrics</A></B>,
+<B><A HREF="../TkLib/MeasureChar.htm">Tk_MeasureChars</A></B>, and <B>Tk_FreeFont</B>.  The Tk_Font token
+will remain valid until
+<B>Tk_FreeFontFromObj</B> or <B>Tk_FreeFont</B> is called to release it. 
+<I>ObjPtr</I> can contain either a symbolic name or a font description; see
+the documentation for the <B><A HREF="../TkCmd/font.htm">font</A></B> command for a description of the
+valid formats.  If <B>Tk_AllocFontFromObj</B> is unsuccessful (because,
+for example, <I>objPtr</I> did not contain a valid font specification) then it
+returns <B>NULL</B> and leaves an error message in <I>interp</I>'s result
+if <I>interp</I> is not <B>NULL</B>.  <B>Tk_AllocFontFromObj</B> caches
+information about the return
+value in <I>objPtr</I>, which speeds up future calls to procedures
+such as <B>Tk_AllocFontFromObj</B> and <B>Tk_GetFontFromObj</B>.
+<P>
+<B>Tk_GetFont</B> is identical to <B>Tk_AllocFontFromObj</B> except
+that the description of the font is specified with a string instead
+of an object.  This prevents <B>Tk_GetFont</B> from caching the
+matching Tk_Font, so <B>Tk_GetFont</B> is less efficient than
+<B>Tk_AllocFontFromObj</B>.
+<P>
+<B>Tk_GetFontFromObj</B> returns the token for an existing font, given
+the window and description used to create the font.
+<B>Tk_GetFontFromObj</B> does not actually create the font; the font
+must already have been created with a previous call to
+<B>Tk_AllocFontFromObj</B> or <B>Tk_GetFont</B>.  The return
+value is cached in <I>objPtr</I>, which speeds up
+future calls to <B>Tk_GetFontFromObj</B> with the same <I>objPtr</I>
+and <I>tkwin</I>.
+<P>
+<B>Tk_AllocFontFromObj</B> and <B>Tk_GetFont</B> maintain
+a database of all fonts they have allocated.  If
+the same font is requested multiple times (e.g. by different
+windows or for different purposes), then a single Tk_Font will be
+shared for all uses.  The underlying resources will be freed automatically
+when no-one is using the font anymore.
+<P>
+The procedure <B>Tk_NameOfFont</B> is roughly the inverse of
+<B>Tk_GetFont</B>.  Given a <I>tkfont</I> that was created by
+<B>Tk_GetFont</B> (or <B>Tk_AllocFontFromObj</B>), the return value is
+the <I>string</I> argument that was
+passed to <B>Tk_GetFont</B> to create the font.  The string returned by
+<B>Tk_NameOfFont</B> is only guaranteed to persist until the <I>tkfont</I>
+is deleted.  The caller must not modify this string.
+<P>
+When a font is no longer needed,
+<B>Tk_FreeFontFromObj</B> or <B>Tk_FreeFont</B> should be called to
+release it.  For <B>Tk_FreeFontFromObj</B> the font to release is specified
+with the same information used to create it; for
+<B>Tk_FreeFont</B> the font to release is specified
+with its Tk_Font token.  There should be
+exactly one call to <B>Tk_FreeFontFromObj</B> or <B>Tk_FreeFont</B>
+for each call to <B>Tk_AllocFontFromObj</B> or <B>Tk_GetFont</B>.
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TkLib/FontId.htm">Tk_FontId</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/F.htm#font">font</A>
+<div class="copy">Copyright &copy; 1990-1992 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

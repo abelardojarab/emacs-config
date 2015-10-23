@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_RecordAndEvalObj manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl C API, version 8.6.0</a> <small>&gt;</small> RecEvalObj</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_RecordAndEvalObj &mdash; save command on history list before evaluating
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+int<BR>
+<B>Tcl_RecordAndEvalObj</B>(<I>interp, cmdPtr, flags</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Tcl interpreter in which to evaluate command.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*cmdPtr</B> (in)<DD>
+Points to a Tcl value containing a command (or sequence of commands)
+to execute.
+<P><DT>int <B>flags</B> (in)<DD>
+An OR'ed combination of flag bits.  <B>TCL_NO_EVAL</B> means record the
+command but do not evaluate it.  <B>TCL_EVAL_GLOBAL</B> means evaluate
+the command at global level instead of the current stack level.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tcl_RecordAndEvalObj</B> is invoked to record a command as an event
+on the history list and then execute it using <B><A HREF="../TclLib/Eval.htm">Tcl_EvalObjEx</A></B>
+(or <B><A HREF="../TclLib/Eval.htm">Tcl_GlobalEvalObj</A></B> if the <B>TCL_EVAL_GLOBAL</B> bit is set
+in <I>flags</I>).
+It returns a completion code such as <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> just like <B><A HREF="../TclLib/Eval.htm">Tcl_EvalObjEx</A></B>,
+as well as a result value containing additional information
+(a result value or error message)
+that can be retrieved using <B><A HREF="../TclLib/SetResult.htm">Tcl_GetObjResult</A></B>.
+If you do not want the command recorded on the history list then
+you should invoke <B><A HREF="../TclLib/Eval.htm">Tcl_EvalObjEx</A></B> instead of <B>Tcl_RecordAndEvalObj</B>.
+Normally <B>Tcl_RecordAndEvalObj</B> is only called with top-level
+commands typed by the user, since the purpose of history is to
+allow the user to re-issue recently invoked commands.
+If the <I>flags</I> argument contains the <B>TCL_NO_EVAL</B> bit then
+the command is recorded without being evaluated.
+
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TclLib/Eval.htm">Tcl_EvalObjEx</A></B>, <B><A HREF="../TclLib/SetResult.htm">Tcl_GetObjResult</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#command">command</A>, <A href="../Keywords/E.htm#event">event</A>, <A href="../Keywords/E.htm#execute">execute</A>, <A href="../Keywords/H.htm#history">history</A>, <A href="../Keywords/I.htm#interpreter">interpreter</A>, <A href="../Keywords/V.htm#value">value</A>, <A href="../Keywords/R.htm#record">record</A>
+<div class="copy">Copyright &copy; 1997 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

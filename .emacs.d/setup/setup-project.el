@@ -160,22 +160,14 @@
 (require 'helm-dash)
 (setq helm-dash-min-length 2)
 (setq helm-dash-docsets-path (expand-file-name "~/.emacs.d/docsets"))
-(setq helm-dash-common-docsets '("C++" "Qt"))
-
-(defun my/dash-path (docset)
-  (if (string= docset "Python_2")
-      (concat (concat helm-dash-docsets-path "/") "Python_2.docset")
-    (if (string= docset "Qt_4")
-        (concat (concat helm-dash-docsets-path "/") "Qt.docset")
-      (concat
-       (concat
-        (concat
-         (concat helm-dash-docsets-path "/")
-         (nth 0 (split-string docset "_")))) ".docset"))))
-
-(defun my/dash-install (docset)
-  (unless (file-exists-p (my/dash-path docset))
-    (helm-dash-install-docset docset)))
+(setq helm-dash-common-docsets '("Python_2"
+                                 "Perl"
+                                 "JavaScript"
+                                 "Java"
+                                 "Tcl"
+                                 "R"
+                                 "Bash"
+                                 "LaTeX"))
 
 (defun c-doc-hook ()
   (interactive)
@@ -184,13 +176,8 @@
 
 (defun python-doc-hook ()
   (interactive)
-  (setq-local helm-dash-docsets '("Python_2")))
+  (setq-local helm-dash-docsets '("Python_2" "NumPy")))
 (add-hook 'python-mode-hook 'python-doc-hook)
-
-(defun java-doc-hook ()
-  (interactive)
-  (setq-local helm-dash-docsets '("Java")))
-(add-hook 'java-mode-hook 'java-doc-hook)
 
 (defun js2-doc-hook ()
   (interactive)

@@ -1,0 +1,545 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>TAP::Parser::Grammar</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../../index-overview.html">Overview</a>
+                <li><a href="../../index-tutorials.html">Tutorials</a>
+                <li><a href="../../index-faq.html">FAQs</a>
+                <li><a href="../../index-history.html">History / Changes</a>
+                <li><a href="../../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../../index-language.html">Language</a>
+                <li><a href="../../index-functions.html">Functions</a>
+                <li><a href="../../perlop.html">Operators</a>
+                <li><a href="../../perlvar.html">Special Variables</a>
+                <li><a href="../../index-pragmas.html">Pragmas</a>
+                <li><a href="../../index-utilities.html">Utilities</a>
+                <li><a href="../../index-internals.html">Internals</a>
+                <li><a href="../../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>TAP::Parser::Grammar</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../../index.html">Home</a> &gt;
+    
+      
+        <a href="../../index-modules-T.html">Core modules (T)</a> &gt;
+      
+    
+    TAP::Parser::Grammar
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>TAP::Parser::Grammar</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#VERSION">VERSION</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#METHODS">METHODS</a><ul><li><a href="#Class-Methods">Class Methods</a><li><a href="#Instance-Methods">Instance Methods</a></ul><li><a href="#TAP-GRAMMAR">TAP GRAMMAR</a><li><a href="#SUBCLASSING">SUBCLASSING</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>TAP::Parser::Grammar - A grammar for the Test Anything Protocol.</p>
+<a name="VERSION"></a><h1>VERSION</h1>
+<p>Version 3.35</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../../functions/use.html">use</a> <span class="w">TAP::Parser::Grammar</span><span class="sc">;</span></li><li>  <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$grammar</span> = <span class="i">$self</span><span class="i">-&gt;make_grammar</span><span class="s">(</span><span class="s">{</span></li><li>    <span class="w">iterator</span> <span class="cm">=&gt;</span> <span class="i">$tap_parser_iterator</span><span class="cm">,</span></li><li>    <span class="w">parser</span>   <span class="cm">=&gt;</span> <span class="i">$tap_parser</span><span class="cm">,</span></li><li>    <span class="w">version</span>  <span class="cm">=&gt;</span> <span class="n">12</span><span class="cm">,</span></li><li>  <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$result</span> = <span class="i">$grammar</span><span class="i">-&gt;tokenize</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p><code class="inline"><span class="w">TAP::Parser::Grammar</span></code>
+ tokenizes lines from a <a href="../../TAP/Parser/Iterator.html">TAP::Parser::Iterator</a> and
+constructs <a href="../../TAP/Parser/Result.html">TAP::Parser::Result</a> subclasses to represent the tokens.</p>
+<p>Do not attempt to use this class directly.  It won't make sense.  It's mainly
+here to ensure that we will be able to have pluggable grammars when TAP is
+expanded at some future date (plus, this stuff was really cluttering the
+parser).</p>
+<a name="METHODS"></a><h1>METHODS</h1>
+<a name="Class-Methods"></a><h2>Class Methods</h2>
+<a name="new"></a><h3><code class="inline"><span class="w">new</span></code>
+</h3>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$grammar</span> = <span class="w">TAP::Parser::Grammar</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">{</span></li><li>      <span class="w">iterator</span> <span class="cm">=&gt;</span> <span class="i">$iterator</span><span class="cm">,</span></li><li>      <span class="w">parser</span>   <span class="cm">=&gt;</span> <span class="i">$parser</span><span class="cm">,</span></li><li>      <span class="w">version</span>  <span class="cm">=&gt;</span> <span class="i">$version</span><span class="cm">,</span></li><li>  <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns <a href="../../TAP/Parser.html">TAP::Parser</a> grammar object that will parse the TAP stream from the
+specified iterator.  Both <code class="inline"><span class="w">iterator</span></code>
+ and <code class="inline"><span class="w">parser</span></code>
+ are required arguments.
+If <code class="inline"><span class="w">version</span></code>
+ is not set it defaults to <code class="inline"><span class="n">12</span></code>
+ (see <a href="#set_version">set_version</a> for more
+details).</p>
+<a name="Instance-Methods"></a><h2>Instance Methods</h2>
+<a name="set_version"></a><h3><code class="inline"><span class="w">set_version</span></code>
+</h3>
+<pre class="verbatim"><ol><li>  <span class="i">$grammar</span><span class="i">-&gt;set_version</span><span class="s">(</span><span class="n">13</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Tell the grammar which TAP syntax version to support. The lowest
+supported version is 12. Although 'TAP version' isn't valid version 12
+syntax it is accepted so that higher version numbers may be parsed.</p>
+<a name="tokenize"></a><h3><code class="inline"><span class="w">tokenize</span></code>
+</h3>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$token</span> = <span class="i">$grammar</span><span class="i">-&gt;tokenize</span><span class="sc">;</span></li></ol></pre><p>This method will return a <a href="../../TAP/Parser/Result.html">TAP::Parser::Result</a> object representing the
+current line of TAP.</p>
+<a name="token_types"></a><h3><code class="inline"><span class="w">token_types</span></code>
+</h3>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../../functions/my.html">my</a> <span class="i">@types</span> = <span class="i">$grammar</span><span class="i">-&gt;token_types</span><span class="sc">;</span></li></ol></pre><p>Returns the different types of tokens which this grammar can parse.</p>
+<a name="syntax_for"></a><h3><code class="inline"><span class="w">syntax_for</span></code>
+</h3>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$syntax</span> = <span class="i">$grammar</span><span class="i">-&gt;syntax_for</span><span class="s">(</span><span class="i">$token_type</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns a pre-compiled regular expression which will match a chunk of TAP
+corresponding to the token type.  For example (not that you should really pay
+attention to this, <code class="inline"><span class="i">$grammar</span><span class="i">-&gt;syntax_for</span><span class="s">(</span><span class="q">&#39;comment&#39;</span><span class="s">)</span></code>
+ will return
+<code class="inline"><a class="l_k" href="../../functions/qr.html">qr/^#(.*)/</a></code>.</p>
+<a name="handler_for"></a><h3><code class="inline"><span class="w">handler_for</span></code>
+</h3>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$handler</span> = <span class="i">$grammar</span><span class="i">-&gt;handler_for</span><span class="s">(</span><span class="i">$token_type</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns a code reference which, when passed an appropriate line of TAP,
+returns the lexed token corresponding to that line.  As a result, the basic
+TAP parsing loop looks similar to the following:</p>
+<pre class="verbatim"><ol><li> <a class="l_k" href="../../functions/my.html">my</a> <span class="i">@tokens</span><span class="sc">;</span></li><li> <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$grammar</span> = <span class="w">TAP::Grammar</span><span class="w">-&gt;new</span><span class="sc">;</span></li><li> <span class="j">LINE:</span> while <span class="s">(</span> <a class="l_k" href="../../functions/defined.html">defined</a><span class="s">(</span> <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$line</span> = <span class="i">$parser</span><span class="i">-&gt;_next_chunk_of_tap</span> <span class="s">)</span> <span class="s">)</span> <span class="s">{</span></li><li>     for <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$type</span> <span class="s">(</span> <span class="i">$grammar</span><span class="i">-&gt;token_types</span> <span class="s">)</span> <span class="s">{</span></li><li>         <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$syntax</span>  = <span class="i">$grammar</span><span class="i">-&gt;syntax_for</span><span class="s">(</span><span class="i">$type</span><span class="s">)</span><span class="sc">;</span></li><li>         if <span class="s">(</span> <span class="i">$line</span> =~ <span class="i">$syntax</span> <span class="s">)</span> <span class="s">{</span></li><li>             <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$handler</span> = <span class="i">$grammar</span><span class="i">-&gt;handler_for</span><span class="s">(</span><span class="i">$type</span><span class="s">)</span><span class="sc">;</span></li><li>             <a class="l_k" href="../../functions/push.html">push</a> <span class="i">@tokens</span> <span class="cm">=&gt;</span> <span class="i">$grammar</span><span class="i">-&gt;$handler</span><span class="s">(</span><span class="i">$line</span><span class="s">)</span><span class="sc">;</span></li><li>             <a class="l_k" href="../../functions/next.html">next</a> <span class="j">LINE</span><span class="sc">;</span></li><li>         <span class="s">}</span></li><li>     <span class="s">}</span></li><li>     <a class="l_k" href="../../functions/push.html">push</a> <span class="i">@tokens</span> <span class="cm">=&gt;</span> <span class="i">$grammar</span><span class="i">-&gt;_make_unknown_token</span><span class="s">(</span><span class="i">$line</span><span class="s">)</span><span class="sc">;</span></li><li> <span class="s">}</span></li></ol></pre><a name="TAP-GRAMMAR"></a><h1>TAP GRAMMAR</h1>
+<p><b>NOTE:</b>  This grammar is slightly out of date.  There's still some discussion
+about it and a new one will be provided when we have things better defined.</p>
+<p>The <a href="../../TAP/Parser.html">TAP::Parser</a> does not use a formal grammar because TAP is essentially a
+stream-based protocol.  In fact, it's quite legal to have an infinite stream.
+For the same reason that we don't apply regexes to streams, we're not using a
+formal grammar here.  Instead, we parse the TAP in lines.</p>
+<p>For purposes for forward compatibility, any result which does not match the
+following grammar is currently referred to as
+<a href="../../TAP/Parser/Result/Unknown.html">TAP::Parser::Result::Unknown</a>.  It is <i>not</i> a parse error.</p>
+<p>A formal grammar would look similar to the following:</p>
+<pre class="verbatim"><ol><li> (*</li><li>     For the time being, I'm cheating on the EBNF by allowing</li><li>     certain terms to be defined by POSIX character classes by</li><li>     using the following syntax:</li><li></li><li>       digit ::= [:digit:]</li><li></li><li>     As far as I am aware, that's not valid EBNF.  Sue me.  I</li><li>     didn't know how to write "char" otherwise (Unicode issues).</li><li>     Suggestions welcome.</li><li> *)</li><li></li><li> tap            ::= version? { comment | unknown } leading_plan lines</li><li>                    |</li><li>                    lines trailing_plan {comment}</li><li></li><li> version        ::= 'TAP version ' positiveInteger {positiveInteger} "\n"</li><li></li><li> leading_plan   ::= plan skip_directive? "\n"</li><li></li><li> trailing_plan  ::= plan "\n"</li><li></li><li> plan           ::= '1..' nonNegativeInteger</li><li></li><li> lines          ::= line {line}</li><li></li><li> line           ::= (comment | test | unknown | bailout ) "\n"</li><li></li><li> test           ::= status positiveInteger? description? directive?</li><li></li><li> status         ::= 'not '? 'ok '</li><li></li><li> description    ::= (character - (digit | '#')) {character - '#'}</li><li></li><li> directive      ::= todo_directive | skip_directive</li><li></li><li> todo_directive ::= hash_mark 'TODO' ' ' {character}</li><li></li><li> skip_directive ::= hash_mark 'SKIP' ' ' {character}</li><li></li><li> comment        ::= hash_mark {character}</li><li></li><li> hash_mark      ::= '#' {' '}</li><li></li><li> bailout        ::= 'Bail out!' {character}</li><li></li><li> unknown        ::= { (character - "\n") }</li><li></li><li> (* POSIX character classes and other terminals *)</li><li></li><li> digit              ::= [:digit:]</li><li> character          ::= ([:print:] - "\n")</li><li> positiveInteger    ::= ( digit - '0' ) {digit}</li><li> nonNegativeInteger ::= digit {digit}</li></ol></pre><a name="SUBCLASSING"></a><h1>SUBCLASSING</h1>
+<p>Please see <a href="../../TAP/Parser.html#SUBCLASSING">SUBCLASSING in TAP::Parser</a> for a subclassing overview.</p>
+<p>If you <i>really</i> want to subclass <a href="../../TAP/Parser.html">TAP::Parser</a>'s grammar the best thing to
+do is read through the code.  There's no easy way of summarizing it here.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../../TAP/Object.html">TAP::Object</a>,
+<a href="../../TAP/Parser.html">TAP::Parser</a>,
+<a href="../../TAP/Parser/Iterator.html">TAP::Parser::Iterator</a>,
+<a href="../../TAP/Parser/Result.html">TAP::Parser::Result</a>,</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#VERSION">VERSION</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#METHODS">METHODS</a><ul><li><a href="#Class-Methods">Class Methods</a><li><a href="#Instance-Methods">Instance Methods</a></ul><li><a href="#TAP-GRAMMAR">TAP GRAMMAR</a><li><a href="#SUBCLASSING">SUBCLASSING</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../../index-overview.html">Overview</a>
+                <li><a href="../../index-tutorials.html">Tutorials</a>
+                <li><a href="../../index-faq.html">FAQs</a>
+                <li><a href="../../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../../index-language.html">Language</a>
+                <li><a href="../../index-functions.html">Functions</a>
+                <li><a href="../../perlop.html">Operators</a>
+                <li><a href="../../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../../index-modules-A.html">Modules</a>
+                <li><a href="../../index-pragmas.html">Pragmas</a>
+                <li><a href="../../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../../index-licence.html">License</a>
+                <li><a href="../../index-internals.html">Internals</a>
+                <li><a href="../../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(2);
+  perldoc.pageName    = 'TAP::Parser::Grammar';
+  perldoc.pageAddress = 'TAP/Parser/Grammar.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

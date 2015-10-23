@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetDash manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetDash</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetDash.htm#M2" NAME="L296">NAME</A>
+<DL><DD>Tk_GetDash &mdash; convert from string to valid dash structure.</DD></DL>
+<DD><A HREF="GetDash.htm#M3" NAME="L297">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>
+<DD>int
+<DD><B>Tk_GetDash</B>(<I>interp, string, dashPtr</I>)
+</DL>
+<DD><A HREF="GetDash.htm#M4" NAME="L298">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetDash.htm#M5" NAME="L299">DESCRIPTION</A>
+<DD><A HREF="GetDash.htm#M6" NAME="L300">SEE ALSO</A>
+<DD><A HREF="GetDash.htm#M7" NAME="L301">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetDash &mdash; convert from string to valid dash structure.
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+<BR>
+int<BR>
+<B>Tk_GetDash</B>(<I>interp, string, dashPtr</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.
+<P><DT>const char <B>*string</B> (in)<DD>
+Textual value to be converted.
+<P><DT>Tk_Dash <B>*dashPtr</B> (out)<DD>
+Points to place to store the dash pattern
+value converted from <I>string</I>. Must not be NULL.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These procedure parses the string and fills in the result in the
+Tk_Dash structure. The string can be a list of integers or a
+character string containing only
+&#8220;<B>.,-_</B>&#8221;
+and spaces. If all
+goes well, <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> is returned and a dash descriptor is stored
+in the variable pointed to by <I>dashPtr</I>.
+If <I>string</I> does not have the
+proper syntax then <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned, an error message is left
+in the interpreter's result, and nothing is stored at *<I>dashPtr</I>.
+<P>
+The first possible syntax is a list of integers. Each element
+represents the number of pixels of a line segment. Only the odd
+segments are drawn using the
+&#8220;outline&#8221;
+color. The other segments are drawn transparent.
+<P>
+The second possible syntax is a character list containing only
+5 possible characters
+&#8220;<B>.,-_ </B>&#8221;.
+The space can be used
+to enlarge the space between other line elements, and can not
+occur in the first position of the string. Some examples:
+<P>
+<PRE>-dash .     = -dash {2 4}
+    -dash -     = -dash {6 4}
+    -dash -.    = -dash {6 4 2 4}
+    -dash -..   = -dash {6 4 2 4 2 4}
+    -dash {. }  = -dash {2 8}
+    -dash ,     = -dash {4 4}</PRE>
+<P>
+The main difference between this syntax and the numeric is that it
+is shape-conserving. This means that all values in the dash
+list will be multiplied by the line width before display. This
+ensures that
+&#8220;.&#8221;
+will always be displayed as a dot and
+&#8220;-&#8221;
+always as a dash regardless of the line width.
+<P>
+On systems where only a limited set of dash patterns, the dash
+pattern will be displayed as the most close dash pattern that
+is available. For example, on Windows only the first 4 of the
+above examples are available; the last 2 examples will be
+displayed identically to the first one.
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/canvas.htm">canvas</A></B>, <B><A HREF="../TkLib/CrtItemType.htm">Tk_CreateItemType</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/D.htm#dash">dash</A>, <A href="../Keywords/C.htm#conversion">conversion</A>
+<div class="copy">Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

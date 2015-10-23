@@ -1,0 +1,570 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>IO::Select</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>IO::Select</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-I.html">Core modules (I)</a> &gt;
+      
+    
+    IO::Select
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>IO::Select</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#METHODS">METHODS</a><li><a href="#EXAMPLE">EXAMPLE</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>IO::Select - OO interface to the select system call</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Select</span><span class="sc">;</span></li><li></li><li>    <span class="i">$s</span> = <span class="w">IO::Select</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">$s</span><span class="i">-&gt;add</span><span class="s">(</span>\<span class="i">*STDIN</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$s</span><span class="i">-&gt;add</span><span class="s">(</span><span class="i">$some_handle</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">@ready</span> = <span class="i">$s</span><span class="i">-&gt;can_read</span><span class="s">(</span><span class="i">$timeout</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">@ready</span> = <span class="w">IO::Select</span><span class="w">-&gt;new</span><span class="s">(</span><span class="i">@handles</span><span class="s">)</span><span class="i">-&gt;can_read</span><span class="s">(</span><span class="n">0</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>The <code class="inline"><span class="w">IO::Select</span></code>
+ package implements an object approach to the system <code class="inline"><a class="l_k" href="../functions/select.html">select</a></code>
+function call. It allows the user to see what IO handles, see <a href="../IO/Handle.html">IO::Handle</a>,
+are ready for reading, writing or have an exception pending.</p>
+<a name="CONSTRUCTOR"></a><h1>CONSTRUCTOR</h1>
+<ul>
+<li><a name="new-(-%5b-HANDLES-%5d-)"></a><b>new ( [ HANDLES ] )</b>
+<p>The constructor creates a new object and optionally initialises it with a set
+of handles.</p>
+</li>
+</ul>
+<a name="METHODS"></a><h1>METHODS</h1>
+<ul>
+<li><a name="add-(-HANDLES-)"></a><b>add ( HANDLES )</b>
+<p>Add the list of handles to the <code class="inline"><span class="w">IO::Select</span></code>
+ object. It is these values that
+will be returned when an event occurs. <code class="inline"><span class="w">IO::Select</span></code>
+ keeps these values in a
+cache which is indexed by the <code class="inline"><a class="l_k" href="../functions/fileno.html">fileno</a></code> of the handle, so if more than one
+handle with the same <code class="inline"><a class="l_k" href="../functions/fileno.html">fileno</a></code> is specified then only the last one is cached.</p>
+<p>Each handle can be an <code class="inline"><span class="w">IO::Handle</span></code>
+ object, an integer or an array
+reference where the first element is an <code class="inline"><span class="w">IO::Handle</span></code>
+ or an integer.</p>
+</li>
+<li><a name="remove-(-HANDLES-)"></a><b>remove ( HANDLES )</b>
+<p>Remove all the given handles from the object. This method also works
+by the <code class="inline"><a class="l_k" href="../functions/fileno.html">fileno</a></code> of the handles. So the exact handles that were added
+need not be passed, just handles that have an equivalent <code class="inline"><a class="l_k" href="../functions/fileno.html">fileno</a></code></p>
+</li>
+<li><a name="exists-(-HANDLE-)"></a><b>exists ( HANDLE )</b>
+<p>Returns a true value (actually the handle itself) if it is present.
+Returns undef otherwise.</p>
+</li>
+<li><a name="handles"></a><b>handles</b>
+<p>Return an array of all registered handles.</p>
+</li>
+<li><a name="can_read-(-%5b-TIMEOUT-%5d-)"></a><b>can_read ( [ TIMEOUT ] )</b>
+<p>Return an array of handles that are ready for reading. <code class="inline"><span class="w">TIMEOUT</span></code>
+ is
+the maximum amount of time to wait before returning an empty list, in
+seconds, possibly fractional. If <code class="inline"><span class="w">TIMEOUT</span></code>
+ is not given and any
+handles are registered then the call will block.</p>
+</li>
+<li><a name="can_write-(-%5b-TIMEOUT-%5d-)"></a><b>can_write ( [ TIMEOUT ] )</b>
+<p>Same as <code class="inline"><span class="w">can_read</span></code>
+ except check for handles that can be written to.</p>
+</li>
+<li><a name="has_exception-(-%5b-TIMEOUT-%5d-)"></a><b>has_exception ( [ TIMEOUT ] )</b>
+<p>Same as <code class="inline"><span class="w">can_read</span></code>
+ except check for handles that have an exception
+condition, for example pending out-of-band data.</p>
+</li>
+<li><a name="count-()"></a><b>count ()</b>
+<p>Returns the number of handles that the object will check for when
+one of the <code class="inline"><span class="w">can_</span></code>
+ methods is called or the object is passed to
+the <code class="inline"><a class="l_k" href="../functions/select.html">select</a></code> static method.</p>
+</li>
+<li><a name="bits()"></a><b>bits()</b>
+<p>Return the bit string suitable as argument to the core select() call.</p>
+</li>
+<li><a name="select-(-READ%2c-WRITE%2c-EXCEPTION-%5b%2c-TIMEOUT-%5d-)"></a><b>select ( READ, WRITE, EXCEPTION [, TIMEOUT ] )</b>
+<p><code class="inline"><a class="l_k" href="../functions/select.html">select</a></code> is a static method, that is you call it with the package name
+like <code class="inline"><span class="w">new</span></code>
+. <code class="inline"><span class="w">READ</span></code>
+, <code class="inline"><span class="w">WRITE</span></code>
+ and <code class="inline"><span class="w">EXCEPTION</span></code>
+ are either <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> or
+<code class="inline"><span class="w">IO::Select</span></code>
+ objects. <code class="inline"><span class="w">TIMEOUT</span></code>
+ is optional and has the same effect as
+for the core select call.</p>
+<p>The result will be an array of 3 elements, each a reference to an array
+which will hold the handles that are ready for reading, writing and have
+exceptions respectively. Upon error an empty list is returned.</p>
+</li>
+</ul>
+<a name="EXAMPLE"></a><h1>EXAMPLE</h1>
+<p>Here is a short example which shows how <code class="inline"><span class="w">IO::Select</span></code>
+ could be used
+to write a server which communicates with several sockets while also
+listening for more connections on a listen socket</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Select</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Socket</span><span class="sc">;</span></li><li></li><li>    <span class="i">$lsn</span> = <span class="w">IO::Socket::INET</span><span class="w">-&gt;new</span><span class="s">(</span><span class="w">Listen</span> <span class="cm">=&gt;</span> <span class="n">1</span><span class="cm">,</span> <span class="w">LocalPort</span> <span class="cm">=&gt;</span> <span class="n">8080</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$sel</span> = <span class="w">IO::Select</span><span class="w">-&gt;new</span><span class="s">(</span> <span class="i">$lsn</span> <span class="s">)</span><span class="sc">;</span></li><li></li><li>    while<span class="s">(</span><span class="i">@ready</span> = <span class="i">$sel</span><span class="i">-&gt;can_read</span><span class="s">)</span> <span class="s">{</span></li><li>        foreach <span class="i">$fh</span> <span class="s">(</span><span class="i">@ready</span><span class="s">)</span> <span class="s">{</span></li><li>            if<span class="s">(</span><span class="i">$fh</span> == <span class="i">$lsn</span><span class="s">)</span> <span class="s">{</span></li><li>                <span class="c"># Create a new socket</span></li><li>                <span class="i">$new</span> = <span class="i">$lsn</span><span class="i">-&gt;accept</span><span class="sc">;</span></li><li>                <span class="i">$sel</span><span class="i">-&gt;add</span><span class="s">(</span><span class="i">$new</span><span class="s">)</span><span class="sc">;</span></li><li>            <span class="s">}</span></li><li>            else <span class="s">{</span></li><li>                <span class="c"># Process socket</span></li><li></li><li>                <span class="c"># Maybe we have finished with the socket</span></li><li>                <span class="i">$sel</span><span class="i">-&gt;remove</span><span class="s">(</span><span class="i">$fh</span><span class="s">)</span><span class="sc">;</span></li><li>                <span class="i">$fh</span><span class="i">-&gt;close</span><span class="sc">;</span></li><li>            <span class="s">}</span></li><li>        <span class="s">}</span></li><li>    <span class="s">}</span></li></ol></pre><a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Graham Barr. Currently maintained by the Perl Porters.  Please report all
+bugs to &lt;perlbug@perl.org&gt;.</p>
+<a name="COPYRIGHT"></a><h1>COPYRIGHT</h1>
+<p>Copyright (c) 1997-8 Graham Barr &lt;gbarr@pobox.com&gt;. All rights reserved.
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#METHODS">METHODS</a><li><a href="#EXAMPLE">EXAMPLE</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'IO::Select';
+  perldoc.pageAddress = 'IO/Select.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

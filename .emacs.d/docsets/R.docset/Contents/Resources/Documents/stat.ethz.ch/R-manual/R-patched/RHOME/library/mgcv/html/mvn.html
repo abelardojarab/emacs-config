@@ -1,0 +1,96 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/mgcv/html/mvn.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:39 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Multivariate normal additive models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for mvn {mgcv}"><tbody><tr><td>mvn {mgcv}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Multivariate normal additive models</h2>
+
+<h3>Description</h3>
+
+<p>Family for use with <code><a href="gam.html">gam</a></code> implementing smooth multivariate Gaussian regression. 
+The means for each dimension are given by a separate linear predictor, which may contain smooth components. The 
+Choleski factor of the response precision matrix is estimated as part of fitting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>mvn(d=2)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>d</code></td>
+<td>
+<p>The dimension of the response (&gt;1).</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p>The response is <code>d</code> dimensional multivariate normal, where the covariance matrix is estimated, 
+and the means for each dimension have sperate linear predictors. Model sepcification is via a list of gam like 
+formulae - one for each dimension. See example.
+</p>
+<p>Currently the family ignores any prior weights, and is implemented using first derivative information sufficient for BFGS estimation of smoothing parameters. <code>"response"</code> residuals give raw residuals, while <code>"deviance"</code> 
+residuals are standardized to be approximately independent standard normal if all is well.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>general.family</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Simon N. Wood  simon.wood@r-project.org
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../stats/html/family.html">gaussian</a></code></p>
+
+
+<h3>Examples</h3>
+
+<pre>library(mgcv)
+## simulate some data...
+V &lt;- matrix(c(2,1,1,2),2,2)
+f0 &lt;- function(x) 2 * sin(pi * x)
+f1 &lt;- function(x) exp(2 * x)
+f2 &lt;- function(x) 0.2 * x^11 * (10 * (1 - x))^6 + 10 * 
+            (10 * x)^3 * (1 - x)^10
+n &lt;- 300
+x0 &lt;- runif(n);x1 &lt;- runif(n);
+x2 &lt;- runif(n);x3 &lt;- runif(n)
+y &lt;- matrix(0,n,2)
+for (i in 1:n) {
+  mu &lt;- c(f0(x0[i])+f1(x1[i]),f2(x2[i]))
+  y[i,] &lt;- rmvn(1,mu,V)
+}
+dat &lt;- data.frame(y0=y[,1],y1=y[,2],x0=x0,x1=x1,x2=x2,x3=x3)
+
+## fit model...
+
+b &lt;- gam(list(y0~s(x0)+s(x1),y1~s(x2)+s(x3)),family=mvn(d=2),data=dat)
+b
+summary(b)
+plot(b,pages=1)
+solve(crossprod(b$family$data$R)) ## estimated cov matrix
+
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>mgcv</em> version 1.8-7 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/mgcv/html/mvn.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:39 GMT -->
+
+</body></html>

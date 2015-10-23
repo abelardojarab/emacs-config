@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/debug.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:31:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head><title>Debug a Function</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for debug {base}"><tr><td>debug {base}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Debug a Function</h2>
+
+<h3>Description</h3>
+
+<p>Set, unset or query the debugging flag on a function.
+The <code>text</code> and <code>condition</code> arguments are the same as those
+that can be supplied via a call to <code>browser</code>. They can be retrieved
+by the user once the browser has been entered, and provide a mechanism to
+allow users to identify which breakpoint has been activated.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+debug(fun, text = "", condition = NULL)
+debugonce(fun, text = "", condition = NULL)
+undebug(fun)
+isdebugged(fun)
+debuggingState(on = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fun</code></td>
+<td>
+<p>any interpreted <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> function.</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>a text string that can be retrieved when the browser is entered.</p>
+</td></tr>
+<tr valign="top"><td><code>condition</code></td>
+<td>
+<p>a condition that can be retrieved when the browser is entered.</p>
+</td></tr>
+<tr valign="top"><td><code>on</code></td>
+<td>
+<p>logical; a call to the support function
+<code>debuggingState</code> returns <code>TRUE</code> if debugging is globally
+turned on, <code>FALSE</code> otherwise.  An argument of one or the other
+of those values sets the state.  If the debugging state is
+<code>FALSE</code>, none of the debugging actions will occur (but explicit
+<code><a href="browser.html">browser</a></code> calls in functions will continue to work).</p>
+</td></tr>
+</table>
+
+
+
+<h3>Details</h3>
+
+<p>When a function flagged for debugging is entered, normal execution
+is suspended and the body of function is executed one statement at a
+time.  A new browser context is initiated for each step (and the
+previous one destroyed).
+</p>
+<p>At the debug prompt the user can enter commands or <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> expressions,
+followed by a newline.  The commands are described in the
+<code><a href="browser.html">browser</a></code> help topic.
+</p>
+<p>To debug a function which is defined inside another function,
+single-step though to the end of its definition, and then call
+<code>debug</code> on its name.
+</p>
+<p>If you want to debug a function not starting at the very beginning,
+use <code><a href="trace.html">trace</a>(..., at = *)</code> or <code><a href="../../utils/html/findLineNum.html">setBreakpoint</a></code>.
+</p>
+<p>Using <code>debug</code> is persistent, and unless debugging is turned off
+the debugger will be entered on every invocation (note that if the
+function is removed and replaced the debug state is not preserved).
+Use <code>debugonce</code> to enter the debugger only the next time the
+function is invoked.
+</p>
+<p>In order to debug S4 methods (see <code><a href="../../methods/html/Methods.html">Methods</a></code>), you
+need to use <code><a href="trace.html">trace</a></code>, typically calling <code><a href="browser.html">browser</a></code>,
+e.g., as <br />
+<code>trace("plot", browser, exit = browser, signature = c("track", "missing"))</code>
+</p>
+<p>The number of lines printed for the deparsed call when a function is
+entered for debugging can be limited by setting
+<code><a href="options.html">options</a>(deparse.max.lines)</code>.
+</p>
+<p>When debugging is enabled on a byte compiled function then the
+interpreted version of the function will be used until debugging is
+disabled.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="browser.html">browser</a></code>, <code><a href="trace.html">trace</a></code>;
+<code><a href="traceback.html">traceback</a></code> to see the stack after an <code>Error: ...</code>
+message; <code><a href="../../utils/html/recover.html">recover</a></code> for another debugging approach.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>base</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/debug.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:31:49 GMT -->
+</html>

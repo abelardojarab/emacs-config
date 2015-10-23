@@ -1,0 +1,637 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>sprintf</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>sprintf</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-language.html">Language reference</a> &gt;
+      
+        <a href="../index-functions.html">Functions</a> &gt;
+      
+    
+    sprintf
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>sprintf</h1>
+
+<div class="mod_az_list">
+  <a href="../index-functions.html">Perl functions A-Z</a> |
+  <a href="../index-functions-by-cat.html">Perl functions by category</a> |
+  <a href="../perlfunc.html">The 'perlfunc' manpage</a>
+</div>
+
+
+  <!--    -->
+<ul>
+<li><a name="sprintf-FORMAT%2c-LIST"></a><b>sprintf FORMAT, LIST</b>
+<p></p>
+<p>Returns a string formatted by the usual <code class="inline"><a class="l_k" href="../functions/printf.html">printf</a></code> conventions of the C
+library function <code class="inline"><a class="l_k" href="../functions/sprintf.html">sprintf</a></code>.  See below for more details
+and see <i>sprintf(3)</i> or <i>printf(3)</i> on your system for an explanation of
+the general principles.</p>
+<p>For example:</p>
+<pre class="verbatim"><ol><li>        <span class="c"># Format number with up to 8 leading zeroes</span></li><li>        <span class="i">$result</span> = <a class="l_k" href="../functions/sprintf.html">sprintf</a><span class="s">(</span><span class="q">&quot;%08d&quot;</span><span class="cm">,</span> <span class="i">$number</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>        <span class="c"># Round number to 3 digits after decimal point</span></li><li>        <span class="i">$rounded</span> = <a class="l_k" href="../functions/sprintf.html">sprintf</a><span class="s">(</span><span class="q">&quot;%.3f&quot;</span><span class="cm">,</span> <span class="i">$number</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Perl does its own <code class="inline"><a class="l_k" href="../functions/sprintf.html">sprintf</a></code> formatting: it emulates the C
+function sprintf(3), but doesn't use it except for floating-point
+numbers, and even then only standard modifiers are allowed.  
+Non-standard extensions in your local sprintf(3) are 
+therefore unavailable from Perl.</p>
+<p>Unlike <code class="inline"><a class="l_k" href="../functions/printf.html">printf</a></code>, <code class="inline"><a class="l_k" href="../functions/sprintf.html">sprintf</a></code> does not do what you probably mean when you
+pass it an array as your first argument. 
+The array is given scalar context,
+and instead of using the 0th element of the array as the format, Perl will
+use the count of elements in the array as the format, which is almost never
+useful.</p>
+<p>Perl's <code class="inline"><a class="l_k" href="../functions/sprintf.html">sprintf</a></code> permits the following universally-known conversions:</p>
+<pre class="verbatim"><ol><li>   %%    a percent sign</li><li>   %c    a character with the given number</li><li>   %s    a string</li><li>   %d    a signed integer, in decimal</li><li>   %u    an unsigned integer, in decimal</li><li>   %o    an unsigned integer, in octal</li><li>   %x    an unsigned integer, in hexadecimal</li><li>   %e    a floating-point number, in scientific notation</li><li>   %f    a floating-point number, in fixed decimal notation</li><li>   %g    a floating-point number, in %e or %f notation</li></ol></pre><p>In addition, Perl permits the following widely-supported conversions:</p>
+<pre class="verbatim"><ol><li>   <span class="i">%X</span>    <span class="w">like</span> <span class="i">%x</span><span class="cm">,</span> <span class="w">but</span> <span class="w">using</span> <span class="w">upper</span>-case <span class="w">letters</span></li><li>   <span class="i">%E</span>    <span class="w">like</span> <span class="i">%e</span><span class="cm">,</span> <span class="w">but</span> <span class="w">using</span> <span class="w">an</span> <span class="w">upper</span>-case <span class="q">&quot;E&quot;</span></li><li>   %<span class="w">G</span>    <span class="w">like</span> <span class="i">%g</span><span class="cm">,</span> <span class="w">but</span> <span class="w">with</span> <span class="w">an</span> <span class="w">upper</span>-case <span class="q">&quot;E&quot;</span> <span class="s">(</span><a class="l_k" href="../functions/if.html">if</a> <span class="w">applicable</span><span class="s">)</span></li><li>   %<span class="w">b</span>    <span class="w">an</span> <span class="w">unsigned</span> <span class="w">integer</span><span class="cm">,</span> <span class="w">in</span> <span class="w">binary</span></li><li>   <span class="i">%B</span>    <span class="w">like</span> <span class="i">%b</span><span class="cm">,</span> <span class="w">but</span> <span class="w">using</span> <span class="w">an</span> <span class="w">upper</span>-case <span class="q">&quot;B&quot;</span> <span class="w">with</span> <span class="w">the</span> <span class="c"># flag</span></li><li>   <span class="i">%p</span>    <span class="w">a</span> <span class="w">pointer</span> <span class="s">(</span><span class="w">outputs</span> <span class="w">the</span> <span class="w">Perl</span> <span class="w">value&#39;s</span> <span class="w">address</span> <span class="w">in</span> <span class="w">hexadecimal</span><span class="s">)</span></li><li>   %<span class="w">n</span>    <span class="w">special</span><span class="co">:</span> <span class="i">*stores</span>* <span class="w">the</span> <span class="w">number</span> <span class="w">of</span> <span class="w">characters</span> <span class="w">output</span> <span class="w">so</span> <span class="w">far</span></li><li>         <span class="w">into</span> <span class="w">the</span> <a class="l_k" href="../functions/next.html">next</a> <span class="j">argument</span> <span class="w">in</span> <span class="w">the</span> <span class="w">parameter</span> <span class="w">list</span></li><li>   <span class="i">%a</span>    <span class="w">hexadecimal</span> <span class="w">floating</span> <span class="w">point</span></li><li>   <span class="i">%A</span>    <span class="w">like</span> <span class="i">%a</span><span class="cm">,</span> <span class="w">but</span> <span class="w">using</span> <span class="w">upper</span>-case <span class="w">letters</span></li></ol></pre><p>Finally, for backward (and we do mean "backward") compatibility, Perl
+permits these unnecessary but widely-supported conversions:</p>
+<pre class="verbatim"><ol><li>   %i    a synonym for %d</li><li>   %D    a synonym for %ld</li><li>   %U    a synonym for %lu</li><li>   %O    a synonym for %lo</li><li>   %F    a synonym for %f</li></ol></pre><p>Note that the number of exponent digits in the scientific notation produced
+by <code class="inline"><span class="i">%e</span></code>
+, <code class="inline"><span class="i">%E</span></code>
+, <code class="inline"><span class="i">%g</span></code>
+ and <code class="inline"><span class="i">%G</span></code>
+ for numbers with the modulus of the
+exponent less than 100 is system-dependent: it may be three or less
+(zero-padded as necessary).  In other words, 1.23 times ten to the
+99th may be either "1.23e99" or "1.23e099".  Similarly for <code class="inline"><span class="i">%a</span></code>
+ and <code class="inline"><span class="i">%A</span></code>
+:
+the exponent or the hexadecimal digits may float: especially the
+"long doubles" Perl configuration option may cause surprises.</p>
+<p>Between the <code class="inline"><span class="i">%</span></code>
+ and the format letter, you may specify several
+additional attributes controlling the interpretation of the format.
+In order, these are:</p>
+<ul>
+<li><a name="format-parameter-index"></a><b>format parameter index</b>
+<p>An explicit format parameter index, such as <code class="inline">2$</code>.  By default sprintf
+will format the next unused argument in the list, but this allows you
+to take the arguments out of order:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;%2$d %1$d&#39;</span><span class="cm">,</span> <span class="n">12</span><span class="cm">,</span> <span class="n">34</span><span class="sc">;</span>      <span class="c"># prints &quot;34 12&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;%3$d %d %1$d&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="cm">,</span> <span class="n">2</span><span class="cm">,</span> <span class="n">3</span><span class="sc">;</span>  <span class="c"># prints &quot;3 1 1&quot;</span></li></ol></pre></li>
+<li><a name="flags"></a><b>flags</b>
+<p>one or more of:</p>
+<pre class="verbatim"><ol><li>   space   prefix non-negative number with a space</li><li>   +       prefix non-negative number with a plus sign</li><li>   -       left-justify within the field</li><li>   0       use zeros, not spaces, to right-justify</li><li>   #       ensure the leading "0" for any octal,</li><li>           prefix non-zero hexadecimal with "0x" or "0X",</li><li>           prefix non-zero binary with "0b" or "0B"</li></ol></pre><p>For example:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;% d&gt;'</span><span class="cm">,</span>  <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt; 12&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%+d&gt;'</span><span class="cm">,</span>  <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;+12&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%6s&gt;'</span><span class="cm">,</span>  <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;    12&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%-6s&gt;'</span><span class="cm">,</span> <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;12    &gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%06s&gt;'</span><span class="cm">,</span> <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;000012&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%#o&gt;'</span><span class="cm">,</span>  <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;014&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%#x&gt;'</span><span class="cm">,</span>  <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;0xc&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%#X&gt;'</span><span class="cm">,</span>  <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;0XC&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%#b&gt;'</span><span class="cm">,</span>  <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;0b1100&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%#B&gt;'</span><span class="cm">,</span>  <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;0B1100&gt;&quot;</span></li></ol></pre><p>When a space and a plus sign are given as the flags at once,
+a plus sign is used to prefix a positive number.</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%+ d&gt;'</span><span class="cm">,</span> <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;+12&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;% +d&gt;'</span><span class="cm">,</span> <span class="n">12</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;+12&gt;&quot;</span></li></ol></pre><p>When the # flag and a precision are given in the %o conversion,
+the precision is incremented if it's necessary for the leading "0".</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%#.5o&gt;'</span><span class="cm">,</span> <span class="n">012</span><span class="sc">;</span>      <span class="c"># prints &quot;&lt;00012&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%#.5o&gt;'</span><span class="cm">,</span> <span class="n">012345</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;012345&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%#.0o&gt;'</span><span class="cm">,</span> <span class="n">0</span><span class="sc">;</span>        <span class="c"># prints &quot;&lt;0&gt;&quot;</span></li></ol></pre></li>
+<li><a name="vector-flag"></a><b>vector flag</b>
+<p>This flag tells Perl to interpret the supplied string as a vector of
+integers, one for each character in the string.  Perl applies the format to
+each integer in turn, then joins the resulting strings with a separator (a
+dot <code class="inline">.</code> by default).  This can be useful for displaying ordinal values of
+characters in arbitrary strings:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;%vd&quot;</span><span class="cm">,</span> <span class="q">&quot;AB\x{100}&quot;</span><span class="sc">;</span>           <span class="c"># prints &quot;65.66.256&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;version is v%vd\n&quot;</span><span class="cm">,</span> <span class="i">$^V</span><span class="sc">;</span>     <span class="c"># Perl&#39;s version</span></li></ol></pre><p>Put an asterisk <code class="inline"><span class="i">*</span></code>
+ before the <code class="inline"><span class="w">v</span></code>
+ to override the string to
+use to separate the numbers:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;address is %*vX\n&quot;</span><span class="cm">,</span> <span class="q">&quot;:&quot;</span><span class="cm">,</span> <span class="i">$addr</span><span class="sc">;</span>   <span class="c"># IPv6 address</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;bits are %0*v8b\n&quot;</span><span class="cm">,</span> <span class="q">&quot; &quot;</span><span class="cm">,</span> <span class="i">$bits</span><span class="sc">;</span>   <span class="c"># random bitstring</span></li></ol></pre><p>You can also explicitly specify the argument number to use for
+the join string using something like <code class="inline">*2$v</code>; for example:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;%*4$vX %*4$vX %*4$vX&#39;</span><span class="cm">,</span>       <span class="c"># 3 IPv6 addresses</span></li><li>          <span class="i">@addr</span>[<span class="n">1</span>..<span class="n">3</span>]<span class="cm">,</span> <span class="q">&quot;:&quot;</span><span class="sc">;</span></li></ol></pre></li>
+<li><a name="(minimum)-width"></a><b>(minimum) width</b>
+<p>Arguments are usually formatted to be only as wide as required to
+display the given value.  You can override the width by putting
+a number here, or get the width from the next argument (with <code class="inline"><span class="i">*</span></code>
+)
+or from a specified argument (e.g., with <code class="inline">*2$</code>):</p>
+<pre class="verbatim"><ol><li> <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;&lt;%s&gt;&quot;</span><span class="cm">,</span> <span class="q">&quot;a&quot;</span><span class="sc">;</span>       <span class="c"># prints &quot;&lt;a&gt;&quot;</span></li><li> <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;&lt;%6s&gt;&quot;</span><span class="cm">,</span> <span class="q">&quot;a&quot;</span><span class="sc">;</span>      <span class="c"># prints &quot;&lt;     a&gt;&quot;</span></li><li> <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;&lt;%*s&gt;&quot;</span><span class="cm">,</span> <span class="n">6</span><span class="cm">,</span> <span class="q">&quot;a&quot;</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;     a&gt;&quot;</span></li><li> <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%*2$s&gt;&#39;</span><span class="cm">,</span> <span class="q">&quot;a&quot;</span><span class="cm">,</span> <span class="n">6</span><span class="sc">;</span> <span class="c"># prints &quot;&lt;     a&gt;&quot;</span></li><li> <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;&lt;%2s&gt;&quot;</span><span class="cm">,</span> <span class="q">&quot;long&quot;</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;long&gt;&quot; (does not truncate)</span></li></ol></pre><p>If a field width obtained through <code class="inline"><span class="i">*</span></code>
+ is negative, it has the same
+effect as the <code class="inline">-</code>
+ flag: left-justification.</p>
+</li>
+<li><a name="precision%2c-or-maximum-width"></a><b>precision, or maximum width
+</b>
+<p>You can specify a precision (for numeric conversions) or a maximum
+width (for string conversions) by specifying a <code class="inline">.</code> followed by a number.
+For floating-point formats except <code class="inline"><span class="w">g</span></code>
+ and <code class="inline"><span class="w">G</span></code>
+, this specifies
+how many places right of the decimal point to show (the default being 6).
+For example:</p>
+<pre class="verbatim"><ol><li>  <span class="c"># these examples are subject to system-specific variation</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%f&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>    <span class="c"># prints &quot;&lt;1.000000&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.1f&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>  <span class="c"># prints &quot;&lt;1.0&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.0f&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>  <span class="c"># prints &quot;&lt;1&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%e&gt;&#39;</span><span class="cm">,</span> <span class="n">10</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;1.000000e+01&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.1e&gt;&#39;</span><span class="cm">,</span> <span class="n">10</span><span class="sc">;</span> <span class="c"># prints &quot;&lt;1.0e+01&gt;&quot;</span></li></ol></pre><p>For "g" and "G", this specifies the maximum number of digits to show,
+including those prior to the decimal point and those after it; for 
+example:</p>
+<pre class="verbatim"><ol><li>  <span class="c"># These examples are subject to system-specific variation.</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%g&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>        <span class="c"># prints &quot;&lt;1&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.10g&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>     <span class="c"># prints &quot;&lt;1&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%g&gt;&#39;</span><span class="cm">,</span> <span class="n">100</span><span class="sc">;</span>      <span class="c"># prints &quot;&lt;100&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.1g&gt;&#39;</span><span class="cm">,</span> <span class="n">100</span><span class="sc">;</span>    <span class="c"># prints &quot;&lt;1e+02&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.2g&gt;&#39;</span><span class="cm">,</span> <span class="n">100.01</span><span class="sc">;</span> <span class="c"># prints &quot;&lt;1e+02&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.5g&gt;&#39;</span><span class="cm">,</span> <span class="n">100.01</span><span class="sc">;</span> <span class="c"># prints &quot;&lt;100.01&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.4g&gt;&#39;</span><span class="cm">,</span> <span class="n">100.01</span><span class="sc">;</span> <span class="c"># prints &quot;&lt;100&gt;&quot;</span></li></ol></pre><p>For integer conversions, specifying a precision implies that the
+output of the number itself should be zero-padded to this width,
+where the 0 flag is ignored:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.6d&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>      <span class="c"># prints &quot;&lt;000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%+.6d&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>     <span class="c"># prints &quot;&lt;+000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%-10.6d&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;000001    &gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%10.6d&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>    <span class="c"># prints &quot;&lt;    000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%010.6d&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;    000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%+10.6d&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;   +000001&gt;&quot;</span></li><li></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.6x&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>      <span class="c"># prints &quot;&lt;000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%#.6x&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>     <span class="c"># prints &quot;&lt;0x000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%-10.6x&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;000001    &gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%10.6x&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>    <span class="c"># prints &quot;&lt;    000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%010.6x&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;    000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%#10.6x&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;  0x000001&gt;&quot;</span></li></ol></pre><p>For string conversions, specifying a precision truncates the string
+to fit the specified width:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.5s&gt;&#39;</span><span class="cm">,</span> <span class="q">&quot;truncated&quot;</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;trunc&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%10.5s&gt;&#39;</span><span class="cm">,</span> <span class="q">&quot;truncated&quot;</span><span class="sc">;</span> <span class="c"># prints &quot;&lt;     trunc&gt;&quot;</span></li></ol></pre><p>You can also get the precision from the next argument using <code class="inline">.*</code>:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.6x&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>       <span class="c"># prints &quot;&lt;000001&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*x&gt;&#39;</span><span class="cm">,</span> <span class="n">6</span><span class="cm">,</span> <span class="n">1</span><span class="sc">;</span>    <span class="c"># prints &quot;&lt;000001&gt;&quot;</span></li></ol></pre><p>If a precision obtained through <code class="inline"><span class="i">*</span></code>
+ is negative, it counts
+as having no precision at all.</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*s&gt;&#39;</span><span class="cm">,</span>  <span class="n">7</span><span class="cm">,</span> <span class="q">&quot;string&quot;</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;string&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*s&gt;&#39;</span><span class="cm">,</span>  <span class="n">3</span><span class="cm">,</span> <span class="q">&quot;string&quot;</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;str&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*s&gt;&#39;</span><span class="cm">,</span>  <span class="n">0</span><span class="cm">,</span> <span class="q">&quot;string&quot;</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*s&gt;&#39;</span><span class="cm">,</span> <span class="n">-1</span><span class="cm">,</span> <span class="q">&quot;string&quot;</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;string&gt;&quot;</span></li><li></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*d&gt;&#39;</span><span class="cm">,</span>  <span class="n">1</span><span class="cm">,</span> <span class="n">0</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;0&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*d&gt;&#39;</span><span class="cm">,</span>  <span class="n">0</span><span class="cm">,</span> <span class="n">0</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;&gt;&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*d&gt;&#39;</span><span class="cm">,</span> <span class="n">-1</span><span class="cm">,</span> <span class="n">0</span><span class="sc">;</span>   <span class="c"># prints &quot;&lt;0&gt;&quot;</span></li></ol></pre><p>You cannot currently get the precision from a specified number,
+but it is intended that this will be possible in the future, for
+example using <code class="inline">.*2$</code>:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&#39;&lt;%.*2$x&gt;&#39;</span><span class="cm">,</span> <span class="n">1</span><span class="cm">,</span> <span class="n">6</span><span class="sc">;</span>   <span class="c"># INVALID, but in future will print</span></li><li>                             <span class="c"># &quot;&lt;000001&gt;&quot;</span></li></ol></pre></li>
+<li><a name="size"></a><b>size</b>
+<p>For numeric conversions, you can specify the size to interpret the
+number as using <code class="inline"><span class="w">l</span></code>
+, <code class="inline"><span class="w">h</span></code>
+, <code class="inline"><span class="w">V</span></code>
+, <code class="inline"><a class="l_k" href="../functions/q.html">q</a></code>, <code class="inline"><span class="w">L</span></code>
+, or <code class="inline"><span class="w">ll</span></code>
+.  For integer
+conversions (<code class="inline"><span class="w">d</span> <span class="w">u</span> <span class="w">o</span> <span class="w">x</span> <span class="w">X</span> <span class="w">b</span> <span class="w">i</span> <span class="w">D</span> <span class="w">U</span> <span class="w">O</span></code>
+), numbers are usually assumed to be
+whatever the default integer size is on your platform (usually 32 or 64
+bits), but you can override this to use instead one of the standard C types,
+as supported by the compiler used to build Perl:</p>
+<pre class="verbatim"><ol><li>   <span class="w">hh</span>          <span class="w">interpret</span> <span class="w">integer</span> <span class="w">as</span> <span class="w">C</span> <span class="w">type</span> <span class="q">&quot;char&quot;</span> <a class="l_k" href="../functions/or.html">or</a> <span class="q">&quot;unsigned</span></li><li>               <span class="q">               char&quot;</span> <span class="w">on</span> <span class="w">Perl</span> <span class="n">5.14</span> <a class="l_k" href="../functions/or.html">or</a> <span class="w">later</span></li><li>   <span class="w">h</span>           <span class="w">interpret</span> <span class="w">integer</span> <span class="w">as</span> <span class="w">C</span> <span class="w">type</span> <span class="q">&quot;short&quot;</span> <a class="l_k" href="../functions/or.html">or</a></li><li>               <span class="q">&quot;unsigned short&quot;</span></li><li>   <span class="w">j</span>           <span class="w">interpret</span> <span class="w">integer</span> <span class="w">as</span> <span class="w">C</span> <span class="w">type</span> <span class="q">&quot;intmax_t&quot;</span> <span class="w">on</span> <span class="w">Perl</span></li><li>               <span class="n">5.14</span> <a class="l_k" href="../functions/or.html">or</a> <span class="w">later</span><span class="cm">,</span> <a class="l_k" href="../functions/and.html">and</a> <span class="w">only</span> <span class="w">with</span> <span class="w">a</span> <span class="w">C99</span> <span class="i">compiler</span></li><li>               <span class="s">(</span><span class="w">unportable</span><span class="s">)</span></li><li>   <span class="w">l</span>           <span class="w">interpret</span> <span class="w">integer</span> <span class="w">as</span> <span class="w">C</span> <span class="w">type</span> <span class="q">&quot;long&quot;</span> <a class="l_k" href="../functions/or.html">or</a></li><li>               <span class="q">&quot;unsigned long&quot;</span></li><li>   <span class="q">q, L,</span> <a class="l_k" href="../functions/or.html">or</a> <span class="w">ll</span> <span class="w">interpret</span> <span class="w">integer</span> <span class="w">as</span> <span class="w">C</span> <span class="w">type</span> <span class="q">&quot;long long&quot;</span><span class="cm">,</span></li><li>               <span class="q">&quot;unsigned long long&quot;</span><span class="cm">,</span> <a class="l_k" href="../functions/or.html">or</a> <span class="q">&quot;quad&quot;</span> <span class="s">(</span><span class="w">typically</span></li><li>               <span class="n">64</span>-<span class="w">bit</span> <span class="w">integers</span><span class="s">)</span></li><li>   <span class="w">t</span>           <span class="w">interpret</span> <span class="w">integer</span> <span class="w">as</span> <span class="w">C</span> <span class="w">type</span> <span class="q">&quot;ptrdiff_t&quot;</span> <span class="w">on</span> <span class="w">Perl</span></li><li>               <span class="n">5.14</span> <a class="l_k" href="../functions/or.html">or</a> <span class="w">later</span></li><li>   <span class="w">z</span>           <span class="w">interpret</span> <span class="w">integer</span> <span class="w">as</span> <span class="w">C</span> <span class="w">type</span> <span class="q">&quot;size_t&quot;</span> <span class="w">on</span> <span class="w">Perl</span> <span class="n">5.14</span></li><li>               <a class="l_k" href="../functions/or.html">or</a> <span class="w">later</span></li></ol></pre><p>As of 5.14, none of these raises an exception if they are not supported on
+your platform.  However, if warnings are enabled, a warning of the
+<code class="inline"><a class="l_k" href="../functions/printf.html">printf</a></code> warning class is issued on an unsupported conversion flag.  
+Should you instead prefer an exception, do this:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">warnings</span> <span class="w">FATAL</span> <span class="cm">=&gt;</span> <span class="q">&quot;printf&quot;</span><span class="sc">;</span></li></ol></pre><p>If you would like to know about a version dependency before you
+start running the program, put something like this at its top:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="n">5.014</span><span class="sc">;</span>  <span class="c"># for hh/j/t/z/ printf modifiers</span></li></ol></pre><p>You can find out whether your Perl supports quads via <a href="../Config.html">Config</a>:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Config</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/if.html">if</a> <span class="s">(</span><span class="i">$Config</span>{<span class="w">use64bitint</span>} <a class="l_k" href="../functions/eq.html">eq</a> <span class="q">&quot;define&quot;</span></li><li>        || <span class="i">$Config</span>{<span class="w">longsize</span>} &gt;= <span class="n">8</span><span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;Nice quads!\n&quot;</span><span class="sc">;</span></li><li>    <span class="s">}</span></li></ol></pre><p>For floating-point conversions (<code class="inline"><span class="w">e</span> <span class="w">f</span> <span class="w">g</span> <span class="w">E</span> <span class="w">F</span> <span class="w">G</span></code>
+), numbers are usually assumed
+to be the default floating-point size on your platform (double or long double),
+but you can force "long double" with <code class="inline"><a class="l_k" href="../functions/q.html">q</a></code>, <code class="inline"><span class="w">L</span></code>
+, or <code class="inline"><span class="w">ll</span></code>
+ if your
+platform supports them.  You can find out whether your Perl supports long
+doubles via <a href="../Config.html">Config</a>:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Config</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;long doubles\n&quot;</span> if <span class="i">$Config</span>{<span class="w">d_longdbl</span>} eq <span class="q">&quot;define&quot;</span><span class="sc">;</span></li></ol></pre><p>You can find out whether Perl considers "long double" to be the default
+floating-point size to use on your platform via <a href="../Config.html">Config</a>:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Config</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/if.html">if</a> <span class="s">(</span><span class="i">$Config</span>{<span class="w">uselongdouble</span>} <a class="l_k" href="../functions/eq.html">eq</a> <span class="q">&quot;define&quot;</span><span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;long doubles by default\n&quot;</span><span class="sc">;</span></li><li>    <span class="s">}</span></li></ol></pre><p>It can also be that long doubles and doubles are the same thing:</p>
+<pre class="verbatim"><ol><li>        <a class="l_k" href="../functions/use.html">use</a> <span class="w">Config</span><span class="sc">;</span></li><li>        <span class="s">(</span><span class="i">$Config</span>{<span class="w">doublesize</span>} == <span class="i">$Config</span>{<span class="w">longdblsize</span>}<span class="s">)</span> &amp;&amp;</li><li>                <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;doubles are long doubles\n&quot;</span><span class="sc">;</span></li></ol></pre><p>The size specifier <code class="inline"><span class="w">V</span></code>
+ has no effect for Perl code, but is supported for
+compatibility with XS code.  It means "use the standard size for a Perl
+integer or floating-point number", which is the default.</p>
+</li>
+<li><a name="order-of-arguments"></a><b>order of arguments</b>
+<p>Normally, sprintf() takes the next unused argument as the value to
+format for each format specification.  If the format specification
+uses <code class="inline"><span class="i">*</span></code>
+ to require additional arguments, these are consumed from
+the argument list in the order they appear in the format
+specification <i>before</i> the value to format.  Where an argument is
+specified by an explicit index, this does not affect the normal
+order for the arguments, even when the explicitly specified index
+would have been the next argument.</p>
+<p>So:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;&lt;%*.*s&gt;&quot;</span><span class="cm">,</span> <span class="i">$a</span><span class="cm">,</span> <span class="i">$b</span><span class="cm">,</span> <span class="i">$c</span><span class="sc">;</span></li></ol></pre><p>uses <code class="inline"><span class="i">$a</span></code>
+ for the width, <code class="inline"><span class="i">$b</span></code>
+ for the precision, and <code class="inline"><span class="i">$c</span></code>
+
+as the value to format; while:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">'&lt;%*1$.*s&gt;'</span><span class="cm">,</span> <span class="i">$a</span><span class="cm">,</span> <span class="i">$b</span><span class="sc">;</span></li></ol></pre><p>would use <code class="inline"><span class="i">$a</span></code>
+ for the width and precision, and <code class="inline"><span class="i">$b</span></code>
+ as the
+value to format.</p>
+<p>Here are some more examples; be aware that when using an explicit
+index, the <code class="inline"><span class="i">$</span></code>
+ may need escaping:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;%2\$d %d\n&quot;</span><span class="cm">,</span>    <span class="n">12</span><span class="cm">,</span> <span class="n">34</span><span class="sc">;</span>      <span class="c"># will print &quot;34 12\n&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;%2\$d %d %d\n&quot;</span><span class="cm">,</span> <span class="n">12</span><span class="cm">,</span> <span class="n">34</span><span class="sc">;</span>      <span class="c"># will print &quot;34 12 34\n&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;%3\$d %d %d\n&quot;</span><span class="cm">,</span> <span class="n">12</span><span class="cm">,</span> <span class="n">34</span><span class="cm">,</span> <span class="n">56</span><span class="sc">;</span>  <span class="c"># will print &quot;56 12 34\n&quot;</span></li><li>  <a class="l_k" href="../functions/printf.html">printf</a> <span class="q">&quot;%2\$*3\$d %d\n&quot;</span><span class="cm">,</span> <span class="n">12</span><span class="cm">,</span> <span class="n">34</span><span class="cm">,</span> <span class="n">3</span><span class="sc">;</span>  <span class="c"># will print &quot; 34 12\n&quot;</span></li></ol></pre></li>
+</ul>
+<p>If <code class="inline"><a class="l_k" href="../functions/use.html">use</a> <span class="w">locale</span></code>
+ (including <code class="inline"><a class="l_k" href="../functions/use.html">use</a> <span class="w">locale</span> <span class="q">&#39;not_characters&#39;</span></code>
+) is in effect
+and POSIX::setlocale() has been called,
+the character used for the decimal separator in formatted floating-point
+numbers is affected by the <code class="inline"><span class="w">LC_NUMERIC</span></code>
+ locale.  See <a href="../perllocale.html">perllocale</a>
+and <a href="../POSIX.html">POSIX</a>.</p>
+</li>
+</ul>
+
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'sprintf';
+  perldoc.pageAddress = 'functions/sprintf.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tdbc_Init manual page - Tcl Database Connectivity</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">TDBC Package C API, version 1.0.0</a> <small>&gt;</small> Tdbc_Init</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="Tdbc_Init.htm#M2" NAME="L2">NAME</A>
+<DL><DD>Tdbc_Init, Tdbc_MapSqlState, Tdbc_TokenizeSql &mdash; C procedures to facilitate writing TDBC drivers</DD></DL>
+<DD><A HREF="Tdbc_Init.htm#M3" NAME="L3">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="Tdbc_Init.htm#M4" NAME="L4">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Tdbc_Init.htm#M5" NAME="L5">DESCRIPTION</A>
+<DD><A HREF="Tdbc_Init.htm#M6" NAME="L6">TOKENS</A>
+<OL class="tokens">
+</OL>
+<DD><A HREF="Tdbc_Init.htm#M7" NAME="L7">SEE ALSO</A>
+<DD><A HREF="Tdbc_Init.htm#M8" NAME="L8">KEYWORDS</A>
+<DD><A HREF="Tdbc_Init.htm#M9" NAME="L9">COPYRIGHT</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tdbc_Init, Tdbc_MapSqlState, Tdbc_TokenizeSql &mdash; C procedures to facilitate writing TDBC drivers
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tdbc.h&gt;</B><BR>
+<BR>
+int<BR>
+<B>Tdbc_Init</B>(<I>interp</I>)<BR>
+<BR>
+<A HREF="../TclLib/Object.htm">Tcl_Obj</A> *<BR>
+<B>Tdbc_TokenizeSql</B>(<I>interp, sqlcode</I>)<BR>
+<BR>
+const char *<BR>
+<B>Tdbc_MapSqlState</B>(<I>state</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in/out)<DD>
+Pointer to a Tcl interpreter.
+<P><DT>const char <B>*state</B> (in)<DD>
+Pointer to a character string containing a 'SQL state' from a database error.
+<P><DT>const char <B>*sqlcode</B> (in)<DD>
+Pointer to a character string containing a SQL statement.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+The TDBC library provides several C procedures that simplify writing a TDBC
+driver. They include a procedure that tokenizes a SQL statement, locating
+variables to be substituted, and a procedure that accepts a SQL state and
+returns an error class for the interpreter error information.
+<P>
+<B>Tdbc_Init</B> must be invoked prior to any other TDBC call.  It accepts
+a pointer to a Tcl interpreter, and arranges to load the TDBC library. It
+returns <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> if the Tcl library was loaded successfully, and
+<B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> otherwise. If <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned, the
+interpreter's result contains the error message.
+<P>
+<B>Tdbc_TokenizeSql</B> accepts a pointer to a Tcl interpreter, and a
+pointer to a character string containing one or more SQL
+statements. It tokenizes the SQL statements, and returns a pointer to
+a <A HREF="../TclLib/Object.htm">Tcl_Obj</A> that contains a list of the tokens that make up the
+statement. Concatenating the tokens together will yield the original
+SQL code. The returned <A HREF="../TclLib/Object.htm">Tcl_Obj</A> has a reference count of zero. The
+caller is responsible for managing the reference count as needed.
+See <B><A HREF="#M6">TOKENS</A></B> below for a description of what may be in the
+returned list of tokens.
+<P>
+<B>Tdbc_MapSqlState</B> accepts a pointer to a string, usually five
+characters long, that is the 'SQL state' that resulted from a database
+error. It returns a character string that is suitable for inclusion as
+the error class when constructing the error code for an error in a
+TDBC driver. (By convention, the error code is a list having at least
+four elements: &quot;<B><A HREF="../TdbcCmd/tdbc.htm">TDBC</A></B> <I>errorClass</I> <I>sqlstate</I>
+<I>driverName</I> <I>details...</I>&quot;.)
+<H3><A NAME="M6">TOKENS</A></H3>
+Each token returned from <B>Tdbc_TokenizeSql</B> may be one of the
+following:
+<P>
+<OL class="tokens">
+<LI value="1">
+A bound variable, which begins with one of the 
+characters '<B>:</B>', '<B>@</B>', or '<B>$</B>'. The 
+remainder of the string is the variable
+name and will consist of alphanumeric characters and underscores. (The
+leading character will be be non-numeric.)
+<P><LI value="2">
+A semicolon that separates two SQL statements.
+<P><LI value="3">
+Something else in a SQL statement. The tokenizer does not attempt to
+parse SQL; it merely identifies bound variables (distinguishing them
+from similar strings appearing inside quotes or comments) and
+statement delimiters.
+<P></OL>
+<H3><A NAME="M7">SEE ALSO</A></H3>
+<B><A HREF="../TdbcCmd/tdbc.htm">tdbc</A></B>, <B>tdbc::mapSqlState</B>, <B><A HREF="../TdbcCmd/tdbc_tokenize.htm">tdbc::tokenize</A></B>
+<H3><A NAME="M8">KEYWORDS</A></H3>
+<A href="../Keywords/T.htm#TDBC">TDBC</A>, <A href="../Keywords/S.htm#SQL">SQL</A>, <A href="../Keywords/D.htm#database">database</A>, <A href="../Keywords/T.htm#tokenize">tokenize</A>
+<H3><A NAME="M9">COPYRIGHT</A></H3>
+Copyright (c) 2009 by Kevin B. Kenny.
+<div class="copy">Copyright &copy; 2009 by Kevin B. Kenny.
+</div>
+</BODY></HTML>

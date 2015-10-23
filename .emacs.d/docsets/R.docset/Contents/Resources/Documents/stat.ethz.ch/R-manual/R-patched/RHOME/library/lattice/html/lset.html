@@ -1,0 +1,49 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/lattice/html/lset.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:31 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Interface to modify Trellis Settings - Defunct</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for I_lset {lattice}"><tbody><tr><td>I_lset {lattice}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Interface to modify Trellis Settings - Defunct</h2>
+
+<h3>Description</h3>
+
+<p>A (hopefully) simpler alternative to <code>trellis.par.get/set</code>.  This
+is deprecated, and the same functionality is now available with
+<code>trellis.par.set</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>lset(theme = col.whitebg())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>theme</code></td>
+<td>
+<p> a list decribing how to change the settings of the
+current active device. Valid components are those in the list
+returned by <code>trellis.par.get()</code>. Each component must itself be
+a list, with one or more of the appropriate components (need not
+have all components). Changes are made to the settings for the
+currently active device only.
+</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Author(s)</h3>
+
+<p> Deepayan Sarkar Deepayan.Sarkar@R-project.org</p>
+
+<hr><div style="text-align: center;">[Package <em>lattice</em> version 0.20-33 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/lattice/html/lset.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:31 GMT -->
+
+</body></html>

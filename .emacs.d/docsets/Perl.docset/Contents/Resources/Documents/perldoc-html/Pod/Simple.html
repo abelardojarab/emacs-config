@@ -1,0 +1,843 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Pod::Simple</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Pod::Simple</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-P.html">Core modules (P)</a> &gt;
+      
+    
+    Pod::Simple
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Pod::Simple</h1>
+
+
+  <!--    -->
+<ul><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#MAIN-METHODS">MAIN METHODS</a><li><a href="#SECONDARY-METHODS">SECONDARY METHODS</a><li><a href="#TERTIARY-METHODS">TERTIARY METHODS</a><li><a href="#ENCODING">ENCODING</a><li><a href="#CAVEATS">CAVEATS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#SUPPORT">SUPPORT</a><li><a href="#COPYRIGHT-AND-DISCLAIMERS">COPYRIGHT AND DISCLAIMERS</a><li><a href="#AUTHOR">AUTHOR</a></ul><a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li> <span class="w">TODO</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>Pod::Simple is a Perl library for parsing text in the Pod ("plain old
+documentation") markup language that is typically used for writing
+documentation for Perl and for Perl modules. The Pod format is explained
+<a href="../perlpod.html">perlpod</a>; the most common formatter is called <code class="inline"><span class="w">perldoc</span></code>
+.</p>
+<p>Be sure to read <a href="#ENCODING">ENCODING</a> if your Pod contains non-ASCII characters.</p>
+<p>Pod formatters can use Pod::Simple to parse Pod documents and render them into
+plain text, HTML, or any number of other formats. Typically, such formatters
+will be subclasses of Pod::Simple, and so they will inherit its methods, like
+<code class="inline"><span class="w">parse_file</span></code>
+.</p>
+<p>If you're reading this document just because you have a Pod-processing
+subclass that you want to use, this document (plus the documentation for the
+subclass) is probably all you need to read.</p>
+<p>If you're reading this document because you want to write a formatter
+subclass, continue reading it and then read <a href="../Pod/Simple/Subclassing.html">Pod::Simple::Subclassing</a>, and
+then possibly even read <a href="../perlpodspec.html">perlpodspec</a> (some of which is for parser-writers,
+but much of which is notes to formatter-writers).</p>
+<a name="MAIN-METHODS"></a><h1>MAIN METHODS</h1>
+<ul>
+<li><a name="%24parser-%3d-_SomeClass_-%3enew()%3b"></a><b><code class="inline">$parser = <i>SomeClass</i>-&gt;new();</code></b>
+<p>This returns a new parser object, where <i><code class="inline"><span class="w">SomeClass</span></code>
+</i> is a subclass
+of Pod::Simple.</p>
+</li>
+<li><a name="%24parser-%3eoutput_fh(-*OUT-)%3b"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;output_fh</span><span class="s">(</span> <span class="i">*OUT</span> <span class="s">)</span><span class="sc">;</span></code>
+</b>
+<p>This sets the filehandle that <code class="inline"><span class="i">$parser</span></code>
+'s output will be written to.
+You can pass <code class="inline"><span class="i">*STDOUT</span></code>
+ or <code class="inline"><span class="i">*STDERR</span></code>
+, otherwise you should probably do
+something like this:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$outfile</span> = <span class="q">&quot;output.txt&quot;</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/open.html">open</a> <span class="w">TXTOUT</span><span class="cm">,</span> <span class="q">&quot;&gt;$outfile&quot;</span> or <a class="l_k" href="../functions/die.html">die</a> <span class="q">&quot;Can't write to $outfile: $!&quot;</span><span class="sc">;</span></li><li>    <span class="i">$parser</span><span class="i">-&gt;output_fh</span><span class="s">(</span><span class="i">*TXTOUT</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>...before you call one of the <code class="inline">$parser-&gt;parse_<i>whatever</i></code> methods.</p>
+</li>
+<li><a name="%24parser-%3eoutput_string(-%5c%24somestring-)%3b"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;output_string</span><span class="s">(</span> \<span class="i">$somestring</span> <span class="s">)</span><span class="sc">;</span></code>
+</b>
+<p>This sets the string that <code class="inline"><span class="i">$parser</span></code>
+'s output will be sent to,
+instead of any filehandle.</p>
+</li>
+<li><a name="%24parser-%3eparse_file(-_%24some_filename_-)%3b"></a><b><code class="inline">$parser-&gt;parse_file( <i>$some_filename</i> );</code></b>
+</li>
+<li><a name="%24parser-%3eparse_file(-*INPUT_FH-)%3b"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;parse_file</span><span class="s">(</span> <span class="i">*INPUT_FH</span> <span class="s">)</span><span class="sc">;</span></code>
+</b>
+<p>This reads the Pod content of the file (or filehandle) that you specify,
+and processes it with that <code class="inline"><span class="i">$parser</span></code>
+ object, according to however
+<code class="inline"><span class="i">$parser</span></code>
+'s class works, and according to whatever parser options you
+have set up for this <code class="inline"><span class="i">$parser</span></code>
+ object.</p>
+</li>
+<li><a name="%24parser-%3eparse_string_document(-_%24all_content_-)%3b"></a><b><code class="inline">$parser-&gt;parse_string_document( <i>$all_content</i> );</code></b>
+<p>This works just like <code class="inline"><span class="w">parse_file</span></code>
+ except that it reads the Pod
+content not from a file, but from a string that you have already
+in memory.</p>
+</li>
+<li><a name="%24parser-%3eparse_lines(-_...%40lines..._%2c-undef-)%3b"></a><b><code class="inline">$parser-&gt;parse_lines( <i>...@lines...</i>, undef );</code></b>
+<p>This processes the lines in <code class="inline"><span class="i">@lines</span></code>
+ (where each list item must be a
+defined value, and must contain exactly one line of content -- so no
+items like <code class="inline"><span class="q">&quot;foo\nbar&quot;</span></code>
+ are allowed).  The final <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> is used to
+indicate the end of document being parsed.</p>
+<p>The other <code class="inline">parser_<i>whatever</i></code> methods are meant to be called only once
+per <code class="inline"><span class="i">$parser</span></code>
+ object; but <code class="inline"><span class="w">parse_lines</span></code>
+ can be called as many times per
+<code class="inline"><span class="i">$parser</span></code>
+ object as you want, as long as the last call (and only
+the last call) ends with an <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> value.</p>
+</li>
+<li><a name="%24parser-%3econtent_seen"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;content_seen</span></code>
+</b>
+<p>This returns true only if there has been any real content seen for this
+document. Returns false in cases where the document contains content,
+but does not make use of any Pod markup.</p>
+</li>
+<li><a name="_SomeClass_-%3efilter(-_%24filename_-)%3b"></a><b><code class="inline"><i>SomeClass</i>-&gt;filter( <i>$filename</i> );</code></b>
+</li>
+<li><a name="_SomeClass_-%3efilter(-_*INPUT_FH_-)%3b"></a><b><code class="inline"><i>SomeClass</i>-&gt;filter( <i>*INPUT_FH</i> );</code></b>
+</li>
+<li><a name="_SomeClass_-%3efilter(-_%5c%24document_content_-)%3b"></a><b><code class="inline"><i>SomeClass</i>-&gt;filter( <i>\$document_content</i> );</code></b>
+<p>This is a shortcut method for creating a new parser object, setting the
+output handle to STDOUT, and then processing the specified file (or
+filehandle, or in-memory document). This is handy for one-liners like
+this:</p>
+<pre class="verbatim"><ol><li>  <span class="w">perl</span> -<span class="w">MPod::Simple::Text</span> -e <span class="q">&quot;Pod::Simple::Text-&gt;filter('thingy.pod')&quot;</span></li></ol></pre></li>
+</ul>
+<a name="SECONDARY-METHODS"></a><h1>SECONDARY METHODS</h1>
+<p>Some of these methods might be of interest to general users, as
+well as of interest to formatter-writers.</p>
+<p>Note that the general pattern here is that the accessor-methods
+read the attribute's value with <code class="inline">$value = $parser-&gt;<i>attribute</i></code>
+and set the attribute's value with
+<code class="inline">$parser-&gt;<i>attribute</i>(<i>newvalue</i>)</code>.  For each accessor, I typically
+only mention one syntax or another, based on which I think you are actually
+most likely to use.</p>
+<ul>
+<li><a name="%24parser-%3eparse_characters(-_SOMEVALUE_-)"></a><b><code class="inline">$parser-&gt;parse_characters( <i>SOMEVALUE</i> )</code></b>
+<p>The Pod parser normally expects to read octets and to convert those octets
+to characters based on the <code class="inline"><span class="pd">=encoding</span></code>
+ declaration in the Pod source.  Set
+this option to a true value to indicate that the Pod source is already a Perl
+character stream.  This tells the parser to ignore any <code class="inline"><span class="pd">=encoding</span></code>
+ command
+and to skip all the code paths involving decoding octets.</p>
+</li>
+<li><a name="%24parser-%3eno_whining(-_SOMEVALUE_-)"></a><b><code class="inline">$parser-&gt;no_whining( <i>SOMEVALUE</i> )</code></b>
+<p>If you set this attribute to a true value, you will suppress the
+parser's complaints about irregularities in the Pod coding. By default,
+this attribute's value is false, meaning that irregularities will
+be reported.</p>
+<p>Note that turning this attribute to true won't suppress one or two kinds
+of complaints about rarely occurring unrecoverable errors.</p>
+</li>
+<li><a name="%24parser-%3eno_errata_section(-_SOMEVALUE_-)"></a><b><code class="inline">$parser-&gt;no_errata_section( <i>SOMEVALUE</i> )</code></b>
+<p>If you set this attribute to a true value, you will stop the parser from
+generating a "POD ERRORS" section at the end of the document. By
+default, this attribute's value is false, meaning that an errata section
+will be generated, as necessary.</p>
+</li>
+<li><a name="%24parser-%3ecomplain_stderr(-_SOMEVALUE_-)"></a><b><code class="inline">$parser-&gt;complain_stderr( <i>SOMEVALUE</i> )</code></b>
+<p>If you set this attribute to a true value, it will send reports of
+parsing errors to STDERR. By default, this attribute's value is false,
+meaning that no output is sent to STDERR.</p>
+<p>Setting <code class="inline"><span class="w">complain_stderr</span></code>
+ also sets <code class="inline"><span class="w">no_errata_section</span></code>
+.</p>
+</li>
+<li><a name="%24parser-%3esource_filename"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;source_filename</span></code>
+</b>
+<p>This returns the filename that this parser object was set to read from.</p>
+</li>
+<li><a name="%24parser-%3edoc_has_started"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;doc_has_started</span></code>
+</b>
+<p>This returns true if <code class="inline"><span class="i">$parser</span></code>
+ has read from a source, and has seen
+Pod content in it.</p>
+</li>
+<li><a name="%24parser-%3esource_dead"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;source_dead</span></code>
+</b>
+<p>This returns true if <code class="inline"><span class="i">$parser</span></code>
+ has read from a source, and come to the
+end of that source.</p>
+</li>
+<li><a name="%24parser-%3estrip_verbatim_indent(-_SOMEVALUE_-)"></a><b><code class="inline">$parser-&gt;strip_verbatim_indent( <i>SOMEVALUE</i> )</code></b>
+<p>The perlpod spec for a Verbatim paragraph is "It should be reproduced
+exactly...", which means that the whitespace you've used to indent your
+verbatim blocks will be preserved in the output. This can be annoying for
+outputs such as HTML, where that whitespace will remain in front of every
+line. It's an unfortunate case where syntax is turned into semantics.</p>
+<p>If the POD you're parsing adheres to a consistent indentation policy, you can
+have such indentation stripped from the beginning of every line of your
+verbatim blocks. This method tells Pod::Simple what to strip. For two-space
+indents, you'd use:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$parser</span><span class="i">-&gt;strip_verbatim_indent</span><span class="s">(</span><span class="q">&#39;  &#39;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>For tab indents, you'd use a tab character:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$parser</span><span class="i">-&gt;strip_verbatim_indent</span><span class="s">(</span><span class="q">&quot;\t&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>If the POD is inconsistent about the indentation of verbatim blocks, but you
+have figured out a heuristic to determine how much a particular verbatim block
+is indented, you can pass a code reference instead. The code reference will be
+executed with one argument, an array reference of all the lines in the
+verbatim block, and should return the value to be stripped from each line. For
+example, if you decide that you're fine to use the first line of the verbatim
+block to set the standard for indentation of the rest of the block, you can
+look at the first line and return the appropriate value, like so:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$new</span><span class="i">-&gt;strip_verbatim_indent</span><span class="s">(</span><a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span></li><li>      <a class="l_k" href="../functions/my.html">my</a> <span class="i">$lines</span> = <a class="l_k" href="../functions/shift.html">shift</a><span class="sc">;</span></li><li>      <span class="s">(</span><a class="l_k" href="../functions/my.html">my</a> <span class="i">$indent</span> = <span class="i">$lines</span>-&gt;[<span class="n">0</span>]<span class="s">)</span> =~ <span class="q">s/\S.*//</span><span class="sc">;</span></li><li>      <a class="l_k" href="../functions/return.html">return</a> <span class="i">$indent</span><span class="sc">;</span></li><li>  <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>If you'd rather treat each line individually, you can do that, too, by just
+transforming them in-place in the code reference and returning <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code>. Say
+that you don't want <i>any</i> lines indented. You can do something like this:</p>
+<pre class="verbatim"><ol><li>  $new-&gt;strip_verbatim_indent(sub {</li><li>      my $lines = shift;</li><li>      sub { s/^\s+// for @{ $lines },</li><li>      return undef;</li><li>  });</li></ol></pre></li>
+</ul>
+<a name="TERTIARY-METHODS"></a><h1>TERTIARY METHODS</h1>
+<ul>
+<li><a name="%24parser-%3eabandon_output_fh()"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;abandon_output_fh</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Cancel output to the file handle. Any POD read by the <code class="inline"><span class="i">$parser</span></code>
+ is not
+effected.</p>
+</li>
+<li><a name="%24parser-%3eabandon_output_string()"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;abandon_output_string</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Cancel output to the output string. Any POD read by the <code class="inline"><span class="i">$parser</span></code>
+ is not
+effected.</p>
+</li>
+<li><a name="%24parser-%3eaccept_code(-%40codes-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_code</span><span class="s">(</span> <span class="i">@codes</span> <span class="s">)</span></code>
+</b>
+<p>Alias for <a href="http://search.cpan.org/perldoc/accept_codes">accept_codes</a>.</p>
+</li>
+<li><a name="%24parser-%3eaccept_codes(-%40codes-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_codes</span><span class="s">(</span> <span class="i">@codes</span> <span class="s">)</span></code>
+</b>
+<p>Allows <code class="inline"><span class="i">$parser</span></code>
+ to accept a list of <a href="../perlpod.html#Formatting-Codes">Formatting Codes in perlpod</a>. This can be
+used to implement user-defined codes.</p>
+</li>
+<li><a name="%24parser-%3eaccept_directive_as_data(-%40directives-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_directive_as_data</span><span class="s">(</span> <span class="i">@directives</span> <span class="s">)</span></code>
+</b>
+<p>Allows <code class="inline"><span class="i">$parser</span></code>
+ to accept a list of directives for data paragraphs. A
+directive is the label of a <a href="../perlpod.html#Command-Paragraph">Command Paragraph in perlpod</a>. A data paragraph is
+one delimited by <code class="inline"><span class="pd">=begin/=for/=end</span></code>
+ directives. This can be used to
+implement user-defined directives.</p>
+</li>
+<li><a name="%24parser-%3eaccept_directive_as_processed(-%40directives-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_directive_as_processed</span><span class="s">(</span> <span class="i">@directives</span> <span class="s">)</span></code>
+</b>
+<p>Allows <code class="inline"><span class="i">$parser</span></code>
+ to accept a list of directives for processed paragraphs. A
+directive is the label of a <a href="../perlpod.html#Command-Paragraph">Command Paragraph in perlpod</a>. A processed
+paragraph is also known as <a href="../perlpod.html#Ordinary-Paragraph">Ordinary Paragraph in perlpod</a>. This can be used to
+implement user-defined directives.</p>
+</li>
+<li><a name="%24parser-%3eaccept_directive_as_verbatim(-%40directives-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_directive_as_verbatim</span><span class="s">(</span> <span class="i">@directives</span> <span class="s">)</span></code>
+</b>
+<p>Allows <code class="inline"><span class="i">$parser</span></code>
+ to accept a list of directives for <a href="../perlpod.html#Verbatim-Paragraph">Verbatim Paragraph in perlpod</a>. A directive is the label of a <a href="../perlpod.html#Command-Paragraph">Command Paragraph in perlpod</a>. This
+can be used to implement user-defined directives.</p>
+</li>
+<li><a name="%24parser-%3eaccept_target(-%40targets-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_target</span><span class="s">(</span> <span class="i">@targets</span> <span class="s">)</span></code>
+</b>
+<p>Alias for <a href="http://search.cpan.org/perldoc/accept_targets">accept_targets</a>.</p>
+</li>
+<li><a name="%24parser-%3eaccept_target_as_text(-%40targets-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_target_as_text</span><span class="s">(</span> <span class="i">@targets</span> <span class="s">)</span></code>
+</b>
+<p>Alias for <a href="http://search.cpan.org/perldoc/accept_targets_as_text">accept_targets_as_text</a>.</p>
+</li>
+<li><a name="%24parser-%3eaccept_targets(-%40targets-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_targets</span><span class="s">(</span> <span class="i">@targets</span> <span class="s">)</span></code>
+</b>
+<p>Accepts targets for <code class="inline"><span class="pd">=begin/=for/=end</span></code>
+ sections of the POD.</p>
+</li>
+<li><a name="%24parser-%3eaccept_targets_as_text(-%40targets-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;accept_targets_as_text</span><span class="s">(</span> <span class="i">@targets</span> <span class="s">)</span></code>
+</b>
+<p>Accepts targets for <code class="inline"><span class="pd">=begin/=for/=end</span></code>
+ sections that should be parsed as
+POD. For details, see <a href="../perlpodspec.html#About-Data-Paragraphs">About Data Paragraphs in perlpodspec</a>.</p>
+</li>
+<li><a name="%24parser-%3eany_errata_seen()"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;any_errata_seen</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Used to check if any errata was seen.</p>
+<p><i>Example:</i></p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/die.html">die</a> <span class="q">&quot;too many errors\n&quot;</span> <a class="l_k" href="../functions/if.html">if</a> <span class="i">$parser</span><span class="i">-&gt;any_errata_seen</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre></li>
+<li><a name="%24parser-%3edetected_encoding()"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;detected_encoding</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Return the encoding corresponding to <code class="inline"><span class="pd">=encoding</span></code>
+, but only if the
+encoding was recognized and handled.</p>
+</li>
+<li><a name="%24parser-%3eencoding()"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;encoding</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Return encoding of the document, even if the encoding is not correctly
+handled.</p>
+</li>
+<li><a name="%24parser-%3eparse_from_file(-%24source%2c-%24to-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;parse_from_file</span><span class="s">(</span> <span class="i">$source</span><span class="cm">,</span> <span class="i">$to</span> <span class="s">)</span></code>
+</b>
+<p>Parses from <code class="inline"><span class="i">$source</span></code>
+ file to <code class="inline"><span class="i">$to</span></code>
+ file. Similar to <a href="../Pod/Parser.html#parse_from_file">parse_from_file in Pod::Parser</a>.</p>
+</li>
+<li><a name="%24parser-%3escream(-%40error_messages-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;scream</span><span class="s">(</span> <span class="i">@error_messages</span> <span class="s">)</span></code>
+</b>
+<p>Log an error that can't be ignored.</p>
+</li>
+<li><a name="%24parser-%3eunaccept_code(-%40codes-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;unaccept_code</span><span class="s">(</span> <span class="i">@codes</span> <span class="s">)</span></code>
+</b>
+<p>Alias for <a href="http://search.cpan.org/perldoc/unaccept_codes">unaccept_codes</a>.</p>
+</li>
+<li><a name="%24parser-%3eunaccept_codes(-%40codes-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;unaccept_codes</span><span class="s">(</span> <span class="i">@codes</span> <span class="s">)</span></code>
+</b>
+<p>Removes <code class="inline"><span class="i">@codes</span></code>
+ as valid codes for the parse.</p>
+</li>
+<li><a name="%24parser-%3eunaccept_directive(-%40directives-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;unaccept_directive</span><span class="s">(</span> <span class="i">@directives</span> <span class="s">)</span></code>
+</b>
+<p>Alias for <a href="http://search.cpan.org/perldoc/unaccept_directives">unaccept_directives</a>.</p>
+</li>
+<li><a name="%24parser-%3eunaccept_directives(-%40directives-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;unaccept_directives</span><span class="s">(</span> <span class="i">@directives</span> <span class="s">)</span></code>
+</b>
+<p>Removes <code class="inline"><span class="i">@directives</span></code>
+ as valid directives for the parse.</p>
+</li>
+<li><a name="%24parser-%3eunaccept_target(-%40targets-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;unaccept_target</span><span class="s">(</span> <span class="i">@targets</span> <span class="s">)</span></code>
+</b>
+<p>Alias for <a href="http://search.cpan.org/perldoc/unaccept_targets">unaccept_targets</a>.</p>
+</li>
+<li><a name="%24parser-%3eunaccept_targets(-%40targets-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;unaccept_targets</span><span class="s">(</span> <span class="i">@targets</span> <span class="s">)</span></code>
+</b>
+<p>Removes <code class="inline"><span class="i">@targets</span></code>
+ as valid targets for the parse.</p>
+</li>
+<li><a name="%24parser-%3eversion_report()"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;version_report</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Returns a string describing the version.</p>
+</li>
+<li><a name="%24parser-%3ewhine(-%40error_messages-)"></a><b><code class="inline"><span class="i">$parser</span><span class="i">-&gt;whine</span><span class="s">(</span> <span class="i">@error_messages</span> <span class="s">)</span></code>
+</b>
+<p>Log an error unless <code class="inline"><span class="i">$parser</span><span class="i">-&gt;no_whining</span><span class="s">(</span> <span class="w">TRUE</span> <span class="s">)</span><span class="sc">;</span></code>
+.</p>
+</li>
+</ul>
+<a name="ENCODING"></a><h1>ENCODING</h1>
+<p>The Pod::Simple parser expects to read <b>octets</b>.  The parser will decode the
+octets into Perl's internal character string representation using the value of
+the <code class="inline"><span class="pd">=encoding</span></code>
+ declaration in the POD source.</p>
+<p>If the POD source does not include an <code class="inline"><span class="pd">=encoding</span></code>
+ declaration, the parser will
+attempt to guess the encoding (selecting one of UTF-8 or Latin-1) by examining
+the first non-ASCII bytes and applying the heuristic described in
+<a href="../perlpodspec.html">perlpodspec</a>.</p>
+<p>If you set the <code class="inline"><span class="w">parse_characters</span></code>
+ option to a true value the parser will
+expect characters rather than octets; will ignore any <code class="inline"><span class="pd">=encoding</span></code>
+; and will
+make no attempt to decode the input.</p>
+<a name="CAVEATS"></a><h1>CAVEATS</h1>
+<p>This is just a beta release -- there are a good number of things still
+left to do.  Notably, support for EBCDIC platforms is still half-done,
+an untested.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../Pod/Simple/Subclassing.html">Pod::Simple::Subclassing</a></p>
+<p><a href="../perlpod.html">perlpod</a></p>
+<p><a href="../perlpodspec.html">perlpodspec</a></p>
+<p><a href="../Pod/Escapes.html">Pod::Escapes</a></p>
+<p><a href="../perldoc.html">perldoc</a></p>
+<a name="SUPPORT"></a><h1>SUPPORT</h1>
+<p>Questions or discussion about POD and Pod::Simple should be sent to the
+pod-people@perl.org mail list. Send an empty email to
+pod-people-subscribe@perl.org to subscribe.</p>
+<p>This module is managed in an open GitHub repository,
+<a href="https://github.com/theory/pod-simple/">https://github.com/theory/pod-simple/</a>. Feel free to fork and contribute, or
+to clone <a href="git://github.com/theory/pod-simple.git">git://github.com/theory/pod-simple.git</a> and send patches!</p>
+<p>Patches against Pod::Simple are welcome. Please send bug reports to
+&lt;bug-pod-simple@rt.cpan.org&gt;.</p>
+<a name="COPYRIGHT-AND-DISCLAIMERS"></a><h1>COPYRIGHT AND DISCLAIMERS</h1>
+<p>Copyright (c) 2002 Sean M. Burke.</p>
+<p>This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.</p>
+<p>This program is distributed in the hope that it will be useful, but
+without any warranty; without even the implied warranty of
+merchantability or fitness for a particular purpose.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Pod::Simple was created by Sean M. Burke &lt;sburke@cpan.org&gt;.
+But don't bother him, he's retired.</p>
+<p>Pod::Simple is maintained by:</p>
+<ul>
+<li><a name="*-Allison-Randal-allison%40perl.org"></a><b>Allison Randal <code class="inline"><span class="w">allison</span><span class="i">@perl</span>.<span class="w">org</span></code>
+</b>
+</li>
+<li><a name="*-Hans-Dieter-Pearcey-hdp%40cpan.org"></a><b>Hans Dieter Pearcey <code class="inline"><span class="w">hdp</span><span class="i">@cpan</span>.<span class="w">org</span></code>
+</b>
+</li>
+<li><a name="*-David-E.-Wheeler-dwheeler%40cpan.org"></a><b>David E. Wheeler <code class="inline"><span class="w">dwheeler</span><span class="i">@cpan</span>.<span class="w">org</span></code>
+</b>
+</li>
+</ul>
+<p>Documentation has been contributed by:</p>
+<ul>
+<li><a name="*-Gabor-Szabo-szabgab%40gmail.com"></a><b>Gabor Szabo <code class="inline"><span class="w">szabgab</span><span class="i">@gmail</span>.<span class="w">com</span></code>
+</b>
+</li>
+<li><a name="*-Shawn-H-Corey--SHCOREY-at-cpan.org"></a><b>Shawn H Corey  <code class="inline"><span class="w">SHCOREY</span> <span class="w">at</span> <span class="w">cpan</span>.<span class="w">org</span></code>
+</b>
+</li>
+</ul>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#MAIN-METHODS">MAIN METHODS</a><li><a href="#SECONDARY-METHODS">SECONDARY METHODS</a><li><a href="#TERTIARY-METHODS">TERTIARY METHODS</a><li><a href="#ENCODING">ENCODING</a><li><a href="#CAVEATS">CAVEATS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#SUPPORT">SUPPORT</a><li><a href="#COPYRIGHT-AND-DISCLAIMERS">COPYRIGHT AND DISCLAIMERS</a><li><a href="#AUTHOR">AUTHOR</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Pod::Simple';
+  perldoc.pageAddress = 'Pod/Simple.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

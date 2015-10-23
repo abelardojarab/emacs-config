@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>itclvars manual page - [incr Tcl]</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">[incr Tcl] Package Commands, version 4.0.0</a> <small>&gt;</small> itclvars</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+itclvars &mdash; variables used by [incr&nbsp;Tcl]
+<H3><A NAME="M3">DESCRIPTION</A></H3>
+The following global variables are created and managed automatically
+by the <B>[incr&nbsp;Tcl]</B> library.  Except where noted below, these
+variables should normally be treated as read-only by application-specific
+code and by users.
+<P>
+<DL class="description">
+<DT><A NAME="M4"><B>itcl::library</B></A><DD>
+When an interpreter is created, <B>[incr&nbsp;Tcl]</B> initializes this variable
+to hold the name of a directory containing the system library of
+<B>[incr&nbsp;Tcl]</B> scripts.  The initial value of <B>itcl::library</B>
+is set from the ITCL_LIBRARY environment variable if it exists,
+or from a compiled-in value otherwise.
+<P><DT><A NAME="M5"><B>itcl::patchLevel</B></A><DD>
+When an interpreter is created, <B>[incr&nbsp;Tcl]</B> initializes this
+variable to hold the current patch level for <B>[incr&nbsp;Tcl]</B>.
+For example, the value &quot;<B>2.0p1</B>&quot; indicates <B>[incr&nbsp;Tcl]</B>
+version 2.0 with the first set of patches applied.
+<P><DT><A NAME="M6"><B>itcl::purist</B></A><DD>
+When an interpreter is created containing Tcl/Tk and the
+<B>[incr&nbsp;Tcl]</B> namespace facility, this variable controls
+a &quot;backward-compatibility&quot; mode for widget access.
+<P>
+In vanilla Tcl/Tk, there is a single pool of commands, so the
+access command for a widget is the same as the window name.
+When a widget is created within a namespace, however, its access
+command is installed in that namespace, and should be accessed
+outside of the namespace using a qualified name.  For example,
+<P>
+<PRE>namespace foo {
+    namespace bar {
+        button .b -text &quot;Testing&quot;
+    }
+}
+foo::bar::.b configure -background red
+pack .b</PRE>
+<P>
+Note that the window name &quot;<TT>.b</TT>&quot; is still used in conjunction
+with commands like <B><A HREF="../TkCmd/pack.htm">pack</A></B> and <B><A HREF="../TkCmd/destroy.htm">destroy</A></B>.  However, the
+access command for the widget (i.e., name that appears as the
+<I>first</I> argument on a command line) must be more specific.
+<P>
+The &quot;<B><A HREF="../TkCmd/winfo.htm">winfo command</A></B>&quot; command can be used to query the
+fully-qualified access command for any widget, so one can write:
+<P>
+<PRE>[winfo command .b] configure -background red</PRE>
+<P>
+and this is good practice when writing library procedures.  Also,
+in conjunction with the <B><A HREF="../TkCmd/bind.htm">bind</A></B> command, the &quot;%q&quot; field can be
+used in place of &quot;%W&quot; as the access command:
+<P>
+<PRE>bind Button &lt;Key-Return&gt; {%q flash; %q invoke}</PRE>
+<P>
+While this behavior makes sense from the standpoint of encapsulation,
+it causes problems with existing Tcl/Tk applications.  Many existing
+applications are written with bindings that use &quot;%W&quot;.  Many
+library procedures assume that the window name is the access
+command.
+<P>The <B>itcl::purist</B> variable controls a backward-compatibility
+mode.  By default, this variable is &quot;0&quot;, and the window name
+can be used as an access command in any context.  Whenever the
+<B><A HREF="../TclCmd/unknown.htm">unknown</A></B> procedure stumbles across a widget name, it simply
+uses &quot;<B><A HREF="../TkCmd/winfo.htm">winfo command</A></B>&quot; to determine the appropriate command
+name.  If this variable is set to &quot;1&quot;, this backward-compatibility
+mode is disabled.  This gives better encapsulation, but using the
+window name as the access command may lead to &quot;invalid command&quot;
+errors.
+<P><DT><A NAME="M7"><B>itcl::version</B></A><DD>
+When an interpreter is created, <B>[incr&nbsp;Tcl]</B> initializes this
+variable to hold the version number of the form <I>x.y</I>.
+Changes to <I>x</I> represent major changes with probable
+incompatibilities and changes to <I>y</I> represent small enhancements
+and bug fixes that retain backward compatibility.
+
+<P></DL>
+<H3><A NAME="M8">KEYWORDS</A></H3>
+<A href="../Keywords/I.htm#itcl">itcl</A>, <A href="../Keywords/V.htm#variables">variables</A>
+<div class="copy">Copyright &copy; 1993-1998 Lucent Technologies, Inc.
+</div>
+</BODY></HTML>

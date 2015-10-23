@@ -1,0 +1,668 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>IO::Zlib</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>IO::Zlib</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-I.html">Core modules (I)</a> &gt;
+      
+    
+    IO::Zlib
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>IO::Zlib</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#OBJECT-METHODS">OBJECT METHODS</a><li><a href="#USING-THE-EXTERNAL-GZIP">USING THE EXTERNAL GZIP</a><li><a href="#CLASS-METHODS">CLASS METHODS</a><li><a href="#DIAGNOSTICS">DIAGNOSTICS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#HISTORY">HISTORY</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>IO::Zlib - IO:: style interface to <a href="../Compress/Zlib.html">Compress::Zlib</a></p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<p>With any version of Perl 5 you can use the basic OO interface:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Zlib</span><span class="sc">;</span></li><li></li><li>    <span class="i">$fh</span> = <span class="w">new</span> <span class="w">IO::Zlib</span><span class="sc">;</span></li><li>    if <span class="s">(</span><span class="i">$fh</span><span class="i">-&gt;open</span><span class="s">(</span><span class="q">&quot;file.gz&quot;</span><span class="cm">,</span> <span class="q">&quot;rb&quot;</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&lt;$fh&gt;</span><span class="sc">;</span></li><li>        <span class="i">$fh</span><span class="i">-&gt;close</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="i">$fh</span> = <span class="w">IO::Zlib</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&quot;file.gz&quot;</span><span class="cm">,</span> <span class="q">&quot;wb9&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>    if <span class="s">(</span><a class="l_k" href="../functions/defined.html">defined</a> <span class="i">$fh</span><span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">$fh</span> <span class="q">&quot;bar\n&quot;</span><span class="sc">;</span></li><li>        <span class="i">$fh</span><span class="i">-&gt;close</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="i">$fh</span> = <span class="w">IO::Zlib</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&quot;file.gz&quot;</span><span class="cm">,</span> <span class="q">&quot;rb&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>    if <span class="s">(</span><a class="l_k" href="../functions/defined.html">defined</a> <span class="i">$fh</span><span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&lt;$fh&gt;</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/undef.html">undef</a> <span class="i">$fh</span><span class="sc">;</span>       <span class="c"># automatically closes the file</span></li><li>    <span class="s">}</span></li></ol></pre><p>With Perl 5.004 you can also use the TIEHANDLE interface to access
+compressed files just like ordinary files:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Zlib</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/tie.html">tie</a> <span class="i">*FILE</span><span class="cm">,</span> <span class="q">&#39;IO::Zlib&#39;</span><span class="cm">,</span> <span class="q">&quot;file.gz&quot;</span><span class="cm">,</span> <span class="q">&quot;wb&quot;</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">FILE</span> <span class="q">&quot;line 1\nline2\n&quot;</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/tie.html">tie</a> <span class="i">*FILE</span><span class="cm">,</span> <span class="q">&#39;IO::Zlib&#39;</span><span class="cm">,</span> <span class="q">&quot;file.gz&quot;</span><span class="cm">,</span> <span class="q">&quot;rb&quot;</span><span class="sc">;</span></li><li>    while <span class="s">(</span><span class="q">&lt;FILE&gt;</span><span class="s">)</span> <span class="s">{</span> <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;LINE: &quot;</span><span class="cm">,</span> <span class="i">$_</span> <span class="s">}</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p><code class="inline"><span class="w">IO::Zlib</span></code>
+ provides an IO:: style interface to <a href="../Compress/Zlib.html">Compress::Zlib</a> and
+hence to gzip/zlib compressed files. It provides many of the same methods
+as the <a href="../IO/Handle.html">IO::Handle</a> interface.</p>
+<p>Starting from IO::Zlib version 1.02, IO::Zlib can also use an
+external <i>gzip</i> command.  The default behaviour is to try to use
+an external <i>gzip</i> if no <code class="inline"><span class="w">Compress::Zlib</span></code>
+ can be loaded, unless
+explicitly disabled by</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Zlib</span> <span class="q">qw(:gzip_external 0)</span><span class="sc">;</span></li></ol></pre><p>If explicitly enabled by</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Zlib</span> <span class="q">qw(:gzip_external 1)</span><span class="sc">;</span></li></ol></pre><p>then the external <i>gzip</i> is used <b>instead</b> of <code class="inline"><span class="w">Compress::Zlib</span></code>
+.</p>
+<a name="CONSTRUCTOR"></a><h1>CONSTRUCTOR</h1>
+<ul>
+<li><a name="new-(-%5bARGS%5d-)"></a><b>new ( [ARGS] )</b>
+<p>Creates an <code class="inline"><span class="w">IO::Zlib</span></code>
+ object. If it receives any parameters, they are
+passed to the method <code class="inline"><a class="l_k" href="../functions/open.html">open</a></code>; if the open fails, the object is destroyed.
+Otherwise, it is returned to the caller.</p>
+</li>
+</ul>
+<a name="OBJECT-METHODS"></a><h1>OBJECT METHODS</h1>
+<ul>
+<li><a name="open-(-FILENAME%2c-MODE-)"></a><b>open ( FILENAME, MODE )</b>
+<p><code class="inline"><a class="l_k" href="../functions/open.html">open</a></code> takes two arguments. The first is the name of the file to open
+and the second is the open mode. The mode can be anything acceptable to
+<a href="../Compress/Zlib.html">Compress::Zlib</a> and by extension anything acceptable to <i>zlib</i> (that
+basically means POSIX fopen() style mode strings plus an optional number
+to indicate the compression level).</p>
+</li>
+<li><a name="opened"></a><b>opened</b>
+<p>Returns true if the object currently refers to a opened file.</p>
+</li>
+<li><a name="close"></a><b>close</b>
+<p>Close the file associated with the object and disassociate
+the file from the handle.
+Done automatically on destroy.</p>
+</li>
+<li><a name="getc"></a><b>getc</b>
+<p>Return the next character from the file, or undef if none remain.</p>
+</li>
+<li><a name="getline"></a><b>getline</b>
+<p>Return the next line from the file, or undef on end of string.
+Can safely be called in an array context.
+Currently ignores $/ ($INPUT_RECORD_SEPARATOR or $RS when <a href="../English.html">English</a>
+is in use) and treats lines as delimited by "\n".</p>
+</li>
+<li><a name="getlines"></a><b>getlines</b>
+<p>Get all remaining lines from the file.
+It will croak() if accidentally called in a scalar context.</p>
+</li>
+<li><a name="print-(-ARGS...-)"></a><b>print ( ARGS... )</b>
+<p>Print ARGS to the  file.</p>
+</li>
+<li><a name="read-(-BUF%2c-NBYTES%2c-%5bOFFSET%5d-)"></a><b>read ( BUF, NBYTES, [OFFSET] )</b>
+<p>Read some bytes from the file.
+Returns the number of bytes actually read, 0 on end-of-file, undef on error.</p>
+</li>
+<li><a name="eof"></a><b>eof</b>
+<p>Returns true if the handle is currently positioned at end of file?</p>
+</li>
+<li><a name="seek-(-OFFSET%2c-WHENCE-)"></a><b>seek ( OFFSET, WHENCE )</b>
+<p>Seek to a given position in the stream.
+Not yet supported.</p>
+</li>
+<li><a name="tell"></a><b>tell</b>
+<p>Return the current position in the stream, as a numeric offset.
+Not yet supported.</p>
+</li>
+<li><a name="setpos-(-POS-)"></a><b>setpos ( POS )</b>
+<p>Set the current position, using the opaque value returned by <code class="inline"><span class="i">getpos</span><span class="s">(</span><span class="s">)</span></code>
+.
+Not yet supported.</p>
+</li>
+<li><a name="getpos-(-POS-)"></a><b>getpos ( POS )</b>
+<p>Return the current position in the string, as an opaque object.
+Not yet supported.</p>
+</li>
+</ul>
+<a name="USING-THE-EXTERNAL-GZIP"></a><h1>USING THE EXTERNAL GZIP</h1>
+<p>If the external <i>gzip</i> is used, the following <code class="inline"><a class="l_k" href="../functions/open.html">open</a></code>s are used:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/open.html">open</a><span class="s">(</span><span class="w">FH</span><span class="cm">,</span> <span class="q">&quot;gzip -dc $filename |&quot;</span><span class="s">)</span>  <span class="c"># for read opens</span></li><li>    <a class="l_k" href="../functions/open.html">open</a><span class="s">(</span><span class="w">FH</span><span class="cm">,</span> <span class="q">&quot; | gzip &gt; $filename&quot;</span><span class="s">)</span>   <span class="c"># for write opens</span></li></ol></pre><p>You can modify the 'commands' for example to hardwire
+an absolute path by e.g.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Zlib</span> <span class="q">':gzip_read_open'</span>  <span class="cm">=&gt;</span> <span class="q">'/some/where/gunzip -c %s |'</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Zlib</span> <span class="q">':gzip_write_open'</span> <span class="cm">=&gt;</span> <span class="q">'| /some/where/gzip.exe &gt; %s'</span><span class="sc">;</span></li></ol></pre><p>The <code class="inline"><span class="i">%s</span></code>
+ is expanded to be the filename (<code class="inline"><a class="l_k" href="../functions/sprintf.html">sprintf</a></code> is used, so be
+careful to escape any other <code class="inline"><span class="i">%</span></code>
+ signs).  The 'commands' are checked
+for sanity - they must contain the <code class="inline"><span class="i">%s</span></code>
+, and the read open must end
+with the pipe sign, and the write open must begin with the pipe sign.</p>
+<a name="CLASS-METHODS"></a><h1>CLASS METHODS</h1>
+<ul>
+<li><a name="has_Compress_Zlib"></a><b>has_Compress_Zlib</b>
+<p>Returns true if <code class="inline"><span class="w">Compress::Zlib</span></code>
+ is available.  Note that this does
+not mean that <code class="inline"><span class="w">Compress::Zlib</span></code>
+ is being used: see <a href="#gzip_external">gzip_external</a>
+and <a href="http://search.cpan.org/perldoc/gzip_used">gzip_used</a>.</p>
+</li>
+<li><a name="gzip_external"></a><b>gzip_external</b>
+<p>Undef if an external <i>gzip</i> <b>can</b> be used if <code class="inline"><span class="w">Compress::Zlib</span></code>
+ is
+not available (see <a href="#has_Compress_Zlib">has_Compress_Zlib</a>), true if an external <i>gzip</i>
+is explicitly used, false if an external <i>gzip</i> must not be used.
+See <a href="#gzip_used">gzip_used</a>.</p>
+</li>
+<li><a name="gzip_used"></a><b>gzip_used</b>
+<p>True if an external <i>gzip</i> is being used, false if not.</p>
+</li>
+<li><a name="gzip_read_open"></a><b>gzip_read_open</b>
+<p>Return the 'command' being used for opening a file for reading using an
+external <i>gzip</i>.</p>
+</li>
+<li><a name="gzip_write_open"></a><b>gzip_write_open</b>
+<p>Return the 'command' being used for opening a file for writing using an
+external <i>gzip</i>.</p>
+</li>
+</ul>
+<a name="DIAGNOSTICS"></a><h1>DIAGNOSTICS</h1>
+<ul>
+<li><a name="IO%3a%3aZlib%3a%3agetlines%3a-must-be-called-in-list-context"></a><b>IO::Zlib::getlines: must be called in list context</b>
+<p>If you want read lines, you must read in list context.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3agzopen_external%3a-mode-'...'-is-illegal"></a><b>IO::Zlib::gzopen_external: mode '...' is illegal</b>
+<p>Use only modes 'rb' or 'wb' or /wb[1-9]/.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aimport%3a-'...'-is-illegal"></a><b>IO::Zlib::import: '...' is illegal</b>
+<p>The known import symbols are the <code class="inline"><span class="j">:</span><span class="w">gzip_external</span></code>
+, <code class="inline"><span class="j">:</span><span class="w">gzip_read_open</span></code>
+,
+and <code class="inline"><span class="j">:</span><span class="w">gzip_write_open</span></code>
+.  Anything else is not recognized.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aimport%3a-'%3agzip_external'-requires-an-argument"></a><b>IO::Zlib::import: ':gzip_external' requires an argument</b>
+<p>The <code class="inline"><span class="j">:</span><span class="w">gzip_external</span></code>
+ requires one boolean argument.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aimport%3a-'gzip_read_open'-requires-an-argument"></a><b>IO::Zlib::import: 'gzip_read_open' requires an argument</b>
+<p>The <code class="inline"><span class="j">:</span><span class="w">gzip_external</span></code>
+ requires one string argument.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aimport%3a-'gzip_read'-'...'-is-illegal"></a><b>IO::Zlib::import: 'gzip_read' '...' is illegal</b>
+<p>The <code class="inline"><span class="j">:</span><span class="w">gzip_read_open</span></code>
+ argument must end with the pipe sign (|)
+and have the <code class="inline"><span class="i">%s</span></code>
+ for the filename.  See <a href="#USING-THE-EXTERNAL-GZIP">USING THE EXTERNAL GZIP</a>.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aimport%3a-'gzip_write_open'-requires-an-argument"></a><b>IO::Zlib::import: 'gzip_write_open' requires an argument</b>
+<p>The <code class="inline"><span class="j">:</span><span class="w">gzip_external</span></code>
+ requires one string argument.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aimport%3a-'gzip_write_open'-'...'-is-illegal"></a><b>IO::Zlib::import: 'gzip_write_open' '...' is illegal</b>
+<p>The <code class="inline"><span class="j">:</span><span class="w">gzip_write_open</span></code>
+ argument must begin with the pipe sign (|)
+and have the <code class="inline"><span class="i">%s</span></code>
+ for the filename.  An output redirect (&gt;) is also
+often a good idea, depending on your operating system shell syntax.
+See <a href="#USING-THE-EXTERNAL-GZIP">USING THE EXTERNAL GZIP</a>.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aimport%3a-no-Compress%3a%3aZlib-and-no-external-gzip"></a><b>IO::Zlib::import: no Compress::Zlib and no external gzip</b>
+<p>Given that we failed to load <code class="inline"><span class="w">Compress::Zlib</span></code>
+ and that the use of
+ an external <i>gzip</i> was disabled, IO::Zlib has not much chance of working.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aopen%3a-needs-a-filename"></a><b>IO::Zlib::open: needs a filename</b>
+<p>No filename, no open.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aREAD%3a-NBYTES-must-be-specified"></a><b>IO::Zlib::READ: NBYTES must be specified</b>
+<p>We must know how much to read.</p>
+</li>
+<li><a name="IO%3a%3aZlib%3a%3aWRITE%3a-too-long-LENGTH"></a><b>IO::Zlib::WRITE: too long LENGTH</b>
+<p>The LENGTH must be less than or equal to the buffer size.</p>
+</li>
+</ul>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../perlfunc.html">perlfunc</a>,
+<a href="../perlop.html#I%2fO-Operators">I/O Operators in perlop</a>,
+<a href="../IO/Handle.html">IO::Handle</a>,
+<a href="../Compress/Zlib.html">Compress::Zlib</a></p>
+<a name="HISTORY"></a><h1>HISTORY</h1>
+<p>Created by Tom Hughes &lt;<i>tom@compton.nu</i>&gt;.</p>
+<p>Support for external gzip added by Jarkko Hietaniemi &lt;<i>jhi@iki.fi</i>&gt;.</p>
+<a name="COPYRIGHT"></a><h1>COPYRIGHT</h1>
+<p>Copyright (c) 1998-2004 Tom Hughes &lt;<i>tom@compton.nu</i>&gt;.
+All rights reserved. This program is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#OBJECT-METHODS">OBJECT METHODS</a><li><a href="#USING-THE-EXTERNAL-GZIP">USING THE EXTERNAL GZIP</a><li><a href="#CLASS-METHODS">CLASS METHODS</a><li><a href="#DIAGNOSTICS">DIAGNOSTICS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#HISTORY">HISTORY</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'IO::Zlib';
+  perldoc.pageAddress = 'IO/Zlib.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>ttk_vsapi manual page - Tk Themed Widget</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk Commands, version 8.6.0</a> <small>&gt;</small> ttk_vsapi</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="ttk_vsapi.htm#M2" NAME="L2196">NAME</A>
+<DL><DD>ttk_vsapi &mdash; Define a Microsoft Visual Styles element</DD></DL>
+<DD><A HREF="ttk_vsapi.htm#M3" NAME="L2197">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="ttk_vsapi.htm#M4" NAME="L2198">DESCRIPTION</A>
+<DD><A HREF="ttk_vsapi.htm#M5" NAME="L2199">OPTIONS</A>
+<DL class="options">
+<DD><A HREF="ttk_vsapi.htm#M6" NAME="L2200"><B>-padding </B><I>padding</I></A>
+<DD><A HREF="ttk_vsapi.htm#M7" NAME="L2201"><B>-margins </B><I>padding</I></A>
+<DD><A HREF="ttk_vsapi.htm#M8" NAME="L2202"><B>-width </B><I>width</I></A>
+<DD><A HREF="ttk_vsapi.htm#M9" NAME="L2203"><B>-height </B><I>height</I></A>
+</DL>
+<DD><A HREF="ttk_vsapi.htm#M10" NAME="L2204">STATE MAP</A>
+<DD><A HREF="ttk_vsapi.htm#M11" NAME="L2205">EXAMPLE</A>
+<DD><A HREF="ttk_vsapi.htm#M12" NAME="L2206">SEE ALSO</A>
+<DD><A HREF="ttk_vsapi.htm#M13" NAME="L2207">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+ttk_vsapi &mdash; Define a Microsoft Visual Styles element
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>ttk::style element create </B><I>name</I> <B>vsapi</B> <I>className</I> <I>partId</I> ?<I>stateMap</I>? ?<I>options</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The <B>vsapi</B> element factory creates a new element
+in the current theme whose visual appearance is drawn using the
+Microsoft Visual Styles API which is responsible for the themed styles
+on Windows XP and Vista. This factory permits any of the Visual
+Styles parts to be declared as Ttk elements that can then be
+included in a style layout to modify the appearance of Ttk widgets.
+<P>
+<I>className</I> and <I>partId</I> are required parameters and specify
+the Visual Styles class and part as given in the Microsoft
+documentation. The <I>stateMap</I> may be provided to map Ttk states to
+Visual Styles API states (see <B><A HREF="#M10">STATE MAP</A></B>).
+<H3><A NAME="M5">OPTIONS</A></H3>
+Valid <I>options</I> are:
+<P>
+<DL class="options">
+<DT><A NAME="M6"><B>-padding </B><I>padding</I></A><DD>
+Specify the element's interior padding.
+<I>padding</I> is a list of up to four integers specifying
+the left, top, right and bottom padding quantities respectively.
+This option may not be mixed with any other options.
+<P><DT><A NAME="M7"><B>-margins </B><I>padding</I></A><DD>
+Specifies the elements exterior padding.
+<I>padding</I> is a list of up to four integers specifying
+the left, top, right and bottom padding quantities respectively.
+This option may not be mixed with any other options.
+<P><DT><A NAME="M8"><B>-width </B><I>width</I></A><DD>
+Specifies the height for the element. If this option is set then
+the Visual Styles API will not be queried for the recommended
+size or the part. If this option is set then <B>-height</B> should
+also be set. The <B>-width</B> and <B>-height</B> options cannot
+be mixed with the <B>-padding</B> or <B>-margins</B> options.
+<P><DT><A NAME="M9"><B>-height </B><I>height</I></A><DD>
+Specifies the height of the element. See the comments for <B>-width</B>.
+<P></DL>
+<H3><A NAME="M10">STATE MAP</A></H3>
+The <I>stateMap</I> parameter is a list of ttk states and the
+corresponding Visual Styles API state value.
+This permits the element appearance to respond to changes in the
+widget state such as becoming active or being pressed. The list should
+be as described for the <B><A HREF="../TkCmd/ttk_style.htm">ttk::style map</A></B> command but note that the
+last pair in the list should be the default state and is typically and
+empty list and 1. Unfortunately all the Visual Styles parts have
+different state values and these must be looked up either in the
+Microsoft documentation or more likely in the header files. The
+original header to use was <I>tmschema.h</I>, but in more recent
+versions of the Windows Development Kit this is <I>vssym32.h</I>.
+<P>
+If no <I>stateMap</I> parameter is given there is an implicit default
+map of {{} 1}
+<H3><A NAME="M11">EXAMPLE</A></H3>
+Create a correctly themed close button by changing the layout of 
+a <B><A HREF="../TkCmd/ttk_button.htm">ttk::button</A></B>(n). This uses the WINDOW part WP_SMALLCLOSEBUTTON
+and as documented the states CBS_DISABLED, CBS_HOT, CBS_NORMAL and
+CBS_PUSHED are mapped from ttk states.
+<PRE>ttk::style element create smallclose <B>vsapi</B> WINDOW 19 &#92;
+    {disabled 4 pressed 3 active 2 {} 1}
+ttk::style layout CloseButton {CloseButton.smallclose -sticky news}
+pack [ttk::button .close -style CloseButton]</PRE>
+<P>
+Change the appearance of a <B><A HREF="../TkCmd/ttk_checkbutton.htm">ttk::checkbutton</A></B>(n) to use the
+Explorer pin part EBP_HEADERPIN.
+<PRE>ttk::style element create pin <B>vsapi</B> EXPLORERBAR 3 {
+    {pressed !selected} 3
+    {active !selected} 2
+    {pressed selected} 6
+    {active selected} 5
+    {selected} 4
+    {} 1
+}
+ttk::style layout Explorer.Pin {Explorer.Pin.pin -sticky news}
+pack [ttk::checkbutton .pin -style Explorer.Pin]</PRE>
+<H3><A NAME="M12">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/ttk_intro.htm">ttk::intro</A></B>, <B><A HREF="../TkCmd/ttk_widget.htm">ttk::widget</A></B>, <B><A HREF="../TkCmd/ttk_style.htm">ttk::style</A></B>, <B><A HREF="../TkCmd/ttk_image.htm">ttk_image</A></B>
+<H3><A NAME="M13">KEYWORDS</A></H3>
+<A href="../Keywords/S.htm#style">style</A>, <A href="../Keywords/T.htm#theme">theme</A>, <A href="../Keywords/A.htm#appearance">appearance</A>, <A href="../Keywords/W.htm#windows">windows</A>
+<div class="copy">Copyright &copy; 2008 Pat Thoyts
+</div>
+</BODY></HTML>

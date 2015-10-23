@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>tdbc::sqlite3 manual page - Tcl Database Connectivity</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">tdbc::sqlite3 Package Commands, version 1.0.0</a> <small>&gt;</small> tdbc_sqlite3</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+tdbc::sqlite3 &mdash; TDBC driver for the SQLite3 database manager
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+package require <B>tdbc::sqlite3 1.0</B><BR>
+<B>tdbc::sqlite3::connection create</B> <I>db</I> <I>fileName</I> ?<I>-option value...</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The <B>tdbc::sqlite3</B> driver provides a database interface that conforms
+to Tcl DataBase Connectivity (TDBC) and allows a Tcl script to connect
+to a SQLite3 database.  It is also provided
+as a worked example of how to write a database driver in Tcl, so that
+driver authors have a starting point for further development.
+<P>
+Connection to a SQLite3 database is established by invoking
+<B>tdbc::sqlite3::connection create</B>, passing it a string to be used
+as the connection handle followed by the file name of
+the database. The side effect of <B>tdbc::sqlite3::connection
+create</B> is to create a new database connection..
+As an alternative, <B>tdbc::sqlite::connection new</B> may be used to create
+a database connection with an automatically assigned name. The return value
+from <B>tdbc::sqlite::connection new</B> is the name that was chosen for the
+connection handle. See
+<B>tdbc::connection(n)</B> for the details of how to use the connection
+to manipulate a database.
+<H3><A NAME="M5">CONFIGURATION OPTIONS</A></H3>
+The standard configuration options <B>-encoding</B>, <B>-isolation</B>,
+<B>-readonly</B> and <B>-timeout</B> are all recognized, both on
+<B>tdbc::sqlite3::connection create</B> and on the <B>configure</B>
+method of the resulting connection.
+<P>
+Since the encoding of a SQLite3 database is always well known, the
+<B>-encoding</B> option accepts only <B>utf-8</B> as an encoding and
+always returns <B>utf-8</B> for an encoding. The actual encoding may be
+set using a SQLite3 <B>PRAGMA</B> statement when creating a new
+database.
+<P>
+Only the isolation levels <B>readuncommitted</B> and <B>serializable</B>
+are implemented. Other isolation levels are promoted to
+<B>serializable</B>.
+<P>
+The <B>-readonly</B> flag is not implemented. <B>-readonly 0</B> is
+accepted silently, while <B>-readonly 1</B> reports an error.
+<H3><A NAME="M6">BUGS</A></H3>
+If any column name is not unique among the columns in a result set, the
+results of <B>-as dicts</B> returns will be missing all but the rightmost
+of the duplicated columns. This limitation can be worked around by adding
+appropriate <B>AS</B> clauses to <B>SELECT</B> statements to ensure that
+all returned column names are unique.  Plans are to fix this bug by using
+a C implementation of the driver, which will also improve performance
+significantly.
+<H3><A NAME="M7">SEE ALSO</A></H3>
+<B><A HREF="../TdbcCmd/tdbc.htm">tdbc</A></B>, <B><A HREF="../TdbcCmd/tdbc_connection.htm">tdbc::connection</A></B>, <B><A HREF="../TdbcCmd/tdbc_resultset.htm">tdbc::resultset</A></B>, <B><A HREF="../TdbcCmd/tdbc_statement.htm">tdbc::statement</A></B>
+<H3><A NAME="M8">KEYWORDS</A></H3>
+<A href="../Keywords/T.htm#TDBC">TDBC</A>, <A href="../Keywords/S.htm#SQL">SQL</A>, <A href="../Keywords/S.htm#SQLite3">SQLite3</A>, <A href="../Keywords/D.htm#database">database</A>, <A href="../Keywords/C.htm#connectivity">connectivity</A>, <A href="../Keywords/C.htm#connection">connection</A>
+<H3><A NAME="M9">COPYRIGHT</A></H3>
+Copyright (c) 2008 by Kevin B. Kenny.
+<div class="copy"></div>
+</BODY></HTML>

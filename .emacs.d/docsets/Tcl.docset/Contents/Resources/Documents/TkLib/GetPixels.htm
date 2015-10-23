@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetPixelsFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetPixels</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetPixels.htm#M2" NAME="L346">NAME</A>
+<DL><DD>Tk_GetPixelsFromObj, Tk_GetPixels, Tk_GetMMFromObj, Tk_GetScreenMM &mdash; translate between strings and screen units</DD></DL>
+<DD><A HREF="GetPixels.htm#M3" NAME="L347">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetPixelsFromObj(</B><I>interp, tkwin, objPtr, intPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetPixels(</B><I>interp, tkwin, string, intPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetMMFromObj(</B><I>interp, tkwin, objPtr, doublePtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetScreenMM(</B><I>interp, tkwin, string, doublePtr</I><B>)</B>
+</DL>
+<DD><A HREF="GetPixels.htm#M4" NAME="L348">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetPixels.htm#M5" NAME="L349">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="GetPixels.htm#M6" NAME="L350">&lt;none&gt;</A>
+<DD><A HREF="GetPixels.htm#M7" NAME="L351"><B>c</B></A>
+<DD><A HREF="GetPixels.htm#M8" NAME="L352"><B>i</B></A>
+<DD><A HREF="GetPixels.htm#M9" NAME="L353"><B>m</B></A>
+<DD><A HREF="GetPixels.htm#M10" NAME="L354"><B>p</B></A>
+</DL>
+<DD><A HREF="GetPixels.htm#M11" NAME="L355">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetPixelsFromObj, Tk_GetPixels, Tk_GetMMFromObj, Tk_GetScreenMM &mdash; translate between strings and screen units
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_GetPixelsFromObj(</B><I>interp, tkwin, objPtr, intPtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_GetPixels(</B><I>interp, tkwin, string, intPtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_GetMMFromObj(</B><I>interp, tkwin, objPtr, doublePtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_GetScreenMM(</B><I>interp, tkwin, string, doublePtr</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.
+<P><DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>tkwin</B> (in)<DD>
+Window whose screen geometry determines the conversion between absolute
+units and pixels.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*objPtr</B> (in/out)<DD>
+String value specifies a distance on the screen;
+internal rep will be modified to cache converted distance.
+<P><DT>const char <B>*string</B> (in)<DD>
+Same as <I>objPtr</I> except specification of distance is passed as
+a string.
+<P><DT>int <B>*intPtr</B> (out)<DD>
+Pointer to location in which to store converted distance in pixels.
+<P><DT>double <B>*doublePtr</B> (out)<DD>
+Pointer to location in which to store converted distance in millimeters.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These procedures take as argument a specification of distance on
+the screen (<I>objPtr</I> or <I>string</I>) and compute the
+corresponding distance either in integer pixels or floating-point millimeters.
+In either case,
+<I>objPtr</I> or <I>string</I>
+specifies a screen distance as a
+floating-point number followed by one of the following characters
+that indicates units:
+<P>
+<DL class="description">
+<DT><A NAME="M6">&lt;none&gt;</A><DD>
+The number specifies a distance in pixels.
+<P><DT><A NAME="M7"><B>c</B></A><DD>
+The number specifies a distance in centimeters on the screen.
+<P><DT><A NAME="M8"><B>i</B></A><DD>
+The number specifies a distance in inches on the screen.
+<P><DT><A NAME="M9"><B>m</B></A><DD>
+The number specifies a distance in millimeters on the screen.
+<P><DT><A NAME="M10"><B>p</B></A><DD>
+The number specifies a distance in printer's points (1/72 inch)
+on the screen.
+<P></DL>
+<P>
+<B>Tk_GetPixelsFromObj</B> converts the value of <I>objPtr</I> to the
+nearest even number of pixels and stores that value at <I>*intPtr</I>.
+It returns <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> under normal circumstances.
+If an error occurs (e.g. <I>objPtr</I> contains a number followed
+by a character that is not one of the ones above) then
+<B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned and an error message is left
+in <I>interp</I>'s result if <I>interp</I> is not NULL.
+<B>Tk_GetPixelsFromObj</B> caches information about the return
+value in <I>objPtr</I>, which speeds up future calls to
+<B>Tk_GetPixelsFromObj</B> with the same <I>objPtr</I>.
+<P>
+<B>Tk_GetPixels</B> is identical to <B>Tk_GetPixelsFromObj</B> except
+that the screen distance is specified with a string instead
+of an object.  This prevents <B>Tk_GetPixels</B> from caching the
+return value, so <B>Tk_GetPixels</B> is less efficient than
+<B>Tk_GetPixelsFromObj</B>.
+<P>
+<B>Tk_GetMMFromObj</B> and <B>Tk_GetScreenMM</B> are similar to
+<B>Tk_GetPixelsFromObj</B> and <B>Tk_GetPixels</B> (respectively) except
+that they convert the screen distance to millimeters and
+store a double-precision floating-point result at <I>*doublePtr</I>.
+<H3><A NAME="M11">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#centimeters">centimeters</A>, <A href="../Keywords/C.htm#convert">convert</A>, <A href="../Keywords/I.htm#inches">inches</A>, <A href="../Keywords/M.htm#millimeters">millimeters</A>, <A href="../Keywords/P.htm#pixels">pixels</A>, <A href="../Keywords/P.htm#points">points</A>, <A href="../Keywords/S.htm#screen units">screen units</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

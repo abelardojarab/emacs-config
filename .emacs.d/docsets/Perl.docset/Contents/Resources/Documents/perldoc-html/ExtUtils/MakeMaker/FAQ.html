@@ -1,0 +1,704 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>ExtUtils::MakeMaker::FAQ</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../../index-overview.html">Overview</a>
+                <li><a href="../../index-tutorials.html">Tutorials</a>
+                <li><a href="../../index-faq.html">FAQs</a>
+                <li><a href="../../index-history.html">History / Changes</a>
+                <li><a href="../../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../../index-language.html">Language</a>
+                <li><a href="../../index-functions.html">Functions</a>
+                <li><a href="../../perlop.html">Operators</a>
+                <li><a href="../../perlvar.html">Special Variables</a>
+                <li><a href="../../index-pragmas.html">Pragmas</a>
+                <li><a href="../../index-utilities.html">Utilities</a>
+                <li><a href="../../index-internals.html">Internals</a>
+                <li><a href="../../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>ExtUtils::MakeMaker::FAQ</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../../index.html">Home</a> &gt;
+    
+      
+        <a href="../../index-modules-E.html">Core modules (E)</a> &gt;
+      
+    
+    ExtUtils::MakeMaker::FAQ
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>ExtUtils::MakeMaker::FAQ</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Module-Installation">Module Installation</a><li><a href="#Common-errors-and-problems">Common errors and problems</a><li><a href="#Philosophy-and-History">Philosophy and History</a><li><a href="#Module-Writing">Module Writing</a><li><a href="#XS">XS</a></ul><li><a href="#PATCHING">PATCHING</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>ExtUtils::MakeMaker::FAQ - Frequently Asked Questions About MakeMaker</p>
+<a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>FAQs, tricks and tips for <code class="inline"><span class="w">ExtUtils::MakeMaker</span></code>
+.</p>
+<a name="Module-Installation"></a><h2>Module Installation</h2>
+<ul>
+<li><a name="How-do-I-install-a-module-into-my-home-directory%3f"></a><b>How do I install a module into my home directory?</b>
+<p>If you're not the Perl administrator you probably don't have
+permission to install a module to its default location.  Then you
+should install it for your own use into your home directory like so:</p>
+<pre class="verbatim"><ol><li>    <span class="c"># Non-unix folks, replace ~ with /path/to/your/home/dir</span></li><li>    <span class="w">perl</span> <span class="w">Makefile</span>.<span class="w">PL</span> <span class="w">INSTALL_BASE</span>=~</li></ol></pre><p>This will put modules into <i>~/lib/perl5</i>, man pages into <i>~/man</i> and
+programs into <i>~/bin</i>.</p>
+<p>To ensure your Perl programs can see these newly installed modules,
+set your <code class="inline"><span class="w">PERL5LIB</span></code>
+ environment variable to <i>~/lib/perl5</i> or tell
+each of your programs to look in that directory with the following:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../../functions/use.html">use</a> <span class="w">lib</span> <span class="q">&quot;$ENV{HOME}/lib/perl5&quot;</span><span class="sc">;</span></li></ol></pre><p>or if $ENV{HOME} isn't set and you don't want to set it for some
+reason, do it the long way.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../../functions/use.html">use</a> <span class="w">lib</span> <span class="q">&quot;/path/to/your/home/dir/lib/perl5&quot;</span><span class="sc">;</span></li></ol></pre></li>
+<li><a name="How-do-I-get-MakeMaker-and-Module%3a%3aBuild-to-install-to-the-same-place%3f"></a><b>How do I get MakeMaker and Module::Build to install to the same place?</b>
+<p>Module::Build, as of 0.28, supports two ways to install to the same
+location as MakeMaker.</p>
+<p>We highly recommend the install_base method, its the simplest and most
+closely approximates the expected behavior of an installation prefix.</p>
+<p>1) Use INSTALL_BASE / <code class="inline">--<span class="w">install_base</span></code>
+</p>
+<p>MakeMaker (as of 6.31) and Module::Build (as of 0.28) both can install
+to the same locations using the "install_base" concept.  See
+<a href="../../ExtUtils/MakeMaker.html#INSTALL_BASE">INSTALL_BASE in ExtUtils::MakeMaker</a> for details.  To get MM and MB to
+install to the same location simply set INSTALL_BASE in MM and
+<code class="inline">--<span class="w">install_base</span></code>
+ in MB to the same location.</p>
+<pre class="verbatim"><ol><li>    perl Makefile.PL INSTALL_BASE=/whatever</li><li>    perl Build.PL    --install_base /whatever</li></ol></pre><p>This works most like other language's behavior when you specify a
+prefix.  We recommend this method.</p>
+<p>2) Use PREFIX / <code class="inline">--<span class="w">prefix</span></code>
+</p>
+<p>Module::Build 0.28 added support for <code class="inline">--<span class="w">prefix</span></code>
+ which works like
+MakeMaker's PREFIX.</p>
+<pre class="verbatim"><ol><li>    perl Makefile.PL PREFIX=/whatever</li><li>    perl Build.PL    --prefix /whatever</li></ol></pre><p>We highly discourage this method.  It should only be used if you know
+what you're doing and specifically need the PREFIX behavior.  The
+PREFIX algorithm is complicated and focused on matching the system
+installation.</p>
+</li>
+<li><a name="How-do-I-keep-from-installing-man-pages%3f"></a><b>How do I keep from installing man pages?</b>
+<p>Recent versions of MakeMaker will only install man pages on Unix-like
+operating systems.</p>
+<p>For an individual module:</p>
+<pre class="verbatim"><ol><li>        <span class="w">perl</span> <span class="w">Makefile</span>.<span class="w">PL</span> <span class="w">INSTALLMAN1DIR</span>=<span class="w">none</span> <span class="w">INSTALLMAN3DIR</span>=<span class="w">none</span></li></ol></pre><p>If you want to suppress man page installation for all modules you have
+to reconfigure Perl and tell it 'none' when it asks where to install
+man pages.</p>
+</li>
+<li><a name="How-do-I-use-a-module-without-installing-it%3f"></a><b>How do I use a module without installing it?</b>
+<p>Two ways.  One is to build the module normally...</p>
+<pre class="verbatim"><ol><li>        <span class="w">perl</span> <span class="w">Makefile</span>.<span class="w">PL</span></li><li>        <span class="w">make</span></li><li>        <span class="w">make</span> <span class="w">test</span></li></ol></pre><p>...and then set the PERL5LIB environment variable to point at the
+blib/lib and blib/arch directories.</p>
+<p>The other is to install the module in a temporary location.</p>
+<pre class="verbatim"><ol><li>        perl Makefile.PL INSTALL_BASE=~/tmp</li><li>        make</li><li>        make test</li><li>        make install</li></ol></pre><p>And then set PERL5LIB to <i>~/tmp/lib/perl5</i>.  This works well when you
+have multiple modules to work with.  It also ensures that the module
+goes through its full installation process which may modify it.</p>
+</li>
+<li><a name="PREFIX-vs-INSTALL_BASE-from-Module%3a%3aBuild%3a%3aCookbook"></a><b>PREFIX vs INSTALL_BASE from Module::Build::Cookbook</b>
+<p>The behavior of PREFIX is complicated and depends closely on how your
+Perl is configured. The resulting installation locations will vary from
+machine to machine and even different installations of Perl on the same machine.
+Because of this, its difficult to document where prefix will place your modules.</p>
+<p>In contrast, INSTALL_BASE has predictable, easy to explain installation locations.
+Now that Module::Build and MakeMaker both have INSTALL_BASE there is little reason
+to use PREFIX other than to preserve your existing installation locations. If you
+are starting a fresh Perl installation we encourage you to use INSTALL_BASE. If
+you have an existing installation installed via PREFIX, consider moving it to an
+installation structure matching INSTALL_BASE and using that instead.</p>
+</li>
+</ul>
+<a name="Common-errors-and-problems"></a><h2>Common errors and problems</h2>
+<ul>
+<li><a name="%22No-rule-to-make-target-%60%2fusr%2flib%2fperl5%2fCORE%2fconfig.h'%2c-needed-by-%60Makefile'%22"></a><b>"No rule to make target `/usr/lib/perl5/CORE/config.h', needed by `Makefile'"</b>
+<p>Just what it says, you're missing that file.  MakeMaker uses it to
+determine if perl has been rebuilt since the Makefile was made.  It's
+a bit of a bug that it halts installation.</p>
+<p>Some operating systems don't ship the CORE directory with their base
+perl install.  To solve the problem, you likely need to install a perl
+development package such as perl-devel (CentOS, Fedora and other
+Redhat systems) or perl (Ubuntu and other Debian systems).</p>
+</li>
+</ul>
+<a name="Philosophy-and-History"></a><h2>Philosophy and History</h2>
+<ul>
+<li><a name="Why-not-just-use-%3cinsert-other-build-config-tool-here%3e%3f"></a><b>Why not just use &lt;insert other build config tool here&gt;?</b>
+<p>Why did MakeMaker reinvent the build configuration wheel?  Why not
+just use autoconf or automake or ppm or Ant or ...</p>
+<p>There are many reasons, but the major one is cross-platform
+compatibility.</p>
+<p>Perl is one of the most ported pieces of software ever.  It works on
+operating systems I've never even heard of (see perlport for details).
+It needs a build tool that can work on all those platforms and with
+any wacky C compilers and linkers they might have.</p>
+<p>No such build tool exists.  Even make itself has wildly different
+dialects.  So we have to build our own.</p>
+</li>
+<li><a name="What-is-Module%3a%3aBuild-and-how-does-it-relate-to-MakeMaker%3f"></a><b>What is Module::Build and how does it relate to MakeMaker?</b>
+<p>Module::Build is a project by Ken Williams to supplant MakeMaker.
+Its primary advantages are:</p>
+<ul>
+<li><a name="*-pure-perl.--no-make%2c-no-shell-commands"></a><b>pure perl.  no make, no shell commands</b>
+</li>
+<li><a name="*-easier-to-customize"></a><b>easier to customize</b>
+</li>
+<li><a name="*-cleaner-internals"></a><b>cleaner internals</b>
+</li>
+<li><a name="*-less-cruft"></a><b>less cruft</b>
+</li>
+</ul>
+<p>Module::Build was long the official heir apparent to MakeMaker.  The rate of
+both its development and adoption has slowed in recent years, though, and it is
+unclear what the future holds for it.  That said, Module::Build set the stage
+for <i>something</i> to become the heir to MakeMaker.  MakeMaker's maintainers have
+long said that it is a dead end and should be kept functioning, but not
+extended with new features.  It's complicated enough as it is!</p>
+</li>
+</ul>
+<a name="Module-Writing"></a><h2>Module Writing</h2>
+<ul>
+<li><a name="How-do-I-keep-my-%24VERSION-up-to-date-without-resetting-it-manually%3f"></a><b>How do I keep my $VERSION up to date without resetting it manually?</b>
+<p>Often you want to manually set the $VERSION in the main module
+distribution because this is the version that everybody sees on CPAN
+and maybe you want to customize it a bit.  But for all the other
+modules in your dist, $VERSION is really just bookkeeping and all that's
+important is it goes up every time the module is changed.  Doing this
+by hand is a pain and you often forget.</p>
+<p>Simplest way to do it automatically is to use your version control
+system's revision number (you are using version control, right?).</p>
+<p>In CVS, RCS and SVN you use $Revision$ (see the documentation of your
+version control system for details).  Every time the file is checked
+in the $Revision$ will be updated, updating your $VERSION.</p>
+<p>SVN uses a simple integer for $Revision$ so you can adapt it for your
+$VERSION like so:</p>
+<pre class="verbatim"><ol><li>    <span class="s">(</span><span class="i">$VERSION</span><span class="s">)</span> = <span class="q">q$Revision$</span> =~ <span class="q">/(\d+)/</span><span class="sc">;</span></li></ol></pre><p>In CVS and RCS version 1.9 is followed by 1.10.  Since CPAN compares
+version numbers numerically we use a sprintf() to convert 1.9 to 1.009
+and 1.10 to 1.010 which compare properly.</p>
+<pre class="verbatim"><ol><li>    <span class="i">$VERSION</span> = <a class="l_k" href="../../functions/sprintf.html">sprintf</a> <span class="q">&quot;%d.%03d&quot;</span><span class="cm">,</span> <span class="q">q$Revision$</span> =~ <span class="q">/(\d+)\.(\d+)/g</span><span class="sc">;</span></li></ol></pre><p>If branches are involved (ie. $Revision: 1.5.3.4$) it's a little more
+complicated.</p>
+<pre class="verbatim"><ol><li>    <span class="c"># must be all on one line or MakeMaker will get confused.</span></li><li>    <span class="i">$VERSION</span> = <a class="l_k" href="../../functions/do.html">do</a> <span class="s">{</span> <a class="l_k" href="../../functions/my.html">my</a> <span class="i">@r</span> = <span class="s">(</span><span class="q">q$Revision$</span> =~ <span class="q">/\d+/g</span><span class="s">)</span><span class="sc">;</span> <a class="l_k" href="../../functions/sprintf.html">sprintf</a> <span class="q">&quot;%d.&quot;</span>.<span class="q">&quot;%03d&quot;</span> x <span class="i">$#r</span><span class="cm">,</span> <span class="i">@r</span> <span class="s">}</span><span class="sc">;</span></li></ol></pre><p>In SVN, $Revision$ should be the same for every file in the project so
+they would all have the same $VERSION.  CVS and RCS have a different
+$Revision$ per file so each file will have a different $VERSION.
+Distributed version control systems, such as SVK, may have a different
+$Revision$ based on who checks out the file, leading to a different $VERSION
+on each machine!  Finally, some distributed version control systems, such
+as darcs, have no concept of revision number at all.</p>
+</li>
+<li><a name="What's-this-_META.yml_-thing-and-how-did-it-get-in-my-_MANIFEST_%3f!"></a><b>What's this <i>META.yml</i> thing and how did it get in my <i>MANIFEST</i>?!</b>
+<p><i>META.yml</i> is a module meta-data file pioneered by Module::Build and
+automatically generated as part of the 'distdir' target (and thus
+'dist').  See <a href="../../ExtUtils/MakeMaker.html#Module-Meta-Data">Module Meta-Data in ExtUtils::MakeMaker</a>.</p>
+<p>To shut off its generation, pass the <code class="inline"><span class="w">NO_META</span></code>
+ flag to <code class="inline"><span class="i">WriteMakefile</span><span class="s">(</span><span class="s">)</span></code>
+.</p>
+</li>
+<li><a name="How-do-I-delete-everything-not-in-my-_MANIFEST_%3f"></a><b>How do I delete everything not in my <i>MANIFEST</i>?</b>
+<p>Some folks are surprised that <code class="inline"><span class="w">make</span> <span class="w">distclean</span></code>
+ does not delete
+everything not listed in their MANIFEST (thus making a clean
+distribution) but only tells them what they need to delete.  This is
+done because it is considered too dangerous.  While developing your
+module you might write a new file, not add it to the MANIFEST, then
+run a <code class="inline"><span class="w">distclean</span></code>
+ and be sad because your new work was deleted.</p>
+<p>If you really want to do this, you can use
+<code class="inline"><span class="i">ExtUtils::Manifest::manifind</span><span class="s">(</span><span class="s">)</span></code>
+ to read the MANIFEST and File::Find
+to delete the files.  But you have to be careful.  Here's a script to
+do that.  Use at your own risk.  Have fun blowing holes in your foot.</p>
+<pre class="verbatim"><ol><li>    <span class="c">#!/usr/bin/perl -w</span></li><li></li><li>    <a class="l_k" href="../../functions/use.html">use</a> <span class="w">strict</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../../functions/use.html">use</a> <span class="w">File::Spec</span><span class="sc">;</span></li><li>    <a class="l_k" href="../../functions/use.html">use</a> <span class="w">File::Find</span><span class="sc">;</span></li><li>    <a class="l_k" href="../../functions/use.html">use</a> <span class="w">ExtUtils::Manifest</span> <span class="q">qw(maniread)</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../../functions/my.html">my</a> <span class="i">%manifest</span> = <a class="l_k" href="../../functions/map.html">map</a>  <span class="s">{</span><span class="s">(</span> <span class="i">$_</span> <span class="cm">=&gt;</span> <span class="n">1</span> <span class="s">)</span><span class="s">}</span></li><li>                   <a class="l_k" href="../../functions/grep.html">grep</a> <span class="s">{</span> <span class="w">File::Spec</span><span class="w">-&gt;canonpath</span><span class="s">(</span><span class="i">$_</span><span class="s">)</span> <span class="s">}</span></li><li>                        <a class="l_k" href="../../functions/keys.html">keys</a> <span class="i">%</span>{ <span class="i">maniread</span><span class="s">(</span><span class="s">)</span> }<span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../../functions/if.html">if</a><span class="s">(</span> !<a class="l_k" href="../../functions/keys.html">keys</a> <span class="i">%manifest</span> <span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../../functions/print.html">print</a> <span class="q">&quot;No files found in MANIFEST.  Stopping.\n&quot;</span><span class="sc">;</span></li><li>        <a class="l_k" href="../../functions/exit.html">exit</a><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="i">find</span><span class="s">(</span><span class="s">{</span></li><li>          <span class="w">wanted</span>   <span class="cm">=&gt;</span> <a class="l_k" href="../../functions/sub.html">sub</a> <span class="s">{</span></li><li>              <a class="l_k" href="../../functions/my.html">my</a> <span class="i">$path</span> = <span class="w">File::Spec</span><span class="w">-&gt;canonpath</span><span class="s">(</span><span class="i">$_</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>              <a class="l_k" href="../../functions/return.html">return</a> <a class="l_k" href="../../functions/unless.html">unless</a> -f <span class="i">$path</span><span class="sc">;</span></li><li>              <a class="l_k" href="../../functions/return.html">return</a> <a class="l_k" href="../../functions/if.html">if</a> <a class="l_k" href="../../functions/exists.html">exists</a> <span class="i">$manifest</span>{ <span class="i">$path</span> }<span class="sc">;</span></li><li></li><li>              <a class="l_k" href="../../functions/print.html">print</a> <span class="q">&quot;unlink $path\n&quot;</span><span class="sc">;</span></li><li>              <a class="l_k" href="../../functions/unlink.html">unlink</a> <span class="i">$path</span><span class="sc">;</span></li><li>          <span class="s">}</span><span class="cm">,</span></li><li>          <span class="w">no_chdir</span> <span class="cm">=&gt;</span> <span class="n">1</span></li><li>         <span class="s">}</span><span class="cm">,</span></li><li>         <span class="q">&quot;.&quot;</span></li><li>    <span class="s">)</span><span class="sc">;</span></li></ol></pre></li>
+<li><a name="Which-tar-should-I-use-on-Windows%3f"></a><b>Which tar should I use on Windows?</b>
+<p>We recommend ptar from Archive::Tar not older than 1.66 with '-C' option.</p>
+</li>
+<li><a name="Which-zip-should-I-use-on-Windows-for-'%5bnd%5dmake-zipdist'%3f"></a><b>Which zip should I use on Windows for '[nd]make zipdist'?</b>
+<p>We recommend InfoZIP: <a href="http://www.info-zip.org/Zip.html">http://www.info-zip.org/Zip.html</a></p>
+</li>
+</ul>
+<a name="XS"></a><h2>XS</h2>
+<ul>
+<li><a name="How-do-I-prevent-%22object-version-X.XX-does-not-match-bootstrap-parameter-Y.YY%22-errors%3f"></a><b>How do I prevent "object version X.XX does not match bootstrap parameter Y.YY" errors?</b>
+<p>XS code is very sensitive to the module version number and will
+complain if the version number in your Perl module doesn't match.  If
+you change your module's version # without rerunning Makefile.PL the old
+version number will remain in the Makefile, causing the XS code to be built
+with the wrong number.</p>
+<p>To avoid this, you can force the Makefile to be rebuilt whenever you
+change the module containing the version number by adding this to your
+WriteMakefile() arguments.</p>
+<pre class="verbatim"><ol><li>    <span class="w">depend</span> <span class="cm">=&gt;</span> <span class="s">{</span> <span class="q">&#39;$(FIRST_MAKEFILE)&#39;</span> <span class="cm">=&gt;</span> <span class="q">&#39;$(VERSION_FROM)&#39;</span> <span class="s">}</span></li></ol></pre></li>
+<li><a name="How-do-I-make-two-or-more-XS-files-coexist-in-the-same-directory%3f"></a><b>How do I make two or more XS files coexist in the same directory?</b>
+<p>Sometimes you need to have two and more XS files in the same package.
+One way to go is to put them into separate directories, but sometimes
+this is not the most suitable solution. The following technique allows
+you to put two (and more) XS files in the same directory.</p>
+<p>Let's assume that we have a package <code class="inline"><span class="w">Cool::Foo</span></code>
+, which includes
+<code class="inline"><span class="w">Cool::Foo</span></code>
+ and <code class="inline"><span class="w">Cool::Bar</span></code>
+ modules each having a separate XS
+file. First we use the following <i>Makefile.PL</i>:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../../functions/use.html">use</a> <span class="w">ExtUtils::MakeMaker</span><span class="sc">;</span></li><li></li><li>  <span class="i">WriteMakefile</span><span class="s">(</span></li><li>      <span class="w">NAME</span>		<span class="cm">=&gt;</span> <span class="q">&#39;Cool::Foo&#39;</span><span class="cm">,</span></li><li>      <span class="w">VERSION_FROM</span>	<span class="cm">=&gt;</span> <span class="q">&#39;Foo.pm&#39;</span><span class="cm">,</span></li><li>      <span class="w">OBJECT</span>              <span class="cm">=&gt;</span> <span class="q">q/$(O_FILES)/</span><span class="cm">,</span></li><li>      <span class="c"># ... other attrs ...</span></li><li>  <span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Notice the <code class="inline"><span class="w">OBJECT</span></code>
+ attribute. MakeMaker generates the following
+variables in <i>Makefile</i>:</p>
+<pre class="verbatim"><ol><li>  <span class="c"># Handy lists of source code files:</span></li><li>  <span class="w">XS_FILES</span>= <span class="w">Bar</span>.<span class="w">xs</span> \</li><li>  	<span class="w">Foo</span>.<span class="w">xs</span></li><li>  <span class="w">C_FILES</span> = <span class="w">Bar</span>.<span class="w">c</span> \</li><li>  	<span class="w">Foo</span>.<span class="w">c</span></li><li>  <span class="w">O_FILES</span> = <span class="w">Bar</span>.<span class="w">o</span> \</li><li>  	<span class="w">Foo</span>.<span class="w">o</span></li></ol></pre><p>Therefore we can use the <code class="inline"><span class="w">O_FILES</span></code>
+ variable to tell MakeMaker to use
+these objects into the shared library.</p>
+<p>That's pretty much it. Now write <i>Foo.pm</i> and <i>Foo.xs</i>, <i>Bar.pm</i>
+and <i>Bar.xs</i>, where <i>Foo.pm</i> bootstraps the shared library and
+<i>Bar.pm</i> simply loading <i>Foo.pm</i>.</p>
+<p>The only issue left is to how to bootstrap <i>Bar.xs</i>. This is done
+from <i>Foo.xs</i>:</p>
+<pre class="verbatim"><ol><li>  MODULE = Cool::Foo PACKAGE = Cool::Foo</li><li></li><li>  BOOT:</li><li>  # boot the second XS file</li><li>  boot_Cool__Bar(aTHX_ cv);</li></ol></pre><p>If you have more than two files, this is the place where you should
+boot extra XS files from.</p>
+<p>The following four files sum up all the details discussed so far.</p>
+<pre class="verbatim"><ol><li>  Foo.pm:</li><li>  -------</li><li>  package Cool::Foo;</li><li></li><li>  require DynaLoader;</li><li></li><li>  our @ISA = qw(DynaLoader);</li><li>  our $VERSION = '0.01';</li><li>  bootstrap Cool::Foo $VERSION;</li><li></li><li>  1;</li><li></li><li>  Bar.pm:</li><li>  -------</li><li>  package Cool::Bar;</li><li></li><li>  use Cool::Foo; # bootstraps Bar.xs</li><li></li><li>  1;</li><li></li><li>  Foo.xs:</li><li>  -------</li><li>  #include "EXTERN.h"</li><li>  #include "perl.h"</li><li>  #include "XSUB.h"</li><li></li><li>  MODULE = Cool::Foo  PACKAGE = Cool::Foo</li><li></li><li>  BOOT:</li><li>  # boot the second XS file</li><li>  boot_Cool__Bar(aTHX_ cv);</li><li></li><li>  MODULE = Cool::Foo  PACKAGE = Cool::Foo  PREFIX = cool_foo_</li><li></li><li>  void</li><li>  cool_foo_perl_rules()</li><li></li><li>      CODE:</li><li>      fprintf(stderr, "Cool::Foo says: Perl Rules\n");</li><li></li><li>  Bar.xs:</li><li>  -------</li><li>  #include "EXTERN.h"</li><li>  #include "perl.h"</li><li>  #include "XSUB.h"</li><li></li><li>  MODULE = Cool::Bar  PACKAGE = Cool::Bar PREFIX = cool_bar_</li><li></li><li>  void</li><li>  cool_bar_perl_rules()</li><li></li><li>      CODE:</li><li>      fprintf(stderr, "Cool::Bar says: Perl Rules\n");</li></ol></pre><p>And of course a very basic test:</p>
+<pre class="verbatim"><ol><li>  t/cool.t:</li><li>  --------</li><li>  use Test;</li><li>  BEGIN { plan tests =&gt; 1 };</li><li>  use Cool::Foo;</li><li>  use Cool::Bar;</li><li>  Cool::Foo::perl_rules();</li><li>  Cool::Bar::perl_rules();</li><li>  ok 1;</li></ol></pre><p>This tip has been brought to you by Nick Ing-Simmons and Stas Bekman.</p>
+</li>
+</ul>
+<a name="PATCHING"></a><h1>PATCHING</h1>
+<p>If you have a question you'd like to see added to the FAQ (whether or
+not you have the answer) please send it to makemaker@perl.org.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>The denizens of makemaker@perl.org.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../../ExtUtils/MakeMaker.html">ExtUtils::MakeMaker</a></p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Module-Installation">Module Installation</a><li><a href="#Common-errors-and-problems">Common errors and problems</a><li><a href="#Philosophy-and-History">Philosophy and History</a><li><a href="#Module-Writing">Module Writing</a><li><a href="#XS">XS</a></ul><li><a href="#PATCHING">PATCHING</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../../index-overview.html">Overview</a>
+                <li><a href="../../index-tutorials.html">Tutorials</a>
+                <li><a href="../../index-faq.html">FAQs</a>
+                <li><a href="../../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../../index-language.html">Language</a>
+                <li><a href="../../index-functions.html">Functions</a>
+                <li><a href="../../perlop.html">Operators</a>
+                <li><a href="../../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../../index-modules-A.html">Modules</a>
+                <li><a href="../../index-pragmas.html">Pragmas</a>
+                <li><a href="../../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../../index-licence.html">License</a>
+                <li><a href="../../index-internals.html">Internals</a>
+                <li><a href="../../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(2);
+  perldoc.pageName    = 'ExtUtils::MakeMaker::FAQ';
+  perldoc.pageAddress = 'ExtUtils/MakeMaker/FAQ.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

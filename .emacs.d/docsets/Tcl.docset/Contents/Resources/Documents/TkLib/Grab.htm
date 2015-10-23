@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_Grab manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> Grab</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="Grab.htm#M2" NAME="L402">NAME</A>
+<DL><DD>Tk_Grab, Tk_Ungrab &mdash; manipulate grab state in an application</DD></DL>
+<DD><A HREF="Grab.htm#M3" NAME="L403">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_Grab</B>(<I>interp, tkwin, grabGlobal</I>)
+<DD>void
+<DD><B>Tk_Ungrab</B>(<I>tkwin</I>)
+</DL>
+<DD><A HREF="Grab.htm#M4" NAME="L404">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Grab.htm#M5" NAME="L405">DESCRIPTION</A>
+<DD><A HREF="Grab.htm#M6" NAME="L406">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_Grab, Tk_Ungrab &mdash; manipulate grab state in an application
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_Grab</B>(<I>interp, tkwin, grabGlobal</I>)<BR>
+void<BR>
+<B>Tk_Ungrab</B>(<I>tkwin</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting
+<P><DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>tkwin</B> (in)<DD>
+Window on whose behalf the pointer is to be grabbed or released
+<P><DT>int <B>grabGlobal</B> (in)<DD>
+Boolean indicating whether the grab is global or application local
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These functions are used to set or release a global or
+application local grab.  When a grab is set on a particular window
+in a Tk application, mouse and keyboard events can only be received by
+that window and its descendants.  Mouse and keyboard events for
+windows outside the tree rooted at <I>tkwin</I> will be redirected to
+<I>tkwin</I>.  If the grab is global, then all mouse and keyboard
+events for windows outside the tree rooted at <I>tkwin</I> (even those
+intended for windows in other applications) will be redirected to
+<I>tkwin</I>.  If the grab is application local, only mouse and
+keyboard events intended for a windows within the same application
+(but outside the tree rooted at <I>tkwin</I>) will be redirected.
+<P>
+<B>Tk_Grab</B> sets a grab on a particular window.  <I>Tkwin</I>
+specifies the window on whose behalf the pointer is to be grabbed.
+<I>GrabGlobal</I> indicates whether the grab should be global or
+application local; if it is non-zero, it means the grab should be
+global.  Normally, <B>Tk_Grab</B> returns <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B>; if an error occurs
+and the grab cannot be set, <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned and an error message
+is left if <I>interp</I>'s result.  Once this call completes
+successfully, no window outside the tree rooted at <I>tkwin</I> will
+receive pointer- or keyboard-related events until the next call to
+Tk_Ungrab.  If a previous grab was in effect within the application,
+then it is replaced with a new one.
+<P>
+<B>Tk_Ungrab</B> releases a grab on the mouse pointer and keyboard, if
+there is one set on the window given by <I>tkwin</I>.  Once a grab is
+released, pointer and keyboard events will start being delivered to
+other windows again.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/G.htm#grab">grab</A>, <A href="../Keywords/W.htm#window">window</A>
+<div class="copy">Copyright &copy; 1998-2000 by Scriptics Corporation.
+</div>
+</BODY></HTML>

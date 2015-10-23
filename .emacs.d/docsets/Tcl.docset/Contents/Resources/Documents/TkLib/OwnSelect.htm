@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_OwnSelection manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> OwnSelect</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_OwnSelection &mdash; make a window the owner of the primary selection
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+<B>Tk_OwnSelection</B>(<I>tkwin, selection, proc, clientData</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>tkwin</B> (in)<DD>
+Window that is to become new selection owner.
+<P><DT>Atom <B><A HREF="../TkCmd/selection.htm">selection</A></B> (in)<DD>
+The name of the selection to be owned, such as XA_PRIMARY.
+<P><DT>Tk_LostSelProc <B>*proc</B> (in)<DD>
+Procedure to invoke when <I>tkwin</I> loses selection ownership later.
+<P><DT>ClientData <B>clientData</B> (in)<DD>
+Arbitrary one-word value to pass to <I>proc</I>.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_OwnSelection</B> arranges for <I>tkwin</I> to become the
+new owner of the selection specified by the atom
+<I>selection</I>.  After this call completes, future requests
+for the selection will be directed to handlers created for
+<I>tkwin</I> using <B><A HREF="../TkLib/CrtSelHdlr.htm">Tk_CreateSelHandler</A></B>.  When <I>tkwin</I>
+eventually loses the selection ownership, <I>proc</I> will be
+invoked so that the window can clean itself up (e.g. by
+unhighlighting the selection).  <I>Proc</I> should have arguments and
+result that match the type <B>Tk_LostSelProc</B>:
+<PRE>typedef void <B>Tk_LostSelProc</B>(
+        ClientData <I>clientData</I>);</PRE>
+The <I>clientData</I> parameter to <I>proc</I> is a copy of the
+<I>clientData</I> argument given to <B>Tk_OwnSelection</B>, and is
+usually a pointer to a data structure containing application-specific
+information about <I>tkwin</I>.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/O.htm#own">own</A>, <A href="../Keywords/S.htm#selection owner">selection owner</A>
+<div class="copy">Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

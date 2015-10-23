@@ -1,0 +1,70 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/grDevices/html/Japanese.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:32:04 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Japanese characters in R</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for Japanese {grDevices}"><tbody><tr><td>Japanese {grDevices}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Japanese characters in R</h2>
+
+<h3>Description</h3>
+
+<p>The implementation of Hershey vector fonts provides a large number of
+Japanese characters (Hiragana, Katakana, and Kanji).
+</p>
+
+
+<h3>Details</h3>
+
+<p>Without keyboard support for typing Japanese characters, the only way
+to produce these characters is to use special escape sequences: see
+<code><a href="Hershey.html">Hershey</a></code>.
+</p>
+<p>For example, the Hiragana character for the sound "ka" is produced
+by <span class="samp">\\#J242b</span> and the Katakana character for this sound is
+produced by <span class="samp">\\#J252b</span>.  The Kanji ideograph for "one" is
+produced by <span class="samp">\\#J306c</span> or <span class="samp">\\#N0001</span>.
+</p>
+<p>The output from <code><a href="../../utils/html/demo.html">demo</a>(Japanese)</code> shows tables of the escape
+sequences for the available Japanese characters.
+</p>
+
+
+<h3>References</h3>
+
+<p>http://www.gnu.org/software/plotutils/plotutils.html
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../utils/html/demo.html">demo</a>(Japanese)</code>, <code><a href="Hershey.html">Hershey</a></code>, <code><a href="../../graphics/html/text.html">text</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>require(graphics)
+
+plot(1:9, type = "n", axes = FALSE, frame = TRUE, ylab = "",
+     main = "example(Japanese)", xlab = "using Hershey fonts")
+par(cex = 3)
+Vf &lt;- c("serif", "plain")
+
+text(4, 2, "\\#J244b\\#J245b\\#J2473", vfont = Vf)
+text(4, 4, "\\#J2538\\#J2563\\#J2551\\#J2573", vfont = Vf)
+text(4, 6, "\\#J467c\\#J4b5c", vfont = Vf)
+text(4, 8, "Japan", vfont = Vf)
+par(cex = 1)
+text(8, 2, "Hiragana")
+text(8, 4, "Katakana")
+text(8, 6, "Kanji")
+text(8, 8, "English")
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>grDevices</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/grDevices/html/Japanese.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:32:04 GMT -->
+
+</body></html>

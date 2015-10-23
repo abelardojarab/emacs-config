@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>tdbc::mysql manual page - Tcl Database Connectivity</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">tdbc::mysql Package Commands, version 1.0.0</a> <small>&gt;</small> tdbc_mysql</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="tdbc_mysql.htm#M2" NAME="L2">NAME</A>
+<DL><DD>tdbc::mysql &mdash; TDBC-MYSQL bridge</DD></DL>
+<DD><A HREF="tdbc_mysql.htm#M3" NAME="L3">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="tdbc_mysql.htm#M4" NAME="L4">DESCRIPTION</A>
+<DD><A HREF="tdbc_mysql.htm#M5" NAME="L5">CONNECTION OPTIONS</A>
+<DL class="connection options">
+<DD><A HREF="tdbc_mysql.htm#M6" NAME="L6"><B>-host</B> <I>hostname</I></A>
+<DD><A HREF="tdbc_mysql.htm#M7" NAME="L7"><B>-port</B> <I>number</I></A>
+<DD><A HREF="tdbc_mysql.htm#M8" NAME="L8"><B>-socket</B> <I>path</I></A>
+<DD><A HREF="tdbc_mysql.htm#M9" NAME="L9"><B>-user</B> <I>name</I></A>
+<DD><A HREF="tdbc_mysql.htm#M10" NAME="L10"><B>-passwd</B> <I>password</I></A>
+<DD><A HREF="tdbc_mysql.htm#M11" NAME="L11"><B>-password</B> <I>password</I></A>
+<DD><A HREF="tdbc_mysql.htm#M12" NAME="L12"><B>-database</B> <I>name</I></A>
+<DD><A HREF="tdbc_mysql.htm#M13" NAME="L13"><B>-db</B> <I>name</I></A>
+<DD><A HREF="tdbc_mysql.htm#M14" NAME="L14"><B>-interactive</B> <I>flag</I></A>
+<DD><A HREF="tdbc_mysql.htm#M15" NAME="L15"><B>-ssl_ca</B> <I>string</I></A>
+<DD><A HREF="tdbc_mysql.htm#M16" NAME="L16"><B>-ssl_capath</B> <I>string</I></A>
+<DD><A HREF="tdbc_mysql.htm#M17" NAME="L17"><B>-ssl_cert</B> <I>string</I></A>
+<DD><A HREF="tdbc_mysql.htm#M18" NAME="L18"><B>-ssl_cipher</B> <I>string</I></A>
+<DD><A HREF="tdbc_mysql.htm#M19" NAME="L19"><B>-ssl_key</B> <I>string</I></A>
+</DL>
+<DD><A HREF="tdbc_mysql.htm#M20" NAME="L20">EXAMPLES</A>
+<DD><A HREF="tdbc_mysql.htm#M21" NAME="L21">ADDITIONAL CONNECTION METHODS</A>
+<DL class="additional connection methods">
+<DD><A HREF="tdbc_mysql.htm#M22" NAME="L22"><I>$connection</I> <B>evaldirect</B> <I>sqlStatement</I></A>
+</DL>
+<DD><A HREF="tdbc_mysql.htm#M23" NAME="L23">SEE ALSO</A>
+<DD><A HREF="tdbc_mysql.htm#M24" NAME="L24">KEYWORDS</A>
+<DD><A HREF="tdbc_mysql.htm#M25" NAME="L25">COPYRIGHT</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+tdbc::mysql &mdash; TDBC-MYSQL bridge
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+package require <B>tdbc::mysql 1.0</B><BR>
+<B>tdbc::mysql::connection create</B> <I>db</I> ?<I>-option value...</I>?<BR>
+<B>tdbc::mysql::connection new</B> ?<I>-option value...</I>?<BR>
+<B>tdbc::mysql::datasources</B> ?<B>-system</B>|<B>-user</B>?<BR>
+<B>tdbc::mysql::drivers</B><BR>
+<B>tdbc::mysql::datasource</B> <I>command</I> <I>driverName</I> ?<I>keyword</I>-<I>value</I>?...<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The <B>tdbc::mysql</B> driver provides a database interface that conforms
+to Tcl DataBase Connectivity (TDBC) and allows a Tcl script to connect
+to a MySQL database.
+<P>
+Connection to an MYSQL database is established by invoking
+<B>tdbc::mysql::connection create</B>, passing it the name to give the
+database handle and a set of <I>-option-value</I> pairs. The available
+options are enumerated under CONNECTION OPTIONS below.
+As an alternative, <B>tdbc::mysql::connection new</B> may be used to create
+a database connection with an automatically assigned name. The return value
+from <B>tdbc::mysql::connection new</B> is the name that was chosen for the
+connection handle.
+<P>
+The side effect of <B>tdbc::mysql::connection create</B> is to create a
+new database connection.. See <B>tdbc::connection(n)</B> for the
+details of how to use the connection to manipulate a database.
+<H3><A NAME="M5">CONNECTION OPTIONS</A></H3>
+The <B>tdbc::mysql::connection create</B> object command supports the
+<B>-encoding</B>, <B>-isolation</B>, <B>-readonly</B> and <B>-timeout</B>
+options common to all TDBC drivers. The <B>-encoding</B> option will
+always fail unless the encoding is <B>utf-8</B>; the database connection
+always uses UTF-8 encoding to be able to transfer arbitrary Unicode
+characters. The <B>-readonly</B> option must be <B>0</B>, because
+MySQL does not offer read-only connections. 
+<P>
+In addition, the following options are recognized:
+<P>
+<DL class="connection options">
+<DT><A NAME="M6"><B>-host</B> <I>hostname</I></A><DD>
+Connects to the host specified by <I>hostname</I>. This option must be
+set on the initial creation of the connection; it cannot be changed
+after connecting. Default is to connect to the local host.
+<P><DT><A NAME="M7"><B>-port</B> <I>number</I></A><DD>
+Connects to a MySQL server listening on the port specified by <I>number</I>.
+This option may not be changed after connecting. It is used only when
+<I>host</I> is specified and is not <B>localhost</B>.
+<P><DT><A NAME="M8"><B>-socket</B> <I>path</I></A><DD>
+Connects to a MySQL server listening on the Unix socket or named
+pipe specified by <I>path</I> . This option may not be changed after connecting.
+It is used only when <I>-host</I> is not specified or is <B>localhost</B>.
+<P><DT><A NAME="M9"><B>-user</B> <I>name</I></A><DD>
+Presents <I>name</I> as the user name to the MySQL server. Default is the
+current user ID.
+<P><DT><A NAME="M10"><B>-passwd</B> <I>password</I></A><DD>
+<P><DT><A NAME="M11"><B>-password</B> <I>password</I></A><DD>
+These two options are synonymous. They present the given <I>password</I> as 
+the user's password to the MySQL server. Default is not to present a password.
+<P><DT><A NAME="M12"><B>-database</B> <I>name</I></A><DD>
+<P><DT><A NAME="M13"><B>-db</B> <I>name</I></A><DD>
+These two options are synonymous.  They present the given <I>name</I> as the
+name of the default database to use in MySQL queries. If not specified,
+the default database for the current user is used.
+<P><DT><A NAME="M14"><B>-interactive</B> <I>flag</I></A><DD>
+The <I>flag</I> value must be a Boolean value. If it is <B>true</B> (or
+any equivalent), the default timeout is set for an interactive user,
+otherwise, the default timeout is set for a batch user. This option
+is meaningful only on initial connection. When using the <B>configure</B>
+method on a MySQL connection use the <B>-timeout</B> option to set the
+timeout desired.
+<P><DT><A NAME="M15"><B>-ssl_ca</B> <I>string</I></A><DD>
+<P><DT><A NAME="M16"><B>-ssl_capath</B> <I>string</I></A><DD>
+<P><DT><A NAME="M17"><B>-ssl_cert</B> <I>string</I></A><DD>
+<P><DT><A NAME="M18"><B>-ssl_cipher</B> <I>string</I></A><DD>
+<P><DT><A NAME="M19"><B>-ssl_key</B> <I>string</I></A><DD>
+These five options set the certificate authority, certificate authority
+search path, SSL certificate, transfer cipher, and SSL key to the
+given <I>string</I> arguments. These options may be specified only
+on initial connection to a database, not in the <B>configure</B> method
+of an existing connection. Default is not to use SSL.
+<P></DL>
+<H3><A NAME="M20">EXAMPLES</A></H3>
+<PRE>tdbc::mysql::connection -user joe -passwd sesame -db joes_database</PRE>
+Connects to the MySQL server on the local host using the default
+connection method, presenting user ID 'joe' and password 'sesame'.
+Uses 'joes_database' as the default database name.
+<H3><A NAME="M21">ADDITIONAL CONNECTION METHODS</A></H3>
+In addition to the usual methods on the tdbc::connection(n) object,
+connections to a MySQL database support one additional method:
+<P>
+<DL class="additional connection methods">
+<DT><A NAME="M22"><I>$connection</I> <B>evaldirect</B> <I>sqlStatement</I></A><DD>
+This method takes the given <I>sqlStatement</I> and interprets as
+MySQL native SQL code and evaluates it without preparing it. The
+statement may not contain variable substitutions. The result set
+is returned as a list of lists, with each sublist being the list
+of columns of a result row formatted as character strings. Note that
+the string formatting is done by MySQL and not by Tcl, so details
+like the appearance of floating point numbers may differ.
+<I>This command is not recommended</I> for anything where the usual
+<I>prepare</I> or <I>preparecall</I> methods work correctly. It is
+provided so that data management language statements that are
+not implemented in MySQL's prepared statement API, such as
+<B>CREATE DATABASE</B> or <B>CREATE PROCEDURE</B>, can be executed.
+<P></DL>
+<H3><A NAME="M23">SEE ALSO</A></H3>
+<B><A HREF="../TdbcCmd/tdbc.htm">tdbc</A></B>, <B><A HREF="../TdbcCmd/tdbc_connection.htm">tdbc::connection</A></B>, <B><A HREF="../TdbcCmd/tdbc_resultset.htm">tdbc::resultset</A></B>, <B><A HREF="../TdbcCmd/tdbc_statement.htm">tdbc::statement</A></B>
+<H3><A NAME="M24">KEYWORDS</A></H3>
+<A href="../Keywords/T.htm#TDBC">TDBC</A>, <A href="../Keywords/S.htm#SQL">SQL</A>, <A href="../Keywords/M.htm#MySQL">MySQL</A>, <A href="../Keywords/D.htm#database">database</A>, <A href="../Keywords/C.htm#connectivity">connectivity</A>, <A href="../Keywords/C.htm#connection">connection</A>
+<H3><A NAME="M25">COPYRIGHT</A></H3>
+Copyright (c) 2009 by Kevin B. Kenny.
+<div class="copy"></div>
+</BODY></HTML>

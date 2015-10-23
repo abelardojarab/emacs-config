@@ -1,0 +1,1002 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Net::FTP</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Net::FTP</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-N.html">Core modules (N)</a> &gt;
+      
+    
+    Net::FTP
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Net::FTP</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#OVERVIEW">OVERVIEW</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#METHODS">METHODS</a><ul><li><a href="#Methods-for-the-adventurous">Methods for the adventurous</a></ul><li><a href="#THE-dataconn-CLASS">THE dataconn CLASS</a><li><a href="#UNIMPLEMENTED">UNIMPLEMENTED</a><li><a href="#REPORTING-BUGS">REPORTING BUGS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#USE-EXAMPLES">USE EXAMPLES</a><li><a href="#CREDITS">CREDITS</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Net::FTP - FTP Client class</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Net::FTP</span><span class="sc">;</span></li><li></li><li>    <span class="i">$ftp</span> = <span class="w">Net::FTP</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&quot;some.host.name&quot;</span><span class="cm">,</span> <span class="w">Debug</span> <span class="cm">=&gt;</span> <span class="n">0</span><span class="s">)</span></li><li>      or <a class="l_k" href="../functions/die.html">die</a> <span class="q">&quot;Cannot connect to some.host.name: $@&quot;</span><span class="sc">;</span></li><li></li><li>    <span class="i">$ftp</span><span class="i">-&gt;login</span><span class="s">(</span><span class="q">&quot;anonymous&quot;</span><span class="cm">,</span><span class="q">&#39;-anonymous@&#39;</span><span class="s">)</span></li><li>      or <a class="l_k" href="../functions/die.html">die</a> <span class="q">&quot;Cannot login &quot;</span><span class="cm">,</span> <span class="i">$ftp</span><span class="i">-&gt;message</span><span class="sc">;</span></li><li></li><li>    <span class="i">$ftp</span><span class="i">-&gt;cwd</span><span class="s">(</span><span class="q">&quot;/pub&quot;</span><span class="s">)</span></li><li>      or <a class="l_k" href="../functions/die.html">die</a> <span class="q">&quot;Cannot change working directory &quot;</span><span class="cm">,</span> <span class="i">$ftp</span><span class="i">-&gt;message</span><span class="sc">;</span></li><li></li><li>    <span class="i">$ftp</span><span class="i">-&gt;get</span><span class="s">(</span><span class="q">&quot;that.file&quot;</span><span class="s">)</span></li><li>      or <a class="l_k" href="../functions/die.html">die</a> <span class="q">&quot;get failed &quot;</span><span class="cm">,</span> <span class="i">$ftp</span><span class="i">-&gt;message</span><span class="sc">;</span></li><li></li><li>    <span class="i">$ftp</span><span class="i">-&gt;quit</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p><code class="inline"><span class="w">Net::FTP</span></code>
+ is a class implementing a simple FTP client in Perl as
+described in RFC959.  It provides wrappers for a subset of the RFC959
+commands.</p>
+<p>The Net::FTP class is a subclass of Net::Cmd and IO::Socket::INET.</p>
+<a name="OVERVIEW"></a><h1>OVERVIEW</h1>
+<p>FTP stands for File Transfer Protocol.  It is a way of transferring
+files between networked machines.  The protocol defines a client
+(whose commands are provided by this module) and a server (not
+implemented in this module).  Communication is always initiated by the
+client, and the server responds with a message and a status code (and
+sometimes with data).</p>
+<p>The FTP protocol allows files to be sent to or fetched from the
+server.  Each transfer involves a <b>local file</b> (on the client) and a
+<b>remote file</b> (on the server).  In this module, the same file name
+will be used for both local and remote if only one is specified.  This
+means that transferring remote file <code class="inline">/path/to/file</code> will try to put
+that file in <code class="inline">/path/to/file</code> locally, unless you specify a local file
+name.</p>
+<p>The protocol also defines several standard <b>translations</b> which the
+file can undergo during transfer.  These are ASCII, EBCDIC, binary,
+and byte.  ASCII is the default type, and indicates that the sender of
+files will translate the ends of lines to a standard representation
+which the receiver will then translate back into their local
+representation.  EBCDIC indicates the file being transferred is in
+EBCDIC format.  Binary (also known as image) format sends the data as
+a contiguous bit stream.  Byte format transfers the data as bytes, the
+values of which remain the same regardless of differences in byte size
+between the two machines (in theory - in practice you should only use
+this if you really know what you're doing).  This class does not support
+the EBCDIC or byte formats, and will default to binary instead if they
+are attempted.</p>
+<a name="CONSTRUCTOR"></a><h1>CONSTRUCTOR</h1>
+<ul>
+<li><a name="new-(%5b-HOST-%5d-%5b%2c-OPTIONS-%5d)"></a><b>new ([ HOST ] [, OPTIONS ])</b>
+<p>This is the constructor for a new Net::FTP object. <code class="inline"><span class="w">HOST</span></code>
+ is the
+name of the remote host to which an FTP connection is required.</p>
+<p><code class="inline"><span class="w">HOST</span></code>
+ is optional. If <code class="inline"><span class="w">HOST</span></code>
+ is not given then it may instead be
+passed as the <code class="inline"><span class="w">Host</span></code>
+ option described below.</p>
+<p><code class="inline"><span class="w">OPTIONS</span></code>
+ are passed in a hash like fashion, using key and value pairs.
+Possible options are:</p>
+<p><b>Host</b> - FTP host to connect to. It may be a single scalar, as defined for
+the <code class="inline"><span class="w">PeerAddr</span></code>
+ option in <a href="../IO/Socket/INET.html">IO::Socket::INET</a>, or a reference to
+an array with hosts to try in turn. The <a href="#host">host</a> method will return the value
+which was used to connect to the host.</p>
+<p><b>Firewall</b> - The name of a machine which acts as an FTP firewall. This can be
+overridden by an environment variable <code class="inline"><span class="w">FTP_FIREWALL</span></code>
+. If specified, and the
+given host cannot be directly connected to, then the
+connection is made to the firewall machine and the string <code class="inline"><span class="i">@hostname</span></code>
+ is
+appended to the login identifier. This kind of setup is also referred to
+as an ftp proxy.</p>
+<p><b>FirewallType</b> - The type of firewall running on the machine indicated by
+<b>Firewall</b>. This can be overridden by an environment variable
+<code class="inline"><span class="w">FTP_FIREWALL_TYPE</span></code>
+. For a list of permissible types, see the description of
+ftp_firewall_type in <a href="../Net/Config.html">Net::Config</a>.</p>
+<p><b>BlockSize</b> - This is the block size that Net::FTP will use when doing
+transfers. (defaults to 10240)</p>
+<p><b>Port</b> - The port number to connect to on the remote machine for the
+FTP connection</p>
+<p><b>SSL</b> - If the connection should be done from start with SSL, contrary to later
+upgrade with <code class="inline"><span class="w">starttls</span></code>
+.</p>
+<p><b>SSL_*</b> - SSL arguments which will be applied when upgrading the control or
+data connection to SSL. You can use SSL arguments as documented in
+<a href="http://search.cpan.org/perldoc/IO::Socket::SSL">IO::Socket::SSL</a>, but it will usually use the right arguments already.</p>
+<p><b>Timeout</b> - Set a timeout value in seconds (defaults to 120)</p>
+<p><b>Debug</b> - debug level (see the debug method in <a href="../Net/Cmd.html">Net::Cmd</a>)</p>
+<p><b>Passive</b> - If set to a non-zero value then all data transfers will
+be done using passive mode. If set to zero then data transfers will be
+done using active mode.  If the machine is connected to the Internet
+directly, both passive and active mode should work equally well.
+Behind most firewall and NAT configurations passive mode has a better
+chance of working.  However, in some rare firewall configurations,
+active mode actually works when passive mode doesn't.  Some really old
+FTP servers might not implement passive transfers.  If not specified,
+then the transfer mode is set by the environment variable
+<code class="inline"><span class="w">FTP_PASSIVE</span></code>
+ or if that one is not set by the settings done by the
+<i>libnetcfg</i> utility.  If none of these apply then passive mode is
+used.</p>
+<p><b>Hash</b> - If given a reference to a file handle (e.g., <code class="inline">\<span class="i">*STDERR</span></code>
+),
+print hash marks (#) on that filehandle every 1024 bytes.  This
+simply invokes the <code class="inline"><span class="i">hash</span><span class="s">(</span><span class="s">)</span></code>
+ method for you, so that hash marks
+are displayed for all transfers.  You can, of course, call <code class="inline"><span class="i">hash</span><span class="s">(</span><span class="s">)</span></code>
+
+explicitly whenever you'd like.</p>
+<p><b>LocalAddr</b> - Local address to use for all socket connections, this
+argument will be passed to <a href="../IO/Socket/INET.html">IO::Socket::INET</a></p>
+<p>If the constructor fails undef will be returned and an error message will
+be in $@</p>
+</li>
+</ul>
+<a name="METHODS"></a><h1>METHODS</h1>
+<p>Unless otherwise stated all methods return either a <i>true</i> or <i>false</i>
+value, with <i>true</i> meaning that the operation was a success. When a method
+states that it returns a value, failure will be returned as <i>undef</i> or an
+empty list.</p>
+<p><code class="inline"><span class="w">Net::FTP</span></code>
+ inherits from <code class="inline"><span class="w">Net::Cmd</span></code>
+ so methods defined in <code class="inline"><span class="w">Net::Cmd</span></code>
+ may
+be used to send commands to the remote FTP server in addition to the methods
+documented here.</p>
+<ul>
+<li><a name="login-(%5bLOGIN-%5b%2cPASSWORD-%5b%2c-ACCOUNT%5d-%5d-%5d)"></a><b>login ([LOGIN [,PASSWORD [, ACCOUNT] ] ])</b>
+<p>Log into the remote FTP server with the given login information. If
+no arguments are given then the <code class="inline"><span class="w">Net::FTP</span></code>
+ uses the <code class="inline"><span class="w">Net::Netrc</span></code>
+
+package to lookup the login information for the connected host.
+If no information is found then a login of <i>anonymous</i> is used.
+If no password is given and the login is <i>anonymous</i> then <i>anonymous@</i>
+will be used for password.</p>
+<p>If the connection is via a firewall then the <code class="inline"><span class="w">authorize</span></code>
+ method will
+be called with no arguments.</p>
+</li>
+<li><a name="starttls-()"></a><b>starttls ()</b>
+<p>Upgrade existing plain connection to SSL.
+The SSL arguments have to be given in <code class="inline"><span class="w">new</span></code>
+ already because they are needed for
+data connections too.</p>
+</li>
+<li><a name="stoptls-()"></a><b>stoptls ()</b>
+<p>Downgrade existing SSL connection back to plain.
+This is needed to work with some FTP helpers at firewalls, which need to see the
+PORT and PASV commands and responses to dynamically open the necessary ports.
+In this case <code class="inline"><span class="w">starttls</span></code>
+ is usually only done to protect the authorization.</p>
+</li>
+<li><a name="prot-(-LEVEL-)"></a><b>prot ( LEVEL )</b>
+<p>Set what type of data channel protection the client and server will be using.
+Only <code class="inline"><span class="w">LEVEL</span></code>
+s "C" (clear) and "P" (private) are supported.</p>
+</li>
+<li><a name="host-()"></a><b>host ()</b>
+<p>Returns the value used by the constructor, and passed to IO::Socket::INET,
+to connect to the host.</p>
+</li>
+<li><a name="account(-ACCT-)"></a><b>account( ACCT )</b>
+<p>Set a string identifying the user's account.</p>
+</li>
+<li><a name="authorize-(-%5bAUTH-%5b%2c-RESP%5d%5d)"></a><b>authorize ( [AUTH [, RESP]])</b>
+<p>This is a protocol used by some firewall ftp proxies. It is used
+to authorise the user to send data out.  If both arguments are not specified
+then <code class="inline"><span class="w">authorize</span></code>
+ uses <code class="inline"><span class="w">Net::Netrc</span></code>
+ to do a lookup.</p>
+</li>
+<li><a name="site-(ARGS)"></a><b>site (ARGS)</b>
+<p>Send a SITE command to the remote server and wait for a response.</p>
+<p>Returns most significant digit of the response code.</p>
+</li>
+<li><a name="ascii-()"></a><b>ascii ()</b>
+<p>Transfer file in ASCII. CRLF translation will be done if required</p>
+</li>
+<li><a name="binary-()"></a><b>binary ()</b>
+<p>Transfer file in binary mode. No transformation will be done.</p>
+<p><b>Hint</b>: If both server and client machines use the same line ending for
+text files, then it will be faster to transfer all files in binary mode.</p>
+</li>
+<li><a name="type-(-%5b-TYPE-%5d-)"></a><b>type ( [ TYPE ] )</b>
+<p>Set or get if files will be transferred in ASCII or binary mode.</p>
+</li>
+<li><a name="rename-(-OLDNAME%2c-NEWNAME-)"></a><b>rename ( OLDNAME, NEWNAME )</b>
+<p>Rename a file on the remote FTP server from <code class="inline"><span class="w">OLDNAME</span></code>
+ to <code class="inline"><span class="w">NEWNAME</span></code>
+. This
+is done by sending the RNFR and RNTO commands.</p>
+</li>
+<li><a name="delete-(-FILENAME-)"></a><b>delete ( FILENAME )</b>
+<p>Send a request to the server to delete <code class="inline"><span class="w">FILENAME</span></code>
+.</p>
+</li>
+<li><a name="cwd-(-%5b-DIR-%5d-)"></a><b>cwd ( [ DIR ] )</b>
+<p>Attempt to change directory to the directory given in <code class="inline"><span class="i">$dir</span></code>
+.  If
+<code class="inline"><span class="i">$dir</span></code>
+ is <code class="inline"><span class="q">&quot;..&quot;</span></code>
+, the FTP <code class="inline"><span class="w">CDUP</span></code>
+ command is used to attempt to
+move up one directory. If no directory is given then an attempt is made
+to change the directory to the root directory.</p>
+</li>
+<li><a name="cdup-()"></a><b>cdup ()</b>
+<p>Change directory to the parent of the current directory.</p>
+</li>
+<li><a name="passive-(-%5b-PASSIVE-%5d-)"></a><b>passive ( [ PASSIVE ] )</b>
+<p>Set or get if data connections will be initiated in passive mode.</p>
+</li>
+<li><a name="pwd-()"></a><b>pwd ()</b>
+<p>Returns the full pathname of the current directory.</p>
+</li>
+<li><a name="restart-(-WHERE-)"></a><b>restart ( WHERE )</b>
+<p>Set the byte offset at which to begin the next data transfer. Net::FTP simply
+records this value and uses it when during the next data transfer. For this
+reason this method will not return an error, but setting it may cause
+a subsequent data transfer to fail.</p>
+</li>
+<li><a name="rmdir-(-DIR-%5b%2c-RECURSE-%5d)"></a><b>rmdir ( DIR [, RECURSE ])</b>
+<p>Remove the directory with the name <code class="inline"><span class="w">DIR</span></code>
+. If <code class="inline"><span class="w">RECURSE</span></code>
+ is <i>true</i> then
+<code class="inline"><a class="l_k" href="../functions/rmdir.html">rmdir</a></code> will attempt to delete everything inside the directory.</p>
+</li>
+<li><a name="mkdir-(-DIR-%5b%2c-RECURSE-%5d)"></a><b>mkdir ( DIR [, RECURSE ])</b>
+<p>Create a new directory with the name <code class="inline"><span class="w">DIR</span></code>
+. If <code class="inline"><span class="w">RECURSE</span></code>
+ is <i>true</i> then
+<code class="inline"><a class="l_k" href="../functions/mkdir.html">mkdir</a></code> will attempt to create all the directories in the given path.</p>
+<p>Returns the full pathname to the new directory.</p>
+</li>
+<li><a name="alloc-(-SIZE-%5b%2c-RECORD_SIZE%5d-)"></a><b>alloc ( SIZE [, RECORD_SIZE] )</b>
+<p>The alloc command allows you to give the ftp server a hint about the size
+of the file about to be transferred using the ALLO ftp command. Some storage
+systems use this to make intelligent decisions about how to store the file.
+The <code class="inline"><span class="w">SIZE</span></code>
+ argument represents the size of the file in bytes. The
+<code class="inline"><span class="w">RECORD_SIZE</span></code>
+ argument indicates a maximum record or page size for files
+sent with a record or page structure.</p>
+<p>The size of the file will be determined, and sent to the server
+automatically for normal files so that this method need only be called if
+you are transferring data from a socket, named pipe, or other stream not
+associated with a normal file.</p>
+</li>
+<li><a name="ls-(-%5b-DIR-%5d-)"></a><b>ls ( [ DIR ] )</b>
+<p>Get a directory listing of <code class="inline"><span class="w">DIR</span></code>
+, or the current directory.</p>
+<p>In an array context, returns a list of lines returned from the server. In
+a scalar context, returns a reference to a list.</p>
+</li>
+<li><a name="dir-(-%5b-DIR-%5d-)"></a><b>dir ( [ DIR ] )</b>
+<p>Get a directory listing of <code class="inline"><span class="w">DIR</span></code>
+, or the current directory in long format.</p>
+<p>In an array context, returns a list of lines returned from the server. In
+a scalar context, returns a reference to a list.</p>
+</li>
+<li><a name="get-(-REMOTE_FILE-%5b%2c-LOCAL_FILE-%5b%2c-WHERE%5d%5d-)"></a><b>get ( REMOTE_FILE [, LOCAL_FILE [, WHERE]] )</b>
+<p>Get <code class="inline"><span class="w">REMOTE_FILE</span></code>
+ from the server and store locally. <code class="inline"><span class="w">LOCAL_FILE</span></code>
+ may be
+a filename or a filehandle. If not specified, the file will be stored in
+the current directory with the same leafname as the remote file.</p>
+<p>If <code class="inline"><span class="w">WHERE</span></code>
+ is given then the first <code class="inline"><span class="w">WHERE</span></code>
+ bytes of the file will
+not be transferred, and the remaining bytes will be appended to
+the local file if it already exists.</p>
+<p>Returns <code class="inline"><span class="w">LOCAL_FILE</span></code>
+, or the generated local file name if <code class="inline"><span class="w">LOCAL_FILE</span></code>
+
+is not given. If an error was encountered undef is returned.</p>
+</li>
+<li><a name="put-(-LOCAL_FILE-%5b%2c-REMOTE_FILE-%5d-)"></a><b>put ( LOCAL_FILE [, REMOTE_FILE ] )</b>
+<p>Put a file on the remote server. <code class="inline"><span class="w">LOCAL_FILE</span></code>
+ may be a name or a filehandle.
+If <code class="inline"><span class="w">LOCAL_FILE</span></code>
+ is a filehandle then <code class="inline"><span class="w">REMOTE_FILE</span></code>
+ must be specified. If
+<code class="inline"><span class="w">REMOTE_FILE</span></code>
+ is not specified then the file will be stored in the current
+directory with the same leafname as <code class="inline"><span class="w">LOCAL_FILE</span></code>
+.</p>
+<p>Returns <code class="inline"><span class="w">REMOTE_FILE</span></code>
+, or the generated remote filename if <code class="inline"><span class="w">REMOTE_FILE</span></code>
+
+is not given.</p>
+<p><b>NOTE</b>: If for some reason the transfer does not complete and an error is
+returned then the contents that had been transferred will not be remove
+automatically.</p>
+</li>
+<li><a name="put_unique-(-LOCAL_FILE-%5b%2c-REMOTE_FILE-%5d-)"></a><b>put_unique ( LOCAL_FILE [, REMOTE_FILE ] )</b>
+<p>Same as put but uses the <code class="inline"><span class="w">STOU</span></code>
+ command.</p>
+<p>Returns the name of the file on the server.</p>
+</li>
+<li><a name="append-(-LOCAL_FILE-%5b%2c-REMOTE_FILE-%5d-)"></a><b>append ( LOCAL_FILE [, REMOTE_FILE ] )</b>
+<p>Same as put but appends to the file on the remote server.</p>
+<p>Returns <code class="inline"><span class="w">REMOTE_FILE</span></code>
+, or the generated remote filename if <code class="inline"><span class="w">REMOTE_FILE</span></code>
+
+is not given.</p>
+</li>
+<li><a name="unique_name-()"></a><b>unique_name ()</b>
+<p>Returns the name of the last file stored on the server using the
+<code class="inline"><span class="w">STOU</span></code>
+ command.</p>
+</li>
+<li><a name="mdtm-(-FILE-)"></a><b>mdtm ( FILE )</b>
+<p>Returns the <i>modification time</i> of the given file</p>
+</li>
+<li><a name="size-(-FILE-)"></a><b>size ( FILE )</b>
+<p>Returns the size in bytes for the given file as stored on the remote server.</p>
+<p><b>NOTE</b>: The size reported is the size of the stored file on the remote server.
+If the file is subsequently transferred from the server in ASCII mode
+and the remote server and local machine have different ideas about
+"End Of Line" then the size of file on the local machine after transfer
+may be different.</p>
+</li>
+<li><a name="supported-(-CMD-)"></a><b>supported ( CMD )</b>
+<p>Returns TRUE if the remote server supports the given command.</p>
+</li>
+<li><a name="hash-(-%5bFILEHANDLE_GLOB_REF%5d%2c%5b-BYTES_PER_HASH_MARK%5d-)"></a><b>hash ( [FILEHANDLE_GLOB_REF],[ BYTES_PER_HASH_MARK] )</b>
+<p>Called without parameters, or with the first argument false, hash marks
+are suppressed.  If the first argument is true but not a reference to a 
+file handle glob, then \*STDERR is used.  The second argument is the number
+of bytes per hash mark printed, and defaults to 1024.  In all cases the
+return value is a reference to an array of two:  the filehandle glob reference
+and the bytes per hash mark.</p>
+</li>
+<li><a name="feature-(-NAME-)"></a><b>feature ( NAME )</b>
+<p>Determine if the server supports the specified feature. The return
+value is a list of lines the server responded with to describe the
+options that it supports for the given feature. If the feature is
+unsupported then the empty list is returned.</p>
+<pre class="verbatim"><ol><li>  if <span class="s">(</span><span class="i">$ftp</span><span class="i">-&gt;feature</span><span class="s">(</span> <span class="q">&#39;MDTM&#39;</span> <span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>    <span class="c"># Do something</span></li><li>  <span class="s">}</span></li><li></li><li>  if <span class="s">(</span><a class="l_k" href="../functions/grep.html">grep</a> <span class="s">{</span> <span class="q">/\bTLS\b/</span> <span class="s">}</span> <span class="i">$ftp</span><span class="i">-&gt;feature</span><span class="s">(</span><span class="q">&#39;AUTH&#39;</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>    <span class="c"># Server supports TLS</span></li><li>  <span class="s">}</span></li></ol></pre></li>
+</ul>
+<p>The following methods can return different results depending on
+how they are called. If the user explicitly calls either
+of the <code class="inline"><span class="w">pasv</span></code>
+ or <code class="inline"><span class="w">port</span></code>
+ methods then these methods will
+return a <i>true</i> or <i>false</i> value. If the user does not
+call either of these methods then the result will be a
+reference to a <code class="inline"><span class="w">Net::FTP::dataconn</span></code>
+ based object.</p>
+<ul>
+<li><a name="nlst-(-%5b-DIR-%5d-)"></a><b>nlst ( [ DIR ] )</b>
+<p>Send an <code class="inline"><span class="w">NLST</span></code>
+ command to the server, with an optional parameter.</p>
+</li>
+<li><a name="list-(-%5b-DIR-%5d-)"></a><b>list ( [ DIR ] )</b>
+<p>Same as <code class="inline"><span class="w">nlst</span></code>
+ but using the <code class="inline"><span class="w">LIST</span></code>
+ command</p>
+</li>
+<li><a name="retr-(-FILE-)"></a><b>retr ( FILE )</b>
+<p>Begin the retrieval of a file called <code class="inline"><span class="w">FILE</span></code>
+ from the remote server.</p>
+</li>
+<li><a name="stor-(-FILE-)"></a><b>stor ( FILE )</b>
+<p>Tell the server that you wish to store a file. <code class="inline"><span class="w">FILE</span></code>
+ is the
+name of the new file that should be created.</p>
+</li>
+<li><a name="stou-(-FILE-)"></a><b>stou ( FILE )</b>
+<p>Same as <code class="inline"><span class="w">stor</span></code>
+ but using the <code class="inline"><span class="w">STOU</span></code>
+ command. The name of the unique
+file which was created on the server will be available via the <code class="inline"><span class="w">unique_name</span></code>
+
+method after the data connection has been closed.</p>
+</li>
+<li><a name="appe-(-FILE-)"></a><b>appe ( FILE )</b>
+<p>Tell the server that we want to append some data to the end of a file
+called <code class="inline"><span class="w">FILE</span></code>
+. If this file does not exist then create it.</p>
+</li>
+</ul>
+<p>If for some reason you want to have complete control over the data connection,
+this includes generating it and calling the <code class="inline"><span class="w">response</span></code>
+ method when required,
+then the user can use these methods to do so.</p>
+<p>However calling these methods only affects the use of the methods above that
+can return a data connection. They have no effect on methods <code class="inline"><span class="w">get</span></code>
+, <code class="inline"><span class="w">put</span></code>
+,
+<code class="inline"><span class="w">put_unique</span></code>
+ and those that do not require data connections.</p>
+<ul>
+<li><a name="port-(-%5b-PORT-%5d-)-%3ditem-eprt-(-%5b-PORT-%5d-)"></a><b>port ( [ PORT ] )
+=item eprt ( [ PORT ] )</b>
+<p>Send a <code class="inline"><span class="w">PORT</span></code>
+ (IPv4) or <code class="inline"><span class="w">EPRT</span></code>
+ (IPv6) command to the server. If <code class="inline"><span class="w">PORT</span></code>
+ is
+specified then it is sent to the server. If not, then a listen socket is created
+and the correct information sent to the server.</p>
+</li>
+<li><a name="pasv-()-%3ditem-epsv-()"></a><b>pasv ()
+=item epsv ()</b>
+<p>Tell the server to go into passive mode (<code class="inline"><span class="w">pasv</span></code>
+ for IPv4, <code class="inline"><span class="w">epsv</span></code>
+ for IPv6).
+Returns the text that represents the port on which the server is listening, this
+text is in a suitable form to send to another ftp server using the <code class="inline"><span class="w">port</span></code>
+ or
+<code class="inline"><span class="w">eprt</span></code>
+ method.</p>
+</li>
+</ul>
+<p>The following methods can be used to transfer files between two remote
+servers, providing that these two servers can connect directly to each other.</p>
+<ul>
+<li><a name="pasv_xfer-(-SRC_FILE%2c-DEST_SERVER-%5b%2c-DEST_FILE-%5d-)"></a><b>pasv_xfer ( SRC_FILE, DEST_SERVER [, DEST_FILE ] )</b>
+<p>This method will do a file transfer between two remote ftp servers. If
+<code class="inline"><span class="w">DEST_FILE</span></code>
+ is omitted then the leaf name of <code class="inline"><span class="w">SRC_FILE</span></code>
+ will be used.</p>
+</li>
+<li><a name="pasv_xfer_unique-(-SRC_FILE%2c-DEST_SERVER-%5b%2c-DEST_FILE-%5d-)"></a><b>pasv_xfer_unique ( SRC_FILE, DEST_SERVER [, DEST_FILE ] )</b>
+<p>Like <code class="inline"><span class="w">pasv_xfer</span></code>
+ but the file is stored on the remote server using
+the STOU command.</p>
+</li>
+<li><a name="pasv_wait-(-NON_PASV_SERVER-)"></a><b>pasv_wait ( NON_PASV_SERVER )</b>
+<p>This method can be used to wait for a transfer to complete between a passive
+server and a non-passive server. The method should be called on the passive
+server with the <code class="inline"><span class="w">Net::FTP</span></code>
+ object for the non-passive server passed as an
+argument.</p>
+</li>
+<li><a name="abort-()"></a><b>abort ()</b>
+<p>Abort the current data transfer.</p>
+</li>
+<li><a name="quit-()"></a><b>quit ()</b>
+<p>Send the QUIT command to the remote FTP server and close the socket connection.</p>
+</li>
+</ul>
+<a name="Methods-for-the-adventurous"></a><h2>Methods for the adventurous</h2>
+<ul>
+<li><a name="quot-(CMD-%5b%2cARGS%5d)"></a><b>quot (CMD [,ARGS])</b>
+<p>Send a command, that Net::FTP does not directly support, to the remote
+server and wait for a response.</p>
+<p>Returns most significant digit of the response code.</p>
+<p><b>WARNING</b> This call should only be used on commands that do not require
+data connections. Misuse of this method can hang the connection.</p>
+</li>
+<li><a name="can_inet6-()"></a><b>can_inet6 ()</b>
+<p>Returns whether we can use IPv6.</p>
+</li>
+<li><a name="can_ssl-()"></a><b>can_ssl ()</b>
+<p>Returns whether we can use SSL.</p>
+</li>
+</ul>
+<a name="THE-dataconn-CLASS"></a><h1>THE dataconn CLASS</h1>
+<p>Some of the methods defined in <code class="inline"><span class="w">Net::FTP</span></code>
+ return an object which will
+be derived from the <code class="inline"><span class="w">Net::FTP::dataconn</span></code>
+ class. See <a href="../Net/FTP/dataconn.html">Net::FTP::dataconn</a> for
+more details.</p>
+<a name="UNIMPLEMENTED"></a><h1>UNIMPLEMENTED</h1>
+<p>The following RFC959 commands have not been implemented:</p>
+<ul>
+<li><a name="*SMNT*"></a><b><b>SMNT</b></b>
+<p>Mount a different file system structure without changing login or
+accounting information.</p>
+</li>
+<li><a name="*HELP*"></a><b><b>HELP</b></b>
+<p>Ask the server for "helpful information" (that's what the RFC says) on
+the commands it accepts.</p>
+</li>
+<li><a name="*MODE*"></a><b><b>MODE</b></b>
+<p>Specifies transfer mode (stream, block or compressed) for file to be
+transferred.</p>
+</li>
+<li><a name="*SYST*"></a><b><b>SYST</b></b>
+<p>Request remote server system identification.</p>
+</li>
+<li><a name="*STAT*"></a><b><b>STAT</b></b>
+<p>Request remote server status.</p>
+</li>
+<li><a name="*STRU*"></a><b><b>STRU</b></b>
+<p>Specifies file structure for file to be transferred.</p>
+</li>
+<li><a name="*REIN*"></a><b><b>REIN</b></b>
+<p>Reinitialize the connection, flushing all I/O and account information.</p>
+</li>
+</ul>
+<a name="REPORTING-BUGS"></a><h1>REPORTING BUGS</h1>
+<p>When reporting bugs/problems please include as much information as possible.
+It may be difficult for me to reproduce the problem as almost every setup
+is different.</p>
+<p>A small script which yields the problem will probably be of help. It would
+also be useful if this script was run with the extra options <code class="inline"><span class="w">Debug</span> =</code>
+ 1&gt;
+passed to the constructor, and the output sent with the bug report. If you
+cannot include a small script then please include a Debug trace from a
+run of your program which does yield the problem.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Graham Barr &lt;<i>gbarr@pobox.com</i>&gt;</p>
+<p>Steve Hay &lt;<i>shay@cpan.org</i>&gt; is now maintaining libnet as of version
+1.22_02</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../Net/Netrc.html">Net::Netrc</a>,
+<a href="../Net/Cmd.html">Net::Cmd</a>,
+<a href="http://search.cpan.org/perldoc/IO::Socket::SSL">IO::Socket::SSL</a></p>
+<p>ftp(1), ftpd(8), RFC 959, RFC 2428, RFC 4217
+<a href="http://www.ietf.org/rfc/rfc959.txt">http://www.ietf.org/rfc/rfc959.txt</a>
+<a href="http://www.ietf.org/rfc/rfc2428.txt">http://www.ietf.org/rfc/rfc2428.txt</a>
+<a href="http://www.ietf.org/rfc/rfc4217.txt">http://www.ietf.org/rfc/rfc4217.txt</a></p>
+<a name="USE-EXAMPLES"></a><h1>USE EXAMPLES</h1>
+<p>For an example of the use of Net::FTP see</p>
+<ul>
+<li><a name="http%3a%2f%2fwww.csh.rit.edu%2f~adam%2fProgs%2f"></a><b><a href="http://www.csh.rit.edu/~adam/Progs/">http://www.csh.rit.edu/~adam/Progs/</a></b>
+<p><code class="inline"><span class="w">autoftp</span></code>
+ is a program that can retrieve, send, or list files via
+the FTP protocol in a non-interactive manner.</p>
+</li>
+</ul>
+<a name="CREDITS"></a><h1>CREDITS</h1>
+<p>Henry Gabryjelski &lt;henryg@WPI.EDU&gt; - for the suggestion of creating directories
+recursively.</p>
+<p>Nathan Torkington &lt;gnat@frii.com&gt; - for some input on the documentation.</p>
+<p>Roderick Schertler &lt;roderick@gate.net&gt; - for various inputs</p>
+<a name="COPYRIGHT"></a><h1>COPYRIGHT</h1>
+<p>Versions up to 2.77_2 Copyright (c) 1995-2004 Graham Barr. All rights reserved.
+Changes in Version 2.77_3 onwards Copyright (C) 2013-2014 Steve Hay.  All rights
+reserved.</p>
+<p>This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#OVERVIEW">OVERVIEW</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#METHODS">METHODS</a><ul><li><a href="#Methods-for-the-adventurous">Methods for the adventurous</a></ul><li><a href="#THE-dataconn-CLASS">THE dataconn CLASS</a><li><a href="#UNIMPLEMENTED">UNIMPLEMENTED</a><li><a href="#REPORTING-BUGS">REPORTING BUGS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#USE-EXAMPLES">USE EXAMPLES</a><li><a href="#CREDITS">CREDITS</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Net::FTP';
+  perldoc.pageAddress = 'Net/FTP.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

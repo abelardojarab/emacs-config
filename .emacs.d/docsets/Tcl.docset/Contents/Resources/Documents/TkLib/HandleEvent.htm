@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_HandleEvent manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> HandleEvent</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_HandleEvent &mdash; invoke event handlers for window system events
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+<B>Tk_HandleEvent</B>(<I>eventPtr</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT>XEvent <B>*eventPtr</B> (in)<DD>
+Pointer to X event to dispatch to relevant handler(s). It is important
+that all unused fields of the structure be set to zero.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_HandleEvent</B> is a lower-level procedure that deals with window
+events.  It is called by <B><A HREF="../TclLib/Notifier.htm">Tcl_ServiceEvent</A></B> (and indirectly by
+<B>Tk_DoOneEvent</B>), and in a few other cases within Tk.
+It makes callbacks to any window event
+handlers (created by calls to <B><A HREF="../TkLib/EventHndlr.htm">Tk_CreateEventHandler</A></B>)
+that match <I>eventPtr</I> and then returns.  In some cases
+it may be useful for an application to bypass the Tk event
+queue and call <B>Tk_HandleEvent</B> directly instead of
+calling <B><A HREF="../TclLib/Notifier.htm">Tcl_QueueEvent</A></B> followed by
+<B><A HREF="../TclLib/Notifier.htm">Tcl_ServiceEvent</A></B>.
+<P>
+This procedure may be invoked recursively.  For example,
+it is possible to invoke <B>Tk_HandleEvent</B> recursively
+from a handler called by <B>Tk_HandleEvent</B>.  This sort
+of operation is useful in some modal situations, such
+as when a
+notifier has been popped up and an application wishes to
+wait for the user to click a button in the notifier before
+doing anything else.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#callback">callback</A>, <A href="../Keywords/E.htm#event">event</A>, <A href="../Keywords/H.htm#handler">handler</A>, <A href="../Keywords/W.htm#window">window</A>
+<div class="copy">Copyright &copy; 1990-1992 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

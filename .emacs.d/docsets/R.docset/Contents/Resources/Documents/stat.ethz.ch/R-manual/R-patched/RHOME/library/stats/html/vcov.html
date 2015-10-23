@@ -1,0 +1,78 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/stats/html/vcov.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:33:00 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Calculate Variance-Covariance Matrix for a Fitted Model...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for vcov {stats}"><tbody><tr><td>vcov {stats}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>
+Calculate Variance-Covariance Matrix for a Fitted Model Object
+</h2>
+
+<h3>Description</h3>
+
+<p>Returns the variance-covariance matrix of the main parameters of
+a fitted model object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>vcov(object, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>object</code></td>
+<td>
+
+<p>a fitted model object, typically.  Sometimes also a
+<code><a href="../../base/html/summary.html">summary</a>()</code> object of such a fitted model.
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+
+<p>additional arguments for method functions.  For the
+<code><a href="glm.html">glm</a></code> method this can be used to pass a
+<code>dispersion</code> parameter.
+</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p>This is a generic function.
+Functions with names beginning in <code>vcov.</code> will be
+methods for this function.
+Classes with methods for this function include:
+<code>lm</code>, <code>mlm</code>, <code>glm</code>, <code>nls</code>,
+<code>summary.lm</code>, <code>summary.glm</code>,
+<code>negbin</code>, <code>polr</code>, <code>rlm</code> (in package MASS),
+<code>multinom</code> (in package nnet)
+<code>gls</code>, <code>lme</code> (in package nlme),
+<code>coxph</code> and <code>survreg</code> (in package survival).
+</p>
+<p>(<code>vcov()</code> methods for summary objects allow more
+efficient and still encapsulated access when both
+<code>summary(mod)</code> and <code>vcov(mod)</code> are needed.)
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix of the estimated covariances between the parameter estimates
+in the linear or non-linear predictor of the model.  This should have
+row and column names corresponding to the parameter names given by the
+<code><a href="coef.html">coef</a></code> method.
+</p>
+
+<hr><div style="text-align: center;">[Package <em>stats</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/stats/html/vcov.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:33:00 GMT -->
+
+</body></html>

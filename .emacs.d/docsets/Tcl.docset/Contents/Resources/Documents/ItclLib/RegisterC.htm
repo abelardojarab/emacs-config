@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Itcl_RegisterC manual page - [incr Tcl] Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">[incr Tcl] Package C API, version 4.0.0</a> <small>&gt;</small> RegisterC</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Itcl_RegisterC, Itcl_RegisterObjC, Itcl_FindC &mdash; Associate a symbolic name with a C procedure.
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;itcl.h&gt;</B><BR>
+<BR>
+int<BR>
+<B>Itcl_RegisterC</B>(<I>interp, cmdName, argProc, clientData, deleteProc</I>)<BR>
+<BR>
+int<BR>
+<B>Itcl_RegisterObjC</B>(<I>interp, cmdName, objProc, clientData, deleteProc</I>)<BR>
+<BR>
+int<BR>
+<B>Itcl_FindC</B>(<I>interp, cmdName, argProcPtr, objProcPtr, cDataPtr</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter in which to create new command.
+<P><DT>CONST char <B>*cmdName</B> (in)<DD>
+Name of command.
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CmdProc</A> <B>*argProc</B> (in)<DD>
+Implementation of new command:  <I>argProc</I> will be called whenever
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CmdProc</A> <B>**argProcPtr</B> (in/out)<DD>
+The <A HREF="../TclLib/CrtObjCmd.htm">Tcl_CmdProc</A> * to receive the pointer.
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_ObjCmdProc</A> <B>*objProc</B> (in)<DD>
+Implementation of the new command: <I>objProc</I> will be called whenever
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_ObjCmdProc</A> <B>**objProcPtr</B> (in/out)<DD>
+The <A HREF="../TclLib/CrtObjCmd.htm">Tcl_ObjCmdProc</A> * to receive the pointer.
+<P><DT>ClientData <B>clientData</B> (in)<DD>
+Arbitrary one-word value to pass to <I>proc</I> and <I>deleteProc</I>.
+<P><DT>ClientData <B>*cDataPtr</B> (in/out)<DD>
+The ClientData to receive the pointer.
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CmdDeleteProc</A> <B>*deleteProc</B> (in)<DD>
+Procedure to call before <I>cmdName</I> is deleted from the interpreter;
+allows for command-specific cleanup.  If NULL, then no procedure is
+called before the command is deleted.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+Used to associate a symbolic name with an (argc,argv) C procedure
+that handles a Tcl command.  Procedures that are registered in this
+manner can be referenced in the body of an [incr Tcl] class
+definition to specify C procedures to acting as methods/procs.
+Usually invoked in an initialization routine for an extension,
+called out in <A HREF="../TclLib/AppInit.htm">Tcl_AppInit</A>() at the start of an application.
+<P>
+Each symbolic procedure can have an arbitrary client data value
+associated with it.  This value is passed into the command
+handler whenever it is invoked.
+<P>
+A symbolic procedure name can be used only once for a given style
+(arg/obj) handler.  If the name is defined with an arg-style
+handler, it can be redefined with an obj-style handler; or if
+the name is defined with an obj-style handler, it can be redefined
+with an arg-style handler.  In either case, any previous client
+data is discarded and the new client data is remembered.  However,
+if a name is redefined to a different handler of the same style,
+this procedure returns an error.
+<P>
+Returns TCL_OK on success, or TCL_ERROR (along with an error message
+in interp-&gt;result) if anything goes wrong.
+<P>
+C procedures can be integrated into an <B>[incr&nbsp;Tcl]</B> class
+definition to implement methods, procs, and the &quot;config&quot; code
+for public variables.  Any body that starts with &quot;<B>@</B>&quot;
+is treated as the symbolic name for a C procedure.
+<P>
+Symbolic names are established by registering procedures via
+<B>Itcl_RegisterC()</B>.  This is usually done in the <B><A HREF="../TclLib/AppInit.htm">Tcl_AppInit()</A></B>
+procedure, which is automatically called when the interpreter starts up.
+In the following example, the procedure <TT>My_FooCmd()</TT> is registered
+with the symbolic name &quot;foo&quot;.  This procedure can be referenced in
+the <B>body</B> command as &quot;<TT>@foo</TT>&quot;.
+<PRE>int
+<A HREF="../TclLib/AppInit.htm">Tcl_AppInit</A>(interp)
+    <A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *interp;     /* Interpreter for application. */
+{
+    if (Itcl_Init(interp) == TCL_ERROR) {
+        return TCL_ERROR;
+    }
+
+    if (Itcl_RegisterC(interp, &quot;foo&quot;, My_FooCmd) != TCL_OK) {
+        return TCL_ERROR;
+    }
+}</PRE>
+C procedures are implemented just like ordinary Tcl commands.
+See the <B>CrtCommand</B> man page for details.  Within the procedure,
+class data members can be accessed like ordinary variables
+using <B><A HREF="../TclLib/SetVar.htm">Tcl_SetVar()</A></B>, <B><A HREF="../TclLib/SetVar.htm">Tcl_GetVar()</A></B>, <B><A HREF="../TclLib/TraceVar.htm">Tcl_TraceVar()</A></B>,
+etc.  Class methods and procs can be executed like ordinary commands
+using <B><A HREF="../TclLib/Eval.htm">Tcl_Eval()</A></B>.  <B>[incr&nbsp;Tcl]</B> makes this possible by
+automatically setting up the context before executing the C procedure.
+<P>
+This scheme provides a natural migration path for code development.
+Classes can be developed quickly using Tcl code to implement the
+bodies.  An entire application can be built and tested.  When
+necessary, individual bodies can be implemented with C code to
+improve performance.
+<P>
+See the Archetype class in <B>[incr&nbsp;Tk]</B> for an example of how this
+C linking method is used.
+
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TclLib/CrtCommand.htm">Tcl_CreateCommand</A></B>, <B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CreateObjCommand</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#class">class</A>, <A href="../Keywords/O.htm#object">object</A>
+<div class="copy">Copyright &copy; 1993-1998 Lucent Technologies, Inc.
+</div>
+</BODY></HTML>

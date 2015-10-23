@@ -1,0 +1,596 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Module::Load</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Module::Load</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-M.html">Core modules (M)</a> &gt;
+      
+    
+    Module::Load
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Module::Load</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Difference-between-load-and-autoload">Difference between load and autoload</a></ul><li><a href="#FUNCTIONS">FUNCTIONS</a><li><a href="#Rules">Rules</a><li><a href="#IMPORTS-THE-FUNCTIONS">IMPORTS THE FUNCTIONS</a><li><a href="#Caveats">Caveats</a><li><a href="#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a><li><a href="#BUG-REPORTS">BUG REPORTS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Module::Load - runtime require of both modules and files</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$module</span> = <span class="q">&#39;Data::Dumper&#39;</span><span class="sc">;</span></li><li></li><li>  <span class="w">load</span> <span class="w">Data::Dumper</span><span class="sc">;</span>     <span class="c"># loads that module, but not import any functions</span></li><li>                         <span class="c"># -&gt; cannot use &#39;Dumper&#39; function</span></li><li></li><li>  <span class="w">load</span> <span class="q">&#39;Data::Dumper&#39;</span><span class="sc">;</span>   <span class="c"># ditto</span></li><li>  <span class="w">load</span> <span class="i">$module</span>           <span class="c"># tritto</span></li><li></li><li>  <span class="w">autoload</span> <span class="w">Data::Dumper</span><span class="sc">;</span> <span class="c"># loads that module and imports the default functions</span></li><li>                         <span class="c"># -&gt; can use &#39;Dumper&#39; function</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$script</span> = <span class="q">&#39;some/script.pl&#39;</span></li><li>  <span class="w">load</span> <span class="i">$script</span><span class="sc">;</span></li><li>  <span class="w">load</span> <span class="q">&#39;some/script.pl&#39;</span><span class="sc">;</span>  <span class="c"># use quotes because of punctuations</span></li><li></li><li>  <span class="w">load</span> <span class="w">thing</span><span class="sc">;</span>             <span class="c"># try &#39;thing&#39; first, then &#39;thing.pm&#39;</span></li><li></li><li>  <span class="w">load</span> <span class="w">CGI</span><span class="cm">,</span> <span class="q">&#39;:all&#39;</span><span class="sc">;</span>       <span class="c"># like &#39;use CGI qw[:standard]&#39;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p><code class="inline"><span class="w">Module::Load</span></code>
+ eliminates the need to know whether you are trying
+to require either a file or a module.</p>
+<p>If you consult <code class="inline"><span class="w">perldoc</span> -f <a class="l_k" href="../functions/require.html">require</a></code>
+ you will see that <code class="inline"><a class="l_k" href="../functions/require.html">require</a></code> will
+behave differently when given a bareword or a string.</p>
+<p>In the case of a string, <code class="inline"><a class="l_k" href="../functions/require.html">require</a></code> assumes you are wanting to load a
+file. But in the case of a bareword, it assumes you mean a module.</p>
+<p>This gives nasty overhead when you are trying to dynamically require
+modules at runtime, since you will need to change the module notation
+(<code class="inline"><span class="w">Acme::Comment</span></code>
+) to a file notation fitting the particular platform
+you are on.</p>
+<p><code class="inline"><span class="w">Module::Load</span></code>
+ eliminates the need for this overhead and will
+just DWYM.</p>
+<a name="Difference-between-load-and-autoload"></a><h2>Difference between <code class="inline"><span class="w">load</span></code>
+ and <code class="inline"><span class="w">autoload</span></code>
+</h2>
+<p><code class="inline"><span class="w">Module::Load</span></code>
+ imports the two functions - <code class="inline"><span class="w">load</span></code>
+ and <code class="inline"><span class="w">autoload</span></code>
+</p>
+<p><code class="inline"><span class="w">autoload</span></code>
+ imports the default functions automatically,
+but <code class="inline"><span class="w">load</span></code>
+ do not import any functions.</p>
+<p><code class="inline"><span class="w">autoload</span></code>
+ is usable under <code class="inline"><a class="l_k" href="../functions/BEGIN.html">BEGIN{};</a></code>.</p>
+<p>Both the functions can import the functions that are specified.</p>
+<p>Following codes are same.</p>
+<pre class="verbatim"><ol><li>  <span class="w">load</span> <span class="w">File::Spec::Functions</span><span class="cm">,</span> <span class="q">qw/splitpath/</span><span class="sc">;</span></li><li></li><li>  <span class="w">autoload</span> <span class="w">File::Spec::Functions</span><span class="cm">,</span> <span class="q">qw/splitpath/</span><span class="sc">;</span></li></ol></pre><a name="FUNCTIONS"></a><h1>FUNCTIONS</h1>
+<ul>
+<li><a name="load"></a><b>load</b>
+<p>Loads a specified module.</p>
+<p>See <a href="#Rules">Rules</a> for detailed loading rule.</p>
+</li>
+<li><a name="autoload"></a><b>autoload</b>
+<p>Loads a specified module and imports the default functions.</p>
+<p>Except importing the functions, 'autoload' is same as 'load'.</p>
+</li>
+<li><a name="load_remote"></a><b>load_remote</b>
+<p>Loads a specified module to the specified package.</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span> <span class="q">&#39;load_remote&#39;</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$pkg</span> = <span class="q">&#39;Other::Package&#39;</span><span class="sc">;</span></li><li></li><li>  <span class="w">load_remote</span> <span class="i">$pkg</span><span class="cm">,</span> <span class="q">&#39;Data::Dumper&#39;</span><span class="sc">;</span> <span class="c"># load a module to &#39;Other::Package&#39;</span></li><li>                                    <span class="c"># but do not import &#39;Dumper&#39; function</span></li></ol></pre><p>A module for loading must be quoted.</p>
+<p>Except specifing the package and quoting module name,
+'load_remote' is same as 'load'.</p>
+</li>
+<li><a name="autoload_remote"></a><b>autoload_remote</b>
+<p>Loads a specified module and imports the default functions to the specified package.</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span> <span class="q">&#39;autoload_remote&#39;</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$pkg</span> = <span class="q">&#39;Other::Package&#39;</span><span class="sc">;</span></li><li></li><li>  <span class="w">autoload_remote</span> <span class="i">$pkg</span><span class="cm">,</span> <span class="q">&#39;Data::Dumper&#39;</span><span class="sc">;</span> <span class="c"># load a module to &#39;Other::Package&#39;</span></li><li>                                        <span class="c"># and imports &#39;Dumper&#39; function</span></li></ol></pre><p>A module for loading must be quoted.</p>
+<p>Except specifing the package and quoting module name,
+'autoload_remote' is same as 'load_remote'.</p>
+</li>
+</ul>
+<a name="Rules"></a><h1>Rules</h1>
+<p>All functions have the following rules to decide what it thinks
+you want:</p>
+<ul>
+<li>
+<p>If the argument has any characters in it other than those matching
+<code class="inline">\<span class="w">w</span></code>
+, <code class="inline"><span class="j">:</span></code>
+ or <code class="inline">'</code>, it must be a file</p>
+</li>
+<li>
+<p>If the argument matches only <code class="inline">[\w:']</code>, it must be a module</p>
+</li>
+<li>
+<p>If the argument matches only <code class="inline">\<span class="w">w</span></code>
+, it could either be a module or a
+file. We will try to find <code class="inline"><span class="w">file</span>.<span class="w">pm</span></code>
+ first in <code class="inline"><span class="i">@INC</span></code>
+ and if that
+fails, we will try to find <code class="inline"><span class="w">file</span></code>
+ in @INC.  If both fail, we die with
+the respective error messages.</p>
+</li>
+</ul>
+<a name="IMPORTS-THE-FUNCTIONS"></a><h1>IMPORTS THE FUNCTIONS</h1>
+<p>'load' and 'autoload' are imported by default, but 'load_remote' and
+'autoload_remote' are not imported.</p>
+<p>To use 'load_remote' or 'autoload_remote', specify at 'use'.</p>
+<ul>
+<li><a name="%22load%22%2c%22autoload%22%2c%22load_remote%22%2c%22autoload_remote%22"></a><b>"load","autoload","load_remote","autoload_remote"</b>
+<p>Imports the selected functions.</p>
+<pre class="verbatim"><ol><li>  <span class="c"># imports &#39;load&#39; and &#39;autoload&#39; (default)</span></li><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span><span class="sc">;</span></li><li></li><li>  <span class="c"># imports &#39;autoload&#39; only</span></li><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span> <span class="q">&#39;autoload&#39;</span><span class="sc">;</span></li><li></li><li>  <span class="c"># imports &#39;autoload&#39; and &#39;autoload_remote&#39;, but don&#39;t import &#39;load&#39;;</span></li><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span> <span class="q">qw/autoload autoload_remote/</span><span class="sc">;</span></li></ol></pre></li>
+<li><a name="'all'"></a><b>'all'</b>
+<p>Imports all the functions.</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span> <span class="q">&#39;all&#39;</span><span class="sc">;</span> <span class="c"># imports load, autoload, load_remote, autoload_remote</span></li></ol></pre></li>
+<li><a name="''%2c'none'%2cundef"></a><b>'','none',undef</b>
+<p>Not import any functions (<code class="inline"><span class="w">load</span></code>
+ and <code class="inline"><span class="w">autoload</span></code>
+ are not imported).</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span> <span class="q">&#39;&#39;</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span> <span class="q">&#39;none&#39;</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Module::Load</span> <a class="l_k" href="../functions/undef.html">undef</a><span class="sc">;</span></li></ol></pre></li>
+</ul>
+<a name="Caveats"></a><h1>Caveats</h1>
+<p>Because of a bug in perl (#19213), at least in version 5.6.1, we have
+to hardcode the path separator for a require on Win32 to be <code class="inline">/</code>, like
+on Unix rather than the Win32 <code class="inline">\</code>
+. Otherwise perl will not read its
+own %INC accurately double load files if they are required again, or
+in the worst case, core dump.</p>
+<p><code class="inline"><span class="w">Module::Load</span></code>
+ cannot do implicit imports, only explicit imports.
+(in other words, you always have to specify explicitly what you wish
+to import from a module, even if the functions are in that modules'
+<code class="inline"><span class="i">@EXPORT</span></code>
+)</p>
+<a name="ACKNOWLEDGEMENTS"></a><h1>ACKNOWLEDGEMENTS</h1>
+<p>Thanks to Jonas B. Nielsen for making explicit imports work.</p>
+<a name="BUG-REPORTS"></a><h1>BUG REPORTS</h1>
+<p>Please report bugs or other issues to &lt;bug-module-load@rt.cpan.org&lt;gt&gt;.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>This module by Jos Boumans &lt;kane@cpan.org&gt;.</p>
+<a name="COPYRIGHT"></a><h1>COPYRIGHT</h1>
+<p>This library is free software; you may redistribute and/or modify it
+under the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Difference-between-load-and-autoload">Difference between load and autoload</a></ul><li><a href="#FUNCTIONS">FUNCTIONS</a><li><a href="#Rules">Rules</a><li><a href="#IMPORTS-THE-FUNCTIONS">IMPORTS THE FUNCTIONS</a><li><a href="#Caveats">Caveats</a><li><a href="#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a><li><a href="#BUG-REPORTS">BUG REPORTS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Module::Load';
+  perldoc.pageAddress = 'Module/Load.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

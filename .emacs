@@ -94,6 +94,9 @@
 ;; Setup Org and LaTeX
 (require 'setup-org)
 
+;; Setup web support
+(require 'setup-web)
+
 ;; Setup regular expressions
 (require 'setup-regexp)
 

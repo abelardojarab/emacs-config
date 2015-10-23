@@ -1,0 +1,1374 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Getopt::Long</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Getopt::Long</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-G.html">Core modules (G)</a> &gt;
+      
+    
+    Getopt::Long
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Getopt::Long</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#Command-Line-Options%2c-an-Introduction">Command Line Options, an Introduction</a><li><a href="#Getting-Started-with-Getopt%3a%3aLong">Getting Started with Getopt::Long</a><ul><li><a href="#Simple-options">Simple options</a><li><a href="#A-little-bit-less-simple-options">A little bit less simple options</a><li><a href="#Mixing-command-line-option-with-other-arguments">Mixing command line option with other arguments</a><li><a href="#Options-with-values">Options with values</a><li><a href="#Options-with-multiple-values">Options with multiple values</a><li><a href="#Options-with-hash-values">Options with hash values</a><li><a href="#User-defined-subroutines-to-handle-options">User-defined subroutines to handle options</a><li><a href="#Options-with-multiple-names">Options with multiple names</a><li><a href="#Case-and-abbreviations">Case and abbreviations</a><li><a href="#Summary-of-Option-Specifications">Summary of Option Specifications</a></ul><li><a href="#Advanced-Possibilities">Advanced Possibilities</a><ul><li><a href="#Object-oriented-interface">Object oriented interface</a><li><a href="#Thread-Safety">Thread Safety</a><li><a href="#Documentation-and-help-texts">Documentation and help texts</a><li><a href="#Parsing-options-from-an-arbitrary-array">Parsing options from an arbitrary array</a><li><a href="#Parsing-options-from-an-arbitrary-string">Parsing options from an arbitrary string</a><li><a href="#Storing-options-values-in-a-hash">Storing options values in a hash</a><li><a href="#Bundling">Bundling</a><li><a href="#The-lonesome-dash">The lonesome dash</a><li><a href="#Argument-callback">Argument callback</a></ul><li><a href="#Configuring-Getopt%3a%3aLong">Configuring Getopt::Long</a><li><a href="#Exportable-Methods">Exportable Methods</a><li><a href="#Return-values-and-Errors">Return values and Errors</a><li><a href="#Legacy">Legacy</a><ul><li><a href="#Default-destinations">Default destinations</a><li><a href="#Alternative-option-starters">Alternative option starters</a><li><a href="#Configuration-variables">Configuration variables</a></ul><li><a href="#Tips-and-Techniques">Tips and Techniques</a><ul><li><a href="#Pushing-multiple-values-in-a-hash-option">Pushing multiple values in a hash option</a></ul><li><a href="#Troubleshooting">Troubleshooting</a><ul><li><a href="#GetOptions-does-not-return-a-false-result-when-an-option-is-not-supplied">GetOptions does not return a false result when an option is not supplied</a><li><a href="#GetOptions-does-not-split-the-command-line-correctly">GetOptions does not split the command line correctly</a><li><a href="#Undefined-subroutine-%26main%3a%3aGetOptions-called">Undefined subroutine &main::GetOptions called</a><li><a href="#How-do-I-put-a-%22-%3f%22-option-into-a-Getopt%3a%3aLong%3f">How do I put a "-?" option into a Getopt::Long?</a></ul><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT-AND-DISCLAIMER">COPYRIGHT AND DISCLAIMER</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Getopt::Long - Extended processing of command line options</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Getopt::Long</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$data</span>   = <span class="q">&quot;file.dat&quot;</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$length</span> = <span class="n">24</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$verbose</span><span class="sc">;</span></li><li>  <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&quot;length=i&quot;</span> <span class="cm">=&gt;</span> \<span class="i">$length</span><span class="cm">,</span>    <span class="c"># numeric</span></li><li>              <span class="q">&quot;file=s&quot;</span>   <span class="cm">=&gt;</span> \<span class="i">$data</span><span class="cm">,</span>      <span class="c"># string</span></li><li>              <span class="q">&quot;verbose&quot;</span>  <span class="cm">=&gt;</span> \<span class="i">$verbose</span><span class="s">)</span>   <span class="c"># flag</span></li><li>  <a class="l_k" href="../functions/or.html">or</a> <a class="l_k" href="../functions/die.html">die</a><span class="s">(</span><span class="q">&quot;Error in command line arguments\n&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>The Getopt::Long module implements an extended getopt function called
+GetOptions(). It parses the command line from <code class="inline"><span class="i">@ARGV</span></code>
+, recognizing
+and removing specified options and their possible values.</p>
+<p>This function adheres to the POSIX syntax for command
+line options, with GNU extensions. In general, this means that options
+have long names instead of single letters, and are introduced with a
+double dash "--". Support for bundling of command line options, as was
+the case with the more traditional single-letter approach, is provided
+but not enabled by default.</p>
+<a name="Command-Line-Options%2c-an-Introduction"></a><h1>Command Line Options, an Introduction</h1>
+<p>Command line operated programs traditionally take their arguments from
+the command line, for example filenames or other information that the
+program needs to know. Besides arguments, these programs often take
+command line <i>options</i> as well. Options are not necessary for the
+program to work, hence the name 'option', but are used to modify its
+default behaviour. For example, a program could do its job quietly,
+but with a suitable option it could provide verbose information about
+what it did.</p>
+<p>Command line options come in several flavours. Historically, they are
+preceded by a single dash <code class="inline">-</code>
+, and consist of a single letter.</p>
+<pre class="verbatim"><ol><li>    -l -<span class="w">a</span> -c</li></ol></pre><p>Usually, these single-character options can be bundled:</p>
+<pre class="verbatim"><ol><li>    -<span class="w">lac</span></li></ol></pre><p>Options can have values, the value is placed after the option
+character. Sometimes with whitespace in between, sometimes not:</p>
+<pre class="verbatim"><ol><li>    -s <span class="n">24</span> -<span class="w">s24</span></li></ol></pre><p>Due to the very cryptic nature of these options, another style was
+developed that used long names. So instead of a cryptic <code class="inline">-l</code>
+ one
+could use the more descriptive <code class="inline">--<span class="w">long</span></code>
+. To distinguish between a
+bundle of single-character options and a long one, two dashes are used
+to precede the option name. Early implementations of long options used
+a plus <code class="inline">+</code>
+ instead. Also, option values could be specified either
+like</p>
+<pre class="verbatim"><ol><li>    --<span class="w">size</span>=<span class="n">24</span></li></ol></pre><p>or</p>
+<pre class="verbatim"><ol><li>    --<span class="w">size</span> <span class="n">24</span></li></ol></pre><p>The <code class="inline">+</code>
+ form is now obsolete and strongly deprecated.</p>
+<a name="Getting-Started-with-Getopt%3a%3aLong"></a><h1>Getting Started with Getopt::Long</h1>
+<p>Getopt::Long is the Perl5 successor of <code class="inline"><span class="w">newgetopt</span>.<span class="w">pl</span></code>
+. This was the
+first Perl module that provided support for handling the new style of
+command line options, in particular long option names, hence the Perl5
+name Getopt::Long. This module also supports single-character options
+and bundling.</p>
+<p>To use Getopt::Long from a Perl program, you must include the
+following line in your Perl program:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Getopt::Long</span><span class="sc">;</span></li></ol></pre><p>This will load the core of the Getopt::Long module and prepare your
+program for using it. Most of the actual Getopt::Long code is not
+loaded until you really call one of its functions.</p>
+<p>In the default configuration, options names may be abbreviated to
+uniqueness, case does not matter, and a single dash is sufficient,
+even for long option names. Also, options may be placed between
+non-option arguments. See <a href="#Configuring-Getopt%3a%3aLong">Configuring Getopt::Long</a> for more
+details on how to configure Getopt::Long.</p>
+<a name="Simple-options"></a><h2>Simple options</h2>
+<p>The most simple options are the ones that take no values. Their mere
+presence on the command line enables the option. Popular examples are:</p>
+<pre class="verbatim"><ol><li>    --all --verbose --quiet --debug</li></ol></pre><p>Handling simple options is straightforward:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$verbose</span> = <span class="q">&#39;&#39;</span><span class="sc">;</span>	<span class="c"># option variable with default value (false)</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$all</span> = <span class="q">&#39;&#39;</span><span class="sc">;</span>	<span class="c"># option variable with default value (false)</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;verbose&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$verbose</span><span class="cm">,</span> <span class="q">&#39;all&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$all</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>The call to GetOptions() parses the command line arguments that are
+present in <code class="inline"><span class="i">@ARGV</span></code>
+ and sets the option variable to the value <code class="inline"><span class="n">1</span></code>
+ if
+the option did occur on the command line. Otherwise, the option
+variable is not touched. Setting the option value to true is often
+called <i>enabling</i> the option.</p>
+<p>The option name as specified to the GetOptions() function is called
+the option <i>specification</i>. Later we'll see that this specification
+can contain more than just the option name. The reference to the
+variable is called the option <i>destination</i>.</p>
+<p>GetOptions() will return a true value if the command line could be
+processed successfully. Otherwise, it will write error messages using
+die() and warn(), and return a false result.</p>
+<a name="A-little-bit-less-simple-options"></a><h2>A little bit less simple options</h2>
+<p>Getopt::Long supports two useful variants of simple options:
+<i>negatable</i> options and <i>incremental</i> options.</p>
+<p>A negatable option is specified with an exclamation mark <code class="inline">!</code>
+ after the
+option name:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$verbose</span> = <span class="q">&#39;&#39;</span><span class="sc">;</span>	<span class="c"># option variable with default value (false)</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;verbose!&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$verbose</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Now, using <code class="inline">--<span class="w">verbose</span></code>
+ on the command line will enable <code class="inline"><span class="i">$verbose</span></code>
+,
+as expected. But it is also allowed to use <code class="inline">--<span class="w">noverbose</span></code>
+, which will
+disable <code class="inline"><span class="i">$verbose</span></code>
+ by setting its value to <code class="inline"><span class="n">0</span></code>
+. Using a suitable
+default value, the program can find out whether <code class="inline"><span class="i">$verbose</span></code>
+ is false
+by default, or disabled by using <code class="inline">--<span class="w">noverbose</span></code>
+.</p>
+<p>An incremental option is specified with a plus <code class="inline">+</code>
+ after the
+option name:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$verbose</span> = <span class="q">&#39;&#39;</span><span class="sc">;</span>	<span class="c"># option variable with default value (false)</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;verbose+&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$verbose</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Using <code class="inline">--<span class="w">verbose</span></code>
+ on the command line will increment the value of
+<code class="inline"><span class="i">$verbose</span></code>
+. This way the program can keep track of how many times the
+option occurred on the command line. For example, each occurrence of
+<code class="inline">--<span class="w">verbose</span></code>
+ could increase the verbosity level of the program.</p>
+<a name="Mixing-command-line-option-with-other-arguments"></a><h2>Mixing command line option with other arguments</h2>
+<p>Usually programs take command line options as well as other arguments,
+for example, file names. It is good practice to always specify the
+options first, and the other arguments last. Getopt::Long will,
+however, allow the options and arguments to be mixed and 'filter out'
+all the options before passing the rest of the arguments to the
+program. To stop Getopt::Long from processing further arguments,
+insert a double dash <code class="inline">--</code>
+ on the command line:</p>
+<pre class="verbatim"><ol><li>    --size 24 -- --all</li></ol></pre><p>In this example, <code class="inline">--<span class="w">all</span></code>
+ will <i>not</i> be treated as an option, but
+passed to the program unharmed, in <code class="inline"><span class="i">@ARGV</span></code>
+.</p>
+<a name="Options-with-values"></a><h2>Options with values</h2>
+<p>For options that take values it must be specified whether the option
+value is required or not, and what kind of value the option expects.</p>
+<p>Three kinds of values are supported: integer numbers, floating point
+numbers, and strings.</p>
+<p>If the option value is required, Getopt::Long will take the
+command line argument that follows the option and assign this to the
+option variable. If, however, the option value is specified as
+optional, this will only be done if that value does not look like a
+valid command line option itself.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$tag</span> = <span class="q">&#39;&#39;</span><span class="sc">;</span>	<span class="c"># option variable with default value</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;tag=s&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$tag</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>In the option specification, the option name is followed by an equals
+sign <code class="inline">=</code>
+ and the letter <code class="inline"><a class="l_k" href="../functions/s.html">s</a></code>. The equals sign indicates that this
+option requires a value. The letter <code class="inline"><a class="l_k" href="../functions/s.html">s</a></code> indicates that this value is
+an arbitrary string. Other possible value types are <code class="inline"><span class="w">i</span></code>
+ for integer
+values, and <code class="inline"><span class="w">f</span></code>
+ for floating point values. Using a colon <code class="inline"><span class="j">:</span></code>
+ instead
+of the equals sign indicates that the option value is optional. In
+this case, if no suitable value is supplied, string valued options get
+an empty string <code class="inline"><span class="q">&#39;&#39;</span></code>
+ assigned, while numeric options are set to <code class="inline"><span class="n">0</span></code>
+.</p>
+<a name="Options-with-multiple-values"></a><h2>Options with multiple values</h2>
+<p>Options sometimes take several values. For example, a program could
+use multiple directories to search for library files:</p>
+<pre class="verbatim"><ol><li>    --library lib/stdlib --library lib/extlib</li></ol></pre><p>To accomplish this behaviour, simply specify an array reference as the
+destination for the option:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&quot;library=s&quot;</span> <span class="cm">=&gt;</span> \<span class="i">@libfiles</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Alternatively, you can specify that the option can have multiple
+values by adding a "@", and pass a scalar reference as the
+destination:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&quot;library=s@&quot;</span> <span class="cm">=&gt;</span> \<span class="i">$libfiles</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Used with the example above, <code class="inline"><span class="i">@libfiles</span></code>
+ (or <code class="inline"><span class="i">@$libfiles</span></code>
+) would
+contain two strings upon completion: <code class="inline"><span class="q">&quot;lib/stdlib&quot;</span></code>
+ and
+<code class="inline"><span class="q">&quot;lib/extlib&quot;</span></code>
+, in that order. It is also possible to specify that
+only integer or floating point numbers are acceptable values.</p>
+<p>Often it is useful to allow comma-separated lists of values as well as
+multiple occurrences of the options. This is easy using Perl's split()
+and join() operators:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&quot;library=s&quot;</span> <span class="cm">=&gt;</span> \<span class="i">@libfiles</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">@libfiles</span> = <a class="l_k" href="../functions/split.html">split</a><span class="s">(</span><span class="q">/,/</span><span class="cm">,</span><a class="l_k" href="../functions/join.html">join</a><span class="s">(</span><span class="q">&#39;,&#39;</span><span class="cm">,</span><span class="i">@libfiles</span><span class="s">)</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Of course, it is important to choose the right separator string for
+each purpose.</p>
+<p>Warning: What follows is an experimental feature.</p>
+<p>Options can take multiple values at once, for example</p>
+<pre class="verbatim"><ol><li>    --coordinates 52.2 16.4 --rgbcolor 255 255 149</li></ol></pre><p>This can be accomplished by adding a repeat specifier to the option
+specification. Repeat specifiers are very similar to the <code class="inline"><span class="s">{</span>...<span class="s">}</span></code>
+
+repeat specifiers that can be used with regular expression patterns.
+For example, the above command line would be handled as follows:</p>
+<pre class="verbatim"><ol><li>    <span class="i">GetOptions</span><span class="s">(</span><span class="q">&#39;coordinates=f{2}&#39;</span> <span class="cm">=&gt;</span> \<span class="i">@coor</span><span class="cm">,</span> <span class="q">&#39;rgbcolor=i{3}&#39;</span> <span class="cm">=&gt;</span> \<span class="i">@color</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>The destination for the option must be an array or array reference.</p>
+<p>It is also possible to specify the minimal and maximal number of
+arguments an option takes. <code class="inline">foo=s{2,4}</code> indicates an option that
+takes at least two and at most 4 arguments. <code class="inline"><span class="w">foo</span>=<span class="q">s{1,}</span></code>
+ indicates one
+or more values; <code class="inline">foo:s{,}</code> indicates zero or more option values.</p>
+<a name="Options-with-hash-values"></a><h2>Options with hash values</h2>
+<p>If the option destination is a reference to a hash, the option will
+take, as value, strings of the form <i>key</i><code class="inline">=</code>
+<i>value</i>. The value will
+be stored with the specified key in the hash.</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&quot;define=s&quot;</span> <span class="cm">=&gt;</span> \<span class="i">%defines</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Alternatively you can use:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&quot;define=s%&quot;</span> <span class="cm">=&gt;</span> \<span class="i">$defines</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>When used with command line options:</p>
+<pre class="verbatim"><ol><li>    --define os=linux --define vendor=redhat</li></ol></pre><p>the hash <code class="inline"><span class="i">%defines</span></code>
+ (or <code class="inline"><span class="i">%$defines</span></code>
+) will contain two keys, <code class="inline"><span class="q">&quot;os&quot;</span></code>
+
+with value <code class="inline"><span class="q">&quot;linux&quot;</span></code>
+ and <code class="inline"><span class="q">&quot;vendor&quot;</span></code>
+ with value <code class="inline"><span class="q">&quot;redhat&quot;</span></code>
+. It is
+also possible to specify that only integer or floating point numbers
+are acceptable values. The keys are always taken to be strings.</p>
+<a name="User-defined-subroutines-to-handle-options"></a><h2>User-defined subroutines to handle options</h2>
+<p>Ultimate control over what should be done when (actually: each time)
+an option is encountered on the command line can be achieved by
+designating a reference to a subroutine (or an anonymous subroutine)
+as the option destination. When GetOptions() encounters the option, it
+will call the subroutine with two or three arguments. The first
+argument is the name of the option. (Actually, it is an object that
+stringifies to the name of the option.) For a scalar or array destination,
+the second argument is the value to be stored. For a hash destination,
+the second argument is the key to the hash, and the third argument
+the value to be stored. It is up to the subroutine to store the value,
+or do whatever it thinks is appropriate.</p>
+<p>A trivial application of this mechanism is to implement options that
+are related to each other. For example:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$verbose</span> = <span class="q">&#39;&#39;</span><span class="sc">;</span>	<span class="c"># option variable with default value (false)</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;verbose&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$verbose</span><span class="cm">,</span></li><li>	        <span class="q">&#39;quiet&#39;</span>   <span class="cm">=&gt;</span> <a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span> <span class="i">$verbose</span> = <span class="n">0</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Here <code class="inline">--<span class="w">verbose</span></code>
+ and <code class="inline">--<span class="w">quiet</span></code>
+ control the same variable
+<code class="inline"><span class="i">$verbose</span></code>
+, but with opposite values.</p>
+<p>If the subroutine needs to signal an error, it should call die() with
+the desired error message as its argument. GetOptions() will catch the
+die(), issue the error message, and record that an error result must
+be returned upon completion.</p>
+<p>If the text of the error message starts with an exclamation mark <code class="inline">!</code>
+
+it is interpreted specially by GetOptions(). There is currently one
+special command implemented: <code class="inline"><a class="l_k" href="../functions/die.html">die("!FINISH")</a></code> will cause GetOptions()
+to stop processing options, as if it encountered a double dash <code class="inline">--</code>
+.</p>
+<p>In version 2.37 the first argument to the callback function was
+changed from string to object. This was done to make room for
+extensions and more detailed control. The object stringifies to the
+option name so this change should not introduce compatibility
+problems.</p>
+<p>Here is an example of how to access the option name and value from within
+a subroutine:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;opt=i&#39;</span> <span class="cm">=&gt;</span> \<span class="i">&amp;handler</span><span class="s">)</span><span class="sc">;</span></li><li><a name="handler"></a>    sub <span class="m">handler</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$opt_name</span><span class="cm">,</span> <span class="i">$opt_value</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><span class="q">&quot;Option name is $opt_name and value is $opt_value\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">}</span></li></ol></pre><a name="Options-with-multiple-names"></a><h2>Options with multiple names</h2>
+<p>Often it is user friendly to supply alternate mnemonic names for
+options. For example <code class="inline">--<span class="w">height</span></code>
+ could be an alternate name for
+<code class="inline">--<a class="l_k" href="../functions/length.html">length</a></code>
+. Alternate names can be included in the option
+specification, separated by vertical bar <code class="inline">|</code> characters. To implement
+the above example:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;length|height=f&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$length</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>The first name is called the <i>primary</i> name, the other names are
+called <i>aliases</i>. When using a hash to store options, the key will
+always be the primary name.</p>
+<p>Multiple alternate names are possible.</p>
+<a name="Case-and-abbreviations"></a><h2>Case and abbreviations</h2>
+<p>Without additional configuration, GetOptions() will ignore the case of
+option names, and allow the options to be abbreviated to uniqueness.</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;length|height=f&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$length</span><span class="cm">,</span> <span class="q">&quot;head&quot;</span> <span class="cm">=&gt;</span> \<span class="i">$head</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This call will allow <code class="inline">--<span class="w">l</span></code>
+ and <code class="inline">--<span class="w">L</span></code>
+ for the length option, but
+requires a least <code class="inline">--<span class="w">hea</span></code>
+ and <code class="inline">--<span class="w">hei</span></code>
+ for the head and height options.</p>
+<a name="Summary-of-Option-Specifications"></a><h2>Summary of Option Specifications</h2>
+<p>Each option specifier consists of two parts: the name specification
+and the argument specification.</p>
+<p>The name specification contains the name of the option, optionally
+followed by a list of alternative names separated by vertical bar
+characters.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/length.html">length</a>	      <span class="w">option</span> <span class="w">name</span> <span class="w">is</span> <span class="q">&quot;length&quot;</span></li><li>    <a class="l_k" href="../functions/length.html">length</a>|<span class="w">size</span>|<span class="w">l</span>     <span class="w">name</span> <span class="w">is</span> <span class="q">&quot;length&quot;</span><span class="cm">,</span> <span class="w">aliases</span> <span class="w">are</span> <span class="q">&quot;size&quot;</span> and <span class="q">&quot;l&quot;</span></li></ol></pre><p>The argument specification is optional. If omitted, the option is
+considered boolean, a value of 1 will be assigned when the option is
+used on the command line.</p>
+<p>The argument specification can be</p>
+<ul>
+<li><a name="!"></a><b>!</b>
+<p>The option does not take an argument and may be negated by prefixing
+it with "no" or "no-". E.g. <code class="inline"><span class="q">&quot;foo!&quot;</span></code>
+ will allow <code class="inline">--<span class="w">foo</span></code>
+ (a value of
+1 will be assigned) as well as <code class="inline">--<span class="w">nofoo</span></code>
+ and <code class="inline">--<a class="l_k" href="../functions/no.html">no</a>-<span class="w">foo</span></code>
+ (a value of
+0 will be assigned). If the option has aliases, this applies to the
+aliases as well.</p>
+<p>Using negation on a single letter option when bundling is in effect is
+pointless and will result in a warning.</p>
+</li>
+<li><a name="%2b"></a><b>+</b>
+<p>The option does not take an argument and will be incremented by 1
+every time it appears on the command line. E.g. <code class="inline"><span class="q">&quot;more+&quot;</span></code>
+, when used
+with <code class="inline">--more --more --more</code>, will increment the value three times,
+resulting in a value of 3 (provided it was 0 or undefined at first).</p>
+<p>The <code class="inline">+</code>
+ specifier is ignored if the option destination is not a scalar.</p>
+</li>
+<li><a name="%3d-_type_-%5b-_desttype_-%5d-%5b-_repeat_-%5d"></a><b>= <i>type</i> [ <i>desttype</i> ] [ <i>repeat</i> ]</b>
+<p>The option requires an argument of the given type. Supported types
+are:</p>
+<ul>
+<li><a name="s"></a><b>s</b>
+<p>String. An arbitrary sequence of characters. It is valid for the
+argument to start with <code class="inline">-</code>
+ or <code class="inline">--</code>
+.</p>
+</li>
+<li><a name="i"></a><b>i</b>
+<p>Integer. An optional leading plus or minus sign, followed by a
+sequence of digits.</p>
+</li>
+<li><a name="o"></a><b>o</b>
+<p>Extended integer, Perl style. This can be either an optional leading
+plus or minus sign, followed by a sequence of digits, or an octal
+string (a zero, optionally followed by '0', '1', .. '7'), or a
+hexadecimal string (<code class="inline"><span class="n">0</span>x</code>
+ followed by '0' .. '9', 'a' .. 'f', case
+insensitive), or a binary string (<code class="inline">0b</code> followed by a series of '0'
+and '1').</p>
+</li>
+<li><a name="f"></a><b>f</b>
+<p>Real number. For example <code class="inline"><span class="n">3.14</span></code>
+, <code class="inline"><span class="n">-6.23E24</span></code>
+ and so on.</p>
+</li>
+</ul>
+<p>The <i>desttype</i> can be <code class="inline"><span class="i">@</span></code>
+ or <code class="inline"><span class="i">%</span></code>
+ to specify that the option is
+list or a hash valued. This is only needed when the destination for
+the option value is not otherwise specified. It should be omitted when
+not needed.</p>
+<p>The <i>repeat</i> specifies the number of values this option takes per
+occurrence on the command line. It has the format <code class="inline">{</code> [ <i>min</i> ] [ <code class="inline"><span class="cm">,</span></code>
+ [ <i>max</i> ] ] <code class="inline">}</code>.</p>
+<p><i>min</i> denotes the minimal number of arguments. It defaults to 1 for
+options with <code class="inline">=</code>
+ and to 0 for options with <code class="inline"><span class="j">:</span></code>
+, see below. Note that
+<i>min</i> overrules the <code class="inline">=</code>
+ / <code class="inline"><span class="j">:</span></code>
+ semantics.</p>
+<p><i>max</i> denotes the maximum number of arguments. It must be at least
+<i>min</i>. If <i>max</i> is omitted, <i>but the comma is not</i>, there is no
+upper bound to the number of argument values taken.</p>
+</li>
+<li><a name="%3a-_type_-%5b-_desttype_-%5d"></a><b>: <i>type</i> [ <i>desttype</i> ]</b>
+<p>Like <code class="inline">=</code>
+, but designates the argument as optional.
+If omitted, an empty string will be assigned to string values options,
+and the value zero to numeric options.</p>
+<p>Note that if a string argument starts with <code class="inline">-</code>
+ or <code class="inline">--</code>
+, it will be
+considered an option on itself.</p>
+</li>
+<li><a name="%3a-_number_-%5b-_desttype_-%5d"></a><b>: <i>number</i> [ <i>desttype</i> ]</b>
+<p>Like <code class="inline"><span class="j">:</span><span class="w">i</span></code>
+, but if the value is omitted, the <i>number</i> will be assigned.</p>
+</li>
+<li><a name="%3a-%2b-%5b-_desttype_-%5d"></a><b>: + [ <i>desttype</i> ]</b>
+<p>Like <code class="inline"><span class="j">:</span><span class="w">i</span></code>
+, but if the value is omitted, the current value for the
+option will be incremented.</p>
+</li>
+</ul>
+<a name="Advanced-Possibilities"></a><h1>Advanced Possibilities</h1>
+<a name="Object-oriented-interface"></a><h2>Object oriented interface</h2>
+<p>Getopt::Long can be used in an object oriented way as well:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Getopt::Long</span><span class="sc">;</span></li><li>    <span class="i">$p</span> = <span class="w">Getopt::Long::Parser</span><span class="w">-&gt;new</span><span class="sc">;</span></li><li>    <span class="i">$p</span><span class="i">-&gt;configure</span><span class="s">(</span>...<span class="w">configuration</span> <span class="w">options</span>...<span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/if.html">if</a> <span class="s">(</span><span class="i">$p</span><span class="i">-&gt;getoptions</span><span class="s">(</span>...<span class="w">options</span> <span class="w">descriptions</span>...<span class="s">)</span><span class="s">)</span> ...</li><li>    <a class="l_k" href="../functions/if.html">if</a> <span class="s">(</span><span class="i">$p</span><span class="i">-&gt;getoptionsfromarray</span><span class="s">(</span> \<span class="i">@array</span><span class="cm">,</span> ...<span class="w">options</span> <span class="w">descriptions</span>...<span class="s">)</span><span class="s">)</span> ...</li></ol></pre><p>Configuration options can be passed to the constructor:</p>
+<pre class="verbatim"><ol><li>    <span class="i">$p</span> = <span class="w">new</span> <span class="w">Getopt::Long::Parser</span></li><li>             <span class="w">config</span> <span class="cm">=&gt;</span> <span class="s">[</span>...<span class="w">configuration</span> <span class="w">options</span>...<span class="s">]</span><span class="sc">;</span></li></ol></pre><a name="Thread-Safety"></a><h2>Thread Safety</h2>
+<p>Getopt::Long is thread safe when using ithreads as of Perl 5.8.  It is
+<i>not</i> thread safe when using the older (experimental and now
+obsolete) threads implementation that was added to Perl 5.005.</p>
+<a name="Documentation-and-help-texts"></a><h2>Documentation and help texts</h2>
+<p>Getopt::Long encourages the use of Pod::Usage to produce help
+messages. For example:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Getopt::Long</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Pod::Usage</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$man</span> = <span class="n">0</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$help</span> = <span class="n">0</span><span class="sc">;</span></li><li></li><li>    <span class="i">GetOptions</span><span class="s">(</span><span class="q">&#39;help|?&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$help</span><span class="cm">,</span> <span class="w">man</span> <span class="cm">=&gt;</span> \<span class="i">$man</span><span class="s">)</span> <a class="l_k" href="../functions/or.html">or</a> <span class="i">pod2usage</span><span class="s">(</span><span class="n">2</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">pod2usage</span><span class="s">(</span><span class="n">1</span><span class="s">)</span> <a class="l_k" href="../functions/if.html">if</a> <span class="i">$help</span><span class="sc">;</span></li><li>    <span class="i">pod2usage</span><span class="s">(</span>-<span class="w">exitval</span> <span class="cm">=&gt;</span> <span class="n">0</span><span class="cm">,</span> -<span class="w">verbose</span> <span class="cm">=&gt;</span> <span class="n">2</span><span class="s">)</span> <a class="l_k" href="../functions/if.html">if</a> <span class="i">$man</span><span class="sc">;</span></li><li></li><li><a name="__END__"></a>    __END__</li><li></li><li><span class="q">    =head1 NAME</span></li><li></li><li><span class="q">    sample - Using Getopt::Long and Pod::Usage</span></li><li></li><li><span class="q">    =head1 SYNOPSIS</span></li><li></li><li><span class="q">    sample [options] [file ...]</span></li><li></li><li><span class="q">     Options:</span></li><li><span class="q">       -help            brief help message</span></li><li><span class="q">       -man             full documentation</span></li><li></li><li><span class="q">    =head1 OPTIONS</span></li><li></li><li><span class="q">    =over 8</span></li><li></li><li><span class="q">    =item B&lt;-help&gt;</span></li><li></li><li><span class="q">    Print a brief help message and exits.</span></li><li></li><li><span class="q">    =item B&lt;-man&gt;</span></li><li></li><li><span class="q">    Prints the manual page and exits.</span></li><li></li><li><span class="q">    =back</span></li><li></li><li><span class="q">    =head1 DESCRIPTION</span></li><li></li><li><span class="q">    B&lt;This program&gt; will read the given input file(s) and do something</span></li><li><span class="q">    useful with the contents thereof.</span></li><li></li><li><span class="q">    =cut</span></li></ol></pre><p>See <a href="../Pod/Usage.html">Pod::Usage</a> for details.</p>
+<a name="Parsing-options-from-an-arbitrary-array"></a><h2>Parsing options from an arbitrary array</h2>
+<p>By default, GetOptions parses the options that are present in the
+global array <code class="inline"><span class="i">@ARGV</span></code>
+. A special entry <code class="inline"><span class="w">GetOptionsFromArray</span></code>
+ can be
+used to parse options from an arbitrary array.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Getopt::Long</span> <span class="q">qw(GetOptionsFromArray)</span><span class="sc">;</span></li><li>    <span class="i">$ret</span> = <span class="i">GetOptionsFromArray</span><span class="s">(</span>\<span class="i">@myopts</span><span class="cm">,</span> ...<span class="s">)</span><span class="sc">;</span></li></ol></pre><p>When used like this, options and their possible values are removed
+from <code class="inline"><span class="i">@myopts</span></code>
+, the global <code class="inline"><span class="i">@ARGV</span></code>
+ is not touched at all.</p>
+<p>The following two calls behave identically:</p>
+<pre class="verbatim"><ol><li>    <span class="i">$ret</span> = <span class="i">GetOptions</span><span class="s">(</span> ... <span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$ret</span> = <span class="i">GetOptionsFromArray</span><span class="s">(</span>\<span class="i">@ARGV</span><span class="cm">,</span> ... <span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This also means that a first argument hash reference now becomes the
+second argument:</p>
+<pre class="verbatim"><ol><li>    <span class="i">$ret</span> = <span class="i">GetOptions</span><span class="s">(</span>\<span class="i">%opts</span><span class="cm">,</span> ... <span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$ret</span> = <span class="i">GetOptionsFromArray</span><span class="s">(</span>\<span class="i">@ARGV</span><span class="cm">,</span> \<span class="i">%opts</span><span class="cm">,</span> ... <span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="Parsing-options-from-an-arbitrary-string"></a><h2>Parsing options from an arbitrary string</h2>
+<p>A special entry <code class="inline"><span class="w">GetOptionsFromString</span></code>
+ can be used to parse options
+from an arbitrary string.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Getopt::Long</span> <span class="q">qw(GetOptionsFromString)</span><span class="sc">;</span></li><li>    <span class="i">$ret</span> = <span class="i">GetOptionsFromString</span><span class="s">(</span><span class="i">$string</span><span class="cm">,</span> ...<span class="s">)</span><span class="sc">;</span></li></ol></pre><p>The contents of the string are split into arguments using a call to
+<code class="inline"><span class="w">Text::ParseWords::shellwords</span></code>
+. As with <code class="inline"><span class="w">GetOptionsFromArray</span></code>
+, the
+global <code class="inline"><span class="i">@ARGV</span></code>
+ is not touched.</p>
+<p>It is possible that, upon completion, not all arguments in the string
+have been processed. <code class="inline"><span class="w">GetOptionsFromString</span></code>
+ will, when called in list
+context, return both the return status and an array reference to any
+remaining arguments:</p>
+<pre class="verbatim"><ol><li>    <span class="s">(</span><span class="i">$ret</span><span class="cm">,</span> <span class="i">$args</span><span class="s">)</span> = <span class="i">GetOptionsFromString</span><span class="s">(</span><span class="i">$string</span><span class="cm">,</span> ... <span class="s">)</span><span class="sc">;</span></li></ol></pre><p>If any arguments remain, and <code class="inline"><span class="w">GetOptionsFromString</span></code>
+ was not called in
+list context, a message will be given and <code class="inline"><span class="w">GetOptionsFromString</span></code>
+ will
+return failure.</p>
+<p>As with GetOptionsFromArray, a first argument hash reference now
+becomes the second argument.</p>
+<a name="Storing-options-values-in-a-hash"></a><h2>Storing options values in a hash</h2>
+<p>Sometimes, for example when there are a lot of options, having a
+separate variable for each of them can be cumbersome. GetOptions()
+supports, as an alternative mechanism, storing options values in a
+hash.</p>
+<p>To obtain this, a reference to a hash must be passed <i>as the first
+argument</i> to GetOptions(). For each option that is specified on the
+command line, the option value will be stored in the hash with the
+option name as key. Options that are not actually used on the command
+line will not be put in the hash, on other words,
+<code class="inline"><a class="l_k" href="../functions/exists.html">exists($h{option})</a></code> (or defined()) can be used to test if an option
+was used. The drawback is that warnings will be issued if the program
+runs under <code class="inline"><a class="l_k" href="../functions/use.html">use</a> <span class="w">strict</span></code>
+ and uses <code class="inline"><span class="i">$h</span>{<span class="w">option</span>}</code>
+ without testing with
+exists() or defined() first.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">%h</span> = <span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span>\<span class="i">%h</span><span class="cm">,</span> <span class="q">&#39;length=i&#39;</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># will store in $h{length}</span></li></ol></pre><p>For options that take list or hash values, it is necessary to indicate
+this by appending an <code class="inline"><span class="i">@</span></code>
+ or <code class="inline"><span class="i">%</span></code>
+ sign after the type:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span>\<span class="i">%h</span><span class="cm">,</span> <span class="q">&#39;colours=s@&#39;</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># will push to @{$h{colours}}</span></li></ol></pre><p>To make things more complicated, the hash may contain references to
+the actual destinations, for example:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$len</span> = <span class="n">0</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">%h</span> = <span class="s">(</span><span class="q">&#39;length&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$len</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span>\<span class="i">%h</span><span class="cm">,</span> <span class="q">&#39;length=i&#39;</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># will store in $len</span></li></ol></pre><p>This example is fully equivalent with:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$len</span> = <span class="n">0</span><span class="sc">;</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;length=i&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$len</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># will store in $len</span></li></ol></pre><p>Any mixture is possible. For example, the most frequently used options
+could be stored in variables while all other options get stored in the
+hash:</p>
+<pre class="verbatim"><ol><li>    my $verbose = 0;			# frequently referred</li><li>    my $debug = 0;			# frequently referred</li><li>    my %h = ('verbose' =&gt; \$verbose, 'debug' =&gt; \$debug);</li><li>    GetOptions (\%h, 'verbose', 'debug', 'filter', 'size=i');</li><li>    if ( $verbose ) { ... }</li><li>    if ( exists $h{filter} ) { ... option 'filter' was specified ... }</li></ol></pre><a name="Bundling"></a><h2>Bundling</h2>
+<p>With bundling it is possible to set several single-character options
+at once. For example if <code class="inline"><span class="w">a</span></code>
+, <code class="inline"><span class="w">v</span></code>
+ and <code class="inline"><span class="w">x</span></code>
+ are all valid options,</p>
+<pre class="verbatim"><ol><li>    -<span class="w">vax</span></li></ol></pre><p>will set all three.</p>
+<p>Getopt::Long supports three styles of bundling. To enable bundling, a
+call to Getopt::Long::Configure is required.</p>
+<p>The simplest style of bundling can be enabled with:</p>
+<pre class="verbatim"><ol><li>    <span class="w">Getopt::Long::Configure</span> <span class="s">(</span><span class="q">&quot;bundling&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Configured this way, single-character options can be bundled but long
+options <b>must</b> always start with a double dash <code class="inline">--</code>
+ to avoid
+ambiguity. For example, when <code class="inline"><span class="w">vax</span></code>
+, <code class="inline"><span class="w">a</span></code>
+, <code class="inline"><span class="w">v</span></code>
+ and <code class="inline"><span class="w">x</span></code>
+ are all valid
+options,</p>
+<pre class="verbatim"><ol><li>    -<span class="w">vax</span></li></ol></pre><p>will set <code class="inline"><span class="w">a</span></code>
+, <code class="inline"><span class="w">v</span></code>
+ and <code class="inline"><span class="w">x</span></code>
+, but</p>
+<pre class="verbatim"><ol><li>    --<span class="w">vax</span></li></ol></pre><p>will set <code class="inline"><span class="w">vax</span></code>
+.</p>
+<p>The second style of bundling lifts this restriction. It can be enabled
+with:</p>
+<pre class="verbatim"><ol><li>    <span class="w">Getopt::Long::Configure</span> <span class="s">(</span><span class="q">&quot;bundling_override&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Now, <code class="inline">-<span class="w">vax</span></code>
+ will set the option <code class="inline"><span class="w">vax</span></code>
+.</p>
+<p>In all of the above cases, option values may be inserted in the
+bundle. For example:</p>
+<pre class="verbatim"><ol><li>    -<span class="w">h24w80</span></li></ol></pre><p>is equivalent to</p>
+<pre class="verbatim"><ol><li>    -<span class="w">h</span> <span class="n">24</span> -<span class="w">w</span> <span class="n">80</span></li></ol></pre><p>A third style of bundling allows only values to be bundled with
+options. It can be enabled with:</p>
+<pre class="verbatim"><ol><li>    <span class="w">Getopt::Long::Configure</span> <span class="s">(</span><span class="q">&quot;bundling_values&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Now, <code class="inline">-<span class="w">h24</span></code>
+ will set the option <code class="inline"><span class="w">h</span></code>
+ to <code class="inline"><span class="n">24</span></code>
+, but option bundles
+like <code class="inline">-<span class="w">vxa</span></code>
+ and <code class="inline">-<span class="w">h24w80</span></code>
+ are flagged as errors.</p>
+<p>Enabling <code class="inline"><span class="w">bundling_values</span></code>
+ will disable the other two styles of
+bundling.</p>
+<p>When configured for bundling, single-character options are matched
+case sensitive while long options are matched case insensitive. To
+have the single-character options matched case insensitive as well,
+use:</p>
+<pre class="verbatim"><ol><li>    <span class="w">Getopt::Long::Configure</span> <span class="s">(</span><span class="q">&quot;bundling&quot;</span><span class="cm">,</span> <span class="q">&quot;ignorecase_always&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>It goes without saying that bundling can be quite confusing.</p>
+<a name="The-lonesome-dash"></a><h2>The lonesome dash</h2>
+<p>Normally, a lone dash <code class="inline">-</code>
+ on the command line will not be considered
+an option. Option processing will terminate (unless "permute" is
+configured) and the dash will be left in <code class="inline"><span class="i">@ARGV</span></code>
+.</p>
+<p>It is possible to get special treatment for a lone dash. This can be
+achieved by adding an option specification with an empty name, for
+example:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$stdio</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>A lone dash on the command line will now be a legal option, and using
+it will set variable <code class="inline"><span class="i">$stdio</span></code>
+.</p>
+<a name="Argument-callback"></a><h2>Argument callback</h2>
+<p>A special option 'name' <code class="inline">&lt;&gt;</code>
+ can be used to designate a subroutine
+to handle non-option arguments. When GetOptions() encounters an
+argument that does not look like an option, it will immediately call this
+subroutine and passes it one parameter: the argument name. Well, actually
+it is an object that stringifies to the argument name.</p>
+<p>For example:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$width</span> = <span class="n">80</span><span class="sc">;</span></li><li><a name="process"></a>    sub <span class="m">process</span> <span class="s">{</span> ... <span class="s">}</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;width=i&#39;</span> <span class="cm">=&gt;</span> \<span class="i">$width</span><span class="cm">,</span> <span class="q">&#39;&lt;&gt;&#39;</span> <span class="cm">=&gt;</span> \<span class="i">&amp;process</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>When applied to the following command line:</p>
+<pre class="verbatim"><ol><li>    arg1 --width=72 arg2 --width=60 arg3</li></ol></pre><p>This will call
+<code class="inline"><span class="i">process</span><span class="s">(</span><span class="q">&quot;arg1&quot;</span><span class="s">)</span></code>
+ while <code class="inline"><span class="i">$width</span></code>
+ is <code class="inline"><span class="n">80</span></code>
+,
+<code class="inline"><span class="i">process</span><span class="s">(</span><span class="q">&quot;arg2&quot;</span><span class="s">)</span></code>
+ while <code class="inline"><span class="i">$width</span></code>
+ is <code class="inline"><span class="n">72</span></code>
+, and
+<code class="inline"><span class="i">process</span><span class="s">(</span><span class="q">&quot;arg3&quot;</span><span class="s">)</span></code>
+ while <code class="inline"><span class="i">$width</span></code>
+ is <code class="inline"><span class="n">60</span></code>
+.</p>
+<p>This feature requires configuration option <b>permute</b>, see section
+<a href="#Configuring-Getopt%3a%3aLong">Configuring Getopt::Long</a>.</p>
+<a name="Configuring-Getopt%3a%3aLong"></a><h1>Configuring Getopt::Long</h1>
+<p>Getopt::Long can be configured by calling subroutine
+Getopt::Long::Configure(). This subroutine takes a list of quoted
+strings, each specifying a configuration option to be enabled, e.g.
+<code class="inline"><span class="w">ignore_case</span></code>
+, or disabled, e.g. <code class="inline"><span class="w">no_ignore_case</span></code>
+. Case does not
+matter. Multiple calls to Configure() are possible.</p>
+<p>Alternatively, as of version 2.24, the configuration options may be
+passed together with the <code class="inline"><a class="l_k" href="../functions/use.html">use</a></code> statement:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Getopt::Long</span> <span class="q">qw(:config no_ignore_case bundling)</span><span class="sc">;</span></li></ol></pre><p>The following options are available:</p>
+<ul>
+<li><a name="default"></a><b>default</b>
+<p>This option causes all configuration options to be reset to their
+default values.</p>
+</li>
+<li><a name="posix_default"></a><b>posix_default</b>
+<p>This option causes all configuration options to be reset to their
+default values as if the environment variable POSIXLY_CORRECT had
+been set.</p>
+</li>
+<li><a name="auto_abbrev"></a><b>auto_abbrev</b>
+<p>Allow option names to be abbreviated to uniqueness.
+Default is enabled unless environment variable
+POSIXLY_CORRECT has been set, in which case <code class="inline"><span class="w">auto_abbrev</span></code>
+ is disabled.</p>
+</li>
+<li><a name="getopt_compat"></a><b>getopt_compat</b>
+<p>Allow <code class="inline">+</code>
+ to start options.
+Default is enabled unless environment variable
+POSIXLY_CORRECT has been set, in which case <code class="inline"><span class="w">getopt_compat</span></code>
+ is disabled.</p>
+</li>
+<li><a name="gnu_compat"></a><b>gnu_compat</b>
+<p><code class="inline"><span class="w">gnu_compat</span></code>
+ controls whether <code class="inline">--<span class="w">opt</span>=</code>
+ is allowed, and what it should
+do. Without <code class="inline"><span class="w">gnu_compat</span></code>
+, <code class="inline">--<span class="w">opt</span>=</code>
+ gives an error. With <code class="inline"><span class="w">gnu_compat</span></code>
+,
+<code class="inline">--<span class="w">opt</span>=</code>
+ will give option <code class="inline"><span class="w">opt</span></code>
+ and empty value.
+This is the way GNU getopt_long() does it.</p>
+</li>
+<li><a name="gnu_getopt"></a><b>gnu_getopt</b>
+<p>This is a short way of setting <code class="inline"><span class="w">gnu_compat</span></code>
+ <code class="inline"><span class="w">bundling</span></code>
+ <code class="inline"><span class="w">permute</span></code>
+
+<code class="inline"><span class="w">no_getopt_compat</span></code>
+. With <code class="inline"><span class="w">gnu_getopt</span></code>
+, command line handling should be
+fully compatible with GNU getopt_long().</p>
+</li>
+<li><a name="require_order"></a><b>require_order</b>
+<p>Whether command line arguments are allowed to be mixed with options.
+Default is disabled unless environment variable
+POSIXLY_CORRECT has been set, in which case <code class="inline"><span class="w">require_order</span></code>
+ is enabled.</p>
+<p>See also <code class="inline"><span class="w">permute</span></code>
+, which is the opposite of <code class="inline"><span class="w">require_order</span></code>
+.</p>
+</li>
+<li><a name="permute"></a><b>permute</b>
+<p>Whether command line arguments are allowed to be mixed with options.
+Default is enabled unless environment variable
+POSIXLY_CORRECT has been set, in which case <code class="inline"><span class="w">permute</span></code>
+ is disabled.
+Note that <code class="inline"><span class="w">permute</span></code>
+ is the opposite of <code class="inline"><span class="w">require_order</span></code>
+.</p>
+<p>If <code class="inline"><span class="w">permute</span></code>
+ is enabled, this means that</p>
+<pre class="verbatim"><ol><li>    --foo arg1 --bar arg2 arg3</li></ol></pre><p>is equivalent to</p>
+<pre class="verbatim"><ol><li>    --foo --bar arg1 arg2 arg3</li></ol></pre><p>If an argument callback routine is specified, <code class="inline"><span class="i">@ARGV</span></code>
+ will always be
+empty upon successful return of GetOptions() since all options have been
+processed. The only exception is when <code class="inline">--</code>
+ is used:</p>
+<pre class="verbatim"><ol><li>    --foo arg1 --bar arg2 -- arg3</li></ol></pre><p>This will call the callback routine for arg1 and arg2, and then
+terminate GetOptions() leaving <code class="inline"><span class="q">&quot;arg3&quot;</span></code>
+ in <code class="inline"><span class="i">@ARGV</span></code>
+.</p>
+<p>If <code class="inline"><span class="w">require_order</span></code>
+ is enabled, options processing
+terminates when the first non-option is encountered.</p>
+<pre class="verbatim"><ol><li>    --foo arg1 --bar arg2 arg3</li></ol></pre><p>is equivalent to</p>
+<pre class="verbatim"><ol><li>    --foo -- arg1 --bar arg2 arg3</li></ol></pre><p>If <code class="inline"><span class="w">pass_through</span></code>
+ is also enabled, options processing will terminate
+at the first unrecognized option, or non-option, whichever comes
+first.</p>
+</li>
+<li><a name="bundling-(default%3a-disabled)"></a><b>bundling (default: disabled)</b>
+<p>Enabling this option will allow single-character options to be
+bundled. To distinguish bundles from long option names, long options
+<i>must</i> be introduced with <code class="inline">--</code>
+ and bundles with <code class="inline">-</code>
+.</p>
+<p>Note that, if you have options <code class="inline"><span class="w">a</span></code>
+, <code class="inline"><span class="w">l</span></code>
+ and <code class="inline"><span class="w">all</span></code>
+, and
+auto_abbrev enabled, possible arguments and option settings are:</p>
+<pre class="verbatim"><ol><li>    using argument               sets option(s)</li><li>    ------------------------------------------</li><li>    -a, --a                      a</li><li>    -l, --l                      l</li><li>    -al, -la, -ala, -all,...     a, l</li><li>    --al, --all                  all</li></ol></pre><p>The surprising part is that <code class="inline">--<span class="w">a</span></code>
+ sets option <code class="inline"><span class="w">a</span></code>
+ (due to auto
+completion), not <code class="inline"><span class="w">all</span></code>
+.</p>
+<p>Note: disabling <code class="inline"><span class="w">bundling</span></code>
+ also disables <code class="inline"><span class="w">bundling_override</span></code>
+.</p>
+</li>
+<li><a name="bundling_override-(default%3a-disabled)"></a><b>bundling_override (default: disabled)</b>
+<p>If <code class="inline"><span class="w">bundling_override</span></code>
+ is enabled, bundling is enabled as with
+<code class="inline"><span class="w">bundling</span></code>
+ but now long option names override option bundles.</p>
+<p>Note: disabling <code class="inline"><span class="w">bundling_override</span></code>
+ also disables <code class="inline"><span class="w">bundling</span></code>
+.</p>
+<p><b>Note:</b> Using option bundling can easily lead to unexpected results,
+especially when mixing long options and bundles. Caveat emptor.</p>
+</li>
+<li><a name="ignore_case--(default%3a-enabled)"></a><b>ignore_case  (default: enabled)</b>
+<p>If enabled, case is ignored when matching option names. If, however,
+bundling is enabled as well, single character options will be treated
+case-sensitive.</p>
+<p>With <code class="inline"><span class="w">ignore_case</span></code>
+, option specifications for options that only
+differ in case, e.g., <code class="inline"><span class="q">&quot;foo&quot;</span></code>
+ and <code class="inline"><span class="q">&quot;Foo&quot;</span></code>
+, will be flagged as
+duplicates.</p>
+<p>Note: disabling <code class="inline"><span class="w">ignore_case</span></code>
+ also disables <code class="inline"><span class="w">ignore_case_always</span></code>
+.</p>
+</li>
+<li><a name="ignore_case_always-(default%3a-disabled)"></a><b>ignore_case_always (default: disabled)</b>
+<p>When bundling is in effect, case is ignored on single-character
+options also.</p>
+<p>Note: disabling <code class="inline"><span class="w">ignore_case_always</span></code>
+ also disables <code class="inline"><span class="w">ignore_case</span></code>
+.</p>
+</li>
+<li><a name="auto_version-(default%3adisabled)"></a><b>auto_version (default:disabled)</b>
+<p>Automatically provide support for the <b>--version</b> option if
+the application did not specify a handler for this option itself.</p>
+<p>Getopt::Long will provide a standard version message that includes the
+program name, its version (if $main::VERSION is defined), and the
+versions of Getopt::Long and Perl. The message will be written to
+standard output and processing will terminate.</p>
+<p><code class="inline"><span class="w">auto_version</span></code>
+ will be enabled if the calling program explicitly
+specified a version number higher than 2.32 in the <code class="inline"><a class="l_k" href="../functions/use.html">use</a></code> or
+<code class="inline"><a class="l_k" href="../functions/require.html">require</a></code> statement.</p>
+</li>
+<li><a name="auto_help-(default%3adisabled)"></a><b>auto_help (default:disabled)</b>
+<p>Automatically provide support for the <b>--help</b> and <b>-?</b> options if
+the application did not specify a handler for this option itself.</p>
+<p>Getopt::Long will provide a help message using module <a href="../Pod/Usage.html">Pod::Usage</a>. The
+message, derived from the SYNOPSIS POD section, will be written to
+standard output and processing will terminate.</p>
+<p><code class="inline"><span class="w">auto_help</span></code>
+ will be enabled if the calling program explicitly
+specified a version number higher than 2.32 in the <code class="inline"><a class="l_k" href="../functions/use.html">use</a></code> or
+<code class="inline"><a class="l_k" href="../functions/require.html">require</a></code> statement.</p>
+</li>
+<li><a name="pass_through-(default%3a-disabled)"></a><b>pass_through (default: disabled)</b>
+<p>With <code class="inline"><span class="w">pass_through</span></code>
+ anything that is unknown, ambiguous or supplied with
+an invalid option will not be flagged as an error. Instead the unknown
+option(s) will be passed to the catchall <code class="inline">&lt;&gt;</code>
+ if present, otherwise
+through to <code class="inline"><span class="i">@ARGV</span></code>
+. This makes it possible to write wrapper scripts that
+process only part of the user supplied command line arguments, and pass the
+remaining options to some other program.</p>
+<p>If <code class="inline"><span class="w">require_order</span></code>
+ is enabled, options processing will terminate at the
+first unrecognized option, or non-option, whichever comes first and all
+remaining arguments are passed to <code class="inline"><span class="i">@ARGV</span></code>
+ instead of the catchall
+<code class="inline">&lt;&gt;</code>
+ if present.  However, if <code class="inline"><span class="w">permute</span></code>
+ is enabled instead, results
+can become confusing.</p>
+<p>Note that the options terminator (default <code class="inline">--</code>
+), if present, will
+also be passed through in <code class="inline"><span class="i">@ARGV</span></code>
+.</p>
+</li>
+<li><a name="prefix"></a><b>prefix</b>
+<p>The string that starts options. If a constant string is not
+sufficient, see <code class="inline"><span class="w">prefix_pattern</span></code>
+.</p>
+</li>
+<li><a name="prefix_pattern"></a><b>prefix_pattern</b>
+<p>A Perl pattern that identifies the strings that introduce options.
+Default is <code class="inline">--|-|\+</code> unless environment variable
+POSIXLY_CORRECT has been set, in which case it is <code class="inline">--|-</code>.</p>
+</li>
+<li><a name="long_prefix_pattern"></a><b>long_prefix_pattern</b>
+<p>A Perl pattern that allows the disambiguation of long and short
+prefixes. Default is <code class="inline">--</code>
+.</p>
+<p>Typically you only need to set this if you are using nonstandard
+prefixes and want some or all of them to have the same semantics as
+'--' does under normal circumstances.</p>
+<p>For example, setting prefix_pattern to <code class="inline">--|-|\+|\/</code> and
+long_prefix_pattern to <code class="inline">--|\/</code> would add Win32 style argument
+handling.</p>
+</li>
+<li><a name="debug-(default%3a-disabled)"></a><b>debug (default: disabled)</b>
+<p>Enable debugging output.</p>
+</li>
+</ul>
+<a name="Exportable-Methods"></a><h1>Exportable Methods</h1>
+<ul>
+<li><a name="VersionMessage"></a><b>VersionMessage</b>
+<p>This subroutine provides a standard version message. Its argument can be:</p>
+<ul>
+<li>
+<p>A string containing the text of a message to print <i>before</i> printing
+the standard message.</p>
+</li>
+<li>
+<p>A numeric value corresponding to the desired exit status.</p>
+</li>
+<li>
+<p>A reference to a hash.</p>
+</li>
+</ul>
+<p>If more than one argument is given then the entire argument list is
+assumed to be a hash.  If a hash is supplied (either as a reference or
+as a list) it should contain one or more elements with the following
+keys:</p>
+<ul>
+<li><a name="-message"></a><b><code class="inline">-<span class="w">message</span></code>
+</b>
+</li>
+<li><a name="-msg"></a><b><code class="inline">-<span class="w">msg</span></code>
+</b>
+<p>The text of a message to print immediately prior to printing the
+program's usage message.</p>
+</li>
+<li><a name="-exitval"></a><b><code class="inline">-<span class="w">exitval</span></code>
+</b>
+<p>The desired exit status to pass to the <b>exit()</b> function.
+This should be an integer, or else the string "NOEXIT" to
+indicate that control should simply be returned without
+terminating the invoking process.</p>
+</li>
+<li><a name="-output"></a><b><code class="inline">-<span class="w">output</span></code>
+</b>
+<p>A reference to a filehandle, or the pathname of a file to which the
+usage message should be written. The default is <code class="inline">\<span class="i">*STDERR</span></code>
+ unless the
+exit value is less than 2 (in which case the default is <code class="inline">\<span class="i">*STDOUT</span></code>
+).</p>
+</li>
+</ul>
+<p>You cannot tie this routine directly to an option, e.g.:</p>
+<pre class="verbatim"><ol><li>    <span class="i">GetOptions</span><span class="s">(</span><span class="q">&quot;version&quot;</span> <span class="cm">=&gt;</span> \<span class="i">&amp;VersionMessage</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Use this instead:</p>
+<pre class="verbatim"><ol><li>    <span class="i">GetOptions</span><span class="s">(</span><span class="q">&quot;version&quot;</span> <span class="cm">=&gt;</span> <a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span> <span class="i">VersionMessage</span><span class="s">(</span><span class="s">)</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li></ol></pre></li>
+<li><a name="HelpMessage"></a><b>HelpMessage</b>
+<p>This subroutine produces a standard help message, derived from the
+program's POD section SYNOPSIS using <a href="../Pod/Usage.html">Pod::Usage</a>. It takes the same
+arguments as VersionMessage(). In particular, you cannot tie it
+directly to an option, e.g.:</p>
+<pre class="verbatim"><ol><li>    <span class="i">GetOptions</span><span class="s">(</span><span class="q">&quot;help&quot;</span> <span class="cm">=&gt;</span> \<span class="i">&amp;HelpMessage</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Use this instead:</p>
+<pre class="verbatim"><ol><li>    <span class="i">GetOptions</span><span class="s">(</span><span class="q">&quot;help&quot;</span> <span class="cm">=&gt;</span> <a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span> <span class="i">HelpMessage</span><span class="s">(</span><span class="s">)</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li></ol></pre></li>
+</ul>
+<a name="Return-values-and-Errors"></a><h1>Return values and Errors</h1>
+<p>Configuration errors and errors in the option definitions are
+signalled using die() and will terminate the calling program unless
+the call to Getopt::Long::GetOptions() was embedded in <code class="inline"><a class="l_k" href="../functions/eval.html">eval</a> <span class="s">{</span> ...
+<span class="s">}</span></code>
+, or die() was trapped using <code class="inline"><span class="i">$SIG</span>{<span class="w">__DIE__</span>}</code>
+.</p>
+<p>GetOptions returns true to indicate success.
+It returns false when the function detected one or more errors during
+option parsing. These errors are signalled using warn() and can be
+trapped with <code class="inline"><span class="i">$SIG</span>{<span class="w">__WARN__</span>}</code>
+.</p>
+<a name="Legacy"></a><h1>Legacy</h1>
+<p>The earliest development of <code class="inline"><span class="w">newgetopt</span>.<span class="w">pl</span></code>
+ started in 1990, with Perl
+version 4. As a result, its development, and the development of
+Getopt::Long, has gone through several stages. Since backward
+compatibility has always been extremely important, the current version
+of Getopt::Long still supports a lot of constructs that nowadays are
+no longer necessary or otherwise unwanted. This section describes
+briefly some of these 'features'.</p>
+<a name="Default-destinations"></a><h2>Default destinations</h2>
+<p>When no destination is specified for an option, GetOptions will store
+the resultant value in a global variable named <code class="inline"><span class="w">opt_</span></code>
+<i>XXX</i>, where
+<i>XXX</i> is the primary name of this option. When a program executes
+under <code class="inline"><a class="l_k" href="../functions/use.html">use</a> <span class="w">strict</span></code>
+ (recommended), these variables must be
+pre-declared with our() or <code class="inline"><a class="l_k" href="../functions/use.html">use</a> <span class="w">vars</span></code>
+.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/our.html">our</a> <span class="i">$opt_length</span> = <span class="n">0</span><span class="sc">;</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;length=i&#39;</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># will store in $opt_length</span></li></ol></pre><p>To yield a usable Perl variable, characters that are not part of the
+syntax for variables are translated to underscores. For example,
+<code class="inline">--<span class="w">fpp</span>-<span class="w">struct</span>-<a class="l_k" href="../functions/return.html">return</a></code>
+ will set the variable
+<code class="inline"><span class="i">$opt_fpp_struct_return</span></code>
+. Note that this variable resides in the
+namespace of the calling program, not necessarily <code class="inline"><span class="w">main</span></code>
+. For
+example:</p>
+<pre class="verbatim"><ol><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&quot;size=i&quot;</span><span class="cm">,</span> <span class="q">&quot;sizes=i@&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>with command line "-size 10 -sizes 24 -sizes 48" will perform the
+equivalent of the assignments</p>
+<pre class="verbatim"><ol><li>    <span class="i">$opt_size</span> = <span class="n">10</span><span class="sc">;</span></li><li>    <span class="i">@opt_sizes</span> = <span class="s">(</span><span class="n">24</span><span class="cm">,</span> <span class="n">48</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="Alternative-option-starters"></a><h2>Alternative option starters</h2>
+<p>A string of alternative option starter characters may be passed as the
+first argument (or the first argument after a leading hash reference
+argument).</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$len</span> = <span class="n">0</span><span class="sc">;</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&#39;/&#39;</span><span class="cm">,</span> <span class="q">&#39;length=i&#39;</span> <span class="cm">=&gt;</span> <span class="i">$len</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Now the command line may look like:</p>
+<pre class="verbatim"><ol><li>    /length 24 -- arg</li></ol></pre><p>Note that to terminate options processing still requires a double dash
+<code class="inline">--</code>
+.</p>
+<p>GetOptions() will not interpret a leading <code class="inline"><span class="q">&quot;&lt;&gt;&quot;</span></code>
+ as option starters
+if the next argument is a reference. To force <code class="inline"><span class="q">&quot;&lt;&quot;</span></code>
+ and <code class="inline"><span class="q">&quot;&gt;&quot;</span></code>
+ as
+option starters, use <code class="inline"><span class="q">&quot;&gt;&lt;&quot;</span></code>
+. Confusing? Well, <b>using a starter
+argument is strongly deprecated</b> anyway.</p>
+<a name="Configuration-variables"></a><h2>Configuration variables</h2>
+<p>Previous versions of Getopt::Long used variables for the purpose of
+configuring. Although manipulating these variables still work, it is
+strongly encouraged to use the <code class="inline"><span class="w">Configure</span></code>
+ routine that was introduced
+in version 2.17. Besides, it is much easier.</p>
+<a name="Tips-and-Techniques"></a><h1>Tips and Techniques</h1>
+<a name="Pushing-multiple-values-in-a-hash-option"></a><h2>Pushing multiple values in a hash option</h2>
+<p>Sometimes you want to combine the best of hashes and arrays. For
+example, the command line:</p>
+<pre class="verbatim"><ol><li>  --list add=first --list add=second --list add=third</li></ol></pre><p>where each successive 'list add' option will push the value of add
+into array ref $list-&gt;{'add'}. The result would be like</p>
+<pre class="verbatim"><ol><li>  <span class="i">$list</span>-&gt;{<span class="w">add</span>} = <span class="s">[</span><span class="q">qw(first second third)</span><span class="s">]</span><span class="sc">;</span></li></ol></pre><p>This can be accomplished with a destination routine:</p>
+<pre class="verbatim"><ol><li>  <span class="i">GetOptions</span><span class="s">(</span><span class="q">'list=s%'</span> <span class="cm">=&gt;</span></li><li>               <a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span> <a class="l_k" href="../functions/push.html">push</a><span class="s">(</span><span class="i">@</span>{<span class="i">$list</span>{<span class="i">$_</span>[<span class="n">1</span>]}}<span class="cm">,</span> <span class="i">$_</span>[<span class="n">2</span>]<span class="s">)</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="Troubleshooting"></a><h1>Troubleshooting</h1>
+<a name="GetOptions-does-not-return-a-false-result-when-an-option-is-not-supplied"></a><h2>GetOptions does not return a false result when an option is not supplied</h2>
+<p>That's why they're called 'options'.</p>
+<a name="GetOptions-does-not-split-the-command-line-correctly"></a><h2>GetOptions does not split the command line correctly</h2>
+<p>The command line is not split by GetOptions, but by the command line
+interpreter (CLI). On Unix, this is the shell. On Windows, it is
+COMMAND.COM or CMD.EXE. Other operating systems have other CLIs.</p>
+<p>It is important to know that these CLIs may behave different when the
+command line contains special characters, in particular quotes or
+backslashes. For example, with Unix shells you can use single quotes
+(<code class="inline">'</code>) and double quotes (<code class="inline">"</code>) to group words together. The following
+alternatives are equivalent on Unix:</p>
+<pre class="verbatim"><ol><li>    "two words"</li><li>    'two words'</li><li>    two\ words</li></ol></pre><p>In case of doubt, insert the following statement in front of your Perl
+program:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">STDERR</span> <span class="s">(</span><a class="l_k" href="../functions/join.html">join</a><span class="s">(</span><span class="q">&quot;|&quot;</span><span class="cm">,</span><span class="i">@ARGV</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>to verify how your CLI passes the arguments to the program.</p>
+<a name="Undefined-subroutine-%26main%3a%3aGetOptions-called"></a><h2>Undefined subroutine &amp;main::GetOptions called</h2>
+<p>Are you running Windows, and did you write</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">GetOpt::Long</span><span class="sc">;</span></li></ol></pre><p>(note the capital 'O')?</p>
+<a name="How-do-I-put-a-%22-%3f%22-option-into-a-Getopt%3a%3aLong%3f"></a><h2>How do I put a "-?" option into a Getopt::Long?</h2>
+<p>You can only obtain this using an alias, and Getopt::Long of at least
+version 2.13.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Getopt::Long</span><span class="sc">;</span></li><li>    <span class="w">GetOptions</span> <span class="s">(</span><span class="q">&quot;help|?&quot;</span><span class="s">)</span><span class="sc">;</span>    <span class="c"># -help and -? will both set $opt_help</span></li></ol></pre><p>Other characters that can't appear in Perl identifiers are also supported
+as aliases with Getopt::Long of at least version 2.39.</p>
+<p>As of version 2.32 Getopt::Long provides auto-help, a quick and easy way
+to add the options --help and -? to your program, and handle them.</p>
+<p>See <code class="inline"><span class="w">auto_help</span></code>
+ in section <a href="#Configuring-Getopt%3a%3aLong">Configuring Getopt::Long</a>.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Johan Vromans &lt;jvromans@squirrel.nl&gt;</p>
+<a name="COPYRIGHT-AND-DISCLAIMER"></a><h1>COPYRIGHT AND DISCLAIMER</h1>
+<p>This program is Copyright 1990,2015 by Johan Vromans.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the Perl Artistic License or the
+GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any
+later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>If you do not have a copy of the GNU General Public License write to
+the Free Software Foundation, Inc., 675 Mass Ave, Cambridge,
+MA 02139, USA.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#Command-Line-Options%2c-an-Introduction">Command Line Options, an Introduction</a><li><a href="#Getting-Started-with-Getopt%3a%3aLong">Getting Started with Getopt::Long</a><ul><li><a href="#Simple-options">Simple options</a><li><a href="#A-little-bit-less-simple-options">A little bit less simple options</a><li><a href="#Mixing-command-line-option-with-other-arguments">Mixing command line option with other arguments</a><li><a href="#Options-with-values">Options with values</a><li><a href="#Options-with-multiple-values">Options with multiple values</a><li><a href="#Options-with-hash-values">Options with hash values</a><li><a href="#User-defined-subroutines-to-handle-options">User-defined subroutines to handle options</a><li><a href="#Options-with-multiple-names">Options with multiple names</a><li><a href="#Case-and-abbreviations">Case and abbreviations</a><li><a href="#Summary-of-Option-Specifications">Summary of Option Specifications</a></ul><li><a href="#Advanced-Possibilities">Advanced Possibilities</a><ul><li><a href="#Object-oriented-interface">Object oriented interface</a><li><a href="#Thread-Safety">Thread Safety</a><li><a href="#Documentation-and-help-texts">Documentation and help texts</a><li><a href="#Parsing-options-from-an-arbitrary-array">Parsing options from an arbitrary array</a><li><a href="#Parsing-options-from-an-arbitrary-string">Parsing options from an arbitrary string</a><li><a href="#Storing-options-values-in-a-hash">Storing options values in a hash</a><li><a href="#Bundling">Bundling</a><li><a href="#The-lonesome-dash">The lonesome dash</a><li><a href="#Argument-callback">Argument callback</a></ul><li><a href="#Configuring-Getopt%3a%3aLong">Configuring Getopt::Long</a><li><a href="#Exportable-Methods">Exportable Methods</a><li><a href="#Return-values-and-Errors">Return values and Errors</a><li><a href="#Legacy">Legacy</a><ul><li><a href="#Default-destinations">Default destinations</a><li><a href="#Alternative-option-starters">Alternative option starters</a><li><a href="#Configuration-variables">Configuration variables</a></ul><li><a href="#Tips-and-Techniques">Tips and Techniques</a><ul><li><a href="#Pushing-multiple-values-in-a-hash-option">Pushing multiple values in a hash option</a></ul><li><a href="#Troubleshooting">Troubleshooting</a><ul><li><a href="#GetOptions-does-not-return-a-false-result-when-an-option-is-not-supplied">GetOptions does not return a false result when an option is not supplied</a><li><a href="#GetOptions-does-not-split-the-command-line-correctly">GetOptions does not split the command line correctly</a><li><a href="#Undefined-subroutine-%26main%3a%3aGetOptions-called">Undefined subroutine &main::GetOptions called</a><li><a href="#How-do-I-put-a-%22-%3f%22-option-into-a-Getopt%3a%3aLong%3f">How do I put a "-?" option into a Getopt::Long?</a></ul><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT-AND-DISCLAIMER">COPYRIGHT AND DISCLAIMER</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Getopt::Long';
+  perldoc.pageAddress = 'Getopt/Long.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

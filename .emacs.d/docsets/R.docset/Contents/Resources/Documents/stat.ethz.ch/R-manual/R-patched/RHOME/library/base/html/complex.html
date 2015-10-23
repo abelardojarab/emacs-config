@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/complex.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:08 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head><title>Complex Vectors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for complex {base}"><tr><td>complex {base}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Complex Vectors</h2>
+
+<h3>Description</h3>
+
+<p>Basic functions which support complex arithmetic in R.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+complex(length.out = 0, real = numeric(), imaginary = numeric(),
+        modulus = 1, argument = 0)
+as.complex(x, ...)
+is.complex(x)
+
+Re(z)
+Im(z)
+Mod(z)
+Arg(z)
+Conj(z)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>length.out</code></td>
+<td>
+<p>numeric.  Desired length of the output vector,
+inputs being recycled as needed.</p>
+</td></tr>
+<tr valign="top"><td><code>real</code></td>
+<td>
+<p>numeric vector.</p>
+</td></tr>
+<tr valign="top"><td><code>imaginary</code></td>
+<td>
+<p>numeric vector.</p>
+</td></tr>
+<tr valign="top"><td><code>modulus</code></td>
+<td>
+<p>numeric vector.</p>
+</td></tr>
+<tr valign="top"><td><code>argument</code></td>
+<td>
+<p>numeric vector.</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an object, probably of mode <code>complex</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>z</code></td>
+<td>
+<p>an object of mode <code>complex</code>, or one of a class for which
+a methods has been defined.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Complex vectors can be created with <code>complex</code>.  The vector can be
+specified either by giving its length, its real and imaginary parts, or
+modulus and argument.  (Giving just the length generates a vector of
+complex zeroes.)
+</p>
+<p><code>as.complex</code> attempts to coerce its argument to be of complex
+type: like <code><a href="vector.html">as.vector</a></code> it strips attributes including
+names.  All forms of <code>NA</code> and <code>NaN</code> are coerced to a complex
+<code>NA</code>, for which both the real and imaginary parts are <code>NA</code>.
+</p>
+<p>Note that <code>is.complex</code> and <code>is.numeric</code> are never both
+<code>TRUE</code>.
+</p>
+<p>The functions <code>Re</code>, <code>Im</code>, <code>Mod</code>, <code>Arg</code> and
+<code>Conj</code> have their usual interpretation as returning the real
+part, imaginary part, modulus, argument and complex conjugate for
+complex values.  The modulus and argument are also called the <em>polar
+coordinates</em>.  If <i>z = x + i y</i> with real <i>x</i> and <i>y</i>, for
+<i>r = Mod(z) = &radic;(x^2 + y^2)</i>,
+and <i>&phi; = Arg(z)</i>, <i>x = r*cos(&phi;)</i> and
+<i>y = r*sin(&phi;)</i>.  They are all
+<a href="InternalMethods.html">internal generic</a> <a href="Primitive.html">primitive</a> functions: methods can be
+defined for them
+individually or <em>via</em> the <code><a href="groupGeneric.html">Complex</a></code>
+group generic.
+</p>
+<p>In addition, the elementary trigonometric, logarithmic, exponential,
+square root and hyperbolic functions are implemented for complex
+values.
+</p>
+<p>Internally, complex numbers are stored as a pair of <a href="double.html">double</a>
+precision numbers, either or both of which can be <code><a href="is.finite.html">NaN</a></code> or
+plus or minus infinity.
+</p>
+
+
+<h3>S4 methods</h3>
+
+<p><code>as.complex</code> is primitive and can have S4 methods set.
+</p>
+<p><code>Re</code>, <code>Im</code>, <code>Mod</code>, <code>Arg</code> and <code>Conj</code>
+constitute the S4 group generic
+<code><a href="../../methods/html/S4groupGeneric.html">Complex</a></code> and so S4 methods can be
+set for them individually or via the group generic.
+</p>
+
+
+<h3>References</h3>
+
+<p>Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<em>The New S Language</em>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+require(graphics)
+
+0i ^ (-3:3)
+
+matrix(1i^ (-6:5), nrow = 4) #- all columns are the same
+0 ^ 1i # a complex NaN
+
+## create a complex normal vector
+z &lt;- complex(real = stats::rnorm(100), imaginary = stats::rnorm(100))
+## or also (less efficiently):
+z2 &lt;- 1:2 + 1i*(8:9)
+
+## The Arg(.) is an angle:
+zz &lt;- (rep(1:4, len = 9) + 1i*(9:1))/10
+zz.shift &lt;- complex(modulus = Mod(zz), argument = Arg(zz) + pi)
+plot(zz, xlim = c(-1,1), ylim = c(-1,1), col = "red", asp = 1,
+     main = expression(paste("Rotation by "," ", pi == 180^o)))
+abline(h = 0, v = 0, col = "blue", lty = 3)
+points(zz.shift, col = "orange")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>base</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/complex.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:08 GMT -->
+</html>

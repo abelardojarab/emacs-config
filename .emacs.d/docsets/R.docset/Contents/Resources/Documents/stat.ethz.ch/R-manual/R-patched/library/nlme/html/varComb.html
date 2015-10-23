@@ -1,0 +1,72 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/nlme/html/varComb.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:34:00 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Combination of Variance Functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for varComb {nlme}"><tbody><tr><td>varComb {nlme}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Combination of Variance Functions</h2>
+
+<h3>Description</h3>
+
+<p>This function is a constructor for the <code>varComb</code> class,
+representing a combination of variance functions. The corresponding
+variance function is equal to the product of the variance functions of
+the <code>varFunc</code> objects listed in <code>...</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>varComb(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>...</code></td>
+<td>
+<p>objects inheriting from class <code>varFunc</code> representing
+variance function structures.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Value</h3>
+
+<p>a <code>varComb</code> object representing a combination of variance
+functions, also inheriting from class <code>varFunc</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>JosÃ© Pinheiro and Douglas Bates bates@stat.wisc.edu</p>
+
+
+<h3>References</h3>
+
+<p>Pinheiro, J.C., and Bates, D.M. (2000) "Mixed-Effects Models
+in S and S-PLUS", Springer.  
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="varClasses.html">varClasses</a></code>,
+<code><a href="varWeights.html">varWeights.varComb</a></code>,
+<code><a href="coef.varFunc.html">coef.varComb</a></code></p>
+
+
+<h3>Examples</h3>
+
+<pre>vf1 &lt;- varComb(varIdent(form = ~1|Sex), varPower())
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>nlme</em> version 3.1-121 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/nlme/html/varComb.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:34:00 GMT -->
+
+</body></html>

@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>class manual page - TclOO Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl Commands, version 8.6.0</a> <small>&gt;</small> class</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="class.htm#M2" NAME="L182">NAME</A>
+<DL><DD>oo::class &mdash; class of all classes</DD></DL>
+<DD><A HREF="class.htm#M3" NAME="L183">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="class.htm#M4" NAME="L184">CLASS HIERARCHY</A>
+<DD><A HREF="class.htm#M5" NAME="L185">DESCRIPTION</A>
+<DD><A HREF="class.htm#M6" NAME="L186">CONSTRUCTOR</A>
+<DD><A HREF="class.htm#M7" NAME="L187">DESTRUCTOR</A>
+<DD><A HREF="class.htm#M8" NAME="L188">EXPORTED METHODS</A>
+<DL class="exported methods">
+<DD><A HREF="class.htm#M9" NAME="L189"><I>cls </I><B>create </B><I>name </I>?<I>arg ...</I>?</A>
+<DD><A HREF="class.htm#M10" NAME="L190"><I>cls </I><B>new </B>?<I>arg ...</I>?</A>
+</DL>
+<DD><A HREF="class.htm#M11" NAME="L191">NON-EXPORTED METHODS</A>
+<DL class="non-exported methods">
+<DD><A HREF="class.htm#M12" NAME="L192"><I>cls </I><B>createWithNamespace</B><I> name nsName</I> ?<I>arg ...</I>?</A>
+</DL>
+<DD><A HREF="class.htm#M13" NAME="L193">EXAMPLES</A>
+<DD><A HREF="class.htm#M14" NAME="L194">SEE ALSO</A>
+<DD><A HREF="class.htm#M15" NAME="L195">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+oo::class &mdash; class of all classes
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+package require TclOO<BR>
+<BR>
+<B>oo::class</B><I> method </I>?<I>arg ...</I>?<BR>
+<H3><A NAME="M4">CLASS HIERARCHY</A></H3>
+<B><A HREF="../TclCmd/object.htm">oo::object</A></B><BR>
+   <font size="+1">&#8594;</font> <B>oo::class</B><BR>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+Classes are objects that can manufacture other objects according to a pattern
+stored in the factory object (the class). An instance of the class is created
+by calling one of the class's factory methods, typically either <B>create</B>
+if an explicit name is being given, or <B>new</B> if an arbitrary unique name
+is to be automatically selected.
+<P>
+The <B>oo::class</B> class is the class of all classes; every class is an
+instance of this class, which is consequently an instance of itself. This
+class is a subclass of <B><A HREF="../TclCmd/object.htm">oo::object</A></B>, so every class is also an object.
+Additional metaclasses (i.e., classes of classes) can be defined if necessary
+by subclassing <B>oo::class</B>. Note that the <B>oo::class</B> object hides the
+<B>new</B> method on itself, so new classes should always be made using the
+<B>create</B> method.
+<H4><A NAME="M6">CONSTRUCTOR</A></H4>
+The constructor of the <B>oo::class</B> class takes an optional argument which,
+if present, is sent to the <B><A HREF="../TclCmd/define.htm">oo::define</A></B> command (along with the name of
+the newly-created class) to allow the class to be conveniently configured at
+creation time.
+<H4><A NAME="M7">DESTRUCTOR</A></H4>
+The <B>oo::class</B> class does not define an explicit destructor. However,
+when a class is destroyed, all its subclasses and instances are also
+destroyed, along with all objects that it has been mixed into.
+<H4><A NAME="M8">EXPORTED METHODS</A></H4>
+<DL class="exported methods">
+<DT><A NAME="M9"><I>cls </I><B>create </B><I>name </I>?<I>arg ...</I>?</A><DD>
+This creates a new instance of the class <I>cls</I> called <I>name</I> (which is
+resolved within the calling context's namespace if not fully qualified),
+passing the arguments, <I>arg ...</I>, to the constructor, and (if that returns
+a successful result) returning the fully qualified name of the created object
+(the result of the constructor is ignored). If the constructor fails (i.e.
+returns a non-OK result) then the object is destroyed and the error message is
+the result of this method call.
+<P><DT><A NAME="M10"><I>cls </I><B>new </B>?<I>arg ...</I>?</A><DD>
+This creates a new instance of the class <I>cls</I> with a new unique name,
+passing the arguments, <I>arg ...</I>, to the constructor, and (if that returns
+a successful result) returning the fully qualified name of the created object
+(the result of the constructor is ignored). If the constructor fails (i.e.,
+returns a non-OK result) then the object is destroyed and the error message is
+the result of this method call.
+<P>
+Note that this method is not exported by the <B>oo::class</B> object itself, so
+classes should not be created using this method.
+<P></DL>
+<H4><A NAME="M11">NON-EXPORTED METHODS</A></H4>
+The <B>oo::class</B> class supports the following non-exported methods:
+<P>
+<DL class="non-exported methods">
+<DT><A NAME="M12"><I>cls </I><B>createWithNamespace</B><I> name nsName</I> ?<I>arg ...</I>?</A><DD>
+This creates a new instance of the class <I>cls</I> called <I>name</I> (which is
+resolved within the calling context's namespace if not fully qualified),
+passing the arguments, <I>arg ...</I>, to the constructor, and (if that returns
+a successful result) returning the fully qualified name of the created object
+(the result of the constructor is ignored). The name of the instance's
+internal namespace will be <I>nsName</I> unless that namespace already exists
+(when an arbitrary name will be chosen instead). If the constructor fails
+(i.e., returns a non-OK result) then the object is destroyed and the error
+message is the result of this method call.
+<P></DL>
+<H3><A NAME="M13">EXAMPLES</A></H3>
+This example defines a simple class hierarchy and creates a new instance of
+it. It then invokes a method of the object before destroying the hierarchy and
+showing that the destruction is transitive.
+<P>
+<PRE><B>oo::class create</B> fruit {
+    method eat {} {
+        puts &quot;yummy!&quot;
+    }
+}
+<B>oo::class create</B> banana {
+    superclass fruit
+    constructor {} {
+        my variable peeled
+        set peeled 0
+    }
+    method peel {} {
+        my variable peeled
+        set peeled 1
+        puts &quot;skin now off&quot;
+    }
+    method edible? {} {
+        my variable peeled
+        return $peeled
+    }
+    method eat {} {
+        if {![my edible?]} {
+            my peel
+        }
+        next
+    }
+}
+set b [banana <B>new</B>]
+$b eat               <I><font size="+1">&#8594;</font> prints &quot;skin now off&quot; and &quot;yummy!&quot;</I>
+fruit destroy
+$b eat               <I><font size="+1">&#8594;</font> error &quot;unknown command&quot;</I></PRE>
+<H3><A NAME="M14">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/define.htm">oo::define</A></B>, <B><A HREF="../TclCmd/object.htm">oo::object</A></B>
+<H3><A NAME="M15">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#class">class</A>, <A href="../Keywords/M.htm#metaclass">metaclass</A>, <A href="../Keywords/O.htm#object">object</A>
+<div class="copy">Copyright &copy; 2007 Donal K. Fellows
+</div>
+</BODY></HTML>

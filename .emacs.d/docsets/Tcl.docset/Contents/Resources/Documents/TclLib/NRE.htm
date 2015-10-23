@@ -1,0 +1,337 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>NRE manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl C API, version 8.6.0</a> <small>&gt;</small> NRE</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="NRE.htm#M2" NAME="L508">NAME</A>
+<DL><DD>Tcl_NRCreateCommand, Tcl_NRCallObjProc, Tcl_NREvalObj, Tcl_NREvalObjv, Tcl_NRCmdSwap, Tcl_NRAddCallback &mdash; Non-Recursive (stackless) evaluation of Tcl scripts.</DD></DL>
+<DD><A HREF="NRE.htm#M3" NAME="L509">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Command
+<DD><B>Tcl_NRCreateCommand</B>(<I>interp, cmdName, proc, nreProc, clientData,
+<DD>deleteProc</I>)
+<DD>int
+<DD><B>Tcl_NRCallObjProc</B>(<I>interp, nreProc, clientData, objc, objv</I>)
+<DD>int
+<DD><B>Tcl_NREvalObj</B>(<I>interp, objPtr, flags</I>)
+<DD>int
+<DD><B>Tcl_NREvalObjv</B>(<I>interp, objc, objv, flags</I>)
+<DD>int
+<DD><B>Tcl_NRCmdSwap</B>(<I>interp, cmd, objc, objv, flags</I>)
+<DD>int
+<DD><B>Tcl_NRExprObj</B>(<I>interp, objPtr, resultPtr</I>)
+<DD>void
+<DD><B>Tcl_NRAddCallback</B>(<I>interp, postProcPtr, data0, data1, data2, data3</I>)
+</DL>
+<DD><A HREF="NRE.htm#M4" NAME="L510">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="NRE.htm#M5" NAME="L511">DESCRIPTION</A>
+<DD><A HREF="NRE.htm#M6" NAME="L512">EXAMPLE</A>
+<UL class="example">
+</UL>
+<DD><A HREF="NRE.htm#M7" NAME="L513">SEE ALSO</A>
+<DD><A HREF="NRE.htm#M8" NAME="L514">KEYWORDS</A>
+<DD><A HREF="NRE.htm#M9" NAME="L515">COPYRIGHT</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_NRCreateCommand, Tcl_NRCallObjProc, Tcl_NREvalObj, Tcl_NREvalObjv, Tcl_NRCmdSwap, Tcl_NRAddCallback &mdash; Non-Recursive (stackless) evaluation of Tcl scripts.
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+<A HREF="../TclLib/CrtObjCmd.htm">Tcl_Command</A><BR>
+<B>Tcl_NRCreateCommand</B>(<I>interp, cmdName, proc, nreProc, clientData,<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TT>deleteProc</I>)<BR>
+int<BR>
+<B>Tcl_NRCallObjProc</B>(<I>interp, nreProc, clientData, objc, objv</I>)<BR>
+int<BR>
+<B>Tcl_NREvalObj</B>(<I>interp, objPtr, flags</I>)<BR>
+int<BR>
+<B>Tcl_NREvalObjv</B>(<I>interp, objc, objv, flags</I>)<BR>
+int<BR>
+<B>Tcl_NRCmdSwap</B>(<I>interp, cmd, objc, objv, flags</I>)<BR>
+int<BR>
+<B>Tcl_NRExprObj</B>(<I>interp, objPtr, resultPtr</I>)<BR>
+void<BR>
+<B>Tcl_NRAddCallback</B>(<I>interp, postProcPtr, data0, data1, data2, data3</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter in which to create or evaluate a command.
+<P><DT>char <B>*cmdName</B> (in)<DD>
+Name of a new command to create.
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_ObjCmdProc</A> <B>*proc</B> (in)<DD>
+Implementation of a command that will be called whenever <I>cmdName</I>
+is invoked as a command in the unoptimized way.
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_ObjCmdProc</A> <B>*nreProc</B> (in)<DD>
+Implementation of a command that will be called whenever <I>cmdName</I> 
+is invoked and requested to conserve the C stack.
+<P><DT>ClientData <B>clientData</B> (in)<DD>
+Arbitrary one-word value that will be passed to <I>proc</I>, <I>nreProc</I>,
+<I>deleteProc</I> and <I>objProc</I>.
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CmdDeleteProc</A> <B>*deleteProc</B> (in/out)<DD>
+Procedure to call before <I>cmdName</I> is deleted from the interpreter.
+This procedure allows for command-specific cleanup. If <I>deleteProc</I>
+is <B>NULL</B>, then no procedure is called before the command is deleted.
+<P><DT>int <B>objc</B> (in)<DD>
+Count of parameters provided to the implementation of a command.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>**objv</B> (in)<DD>
+Pointer to an array of Tcl values. Each value holds the value of a
+single word in the command to execute.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*objPtr</B> (in)<DD>
+Pointer to a <A HREF="../TclLib/Object.htm">Tcl_Obj</A> whose value is a script or expression to execute.
+<P><DT>int <B>flags</B> (in)<DD>
+ORed combination of flag bits that specify additional options.
+<B>TCL_EVAL_GLOBAL</B> is the only flag that is currently supported.
+<P><DT><A HREF="../TclLib/CrtObjCmd.htm">Tcl_Command</A> <B>cmd</B> (in)<DD>
+Token for a command that is to be used instead of the currently
+executing command.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*resultPtr</B> (out)<DD>
+Pointer to an unshared <A HREF="../TclLib/Object.htm">Tcl_Obj</A> where the result of expression
+evaluation is written.
+<P><DT>Tcl_NRPostProc <B>*postProcPtr</B> (in)<DD>
+Pointer to a function that will be invoked when the command currently
+executing in the interpreter designated by <I>interp</I> completes.
+<P><DT>ClientData <B>data0</B> (in)<DD>
+<P><DT>ClientData <B>data1</B> (in)<DD>
+<P><DT>ClientData <B>data2</B> (in)<DD>
+<P><DT>ClientData <B>data3</B> (in)<DD>
+<I>data0</I> through <I>data3</I> are four one-word values that will be passed
+to the function designated by <I>postProcPtr</I> when it is invoked.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+This series of C functions provides an interface whereby commands that
+are implemented in C can be evaluated, and invoke Tcl commands scripts
+and scripts, without consuming space on the C stack. The non-recursive
+evaluation is done by installing a <I>trampoline</I>, a small piece of
+code that invokes a command or script, and then executes a series of
+callbacks when the command or script returns. 
+<P>
+The <B>Tcl_NRCreateCommand</B> function creates a Tcl command in the
+interpreter designated by <I>interp</I> that is prepared to handle
+nonrecursive evaluation with a trampoline. The <I>cmdName</I> argument
+gives the name of the new command. If <I>cmdName</I> contains any
+namespace qualifiers, then the new command is added to the specified
+namespace; otherwise, it is added to the global namespace. <I>proc</I>
+gives the procedure that will be called when the interpreter wishes to
+evaluate the command in an unoptimized manner, and <I>nreProc</I> is
+the procedure that will be called when the interpreter wishes to
+evaluate the command using a trampoline. <I>deleteProc</I> is a
+function that will be called before the command is deleted from the
+interpreter. When any of the three functions is invoked, it is passed
+the <I>clientData</I> parameter.
+<P>
+<B>Tcl_NRCreateCommand</B> deletes any existing command
+<I>name</I> already associated with the interpreter
+(however see below for an exception where the existing command
+is not deleted).
+It returns a token that may be used to refer
+to the command in subsequent calls to <B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_GetCommandName</A></B>.
+If <B>Tcl_NRCreateCommand</B> is called for an interpreter that is in
+the process of being deleted, then it does not create a new command,
+does not delete any existing command of the same name, and returns NULL.
+<P>
+The <I>proc</I> and <I>nreProc</I> function are expected to conform to
+all the rules set forth for the <I>proc</I> argument to
+<B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CreateObjCommand</A></B>(3) (<I>q.v.</I>).
+<P>
+When a command that is written to cope with evaluation via trampoline
+is invoked without a trampoline on the stack, it will usually respond
+to the invocation by creating a trampoline and calling the
+trampoline-enabled implementation of the same command. This call is done by
+means of <B>Tcl_NRCallObjProc</B>. In the call to
+<B>Tcl_NRCallObjProc</B>, the <I>interp</I>, <I>clientData</I>,
+<I>objc</I> and <I>objv</I> parameters should be the same ones that were
+passed to <I>proc</I>. The <I>nreProc</I> parameter should designate the
+trampoline-enabled implementation of the command.
+<P>
+<B>Tcl_NREvalObj</B> arranges for the script contained in <I>objPtr</I>
+to be evaluated in the interpreter designated by <I>interp</I> after
+the current command (which must be trampoline-enabled) returns. It is
+the method by which a command may invoke a script without consuming
+space on the C stack. Similarly, <B>Tcl_NREvalObjv</B> arranges to
+invoke a single Tcl command whose words have already been separated
+and substituted. The <I>objc</I> and <I>objv</I> parameters give the
+words of the command to be evaluated when execution reaches the
+trampoline.
+<P>
+<B>Tcl_NRCmdSwap</B> allows for trampoline evaluation of a command whose
+resolution is already known.  The <I>cmd</I> parameter gives a
+<B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_Command</A></B> token (returned from <B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CreateObjCommand</A></B> or
+<B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_GetCommandFromObj</A></B>) identifying the command to be invoked in
+the trampoline; this command must match the word in <I>objv[0]</I>.
+The remaining arguments are as for <B>Tcl_NREvalObj</B>.
+<P>
+<B>Tcl_NREvalObj</B>, <B>Tcl_NREvalObjv</B> and <B>Tcl_NRCmdSwap</B>
+all accept a <I>flags</I> parameter, which is an OR-ed-together set of
+bits to control evaluation. At the present time, the only supported flag
+available to callers is <B>TCL_EVAL_GLOBAL</B>. 
+If the <B>TCL_EVAL_GLOBAL</B> flag is set, the script or command is
+evaluated in the global namespace. If it is not set, it is evaluated
+in the current namespace.
+<P>
+<B>Tcl_NRExprObj</B> arranges for the expression contained in <I>objPtr</I>
+to be evaluated in the interpreter designated by <I>interp</I> after
+the current command (which must be trampoline-enabled) returns. It is
+the method by which a command may evaluate a Tcl expression without consuming
+space on the C stack.  The argument <I>resultPtr</I> is a pointer to an
+unshared <A HREF="../TclLib/Object.htm">Tcl_Obj</A> where the result of expression evaluation is to be written.
+If expression evaluation returns any code other than TCL_OK, the
+<I>resultPtr</I> value is left untouched.
+<P>
+All of the routines return <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> if command or expression invocation
+has been scheduled successfully. If for any reason the scheduling cannot
+be completed (for example, if the interpreter is unable to find
+the requested command), they return <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> with an
+appropriate message left in the interpreter's result.
+<P>
+<B>Tcl_NRAddCallback</B> arranges to have a C function called when the
+current trampoline-enabled command in the Tcl interpreter designated
+by <I>interp</I> returns.  The <I>postProcPtr</I> argument is a pointer
+to the callback function, which must have arguments and return value
+consistent with the <B>Tcl_NRPostProc</B> data type:
+<P>
+<PRE>typedef int
+<B>Tcl_NRPostProc</B>(
+        <B>ClientData</B> <I>data</I>[],
+        <B><A HREF="../TclLib/Interp.htm">Tcl_Interp</A></B> *<I>interp</I>,
+        int <I>result</I>);</PRE>
+<P>
+When the trampoline invokes the callback function, the <I>data</I>
+parameter will point to an array containing the four one-word
+quantities that were passed to <B>Tcl_NRAddCallback</B> in the
+<I>data0</I> through <I>data3</I> parameters. The Tcl interpreter will
+be designated by the <I>interp</I> parameter, and the <I>result</I>
+parameter will contain the result (<B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B>, <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B>,
+<B><A HREF="../TclCmd/catch.htm">TCL_RETURN</A></B>, <B><A HREF="../TclCmd/catch.htm">TCL_BREAK</A></B> or <B><A HREF="../TclCmd/catch.htm">TCL_CONTINUE</A></B>) that was
+returned by the command evaluation. The callback function is expected,
+in turn, either to return a <I>result</I> to control further evaluation.
+<P>
+Multiple <B>Tcl_NRAddCallback</B> invocations may request multiple
+callbacks, which may be to the same or different callback
+functions. If multiple callbacks are requested, they are executed in
+last-in, first-out order, that is, the most recently requested
+callback is executed first.
+<H3><A NAME="M6">EXAMPLE</A></H3>
+The usual pattern for Tcl commands that invoke other Tcl commands
+is something like:
+<P>
+<PRE>int
+<I>TheCmdObjProc</I>(
+    ClientData clientData,
+    <A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *interp,
+    int objc,
+    <A HREF="../TclLib/Object.htm">Tcl_Obj</A> *const objv[])
+{
+    int result;
+    <A HREF="../TclLib/Object.htm">Tcl_Obj</A> *objPtr;
+
+    <I>... preparation ...</I>
+
+    result = <B><A HREF="../TclLib/Eval.htm">Tcl_EvalObjEx</A></B>(interp, objPtr, 0);
+
+    <I>... postprocessing ...</I>
+
+    return result;
+}
+<B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CreateObjCommand</A></B>(interp, &quot;theCommand&quot;,
+        <I>TheCmdObjProc</I>, clientData, TheCmdDeleteProc);</PRE>
+<P>
+To enable a command like this one for trampoline-based evaluation,
+it must be split into three pieces:
+<P>
+<UL class="example">
+<LI>
+A non-trampoline implementation, <I>TheCmdNewObjProc</I>,
+which will simply create a trampoline
+and invoke the trampoline-based implementation.
+<P><LI>
+A trampoline-enabled implementation, <I>TheCmdNRObjProc</I>.  This
+function will perform the initialization, request that the trampoline
+call the postprocessing routine after command evaluation, and finally,
+request that the trampoline call the inner command.
+<P><LI>
+A postprocessing routine, <I>TheCmdPostProc</I>. This function will
+perform the postprocessing formerly done after the return from the
+inner command in <I>TheCmdObjProc</I>.
+<P></UL>
+<P>
+The non-trampoline implementation is simple and stylized, containing
+a single statement:
+<P>
+<PRE>int
+<I>TheCmdNewObjProc</I>(
+    ClientData clientData,
+    <A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *interp,
+    int objc,
+    <A HREF="../TclLib/Object.htm">Tcl_Obj</A> *const objv[])
+{
+    return <B>Tcl_NRCallObjProc</B>(interp, name,
+            <I>TheCmdNRObjProc</I>, clientData, objc, objv);
+}</PRE>
+<P>
+The trampoline-enabled implementation requests postprocessing,
+and returns to the trampoline requesting command evaluation.
+<P>
+<PRE>int
+<I>TheCmdNRObjProc</I>
+    ClientData clientData,
+    <A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *interp,
+    int objc,
+    <A HREF="../TclLib/Object.htm">Tcl_Obj</A> *const objv[])
+{
+    <A HREF="../TclLib/Object.htm">Tcl_Obj</A> *objPtr;
+
+    <I>... preparation ...</I>
+
+    <B>Tcl_NRAddCallback</B>(interp, <I>TheCmdPostProc</I>,
+            data0, data1, data2, data3);
+    /* <I>data0 .. data3</I> are up to four one-word items to
+     * pass to the postprocessing procedure */
+
+    return <B>Tcl_NREvalObj</B>(interp, objPtr, 0);
+}</PRE>
+<P>
+The postprocessing procedure does whatever the original command did
+upon return from the inner evaluation.
+<P>
+<PRE>int
+<I>TheCmdNRPostProc</I>(
+    ClientData data[],
+    <A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *interp,
+    int result)
+{
+    /* <I>data[0] .. data[3]</I> are the four words of data
+     * passed to <B>Tcl_NRAddCallback</B> */
+
+    <I>... postprocessing ...</I>
+
+    return result;
+}</PRE>
+<P>
+If <I>theCommand</I> is a command that results in multiple commands or
+scripts being evaluated, its postprocessing routine may schedule
+additional postprocessing and then request another command evaluation
+by means of <B>Tcl_NREvalObj</B> or one of the other evaluation
+routines. Looping and sequencing constructs may be implemented in this way.
+<P>
+Finally, to install a trampoline-enabled command in the interpreter,
+<B>Tcl_NRCreateCommand</B> is used in place of
+<B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CreateObjCommand</A></B>.  It accepts two command procedures instead
+of one. The first is for use when no trampoline is yet on the stack,
+and the second is for use when there is already a trampoline in place.
+<P>
+<PRE><B>Tcl_NRCreateCommand</B>(interp, &quot;theCommand&quot;,
+        <I>TheCmdObjProc</I>, <I>TheCmdNRObjProc</I>, clientData,
+        TheCmdDeleteProc);</PRE>
+<H3><A NAME="M7">SEE ALSO</A></H3>
+<B><A HREF="../TclLib/CrtCommand.htm">Tcl_CreateCommand</A></B>, <B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CreateObjCommand</A></B>, <B><A HREF="../TclLib/Eval.htm">Tcl_EvalObjEx</A></B>, <B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_GetCommandFromObj</A></B>, <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprObj</A></B>
+<H3><A NAME="M8">KEYWORDS</A></H3>
+<A href="../Keywords/S.htm#stackless">stackless</A>, <A href="../Keywords/N.htm#nonrecursive">nonrecursive</A>, <A href="../Keywords/E.htm#execute">execute</A>, <A href="../Keywords/C.htm#command">command</A>, <A href="../Keywords/G.htm#global">global</A>, <A href="../Keywords/V.htm#value">value</A>, <A href="../Keywords/R.htm#result">result</A>, <A href="../Keywords/S.htm#script">script</A>
+<H3><A NAME="M9">COPYRIGHT</A></H3>
+Copyright (c) 2008 by Kevin B. Kenny
+<div class="copy"></div>
+</BODY></HTML>

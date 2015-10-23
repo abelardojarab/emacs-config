@@ -1,0 +1,518 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>widget manual page - [incr Tcl]</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">[incr Tcl] Package Commands, version 4.0.0</a> <small>&gt;</small> itclwidget</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="itclwidget.htm#M2" NAME="L161">NAME</A>
+<DL><DD>itcl::widget &mdash; create a widget class of objects</DD></DL>
+<DD><A HREF="itclwidget.htm#M3" NAME="L162">WARNING!</A>
+<DD><A HREF="itclwidget.htm#M4" NAME="L163">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="itclwidget.htm#M5" NAME="L164">DESCRIPTION</A>
+<DD><A HREF="itclwidget.htm#M6" NAME="L165">WIDGET DEFINITIONS</A>
+<DL class="widget definitions">
+<DD><A HREF="itclwidget.htm#M7" NAME="L166"><B>widget </B><I>widgetName definition</I></A>
+</DL>
+<DL class="widget definitions">
+<DD><A HREF="itclwidget.htm#M8" NAME="L167"><B>inherit </B><I>baseWidget</I> ?<I>baseWidget</I>...?</A>
+<DD><A HREF="itclwidget.htm#M9" NAME="L168"><B>constructor </B><I>args</I> ?<I>init</I>? <I>body</I></A>
+<DD><A HREF="itclwidget.htm#M10" NAME="L169"><B>destructor </B><I>body</I></A>
+<DD><A HREF="itclwidget.htm#M11" NAME="L170"><B>method </B><I>name</I> ?<I>args</I>? ?<I>body</I>?</A>
+<DD><A HREF="itclwidget.htm#M12" NAME="L171"><B>proc </B><I>name</I> ?<I>args</I>? ?<I>body</I>?</A>
+<DD><A HREF="itclwidget.htm#M13" NAME="L172"><B>variable </B><I>varName</I> ?<I>init</I>? ?<I>config</I>?</A>
+<DD><A HREF="itclwidget.htm#M14" NAME="L173"><B>common </B><I>varName</I> ?<I>init</I>?</A>
+<DD><A HREF="itclwidget.htm#M15" NAME="L174"><B>public </B><I>command</I> ?<I>arg arg ...</I>?</A>
+<DD><A HREF="itclwidget.htm#M16" NAME="L175"><B>protected </B><I>command</I> ?<I>arg arg ...</I>?</A>
+<DD><A HREF="itclwidget.htm#M17" NAME="L176"><B>private </B><I>command</I> ?<I>arg arg ...</I>?</A>
+</DL>
+<DD><A HREF="itclwidget.htm#M18" NAME="L177">WIDGET USAGE</A>
+<DL class="widget usage">
+<DD><A HREF="itclwidget.htm#M19" NAME="L178"><I>widgetName objName</I> ?<I>args...</I>?</A>
+</DL>
+<DD><A HREF="itclwidget.htm#M20" NAME="L179">OBJECT USAGE</A>
+<DL class="object usage">
+<DD><A HREF="itclwidget.htm#M21" NAME="L180"><I>objName method</I> ?<I>args...</I>?</A>
+</DL>
+<DD><A HREF="itclwidget.htm#M22" NAME="L181">BUILT-IN METHODS</A>
+<DL class="built-in methods">
+<DD><A HREF="itclwidget.htm#M23" NAME="L182"><I>objName</I> <B>cget option</B></A>
+<DD><A HREF="itclwidget.htm#M24" NAME="L183"><I>objName</I> <B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="itclwidget.htm#M25" NAME="L184"><I>objName</I> <B>isa </B><I>widgetName</I></A>
+<DD><A HREF="itclwidget.htm#M26" NAME="L185"><I>objName</I> <B>info </B><I>option</I> ?<I>args...</I>?</A>
+<DL class="built-in methods">
+<DD><A HREF="itclwidget.htm#M27" NAME="L186"><I>objName</I> <B>info widget</B></A>
+<DD><A HREF="itclwidget.htm#M28" NAME="L187"><I>objName</I> <B>info inherit</B></A>
+<DD><A HREF="itclwidget.htm#M29" NAME="L188"><I>objName</I> <B>info heritage</B></A>
+<DD><A HREF="itclwidget.htm#M30" NAME="L189"><I>objName</I> <B>info function</B> ?<I>cmdName</I>? ?<B>-protection</B>? ?<B>-type</B>? ?<B>-name</B>? ?<B>-args</B>? ?<B>-body</B>?</A>
+<DD><A HREF="itclwidget.htm#M31" NAME="L190"><I>objName</I> <B>info variable</B> ?<I>varName</I>? ?<B>-protection</B>? ?<B>-type</B>? ?<B>-name</B>? ?<B>-init</B>? ?<B>-value</B>? ?<B>-config</B>?</A>
+</DL>
+</DL>
+<DD><A HREF="itclwidget.htm#M32" NAME="L191">CHAINING METHODS/PROCS</A>
+<DD><A HREF="itclwidget.htm#M33" NAME="L192">AUTO-LOADING</A>
+<DD><A HREF="itclwidget.htm#M34" NAME="L193">C PROCEDURES</A>
+<DD><A HREF="itclwidget.htm#M35" NAME="L194">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+itcl::widget &mdash; create a widget class of objects
+<H3><A NAME="M3">WARNING!</A></H3>
+This is new functionality in [incr Tcl] where the API can still change!!
+<H3><A NAME="M4">SYNOPSIS</A></H3>
+<B>itcl::widget </B><I>widgetName</I> <B>{</B><BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>inherit </B><I>baseWidget</I> ?<I>baseWidget</I>...?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>constructor </B><I>args</I> ?<I>init</I>? <I>body</I><BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>destructor </B><I>body</I><BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>public method </B><I>name</I> ?<I>args</I>? ?<I>body</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>protected method </B><I>name</I> ?<I>args</I>? ?<I>body</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>private method </B><I>name</I> ?<I>args</I>? ?<I>body</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>public proc </B><I>name</I> ?<I>args</I>? ?<I>body</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>protected proc </B><I>name</I> ?<I>args</I>? ?<I>body</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>private proc </B><I>name</I> ?<I>args</I>? ?<I>body</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>public variable </B><I>varName</I> ?<I>init</I>? ?<I>config</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>protected variable </B><I>varName</I> ?<I>init</I>? ?<I>config</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>private variable </B><I>varName</I> ?<I>init</I>? ?<I>config</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>public common </B><I>varName</I> ?<I>init</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>protected common </B><I>varName</I> ?<I>init</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>private common </B><I>varName</I> ?<I>init</I>?<BR>
+<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>public </B><I>command</I> ?<I>arg arg ...</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>protected </B><I>command</I> ?<I>arg arg ...</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>private </B><I>command</I> ?<I>arg arg ...</I>?<BR>
+<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>&lt;delegation info&gt;</B> see delegation page<BR>
+<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>&lt;option info&gt;</B> see option page<BR>
+<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B>set </B><I>varName</I> ?<I>value</I>?<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;</TT><B><A HREF="../TclCmd/array.htm">array </A></B><I>option</I> ?<I>arg arg ...</I>?<BR>
+<B>}</B><BR>
+<BR>
+<I>widgetName objName</I> ?<I>arg arg ...</I>?<BR>
+<BR>
+<I>objName method</I> ?<I>arg arg ...</I>?<BR>
+<BR>
+<I>widgetName::proc</I> ?<I>arg arg ...</I>?<BR>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+One of the fundamental constructs in <B>[incr&nbsp;Tcl]</B> is the widget definition.
+A widget is like a class with some additional features.
+Each widget acts as a template for actual objects that can be created.
+The widget itself is a namespace which contains things common to all
+objects.  Each object has its own unique bundle of data which contains
+instances of the &quot;variables&quot; defined in the widget definition.  Each
+object also has a built-in variable named &quot;this&quot;, which contains the
+name of the object.  Widgets can also have &quot;common&quot; data members that
+are shared by all objects in a widget.
+<P>
+Two types of functions can be included in the widget definition.
+&quot;Methods&quot; are functions which operate on a specific object, and
+therefore have access to both &quot;variables&quot; and &quot;common&quot; data members.
+&quot;Procs&quot; are ordinary procedures in the widget namespace, and only
+have access to &quot;common&quot; data members.
+<P>
+If the body of any method or proc starts with &quot;<B>@</B>&quot;, it is treated
+as the symbolic name for a C procedure.  Otherwise, it is treated as
+a Tcl code script.  See below for details on registering and using
+C procedures.
+<P>
+A widget can only be defined once, although the bodies of widget
+methods and procs can be defined again and again for interactive
+debugging.  See the <B>body</B> and <B>configbody</B> commands for
+details.
+<P>
+Each namespace can have its own collection of objects and widgets.
+The list of widgets available in the current context can be queried
+using the &quot;<B><A HREF="../ItclCmd/find.htm">itcl::find widgets</A></B>&quot; command, and the list of objects,
+with the &quot;<B><A HREF="../ItclCmd/find.htm">itcl::find objects</A></B>&quot; command.
+<P>
+A widget can be deleted using the &quot;<B>delete widget</B>&quot; command.
+Individual objects can be deleted using the &quot;<B>delete object</B>&quot;
+command.
+
+<H3><A NAME="M6">WIDGET DEFINITIONS</A></H3>
+<DL class="widget definitions">
+<DT><A NAME="M7"><B>widget </B><I>widgetName definition</I></A><DD>
+Provides the definition for a widget named <I>widgetName</I>.  If
+the widget <I>widgetName</I> already exists, or if a command called
+<I>widgetName</I> exists in the current namespace context, this
+command returns an error.  If the widget definition is successfully
+parsed, <I>widgetName</I> becomes a command in the current context,
+handling the creation of objects for this widget.
+<P></DL>
+<P>
+The widget <I>definition</I> is evaluated as a series of Tcl
+statements that define elements within the widget.  The following
+widget definition commands are recognized:
+<P>
+<DL class="widget definitions">
+<DT><A NAME="M8"><B>inherit </B><I>baseWidget</I> ?<I>baseWidget</I>...?</A><DD>
+Causes the current widget to inherit characteristics from one or
+more base widgets.  Widgets must have been defined by a previous
+<B>widget</B> command, or must be available to the auto-loading
+facility (see &quot;AUTO-LOADING&quot; below).  A single widget definition
+can contain no more than one <B>inherit</B> command.
+<P>
+The order of <I>baseWidget</I> names in the <B>inherit</B> list
+affects the name resolution for widget members.  When the same
+member name appears in two or more base widgets, the base widget
+that appears first in the <B>inherit</B> list takes precedence.
+For example, if widgets &quot;Foo&quot; and &quot;Bar&quot; both contain the member
+&quot;x&quot;, and if another widget has the &quot;<B>inherit</B>&quot; statement:
+<P>
+<PRE>inherit Foo Bar</PRE>
+<P>then the name &quot;x&quot; means &quot;Foo::x&quot;.  Other inherited members named
+&quot;x&quot; must be referenced with their explicit name, like &quot;Bar::x&quot;.
+<P><DT><A NAME="M9"><B>constructor </B><I>args</I> ?<I>init</I>? <I>body</I></A><DD>
+Declares the <I>args</I> argument list and <I>body</I> used for
+the constructor, which is automatically invoked whenever an
+object is created.
+<P>
+Before the <I>body</I> is executed, the
+optional <I>init</I> statement is used to invoke any base widget
+constructors that require arguments.  Variables in the <I>args</I>
+specification can be accessed in the <I>init</I> code fragment,
+and passed to base widget constructors.  After evaluating the
+<I>init</I> statement, any base widget constructors that have
+not been executed are invoked automatically without arguments.
+This ensures that all base widgets are fully constructed before
+the constructor <I>body</I> is executed.  By default, this
+scheme causes constructors to be invoked in order from least-
+to most-specific.  This is exactly the opposite of the order
+that widgets are reported by the <B><A HREF="../TclCmd/info.htm">info heritage</A></B> command.
+<P>If construction is successful, the constructor always returns
+the object name-regardless of how the <I>body</I> is defined-and
+the object name becomes a command in the current namespace context.
+If construction fails, an error message is returned.
+<P><DT><A NAME="M10"><B>destructor </B><I>body</I></A><DD>
+Declares the <I>body</I> used for the destructor, which is automatically
+invoked when an object is deleted.  If the destructor is successful,
+the object data is destroyed and the object name is removed as a command
+from the interpreter.  If destruction fails, an error message is returned
+and the object remains.
+<P>
+When an object is destroyed, all destructors in its widget hierarchy
+are invoked in order from most- to least-specific.  This is the
+order that the widgets are reported by the &quot;<B><A HREF="../TclCmd/info.htm">info heritage</A></B>&quot;
+command, and it is exactly the opposite of the default constructor
+order.
+<P><DT><A NAME="M11"><B>method </B><I>name</I> ?<I>args</I>? ?<I>body</I>?</A><DD>
+Declares a method called <I>name</I>.  When the method <I>body</I> is
+executed, it will have automatic access to object-specific variables
+and common data members.
+<P>
+If the <I>args</I> list is specified, it establishes the usage
+information for this method.  The <B>body</B> command can be used
+to redefine the method body, but the <I>args</I> list must match
+this specification.
+<P>Within the body of another widget method, a method can be invoked
+like any other command-simply by using its name.  Outside of the
+widget context, the method name must be prefaced an object name,
+which provides the context for the data that it manipulates.
+Methods in a base widget that are redefined in the current widget,
+or hidden by another base widget, can be qualified using the
+&quot;<I>widgetName</I>::<I>method</I>&quot; syntax.
+<P><DT><A NAME="M12"><B>proc </B><I>name</I> ?<I>args</I>? ?<I>body</I>?</A><DD>
+Declares a proc called <I>name</I>.  A proc is an ordinary procedure
+within the widget namespace.  Unlike a method, a proc is invoked
+without referring to a specific object.  When the proc <I>body</I> is
+executed, it will have automatic access only to common data members.
+<P>
+If the <I>args</I> list is specified, it establishes the usage
+information for this proc.  The <B>body</B> command can be used
+to redefine the proc body, but the <I>args</I> list must match
+this specification.
+<P>Within the body of another widget method or proc, a proc can be
+invoked like any other command-simply by using its name.
+In any other namespace context, the proc is invoked using a
+qualified name like &quot;<I>widgetName</I><B>::</B><I>proc</I>&quot;.  Procs in
+a base widget that are redefined in the current widget, or hidden
+by another base widget, can also be accessed via their qualified
+name.
+<P><DT><A NAME="M13"><B>variable </B><I>varName</I> ?<I>init</I>? ?<I>config</I>?</A><DD>
+Defines an object-specific variable named <I>varName</I>.  All
+object-specific variables are automatically available in widget
+methods.  They need not be declared with anything like the
+<B><A HREF="../TclCmd/global.htm">global</A></B> command.
+<P>
+If the optional <I>init</I> string is specified, it is used as the
+initial value of the variable when a new object is created.
+Initialization forces the variable to be a simple scalar
+value; uninitialized variables, on the other hand, can be set
+within the constructor and used as arrays.
+<P>The optional <I>config</I> script is only allowed for public variables.
+If specified, this code fragment is executed whenever a public
+variable is modified by the built-in &quot;configure&quot; method.  The
+<I>config</I> script can also be specified outside of the widget
+definition using the <B>configbody</B> command.
+<P><DT><A NAME="M14"><B>common </B><I>varName</I> ?<I>init</I>?</A><DD>
+Declares a common variable named <I>varName</I>.  Common variables
+reside in the widget namespace and are shared by all objects belonging
+to the widget.  They are just like global variables, except that
+they need not be declared with the usual <B><A HREF="../TclCmd/global.htm">global</A></B> command.
+They are automatically visible in all widget methods and procs.
+<P>
+If the optional <I>init</I> string is specified, it is used as the
+initial value of the variable.  Initialization forces the variable
+to be a simple scalar value; uninitialized variables, on the other
+hand, can be set with subsequent <B><A HREF="../TclCmd/set.htm">set</A></B> and <B><A HREF="../TclCmd/array.htm">array</A></B> commands
+and used as arrays.
+<P>
+Once a common data member has been defined, it can be set using
+<B><A HREF="../TclCmd/set.htm">set</A></B> and <B><A HREF="../TclCmd/array.htm">array</A></B> commands within the widget definition.
+This allows common data members to be initialized as arrays.
+For example:
+<P>
+<PRE>itcl::widget Foo {
+    protected common boolean
+    set boolean(true) 1
+    set boolean(false) 0
+}</PRE>
+<P>Note that if common data members are initialized within the
+constructor, they get initialized again and again whenever new
+objects are created.
+<P><DT><A NAME="M15"><B>public </B><I>command</I> ?<I>arg arg ...</I>?</A><DD>
+<P><DT><A NAME="M16"><B>protected </B><I>command</I> ?<I>arg arg ...</I>?</A><DD>
+<P><DT><A NAME="M17"><B>private </B><I>command</I> ?<I>arg arg ...</I>?</A><DD>
+These commands are used to set the protection level for widget
+members that are created when <I>command</I> is evaluated.
+The <I>command</I> is usually <B>method</B>, <B><A HREF="../TclCmd/proc.htm">proc</A></B>,
+<B><A HREF="../TclCmd/variable.htm">variable</A></B> or<B>common</B>, and the remaining <I>arg</I>'s
+complete the member definition.  However, <I>command</I> can
+also be a script containing many different member definitions,
+and the protection level will apply to all of the members
+that are created.
+<P></DL>
+<H3><A NAME="M18">WIDGET USAGE</A></H3>
+Once a widget has been defined, the widget name can be used as a
+command to create new objects belonging to the widget.
+<P>
+<DL class="widget usage">
+<DT><A NAME="M19"><I>widgetName objName</I> ?<I>args...</I>?</A><DD>
+Creates a new object in widget <I>widgetName</I> with the name <I>objName</I>.
+Remaining arguments are passed to the constructor of the most-specific
+widget.  This in turn passes arguments to base widget constructors before
+invoking its own body of commands.  If construction is successful, a
+command called <I>objName</I> is created in the current namespace context,
+and <I>objName</I> is returned as the result of this operation.
+If an error is encountered during construction, the destructors are
+automatically invoked to free any resources that have been allocated,
+the object is deleted, and an error is returned.
+<P>
+If <I>objName</I> contains the string &quot;<B>#auto</B>&quot;, that string is
+replaced with an automatically generated name.  Names have the
+form <I>widgetName&lt;number&gt;</I>, where the <I>widgetName</I> part is
+modified to start with a lowercase letter.  In widget &quot;Toaster&quot;,
+for example, the &quot;<B>#auto</B>&quot; specification would produce names
+like toaster0, toaster1, etc.  Note that &quot;<B>#auto</B>&quot; can be
+also be buried within an object name:
+<P>
+<PRE>fileselectiondialog .foo.bar.#auto -background red</PRE>
+<P>This would generate an object named &quot;.foo.bar.fileselectiondialog0&quot;.
+<P></DL>
+<H3><A NAME="M20">OBJECT USAGE</A></H3>
+Once an object has been created, the object name can be used
+as a command to invoke methods that operate on the object.
+<P>
+<DL class="object usage">
+<DT><A NAME="M21"><I>objName method</I> ?<I>args...</I>?</A><DD>
+Invokes a method named <I>method</I> on an object named <I>objName</I>.
+Remaining arguments are passed to the argument list for the
+method.  The method name can be &quot;constructor&quot;, &quot;destructor&quot;,
+any method name appearing in the widget definition, or any of
+the following built-in methods.
+<P></DL>
+<H3><A NAME="M22">BUILT-IN METHODS</A></H3>
+<DL class="built-in methods">
+<DT><A NAME="M23"><I>objName</I> <B>cget option</B></A><DD>
+Provides access to public variables as configuration options.  This
+mimics the behavior of the usual &quot;cget&quot; operation for Tk widgets.
+The <I>option</I> argument is a string of the form &quot;<B>-</B><I>varName</I>&quot;,
+and this method returns the current value of the public variable
+<I>varName</I>.
+<P><DT><A NAME="M24"><I>objName</I> <B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A><DD>
+Provides access to public variables as configuration options.  This
+mimics the behavior of the usual &quot;configure&quot; operation for Tk widgets.
+With no arguments, this method returns a list of lists describing
+all of the public variables.  Each list has three elements:  the
+variable name, its initial value and its current value.
+<P>
+If a single <I>option</I> of the form &quot;<B>-</B><I>varName</I>&quot; is specified,
+then this method returns the information for that one variable.
+<P>Otherwise, the arguments are treated as <I>option</I>/<I>value</I>
+pairs assigning new values to public variables.  Each variable
+is assigned its new value, and if it has any &quot;config&quot; code associated
+with it, it is executed in the context of the widget where it was
+defined.  If the &quot;config&quot; code generates an error, the variable
+is set back to its previous value, and the <B>configure</B> method
+returns an error.
+<P><DT><A NAME="M25"><I>objName</I> <B>isa </B><I>widgetName</I></A><DD>
+Returns non-zero if the given <I>widgetName</I> can be found in the
+object's heritage, and zero otherwise.
+<P><DT><A NAME="M26"><I>objName</I> <B>info </B><I>option</I> ?<I>args...</I>?</A><DD>
+Returns information related to a particular object named
+<I>objName</I>, or to its widget definition.  The <I>option</I>
+parameter includes the following things, as well as the options
+recognized by the usual Tcl &quot;info&quot; command:
+<P>
+<DL class="built-in methods">
+<DT><A NAME="M27"><I>objName</I> <B>info widget</B></A><DD>
+Returns the name of the most-specific widget for object <I>objName</I>.
+<P><DT><A NAME="M28"><I>objName</I> <B>info inherit</B></A><DD>
+Returns the list of base widgets as they were defined in the
+&quot;<B>inherit</B>&quot; command, or an empty string if this widget
+has no base widgets.
+<P><DT><A NAME="M29"><I>objName</I> <B>info heritage</B></A><DD>
+Returns the current widget name and the entire list of base widgets
+in the order that they are traversed for member lookup and object
+destruction.
+<P><DT><A NAME="M30"><I>objName</I> <B>info function</B> ?<I>cmdName</I>? ?<B>-protection</B>? ?<B>-type</B>? ?<B>-name</B>? ?<B>-args</B>? ?<B>-body</B>?</A><DD>
+With no arguments, this command returns a list of all widgets methods
+and procs.  If <I>cmdName</I> is specified, it returns information
+for a specific method or proc.  If no flags are specified, this
+command returns a list with the following elements:  the protection
+level, the type (method/proc), the qualified name, the argument list
+and the body.  Flags can be used to request specific elements from
+this list.
+<P><DT><A NAME="M31"><I>objName</I> <B>info variable</B> ?<I>varName</I>? ?<B>-protection</B>? ?<B>-type</B>? ?<B>-name</B>? ?<B>-init</B>? ?<B>-value</B>? ?<B>-config</B>?</A><DD>
+With no arguments, this command returns a list of all object-specific
+variables and common data members.  If <I>varName</I> is specified, it
+returns information for a specific data member.  If no flags are
+specified, this command returns a list with the following elements:  the
+protection level, the type (variable/common), the qualified name, the
+initial value, and the current value.  If <I>varName</I> is a public
+variable, the &quot;config&quot; code is included on this list.  Flags can be
+used to request specific elements from this list.
+<P></DL>
+<P></DL>
+<H3><A NAME="M32">CHAINING METHODS/PROCS</A></H3>
+Sometimes a base widget has a method or proc that is redefined with
+the same name in a derived widget.  This is a way of making the
+derived widget handle the same operations as the base widget, but
+with its own specialized behavior.  For example, suppose we have
+a Toaster widget that looks like this:
+<P>
+<PRE>itcl::widget Toaster {
+    variable crumbs 0
+    method toast {nslices} {
+        if {$crumbs &gt; 50} {
+            error &quot;== FIRE! FIRE! ==&quot;
+        }
+        set crumbs [expr $crumbs+4*$nslices]
+    }
+    method clean {} {
+        set crumbs 0
+    }
+}</PRE>
+<P>
+We might create another widget like SmartToaster that redefines
+the &quot;toast&quot; method.  If we want to access the base widget method,
+we can qualify it with the base widget name, to avoid ambiguity:
+<P>
+<PRE>itcl::widget SmartToaster {
+    inherit Toaster
+    method toast {nslices} {
+        if {$crumbs &gt; 40} {
+            clean
+        }
+        return [Toaster::toast $nslices]
+    }
+}</PRE>
+<P>
+Instead of hard-coding the base widget name, we can use the
+&quot;chain&quot; command like this:
+<P>
+<PRE>itcl::widget SmartToaster {
+    inherit Toaster
+    method toast {nslices} {
+        if {$crumbs &gt; 40} {
+            clean
+        }
+        return [chain $nslices]
+    }
+}</PRE>
+<P>
+The chain command searches through the widget hierarchy for
+a slightly more generic (base widget) implementation of a method
+or proc, and invokes it with the specified arguments.  It starts
+at the current widget context and searches through base widgets
+in the order that they are reported by the &quot;info heritage&quot; command.
+If another implementation is not found, this command does nothing
+and returns the null string.
+
+<H3><A NAME="M33">AUTO-LOADING</A></H3>
+Widget definitions need not be loaded explicitly; they can be loaded as
+needed by the usual Tcl auto-loading facility.  Each directory containing
+widget definition files should have an accompanying &quot;tclIndex&quot; file.
+Each line in this file identifies a Tcl procedure or <B>[incr&nbsp;Tcl]</B>
+widget definition and the file where the definition can be found.
+<P>
+For example, suppose a directory contains the definitions for widgets
+&quot;Toaster&quot; and &quot;SmartToaster&quot;.  Then the &quot;tclIndex&quot; file for this
+directory would look like:
+<P>
+<PRE># Tcl autoload index file, version 2.0 for [incr Tcl]
+# This file is generated by the &quot;auto_mkindex&quot; command
+# and sourced to set up indexing information for one or
+# more commands.  Typically each line is a command that
+# sets an element in the auto_index array, where the
+# element name is the name of a command and the value is
+# a script that loads the command.
+
+set auto_index(::Toaster) &quot;source $dir/Toaster.itcl&quot;
+set auto_index(::SmartToaster) &quot;source $dir/SmartToaster.itcl&quot;</PRE>
+<P>
+The <B><A HREF="../TclCmd/library.htm">auto_mkindex</A></B> command is used to automatically
+generate &quot;tclIndex&quot; files.
+<P>
+The auto-loader must be made aware of this directory by appending
+the directory name to the &quot;auto_path&quot; variable.  When this is in
+place, widgets will be auto-loaded as needed when used in an
+application.
+
+<H3><A NAME="M34">C PROCEDURES</A></H3>
+C procedures can be integrated into an <B>[incr&nbsp;Tcl]</B> widget
+definition to implement methods, procs, and the &quot;config&quot; code
+for public variables.  Any body that starts with &quot;<B>@</B>&quot;
+is treated as the symbolic name for a C procedure.
+<P>
+Symbolic names are established by registering procedures via
+<B><A HREF="../ItclLib/RegisterC.htm">Itcl_RegisterC()</A></B>.  This is usually done in the <B><A HREF="../TclLib/AppInit.htm">Tcl_AppInit()</A></B>
+procedure, which is automatically called when the interpreter starts up.
+In the following example, the procedure <TT>My_FooCmd()</TT> is registered
+with the symbolic name &quot;foo&quot;.  This procedure can be referenced in
+the <B>body</B> command as &quot;<TT>@foo</TT>&quot;.
+<P>
+<PRE>int
+<A HREF="../TclLib/AppInit.htm">Tcl_AppInit</A>(interp)
+    <A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *interp;     /* Interpreter for application. */
+{
+    if (Itcl_Init(interp) == TCL_ERROR) {
+        return TCL_ERROR;
+    }
+
+    if (<A HREF="../ItclLib/RegisterC.htm">Itcl_RegisterC</A>(interp, &quot;foo&quot;, My_FooCmd) != TCL_OK) {
+        return TCL_ERROR;
+    }
+}</PRE>
+<P>
+C procedures are implemented just like ordinary Tcl commands.
+See the <B>CrtCommand</B> man page for details.  Within the procedure,
+widget data members can be accessed like ordinary variables
+using <B><A HREF="../TclLib/SetVar.htm">Tcl_SetVar()</A></B>, <B><A HREF="../TclLib/SetVar.htm">Tcl_GetVar()</A></B>, <B><A HREF="../TclLib/TraceVar.htm">Tcl_TraceVar()</A></B>,
+etc.  Widget methods and procs can be executed like ordinary commands
+using <B><A HREF="../TclLib/Eval.htm">Tcl_Eval()</A></B>.  <B>[incr&nbsp;Tcl]</B> makes this possible by
+automatically setting up the context before executing the C procedure.
+<P>
+This scheme provides a natural migration path for code development.
+Widgets can be developed quickly using Tcl code to implement the
+bodies.  An entire application can be built and tested.  When
+necessary, individual bodies can be implemented with C code to
+improve performance.
+
+<H3><A NAME="M35">KEYWORDS</A></H3>
+<A href="../Keywords/W.htm#widget">widget</A>, <A href="../Keywords/O.htm#object">object</A>, <A href="../Keywords/O.htm#object-oriented">object-oriented</A>
+<div class="copy">Copyright &copy; 2008 Arnulf Widemann
+</div>
+</BODY></HTML>

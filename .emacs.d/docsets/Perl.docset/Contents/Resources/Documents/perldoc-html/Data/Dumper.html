@@ -1,0 +1,852 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Data::Dumper</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Data::Dumper</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-D.html">Core modules (D)</a> &gt;
+      
+    
+    Data::Dumper
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Data::Dumper</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Methods">Methods</a><li><a href="#Functions">Functions</a><li><a href="#Configuration-Variables-or-Methods">Configuration Variables or Methods</a><li><a href="#Exports">Exports</a></ul><li><a href="#EXAMPLES">EXAMPLES</a><li><a href="#BUGS">BUGS</a><ul><li><a href="#NOTE">NOTE</a></ul><li><a href="#AUTHOR">AUTHOR</a><li><a href="#VERSION">VERSION</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Data::Dumper - stringified perl data structures, suitable for both printing and <code class="inline"><a class="l_k" href="../functions/eval.html">eval</a></code></p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Data::Dumper</span><span class="sc">;</span></li><li></li><li>    <span class="c"># simple procedural interface</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Dumper</span><span class="s">(</span><span class="i">$foo</span><span class="cm">,</span> <span class="i">$bar</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># extended usage with names</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$foo</span><span class="cm">,</span> <span class="i">$bar</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(foo *ary)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># configuration variables</span></li><li>    <span class="s">{</span></li><li>      <a class="l_k" href="../functions/local.html">local</a> <span class="i">$Data::Dumper::Purity</span> = <span class="n">1</span><span class="sc">;</span></li><li>      <a class="l_k" href="../functions/eval.html">eval</a> <span class="w">Data::Dumper</span><span class="w">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$foo</span><span class="cm">,</span> <span class="i">$bar</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(foo *ary)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="c"># OO usage</span></li><li>    <span class="i">$d</span> = <span class="w">Data::Dumper</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">[</span><span class="i">$foo</span><span class="cm">,</span> <span class="i">$bar</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(foo *ary)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li>       ...</li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$d</span><span class="i">-&gt;Dump</span><span class="sc">;</span></li><li>       ...</li><li>    <span class="i">$d</span><span class="i">-&gt;Purity</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="i">-&gt;Terse</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="i">-&gt;Deepcopy</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/eval.html">eval</a> <span class="i">$d</span><span class="i">-&gt;Dump</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>Given a list of scalars or reference variables, writes out their contents in
+perl syntax. The references can also be objects.  The content of each
+variable is output in a single Perl statement.  Handles self-referential
+structures correctly.</p>
+<p>The return value can be <code class="inline"><a class="l_k" href="../functions/eval.html">eval</a></code>ed to get back an identical copy of the
+original reference structure.  (Please do consider the security implications
+of eval'ing code from untrusted sources!)</p>
+<p>Any references that are the same as one of those passed in will be named
+<code class="inline"><span class="i">$VAR</span></code>
+<i>n</i> (where <i>n</i> is a numeric suffix), and other duplicate references
+to substructures within <code class="inline"><span class="i">$VAR</span></code>
+<i>n</i> will be appropriately labeled using arrow
+notation.  You can specify names for individual values to be dumped if you
+use the <code class="inline"><span class="i">Dump</span><span class="s">(</span><span class="s">)</span></code>
+ method, or you can change the default <code class="inline"><span class="i">$VAR</span></code>
+ prefix to
+something else.  See <code class="inline"><span class="i">$Data::Dumper::Varname</span></code>
+ and <code class="inline"><span class="i">$Data::Dumper::Terse</span></code>
+
+below.</p>
+<p>The default output of self-referential structures can be <code class="inline"><a class="l_k" href="../functions/eval.html">eval</a></code>ed, but the
+nested references to <code class="inline"><span class="i">$VAR</span></code>
+<i>n</i> will be undefined, since a recursive
+structure cannot be constructed using one Perl statement.  You should set the
+<code class="inline"><span class="w">Purity</span></code>
+ flag to 1 to get additional statements that will correctly fill in
+these references.  Moreover, if <code class="inline"><a class="l_k" href="../functions/eval.html">eval</a></code>ed when strictures are in effect,
+you need to ensure that any variables it accesses are previously declared.</p>
+<p>In the extended usage form, the references to be dumped can be given
+user-specified names.  If a name begins with a <code class="inline"><span class="i">*</span></code>
+, the output will
+describe the dereferenced type of the supplied reference for hashes and
+arrays, and coderefs.  Output of names will be avoided where possible if
+the <code class="inline"><span class="w">Terse</span></code>
+ flag is set.</p>
+<p>In many cases, methods that are used to set the internal state of the
+object will return the object itself, so method calls can be conveniently
+chained together.</p>
+<p>Several styles of output are possible, all controlled by setting
+the <code class="inline"><span class="w">Indent</span></code>
+ flag.  See <a href="#Configuration-Variables-or-Methods">Configuration Variables or Methods</a> below
+for details.</p>
+<a name="Methods"></a><h2>Methods</h2>
+<ul>
+<li><a name="_PACKAGE_-%3enew(_ARRAYREF-%5b_%2c-_ARRAYREF%5d_)"></a><b><i>PACKAGE</i>-&gt;new(<i>ARRAYREF [</i>, <i>ARRAYREF]</i>)</b>
+<p>Returns a newly created <code class="inline"><span class="w">Data::Dumper</span></code>
+ object.  The first argument is an
+anonymous array of values to be dumped.  The optional second argument is an
+anonymous array of names for the values.  The names need not have a leading
+<code class="inline"><span class="i">$</span></code>
+ sign, and must be comprised of alphanumeric characters.  You can begin
+a name with a <code class="inline"><span class="i">*</span></code>
+ to specify that the dereferenced type must be dumped
+instead of the reference itself, for ARRAY and HASH references.</p>
+<p>The prefix specified by <code class="inline"><span class="i">$Data::Dumper::Varname</span></code>
+ will be used with a
+numeric suffix if the name for a value is undefined.</p>
+<p>Data::Dumper will catalog all references encountered while dumping the
+values. Cross-references (in the form of names of substructures in perl
+syntax) will be inserted at all possible points, preserving any structural
+interdependencies in the original set of values.  Structure traversal is
+depth-first,  and proceeds in order from the first supplied value to
+the last.</p>
+</li>
+<li><a name="_%24OBJ_-%3eDump--_or_--_PACKAGE_-%3eDump(_ARRAYREF-%5b_%2c-_ARRAYREF%5d_)"></a><b><i>$OBJ</i>-&gt;Dump  <i>or</i>  <i>PACKAGE</i>-&gt;Dump(<i>ARRAYREF [</i>, <i>ARRAYREF]</i>)</b>
+<p>Returns the stringified form of the values stored in the object (preserving
+the order in which they were supplied to <code class="inline"><span class="w">new</span></code>
+), subject to the
+configuration options below.  In a list context, it returns a list
+of strings corresponding to the supplied values.</p>
+<p>The second form, for convenience, simply calls the <code class="inline"><span class="w">new</span></code>
+ method on its
+arguments before dumping the object immediately.</p>
+</li>
+<li><a name="_%24OBJ_-%3eSeen(_%5bHASHREF%5d_)"></a><b><i>$OBJ</i>-&gt;Seen(<i>[HASHREF]</i>)</b>
+<p>Queries or adds to the internal table of already encountered references.
+You must use <code class="inline"><span class="w">Reset</span></code>
+ to explicitly clear the table if needed.  Such
+references are not dumped; instead, their names are inserted wherever they
+are encountered subsequently.  This is useful especially for properly
+dumping subroutine references.</p>
+<p>Expects an anonymous hash of name =&gt; value pairs.  Same rules apply for names
+as in <code class="inline"><span class="w">new</span></code>
+.  If no argument is supplied, will return the "seen" list of
+name =&gt; value pairs, in a list context.  Otherwise, returns the object
+itself.</p>
+</li>
+<li><a name="_%24OBJ_-%3eValues(_%5bARRAYREF%5d_)"></a><b><i>$OBJ</i>-&gt;Values(<i>[ARRAYREF]</i>)</b>
+<p>Queries or replaces the internal array of values that will be dumped.  When
+called without arguments, returns the values as a list.  When called with a
+reference to an array of replacement values, returns the object itself.  When
+called with any other type of argument, dies.</p>
+</li>
+<li><a name="_%24OBJ_-%3eNames(_%5bARRAYREF%5d_)"></a><b><i>$OBJ</i>-&gt;Names(<i>[ARRAYREF]</i>)</b>
+<p>Queries or replaces the internal array of user supplied names for the values
+that will be dumped.  When called without arguments, returns the names.  When
+called with an array of replacement names, returns the object itself.  If the
+number of replacement names exceeds the number of values to be named, the
+excess names will not be used.  If the number of replacement names falls short
+of the number of values to be named, the list of replacement names will be
+exhausted and remaining values will not be renamed.  When
+called with any other type of argument, dies.</p>
+</li>
+<li><a name="_%24OBJ_-%3eReset"></a><b><i>$OBJ</i>-&gt;Reset</b>
+<p>Clears the internal table of "seen" references and returns the object
+itself.</p>
+</li>
+</ul>
+<a name="Functions"></a><h2>Functions</h2>
+<ul>
+<li><a name="Dumper(_LIST_)"></a><b>Dumper(<i>LIST</i>)</b>
+<p>Returns the stringified form of the values in the list, subject to the
+configuration options below.  The values will be named <code class="inline"><span class="i">$VAR</span></code>
+<i>n</i> in the
+output, where <i>n</i> is a numeric suffix.  Will return a list of strings
+in a list context.</p>
+</li>
+</ul>
+<a name="Configuration-Variables-or-Methods"></a><h2>Configuration Variables or Methods</h2>
+<p>Several configuration variables can be used to control the kind of output
+generated when using the procedural interface.  These variables are usually
+<code class="inline"><a class="l_k" href="../functions/local.html">local</a></code>ized in a block so that other parts of the code are not affected by
+the change.</p>
+<p>These variables determine the default state of the object created by calling
+the <code class="inline"><span class="w">new</span></code>
+ method, but cannot be used to alter the state of the object
+thereafter.  The equivalent method names should be used instead to query
+or set the internal state of the object.</p>
+<p>The method forms return the object itself when called with arguments,
+so that they can be chained together nicely.</p>
+<ul>
+<li>
+<p>$Data::Dumper::Indent  <i>or</i>  <i>$OBJ</i>-&gt;Indent(<i>[NEWVAL]</i>)</p>
+<p>Controls the style of indentation.  It can be set to 0, 1, 2 or 3.  Style 0
+spews output without any newlines, indentation, or spaces between list
+items.  It is the most compact format possible that can still be called
+valid perl.  Style 1 outputs a readable form with newlines but no fancy
+indentation (each level in the structure is simply indented by a fixed
+amount of whitespace).  Style 2 (the default) outputs a very readable form
+which takes into account the length of hash keys (so the hash value lines
+up).  Style 3 is like style 2, but also annotates the elements of arrays
+with their index (but the comment is on its own line, so array output
+consumes twice the number of lines).  Style 2 is the default.</p>
+</li>
+<li>
+<p>$Data::Dumper::Purity  <i>or</i>  <i>$OBJ</i>-&gt;Purity(<i>[NEWVAL]</i>)</p>
+<p>Controls the degree to which the output can be <code class="inline"><a class="l_k" href="../functions/eval.html">eval</a></code>ed to recreate the
+supplied reference structures.  Setting it to 1 will output additional perl
+statements that will correctly recreate nested references.  The default is
+0.</p>
+</li>
+<li>
+<p>$Data::Dumper::Pad  <i>or</i>  <i>$OBJ</i>-&gt;Pad(<i>[NEWVAL]</i>)</p>
+<p>Specifies the string that will be prefixed to every line of the output.
+Empty string by default.</p>
+</li>
+<li>
+<p>$Data::Dumper::Varname  <i>or</i>  <i>$OBJ</i>-&gt;Varname(<i>[NEWVAL]</i>)</p>
+<p>Contains the prefix to use for tagging variable names in the output. The
+default is "VAR".</p>
+</li>
+<li>
+<p>$Data::Dumper::Useqq  <i>or</i>  <i>$OBJ</i>-&gt;Useqq(<i>[NEWVAL]</i>)</p>
+<p>When set, enables the use of double quotes for representing string values.
+Whitespace other than space will be represented as <code class="inline"><span class="s">[</span>\<span class="w">n</span>\<span class="w">t</span>\<span class="w">r</span><span class="s">]</span></code>
+, "unsafe"
+characters will be backslashed, and unprintable characters will be output as
+quoted octal integers.  The default is 0.</p>
+</li>
+<li>
+<p>$Data::Dumper::Terse  <i>or</i>  <i>$OBJ</i>-&gt;Terse(<i>[NEWVAL]</i>)</p>
+<p>When set, Data::Dumper will emit single, non-self-referential values as
+atoms/terms rather than statements.  This means that the <code class="inline"><span class="i">$VAR</span></code>
+<i>n</i> names
+will be avoided where possible, but be advised that such output may not
+always be parseable by <code class="inline"><a class="l_k" href="../functions/eval.html">eval</a></code>.</p>
+</li>
+<li>
+<p>$Data::Dumper::Freezer  <i>or</i>  $<i>OBJ</i>-&gt;Freezer(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a method name, or to an empty string to disable the feature.
+Data::Dumper will invoke that method via the object before attempting to
+stringify it.  This method can alter the contents of the object (if, for
+instance, it contains data allocated from C), and even rebless it in a
+different package.  The client is responsible for making sure the specified
+method can be called via the object, and that the object ends up containing
+only perl data types after the method has been called.  Defaults to an empty
+string.</p>
+<p>If an object does not support the method specified (determined using
+UNIVERSAL::can()) then the call will be skipped.  If the method dies a
+warning will be generated.</p>
+</li>
+<li>
+<p>$Data::Dumper::Toaster  <i>or</i>  $<i>OBJ</i>-&gt;Toaster(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a method name, or to an empty string to disable the feature.
+Data::Dumper will emit a method call for any objects that are to be dumped
+using the syntax <code class="inline"><a class="l_k" href="../functions/bless.html">bless</a><span class="s">(</span><span class="w">DATA</span><span class="cm">,</span> <span class="w">CLASS</span><span class="s">)</span><span class="i">-&gt;METHOD</span><span class="s">(</span><span class="s">)</span></code>
+.  Note that this means that
+the method specified will have to perform any modifications required on the
+object (like creating new state within it, and/or reblessing it in a
+different package) and then return it.  The client is responsible for making
+sure the method can be called via the object, and that it returns a valid
+object.  Defaults to an empty string.</p>
+</li>
+<li>
+<p>$Data::Dumper::Deepcopy  <i>or</i>  $<i>OBJ</i>-&gt;Deepcopy(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a boolean value to enable deep copies of structures.
+Cross-referencing will then only be done when absolutely essential
+(i.e., to break reference cycles).  Default is 0.</p>
+</li>
+<li>
+<p>$Data::Dumper::Quotekeys  <i>or</i>  $<i>OBJ</i>-&gt;Quotekeys(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a boolean value to control whether hash keys are quoted.
+A defined false value will avoid quoting hash keys when it looks like a simple
+string.  Default is 1, which will always enclose hash keys in quotes.</p>
+</li>
+<li>
+<p>$Data::Dumper::Bless  <i>or</i>  $<i>OBJ</i>-&gt;Bless(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a string that specifies an alternative to the <code class="inline"><a class="l_k" href="../functions/bless.html">bless</a></code>
+builtin operator used to create objects.  A function with the specified
+name should exist, and should accept the same arguments as the builtin.
+Default is <code class="inline"><a class="l_k" href="../functions/bless.html">bless</a></code>.</p>
+</li>
+<li>
+<p>$Data::Dumper::Pair  <i>or</i>  $<i>OBJ</i>-&gt;Pair(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a string that specifies the separator between hash keys
+and values. To dump nested hash, array and scalar values to JavaScript,
+use: <code class="inline"><span class="i">$Data::Dumper::Pair</span> = <span class="q">&#39; : &#39;</span><span class="sc">;</span></code>
+. Implementing <code class="inline"><a class="l_k" href="../functions/bless.html">bless</a></code> in JavaScript
+is left as an exercise for the reader.
+A function with the specified name exists, and accepts the same arguments
+as the builtin.</p>
+<p>Default is: <code class="inline"> <span class="cm">=&gt;</span> </code>
+.</p>
+</li>
+<li>
+<p>$Data::Dumper::Maxdepth  <i>or</i>  $<i>OBJ</i>-&gt;Maxdepth(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a positive integer that specifies the depth beyond which
+we don't venture into a structure.  Has no effect when
+<code class="inline"><span class="w">Data::Dumper::Purity</span></code>
+ is set.  (Useful in debugger when we often don't
+want to see more than enough).  Default is 0, which means there is
+no maximum depth.</p>
+</li>
+<li>
+<p>$Data::Dumper::Maxrecurse  <i>or</i>  $<i>OBJ</i>-&gt;Maxrecurse(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a positive integer that specifies the depth beyond which
+recursion into a structure will throw an exception.  This is intended
+as a security measure to prevent perl running out of stack space when
+dumping an excessively deep structure.  Can be set to 0 to remove the
+limit.  Default is 1000.</p>
+</li>
+<li>
+<p>$Data::Dumper::Useperl  <i>or</i>  $<i>OBJ</i>-&gt;Useperl(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a boolean value which controls whether the pure Perl
+implementation of <code class="inline"><span class="w">Data::Dumper</span></code>
+ is used. The <code class="inline"><span class="w">Data::Dumper</span></code>
+ module is
+a dual implementation, with almost all functionality written in both
+pure Perl and also in XS ('C'). Since the XS version is much faster, it
+will always be used if possible. This option lets you override the
+default behavior, usually for testing purposes only. Default is 0, which
+means the XS implementation will be used if possible.</p>
+</li>
+<li>
+<p>$Data::Dumper::Sortkeys  <i>or</i>  $<i>OBJ</i>-&gt;Sortkeys(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a boolean value to control whether hash keys are dumped in
+sorted order. A true value will cause the keys of all hashes to be
+dumped in Perl's default sort order. Can also be set to a subroutine
+reference which will be called for each hash that is dumped. In this
+case <code class="inline"><span class="w">Data::Dumper</span></code>
+ will call the subroutine once for each hash,
+passing it the reference of the hash. The purpose of the subroutine is
+to return a reference to an array of the keys that will be dumped, in
+the order that they should be dumped. Using this feature, you can
+control both the order of the keys, and which keys are actually used. In
+other words, this subroutine acts as a filter by which you can exclude
+certain keys from being dumped. Default is 0, which means that hash keys
+are not sorted.</p>
+</li>
+<li>
+<p>$Data::Dumper::Deparse  <i>or</i>  $<i>OBJ</i>-&gt;Deparse(<i>[NEWVAL]</i>)</p>
+<p>Can be set to a boolean value to control whether code references are
+turned into perl source code. If set to a true value, <code class="inline"><span class="w">B::Deparse</span></code>
+
+will be used to get the source of the code reference. Using this option
+will force using the Perl implementation of the dumper, since the fast
+XSUB implementation doesn't support it.</p>
+<p>Caution : use this option only if you know that your coderefs will be
+properly reconstructed by <code class="inline"><span class="w">B::Deparse</span></code>
+.</p>
+</li>
+<li>
+<p>$Data::Dumper::Sparseseen <i>or</i>  $<i>OBJ</i>-&gt;Sparseseen(<i>[NEWVAL]</i>)</p>
+<p>By default, Data::Dumper builds up the "seen" hash of scalars that
+it has encountered during serialization. This is very expensive.
+This seen hash is necessary to support and even just detect circular
+references. It is exposed to the user via the <code class="inline"><span class="i">Seen</span><span class="s">(</span><span class="s">)</span></code>
+ call both
+for writing and reading.</p>
+<p>If you, as a user, do not need explicit access to the "seen" hash,
+then you can set the <code class="inline"><span class="w">Sparseseen</span></code>
+ option to allow Data::Dumper
+to eschew building the "seen" hash for scalars that are known not
+to possess more than one reference. This speeds up serialization
+considerably if you use the XS implementation.</p>
+<p>Note: If you turn on <code class="inline"><span class="w">Sparseseen</span></code>
+, then you must not rely on the
+content of the seen hash since its contents will be an
+implementation detail!</p>
+</li>
+</ul>
+<a name="Exports"></a><h2>Exports</h2>
+<ul>
+<li><a name="Dumper"></a><b>Dumper</b>
+</li>
+</ul>
+<a name="EXAMPLES"></a><h1>EXAMPLES</h1>
+<p>Run these code snippets to get a quick feel for the behavior of this
+module.  When you are through with these examples, you may want to
+add or change the various configuration variables described above,
+to see their behavior.  (See the testsuite in the Data::Dumper
+distribution for more examples.)</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Data::Dumper</span><span class="sc">;</span></li><li></li><li><a name="package-Foo"></a>    package <span class="i">Foo</span><span class="sc">;</span></li><li><a name="new"></a>    sub <span class="m">new</span> <span class="s">{</span><a class="l_k" href="../functions/bless.html">bless</a> <span class="s">{</span><span class="q">&#39;a&#39;</span> <span class="cm">=&gt;</span> <span class="n">1</span><span class="cm">,</span> <span class="q">&#39;b&#39;</span> <span class="cm">=&gt;</span> <a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span> <a class="l_k" href="../functions/return.html">return</a> <span class="q">&quot;foo&quot;</span> <span class="s">}</span><span class="s">}</span><span class="cm">,</span> <span class="i">$_</span>[<span class="n">0</span>]<span class="s">}</span><span class="sc">;</span></li><li></li><li><a name="package-Fuz"></a>    package <span class="i">Fuz</span><span class="sc">;</span>                       <span class="c"># a weird REF-REF-SCALAR object</span></li><li><a name="new-1"></a>    sub <span class="m">new</span> <span class="s">{</span><a class="l_k" href="../functions/bless.html">bless</a> \<span class="s">(</span><span class="i">$_</span> = \ <span class="q">&#39;fu\&#39;z&#39;</span><span class="s">)</span><span class="cm">,</span> <span class="i">$_</span>[<span class="n">0</span>]<span class="s">}</span><span class="sc">;</span></li><li></li><li><a name="package-main"></a>    package <span class="i">main</span><span class="sc">;</span></li><li>    <span class="i">$foo</span> = <span class="w">Foo</span><span class="w">-&gt;new</span><span class="sc">;</span></li><li>    <span class="i">$fuz</span> = <span class="w">Fuz</span><span class="w">-&gt;new</span><span class="sc">;</span></li><li>    <span class="i">$boo</span> = <span class="s">[</span> <span class="n">1</span><span class="cm">,</span> <span class="s">[</span><span class="s">]</span><span class="cm">,</span> <span class="q">&quot;abcd&quot;</span><span class="cm">,</span> \<span class="i">*foo</span><span class="cm">,</span></li><li>             <span class="s">{</span><span class="n">1</span> <span class="cm">=&gt;</span> <span class="q">&#39;a&#39;</span><span class="cm">,</span> <span class="n">023</span> <span class="cm">=&gt;</span> <span class="q">&#39;b&#39;</span><span class="cm">,</span> <span class="n">0x45</span> <span class="cm">=&gt;</span> <span class="q">&#39;c&#39;</span><span class="s">}</span><span class="cm">,</span></li><li>             \\<span class="q">&quot;p\q\&#39;r&quot;</span><span class="cm">,</span> <span class="i">$foo</span><span class="cm">,</span> <span class="i">$fuz</span><span class="s">]</span><span class="sc">;</span></li><li></li><li>    <span class="c">########</span></li><li>    <span class="c"># simple usage</span></li><li>    <span class="c">########</span></li><li></li><li>    <span class="i">$bar</span> = <a class="l_k" href="../functions/eval.html">eval</a><span class="s">(</span><span class="i">Dumper</span><span class="s">(</span><span class="i">$boo</span><span class="s">)</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a><span class="s">(</span><span class="i">$@</span><span class="s">)</span> <a class="l_k" href="../functions/if.html">if</a> <span class="i">$@</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Dumper</span><span class="s">(</span><span class="i">$boo</span><span class="s">)</span><span class="cm">,</span> <span class="i">Dumper</span><span class="s">(</span><span class="i">$bar</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># pretty print (no array indices)</span></li><li></li><li>    <span class="i">$Data::Dumper::Terse</span> = <span class="n">1</span><span class="sc">;</span>        <span class="c"># don&#39;t output names where feasible</span></li><li>    <span class="i">$Data::Dumper::Indent</span> = <span class="n">0</span><span class="sc">;</span>       <span class="c"># turn off all pretty print</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Dumper</span><span class="s">(</span><span class="i">$boo</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="sc">;</span></li><li></li><li>    <span class="i">$Data::Dumper::Indent</span> = <span class="n">1</span><span class="sc">;</span>       <span class="c"># mild pretty print</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Dumper</span><span class="s">(</span><span class="i">$boo</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">$Data::Dumper::Indent</span> = <span class="n">3</span><span class="sc">;</span>       <span class="c"># pretty print with array indices</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Dumper</span><span class="s">(</span><span class="i">$boo</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">$Data::Dumper::Useqq</span> = <span class="n">1</span><span class="sc">;</span>        <span class="c"># print strings in double quotes</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Dumper</span><span class="s">(</span><span class="i">$boo</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">$Data::Dumper::Pair</span> = <span class="q">&quot; : &quot;</span><span class="sc">;</span>     <span class="c"># specify hash key/value separator</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Dumper</span><span class="s">(</span><span class="i">$boo</span><span class="s">)</span><span class="sc">;</span></li><li></li><li></li><li>    <span class="c">########</span></li><li>    <span class="c"># recursive structures</span></li><li>    <span class="c">########</span></li><li></li><li>    <span class="i">@c</span> = <span class="s">(</span><span class="q">&#39;c&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$c</span> = \<span class="i">@c</span><span class="sc">;</span></li><li>    <span class="i">$b</span> = <span class="s">{</span><span class="s">}</span><span class="sc">;</span></li><li>    <span class="i">$a</span> = <span class="s">[</span><span class="n">1</span><span class="cm">,</span> <span class="i">$b</span><span class="cm">,</span> <span class="i">$c</span><span class="s">]</span><span class="sc">;</span></li><li>    <span class="i">$b</span>-&gt;{<span class="w">a</span>} = <span class="i">$a</span><span class="sc">;</span></li><li>    <span class="i">$b</span>-&gt;{<span class="w">b</span>} = <span class="i">$a</span>-&gt;[<span class="n">1</span>]<span class="sc">;</span></li><li>    <span class="i">$b</span>-&gt;{<span class="w">c</span>} = <span class="i">$a</span>-&gt;[<span class="n">2</span>]<span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$a</span><span class="cm">,</span><span class="i">$b</span><span class="cm">,</span><span class="i">$c</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(a b c)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li></li><li>    <span class="i">$Data::Dumper::Purity</span> = <span class="n">1</span><span class="sc">;</span>         <span class="c"># fill in the holes for eval</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$a</span><span class="cm">,</span> <span class="i">$b</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(*a b)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span> <span class="c"># print as @a</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$b</span><span class="cm">,</span> <span class="i">$a</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(*b a)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span> <span class="c"># print as %b</span></li><li></li><li></li><li>    <span class="i">$Data::Dumper::Deepcopy</span> = <span class="n">1</span><span class="sc">;</span>       <span class="c"># avoid cross-refs</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$b</span><span class="cm">,</span> <span class="i">$a</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(*b a)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li></li><li>    <span class="i">$Data::Dumper::Purity</span> = <span class="n">0</span><span class="sc">;</span>         <span class="c"># avoid cross-refs</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$b</span><span class="cm">,</span> <span class="i">$a</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(*b a)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c">########</span></li><li>    <span class="c"># deep structures</span></li><li>    <span class="c">########</span></li><li></li><li>    <span class="i">$a</span> = <span class="q">&quot;pearl&quot;</span><span class="sc">;</span></li><li>    <span class="i">$b</span> = <span class="s">[</span> <span class="i">$a</span> <span class="s">]</span><span class="sc">;</span></li><li>    <span class="i">$c</span> = <span class="s">{</span> <span class="q">&#39;b&#39;</span> <span class="cm">=&gt;</span> <span class="i">$b</span> <span class="s">}</span><span class="sc">;</span></li><li>    <span class="i">$d</span> = <span class="s">[</span> <span class="i">$c</span> <span class="s">]</span><span class="sc">;</span></li><li>    <span class="i">$e</span> = <span class="s">{</span> <span class="q">&#39;d&#39;</span> <span class="cm">=&gt;</span> <span class="i">$d</span> <span class="s">}</span><span class="sc">;</span></li><li>    <span class="i">$f</span> = <span class="s">{</span> <span class="q">&#39;e&#39;</span> <span class="cm">=&gt;</span> <span class="i">$e</span> <span class="s">}</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$f</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(f)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">$Data::Dumper::Maxdepth</span> = <span class="n">3</span><span class="sc">;</span>       <span class="c"># no deeper than 3 refs down</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$f</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(f)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li></li><li>    <span class="c">########</span></li><li>    <span class="c"># object-oriented usage</span></li><li>    <span class="c">########</span></li><li></li><li>    <span class="i">$d</span> = <span class="w">Data::Dumper</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">[</span><span class="i">$a</span><span class="cm">,</span><span class="i">$b</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">qw(a b)</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$d</span><span class="i">-&gt;Seen</span><span class="s">(</span><span class="s">{</span><span class="q">&#39;*c&#39;</span> <span class="cm">=&gt;</span> <span class="i">$c</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span>            <span class="c"># stash a ref without printing it</span></li><li>    <span class="i">$d</span><span class="i">-&gt;Indent</span><span class="s">(</span><span class="n">3</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$d</span><span class="i">-&gt;Dump</span><span class="sc">;</span></li><li>    <span class="i">$d</span><span class="i">-&gt;Reset</span><span class="i">-&gt;Purity</span><span class="s">(</span><span class="n">0</span><span class="s">)</span><span class="sc">;</span>              <span class="c"># empty the seen cache</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <a class="l_k" href="../functions/join.html">join</a> <span class="q">&quot;----\n&quot;</span><span class="cm">,</span> <span class="i">$d</span><span class="i">-&gt;Dump</span><span class="sc">;</span></li><li></li><li></li><li>    <span class="c">########</span></li><li>    <span class="c"># persistence</span></li><li>    <span class="c">########</span></li><li></li><li><a name="package-Foo-1"></a>    package <span class="i">Foo</span><span class="sc">;</span></li><li><a name="new-2"></a>    sub <span class="m">new</span> <span class="s">{</span> <a class="l_k" href="../functions/bless.html">bless</a> <span class="s">{</span> <span class="w">state</span> <span class="cm">=&gt;</span> <span class="q">&#39;awake&#39;</span> <span class="s">}</span><span class="cm">,</span> <a class="l_k" href="../functions/shift.html">shift</a> <span class="s">}</span></li><li><a name="Freeze"></a>    sub <span class="m">Freeze</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$s</span> = <a class="l_k" href="../functions/shift.html">shift</a><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">STDERR</span> <span class="q">&quot;preparing to sleep\n&quot;</span><span class="sc">;</span></li><li>        <span class="i">$s</span>-&gt;{<span class="w">state</span>} = <span class="q">&#39;asleep&#39;</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/return.html">return</a> <a class="l_k" href="../functions/bless.html">bless</a> <span class="i">$s</span><span class="cm">,</span> <span class="q">&#39;Foo::ZZZ&#39;</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li><a name="package-Foo::ZZZ"></a>    package <span class="i">Foo::ZZZ</span><span class="sc">;</span></li><li><a name="Thaw"></a>    sub <span class="m">Thaw</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$s</span> = <a class="l_k" href="../functions/shift.html">shift</a><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">STDERR</span> <span class="q">&quot;waking up\n&quot;</span><span class="sc">;</span></li><li>        <span class="i">$s</span>-&gt;{<span class="w">state</span>} = <span class="q">&#39;awake&#39;</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/return.html">return</a> <a class="l_k" href="../functions/bless.html">bless</a> <span class="i">$s</span><span class="cm">,</span> <span class="q">&#39;Foo&#39;</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li><a name="package-main-1"></a>    package <span class="i">main</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Data::Dumper</span><span class="sc">;</span></li><li>    <span class="i">$a</span> = <span class="w">Foo</span><span class="w">-&gt;new</span><span class="sc">;</span></li><li>    <span class="i">$b</span> = <span class="w">Data::Dumper</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">[</span><span class="i">$a</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">&#39;c&#39;</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$b</span><span class="i">-&gt;Freezer</span><span class="s">(</span><span class="q">&#39;Freeze&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$b</span><span class="i">-&gt;Toaster</span><span class="s">(</span><span class="q">&#39;Thaw&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$c</span> = <span class="i">$b</span><span class="i">-&gt;Dump</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$c</span><span class="sc">;</span></li><li>    <span class="i">$d</span> = <a class="l_k" href="../functions/eval.html">eval</a> <span class="i">$c</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Data::Dumper</span><span class="i">-&gt;Dump</span><span class="s">(</span><span class="s">[</span><span class="i">$d</span><span class="s">]</span><span class="cm">,</span> <span class="s">[</span><span class="q">&#39;d&#39;</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li></li><li></li><li>    <span class="c">########</span></li><li>    <span class="c"># symbol substitution (useful for recreating CODE refs)</span></li><li>    <span class="c">########</span></li><li></li><li><a name="foo"></a>    sub <span class="m">foo</span> <span class="s">{</span> <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;foo speaking\n&quot;</span> <span class="s">}</span></li><li>    <span class="i">*other</span> = \<span class="i">&amp;foo</span><span class="sc">;</span></li><li>    <span class="i">$bar</span> = <span class="s">[</span> \<span class="i">&amp;other</span> <span class="s">]</span><span class="sc">;</span></li><li>    <span class="i">$d</span> = <span class="w">Data::Dumper</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">[</span>\<span class="i">&amp;other</span><span class="cm">,</span><span class="i">$bar</span><span class="s">]</span><span class="cm">,</span><span class="s">[</span><span class="q">&#39;*other&#39;</span><span class="cm">,</span><span class="q">&#39;bar&#39;</span><span class="s">]</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$d</span><span class="i">-&gt;Seen</span><span class="s">(</span><span class="s">{</span> <span class="q">&#39;*foo&#39;</span> <span class="cm">=&gt;</span> \<span class="i">&amp;foo</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$d</span><span class="i">-&gt;Dump</span><span class="sc">;</span></li><li></li><li></li><li>    <span class="c">########</span></li><li>    <span class="c"># sorting and filtering hash keys</span></li><li>    <span class="c">########</span></li><li></li><li>    <span class="i">$Data::Dumper::Sortkeys</span> = \<span class="i">&amp;my_filter</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$foo</span> = <span class="s">{</span> <a class="l_k" href="../functions/map.html">map</a> <span class="s">{</span> <span class="s">(</span><a class="l_k" href="../functions/ord.html">ord</a><span class="cm">,</span> <span class="q">&quot;$_$_$_&quot;</span><span class="s">)</span> <span class="s">}</span> <span class="q">&#39;I&#39;</span>..<span class="q">&#39;Q&#39;</span> <span class="s">}</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$bar</span> = <span class="s">{</span> <span class="i">%$foo</span> <span class="s">}</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$baz</span> = <span class="s">{</span> <a class="l_k" href="../functions/reverse.html">reverse</a> <span class="i">%$foo</span> <span class="s">}</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">Dumper</span> <span class="s">[</span> <span class="i">$foo</span><span class="cm">,</span> <span class="i">$bar</span><span class="cm">,</span> <span class="i">$baz</span> <span class="s">]</span><span class="sc">;</span></li><li></li><li><a name="my_filter"></a>    sub <span class="m">my_filter</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$hash</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <span class="c"># return an array ref containing the hash keys to dump</span></li><li>        <span class="c"># in the order that you want them to be dumped</span></li><li>        <a class="l_k" href="../functions/return.html">return</a> <span class="s">[</span></li><li>          <span class="c"># Sort the keys of %$foo in reverse numeric order</span></li><li>            <span class="i">$hash</span> <a class="l_k" href="../functions/eq.html">eq</a> <span class="i">$foo</span> ? <span class="s">(</span><a class="l_k" href="../functions/sort.html">sort</a> <span class="s">{</span><span class="i">$b</span> &lt;=&gt; <span class="i">$a</span><span class="s">}</span> <a class="l_k" href="../functions/keys.html">keys</a> <span class="i">%$hash</span><span class="s">)</span> <span class="co">:</span></li><li>          <span class="c"># Only dump the odd number keys of %$bar</span></li><li>            <span class="i">$hash</span> <a class="l_k" href="../functions/eq.html">eq</a> <span class="i">$bar</span> ? <span class="s">(</span><a class="l_k" href="../functions/grep.html">grep</a> <span class="s">{</span><span class="i">$_</span> % <span class="n">2</span><span class="s">}</span> <a class="l_k" href="../functions/keys.html">keys</a> <span class="i">%$hash</span><span class="s">)</span> <span class="co">:</span></li><li>          <span class="c"># Sort keys in default order for all other hashes</span></li><li>            <span class="s">(</span><a class="l_k" href="../functions/sort.html">sort</a> <a class="l_k" href="../functions/keys.html">keys</a> <span class="i">%$hash</span><span class="s">)</span></li><li>        <span class="s">]</span><span class="sc">;</span></li><li>    <span class="s">}</span></li></ol></pre><a name="BUGS"></a><h1>BUGS</h1>
+<p>Due to limitations of Perl subroutine call semantics, you cannot pass an
+array or hash.  Prepend it with a <code class="inline">\</code>
+ to pass its reference instead.  This
+will be remedied in time, now that Perl has subroutine prototypes.
+For now, you need to use the extended usage form, and prepend the
+name with a <code class="inline"><span class="i">*</span></code>
+ to output it as a hash or array.</p>
+<p><code class="inline"><span class="w">Data::Dumper</span></code>
+ cheats with CODE references.  If a code reference is
+encountered in the structure being processed (and if you haven't set
+the <code class="inline"><span class="w">Deparse</span></code>
+ flag), an anonymous subroutine that
+contains the string '"DUMMY"' will be inserted in its place, and a warning
+will be printed if <code class="inline"><span class="w">Purity</span></code>
+ is set.  You can <code class="inline"><a class="l_k" href="../functions/eval.html">eval</a></code> the result, but bear
+in mind that the anonymous sub that gets created is just a placeholder.
+Someday, perl will have a switch to cache-on-demand the string
+representation of a compiled piece of code, I hope.  If you have prior
+knowledge of all the code refs that your data structures are likely
+to have, you can use the <code class="inline"><span class="w">Seen</span></code>
+ method to pre-seed the internal reference
+table and make the dumped output point to them, instead.  See <a href="#EXAMPLES">EXAMPLES</a>
+above.</p>
+<p>The <code class="inline"><span class="w">Deparse</span></code>
+ flag makes Dump() run slower, since the XSUB
+implementation does not support it.</p>
+<p>SCALAR objects have the weirdest looking <code class="inline"><a class="l_k" href="../functions/bless.html">bless</a></code> workaround.</p>
+<p>Pure Perl version of <code class="inline"><span class="w">Data::Dumper</span></code>
+ escapes UTF-8 strings correctly
+only in Perl 5.8.0 and later.</p>
+<a name="NOTE"></a><h2>NOTE</h2>
+<p>Starting from Perl 5.8.1 different runs of Perl will have different
+ordering of hash keys.  The change was done for greater security,
+see <a href="../perlsec.html#Algorithmic-Complexity-Attacks">Algorithmic Complexity Attacks in perlsec</a>.  This means that
+different runs of Perl will have different Data::Dumper outputs if
+the data contains hashes.  If you need to have identical Data::Dumper
+outputs from different runs of Perl, use the environment variable
+PERL_HASH_SEED, see <a href="../perlrun.html#PERL_HASH_SEED">PERL_HASH_SEED in perlrun</a>.  Using this restores
+the old (platform-specific) ordering: an even prettier solution might
+be to use the <code class="inline"><span class="w">Sortkeys</span></code>
+ filter of Data::Dumper.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Gurusamy Sarathy        gsar@activestate.com</p>
+<p>Copyright (c) 1996-2014 Gurusamy Sarathy. All rights reserved.
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<a name="VERSION"></a><h1>VERSION</h1>
+<p>Version 2.158  (March 13 2015)</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p>perl(1)</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Methods">Methods</a><li><a href="#Functions">Functions</a><li><a href="#Configuration-Variables-or-Methods">Configuration Variables or Methods</a><li><a href="#Exports">Exports</a></ul><li><a href="#EXAMPLES">EXAMPLES</a><li><a href="#BUGS">BUGS</a><ul><li><a href="#NOTE">NOTE</a></ul><li><a href="#AUTHOR">AUTHOR</a><li><a href="#VERSION">VERSION</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Data::Dumper';
+  perldoc.pageAddress = 'Data/Dumper.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

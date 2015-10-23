@@ -1,0 +1,108 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/grDevices/html/nclass.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:32:04 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Compute the Number of Classes for a Histogram</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for nclass {grDevices}"><tbody><tr><td>nclass {grDevices}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Compute the Number of Classes for a Histogram</h2>
+
+<h3>Description</h3>
+
+<p>Compute the number of classes for a histogram.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>nclass.Sturges(x)
+nclass.scott(x)
+nclass.FD(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>A data vector.
+</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p><code>nclass.Sturges</code> uses Sturges' formula, implicitly basing bin
+sizes on the range of the data.
+</p>
+<p><code>nclass.scott</code> uses Scott's choice for a normal distribution based on
+the estimate of the standard error, unless that is zero where it
+returns <code>1</code>.
+</p>
+<p><code>nclass.FD</code> uses the Freedman-Diaconis choice based on the
+inter-quartile range (<code><a href="../../stats/html/IQR.html">IQR</a></code>) unless that's zero where it
+reverts to <code><a href="../../stats/html/mad.html">mad</a>(x, constant = 2)</code> and when that is <i>0</i>
+as well, returns <code>1</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The suggested number of classes.
+</p>
+
+
+<h3>References</h3>
+
+<p>Venables, W. N. and Ripley, B. D. (2002)
+<em>Modern Applied Statistics with S-PLUS.</em>
+Springer, page 112.
+</p>
+<p>Freedman, D. and Diaconis, P. (1981)
+On the histogram as a density estimator: <i>L_2</i> theory.
+<em>Zeitschrift fÃ¼r Wahrscheinlichkeitstheorie
+und verwandte Gebiete</em> <b>57</b>, 453–476.
+</p>
+<p>Scott, D. W. (1979) On optimal and data-based histograms.
+<em>Biometrika</em> <b>66</b>, 605–610.
+</p>
+<p>Scott, D. W. (1992)
+<em>Multivariate Density Estimation. Theory, Practice, and
+Visualization</em>. Wiley.
+</p>
+<p>Sturges, H. A. (1926)  The choice of a class interval.
+<em>Journal of the American Statistical Association</em> <b>21</b>, 65–66.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../graphics/html/hist.html">hist</a></code> and <code><a href="../../MASS/html/truehist.html">truehist</a></code> (package
+MASS);  <code><a href="../../KernSmooth/html/dpih.html">dpih</a></code> (package
+KernSmooth) for a plugin bandwidth proposed by Wand(1995).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>set.seed(1)
+x &lt;- stats::rnorm(1111)
+nclass.Sturges(x)
+
+## Compare them:
+NC &lt;- function(x) c(Sturges = nclass.Sturges(x),
+      Scott = nclass.scott(x), FD = nclass.FD(x))
+NC(x)
+onePt &lt;- rep(1, 11)
+NC(onePt) # no longer gives NaN
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>grDevices</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/grDevices/html/nclass.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:32:04 GMT -->
+
+</body></html>

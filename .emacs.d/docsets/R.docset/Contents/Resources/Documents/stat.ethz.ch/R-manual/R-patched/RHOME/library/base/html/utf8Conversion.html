@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/utf8Conversion.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head><title>Convert Integer Vectors to or from UTF-8-encoded Character...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for utf8Conversion {base}"><tr><td>utf8Conversion {base}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert Integer Vectors to or from UTF-8-encoded Character Vectors</h2>
+
+<h3>Description</h3>
+
+<p>Conversion of UTF-8 encoded character vectors to and from integer vectors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+utf8ToInt(x)
+intToUtf8(x, multiple = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>object to be converted.</p>
+</td></tr>
+<tr valign="top"><td><code>multiple</code></td>
+<td>
+<p>logical: should the conversion be to a single
+character string or multiple individual characters?</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>These will work in any locale, including on platforms that do not
+otherwise support multi-byte character sets.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Unicode defines a name and a number of all of the glyphs it
+encompasses: the numbers are called <em>code points</em>: they run from
+<code>0</code> to <code>0x10FFFF</code>.
+</p>
+<p><code>utf8ToInt</code> converts a length-one character string encoded in
+UTF-8 to an integer vector of Unicode code points.  As from <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 3.2.1
+it checks validity of the input and returns <code>NA</code> if it is invalid.
+</p>
+<p><code>intToUtf8</code> converts a numeric vector of Unicode code points
+either to a single character string or a character vector of single
+characters.  (For a single character string <code>0</code> is silently
+omitted: otherwise <code>0</code> is mapped to <code>""</code>.  Non-integral
+numeric values are truncated to integers.)  The <code><a href="Encoding.html">Encoding</a></code>
+is declared as <code>"UTF-8"</code>.
+</p>
+<p><code>NA</code> inputs are mapped to <code>NA</code> output.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## will only display in some locales and fonts
+intToUtf8(0x03B2L) # Greek beta
+
+utf8ToInt("bi\u00dfchen")
+utf8ToInt("\xfa\xb4\xbf\xbf\x9f")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>base</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/utf8Conversion.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:10 GMT -->
+</html>

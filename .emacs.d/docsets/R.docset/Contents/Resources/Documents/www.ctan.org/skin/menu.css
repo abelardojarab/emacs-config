@@ -1,0 +1,135 @@
+/* CSS-only drop-down menus
+ * (c) 2014-2015 Gerd Neugebauer
+ */
+.Menu > li > a:after {
+	content:" \25BE";
+}
+.Menu li {
+	list-style-type:none;
+}
+.Menu ul li a:hover {
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	-o-box-shadow:none;
+	box-shadow:none;
+	margin:0;
+	background:gray;
+	color:white;
+}
+.Menu a {
+	background-image:none;
+	color:black;
+}
+.MenuBar {
+	margin:0;
+	padding:0 0 0 1em;
+	min-height:2em;
+	min-width:16em;
+}
+.MenuBar .Menu {
+	z-index:8;
+	width:100%;
+	vertical-align:middle;
+	padding:0;
+	margin:0;
+	width:100%;
+	list-style:none;
+}
+.MenuBar .Menu > li {
+	display:inline-block;
+	vertical-align:middle;
+	padding-right:.5em;
+}
+@media (max-width: 52em) {
+	.MenuBar .Menu > li {
+		padding-right:.4em;
+	}
+}
+@media (max-width: 46em) {
+	.MenuBar .Menu > li {
+		padding-right:.3em;
+	}
+}
+@media (max-width: 40em) {
+	.MenuBar .Menu > li {
+		padding-right:.2em;
+	}
+}
+@media (max-width: 34em) {
+	.MenuBar .Menu > li {
+		padding-right:.1em;
+	}
+}
+.MenuBar .Menu li {
+	float:left;
+	position:relative;
+	border:none;
+}
+.MenuBar .Menu a {
+	text-decoration:none;
+	display:block;
+	padding:.15em .5em .25em .5em;
+	margin:0 .5em 0 0;
+}
+.MenuBar .Menu a:focus,
+.MenuBar .Menu a:hover {
+	background-color:gray;
+	margin:0 .5em 0 0;
+	padding:.1em .2em -1em .5em;
+}
+.MenuBar .Menu ul {
+	font-size:95%;
+	background:white;
+	border:1pt solid #dddddd;
+	list-style:none;
+	position:absolute;
+	left:-9999pt;
+	box-shadow:1pt 1pt 2pt #999999;
+	-o-box-shadow:1pt 1pt 2pt #999999;
+	-moz-box-shadow:1pt 1pt 2pt #999999;
+	-webkit-box-shadow:1pt 1pt 2pt #999999;
+	padding:0;
+	opacity:0;
+	transition: opacity .5s;
+}
+.MenuBar .Menu li {
+	margin:0;
+}
+.MenuBar .Menu ul li {
+	min-width:14em;
+	padding:0;
+	float:none;
+}
+.MenuBar .Menu ul a {
+	white-space:nowrap;
+	padding:.25em 1em .25em 1em;
+	margin:0 !important;
+}
+.MenuBar .Menu li:focus ul,
+.MenuBar .Menu li:hover ul {
+	left:0;
+	opacity:1;
+}
+.MenuBar .Menu li li ul {
+	top:-.5ex;
+	display:none;
+}
+.MenuBar .Menu li li:focus ul,
+.MenuBar .Menu li li:hover ul {
+	left:10em;
+	display:block;
+}
+.MenuBar .Menu>ul>li:focus>a,
+.MenuBar .Menu>ul>li:hover>a {
+	background:red;
+	color:#000000;
+}
+.MenuBar .Menu li:focus ul li a:hover,
+.MenuBar .Menu li:hover ul li a:hover {
+	background:#666666;
+	color:white;
+}
+.phrase {
+	vertical-align:middle;
+	float:left;
+}

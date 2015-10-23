@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetPixmap manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetPixmap</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetPixmap, Tk_FreePixmap &mdash; allocate and free pixmaps
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+Pixmap<BR>
+<B>Tk_GetPixmap(</B><I>display, d, width, height, depth</I><B>)</B><BR>
+<B>Tk_FreePixmap(</B><I>display, pixmap</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT>Display <B>*display</B> (in)<DD>
+X display for the pixmap.
+<P><DT>Drawable <B>d</B> (in)<DD>
+Pixmap or window where the new pixmap will be used for drawing.
+<P><DT>int <B>width</B> (in)<DD>
+Width of pixmap.
+<P><DT>int <B>height</B> (in)<DD>
+Height of pixmap.
+<P><DT>int <B>depth</B> (in)<DD>
+Number of bits per pixel in pixmap.
+<P><DT>Pixmap <B>pixmap</B> (in)<DD>
+Pixmap to destroy.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These procedures are identical to the Xlib procedures <B>XCreatePixmap</B>
+and <B>XFreePixmap</B>, except that they have extra code to manage X
+resource identifiers so that identifiers for deleted pixmaps can be
+reused in the future.
+It is important for Tk applications to use these procedures rather
+than <B>XCreatePixmap</B> and <B>XFreePixmap</B>;  otherwise long-running
+applications may run out of resource identifiers.
+<P>
+<B>Tk_GetPixmap</B> creates a pixmap suitable for drawing in <I>d</I>,
+with dimensions given by <I>width</I>, <I>height</I>, and <I>depth</I>,
+and returns its identifier.
+<B>Tk_FreePixmap</B> destroys the pixmap given by <I>pixmap</I> and makes
+its resource identifier available for reuse.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/P.htm#pixmap">pixmap</A>, <A href="../Keywords/R.htm#resource identifier">resource identifier</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

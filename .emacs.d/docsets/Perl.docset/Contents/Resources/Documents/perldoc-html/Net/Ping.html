@@ -1,0 +1,717 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Net::Ping</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Net::Ping</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-N.html">Core modules (N)</a> &gt;
+      
+    
+    Net::Ping
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Net::Ping</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Functions">Functions</a></ul><li><a href="#NOTES">NOTES</a><li><a href="#INSTALL">INSTALL</a><li><a href="#BUGS">BUGS</a><li><a href="#AUTHORS">AUTHORS</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Net::Ping - check a remote host for reachability</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Net::Ping</span><span class="sc">;</span></li><li></li><li>    <span class="i">$p</span> = <span class="w">Net::Ping</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$host is alive.\n&quot;</span> <a class="l_k" href="../functions/if.html">if</a> <span class="i">$p</span><span class="i">-&gt;ping</span><span class="s">(</span><span class="i">$host</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$p</span><span class="i">-&gt;close</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">$p</span> = <span class="w">Net::Ping</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&quot;icmp&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$p</span><span class="i">-&gt;bind</span><span class="s">(</span><span class="i">$my_addr</span><span class="s">)</span><span class="sc">;</span> <span class="c"># Specify source interface of pings</span></li><li>    <a class="l_k" href="../functions/foreach.html">foreach</a> <span class="i">$host</span> <span class="s">(</span><span class="i">@host_array</span><span class="s">)</span></li><li>    <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$host is &quot;</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;NOT &quot;</span> <a class="l_k" href="../functions/unless.html">unless</a> <span class="i">$p</span><span class="i">-&gt;ping</span><span class="s">(</span><span class="i">$host</span><span class="cm">,</span> <span class="n">2</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;reachable.\n&quot;</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/sleep.html">sleep</a><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li>    <span class="i">$p</span><span class="i">-&gt;close</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="i">$p</span> = <span class="w">Net::Ping</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&quot;tcp&quot;</span><span class="cm">,</span> <span class="n">2</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="c"># Try connecting to the www port instead of the echo port</span></li><li>    <span class="i">$p</span><span class="i">-&gt;port_number</span><span class="s">(</span><a class="l_k" href="../functions/scalar.html">scalar</a><span class="s">(</span><a class="l_k" href="../functions/getservbyname.html">getservbyname</a><span class="s">(</span><span class="q">&quot;http&quot;</span><span class="cm">,</span> <span class="q">&quot;tcp&quot;</span><span class="s">)</span><span class="s">)</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/while.html">while</a> <span class="s">(</span><span class="i">$stop_time</span> &gt; <a class="l_k" href="../functions/time.html">time</a><span class="s">(</span><span class="s">)</span><span class="s">)</span></li><li>    <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$host not reachable &quot;</span><span class="cm">,</span> <a class="l_k" href="../functions/scalar.html">scalar</a><span class="s">(</span><a class="l_k" href="../functions/localtime.html">localtime</a><span class="s">(</span><span class="s">)</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span></li><li>            <a class="l_k" href="../functions/unless.html">unless</a> <span class="i">$p</span><span class="i">-&gt;ping</span><span class="s">(</span><span class="i">$host</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/sleep.html">sleep</a><span class="s">(</span><span class="n">300</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li>    <a class="l_k" href="../functions/undef.html">undef</a><span class="s">(</span><span class="i">$p</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># Like tcp protocol, but with many hosts</span></li><li>    <span class="i">$p</span> = <span class="w">Net::Ping</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">&quot;syn&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$p</span><span class="i">-&gt;port_number</span><span class="s">(</span><a class="l_k" href="../functions/getservbyname.html">getservbyname</a><span class="s">(</span><span class="q">&quot;http&quot;</span><span class="cm">,</span> <span class="q">&quot;tcp&quot;</span><span class="s">)</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/foreach.html">foreach</a> <span class="i">$host</span> <span class="s">(</span><span class="i">@host_array</span><span class="s">)</span> <span class="s">{</span></li><li>      <span class="i">$p</span><span class="i">-&gt;ping</span><span class="s">(</span><span class="i">$host</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li>    <a class="l_k" href="../functions/while.html">while</a> <span class="s">(</span><span class="s">(</span><span class="i">$host</span><span class="cm">,</span><span class="i">$rtt</span><span class="cm">,</span><span class="i">$ip</span><span class="s">)</span> = <span class="i">$p</span><span class="i">-&gt;ack</span><span class="s">)</span> <span class="s">{</span></li><li>      <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;HOST: $host [$ip] ACKed in $rtt seconds.\n&quot;</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="c"># High precision syntax (requires Time::HiRes)</span></li><li>    <span class="i">$p</span> = <span class="w">Net::Ping</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$p</span><span class="i">-&gt;hires</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">(</span><span class="i">$ret</span><span class="cm">,</span> <span class="i">$duration</span><span class="cm">,</span> <span class="i">$ip</span><span class="s">)</span> = <span class="i">$p</span><span class="i">-&gt;ping</span><span class="s">(</span><span class="i">$host</span><span class="cm">,</span> <span class="n">5.5</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/printf.html">printf</a><span class="s">(</span><span class="q">&quot;$host [ip: $ip] is alive (packet return time: %.2f ms)\n&quot;</span><span class="cm">,</span></li><li>            <span class="n">1000</span> * <span class="i">$duration</span><span class="s">)</span></li><li>      <a class="l_k" href="../functions/if.html">if</a> <span class="i">$ret</span><span class="sc">;</span></li><li>    <span class="i">$p</span><span class="i">-&gt;close</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <span class="c"># For backward compatibility</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$host is alive.\n&quot;</span> <a class="l_k" href="../functions/if.html">if</a> <span class="i">pingecho</span><span class="s">(</span><span class="i">$host</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>This module contains methods to test the reachability of remote
+hosts on a network.  A ping object is first created with optional
+parameters, a variable number of hosts may be pinged multiple
+times and then the connection is closed.</p>
+<p>You may choose one of six different protocols to use for the
+ping. The "tcp" protocol is the default. Note that a live remote host
+may still fail to be pingable by one or more of these protocols. For
+example, www.microsoft.com is generally alive but not "icmp" pingable.</p>
+<p>With the "tcp" protocol the ping() method attempts to establish a
+connection to the remote host's echo port.  If the connection is
+successfully established, the remote host is considered reachable.  No
+data is actually echoed.  This protocol does not require any special
+privileges but has higher overhead than the "udp" and "icmp" protocols.</p>
+<p>Specifying the "udp" protocol causes the ping() method to send a udp
+packet to the remote host's echo port.  If the echoed packet is
+received from the remote host and the received packet contains the
+same data as the packet that was sent, the remote host is considered
+reachable.  This protocol does not require any special privileges.
+It should be borne in mind that, for a udp ping, a host
+will be reported as unreachable if it is not running the
+appropriate echo service.  For Unix-like systems see <i>inetd(8)</i>
+for more information.</p>
+<p>If the "icmp" protocol is specified, the ping() method sends an icmp
+echo message to the remote host, which is what the UNIX ping program
+does.  If the echoed message is received from the remote host and
+the echoed information is correct, the remote host is considered
+reachable.  Specifying the "icmp" protocol requires that the program
+be run as root or that the program be setuid to root.</p>
+<p>If the "external" protocol is specified, the ping() method attempts to
+use the <code class="inline"><span class="w">Net::Ping::External</span></code>
+ module to ping the remote host.
+<code class="inline"><span class="w">Net::Ping::External</span></code>
+ interfaces with your system's default <code class="inline"><span class="w">ping</span></code>
+
+utility to perform the ping, and generally produces relatively
+accurate results. If <code class="inline"><span class="w">Net::Ping::External</span></code>
+ if not installed on your
+system, specifying the "external" protocol will result in an error.</p>
+<p>If the "syn" protocol is specified, the ping() method will only
+send a TCP SYN packet to the remote host then immediately return.
+If the syn packet was sent successfully, it will return a true value,
+otherwise it will return false.  NOTE: Unlike the other protocols,
+the return value does NOT determine if the remote host is alive or
+not since the full TCP three-way handshake may not have completed
+yet.  The remote host is only considered reachable if it receives
+a TCP ACK within the timeout specified.  To begin waiting for the
+ACK packets, use the ack() method as explained below.  Use the
+"syn" protocol instead the "tcp" protocol to determine reachability
+of multiple destinations simultaneously by sending parallel TCP
+SYN packets.  It will not block while testing each remote host.
+demo/fping is provided in this distribution to demonstrate the
+"syn" protocol as an example.
+This protocol does not require any special privileges.</p>
+<a name="Functions"></a><h2>Functions</h2>
+<ul>
+<li><a name="Net%3a%3aPing-%3enew(%5b%24proto-%5b%2c-%24def_timeout-%5b%2c-%24bytes-%5b%2c-%24device-%5b%2c-%24tos-%5b%2c-%24ttl-%5d%5d%5d%5d%5d%5d)%3b"></a><b>Net::Ping-&gt;new([$proto [, $def_timeout [, $bytes [, $device [, $tos [, $ttl ]]]]]]);</b>
+<p>Create a new ping object.  All of the parameters are optional.  $proto
+specifies the protocol to use when doing a ping.  The current choices
+are "tcp", "udp", "icmp", "stream", "syn", or "external".
+The default is "tcp".</p>
+<p>If a default timeout ($def_timeout) in seconds is provided, it is used
+when a timeout is not given to the ping() method (below).  The timeout
+must be greater than 0 and the default, if not specified, is 5 seconds.</p>
+<p>If the number of data bytes ($bytes) is given, that many data bytes
+are included in the ping packet sent to the remote host. The number of
+data bytes is ignored if the protocol is "tcp".  The minimum (and
+default) number of data bytes is 1 if the protocol is "udp" and 0
+otherwise.  The maximum number of data bytes that can be specified is
+1024.</p>
+<p>If $device is given, this device is used to bind the source endpoint
+before sending the ping packet.  I believe this only works with
+superuser privileges and with udp and icmp protocols at this time.</p>
+<p>If $tos is given, this ToS is configured into the socket.</p>
+<p>For icmp, $ttl can be specified to set the TTL of the outgoing packet.</p>
+</li>
+<li><a name="%24p-%3eping(%24host-%5b%2c-%24timeout%5d)%3b"></a><b>$p-&gt;ping($host [, $timeout]);</b>
+<p>Ping the remote host and wait for a response.  $host can be either the
+hostname or the IP number of the remote host.  The optional timeout
+must be greater than 0 seconds and defaults to whatever was specified
+when the ping object was created.  Returns a success flag.  If the
+hostname cannot be found or there is a problem with the IP number, the
+success flag returned will be undef.  Otherwise, the success flag will
+be 1 if the host is reachable and 0 if it is not.  For most practical
+purposes, undef and 0 and can be treated as the same case.  In array
+context, the elapsed time as well as the string form of the ip the
+host resolved to are also returned.  The elapsed time value will
+be a float, as returned by the Time::HiRes::time() function, if hires()
+has been previously called, otherwise it is returned as an integer.</p>
+</li>
+<li><a name="%24p-%3esource_verify(-%7b-0-%7c-1-%7d-)%3b"></a><b>$p-&gt;source_verify( { 0 | 1 } );</b>
+<p>Allows source endpoint verification to be enabled or disabled.
+This is useful for those remote destinations with multiples
+interfaces where the response may not originate from the same
+endpoint that the original destination endpoint was sent to.
+This only affects udp and icmp protocol pings.</p>
+<p>This is enabled by default.</p>
+</li>
+<li><a name="%24p-%3eservice_check(-%7b-0-%7c-1-%7d-)%3b"></a><b>$p-&gt;service_check( { 0 | 1 } );</b>
+<p>Set whether or not the connect behavior should enforce
+remote service availability as well as reachability.  Normally,
+if the remote server reported ECONNREFUSED, it must have been
+reachable because of the status packet that it reported.
+With this option enabled, the full three-way tcp handshake
+must have been established successfully before it will
+claim it is reachable.  NOTE:  It still does nothing more
+than connect and disconnect.  It does not speak any protocol
+(i.e., HTTP or FTP) to ensure the remote server is sane in
+any way.  The remote server CPU could be grinding to a halt
+and unresponsive to any clients connecting, but if the kernel
+throws the ACK packet, it is considered alive anyway.  To
+really determine if the server is responding well would be
+application specific and is beyond the scope of Net::Ping.
+For udp protocol, enabling this option demands that the
+remote server replies with the same udp data that it was sent
+as defined by the udp echo service.</p>
+<p>This affects the "udp", "tcp", and "syn" protocols.</p>
+<p>This is disabled by default.</p>
+</li>
+<li><a name="%24p-%3etcp_service_check(-%7b-0-%7c-1-%7d-)%3b"></a><b>$p-&gt;tcp_service_check( { 0 | 1 } );</b>
+<p>Deprecated method, but does the same as service_check() method.</p>
+</li>
+<li><a name="%24p-%3ehires(-%7b-0-%7c-1-%7d-)%3b"></a><b>$p-&gt;hires( { 0 | 1 } );</b>
+<p>Causes this module to use Time::HiRes module, allowing milliseconds
+to be returned by subsequent calls to ping().</p>
+<p>This is disabled by default.</p>
+</li>
+<li><a name="%24p-%3ebind(%24local_addr)%3b"></a><b>$p-&gt;bind($local_addr);</b>
+<p>Sets the source address from which pings will be sent.  This must be
+the address of one of the interfaces on the local host.  $local_addr
+may be specified as a hostname or as a text IP address such as
+"192.168.1.1".</p>
+<p>If the protocol is set to "tcp", this method may be called any
+number of times, and each call to the ping() method (below) will use
+the most recent $local_addr.  If the protocol is "icmp" or "udp",
+then bind() must be called at most once per object, and (if it is
+called at all) must be called before the first call to ping() for that
+object.</p>
+</li>
+<li><a name="%24p-%3eopen(%24host)%3b"></a><b>$p-&gt;open($host);</b>
+<p>When you are using the "stream" protocol, this call pre-opens the
+tcp socket.  It's only necessary to do this if you want to
+provide a different timeout when creating the connection, or
+remove the overhead of establishing the connection from the
+first ping.  If you don't call <code class="inline"><a class="l_k" href="../functions/open.html">open()</a></code>, the connection is
+automatically opened the first time <code class="inline"><span class="i">ping</span><span class="s">(</span><span class="s">)</span></code>
+ is called.
+This call simply does nothing if you are using any protocol other
+than stream.</p>
+</li>
+<li><a name="%24p-%3eack(-%5b-%24host-%5d-)%3b"></a><b>$p-&gt;ack( [ $host ] );</b>
+<p>When using the "syn" protocol, use this method to determine
+the reachability of the remote host.  This method is meant
+to be called up to as many times as ping() was called.  Each
+call returns the host (as passed to ping()) that came back
+with the TCP ACK.  The order in which the hosts are returned
+may not necessarily be the same order in which they were
+SYN queued using the ping() method.  If the timeout is
+reached before the TCP ACK is received, or if the remote
+host is not listening on the port attempted, then the TCP
+connection will not be established and ack() will return
+undef.  In list context, the host, the ack time, and the
+dotted ip string will be returned instead of just the host.
+If the optional $host argument is specified, the return
+value will be pertaining to that host only.
+This call simply does nothing if you are using any protocol
+other than syn.</p>
+</li>
+<li><a name="%24p-%3enack(-%24failed_ack_host-)%3b"></a><b>$p-&gt;nack( $failed_ack_host );</b>
+<p>The reason that host $failed_ack_host did not receive a
+valid ACK.  Useful to find out why when ack( $fail_ack_host )
+returns a false value.</p>
+</li>
+<li><a name="%24p-%3eclose()%3b"></a><b>$p-&gt;close();</b>
+<p>Close the network connection for this ping object.  The network
+connection is also closed by "undef $p".  The network connection is
+automatically closed if the ping object goes out of scope (e.g. $p is
+local to a subroutine and you leave the subroutine).</p>
+</li>
+<li><a name="%24p-%3eport_number(%5b%24port_number%5d)"></a><b>$p-&gt;port_number([$port_number])</b>
+<p>When called with a port number, the port number used to ping is set to
+$port_number rather than using the echo port.  It also has the effect
+of calling <code class="inline"><span class="i">$p</span><span class="i">-&gt;service_check</span><span class="s">(</span><span class="n">1</span><span class="s">)</span></code>
+ causing a ping to return a successful
+response only if that specific port is accessible.  This function returns
+the value of the port that <code class="inline"><span class="i">ping</span><span class="s">(</span><span class="s">)</span></code>
+ will connect to.</p>
+</li>
+<li><a name="pingecho(%24host-%5b%2c-%24timeout%5d)%3b"></a><b>pingecho($host [, $timeout]);</b>
+<p>To provide backward compatibility with the previous version of
+Net::Ping, a pingecho() subroutine is available with the same
+functionality as before.  pingecho() uses the tcp protocol.  The
+return values and parameters are the same as described for the ping()
+method.  This subroutine is obsolete and may be removed in a future
+version of Net::Ping.</p>
+</li>
+</ul>
+<a name="NOTES"></a><h1>NOTES</h1>
+<p>There will be less network overhead (and some efficiency in your
+program) if you specify either the udp or the icmp protocol.  The tcp
+protocol will generate 2.5 times or more traffic for each ping than
+either udp or icmp.  If many hosts are pinged frequently, you may wish
+to implement a small wait (e.g. 25ms or more) between each ping to
+avoid flooding your network with packets.</p>
+<p>The icmp protocol requires that the program be run as root or that it
+be setuid to root.  The other protocols do not require special
+privileges, but not all network devices implement tcp or udp echo.</p>
+<p>Local hosts should normally respond to pings within milliseconds.
+However, on a very congested network it may take up to 3 seconds or
+longer to receive an echo packet from the remote host.  If the timeout
+is set too low under these conditions, it will appear that the remote
+host is not reachable (which is almost the truth).</p>
+<p>Reachability doesn't necessarily mean that the remote host is actually
+functioning beyond its ability to echo packets.  tcp is slightly better
+at indicating the health of a system than icmp because it uses more
+of the networking stack to respond.</p>
+<p>Because of a lack of anything better, this module uses its own
+routines to pack and unpack ICMP packets.  It would be better for a
+separate module to be written which understands all of the different
+kinds of ICMP packets.</p>
+<a name="INSTALL"></a><h1>INSTALL</h1>
+<p>The latest source tree is available via cvs:</p>
+<pre class="verbatim"><ol><li>  <span class="w">cvs</span> -<span class="w">z3</span> -<span class="q">q -d \</span></li><li>    <span class="q">    :pserver:anonymous@cvs.roobik.com.:/usr/local/cvsroot/freeware \</span></li><li>    <span class="q">    checkout Net-</span><span class="w">Ping</span></li><li>  <span class="w">cd</span> <span class="w">Net</span>-<span class="w">Ping</span></li></ol></pre><p>The tarball can be created as follows:</p>
+<pre class="verbatim"><ol><li>  <span class="w">perl</span> <span class="w">Makefile</span>.<span class="w">PL</span> <span class="sc">;</span> <span class="w">make</span> <span class="sc">;</span> <span class="w">make</span> <span class="w">dist</span></li></ol></pre><p>The latest Net::Ping release can be found at CPAN:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$CPAN</span>/<span class="w">modules</span>/<span class="w">by</span>-<span class="w">module</span><span class="q">/Net/</span></li></ol></pre><p>1) Extract the tarball</p>
+<pre class="verbatim"><ol><li>  <span class="w">gtar</span> -<span class="w">zxvf</span> <span class="w">Net</span>-<span class="w">Ping</span>-<span class="w">xxxx</span>.<span class="w">tar</span>.<span class="w">gz</span></li><li>  <span class="w">cd</span> <span class="w">Net</span>-<span class="w">Ping</span>-<span class="w">xxxx</span></li></ol></pre><p>2) Build:</p>
+<pre class="verbatim"><ol><li>  <span class="w">make</span> <span class="w">realclean</span></li><li>  <span class="w">perl</span> <span class="w">Makefile</span>.<span class="w">PL</span></li><li>  <span class="w">make</span></li><li>  <span class="w">make</span> <span class="w">test</span></li></ol></pre><p>3) Install</p>
+<pre class="verbatim"><ol><li>  <span class="w">make</span> <span class="w">install</span></li></ol></pre><p>Or install it RPM Style:</p>
+<pre class="verbatim"><ol><li>  <span class="w">rpm</span> -<span class="w">ta</span> <span class="w">SOURCES</span>/<span class="w">Net</span>-<span class="w">Ping</span>-<span class="w">xxxx</span>.<span class="w">tar</span>.<span class="w">gz</span></li><li></li><li>  <span class="w">rpm</span> -<span class="w">ih</span> <span class="w">RPMS</span>/<span class="w">noarch</span>/<span class="w">perl</span>-<span class="w">Net</span>-<span class="w">Ping</span>-<span class="w">xxxx</span>.<span class="w">rpm</span></li></ol></pre><a name="BUGS"></a><h1>BUGS</h1>
+<p>For a list of known issues, visit:</p>
+<p>https://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-Ping</p>
+<p>To report a new bug, visit:</p>
+<p>https://rt.cpan.org/NoAuth/ReportBug.html?Queue=Net-Ping</p>
+<a name="AUTHORS"></a><h1>AUTHORS</h1>
+<pre class="verbatim"><ol><li>  Current maintainer:</li><li>    bbb@cpan.org (Rob Brown)</li><li></li><li>  External protocol:</li><li>    colinm@cpan.org (Colin McMillen)</li><li></li><li>  Stream protocol:</li><li>    bronson@trestle.com (Scott Bronson)</li><li></li><li>  Original pingecho():</li><li>    karrer@bernina.ethz.ch (Andreas Karrer)</li><li>    pmarquess@bfsec.bt.co.uk (Paul Marquess)</li><li></li><li>  Original Net::Ping author:</li><li>    mose@ns.ccsn.edu (Russell Mosemann)</li></ol></pre><a name="COPYRIGHT"></a><h1>COPYRIGHT</h1>
+<p>Copyright (c) 2002-2003, Rob Brown.  All rights reserved.</p>
+<p>Copyright (c) 2001, Colin McMillen.  All rights reserved.</p>
+<p>This program is free software; you may redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Functions">Functions</a></ul><li><a href="#NOTES">NOTES</a><li><a href="#INSTALL">INSTALL</a><li><a href="#BUGS">BUGS</a><li><a href="#AUTHORS">AUTHORS</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Net::Ping';
+  perldoc.pageAddress = 'Net/Ping.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

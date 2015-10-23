@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_AllocCursorFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetCursor</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetCursor.htm#M2" NAME="L286">NAME</A>
+<DL><DD>Tk_AllocCursorFromObj, Tk_GetCursor, Tk_GetCursorFromObj, Tk_GetCursorFromData, Tk_NameOfCursor, Tk_FreeCursorFromObj, Tk_FreeCursor &mdash; maintain database of cursors</DD></DL>
+<DD><A HREF="GetCursor.htm#M3" NAME="L287">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_Cursor
+<DD><B>Tk_AllocCursorFromObj(</B><I>interp, tkwin, objPtr</I><B>)</B>
+<DD>Tk_Cursor
+<DD><B>Tk_GetCursor(</B><I>interp, tkwin, name</I><B>)</B>
+<DD>Tk_Cursor
+<DD><B>Tk_GetCursorFromObj(</B><I>tkwin, objPtr</I><B>)</B>
+<DD>Tk_Cursor
+<DD><B>Tk_GetCursorFromData(</B><I>interp, tkwin, source, mask, width, height, xHot, yHot, fg, bg</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfCursor(</B><I>display, cursor</I><B>)</B>
+<DD><B>Tk_FreeCursorFromObj(</B><I>tkwin, objPtr</I><B>)</B>
+<DD><B>Tk_FreeCursor(</B><I>display, cursor</I><B>)</B>
+</DL>
+<DD><A HREF="GetCursor.htm#M4" NAME="L288">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetCursor.htm#M5" NAME="L289">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="GetCursor.htm#M6" NAME="L290"><I>name</I> [<I>fgColor</I> [<I>bgColor</I>]]</A>
+<DD><A HREF="GetCursor.htm#M7" NAME="L291"><B>@</B><I>sourceName maskName fgColor bgColor</I></A>
+<DD><A HREF="GetCursor.htm#M8" NAME="L292"><B>@</B><I>sourceName fgColor</I></A>
+<DD><A HREF="GetCursor.htm#M9" NAME="L293"><B>@</B><I>sourceName</I></A>
+</DL>
+<DD><A HREF="GetCursor.htm#M10" NAME="L294">BUGS</A>
+<DD><A HREF="GetCursor.htm#M11" NAME="L295">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_AllocCursorFromObj, Tk_GetCursor, Tk_GetCursorFromObj, Tk_GetCursorFromData, Tk_NameOfCursor, Tk_FreeCursorFromObj, Tk_FreeCursor &mdash; maintain database of cursors
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+Tk_Cursor<BR>
+<B>Tk_AllocCursorFromObj(</B><I>interp, tkwin, objPtr</I><B>)</B><BR>
+Tk_Cursor<BR>
+<B>Tk_GetCursor(</B><I>interp, tkwin, name</I><B>)</B><BR>
+Tk_Cursor<BR>
+<B>Tk_GetCursorFromObj(</B><I>tkwin, objPtr</I><B>)</B><BR>
+Tk_Cursor<BR>
+<B>Tk_GetCursorFromData(</B><I>interp, tkwin, source, mask, width, height, xHot, yHot, fg, bg</I><B>)</B><BR>
+const char *<BR>
+<B>Tk_NameOfCursor(</B><I>display, cursor</I><B>)</B><BR>
+<B>Tk_FreeCursorFromObj(</B><I>tkwin, objPtr</I><B>)</B><BR>
+<B>Tk_FreeCursor(</B><I>display, cursor</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.
+<P><DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>tkwin</B> (in)<DD>
+Token for window in which the cursor will be used.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*objPtr</B> (in/out)<DD>
+Description of cursor;  see below for possible values.  Internal rep will be
+modified to cache pointer to corresponding Tk_Cursor.
+<P><DT>char <B>*name</B> (in)<DD>
+Same as <I>objPtr</I> except description of cursor is passed as a string and
+resulting Tk_Cursor is not cached.
+<P><DT>const char <B>*source</B> (in)<DD>
+Data for cursor cursor, in standard cursor format.
+<P><DT>const char <B>*mask</B> (in)<DD>
+Data for mask cursor, in standard cursor format.
+<P><DT>int <B>width</B> (in)<DD>
+Width of <I>source</I> and <I>mask</I>.
+<P><DT>int <B>height</B> (in)<DD>
+Height of <I>source</I> and <I>mask</I>.
+<P><DT>int <B>xHot</B> (in)<DD>
+X-location of cursor hot-spot.
+<P><DT>int <B>yHot</B> (in)<DD>
+Y-location of cursor hot-spot.
+<P><DT><A HREF="../TkLib/GetUid.htm">Tk_Uid</A> <B>fg</B> (in)<DD>
+Textual description of foreground color for cursor.
+<P><DT><A HREF="../TkLib/GetUid.htm">Tk_Uid</A> <B>bg</B> (in)<DD>
+Textual description of background color for cursor.
+<P><DT>Display <B>*display</B> (in)<DD>
+Display for which <I>cursor</I> was allocated.
+<P><DT>Tk_Cursor <B>cursor</B> (in)<DD>
+Opaque Tk identifier for cursor.  If passed to <B>Tk_FreeCursor</B>, must
+have been returned by some previous call to <B>Tk_GetCursor</B> or
+<B>Tk_GetCursorFromData</B>.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These procedures manage a collection of cursors
+being used by an application.  The procedures allow cursors to be
+re-used efficiently, thereby avoiding server overhead, and also
+allow cursors to be named with character strings.
+<P>
+<B>Tk_AllocCursorFromObj</B> takes as argument an object describing a
+cursor, and returns an opaque Tk identifier for a cursor corresponding
+to the description.  It re-uses an existing cursor if possible and
+creates a new one otherwise.  <B>Tk_AllocCursorFromObj</B> caches
+information about the return value in <I>objPtr</I>, which speeds up
+future calls to procedures such as <B>Tk_AllocCursorFromObj</B> and
+<B>Tk_GetCursorFromObj</B>. If an error occurs in creating the cursor,
+such as when <I>objPtr</I> refers to a non-existent file, then <B>None</B>
+is returned and an error message will be stored in <I>interp</I>'s result
+if <I>interp</I> is not NULL.  <I>ObjPtr</I> must contain a standard Tcl
+list with one of the following forms:
+<P>
+<DL class="description">
+<DT><A NAME="M6"><I>name</I> [<I>fgColor</I> [<I>bgColor</I>]]</A><DD>
+<I>Name</I> is the name of a cursor in the standard X cursor cursor,
+i.e., any of the names defined in <B>cursorcursor.h</B>, without
+the <B>XC_</B>.  Some example values are <B>X_cursor</B>, <B>hand2</B>,
+or <B>left_ptr</B>.  Appendix B of
+&#8220;The X Window System&#8221;
+by Scheifler &amp; Gettys has illustrations showing what each of these
+cursors looks like.  If <I>fgColor</I> and <I>bgColor</I> are both
+specified, they give the foreground and background colors to use
+for the cursor (any of the forms acceptable to <B><A HREF="../TkLib/GetColor.htm">Tk_GetColor</A></B>
+may be used).  If only <I>fgColor</I> is specified, then there
+will be no background color:  the background will be transparent.
+If no colors are specified, then the cursor
+will use black for its foreground color and white for its background
+color.
+<P>
+The Macintosh version of Tk supports all of the X cursors and
+will also accept any of the standard Mac cursors
+including <B>ibeam</B>, <B>crosshair</B>, <B>watch</B>, <B>plus</B>, and
+<B>arrow</B>.  In addition, Tk will load Macintosh cursor resources of
+the types <B>crsr</B> (color) and <B>CURS</B> (black and white) by the
+name of the resource.  The application and all its open
+dynamic library's resource files will be searched for the named
+cursor.  If there are conflicts color cursors will always be loaded
+in preference to black and white cursors.
+<P><DT><A NAME="M7"><B>@</B><I>sourceName maskName fgColor bgColor</I></A><DD>
+In this form, <I>sourceName</I> and <I>maskName</I> are the names of
+files describing cursors for the cursor's source bits and mask.
+Each file must be in standard X11 cursor format.
+<I>FgColor</I> and <I>bgColor</I> 
+indicate the colors to use for the
+cursor, in any of the forms acceptable to <B><A HREF="../TkLib/GetColor.htm">Tk_GetColor</A></B>.  This
+form of the command will not work on Macintosh or Windows computers.
+<P><DT><A NAME="M8"><B>@</B><I>sourceName fgColor</I></A><DD>
+This form is similar to the one above, except that the source is
+used as mask also.  This means that the cursor's background is
+transparent.  This form of the command will not work on Macintosh
+or Windows computers.
+<P><DT><A NAME="M9"><B>@</B><I>sourceName</I></A><DD>
+This form only works on Windows, and will load a Windows system
+cursor (<B>.ani</B> or <B>.cur</B>) from the file specified in
+<I>sourceName</I>.
+<P></DL>
+<P>
+<B>Tk_GetCursor</B> is identical to <B>Tk_AllocCursorFromObj</B> except
+that the description of the cursor is specified with a string instead
+of an object.  This prevents <B>Tk_GetCursor</B> from caching the
+return value, so <B>Tk_GetCursor</B> is less efficient than
+<B>Tk_AllocCursorFromObj</B>.
+<P>
+<B>Tk_GetCursorFromObj</B> returns the token for an existing cursor, given
+the window and description used to create the cursor.
+<B>Tk_GetCursorFromObj</B> does not actually create the cursor; the cursor
+must already have been created with a previous call to
+<B>Tk_AllocCursorFromObj</B> or <B>Tk_GetCursor</B>.  The return
+value is cached in <I>objPtr</I>, which speeds up
+future calls to <B>Tk_GetCursorFromObj</B> with the same <I>objPtr</I>
+and <I>tkwin</I>.
+<P>
+<B>Tk_GetCursorFromData</B> allows cursors to be created from
+in-memory descriptions of their source and mask cursors.  <I>Source</I>
+points to standard cursor data for the cursor's source bits, and
+<I>mask</I> points to standard cursor data describing
+which pixels of <I>source</I> are to be drawn and which are to be
+considered transparent.  <I>Width</I> and <I>height</I> give the
+dimensions of the cursor, <I>xHot</I> and <I>yHot</I> indicate the
+location of the cursor's hot-spot (the point that is reported when
+an event occurs), and <I>fg</I> and <I>bg</I> describe the cursor's
+foreground and background colors textually (any of the forms
+suitable for <B><A HREF="../TkLib/GetColor.htm">Tk_GetColor</A></B> may be used).  Typically, the
+arguments to <B>Tk_GetCursorFromData</B> are created by including
+a cursor file directly into the source code for a program, as in
+the following example:
+<PRE>Tk_Cursor cursor;
+#include &quot;source.cursor&quot;
+#include &quot;mask.cursor&quot;
+cursor = Tk_GetCursorFromData(interp, tkwin, source_bits,
+    mask_bits, source_width, source_height, source_x_hot,
+    source_y_hot, <A HREF="../TkLib/GetUid.htm">Tk_GetUid</A>(&quot;red&quot;), <A HREF="../TkLib/GetUid.htm">Tk_GetUid</A>(&quot;blue&quot;));</PRE>
+<P>
+Under normal conditions <B>Tk_GetCursorFromData</B>
+will return an identifier for the requested cursor.  If an error
+occurs in creating the cursor then <B>None</B> is returned and an error
+message will be stored in <I>interp</I>'s result.
+<P>
+<B>Tk_AllocCursorFromObj</B>, <B>Tk_GetCursor</B>, and
+<B>Tk_GetCursorFromData</B> maintain a
+database of all the cursors they have created.  Whenever possible,
+a call to <B>Tk_AllocCursorFromObj</B>, <B>Tk_GetCursor</B>, or
+<B>Tk_GetCursorFromData</B> will
+return an existing cursor rather than creating a new one.  This
+approach can substantially reduce server overhead, so the Tk
+procedures should generally be used in preference to Xlib procedures
+like <B>XCreateFontCursor</B> or <B>XCreatePixmapCursor</B>, which
+create a new cursor on each call.  The Tk procedures are also more
+portable than the lower-level X procedures.
+<P>
+The procedure <B>Tk_NameOfCursor</B> is roughly the inverse of
+<B>Tk_GetCursor</B>.  If its <I>cursor</I> argument was created
+by <B>Tk_GetCursor</B>, then the return value is the <I>name</I>
+argument that was passed to <B>Tk_GetCursor</B> to create the
+cursor.  If <I>cursor</I> was created by a call to <B>Tk_GetCursorFromData</B>,
+or by any other mechanism, then the return value is a hexadecimal string
+giving the X identifier for the cursor.
+Note:  the string returned by <B>Tk_NameOfCursor</B> is
+only guaranteed to persist until the next call to
+<B>Tk_NameOfCursor</B>.  Also, this call is not portable except for
+cursors returned by <B>Tk_GetCursor</B>.
+<P>
+When a cursor returned by <B>Tk_AllocCursorFromObj</B>, <B>Tk_GetCursor</B>,
+or <B>Tk_GetCursorFromData</B>
+is no longer needed, <B>Tk_FreeCursorFromObj</B> or
+<B>Tk_FreeCursor</B> should be called to release it.
+For <B>Tk_FreeCursorFromObj</B> the cursor to release is specified
+with the same information used to create it; for
+<B>Tk_FreeCursor</B> the cursor to release is specified
+with its Tk_Cursor token.
+There should be exactly one call to <B>Tk_FreeCursor</B> for
+each call to <B>Tk_AllocCursorFromObj</B>, <B>Tk_GetCursor</B>,
+or <B>Tk_GetCursorFromData</B>.
+<H3><A NAME="M10">BUGS</A></H3>
+In determining whether an existing cursor can be used to satisfy
+a new request, <B>Tk_AllocCursorFromObj</B>, <B>Tk_GetCursor</B>,
+and <B>Tk_GetCursorFromData</B>
+consider only the immediate values of their arguments.  For
+example, when a file name is passed to <B>Tk_GetCursor</B>,
+<B>Tk_GetCursor</B> will assume it is safe to re-use an existing
+cursor created from the same file name:  it will not check to
+see whether the file itself has changed, or whether the current
+directory has changed, thereby causing the name to refer to
+a different file.  Similarly, <B>Tk_GetCursorFromData</B> assumes
+that if the same <I>source</I> pointer is used in two different calls,
+then the pointers refer to the same data;  it does not check to
+see if the actual data values have changed.
+<H3><A NAME="M11">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#cursor">cursor</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>coroutine manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl Commands, version 8.6.0</a> <small>&gt;</small> coroutine</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+coroutine, yield, yieldto &mdash; Create and produce values from coroutines
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>coroutine </B><I>name command</I> ?<I>arg...</I>?<BR>
+<B>yield</B> ?<I>value</I>?<BR>
+<B>yieldto</B> <I>command</I> ?<I>arg...</I>?<BR>
+<I>name</I> ?<I>value...</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The <B>coroutine</B> command creates a new coroutine context (with associated
+command) named <I>name</I> and executes that context by calling <I>command</I>,
+passing in the other remaining arguments without further interpretation. Once
+<I>command</I> returns normally or with an exception (e.g., an error) the
+coroutine context <I>name</I> is deleted.
+<P>
+Within the context, values may be generated as results by using the
+<B>yield</B> command; if no <I>value</I> is supplied, the empty string is used.
+When that is called, the context will suspend execution and the
+<B>coroutine</B> command will return the argument to <B>yield</B>. The execution
+of the context can then be resumed by calling the context command, optionally
+passing in the <I>single</I> value to use as the result of the <B>yield</B> call
+that caused
+the context to be suspended. If the coroutine context never yields and instead
+returns conventionally, the result of the <B>coroutine</B> command will be the
+result of the evaluation of the context.
+<P>
+The coroutine may also suspend its execution by use of the <B>yieldto</B>
+command, which instead of returning, cedes execution to some command called
+<I>command</I> (resolved in the context of the coroutine) and to which <I>any
+number</I> of arguments may be passed. Since every coroutine has a context
+command, <B>yieldto</B> can be used to transfer control directly from one
+coroutine to another (this is only advisable if the two coroutines are
+expecting this to happen) but <I>any</I> command may be the target. If a
+coroutine is suspended by this mechanism, the coroutine processing can be
+resumed by calling the context command optionally passing in an arbitrary
+number of arguments. The return value of the <B>yieldto</B> call will be the
+list of arguments passed to the context command; it is up to the caller to
+decide what to do with those values.
+<P>
+The recommended way of writing a version of <B>yield</B> that allows resumption
+with multiple arguments is by using <B>yieldto</B> and the <B><A HREF="../TclCmd/return.htm">return</A></B>
+command, like this:
+<P>
+<PRE>proc yieldm {value} {
+    <B>yieldto</B> return -level 0 $value
+}</PRE>
+<P>
+The coroutine can also be deleted by destroying the command <I>name</I>, and
+the name of the current coroutine can be retrieved by using
+<B><A HREF="../TclCmd/info.htm">info coroutine</A></B>.
+If there are deletion traces on variables in the coroutine's
+implementation, they will fire at the point when the coroutine is explicitly
+deleted (or, naturally, if the command returns conventionally).
+<P>
+At the point when <I>command</I> is called, the current namespace will be the
+global namespace and there will be no stack frames above it (in the sense of
+<B><A HREF="../TclCmd/upvar.htm">upvar</A></B> and <B><A HREF="../TclCmd/uplevel.htm">uplevel</A></B>). However, which command to call will be
+determined in the namespace that the <B>coroutine</B> command was called from.
+<H3><A NAME="M5">EXAMPLES</A></H3>
+This example shows a coroutine that will produce an infinite sequence of
+even values, and a loop that consumes the first ten of them.
+<P>
+<PRE>proc allNumbers {} {
+    <B>yield</B>
+    set i 0
+    while 1 {
+        <B>yield</B> $i
+        incr i 2
+    }
+}
+<B>coroutine</B> nextNumber allNumbers
+for {set i 0} {$i &lt; 10} {incr i} {
+    puts &quot;received [<I>nextNumber</I>]&quot;
+}
+rename nextNumber {}</PRE>
+<P>
+In this example, the coroutine acts to add up the arguments passed to it.
+<P>
+<PRE><B>coroutine</B> accumulator apply {{} {
+    set x 0
+    while 1 {
+        incr x [<B>yield</B> $x]
+    }
+}}
+for {set i 0} {$i &lt; 10} {incr i} {
+    puts &quot;$i -&gt; [<I>accumulator</I> $i]&quot;
+}</PRE>
+<P>
+This example demonstrates the use of coroutines to implement the classic Sieve
+of Eratosthenes algorithm for finding prime numbers. Note the creation of
+coroutines inside a coroutine.
+<P>
+<PRE>proc filterByFactor {source n} {
+    <B>yield</B> [info coroutine]
+    while 1 {
+        set x [<I>$source</I>]
+        if {$x % $n} {
+            <B>yield</B> $x
+        }
+    }
+}
+<B>coroutine</B> allNumbers apply {{} {while 1 {<B>yield</B> [incr x]}}}
+<B>coroutine</B> eratosthenes apply {c {
+    <B>yield</B>
+    while 1 {
+        set n [<I>$c</I>]
+        <B>yield</B> $n
+        set c [<B>coroutine</B> prime$n filterByFactor $c $n]
+    }
+}} allNumbers
+for {set i 1} {$i &lt;= 20} {incr i} {
+    puts &quot;prime#$i = [<I>eratosthenes</I>]&quot;
+}</PRE>
+<P>
+This example shows how a value can be passed around a group of three
+coroutines that yield to each other:
+<P>
+<PRE>proc juggler {name target {value &quot;&quot;}} {
+    if {$value eq &quot;&quot;} {
+        set value [<B>yield</B> [info coroutine]]
+    }
+    while {$value ne &quot;&quot;} {
+        puts &quot;$name : $value&quot;
+        set value [string range $value 0 end-1]
+        lassign [<B>yieldto</B> $target $value] value
+    }
+}
+<B>coroutine</B> j1 juggler Larry [
+    <B>coroutine</B> j2 juggler Curly [
+        <B>coroutine</B> j3 juggler Moe j1]] &quot;Nyuck!Nyuck!Nyuck!&quot;</PRE>
+<H4><A NAME="M6">DETAILED SEMANTICS</A></H4>
+This example demonstrates that coroutines start from the global namespace, and
+that <I>command</I> resolution happens before the coroutine stack is created.
+<P>
+<PRE>proc report {where level} {
+    # Where was the caller called from?
+    set ns [uplevel 2 {namespace current}]
+    <B>yield</B> &quot;made $where $level context=$ns name=[info coroutine]&quot;
+}
+proc example {} {
+    report outer [info level]
+}
+namespace eval demo {
+    proc example {} {
+        report inner [info level]
+    }
+    proc makeExample {} {
+        puts &quot;making from [info level]&quot;
+        puts [<B>coroutine</B> coroEg example]
+    }
+    makeExample
+}</PRE>
+<P>
+Which produces the output below. In particular, we can see that stack
+manipulation has occurred (comparing the levels from the first and second
+line) and that the parent level in the coroutine is the global namespace. We
+can also see that coroutine names are local to the current namespace if not
+qualified, and that coroutines may yield at depth (e.g., in called
+procedures).
+<P>
+<PRE>making from 2
+made inner 1 context=:: name=::demo::coroEg</PRE>
+<H3><A NAME="M7">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/apply.htm">apply</A></B>, <B><A HREF="../TclCmd/info.htm">info</A></B>, <B><A HREF="../TclCmd/proc.htm">proc</A></B>, <B><A HREF="../TclCmd/return.htm">return</A></B>
+<H3><A NAME="M8">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#coroutine">coroutine</A>, <A href="../Keywords/G.htm#generator">generator</A>
+<div class="copy">Copyright &copy; 2009 Donal K. Fellows.
+</div>
+</BODY></HTML>

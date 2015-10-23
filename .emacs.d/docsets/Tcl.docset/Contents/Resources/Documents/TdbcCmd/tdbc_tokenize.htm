@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>tdbc::tokenize manual page - Tcl Database Connectivity</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">TDBC Package Commands, version 1.0.0</a> <small>&gt;</small> tdbc_tokenize</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+tdbc::tokenize &mdash; TDBC SQL tokenizer
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+package require <B>tdbc 1.0</B><BR>
+<BR>
+<B>tdbc::tokenize</B> <I>string</I><BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+As a convenience to database drivers, Tcl Database Connectivity (TDBC)
+provides a command to break SQL code apart into tokens so that bound
+variables can readily be identified and substituted.
+<P>
+The <B>tdbc::tokenize</B> command accepts as its parameter a string
+that is expected to contain one or more SQL statements. It returns a
+list of substrings; concatenating these substrings together will yield
+the original string. Each substring is one of the following:
+<P>
+<OL class="description">
+<LI value="1">
+A bound variable, which begins with one of the 
+characters '<B>:</B>', '<B>@</B>', or '<B>$</B>'. The 
+remainder of the string is the variable
+name and will consist of alphanumeric characters and underscores. (The
+leading character will be be non-numeric.)
+<P><LI value="2">
+A semicolon that separates two SQL statements.
+<P><LI value="3">
+Something else in a SQL statement. The tokenizer does not attempt to
+parse SQL; it merely identifies bound variables (distinguishing them
+from similar strings appearing inside quotes or comments) and
+statement delimiters.
+<P></OL>
+<H3><A NAME="M5">SEE ALSO</A></H3>
+<B><A HREF="../TdbcCmd/tdbc.htm">tdbc</A></B>, <B><A HREF="../TdbcCmd/tdbc_connection.htm">tdbc::connection</A></B>, <B><A HREF="../TdbcCmd/tdbc_statement.htm">tdbc::statement</A></B>, <B><A HREF="../TdbcCmd/tdbc_resultset.htm">tdbc::resultset</A></B>
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/T.htm#TDBC">TDBC</A>, <A href="../Keywords/S.htm#SQL">SQL</A>, <A href="../Keywords/D.htm#database">database</A>, <A href="../Keywords/T.htm#tokenize">tokenize</A>
+<H3><A NAME="M7">COPYRIGHT</A></H3>
+Copyright (c) 2008 by Kevin B. Kenny.
+<div class="copy">Copyright &copy; 2008 by Kevin B. Kenny.
+</div>
+</BODY></HTML>

@@ -1,0 +1,662 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Test::Builder::Tester</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../../index-overview.html">Overview</a>
+                <li><a href="../../index-tutorials.html">Tutorials</a>
+                <li><a href="../../index-faq.html">FAQs</a>
+                <li><a href="../../index-history.html">History / Changes</a>
+                <li><a href="../../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../../index-language.html">Language</a>
+                <li><a href="../../index-functions.html">Functions</a>
+                <li><a href="../../perlop.html">Operators</a>
+                <li><a href="../../perlvar.html">Special Variables</a>
+                <li><a href="../../index-pragmas.html">Pragmas</a>
+                <li><a href="../../index-utilities.html">Utilities</a>
+                <li><a href="../../index-internals.html">Internals</a>
+                <li><a href="../../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Test::Builder::Tester</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../../index.html">Home</a> &gt;
+    
+      
+        <a href="../../index-modules-T.html">Core modules (T)</a> &gt;
+      
+    
+    Test::Builder::Tester
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Test::Builder::Tester</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Functions">Functions</a></ul><li><a href="#BUGS">BUGS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#MAINTAINERS">MAINTAINERS</a><li><a href="#NOTES">NOTES</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Test::Builder::Tester - test testsuites that have been built with
+Test::Builder</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../../functions/use.html">use</a> <span class="w">Test::Builder::Tester</span> <span class="w">tests</span> <span class="cm">=&gt;</span> <span class="n">1</span><span class="sc">;</span></li><li>    <a class="l_k" href="../../functions/use.html">use</a> <span class="w">Test::More</span><span class="sc">;</span></li><li></li><li>    <span class="i">test_out</span><span class="s">(</span><span class="q">&quot;not ok 1 - foo&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">test_fail</span><span class="s">(</span><span class="n">+1</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">fail</span><span class="s">(</span><span class="q">&quot;foo&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">test_test</span><span class="s">(</span><span class="q">&quot;fail works&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>A module that helps you test testing modules that are built with
+<a href="../../Test/Builder.html">Test::Builder</a>.</p>
+<p>The testing system is designed to be used by performing a three step
+process for each test you wish to test.  This process starts with using
+<code class="inline"><span class="w">test_out</span></code>
+ and <code class="inline"><span class="w">test_err</span></code>
+ in advance to declare what the testsuite you
+are testing will output with <a href="../../Test/Builder.html">Test::Builder</a> to stdout and stderr.</p>
+<p>You then can run the test(s) from your test suite that call
+<a href="../../Test/Builder.html">Test::Builder</a>.  At this point the output of <a href="../../Test/Builder.html">Test::Builder</a> is
+safely captured by <a href="../../Test/Builder/Tester.html">Test::Builder::Tester</a> rather than being
+interpreted as real test output.</p>
+<p>The final stage is to call <code class="inline"><span class="w">test_test</span></code>
+ that will simply compare what you
+predeclared to what <a href="../../Test/Builder.html">Test::Builder</a> actually outputted, and report the
+results back with a "ok" or "not ok" (with debugging) to the normal
+output.</p>
+<a name="Functions"></a><h2>Functions</h2>
+<p>These are the six methods that are exported as default.</p>
+<ul>
+<li><a name="test_out"></a><b>test_out</b>
+</li>
+<li><a name="test_err"></a><b>test_err</b>
+<p>Procedures for predeclaring the output that your test suite is
+expected to produce until <code class="inline"><span class="w">test_test</span></code>
+ is called.  These procedures
+automatically assume that each line terminates with "\n".  So</p>
+<pre class="verbatim"><ol><li>   <span class="i">test_out</span><span class="s">(</span><span class="q">&quot;ok 1&quot;</span><span class="cm">,</span><span class="q">&quot;ok 2&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>is the same as</p>
+<pre class="verbatim"><ol><li>   <span class="i">test_out</span><span class="s">(</span><span class="q">&quot;ok 1\nok 2&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>which is even the same as</p>
+<pre class="verbatim"><ol><li>   <span class="i">test_out</span><span class="s">(</span><span class="q">&quot;ok 1&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>   <span class="i">test_out</span><span class="s">(</span><span class="q">&quot;ok 2&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Once <code class="inline"><span class="w">test_out</span></code>
+ or <code class="inline"><span class="w">test_err</span></code>
+ (or <code class="inline"><span class="w">test_fail</span></code>
+ or <code class="inline"><span class="w">test_diag</span></code>
+) have
+been called, all further output from <a href="../../Test/Builder.html">Test::Builder</a> will be
+captured by <a href="../../Test/Builder/Tester.html">Test::Builder::Tester</a>.  This means that you will not
+be able perform further tests to the normal output in the normal way
+until you call <code class="inline"><span class="w">test_test</span></code>
+ (well, unless you manually meddle with the
+output filehandles)</p>
+</li>
+<li><a name="test_fail"></a><b>test_fail</b>
+<p>Because the standard failure message that <a href="../../Test/Builder.html">Test::Builder</a> produces
+whenever a test fails will be a common occurrence in your test error
+output, and because it has changed between Test::Builder versions, rather
+than forcing you to call <code class="inline"><span class="w">test_err</span></code>
+ with the string all the time like
+so</p>
+<pre class="verbatim"><ol><li>    <span class="i">test_err</span><span class="s">(</span><span class="q">&quot;# Failed test ($0 at line &quot;</span>.<span class="i">line_num</span><span class="s">(</span><span class="n">+1</span><span class="s">)</span>.<span class="q">&quot;)&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p><code class="inline"><span class="w">test_fail</span></code>
+ exists as a convenience function that can be called
+instead.  It takes one argument, the offset from the current line that
+the line that causes the fail is on.</p>
+<pre class="verbatim"><ol><li>    <span class="i">test_fail</span><span class="s">(</span><span class="n">+1</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This means that the example in the synopsis could be rewritten
+more simply as:</p>
+<pre class="verbatim"><ol><li>   <span class="i">test_out</span><span class="s">(</span><span class="q">&quot;not ok 1 - foo&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>   <span class="i">test_fail</span><span class="s">(</span><span class="n">+1</span><span class="s">)</span><span class="sc">;</span></li><li>   <span class="i">fail</span><span class="s">(</span><span class="q">&quot;foo&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>   <span class="i">test_test</span><span class="s">(</span><span class="q">&quot;fail works&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre></li>
+<li><a name="test_diag"></a><b>test_diag</b>
+<p>As most of the remaining expected output to the error stream will be
+created by <a href="../../Test/Builder.html">Test::Builder</a>'s <code class="inline"><span class="w">diag</span></code>
+ function, <a href="../../Test/Builder/Tester.html">Test::Builder::Tester</a>
+provides a convenience function <code class="inline"><span class="w">test_diag</span></code>
+ that you can use instead of
+<code class="inline"><span class="w">test_err</span></code>
+.</p>
+<p>The <code class="inline"><span class="w">test_diag</span></code>
+ function prepends comment hashes and spacing to the
+start and newlines to the end of the expected output passed to it and
+adds it to the list of expected error output.  So, instead of writing</p>
+<pre class="verbatim"><ol><li>   <span class="i">test_err</span><span class="s">(</span><span class="q">&quot;# Couldn&#39;t open file&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>you can write</p>
+<pre class="verbatim"><ol><li>   <span class="i">test_diag</span><span class="s">(</span><span class="q">&quot;Couldn&#39;t open file&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Remember that <a href="../../Test/Builder.html">Test::Builder</a>'s diag function will not add newlines to
+the end of output and test_diag will. So to check</p>
+<pre class="verbatim"><ol><li>   <span class="w">Test::Builder</span><span class="w">-&gt;new</span><span class="w">-&gt;diag</span><span class="s">(</span><span class="q">&quot;foo\n&quot;</span><span class="cm">,</span><span class="q">&quot;bar\n&quot;</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>You would do</p>
+<pre class="verbatim"><ol><li>  <span class="i">test_diag</span><span class="s">(</span><span class="q">&quot;foo&quot;</span><span class="cm">,</span><span class="q">&quot;bar&quot;</span><span class="s">)</span></li></ol></pre><p>without the newlines.</p>
+</li>
+<li><a name="test_test"></a><b>test_test</b>
+<p>Actually performs the output check testing the tests, comparing the
+data (with <code class="inline">eq</code>
+) that we have captured from <a href="../../Test/Builder.html">Test::Builder</a> against
+what was declared with <code class="inline"><span class="w">test_out</span></code>
+ and <code class="inline"><span class="w">test_err</span></code>
+.</p>
+<p>This takes name/value pairs that effect how the test is run.</p>
+<ul>
+<li><a name="title-(synonym-'name'%2c-'label')"></a><b>title (synonym 'name', 'label')</b>
+<p>The name of the test that will be displayed after the <code class="inline"><span class="w">ok</span></code>
+ or <code class="inline">not
+<span class="w">ok</span></code>
+.</p>
+</li>
+<li><a name="skip_out"></a><b>skip_out</b>
+<p>Setting this to a true value will cause the test to ignore if the
+output sent by the test to the output stream does not match that
+declared with <code class="inline"><span class="w">test_out</span></code>
+.</p>
+</li>
+<li><a name="skip_err"></a><b>skip_err</b>
+<p>Setting this to a true value will cause the test to ignore if the
+output sent by the test to the error stream does not match that
+declared with <code class="inline"><span class="w">test_err</span></code>
+.</p>
+</li>
+</ul>
+<p>As a convenience, if only one argument is passed then this argument
+is assumed to be the name of the test (as in the above examples.)</p>
+<p>Once <code class="inline"><span class="w">test_test</span></code>
+ has been run test output will be redirected back to
+the original filehandles that <a href="../../Test/Builder.html">Test::Builder</a> was connected to
+(probably STDOUT and STDERR,) meaning any further tests you run
+will function normally and cause success/errors for <a href="../../Test/Harness.html">Test::Harness</a>.</p>
+</li>
+<li><a name="line_num"></a><b>line_num</b>
+<p>A utility function that returns the line number that the function was
+called on.  You can pass it an offset which will be added to the
+result.  This is very useful for working out the correct text of
+diagnostic functions that contain line numbers.</p>
+<p>Essentially this is the same as the <code class="inline"><span class="w">__LINE__</span></code>
+ macro, but the
+<code class="inline"><span class="i">line_num</span><span class="s">(</span><span class="n">+3</span><span class="s">)</span></code>
+ idiom is arguably nicer.</p>
+</li>
+</ul>
+<p>In addition to the six exported functions there exists one
+function that can only be accessed with a fully qualified function
+call.</p>
+<ul>
+<li><a name="color"></a><b>color</b>
+<p>When <code class="inline"><span class="w">test_test</span></code>
+ is called and the output that your tests generate
+does not match that which you declared, <code class="inline"><span class="w">test_test</span></code>
+ will print out
+debug information showing the two conflicting versions.  As this
+output itself is debug information it can be confusing which part of
+the output is from <code class="inline"><span class="w">test_test</span></code>
+ and which was the original output from
+your original tests.  Also, it may be hard to spot things like
+extraneous whitespace at the end of lines that may cause your test to
+fail even though the output looks similar.</p>
+<p>To assist you <code class="inline"><span class="w">test_test</span></code>
+ can colour the background of the debug
+information to disambiguate the different types of output. The debug
+output will have its background coloured green and red.  The green
+part represents the text which is the same between the executed and
+actual output, the red shows which part differs.</p>
+<p>The <code class="inline"><span class="w">color</span></code>
+ function determines if colouring should occur or not.
+Passing it a true or false value will enable or disable colouring
+respectively, and the function called with no argument will return the
+current setting.</p>
+<p>To enable colouring from the command line, you can use the
+<a href="http://search.cpan.org/perldoc/Text::Builder::Tester::Color">Text::Builder::Tester::Color</a> module like so:</p>
+<pre class="verbatim"><ol><li>   <span class="w">perl</span> -<span class="w">Mlib</span>=<span class="w">Text::Builder::Tester::Color</span> <span class="w">test</span>.<span class="w">t</span></li></ol></pre><p>Or by including the <a href="../../Test/Builder/Tester/Color.html">Test::Builder::Tester::Color</a> module directly in
+the PERL5LIB.</p>
+</li>
+</ul>
+<a name="BUGS"></a><h1>BUGS</h1>
+<p>Calls <code class="inline"><span class="w">Test::Builder</span><span class="w">-&gt;no_ending</span></code>
+ turning off the ending tests.
+This is needed as otherwise it will trip out because we've run more
+tests than we strictly should have and it'll register any failures we
+had that we were testing for as real failures.</p>
+<p>The color function doesn't work unless <a href="../../Term/ANSIColor.html">Term::ANSIColor</a> is
+compatible with your terminal.</p>
+<p>Bugs (and requests for new features) can be reported to the author
+though the CPAN RT system:
+<a href="http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Builder-Tester">http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Builder-Tester</a></p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Copyright Mark Fowler &lt;mark@twoshortplanks.com&gt; 2002, 2004.</p>
+<p>Some code taken from <a href="../../Test/More.html">Test::More</a> and <a href="http://search.cpan.org/perldoc/Test::Catch">Test::Catch</a>, written by
+Michael G Schwern &lt;schwern@pobox.com&gt;.  Hence, those parts
+Copyright Micheal G Schwern 2001.  Used and distributed with
+permission.</p>
+<p>This program is free software; you can redistribute it
+and/or modify it under the same terms as Perl itself.</p>
+<a name="MAINTAINERS"></a><h1>MAINTAINERS</h1>
+<ul>
+<li><a name="Chad-Granum-%3cexodist%40cpan.org%3e"></a><b>Chad Granum &lt;exodist@cpan.org&gt;</b>
+</li>
+</ul>
+<a name="NOTES"></a><h1>NOTES</h1>
+<p>Thanks to Richard Clamp &lt;richardc@unixbeard.net&gt; for letting
+me use his testing system to try this module out on.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../../Test/Builder.html">Test::Builder</a>, <a href="../../Test/Builder/Tester/Color.html">Test::Builder::Tester::Color</a>, <a href="../../Test/More.html">Test::More</a>.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Functions">Functions</a></ul><li><a href="#BUGS">BUGS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#MAINTAINERS">MAINTAINERS</a><li><a href="#NOTES">NOTES</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../../index-overview.html">Overview</a>
+                <li><a href="../../index-tutorials.html">Tutorials</a>
+                <li><a href="../../index-faq.html">FAQs</a>
+                <li><a href="../../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../../index-language.html">Language</a>
+                <li><a href="../../index-functions.html">Functions</a>
+                <li><a href="../../perlop.html">Operators</a>
+                <li><a href="../../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../../index-modules-A.html">Modules</a>
+                <li><a href="../../index-pragmas.html">Pragmas</a>
+                <li><a href="../../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../../index-licence.html">License</a>
+                <li><a href="../../index-internals.html">Internals</a>
+                <li><a href="../../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(2);
+  perldoc.pageName    = 'Test::Builder::Tester';
+  perldoc.pageAddress = 'Test/Builder/Tester.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

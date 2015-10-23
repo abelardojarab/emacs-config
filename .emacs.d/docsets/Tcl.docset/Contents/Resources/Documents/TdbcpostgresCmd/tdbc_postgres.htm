@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>tdbc::postgres manual page - Tcl Database Connectivity</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">tdbc::postgres Package Commands, version 1.0.0</a> <small>&gt;</small> tdbc_postgres</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="tdbc_postgres.htm#M2" NAME="L2">NAME</A>
+<DL><DD>tdbc::postgres &mdash; TDBC-POSTGRES bridge</DD></DL>
+<DD><A HREF="tdbc_postgres.htm#M3" NAME="L3">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="tdbc_postgres.htm#M4" NAME="L4">DESCRIPTION</A>
+<DD><A HREF="tdbc_postgres.htm#M5" NAME="L5">CONNECTION OPTIONS</A>
+<DL class="connection options">
+<DD><A HREF="tdbc_postgres.htm#M6" NAME="L6"><B>-host</B> <I>hostname</I></A>
+<DD><A HREF="tdbc_postgres.htm#M7" NAME="L7"><B>-hostaddr</B> <I>address</I></A>
+<DD><A HREF="tdbc_postgres.htm#M8" NAME="L8"><B>-port</B> <I>number</I></A>
+<DD><A HREF="tdbc_postgres.htm#M9" NAME="L9"><B>-user</B> <I>name</I></A>
+<DD><A HREF="tdbc_postgres.htm#M10" NAME="L10"><B>-passwd</B> <I>password</I></A>
+<DD><A HREF="tdbc_postgres.htm#M11" NAME="L11"><B>-password</B> <I>password</I></A>
+<DD><A HREF="tdbc_postgres.htm#M12" NAME="L12"><B>-database</B> <I>name</I></A>
+<DD><A HREF="tdbc_postgres.htm#M13" NAME="L13"><B>-db</B> <I>name</I></A>
+<DD><A HREF="tdbc_postgres.htm#M14" NAME="L14"><B>-options</B> <I>opts</I></A>
+<DD><A HREF="tdbc_postgres.htm#M15" NAME="L15"><B>-tty</B> <I>file</I></A>
+<DD><A HREF="tdbc_postgres.htm#M16" NAME="L16"><B>-sslmode</B> <I>mode</I></A>
+<DD><A HREF="tdbc_postgres.htm#M17" NAME="L17"><B>-requiressl</B> <I>flag</I></A>
+<DD><A HREF="tdbc_postgres.htm#M18" NAME="L18"><B>-service</B> <I>name</I></A>
+</DL>
+<DD><A HREF="tdbc_postgres.htm#M19" NAME="L19">EXAMPLES</A>
+<DD><A HREF="tdbc_postgres.htm#M20" NAME="L20">SEE ALSO</A>
+<DD><A HREF="tdbc_postgres.htm#M21" NAME="L21">KEYWORDS</A>
+<DD><A HREF="tdbc_postgres.htm#M22" NAME="L22">COPYRIGHT</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+tdbc::postgres &mdash; TDBC-POSTGRES bridge
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+package require <B>tdbc::postgres 1.0</B><BR>
+<B>tdbc::postgres::connection create</B> <I>db</I> ?<I>-option value...</I>?<BR>
+<B>tdbc::postgres::connection new</B> ?<I>-option value...</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The <B>tdbc::postgres</B> driver provides a database interface that conforms
+to Tcl DataBase Connectivity (TDBC) and allows a Tcl script to connect
+to a Postgres database.
+<P>
+Connection to a POSTGRES database is established by invoking
+<B>tdbc::postgres::connection create</B>, passing it the name to give the
+database handle and a set of <I>-option-value</I> pairs. The available
+options are enumerated under CONNECTION OPTIONS below.
+As an alternative, <B>tdbc::postgres::connection new</B> may be used to create
+a database connection with an automatically assigned name. The return value
+from <B>tdbc::postgres::connection new</B> is the name that was chosen for the
+connection handle.
+<P>
+The side effect of <B>tdbc::postgres::connection create</B> is to create a
+new database connection.. See <B>tdbc::connection(n)</B> for the
+details of how to use the connection to manipulate a database.
+<H3><A NAME="M5">CONNECTION OPTIONS</A></H3>
+The <B>tdbc::postgres::connection create</B> object command supports the
+<B>-encoding</B>, <B>-isolation</B>, <B>-readonly</B> and <B>-timeout</B>
+options common to all TDBC drivers. The <B>-timeout</B> option will
+only affect connection process, once connected this value will be 
+ignored and cannot be changed after connecting. 
+<P>
+In addition, the following options are recognized (these options must be
+set on the initial creation of the connection; they cannot be changed
+after connecting) :
+<P>
+<DL class="connection options">
+<DT><A NAME="M6"><B>-host</B> <I>hostname</I></A><DD>
+Connects to the host specified by <I>hostname</I>. Default is to connect using a local Unix domain socket.
+<P><DT><A NAME="M7"><B>-hostaddr</B> <I>address</I></A><DD>
+Connects to the host specified by given IP <I>address</I>. If both <B>-host</B> and <B>-hostaddr</B> are given, the value 
+of <B>-host</B> is ignored. Default is to connect using a local Unix domain socket. 
+<P><DT><A NAME="M8"><B>-port</B> <I>number</I></A><DD>
+Connects to a Postgres server listening on the port specified by <I>number</I>.
+It is used only when <I>host</I>  or <I>hostaddr</I> is specified.
+<P><DT><A NAME="M9"><B>-user</B> <I>name</I></A><DD>
+Presents <I>name</I> as the user name to the Postgres server. Default is the
+current user ID.
+<P><DT><A NAME="M10"><B>-passwd</B> <I>password</I></A><DD>
+<P><DT><A NAME="M11"><B>-password</B> <I>password</I></A><DD>
+These two options are synonymous. They present the given <I>password</I> as 
+the user's password to the Postgres server. Default is not to present a password. 
+<P><DT><A NAME="M12"><B>-database</B> <I>name</I></A><DD>
+<P><DT><A NAME="M13"><B>-db</B> <I>name</I></A><DD>
+These two options are synonymous.  They present the given <I>name</I> as the
+name of the default database to use in Postgres queries. If not specified,
+the default database for the current user is used.
+<P><DT><A NAME="M14"><B>-options</B> <I>opts</I></A><DD>
+This sets <I>opts</I> as additional command line options send to the server.
+<P><DT><A NAME="M15"><B>-tty</B> <I>file</I></A><DD>
+This option is ignored on never servers. Formerly this specified where to send debug
+output. This option is left for compatibility with older servers.
+<P><DT><A NAME="M16"><B>-sslmode</B> <I>mode</I></A><DD>
+This option determines whether or with what priority an SSL connection will be negotiated with
+the server. There are four <I>modes</I>: <B>disable</B> will attempt only an unencrypted SSL connection;
+<B>allow</B> will negotiate, trying first a non-SSL connection, then if that fails, trying an SSL
+connection; <B>prefer</B> (the default) will negotiate, trying first an SSL connection, 
+then if that fails, trying a regular non-SSL connection; <B>require</B> will try only an SSL connection.
+If PostgreSQL is compiled without SSL support, using option <B>require</B> will cause an error,
+and options <B>allow</B> and <B>prefer</B> will be tolerated but the driver will be unable to negotiate
+an SSL connection.
+<P><DT><A NAME="M17"><B>-requiressl</B> <I>flag</I></A><DD>
+This option is deprecated in favor of the <B>-sslmode</B> setting. 
+The <I>flag</I> value must be a Boolean value. If it is <B>true</B> (or
+any equivalent), driver will then refuse to connect if the server does
+not accept an SSL connection. The default value is <B>false</B> (or any
+equivalent), and acts the same like <B>-sslmode</B> <B>preffered</B>
+<P><DT><A NAME="M18"><B>-service</B> <I>name</I></A><DD>
+It specifies a service <I>name</I> in pg_service.conf file that holds additional connection parameters.
+This allows applications to specify only a service name so connection parameters can be
+centrally maintained. Refer to PostgreSQL Documentation or PREFIX/share/pg_service.conf.sample file
+for details.
+<P></DL>
+<H3><A NAME="M19">EXAMPLES</A></H3>
+<PRE>tdbc::postgres::connection -user joe -passwd sesame -db joes_database</PRE>
+Connects to the Postgres server on the local host using the default
+connection method, presenting user ID 'joe' and password 'sesame'.
+Uses 'joes_database' as the default database name.
+<H3><A NAME="M20">SEE ALSO</A></H3>
+<B><A HREF="../TdbcCmd/tdbc.htm">tdbc</A></B>, <B><A HREF="../TdbcCmd/tdbc_connection.htm">tdbc::connection</A></B>, <B><A HREF="../TdbcCmd/tdbc_resultset.htm">tdbc::resultset</A></B>, <B><A HREF="../TdbcCmd/tdbc_statement.htm">tdbc::statement</A></B>
+<H3><A NAME="M21">KEYWORDS</A></H3>
+<A href="../Keywords/T.htm#TDBC">TDBC</A>, <A href="../Keywords/S.htm#SQL">SQL</A>, <A href="../Keywords/P.htm#Postgres">Postgres</A>, <A href="../Keywords/D.htm#database">database</A>, <A href="../Keywords/C.htm#connectivity">connectivity</A>, <A href="../Keywords/C.htm#connection">connection</A>
+<H3><A NAME="M22">COPYRIGHT</A></H3>
+Copyright (c) 2009 by Slawomir Cygan
+<div class="copy"></div>
+</BODY></HTML>

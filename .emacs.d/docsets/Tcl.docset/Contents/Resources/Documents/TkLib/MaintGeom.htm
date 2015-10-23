@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_MaintainGeometry manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> MaintGeom</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="MaintGeom.htm#M2" NAME="L442">NAME</A>
+<DL><DD>Tk_MaintainGeometry, Tk_UnmaintainGeometry &mdash; maintain geometry of one window relative to another</DD></DL>
+<DD><A HREF="MaintGeom.htm#M3" NAME="L443">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD><B>Tk_MaintainGeometry</B>(<I>slave, master, x, y, width, height</I>)
+<DD><B>Tk_UnmaintainGeometry</B>(<I>slave, master</I>)
+</DL>
+<DD><A HREF="MaintGeom.htm#M4" NAME="L444">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="MaintGeom.htm#M5" NAME="L445">DESCRIPTION</A>
+<OL class="description">
+</OL>
+<DD><A HREF="MaintGeom.htm#M6" NAME="L446">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_MaintainGeometry, Tk_UnmaintainGeometry &mdash; maintain geometry of one window relative to another
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+<B>Tk_MaintainGeometry</B>(<I>slave, master, x, y, width, height</I>)<BR>
+<B>Tk_UnmaintainGeometry</B>(<I>slave, master</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>slave</B> (in)<DD>
+Window whose geometry is to be controlled.
+<P><DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>master</B> (in)<DD>
+Window relative to which <I>slave</I>'s geometry will be controlled.
+<P><DT>int <B>x</B> (in)<DD>
+Desired x-coordinate of <I>slave</I> in <I>master</I>, measured in pixels
+from the inside of <I>master</I>'s left border to the outside of
+<I>slave</I>'s left border.
+<P><DT>int <B>y</B> (in)<DD>
+Desired y-coordinate of <I>slave</I> in <I>master</I>, measured in pixels
+from the inside of <I>master</I>'s top border to the outside of
+<I>slave</I>'s top border.
+<P><DT>int <B>width</B> (in)<DD>
+Desired width for <I>slave</I>, in pixels.
+<P><DT>int <B>height</B> (in)<DD>
+Desired height for <I>slave</I>, in pixels.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_MaintainGeometry</B> and <B>Tk_UnmaintainGeometry</B> make it
+easier for geometry managers to deal with slaves whose masters are not
+their parents.
+Three problems arise if the master for a slave is not its parent:
+<P>
+<OL class="description">
+<LI value="1">
+The x- and y-position of the slave must be translated from the
+coordinate system of the master to that of the parent before
+positioning the slave.
+<P><LI value="2">
+If the master window, or any of its ancestors up to the slave's
+parent, is moved, then the slave must be repositioned within its
+parent in order to maintain the correct position relative to the
+master.
+<P><LI value="3">
+If the master or one of its ancestors is mapped or unmapped, then
+the slave must be mapped or unmapped to correspond.
+<P></OL>
+<P>
+None of these problems is an issue if the parent and master are
+the same.  For example, if the master or one of its ancestors
+is unmapped, the slave is automatically removed by the screen
+by X.
+<P>
+<B>Tk_MaintainGeometry</B> deals with these problems for slaves
+whose masters are not their parents, as well as handling the simpler
+case of slaves whose masters are their parents.
+<B>Tk_MaintainGeometry</B> is typically called by a window manager
+once it has decided where a slave should be positioned relative
+to its master.
+<B>Tk_MaintainGeometry</B> translates the coordinates to the
+coordinate system of <I>slave</I>'s parent and then moves and
+resizes the slave appropriately.
+Furthermore, it remembers the desired position and creates event
+handlers to monitor the master and all of its ancestors up
+to (but not including) the slave's parent.
+If any of these windows is moved, mapped, or unmapped,
+the slave will be adjusted so that it is mapped only when the
+master is mapped and its geometry relative to the master
+remains as specified by <I>x</I>, <I>y</I>, <I>width</I>, and
+<I>height</I>.
+<P>
+When a window manager relinquishes control over a window, or
+if it decides that it does not want the window to appear on the
+screen under any conditions, it calls <B>Tk_UnmaintainGeometry</B>.
+<B>Tk_UnmaintainGeometry</B> unmaps the window and cancels any
+previous calls to <B>Tk_MaintainGeometry</B> for the
+<I>master</I>-<I>slave</I> pair, so that the slave's
+geometry and mapped state are no longer maintained
+automatically.
+<B>Tk_UnmaintainGeometry</B> need not be called by a geometry
+manager if the slave, the master, or any of the master's ancestors
+is destroyed:  Tk will call it automatically.
+<P>
+If <B>Tk_MaintainGeometry</B> is called repeatedly for the same
+<I>master</I>-<I>slave</I> pair, the information from the most
+recent call supersedes any older information.
+If <B>Tk_UnmaintainGeometry</B> is called for a <I>master</I>-<I>slave</I>
+pair that is is not currently managed, the call has no effect.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/G.htm#geometry manager">geometry manager</A>, <A href="../Keywords/M.htm#map">map</A>, <A href="../Keywords/M.htm#master">master</A>, <A href="../Keywords/P.htm#parent">parent</A>, <A href="../Keywords/P.htm#position">position</A>, <A href="../Keywords/S.htm#slave">slave</A>, <A href="../Keywords/U.htm#unmap">unmap</A>
+<div class="copy">Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>delegation manual page - [incr Tcl]</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">[incr Tcl] Package Commands, version 4.0.0</a> <small>&gt;</small> itcldelegate</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="itcldelegate.htm#M2" NAME="L85">NAME</A>
+<DL><DD>itcl::delegation &mdash; delegate methods, procs or options to other objects</DD></DL>
+<DD><A HREF="itcldelegate.htm#M3" NAME="L86">WARNING!</A>
+<DD><A HREF="itcldelegate.htm#M4" NAME="L87">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="itcldelegate.htm#M5" NAME="L88">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="itcldelegate.htm#M6" NAME="L89"><B>delegate method </B><I>methodName</I><B> to </B><I>componentName</I> ?<B>as </B><I>targetName</I>?</A>
+<DD><A HREF="itcldelegate.htm#M7" NAME="L90"><B>delegate method </B><I>methodName</I> ?<B>to </B><I>componentName</I>? <B>using </B><I>pattern</I></A>
+<DL class="description">
+<DD><A HREF="itcldelegate.htm#M8" NAME="L91"><B>%%</B></A>
+<DD><A HREF="itcldelegate.htm#M9" NAME="L92"><B>%c</B></A>
+<DD><A HREF="itcldelegate.htm#M10" NAME="L93"><B>%j</B></A>
+<DD><A HREF="itcldelegate.htm#M11" NAME="L94"><B>%m</B></A>
+<DD><A HREF="itcldelegate.htm#M12" NAME="L95"><B>%M</B></A>
+<DD><A HREF="itcldelegate.htm#M13" NAME="L96"><B>%n</B></A>
+<DD><A HREF="itcldelegate.htm#M14" NAME="L97"><B>%s</B></A>
+<DD><A HREF="itcldelegate.htm#M15" NAME="L98"><B>%t</B></A>
+<DD><A HREF="itcldelegate.htm#M16" NAME="L99"><B>%w</B></A>
+</DL>
+<DD><A HREF="itcldelegate.htm#M17" NAME="L100"><B>delegate method </B><I>*</I> ?<B>to </B><I>componentName</I>? ?<B>using </B><I>pattern</I>? ?<B>except </B><I>methodName methodName ...</I>?</A>
+<DD><A HREF="itcldelegate.htm#M18" NAME="L101"><B>delegate option </B><I>namespec</I><B> to </B><I>comp</I></A>
+<DD><A HREF="itcldelegate.htm#M19" NAME="L102"><B>delegate option namespec to comp as target</B></A>
+<DD><A HREF="itcldelegate.htm#M20" NAME="L103"><B>delegate option * to </B><I>comp</I></A>
+<DD><A HREF="itcldelegate.htm#M21" NAME="L104"><B>delegate option * to </B><I>comp </I><B>except </B><I>exceptions</I></A>
+<DD><A HREF="itcldelegate.htm#M22" NAME="L105"><B>delegate </B><I>option</I><B> *</B> ?<B>except</B><I> optionName optionName ...</I>?</A>
+</DL>
+<DD><A HREF="itcldelegate.htm#M23" NAME="L106">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+itcl::delegation &mdash; delegate methods, procs or options to other objects
+<P>
+Parts of this description are &quot;borrowed&quot; from Tcl extension [snit], as the functionality is mostly identical.
+<H3><A NAME="M3">WARNING!</A></H3>
+This is new functionality in [incr Tcl] where the API can still change!!
+<H3><A NAME="M4">SYNOPSIS</A></H3>
+<B>delegate method </B><I>methodName</I><B> to </B><I>componentName</I> ?<B>as </B><I>targetName</I>?<BR>
+<B>delegate method </B><I>methodName</I> ?<B>to </B><I>componentName</I>? <B>using </B><I>pattern</I><BR>
+<B>delegate method </B><I>* ?</I><B>to </B><I>componentName</I>? ?<B>using </B><I>pattern</I>? ?<B>except </B><I>methodName methodName ...</I>?<BR>
+<BR>
+<B>delegate proc </B><I>procName</I><B> to </B><I>componentName</I> ?<B>as </B><I>targetName</I>?<BR>
+<B>delegate proc </B><I>procName</I> ?<B>to </B><I>componentName</I>? <B>using </B><I>pattern</I><BR>
+<B>delegate proc </B><I>*</I> ?<B>to </B><I>componentName</I>? ?<B>using </B><I>pattern</I>? ?<B>except </B><I>procName procName ...</I>?<BR>
+<BR>
+<B>delegate option </B><I>optionSpec</I><B> to </B><I>componentName</I><BR>
+<B>delegate option </B><I>optionSpec</I><B> to </B><I>componentName</I> <B>as </B><I>targetname</I>?<BR>
+<B>delegate option </B><I>* </I><B>to </B><I>componentName</I><BR>
+<B>delegate option </B><I>* </I><B>to </B><I>componentName</I> <B>except </B><I>optionName optionname ...</I><BR>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+The <B>delegate</B> command is used inside an <B>[incr&nbsp;Tcl]</B>
+extendedclass/widget/widgetadaptor definition to delegate
+methods/procs/options to other objects for handling.
+<P>
+<DL class="description">
+<DT><A NAME="M6"><B>delegate method </B><I>methodName</I><B> to </B><I>componentName</I> ?<B>as </B><I>targetName</I>?</A><DD>
+This form of delegate method delegates method methodName to component
+componentName. That is, when method methdoNameame is called on an instance of
+this type, the method and its arguments will be passed to the named component's
+command instead. That is, the following statement
+<P>
+<PRE>delegate method wag to tail</PRE>
+<P>
+is roughly equivalent to this explicitly defined method:
+<P>
+<PRE>method wag {args} {
+    uplevel $tail wag $args
+}</PRE>
+<P>
+The optional <B>as</B> clause allows you to specify the delegated method
+name and possibly add some arguments:
+<P>
+<PRE>delegate method wagtail to tail as &quot;wag briskly&quot;</PRE>
+<P>A method cannot be both locally defined and delegated.
+<P><DT><A NAME="M7"><B>delegate method </B><I>methodName</I> ?<B>to </B><I>componentName</I>? <B>using </B><I>pattern</I></A><DD>
+In this form of the delegate statement, the <B>using</B> clause is used to
+specify the precise form of the command to which method name name is delegated.
+The <B>to</B> clause is optional, since the chosen command might not involve
+any particular component.
+<P>
+The value of the using clause is a list that may contain any or all of the
+following substitution codes; these codes are substituted with the described
+value to build the delegated command prefix. Note that the following two
+statements are equivalent:
+<P>
+<PRE>delegate method wag to tail
+delegate method wag to tail using &quot;%c %m&quot;</PRE>
+<P>
+Each element of the list becomes a single element of the delegated command 
+--it is never reparsed as a string.
+<P>
+Substitutions:
+<P>
+<DL class="description">
+<DT><A NAME="M8"><B>%%</B></A><DD>
+This is replaced with a single &quot;%&quot;. Thus, to pass the string &quot;%c&quot; to the
+command as an argument, you'd write &quot;%%c&quot;.
+<P><DT><A NAME="M9"><B>%c</B></A><DD>
+This is replaced with the named component's command. 
+<P><DT><A NAME="M10"><B>%j</B></A><DD>
+This is replaced by the method name; if the name consists of multiple tokens,
+they are joined by underscores (&quot;_&quot;).
+<P><DT><A NAME="M11"><B>%m</B></A><DD>
+This is replaced with the final token of the method name; if the method name
+has one token, this is identical to <B>%M</B>.
+<P><DT><A NAME="M12"><B>%M</B></A><DD>
+This is replaced by the method name; if the name consists of multiple tokens,
+they are joined by space characters.
+<P><DT><A NAME="M13"><B>%n</B></A><DD>
+This is replaced with the name of the instance's private namespace.
+<P><DT><A NAME="M14"><B>%s</B></A><DD>
+This is replaced with the name of the instance command. 
+<P><DT><A NAME="M15"><B>%t</B></A><DD>
+This is replaced with the fully qualified type name. 
+<P><DT><A NAME="M16"><B>%w</B></A><DD>
+This is replaced with the original name of the instance command; for Itcl
+widgets and widget adaptors, it will be the Tk window name. It remains
+constant, even if the instance command is renamed.
+<P></DL>
+<P><DT><A NAME="M17"><B>delegate method </B><I>*</I> ?<B>to </B><I>componentName</I>? ?<B>using </B><I>pattern</I>? ?<B>except </B><I>methodName methodName ...</I>?</A><DD>
+In this form all unknown method names are delegeted to the specified
+component. The except clause can be used to specify a list of exceptions,
+i.e., method names that will not be so delegated. The using clause
+is defined as given above. In this form, the statement must
+contain the to clause, the using clause, or both.
+<P>
+In fact, the &quot;*&quot; can be a list of two or more tokens whose last element
+is &quot;*&quot;, as in the following example:
+<P>
+<PRE>delegate method {tail *} to tail</PRE>
+<P>
+This implicitly defines the method tail whose subcommands will be
+delegated to the tail component. 
+<P>The definitions for <B>delegate proc</B> ... are the same as for method,
+the only difference being, that this is for procs.
+<P><DT><A NAME="M18"><B>delegate option </B><I>namespec</I><B> to </B><I>comp</I></A><DD>
+<P><DT><A NAME="M19"><B>delegate option namespec to comp as target</B></A><DD>
+<P><DT><A NAME="M20"><B>delegate option * to </B><I>comp</I></A><DD>
+<P><DT><A NAME="M21"><B>delegate option * to </B><I>comp </I><B>except </B><I>exceptions</I></A><DD>
+Defines a delegated option; the namespec is defined as for the option
+statement. When the configure, configurelist, or cget instance method is
+used to set or retrieve the option's value, the equivalent configure or
+cget command will be applied to the component as though the option was
+defined with the following <B>-configuremethod</B> and <B>-cgetmethod</B>:
+<P>
+<PRE>method ConfigureMethod {option value} {
+    $comp configure $option $value
+}
+
+method CgetMethod {option} {
+    return [$comp cget $option]
+}</PRE>
+<P>Note that delegated options never appear in the <B>itcl_options</B> array.
+If the as clause is specified, then the target option name is used in place
+of name.
+<P><DT><A NAME="M22"><B>delegate </B><I>option</I><B> *</B> ?<B>except</B><I> optionName optionName ...</I>?</A><DD>
+This form delegates all unknown options to the specified component.
+The except clause can be used to specify a list of exceptions,
+i.e., option names that will not be so delegated.
+<P>
+<B>Warning:</B> options can only be delegated to a component if it supports the
+<B>configure</B> and <B>cget</B> instance methods.
+<P>An option cannot be both locally defined and delegated. TBD: Continue from here.
+<P></DL>
+<H3><A NAME="M23">KEYWORDS</A></H3>
+<A href="../Keywords/D.htm#delegation">delegation</A>, <A href="../Keywords/O.htm#option">option</A>, <A href="../Keywords/M.htm#method">method</A>, <A href="../Keywords/P.htm#proc">proc</A>
+<div class="copy">Copyright &copy; 2008 Arnulf Wiedemann
+</div>
+</BODY></HTML>

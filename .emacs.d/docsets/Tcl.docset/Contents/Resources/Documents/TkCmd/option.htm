@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>option manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk Commands, version 8.6.0</a> <small>&gt;</small> option</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="option.htm#M2" NAME="L1061">NAME</A>
+<DL><DD>option &mdash; Add/retrieve window options to/from the option database</DD></DL>
+<DD><A HREF="option.htm#M3" NAME="L1062">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="option.htm#M4" NAME="L1063">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="option.htm#M5" NAME="L1064"><B>widgetDefault</B></A>
+<DD><A HREF="option.htm#M6" NAME="L1065"><B>startupFile</B></A>
+<DD><A HREF="option.htm#M7" NAME="L1066"><B>userDefault</B></A>
+<DD><A HREF="option.htm#M8" NAME="L1067"><B>interactive</B></A>
+</DL>
+<DD><A HREF="option.htm#M9" NAME="L1068">PATTERN FORMAT</A>
+<DD><A HREF="option.htm#M10" NAME="L1069">EXAMPLES</A>
+<DD><A HREF="option.htm#M11" NAME="L1070">SEE ALSO</A>
+<DD><A HREF="option.htm#M12" NAME="L1071">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+option &mdash; Add/retrieve window options to/from the option database
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>option add </B><I>pattern value </I>?<I>priority</I>?<BR>
+<B>option clear</B><BR>
+<B>option get </B><I>window name class</I><BR>
+<B>option readfile </B><I>fileName </I>?<I>priority</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The <B>option</B> command allows you to add entries to the Tk option
+database or to retrieve options from the database.  The <B>add</B>
+form of the command adds a new option to the database.
+<I>Pattern</I> contains
+the option being specified, and consists of names and/or classes
+separated by asterisks or dots, in the usual X format (see
+<B><A HREF="#M9">PATTERN FORMAT</A></B>).  <I>Value</I>
+contains a text string to associate with <I>pattern</I>;  this is the
+value that will be returned in calls to <B><A HREF="../TkLib/GetOption.htm">Tk_GetOption</A></B> or by
+invocations of the <B>option get</B> command.  If <I>priority</I>
+is specified, it indicates the priority level for this option (see
+below for legal values);  it defaults to <B>interactive</B>.
+This command always returns an empty string.
+<P>
+The <B>option clear</B> command clears the option database.  Default
+options (from the
+<B>RESOURCE_MANAGER</B> property or the <B>.Xdefaults</B>
+file) will be reloaded automatically the next time an
+option is added to the database or removed from it.  This command
+always returns an empty string.
+<P>
+The <B>option get</B> command returns the value of the option
+specified for <I>window</I>
+under <I>name</I> and <I>class</I>.  If several entries in the option
+database match <I>window</I>, <I>name</I>, and <I>class</I>, then
+the command returns whichever was created with highest
+<I>priority</I> level.  If there are several matching
+entries at the same priority level, then it returns whichever entry
+was most recently entered into the option database.  If there are
+no matching entries, then the empty string is returned.
+<P>
+The <B>readfile</B> form of the command reads <I>fileName</I>,
+which should have the standard format for an
+X resource database such as <B>.Xdefaults</B>, and adds all the
+options specified in that file to the option database.  If <I>priority</I>
+is specified, it indicates the priority level at which to enter the
+options;  <I>priority</I> defaults to <B>interactive</B>.
+<P>
+The <I>priority</I> arguments to the <B>option</B> command are
+normally specified symbolically using one of the following values:
+<P>
+<DL class="description">
+<DT><A NAME="M5"><B>widgetDefault</B></A><DD>
+Level 20.  Used for default values hard-coded into widgets.
+<P><DT><A NAME="M6"><B>startupFile</B></A><DD>
+Level 40.  Used for options specified in application-specific
+startup files.
+<P><DT><A NAME="M7"><B>userDefault</B></A><DD>
+Level 60.  Used for options specified in user-specific defaults
+files, such as <B>.Xdefaults</B>, resource databases loaded into
+the X server, or user-specific startup files.
+<P><DT><A NAME="M8"><B>interactive</B></A><DD>
+Level 80.  Used for options specified interactively after the application
+starts running.  If <I>priority</I> is not specified, it defaults to
+this level.
+<P></DL>
+<P>
+Any of the above keywords may be abbreviated.  In addition, priorities
+may be specified numerically using integers between 0 and 100,
+inclusive.  The numeric form is probably a bad idea except for new priority
+levels other than the ones given above.
+<H3><A NAME="M9">PATTERN FORMAT</A></H3>
+Patterns consist of a sequence of words separated by either periods,
+&#8220;.&#8221;,
+or asterisks
+&#8220;*&#8221;.
+The overall pattern may also be optionally preceded by an asterisk.
+<P>
+Each word in the pattern conventionally starts with either an upper-case
+letter (in which case it denotes the class of either a widget or an option) or
+any other character, when it denotes the name of a widget or option. The last
+word in the pattern always indicates the option; the preceding ones constrain
+which widgets that option will be looked for in.
+<P>
+When two words are separated by a period, the latter widget must be a direct
+child of the former (or the option must apply to only the indicated widgets).
+When two words are separated by an asterisk, any depth of widgets may lie
+between the former and latter widgets (and the option applies to all widgets
+that are children of the former widget).
+<P>
+If the overall pattern is preceded by an asterisk, then the overall pattern
+applies anywhere it can throughout the whole widget hierarchy. Otherwise the
+first word of the pattern is matched against the name and class of the
+&#8220;<B>.</B>&#8221;
+<B><A HREF="../TkCmd/toplevel.htm">toplevel</A></B>, which are usually set by options to <B><A HREF="../UserCmd/wish.htm">wish</A></B>.
+<H3><A NAME="M10">EXAMPLES</A></H3>
+Instruct every button in the application to have red text on it unless
+explicitly overridden, by setting the <B>foreground</B> for the <B><A HREF="../TkCmd/button.htm">Button</A></B>
+class (note that on some platforms the option is ignored):
+<PRE><B>option add</B> *Button.foreground red startupFile</PRE>
+<P>
+Allow users to control what happens in an entry widget when the Return
+key is pressed by specifying a script in the option database and add a
+default option for that which rings the bell:
+<PRE>entry .e
+bind .e &lt;Return&gt; [<B>option get</B> .e returnCommand Command]
+<B>option add</B> *.e.returnCommand bell widgetDefault</PRE>
+<H3><A NAME="M11">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/options.htm">options</A></B>, <B><A HREF="../UserCmd/wish.htm">wish</A></B>
+<H3><A NAME="M12">KEYWORDS</A></H3>
+<A href="../Keywords/D.htm#database">database</A>, <A href="../Keywords/O.htm#option">option</A>, <A href="../Keywords/P.htm#priority">priority</A>, <A href="../Keywords/R.htm#retrieve">retrieve</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

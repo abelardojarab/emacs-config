@@ -1,0 +1,853 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>IPC::Cmd</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>IPC::Cmd</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-I.html">Core modules (I)</a> &gt;
+      
+    
+    IPC::Cmd
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>IPC::Cmd</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#CLASS-METHODS">CLASS METHODS</a><ul><li><a href="#%24ipc_run_version-%3d-IPC%3a%3aCmd-%3ecan_use_ipc_run(-%5bVERBOSE%5d-)">$ipc_run_version = IPC::Cmd->can_use_ipc_run( [VERBOSE] )</a><li><a href="#%24ipc_open3_version-%3d-IPC%3a%3aCmd-%3ecan_use_ipc_open3(-%5bVERBOSE%5d-)">$ipc_open3_version = IPC::Cmd->can_use_ipc_open3( [VERBOSE] )</a><li><a href="#%24bool-%3d-IPC%3a%3aCmd-%3ecan_capture_buffer">$bool = IPC::Cmd->can_capture_buffer</a><li><a href="#%24bool-%3d-IPC%3a%3aCmd-%3ecan_use_run_forked">$bool = IPC::Cmd->can_use_run_forked</a></ul><li><a href="#FUNCTIONS">FUNCTIONS</a><ul><li><a href="#%24path-%3d-can_run(-PROGRAM-)%3b">$path = can_run( PROGRAM );</a><li><a href="#%24ok-%7c-(%24ok%2c-%24err%2c-%24full_buf%2c-%24stdout_buff%2c-%24stderr_buff)-%3d-run(-command-%3d%3e-COMMAND%2c-%5bverbose-%3d%3e-BOOL%2c-buffer-%3d%3e-%5c%24SCALAR%2c-timeout-%3d%3e-DIGIT%5d-)%3b">$ok | ($ok, $err, $full_buf, $stdout_buff, $stderr_buff) = run( command => COMMAND, [verbose => BOOL, buffer => \$SCALAR, timeout => DIGIT] );</a><li><a href="#%24hashref-%3d-run_forked(-COMMAND%2c-%7b-child_stdin-%3d%3e-SCALAR%2c-timeout-%3d%3e-DIGIT%2c-stdout_handler-%3d%3e-CODEREF%2c-stderr_handler-%3d%3e-CODEREF%7d-)%3b">$hashref = run_forked( COMMAND, { child_stdin => SCALAR, timeout => DIGIT, stdout_handler => CODEREF, stderr_handler => CODEREF} );</a><li><a href="#%24q-%3d-QUOTE">$q = QUOTE</a></ul><li><a href="#HOW-IT-WORKS">HOW IT WORKS</a><li><a href="#Global-Variables">Global Variables</a><ul><li><a href="#%24IPC%3a%3aCmd%3a%3aVERBOSE">$IPC::Cmd::VERBOSE</a><li><a href="#%24IPC%3a%3aCmd%3a%3aUSE_IPC_RUN">$IPC::Cmd::USE_IPC_RUN</a><li><a href="#%24IPC%3a%3aCmd%3a%3aUSE_IPC_OPEN3">$IPC::Cmd::USE_IPC_OPEN3</a><li><a href="#%24IPC%3a%3aCmd%3a%3aWARN">$IPC::Cmd::WARN</a><li><a href="#%24IPC%3a%3aCmd%3a%3aINSTANCES">$IPC::Cmd::INSTANCES</a><li><a href="#%24IPC%3a%3aCmd%3a%3aALLOW_NULL_ARGS">$IPC::Cmd::ALLOW_NULL_ARGS</a></ul><li><a href="#Caveats">Caveats</a><li><a href="#See-Also">See Also</a><li><a href="#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a><li><a href="#BUG-REPORTS">BUG REPORTS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>IPC::Cmd - finding and running system commands made easy</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IPC::Cmd</span> <span class="q">qw[can_run run run_forked]</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$full_path</span> = <span class="i">can_run</span><span class="s">(</span><span class="q">&#39;wget&#39;</span><span class="s">)</span> <a class="l_k" href="../functions/or.html">or</a> <a class="l_k" href="../functions/warn.html">warn</a> <span class="q">&#39;wget is not installed!&#39;</span><span class="sc">;</span></li><li></li><li>    <span class="c">### commands can be arrayrefs or strings ###</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$cmd</span> = <span class="q">&quot;$full_path -b theregister.co.uk&quot;</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$cmd</span> = <span class="s">[</span><span class="i">$full_path</span><span class="cm">,</span> <span class="q">&#39;-b&#39;</span><span class="cm">,</span> <span class="q">&#39;theregister.co.uk&#39;</span><span class="s">]</span><span class="sc">;</span></li><li></li><li>    <span class="c">### in scalar context ###</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$buffer</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/if.html">if</a><span class="s">(</span> <a class="l_k" href="../functions/scalar.html">scalar</a> <span class="i">run</span><span class="s">(</span> <span class="w">command</span> <span class="cm">=&gt;</span> <span class="i">$cmd</span><span class="cm">,</span></li><li>                    <span class="w">verbose</span> <span class="cm">=&gt;</span> <span class="n">0</span><span class="cm">,</span></li><li>                    <span class="w">buffer</span>  <span class="cm">=&gt;</span> \<span class="i">$buffer</span><span class="cm">,</span></li><li>                    <span class="w">timeout</span> <span class="cm">=&gt;</span> <span class="n">20</span> <span class="s">)</span></li><li>    <span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;fetched webpage successfully: $buffer\n&quot;</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li></li><li>    <span class="c">### in list context ###</span></li><li>    <a class="l_k" href="../functions/my.html">my</a><span class="s">(</span> <span class="i">$success</span><span class="cm">,</span> <span class="i">$error_message</span><span class="cm">,</span> <span class="i">$full_buf</span><span class="cm">,</span> <span class="i">$stdout_buf</span><span class="cm">,</span> <span class="i">$stderr_buf</span> <span class="s">)</span> =</li><li>            <span class="i">run</span><span class="s">(</span> <span class="w">command</span> <span class="cm">=&gt;</span> <span class="i">$cmd</span><span class="cm">,</span> <span class="w">verbose</span> <span class="cm">=&gt;</span> <span class="n">0</span> <span class="s">)</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/if.html">if</a><span class="s">(</span> <span class="i">$success</span> <span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;this is what the command printed:\n&quot;</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <a class="l_k" href="../functions/join.html">join</a> <span class="q">&quot;&quot;</span><span class="cm">,</span> <span class="i">@$full_buf</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="c">### run_forked example ###</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$result</span> = <span class="i">run_forked</span><span class="s">(</span><span class="q">&quot;$full_path -q -O - theregister.co.uk&quot;</span><span class="cm">,</span> <span class="s">{</span><span class="q">&#39;timeout&#39;</span> <span class="cm">=&gt;</span> <span class="n">20</span><span class="s">}</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/if.html">if</a> <span class="s">(</span><span class="i">$result</span>-&gt;{<span class="q">&#39;exit_code&#39;</span>} <a class="l_k" href="../functions/eq.html">eq</a> <span class="n">0</span> &amp;&amp; !<span class="i">$result</span>-&gt;{<span class="q">&#39;timeout&#39;</span>}<span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;this is what wget returned:\n&quot;</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">$result</span>-&gt;{<span class="q">&#39;stdout&#39;</span>}<span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="c">### check for features</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;IPC::Open3 available: &quot;</span>  . <span class="w">IPC::Cmd</span><span class="w">-&gt;can_use_ipc_open3</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;IPC::Run available: &quot;</span>    . <span class="w">IPC::Cmd</span><span class="w">-&gt;can_use_ipc_run</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;Can capture buffer: &quot;</span>    . <span class="w">IPC::Cmd</span><span class="w">-&gt;can_capture_buffer</span><span class="sc">;</span></li><li></li><li>    <span class="c">### don&#39;t have IPC::Cmd be verbose, ie don&#39;t print to stdout or</span></li><li>    <span class="c">### stderr when running commands -- default is &#39;0&#39;</span></li><li>    <span class="i">$IPC::Cmd::VERBOSE</span> = <span class="n">0</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>IPC::Cmd allows you to run commands platform independently,
+interactively if desired, but have them still work.</p>
+<p>The <code class="inline"><span class="w">can_run</span></code>
+ function can tell you if a certain binary is installed
+and if so where, whereas the <code class="inline"><span class="w">run</span></code>
+ function can actually execute any
+of the commands you give it and give you a clear return value, as well
+as adhere to your verbosity settings.</p>
+<a name="CLASS-METHODS"></a><h1>CLASS METHODS</h1>
+<a name="%24ipc_run_version-%3d-IPC%3a%3aCmd-%3ecan_use_ipc_run(-%5bVERBOSE%5d-)"></a><h2>$ipc_run_version = IPC::Cmd-&gt;can_use_ipc_run( [VERBOSE] )</h2>
+<p>Utility function that tells you if <code class="inline"><span class="w">IPC::Run</span></code>
+ is available.
+If the <code class="inline"><span class="w">verbose</span></code>
+ flag is passed, it will print diagnostic messages
+if <a href="http://search.cpan.org/perldoc/IPC::Run">IPC::Run</a> can not be found or loaded.</p>
+<a name="%24ipc_open3_version-%3d-IPC%3a%3aCmd-%3ecan_use_ipc_open3(-%5bVERBOSE%5d-)"></a><h2>$ipc_open3_version = IPC::Cmd-&gt;can_use_ipc_open3( [VERBOSE] )</h2>
+<p>Utility function that tells you if <code class="inline"><span class="w">IPC::Open3</span></code>
+ is available.
+If the verbose flag is passed, it will print diagnostic messages
+if <code class="inline"><span class="w">IPC::Open3</span></code>
+ can not be found or loaded.</p>
+<a name="%24bool-%3d-IPC%3a%3aCmd-%3ecan_capture_buffer"></a><h2>$bool = IPC::Cmd-&gt;can_capture_buffer</h2>
+<p>Utility function that tells you if <code class="inline"><span class="w">IPC::Cmd</span></code>
+ is capable of
+capturing buffers in it's current configuration.</p>
+<a name="%24bool-%3d-IPC%3a%3aCmd-%3ecan_use_run_forked"></a><h2>$bool = IPC::Cmd-&gt;can_use_run_forked</h2>
+<p>Utility function that tells you if <code class="inline"><span class="w">IPC::Cmd</span></code>
+ is capable of
+providing <code class="inline"><span class="w">run_forked</span></code>
+ on the current platform.</p>
+<a name="FUNCTIONS"></a><h1>FUNCTIONS</h1>
+<a name="%24path-%3d-can_run(-PROGRAM-)%3b"></a><h2>$path = can_run( PROGRAM );</h2>
+<p><code class="inline"><span class="w">can_run</span></code>
+ takes only one argument: the name of a binary you wish
+to locate. <code class="inline"><span class="w">can_run</span></code>
+ works much like the unix binary <code class="inline"><span class="w">which</span></code>
+ or the bash
+command <code class="inline"><span class="w">type</span></code>
+, which scans through your path, looking for the requested
+binary.</p>
+<p>Unlike <code class="inline"><span class="w">which</span></code>
+ and <code class="inline"><span class="w">type</span></code>
+, this function is platform independent and
+will also work on, for example, Win32.</p>
+<p>If called in a scalar context it will return the full path to the binary
+you asked for if it was found, or <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> if it was not.</p>
+<p>If called in a list context and the global variable <code class="inline"><span class="i">$INSTANCES</span></code>
+ is a true
+value, it will return a list of the full paths to instances
+of the binary where found in <code class="inline"><span class="w">PATH</span></code>
+, or an empty list if it was not found.</p>
+<a name="%24ok-%7c-(%24ok%2c-%24err%2c-%24full_buf%2c-%24stdout_buff%2c-%24stderr_buff)-%3d-run(-command-%3d%3e-COMMAND%2c-%5bverbose-%3d%3e-BOOL%2c-buffer-%3d%3e-%5c%24SCALAR%2c-timeout-%3d%3e-DIGIT%5d-)%3b"></a><h2>$ok | ($ok, $err, $full_buf, $stdout_buff, $stderr_buff) = run( command =&gt; COMMAND, [verbose =&gt; BOOL, buffer =&gt; \$SCALAR, timeout =&gt; DIGIT] );</h2>
+<p><code class="inline"><span class="w">run</span></code>
+ takes 4 arguments:</p>
+<ul>
+<li><a name="command"></a><b>command</b>
+<p>This is the command to execute. It may be either a string or an array
+reference.
+This is a required argument.</p>
+<p>See <a href="#Caveats">Caveats</a> for remarks on how commands are parsed and their
+limitations.</p>
+</li>
+<li><a name="verbose"></a><b>verbose</b>
+<p>This controls whether all output of a command should also be printed
+to STDOUT/STDERR or should only be trapped in buffers (NOTE: buffers
+require <a href="http://search.cpan.org/perldoc/IPC::Run">IPC::Run</a> to be installed, or your system able to work with
+<a href="../IPC/Open3.html">IPC::Open3</a>).</p>
+<p>It will default to the global setting of <code class="inline"><span class="i">$IPC::Cmd::VERBOSE</span></code>
+,
+which by default is 0.</p>
+</li>
+<li><a name="buffer"></a><b>buffer</b>
+<p>This will hold all the output of a command. It needs to be a reference
+to a scalar.
+Note that this will hold both the STDOUT and STDERR messages, and you
+have no way of telling which is which.
+If you require this distinction, run the <code class="inline"><span class="w">run</span></code>
+ command in list context
+and inspect the individual buffers.</p>
+<p>Of course, this requires that the underlying call supports buffers. See
+the note on buffers above.</p>
+</li>
+<li><a name="timeout"></a><b>timeout</b>
+<p>Sets the maximum time the command is allowed to run before aborting,
+using the built-in <code class="inline"><a class="l_k" href="../functions/alarm.html">alarm()</a></code> call. If the timeout is triggered, the
+<code class="inline"><span class="w">errorcode</span></code>
+ in the return value will be set to an object of the
+<code class="inline"><span class="w">IPC::Cmd::TimeOut</span></code>
+ class. See the <a href="#error-message">error message</a> section below for
+details.</p>
+<p>Defaults to <code class="inline"><span class="n">0</span></code>
+, meaning no timeout is set.</p>
+</li>
+</ul>
+<p><code class="inline"><span class="w">run</span></code>
+ will return a simple <code class="inline"><span class="w">true</span></code>
+ or <code class="inline"><span class="w">false</span></code>
+ when called in scalar
+context.
+In list context, you will be returned a list of the following items:</p>
+<ul>
+<li><a name="success"></a><b>success</b>
+<p>A simple boolean indicating if the command executed without errors or
+not.</p>
+</li>
+<li><a name="error-message"></a><b>error message</b>
+<p>If the first element of the return value (<code class="inline"><span class="w">success</span></code>
+) was 0, then some
+error occurred. This second element is the error message the command
+you requested exited with, if available. This is generally a pretty
+printed value of <code class="inline"><span class="i">$?</span></code>
+ or <code class="inline"><span class="i">$@</span></code>
+. See <code class="inline"><span class="w">perldoc</span> <span class="w">perlvar</span></code>
+ for details on
+what they can contain.
+If the error was a timeout, the <code class="inline"><span class="w">error</span> <span class="w">message</span></code>
+ will be prefixed with
+the string <code class="inline"><span class="w">IPC::Cmd::TimeOut</span></code>
+, the timeout class.</p>
+</li>
+<li><a name="full_buffer"></a><b>full_buffer</b>
+<p>This is an array reference containing all the output the command
+generated.
+Note that buffers are only available if you have <a href="http://search.cpan.org/perldoc/IPC::Run">IPC::Run</a> installed,
+or if your system is able to work with <a href="../IPC/Open3.html">IPC::Open3</a> -- see below).
+Otherwise, this element will be <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code>.</p>
+</li>
+<li><a name="out_buffer"></a><b>out_buffer</b>
+<p>This is an array reference containing all the output sent to STDOUT the
+command generated. The notes from <a href="#full_buffer">full_buffer</a> apply.</p>
+</li>
+<li><a name="error_buffer"></a><b>error_buffer</b>
+<p>This is an arrayreference containing all the output sent to STDERR the
+command generated. The notes from <a href="#full_buffer">full_buffer</a> apply.</p>
+</li>
+</ul>
+<p>See the <a href="#HOW-IT-WORKS">HOW IT WORKS</a> section below to see how <code class="inline"><span class="w">IPC::Cmd</span></code>
+ decides
+what modules or function calls to use when issuing a command.</p>
+<a name="%24hashref-%3d-run_forked(-COMMAND%2c-%7b-child_stdin-%3d%3e-SCALAR%2c-timeout-%3d%3e-DIGIT%2c-stdout_handler-%3d%3e-CODEREF%2c-stderr_handler-%3d%3e-CODEREF%7d-)%3b"></a><h2>$hashref = run_forked( COMMAND, { child_stdin =&gt; SCALAR, timeout =&gt; DIGIT, stdout_handler =&gt; CODEREF, stderr_handler =&gt; CODEREF} );</h2>
+<p><code class="inline"><span class="w">run_forked</span></code>
+ is used to execute some program or a coderef,
+optionally feed it with some input, get its return code
+and output (both stdout and stderr into separate buffers).
+In addition, it allows to terminate the program
+if it takes too long to finish.</p>
+<p>The important and distinguishing feature of run_forked
+is execution timeout which at first seems to be
+quite a simple task but if you think
+that the program which you're spawning
+might spawn some children itself (which
+in their turn could do the same and so on)
+it turns out to be not a simple issue.</p>
+<p><code class="inline"><span class="w">run_forked</span></code>
+ is designed to survive and
+successfully terminate almost any long running task,
+even a fork bomb in case your system has the resources
+to survive during given timeout.</p>
+<p>This is achieved by creating separate watchdog process
+which spawns the specified program in a separate
+process session and supervises it: optionally
+feeds it with input, stores its exit code,
+stdout and stderr, terminates it in case
+it runs longer than specified.</p>
+<p>Invocation requires the command to be executed or a coderef and optionally a hashref of options:</p>
+<ul>
+<li><a name="timeout"></a><b><code class="inline"><span class="w">timeout</span></code>
+</b>
+<p>Specify in seconds how long to run the command before it is killed with SIG_KILL (9),
+which effectively terminates it and all of its children (direct or indirect).</p>
+</li>
+<li><a name="child_stdin"></a><b><code class="inline"><span class="w">child_stdin</span></code>
+</b>
+<p>Specify some text that will be passed into the <code class="inline"><span class="w">STDIN</span></code>
+ of the executed program.</p>
+</li>
+<li><a name="stdout_handler"></a><b><code class="inline"><span class="w">stdout_handler</span></code>
+</b>
+<p>Coderef of a subroutine to call when a portion of data is received on
+STDOUT from the executing program.</p>
+</li>
+<li><a name="stderr_handler"></a><b><code class="inline"><span class="w">stderr_handler</span></code>
+</b>
+<p>Coderef of a subroutine to call when a portion of data is received on
+STDERR from the executing program.</p>
+</li>
+<li><a name="discard_output"></a><b><code class="inline"><span class="w">discard_output</span></code>
+</b>
+<p>Discards the buffering of the standard output and standard errors for return by run_forked().
+With this option you have to use the std*_handlers to read what the command outputs.
+Useful for commands that send a lot of output.</p>
+</li>
+<li><a name="terminate_on_parent_sudden_death"></a><b><code class="inline"><span class="w">terminate_on_parent_sudden_death</span></code>
+</b>
+<p>Enable this option if you wish all spawned processes to be killed if the initially spawned
+process (the parent) is killed or dies without waiting for child processes.</p>
+</li>
+</ul>
+<p><code class="inline"><span class="w">run_forked</span></code>
+ will return a HASHREF with the following keys:</p>
+<ul>
+<li><a name="exit_code"></a><b><code class="inline"><span class="w">exit_code</span></code>
+</b>
+<p>The exit code of the executed program.</p>
+</li>
+<li><a name="timeout"></a><b><code class="inline"><span class="w">timeout</span></code>
+</b>
+<p>The number of seconds the program ran for before being terminated, or 0 if no timeout occurred.</p>
+</li>
+<li><a name="stdout"></a><b><code class="inline"><span class="w">stdout</span></code>
+</b>
+<p>Holds the standard output of the executed command (or empty string if
+there was no STDOUT output or if <code class="inline"><span class="w">discard_output</span></code>
+ was used; it's always defined!)</p>
+</li>
+<li><a name="stderr"></a><b><code class="inline"><span class="w">stderr</span></code>
+</b>
+<p>Holds the standard error of the executed command (or empty string if
+there was no STDERR output or if <code class="inline"><span class="w">discard_output</span></code>
+ was used; it's always defined!)</p>
+</li>
+<li><a name="merged"></a><b><code class="inline"><span class="w">merged</span></code>
+</b>
+<p>Holds the standard output and error of the executed command merged into one stream
+(or empty string if there was no output at all or if <code class="inline"><span class="w">discard_output</span></code>
+ was used; it's always defined!)</p>
+</li>
+<li><a name="err_msg"></a><b><code class="inline"><span class="w">err_msg</span></code>
+</b>
+<p>Holds some explanation in the case of an error.</p>
+</li>
+</ul>
+<a name="%24q-%3d-QUOTE"></a><h2>$q = QUOTE</h2>
+<p>Returns the character used for quoting strings on this platform. This is
+usually a <code class="inline">'</code> (single quote) on most systems, but some systems use different
+quotes. For example, <code class="inline"><span class="w">Win32</span></code>
+ uses <code class="inline">"</code> (double quote).</p>
+<p>You can use it as follows:</p>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">IPC::Cmd</span> <span class="q">qw[run QUOTE]</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$cmd</span> = <span class="q">q[echo ]</span> . <span class="w">QUOTE</span> . <span class="q">q[foo bar]</span> . <span class="w">QUOTE</span><span class="sc">;</span></li></ol></pre><p>This makes sure that <code class="inline"><span class="w">foo</span> <span class="w">bar</span></code>
+ is treated as a string, rather than two
+separate arguments to the <code class="inline"><span class="w">echo</span></code>
+ function.</p>
+<p>__END__</p>
+<a name="HOW-IT-WORKS"></a><h1>HOW IT WORKS</h1>
+<p><code class="inline"><span class="w">run</span></code>
+ will try to execute your command using the following logic:</p>
+<ul>
+<li>
+<p>If you have <code class="inline"><span class="w">IPC::Run</span></code>
+ installed, and the variable <code class="inline"><span class="i">$IPC::Cmd::USE_IPC_RUN</span></code>
+
+is set to true (See the <a href="#Global-Variables">Global Variables</a> section) use that to execute
+the command. You will have the full output available in buffers, interactive commands
+are sure to work  and you are guaranteed to have your verbosity
+settings honored cleanly.</p>
+</li>
+<li>
+<p>Otherwise, if the variable <code class="inline"><span class="i">$IPC::Cmd::USE_IPC_OPEN3</span></code>
+ is set to true
+(See the <a href="#Global-Variables">Global Variables</a> section), try to execute the command using
+<a href="../IPC/Open3.html">IPC::Open3</a>. Buffers will be available on all platforms,
+interactive commands will still execute cleanly, and also your verbosity
+settings will be adhered to nicely;</p>
+</li>
+<li>
+<p>Otherwise, if you have the <code class="inline"><span class="w">verbose</span></code>
+ argument set to true, we fall back
+to a simple <code class="inline"><a class="l_k" href="../functions/system.html">system()</a></code> call. We cannot capture any buffers, but
+interactive commands will still work.</p>
+</li>
+<li>
+<p>Otherwise we will try and temporarily redirect STDERR and STDOUT, do a
+<code class="inline"><a class="l_k" href="../functions/system.html">system()</a></code> call with your command and then re-open STDERR and STDOUT.
+This is the method of last resort and will still allow you to execute
+your commands cleanly. However, no buffers will be available.</p>
+</li>
+</ul>
+<a name="Global-Variables"></a><h1>Global Variables</h1>
+<p>The behaviour of IPC::Cmd can be altered by changing the following
+global variables:</p>
+<a name="%24IPC%3a%3aCmd%3a%3aVERBOSE"></a><h2>$IPC::Cmd::VERBOSE</h2>
+<p>This controls whether IPC::Cmd will print any output from the
+commands to the screen or not. The default is 0.</p>
+<a name="%24IPC%3a%3aCmd%3a%3aUSE_IPC_RUN"></a><h2>$IPC::Cmd::USE_IPC_RUN</h2>
+<p>This variable controls whether IPC::Cmd will try to use <a href="http://search.cpan.org/perldoc/IPC::Run">IPC::Run</a>
+when available and suitable.</p>
+<a name="%24IPC%3a%3aCmd%3a%3aUSE_IPC_OPEN3"></a><h2>$IPC::Cmd::USE_IPC_OPEN3</h2>
+<p>This variable controls whether IPC::Cmd will try to use <a href="../IPC/Open3.html">IPC::Open3</a>
+when available and suitable. Defaults to true.</p>
+<a name="%24IPC%3a%3aCmd%3a%3aWARN"></a><h2>$IPC::Cmd::WARN</h2>
+<p>This variable controls whether run-time warnings should be issued, like
+the failure to load an <code class="inline"><span class="w">IPC::</span>*</code>
+ module you explicitly requested.</p>
+<p>Defaults to true. Turn this off at your own risk.</p>
+<a name="%24IPC%3a%3aCmd%3a%3aINSTANCES"></a><h2>$IPC::Cmd::INSTANCES</h2>
+<p>This variable controls whether <code class="inline"><span class="w">can_run</span></code>
+ will return all instances of
+the binary it finds in the <code class="inline"><span class="w">PATH</span></code>
+ when called in a list context.</p>
+<p>Defaults to false, set to true to enable the described behaviour.</p>
+<a name="%24IPC%3a%3aCmd%3a%3aALLOW_NULL_ARGS"></a><h2>$IPC::Cmd::ALLOW_NULL_ARGS</h2>
+<p>This variable controls whether <code class="inline"><span class="w">run</span></code>
+ will remove any empty/null arguments
+it finds in command arguments.</p>
+<p>Defaults to false, so it will remove null arguments. Set to true to allow
+them.</p>
+<a name="Caveats"></a><h1>Caveats</h1>
+<ul>
+<li><a name="Whitespace-and-IPC%3a%3aOpen3-%2f-system()"></a><b>Whitespace and IPC::Open3 / system()</b>
+<p>When using <code class="inline"><span class="w">IPC::Open3</span></code>
+ or <code class="inline"><a class="l_k" href="../functions/system.html">system</a></code>, if you provide a string as the
+<code class="inline"><span class="w">command</span></code>
+ argument, it is assumed to be appropriately escaped. You can
+use the <code class="inline"><span class="w">QUOTE</span></code>
+ constant to use as a portable quote character (see above).
+However, if you provide an array reference, special rules apply:</p>
+<p>If your command contains <b>special characters</b> (&lt; &gt; | &amp;), it will
+be internally stringified before executing the command, to avoid that these
+special characters are escaped and passed as arguments instead of retaining
+their special meaning.</p>
+<p>However, if the command contained arguments that contained whitespace,
+stringifying the command would lose the significance of the whitespace.
+Therefore, <code class="inline"><span class="w">IPC::Cmd</span></code>
+ will quote any arguments containing whitespace in your
+command if the command is passed as an arrayref and contains special characters.</p>
+</li>
+<li><a name="Whitespace-and-IPC%3a%3aRun"></a><b>Whitespace and IPC::Run</b>
+<p>When using <code class="inline"><span class="w">IPC::Run</span></code>
+, if you provide a string as the <code class="inline"><span class="w">command</span></code>
+ argument,
+the string will be split on whitespace to determine the individual elements
+of your command. Although this will usually just Do What You Mean, it may
+break if you have files or commands with whitespace in them.</p>
+<p>If you do not wish this to happen, you should provide an array
+reference, where all parts of your command are already separated out.
+Note however, if there are extra or spurious whitespaces in these parts,
+the parser or underlying code may not interpret it correctly, and
+cause an error.</p>
+<p>Example:
+The following code</p>
+<pre class="verbatim"><ol><li>    <span class="w">gzip</span> -<span class="w">cdf</span> <span class="w">foo</span>.<span class="w">tar</span>.<span class="w">gz</span> | <span class="w">tar</span> -<span class="w">xf</span> -</li></ol></pre><p>should either be passed as</p>
+<pre class="verbatim"><ol><li>    <span class="q">&quot;gzip -cdf foo.tar.gz | tar -xf -&quot;</span></li></ol></pre><p>or as</p>
+<pre class="verbatim"><ol><li>    <span class="s">[</span><span class="q">'gzip'</span><span class="cm">,</span> <span class="q">'-cdf'</span><span class="cm">,</span> <span class="q">'foo.tar.gz'</span><span class="cm">,</span> <span class="q">'|'</span><span class="cm">,</span> <span class="q">'tar'</span><span class="cm">,</span> <span class="q">'-xf'</span><span class="cm">,</span> <span class="q">'-'</span><span class="s">]</span></li></ol></pre><p>But take care not to pass it as, for example</p>
+<pre class="verbatim"><ol><li>    <span class="s">[</span><span class="q">'gzip -cdf foo.tar.gz'</span><span class="cm">,</span> <span class="q">'|'</span><span class="cm">,</span> <span class="q">'tar -xf -'</span><span class="s">]</span></li></ol></pre><p>Since this will lead to issues as described above.</p>
+</li>
+<li><a name="IO-Redirect"></a><b>IO Redirect</b>
+<p>Currently it is too complicated to parse your command for IO
+redirections. For capturing STDOUT or STDERR there is a work around
+however, since you can just inspect your buffers for the contents.</p>
+</li>
+<li><a name="Interleaving-STDOUT%2fSTDERR"></a><b>Interleaving STDOUT/STDERR</b>
+<p>Neither IPC::Run nor IPC::Open3 can interleave STDOUT and STDERR. For short
+bursts of output from a program, e.g. this sample,</p>
+<pre class="verbatim"><ol><li>    for <span class="s">(</span> <span class="n">1</span>..<span class="n">4</span> <span class="s">)</span> <span class="s">{</span></li><li>        <span class="i">$_</span> % <span class="n">2</span> ? <a class="l_k" href="../functions/print.html">print</a> <span class="i">STDOUT</span> <span class="i">$_</span> <span class="co">:</span> <a class="l_k" href="../functions/print.html">print</a> <span class="i">STDERR</span> <span class="i">$_</span><span class="sc">;</span></li><li>    <span class="s">}</span></li></ol></pre><p>IPC::[Run|Open3] will first read all of STDOUT, then all of STDERR, meaning
+the output looks like '13' on STDOUT and '24' on STDERR, instead of</p>
+<pre class="verbatim"><ol><li>    <span class="n">1</span></li><li>    <span class="n">2</span></li><li>    <span class="n">3</span></li><li>    <span class="n">4</span></li></ol></pre><p>This has been recorded in <a href="http://search.cpan.org/perldoc/rt.cpan.org">rt.cpan.org</a> as bug #37532: Unable to interleave
+STDOUT and STDERR.</p>
+</li>
+</ul>
+<a name="See-Also"></a><h1>See Also</h1>
+<p><a href="http://search.cpan.org/perldoc/IPC::Run">IPC::Run</a>, <a href="../IPC/Open3.html">IPC::Open3</a></p>
+<a name="ACKNOWLEDGEMENTS"></a><h1>ACKNOWLEDGEMENTS</h1>
+<p>Thanks to James Mastros and Martijn van der Streek for their
+help in getting <a href="../IPC/Open3.html">IPC::Open3</a> to behave nicely.</p>
+<p>Thanks to Petya Kohts for the <code class="inline"><span class="w">run_forked</span></code>
+ code.</p>
+<a name="BUG-REPORTS"></a><h1>BUG REPORTS</h1>
+<p>Please report bugs or other issues to &lt;bug-ipc-cmd@rt.cpan.org&gt;.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Original author: Jos Boumans &lt;kane@cpan.org&gt;.
+Current maintainer: Chris Williams &lt;bingos@cpan.org&gt;.</p>
+<a name="COPYRIGHT"></a><h1>COPYRIGHT</h1>
+<p>This library is free software; you may redistribute and/or modify it
+under the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#CLASS-METHODS">CLASS METHODS</a><ul><li><a href="#%24ipc_run_version-%3d-IPC%3a%3aCmd-%3ecan_use_ipc_run(-%5bVERBOSE%5d-)">$ipc_run_version = IPC::Cmd->can_use_ipc_run( [VERBOSE] )</a><li><a href="#%24ipc_open3_version-%3d-IPC%3a%3aCmd-%3ecan_use_ipc_open3(-%5bVERBOSE%5d-)">$ipc_open3_version = IPC::Cmd->can_use_ipc_open3( [VERBOSE] )</a><li><a href="#%24bool-%3d-IPC%3a%3aCmd-%3ecan_capture_buffer">$bool = IPC::Cmd->can_capture_buffer</a><li><a href="#%24bool-%3d-IPC%3a%3aCmd-%3ecan_use_run_forked">$bool = IPC::Cmd->can_use_run_forked</a></ul><li><a href="#FUNCTIONS">FUNCTIONS</a><ul><li><a href="#%24path-%3d-can_run(-PROGRAM-)%3b">$path = can_run( PROGRAM );</a><li><a href="#%24ok-%7c-(%24ok%2c-%24err%2c-%24full_buf%2c-%24stdout_buff%2c-%24stderr_buff)-%3d-run(-command-%3d%3e-COMMAND%2c-%5bverbose-%3d%3e-BOOL%2c-buffer-%3d%3e-%5c%24SCALAR%2c-timeout-%3d%3e-DIGIT%5d-)%3b">$ok | ($ok, $err, $full_buf, $stdout_buff, $stderr_buff) = run( command => COMMAND, [verbose => BOOL, buffer => \$SCALAR, timeout => DIGIT] );</a><li><a href="#%24hashref-%3d-run_forked(-COMMAND%2c-%7b-child_stdin-%3d%3e-SCALAR%2c-timeout-%3d%3e-DIGIT%2c-stdout_handler-%3d%3e-CODEREF%2c-stderr_handler-%3d%3e-CODEREF%7d-)%3b">$hashref = run_forked( COMMAND, { child_stdin => SCALAR, timeout => DIGIT, stdout_handler => CODEREF, stderr_handler => CODEREF} );</a><li><a href="#%24q-%3d-QUOTE">$q = QUOTE</a></ul><li><a href="#HOW-IT-WORKS">HOW IT WORKS</a><li><a href="#Global-Variables">Global Variables</a><ul><li><a href="#%24IPC%3a%3aCmd%3a%3aVERBOSE">$IPC::Cmd::VERBOSE</a><li><a href="#%24IPC%3a%3aCmd%3a%3aUSE_IPC_RUN">$IPC::Cmd::USE_IPC_RUN</a><li><a href="#%24IPC%3a%3aCmd%3a%3aUSE_IPC_OPEN3">$IPC::Cmd::USE_IPC_OPEN3</a><li><a href="#%24IPC%3a%3aCmd%3a%3aWARN">$IPC::Cmd::WARN</a><li><a href="#%24IPC%3a%3aCmd%3a%3aINSTANCES">$IPC::Cmd::INSTANCES</a><li><a href="#%24IPC%3a%3aCmd%3a%3aALLOW_NULL_ARGS">$IPC::Cmd::ALLOW_NULL_ARGS</a></ul><li><a href="#Caveats">Caveats</a><li><a href="#See-Also">See Also</a><li><a href="#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a><li><a href="#BUG-REPORTS">BUG REPORTS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#COPYRIGHT">COPYRIGHT</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'IPC::Cmd';
+  perldoc.pageAddress = 'IPC/Cmd.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

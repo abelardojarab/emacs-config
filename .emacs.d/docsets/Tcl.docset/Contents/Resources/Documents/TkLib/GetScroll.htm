@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetScrollInfo manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetScroll</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetScroll.htm#M2" NAME="L371">NAME</A>
+<DL><DD>Tk_GetScrollInfoObj, Tk_GetScrollInfo &mdash; parse arguments for scrolling commands</DD></DL>
+<DD><A HREF="GetScroll.htm#M3" NAME="L372">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetScrollInfoObj(</B><I>interp, objc, objv, dblPtr, intPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetScrollInfo(</B><I>interp, argc, argv, dblPtr, intPtr</I><B>)</B>
+</DL>
+<DD><A HREF="GetScroll.htm#M4" NAME="L373">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetScroll.htm#M5" NAME="L374">DESCRIPTION</A>
+<DD><A HREF="GetScroll.htm#M6" NAME="L375">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetScrollInfoObj, Tk_GetScrollInfo &mdash; parse arguments for scrolling commands
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_GetScrollInfoObj(</B><I>interp, objc, objv, dblPtr, intPtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_GetScrollInfo(</B><I>interp, argc, argv, dblPtr, intPtr</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.
+<P><DT>int <B>objc</B> (in)<DD>
+Number of <A HREF="../TclLib/Object.htm">Tcl_Obj</A>'s in <I>objv</I> array.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> *const <B>objv[]</B> (in)<DD>
+Argument objects.  These represent the entire widget command, of
+which the first word is typically the widget name and the second
+word is typically <B>xview</B> or <B>yview</B>.
+<P><DT>int <B><A HREF="../TclCmd/tclvars.htm">argc</A></B> (in)<DD>
+Number of strings in <I>argv</I> array.
+<P><DT>const char <B>*argv[]</B> (in)<DD>
+Argument strings.  These represent the entire widget command, of
+which the first word is typically the widget name and the second
+word is typically <B>xview</B> or <B>yview</B>.
+<P><DT>double <B>*fractionPtr</B> (out)<DD>
+Filled in with fraction from <B>moveto</B> option, if any.
+<P><DT>int <B>*stepsPtr</B> (out)<DD>
+Filled in with line or page count from <B>scroll</B> option, if any.
+The value may be negative.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetScrollInfoObj</B> parses the arguments expected by widget
+scrolling commands such as <B>xview</B> and <B>yview</B>.
+It receives the entire list of words that make up a widget command
+and parses the words starting with <I>objv</I>[2].
+The words starting with <I>objv</I>[2] must have one of the following forms:
+<PRE><B>moveto </B><I>fraction</I>
+<B>scroll </B><I>number</I><B> units</B>
+<B>scroll </B><I>number</I><B> pages</B></PRE>
+<P>
+Any of the <B>moveto</B>, <B>scroll</B>, <B>units</B>, and <B>pages</B>
+keywords may be abbreviated.
+If <I>objv</I> has the <B>moveto</B> form, <B>TK_SCROLL_MOVETO</B>
+is returned as result and <I>*fractionPtr</I> is filled in with the
+<I>fraction</I> argument to the command, which must be a proper real
+value.
+If <I>objv</I> has the <B>scroll</B> form, <B>TK_SCROLL_UNITS</B>
+or <B>TK_SCROLL_PAGES</B> is returned and <I>*stepsPtr</I> is filled
+in with the <I>number</I> value, which must be a proper integer.
+If an error occurs in parsing the arguments, <B>TK_SCROLL_ERROR</B>
+is returned and an error message is left in interpreter
+<I>interp</I>'s result.
+<P>
+<B>Tk_GetScrollInfo</B> is identical in function to
+<B>Tk_GetScrollInfoObj</B>.  However, <B>Tk_GetScrollInfo</B> accepts
+string arguments, making it more appropriate for use with legacy
+widgets.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/P.htm#parse">parse</A>, <A href="../Keywords/S.htm#scrollbar">scrollbar</A>, <A href="../Keywords/S.htm#scrolling command">scrolling command</A>, <A href="../Keywords/X.htm#xview">xview</A>, <A href="../Keywords/Y.htm#yview">yview</A>
+<div class="copy">Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

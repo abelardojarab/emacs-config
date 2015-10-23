@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>refchan manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl Commands, version 8.6.0</a> <small>&gt;</small> refchan</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="refchan.htm#M2" NAME="L1530">NAME</A>
+<DL><DD>refchan &mdash; command handler API of reflected channels</DD></DL>
+<DD><A HREF="refchan.htm#M3" NAME="L1531">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="refchan.htm#M4" NAME="L1532">DESCRIPTION</A>
+<DD><A HREF="refchan.htm#M5" NAME="L1533">MANDATORY SUBCOMMANDS</A>
+<DL class="mandatory subcommands">
+<DD><A HREF="refchan.htm#M6" NAME="L1534"><I>cmdPrefix </I><B>initialize </B><I>channelId mode</I></A>
+<DD><A HREF="refchan.htm#M7" NAME="L1535"><I>cmdPrefix </I><B>finalize </B><I>channelId</I></A>
+<DD><A HREF="refchan.htm#M8" NAME="L1536"><I>cmdPrefix </I><B>watch </B><I>channelId eventspec</I></A>
+</DL>
+<DD><A HREF="refchan.htm#M9" NAME="L1537">OPTIONAL SUBCOMMANDS</A>
+<DL class="optional subcommands">
+<DD><A HREF="refchan.htm#M10" NAME="L1538"><I>cmdPrefix </I><B>read </B><I>channelId count</I></A>
+<DD><A HREF="refchan.htm#M11" NAME="L1539"><I>cmdPrefix </I><B>write </B><I>channelId data</I></A>
+<DD><A HREF="refchan.htm#M12" NAME="L1540"><I>cmdPrefix </I><B>seek </B><I>channelId offset base</I></A>
+<DL class="optional subcommands">
+<DD><A HREF="refchan.htm#M13" NAME="L1541"><B>start</B></A>
+<DD><A HREF="refchan.htm#M14" NAME="L1542"><B>current</B></A>
+<DD><A HREF="refchan.htm#M15" NAME="L1543"><B>end</B></A>
+</DL>
+<DD><A HREF="refchan.htm#M16" NAME="L1544"><I>cmdPrefix </I><B>configure </B><I>channelId option value</I></A>
+<DD><A HREF="refchan.htm#M17" NAME="L1545"><I>cmdPrefix </I><B>cget </B><I>channelId option</I></A>
+<DD><A HREF="refchan.htm#M18" NAME="L1546"><I>cmdPrefix </I><B>cgetall </B><I>channelId</I></A>
+<DD><A HREF="refchan.htm#M19" NAME="L1547"><I>cmdPrefix </I><B>blocking </B><I>channelId mode</I></A>
+</DL>
+<DD><A HREF="refchan.htm#M20" NAME="L1548">NOTES</A>
+<DD><A HREF="refchan.htm#M21" NAME="L1549">EXAMPLE</A>
+<DD><A HREF="refchan.htm#M22" NAME="L1550">SEE ALSO</A>
+<DD><A HREF="refchan.htm#M23" NAME="L1551">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+refchan &mdash; command handler API of reflected channels
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>cmdPrefix </B><I>option</I> ?<I>arg arg ...</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+The Tcl-level handler for a reflected channel has to be a command with
+subcommands (termed an <I>ensemble</I>, as it is a command such as that
+created by <B><A HREF="../TclCmd/namespace.htm">namespace ensemble</A></B> <B>create</B>, though the implementation
+of handlers for reflected channel <I>is not</I> tied to <B>namespace
+ensemble</B>s in any way; see <B><A HREF="#M21">EXAMPLE</A></B> below for how to build an
+<B><A HREF="../TclCmd/class.htm">oo::class</A></B> that supports the API). Note that <I>cmdPrefix</I> is whatever was
+specified in the call to <B><A HREF="../TclCmd/chan.htm">chan create</A></B>, and may consist of
+multiple arguments; this will be expanded to multiple words in place
+of the prefix.
+<P>
+Of all the possible subcommands, the handler <I>must</I> support
+<B>initialize</B>, <B>finalize</B>, and <B>watch</B>. Support for the
+other subcommands is optional.
+<H4><A NAME="M5">MANDATORY SUBCOMMANDS</A></H4>
+<DL class="mandatory subcommands">
+<DT><A NAME="M6"><I>cmdPrefix </I><B>initialize </B><I>channelId mode</I></A><DD>
+An invocation of this subcommand will be the first call the
+<I>cmdPrefix</I> will receive for the specified new <I>channelId</I>. It
+is the responsibility of this subcommand to set up any internal data
+structures required to keep track of the channel and its state.
+<P>
+The return value of the method has to be a list containing the names
+of all subcommands supported by the <I>cmdPrefix</I>. This also tells
+the Tcl core which version of the API for reflected channels is used by
+this command handler.
+<P>
+Any error thrown by the method will abort the creation of the channel
+and no channel will be created. The thrown error will appear as error
+thrown by <B><A HREF="../TclCmd/chan.htm">chan create</A></B>. Any exception other than an <B><A HREF="../TclCmd/error.htm">error</A></B>
+(e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>, etc.) is treated as (and converted to) an error.
+<P>
+<B>Note:</B> If the creation of the channel was aborted due to failures
+here, then the <B>finalize</B> subcommand will not be called.
+<P>
+The <I>mode</I> argument tells the handler whether the channel was
+opened for reading, writing, or both. It is a list containing any of
+the strings <B><A HREF="../TclCmd/read.htm">read</A></B> or <B>write</B>. The list will always
+contain at least one element.
+<P>The subcommand must throw an error if the chosen mode is not
+supported by the <I>cmdPrefix</I>.
+<P><DT><A NAME="M7"><I>cmdPrefix </I><B>finalize </B><I>channelId</I></A><DD>
+An invocation of this subcommand will be the last call the
+<I>cmdPrefix</I> will receive for the specified <I>channelId</I>. It will
+be generated just before the destruction of the data structures of the
+channel held by the Tcl core. The command handler <I>must not</I>
+access the <I>channelId</I> anymore in no way. Upon this subcommand being
+called, any internal resources allocated to this channel must be
+cleaned up.
+<P>
+The return value of this subcommand is ignored.
+<P>
+If the subcommand throws an error the command which caused its
+invocation (usually <B><A HREF="../TclCmd/chan.htm">chan close</A></B>) will appear to have thrown this
+error. Any exception beyond <B><A HREF="../TclCmd/error.htm">error</A></B> (e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>, etc.) is
+treated as (and converted to) an error.
+<P>This subcommand is not invoked if the creation of the channel was
+aborted during <B>initialize</B> (See above).
+<P><DT><A NAME="M8"><I>cmdPrefix </I><B>watch </B><I>channelId eventspec</I></A><DD>
+This subcommand notifies the <I>cmdPrefix</I> that the specified
+<I>channelId</I> is interested in the events listed in the
+<I>eventspec</I>. This argument is a list containing any of <B><A HREF="../TclCmd/read.htm">read</A></B>
+and <B>write</B>. The list may be empty, which signals that the
+channel does not wish to be notified of any events. In that situation,
+the handler should disable event generation completely.
+<P>
+<B>Warning:</B> Any return value of the subcommand is ignored. This
+includes all errors thrown by the subcommand, <B><A HREF="../TclCmd/break.htm">break</A></B>, <B><A HREF="../TclCmd/continue.htm">continue</A></B>, and
+custom return codes.
+<P>This subcommand interacts with <B><A HREF="../TclCmd/chan.htm">chan postevent</A></B>. Trying to post an
+event which was not listed in the last call to <B>watch</B> will cause
+<B><A HREF="../TclCmd/chan.htm">chan postevent</A></B> to throw an error.
+<P></DL>
+<H4><A NAME="M9">OPTIONAL SUBCOMMANDS</A></H4>
+<DL class="optional subcommands">
+<DT><A NAME="M10"><I>cmdPrefix </I><B>read </B><I>channelId count</I></A><DD>
+This <I>optional</I> subcommand is called when the user requests data from the
+channel <I>channelId</I>. <I>count</I> specifies how many <I>bytes</I> have been
+requested. If the subcommand is not supported then it is not possible to read
+from the channel handled by the command.
+<P>
+The return value of this subcommand is taken as the requested data
+<I>bytes</I>. If the returned data contains more bytes than requested,
+an error will be signaled and later thrown by the command which
+performed the read (usually <B><A HREF="../TclCmd/gets.htm">gets</A></B> or <B><A HREF="../TclCmd/read.htm">read</A></B>). However,
+returning fewer bytes than requested is acceptable.
+<P>
+Note that returning nothing (0 bytes) is a signal to the higher layers
+that <B><A HREF="../TclCmd/eof.htm">EOF</A></B> has been reached on the channel. To signal that the
+channel is out of data right now, but has not yet reached <B><A HREF="../TclCmd/eof.htm">EOF</A></B>,
+it is necessary to throw the error &quot;EAGAIN&quot;, i.e. to either
+<P>
+<PRE>return -code error EAGAIN</PRE>
+or
+<PRE>error EAGAIN</PRE>
+<P>
+For extensibility any error whose value is a negative integer number
+will cause the higher layers to set the C-level variable &quot;<B>errno</B>&quot;
+to the absolute value of this number, signaling a system error.
+However, note that the exact mapping between these error numbers and
+their meanings is operating system dependent.
+<P>
+For example, while on Linux both
+<P>
+<PRE>return -code error -11</PRE>
+and
+<PRE>error -11</PRE>
+<P>
+are equivalent to the examples above, using the more readable string &quot;EAGAIN&quot;,
+this is not true for BSD, where the equivalent number is -35.
+<P>
+The symbolic string however is the same across systems, and internally
+translated to the correct number. No other error value has such a mapping
+to a symbolic string.
+<P>If the subcommand throws any other error, the command which caused its
+invocation (usually <B><A HREF="../TclCmd/gets.htm">gets</A></B>, or <B><A HREF="../TclCmd/read.htm">read</A></B>) will appear to have
+thrown this error. Any exception beyond <B><A HREF="../TclCmd/error.htm">error</A></B>, (e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>,
+etc.) is treated as and converted to an error.
+<P><DT><A NAME="M11"><I>cmdPrefix </I><B>write </B><I>channelId data</I></A><DD>
+This <I>optional</I> subcommand is called when the user writes data to
+the channel <I>channelId</I>. The <I>data</I> argument contains <I>bytes</I>, not
+characters. Any type of transformation (EOL, encoding) configured for
+the channel has already been applied at this point. If this subcommand
+is not supported then it is not possible to write to the channel
+handled by the command.
+<P>
+The return value of the subcommand is taken as the number of bytes
+written by the channel. Anything non-numeric will cause an error to be
+signaled and later thrown by the command which performed the write. A
+negative value implies that the write failed. Returning a value
+greater than the number of bytes given to the handler, or zero, is
+forbidden and will cause the Tcl core to throw an error.
+<P>
+To signal that the channel is not able to accept data for writing
+right now, it is necessary to throw the error &quot;EAGAIN&quot;, i.e. to either
+<P>
+<PRE>return -code error EAGAIN</PRE>
+or
+<PRE>error EAGAIN</PRE>
+<P>
+For extensibility any error whose value is a negative integer number
+will cause the higher layers to set the C-level variable &quot;<B>errno</B>&quot;
+to the absolute value of this number, signaling a system error.
+However, note that the exact mapping between these error numbers and
+their meanings is operating system dependent.
+<P>
+For example, while on Linux both
+<P>
+<PRE>return -code error -11</PRE>
+and
+<PRE>error -11</PRE>
+<P>
+are equivalent to the examples above, using the more readable string &quot;EAGAIN&quot;,
+this is not true for BSD, where the equivalent number is -35.
+<P>
+The symbolic string however is the same across systems, and internally
+translated to the correct number. No other error value has such a mapping
+to a symbolic string.
+<P>If the subcommand throws any other error the command which caused its
+invocation (usually <B><A HREF="../TclCmd/puts.htm">puts</A></B>) will appear to have thrown this error.
+Any exception beyond <B><A HREF="../TclCmd/error.htm">error</A></B> (e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>, etc.) is treated
+as and converted to an error.
+<P><DT><A NAME="M12"><I>cmdPrefix </I><B>seek </B><I>channelId offset base</I></A><DD>
+This <I>optional</I> subcommand is responsible for the handling of
+<B><A HREF="../TclCmd/chan.htm">chan seek</A></B> and <B><A HREF="../TclCmd/chan.htm">chan tell</A></B> requests on the channel
+<I>channelId</I>. If it is not supported then seeking will not be possible for
+the channel.
+<P>
+The <I>base</I> argument is the same as the equivalent argument of the
+builtin <B><A HREF="../TclCmd/chan.htm">chan seek</A></B>, namely:
+<P>
+<DL class="optional subcommands">
+<DT><A NAME="M13"><B>start</B></A><DD>
+Seeking is relative to the beginning of the channel.
+<P><DT><A NAME="M14"><B>current</B></A><DD>
+Seeking is relative to the current seek position.
+<P><DT><A NAME="M15"><B>end</B></A><DD>
+Seeking is relative to the end of the channel.
+<P></DL>
+<P>
+The <I>offset</I> is an integer number specifying the amount of
+<B>bytes</B> to seek forward or backward. A positive number should seek
+forward, and a negative number should seek backward.
+A channel may provide only limited seeking. For example sockets can
+seek forward, but not backward.
+<P>
+The return value of the subcommand is taken as the (new) location of
+the channel, counted from the start. This has to be an integer number
+greater than or equal to zero.
+If the subcommand throws an error the command which caused its
+invocation (usually <B><A HREF="../TclCmd/chan.htm">chan seek</A></B>, or <B><A HREF="../TclCmd/chan.htm">chan tell</A></B>) will appear to have
+thrown this error. Any exception beyond <B><A HREF="../TclCmd/error.htm">error</A></B> (e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>,
+etc.) is treated as and converted to an error.
+<P>The offset/base combination of 0/<B>current</B> signals a <B><A HREF="../TclCmd/chan.htm">chan tell</A></B>
+request, i.e.,&nbsp;seek nothing relative to the current location, making
+the new location identical to the current one, which is then returned.
+<P><DT><A NAME="M16"><I>cmdPrefix </I><B>configure </B><I>channelId option value</I></A><DD>
+This <I>optional</I> subcommand is for setting the type-specific options of
+channel <I>channelId</I>. The <I>option</I> argument indicates the option to be
+written, and the <I>value</I> argument indicates the value to set the option to.
+<P>
+This subcommand will never try to update more than one option at a
+time; that is behavior implemented in the Tcl channel core.
+<P>
+The return value of the subcommand is ignored.
+<P>If the subcommand throws an error the command which performed the
+(re)configuration or query (usually <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B> or
+<B><A HREF="../TclCmd/chan.htm">chan configure</A></B>) will appear to have thrown this error. Any exception
+beyond <B><A HREF="../TclCmd/error.htm">error</A></B> (e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>, etc.) is treated as and
+converted to an error.
+<P><DT><A NAME="M17"><I>cmdPrefix </I><B>cget </B><I>channelId option</I></A><DD>
+This <I>optional</I> subcommand is used when reading a single type-specific
+option of channel <I>channelId</I>. If this subcommand is supported then the
+subcommand <B>cgetall</B> must be supported as well.
+<P>
+The subcommand should return the value of the specified <I>option</I>.
+<P>If the subcommand throws an error, the command which performed the
+(re)configuration or query (usually <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B> or <B><A HREF="../TclCmd/chan.htm">chan configure</A></B>)
+will appear to have thrown this error. Any exception beyond <I>error</I>
+(e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>, etc.) is treated as and converted to an error.
+<P><DT><A NAME="M18"><I>cmdPrefix </I><B>cgetall </B><I>channelId</I></A><DD>
+This <I>optional</I> subcommand is used for reading all type-specific options
+of channel <I>channelId</I>. If this subcommand is supported then the
+subcommand <B>cget</B> has to be supported as well.
+<P>
+The subcommand should return a list of all options and their values.
+This list must have an even number of elements.
+<P>If the subcommand throws an error the command which performed the
+(re)configuration or query (usually <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B> or <B><A HREF="../TclCmd/chan.htm">chan configure</A></B>)
+will appear to have thrown this error. Any exception beyond <B><A HREF="../TclCmd/error.htm">error</A></B>
+(e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>, etc.) is treated as and converted to an error.
+<P><DT><A NAME="M19"><I>cmdPrefix </I><B>blocking </B><I>channelId mode</I></A><DD>
+This <I>optional</I> subcommand handles changes to the blocking mode of the
+channel <I>channelId</I>. The <I>mode</I> is a boolean flag. A true value means
+that the channel has to be set to blocking, and a false value means that the
+channel should be non-blocking.
+<P>
+The return value of the subcommand is ignored.
+<P>If the subcommand throws an error the command which caused its
+invocation (usually <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B> or <B><A HREF="../TclCmd/chan.htm">chan configure</A></B>) will appear to
+have thrown this error. Any exception beyond <B><A HREF="../TclCmd/error.htm">error</A></B> (e.g.,&nbsp;<B><A HREF="../TclCmd/break.htm">break</A></B>,
+etc.) is treated as and converted to an error.
+<P></DL>
+<H3><A NAME="M20">NOTES</A></H3>
+Some of the functions supported in channels defined in Tcl's C
+interface are not available to channels reflected to the Tcl level.
+<P>
+The function <B>Tcl_DriverGetHandleProc</B> is not supported;
+i.e.,&nbsp;reflected channels do not have OS specific handles.
+<P>
+The function <B>Tcl_DriverHandlerProc</B> is not supported. This driver
+function is relevant only for stacked channels, i.e.,&nbsp;transformations.
+Reflected channels are always base channels, not transformations.
+<P>
+The function <B>Tcl_DriverFlushProc</B> is not supported. This is
+because the current generic I/O layer of Tcl does not use this
+function anywhere at all. Therefore support at the Tcl level makes no
+sense either. This may be altered in the future (through extending the
+API defined here and changing its version number) should the function
+be used at some time in the future.
+<H3><A NAME="M21">EXAMPLE</A></H3>
+This demonstrates how to make a channel that reads from a string.
+<P>
+<PRE>oo::class create stringchan {
+    variable data pos
+    constructor {string {encoding {}}} {
+        if {$encoding eq &quot;&quot;} {set encoding [encoding system]}
+        set data [encoding convertto $encoding $string]
+        set pos 0
+    }
+
+    method <B>initialize</B> {ch mode} {
+        return &quot;initialize finalize watch read seek&quot;
+    }
+    method <B>finalize</B> {ch} {
+        my destroy
+    }
+    method <B>watch</B> {ch events} {
+        # Must be present but we ignore it because we do not
+        # post any events
+    }
+
+    # Must be present on a readable channel
+    method <B><A HREF="../TclCmd/read.htm">read</A></B> {ch count} {
+        set d [string range $data $pos [expr {$pos+$count-1}]]
+        incr pos [string length $d]
+        return $d
+    }
+
+    # This method is optional, but useful for the example below
+    method <B><A HREF="../TclCmd/seek.htm">seek</A></B> {ch offset base} {
+        switch $base {
+            start {
+                set pos $offset
+            }
+            current {
+                incr pos $offset
+            }
+            end {
+                set pos [string length $data]
+                incr pos $offset
+            }
+        }
+        if {$pos &lt; 0} {
+            set pos 0
+        } elseif {$pos &gt; [string length $data]} {
+            set pos [string length $data]
+        }
+        return $pos
+    }
+}
+
+# Now we create an instance...
+set string &quot;The quick brown fox jumps over the lazy dog.&#92;n&quot;
+set ch [<B><A HREF="../TclCmd/chan.htm">chan create</A></B> read [stringchan new $string]]
+
+puts [gets $ch];   # Prints the whole string
+
+seek $ch -5 end;
+puts [read $ch];   # Prints just the last word</PRE>
+<H3><A NAME="M22">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/chan.htm">chan</A></B>, <B><A HREF="../TclCmd/transchan.htm">transchan</A></B>
+<H3><A NAME="M23">KEYWORDS</A></H3>
+<A href="../Keywords/A.htm#API">API</A>, <A href="../Keywords/C.htm#channel">channel</A>, <A href="../Keywords/E.htm#ensemble">ensemble</A>, <A href="../Keywords/P.htm#prefix">prefix</A>, <A href="../Keywords/R.htm#reflection">reflection</A>
+<div class="copy">Copyright &copy; 2006 Andreas Kupries &lt;andreas_kupries(at)users.sourceforge.net&gt;
+</div>
+</BODY></HTML>

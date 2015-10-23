@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/Signals.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:05 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head><title>Interrupting Execution of R</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Signals {base}"><tr><td>Signals {base}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Interrupting Execution of R</h2>
+
+<h3>Description</h3>
+
+<p>On receiving <code>SIGUSR1</code> <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> will save the workspace and quit.
+<code>SIGUSR2</code> has the same result except that the <code><a href="quit.html">.Last</a></code>
+function and <code><a href="on.exit.html">on.exit</a></code> expressions will not be called.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+kill -USR1 pid
+kill -USR2 pid
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pid</code></td>
+<td>
+<p>The process ID of the <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> process.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The commands history will also be saved if would be at normal
+termination.
+</p>
+<p>This is not available on Windows, and possibly on other OSes which do
+not support these signals.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>It is possible that one or more <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> objects will be undergoing
+modification at the time the signal is sent.  These objects could be
+saved in a corrupted form.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Sys.getpid.html">Sys.getpid</a></code> to report the process ID for future use.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>base</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/Signals.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 05:32:05 GMT -->
+</html>

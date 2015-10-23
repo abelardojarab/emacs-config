@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_ExprLong manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl C API, version 8.6.0</a> <small>&gt;</small> ExprLong</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="ExprLong.htm#M2" NAME="L294">NAME</A>
+<DL><DD>Tcl_ExprLong, Tcl_ExprDouble, Tcl_ExprBoolean, Tcl_ExprString &mdash; evaluate an expression</DD></DL>
+<DD><A HREF="ExprLong.htm#M3" NAME="L295">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_ExprLong</B>(<I>interp, expr, longPtr</I>)
+<DD>int
+<DD><B>Tcl_ExprDouble</B>(<I>interp, expr, doublePtr</I>)
+<DD>int
+<DD><B>Tcl_ExprBoolean</B>(<I>interp, expr, booleanPtr</I>)
+<DD>int
+<DD><B>Tcl_ExprString</B>(<I>interp, expr</I>)
+</DL>
+<DD><A HREF="ExprLong.htm#M4" NAME="L296">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="ExprLong.htm#M5" NAME="L297">DESCRIPTION</A>
+<DD><A HREF="ExprLong.htm#M6" NAME="L298">SEE ALSO</A>
+<DD><A HREF="ExprLong.htm#M7" NAME="L299">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_ExprLong, Tcl_ExprDouble, Tcl_ExprBoolean, Tcl_ExprString &mdash; evaluate an expression
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+int<BR>
+<B>Tcl_ExprLong</B>(<I>interp, expr, longPtr</I>)<BR>
+int<BR>
+<B>Tcl_ExprDouble</B>(<I>interp, expr, doublePtr</I>)<BR>
+int<BR>
+<B>Tcl_ExprBoolean</B>(<I>interp, expr, booleanPtr</I>)<BR>
+int<BR>
+<B>Tcl_ExprString</B>(<I>interp, expr</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter in whose context to evaluate <I>expr</I>.
+<P><DT>const char <B>*expr</B> (in)<DD>
+Expression to be evaluated.  
+<P><DT>long <B>*longPtr</B> (out)<DD>
+Pointer to location in which to store the integer value of the
+expression.
+<P><DT>int <B>*doublePtr</B> (out)<DD>
+Pointer to location in which to store the floating-point value of the
+expression.
+<P><DT>int <B>*booleanPtr</B> (out)<DD>
+Pointer to location in which to store the 0/1 boolean value of the
+expression.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These four procedures all evaluate the expression
+given by the <I>expr</I> argument
+and return the result in one of four different forms.
+The expression can have any of the forms accepted by the <B><A HREF="../TclCmd/expr.htm">expr</A></B> command.
+Note that these procedures have been largely replaced by the
+value-based procedures <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprLongObj</A></B>, <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprDoubleObj</A></B>,
+<B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprBooleanObj</A></B>, and <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprObj</A></B>.
+Those value-based procedures evaluate an expression held in a Tcl value
+instead of a string.
+The value argument can retain an internal representation
+that is more efficient to execute.
+<P>
+The <I>interp</I> argument refers to an interpreter used to
+evaluate the expression (e.g. for variables and nested Tcl
+commands) and to return error information.
+<P>
+For all of these procedures the return value is a standard
+Tcl result: <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> means the expression was successfully
+evaluated, and <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> means that an error occurred while
+evaluating the expression.
+If <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned then
+the interpreter's result will hold a message describing the error.
+If an error occurs while executing a Tcl command embedded in
+the expression then that error will be returned.
+<P>
+If the expression is successfully evaluated, then its value is
+returned in one of four forms, depending on which procedure
+is invoked.
+<B>Tcl_ExprLong</B> stores an integer value at <I>*longPtr</I>.
+If the expression's actual value is a floating-point number,
+then it is truncated to an integer.
+If the expression's actual value is a non-numeric string then
+an error is returned.
+<P>
+<B>Tcl_ExprDouble</B> stores a floating-point value at <I>*doublePtr</I>.
+If the expression's actual value is an integer, it is converted to
+floating-point.
+If the expression's actual value is a non-numeric string then
+an error is returned.
+<P>
+<B>Tcl_ExprBoolean</B> stores a 0/1 integer value at <I>*booleanPtr</I>.
+If the expression's actual value is an integer or floating-point
+number, then they store 0 at <I>*booleanPtr</I> if
+the value was zero and 1 otherwise.
+If the expression's actual value is a non-numeric string then
+it must be one of the values accepted by <B><A HREF="../TclLib/GetInt.htm">Tcl_GetBoolean</A></B>
+such as
+&#8220;yes&#8221;
+or
+&#8220;no&#8221;,
+or else an error occurs.
+<P>
+<B>Tcl_ExprString</B> returns the value of the expression as a
+string stored in the interpreter's result.
+
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprLongObj</A></B>, <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprDoubleObj</A></B>, <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprBooleanObj</A></B>, <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprObj</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/B.htm#boolean">boolean</A>, <A href="../Keywords/D.htm#double">double</A>, <A href="../Keywords/E.htm#evaluate">evaluate</A>, <A href="../Keywords/E.htm#expression">expression</A>, <A href="../Keywords/I.htm#integer">integer</A>, <A href="../Keywords/V.htm#value">value</A>, <A href="../Keywords/S.htm#string">string</A>
+<div class="copy">Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

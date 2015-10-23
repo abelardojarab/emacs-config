@@ -1,0 +1,1091 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Pod::Parser</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Pod::Parser</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-P.html">Core modules (P)</a> &gt;
+      
+    
+    Pod::Parser
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Pod::Parser</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#REQUIRES">REQUIRES</a><li><a href="#EXPORTS">EXPORTS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#QUICK-OVERVIEW">QUICK OVERVIEW</a><li><a href="#PARSING-OPTIONS">PARSING OPTIONS</a><li><a href="#RECOMMENDED-SUBROUTINE%2fMETHOD-OVERRIDES">RECOMMENDED SUBROUTINE/METHOD OVERRIDES</a><li><a href="#*command()*">*command()*</a><li><a href="#*verbatim()*">*verbatim()*</a><li><a href="#*textblock()*">*textblock()*</a><li><a href="#*interior_sequence()*">*interior_sequence()*</a><li><a href="#OPTIONAL-SUBROUTINE%2fMETHOD-OVERRIDES">OPTIONAL SUBROUTINE/METHOD OVERRIDES</a><li><a href="#*new()*">*new()*</a><li><a href="#*initialize()*">*initialize()*</a><li><a href="#*begin_pod()*">*begin_pod()*</a><li><a href="#*begin_input()*">*begin_input()*</a><li><a href="#*end_input()*">*end_input()*</a><li><a href="#*end_pod()*">*end_pod()*</a><li><a href="#*preprocess_line()*">*preprocess_line()*</a><li><a href="#*preprocess_paragraph()*">*preprocess_paragraph()*</a><li><a href="#METHODS-FOR-PARSING-AND-PROCESSING">METHODS FOR PARSING AND PROCESSING</a><li><a href="#*parse_text()*">*parse_text()*</a><li><a href="#*interpolate()*">*interpolate()*</a><li><a href="#*parse_from_filehandle()*">*parse_from_filehandle()*</a><li><a href="#*parse_from_file()*">*parse_from_file()*</a><li><a href="#ACCESSOR-METHODS">ACCESSOR METHODS</a><li><a href="#*errorsub()*">*errorsub()*</a><li><a href="#*cutting()*">*cutting()*</a><li><a href="#*parseopts()*">*parseopts()*</a><li><a href="#*output_file()*">*output_file()*</a><li><a href="#*output_handle()*">*output_handle()*</a><li><a href="#*input_file()*">*input_file()*</a><li><a href="#*input_handle()*">*input_handle()*</a><li><a href="#PRIVATE-METHODS-AND-DATA">PRIVATE METHODS AND DATA</a><li><a href="#TREE-BASED-PARSING">TREE-BASED PARSING</a><li><a href="#CAVEATS">CAVEATS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#LICENSE">LICENSE</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Pod::Parser - base class for creating POD filters and translators</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Pod::Parser</span><span class="sc">;</span></li><li></li><li><a name="package-MyParser"></a>    package <span class="i">MyParser</span><span class="sc">;</span></li><li>    <span class="i">@ISA</span> = <span class="q">qw(Pod::Parser)</span><span class="sc">;</span></li><li></li><li><a name="command"></a>    sub <span class="m">command</span> <span class="s">{</span> </li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$parser</span><span class="cm">,</span> <span class="i">$command</span><span class="cm">,</span> <span class="i">$paragraph</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <span class="c">## Interpret the command and its text; sample actions might be:</span></li><li>        if <span class="s">(</span><span class="i">$command</span> eq <span class="q">&#39;head1&#39;</span><span class="s">)</span> <span class="s">{</span> ... <span class="s">}</span></li><li>        elsif <span class="s">(</span><span class="i">$command</span> eq <span class="q">&#39;head2&#39;</span><span class="s">)</span> <span class="s">{</span> ... <span class="s">}</span></li><li>        <span class="c">## ... other commands and their actions</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$out_fh</span> = <span class="i">$parser</span><span class="i">-&gt;output_handle</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$expansion</span> = <span class="i">$parser</span><span class="i">-&gt;interpolate</span><span class="s">(</span><span class="i">$paragraph</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">$out_fh</span> <span class="i">$expansion</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li><a name="verbatim"></a>    sub <span class="m">verbatim</span> <span class="s">{</span> </li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$parser</span><span class="cm">,</span> <span class="i">$paragraph</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <span class="c">## Format verbatim paragraph; sample actions might be:</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$out_fh</span> = <span class="i">$parser</span><span class="i">-&gt;output_handle</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">$out_fh</span> <span class="i">$paragraph</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li><a name="textblock"></a>    sub <span class="m">textblock</span> <span class="s">{</span> </li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$parser</span><span class="cm">,</span> <span class="i">$paragraph</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <span class="c">## Translate/Format this block of text; sample actions might be:</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$out_fh</span> = <span class="i">$parser</span><span class="i">-&gt;output_handle</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$expansion</span> = <span class="i">$parser</span><span class="i">-&gt;interpolate</span><span class="s">(</span><span class="i">$paragraph</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">$out_fh</span> <span class="i">$expansion</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li><a name="interior_sequence"></a>    sub <span class="m">interior_sequence</span> <span class="s">{</span> </li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$parser</span><span class="cm">,</span> <span class="i">$seq_command</span><span class="cm">,</span> <span class="i">$seq_argument</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <span class="c">## Expand an interior sequence; sample actions might be:</span></li><li>        <a class="l_k" href="../functions/return.html">return</a> <span class="q">&quot;*$seq_argument*&quot;</span>     if <span class="s">(</span><span class="i">$seq_command</span> eq <span class="q">&#39;B&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/return.html">return</a> <span class="q">&quot;`$seq_argument&#39;&quot;</span>     if <span class="s">(</span><span class="i">$seq_command</span> eq <span class="q">&#39;C&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/return.html">return</a> <span class="q">&quot;_${seq_argument}_&#39;&quot;</span>  if <span class="s">(</span><span class="i">$seq_command</span> eq <span class="q">&#39;I&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>        <span class="c">## ... other sequence commands and their resulting text</span></li><li>    <span class="s">}</span></li><li></li><li><a name="package-main"></a>    package <span class="i">main</span><span class="sc">;</span></li><li></li><li>    <span class="c">## Create a parser object and have it parse file whose name was</span></li><li>    <span class="c">## given on the command-line (use STDIN if no files were given).</span></li><li>    <span class="i">$parser</span> = <span class="w">new</span> <span class="i">MyParser</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$parser</span><span class="i">-&gt;parse_from_filehandle</span><span class="s">(</span>\<span class="i">*STDIN</span><span class="s">)</span>  if <span class="s">(</span><span class="i">@ARGV</span> == <span class="n">0</span><span class="s">)</span><span class="sc">;</span></li><li>    for <span class="s">(</span><span class="i">@ARGV</span><span class="s">)</span> <span class="s">{</span> <span class="i">$parser</span><span class="i">-&gt;parse_from_file</span><span class="s">(</span><span class="i">$_</span><span class="s">)</span><span class="sc">;</span> <span class="s">}</span></li></ol></pre><a name="REQUIRES"></a><h1>REQUIRES</h1>
+<p>perl5.005, Pod::InputObjects, Exporter, Symbol, Carp</p>
+<a name="EXPORTS"></a><h1>EXPORTS</h1>
+<p>Nothing.</p>
+<a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p><b>NOTE: This module is considered legacy; modern Perl releases (5.18 and
+higher) are going to remove Pod-Parser from core and use <a href="http://search.cpan.org/perldoc/Pod-Simple">Pod-Simple</a>
+for all things POD.</b></p>
+<p><b>Pod::Parser</b> is a base class for creating POD filters and translators.
+It handles most of the effort involved with parsing the POD sections
+from an input stream, leaving subclasses free to be concerned only with
+performing the actual translation of text.</p>
+<p><b>Pod::Parser</b> parses PODs, and makes method calls to handle the various
+components of the POD. Subclasses of <b>Pod::Parser</b> override these methods
+to translate the POD into whatever output format they desire.</p>
+<a name="QUICK-OVERVIEW"></a><h1>QUICK OVERVIEW</h1>
+<p>To create a POD filter for translating POD documentation into some other
+format, you create a subclass of <b>Pod::Parser</b> which typically overrides
+just the base class implementation for the following methods:</p>
+<ul>
+<li>
+<p><b>command()</b></p>
+</li>
+<li>
+<p><b>verbatim()</b></p>
+</li>
+<li>
+<p><b>textblock()</b></p>
+</li>
+<li>
+<p><b>interior_sequence()</b></p>
+</li>
+</ul>
+<p>You may also want to override the <b>begin_input()</b> and <b>end_input()</b>
+methods for your subclass (to perform any needed per-file and/or
+per-document initialization or cleanup).</p>
+<p>If you need to perform any preprocessing of input before it is parsed
+you may want to override one or more of <b>preprocess_line()</b> and/or
+<b>preprocess_paragraph()</b>.</p>
+<p>Sometimes it may be necessary to make more than one pass over the input
+files. If this is the case you have several options. You can make the
+first pass using <b>Pod::Parser</b> and override your methods to store the
+intermediate results in memory somewhere for the <b>end_pod()</b> method to
+process. You could use <b>Pod::Parser</b> for several passes with an
+appropriate state variable to control the operation for each pass. If
+your input source can't be reset to start at the beginning, you can
+store it in some other structure as a string or an array and have that
+structure implement a <b>getline()</b> method (which is all that
+<b>parse_from_filehandle()</b> uses to read input).</p>
+<p>Feel free to add any member data fields you need to keep track of things
+like current font, indentation, horizontal or vertical position, or
+whatever else you like. Be sure to read <a href="#PRIVATE-METHODS-AND-DATA">PRIVATE METHODS AND DATA</a>
+to avoid name collisions.</p>
+<p>For the most part, the <b>Pod::Parser</b> base class should be able to
+do most of the input parsing for you and leave you free to worry about
+how to interpret the commands and translate the result.</p>
+<p>Note that all we have described here in this quick overview is the
+simplest most straightforward use of <b>Pod::Parser</b> to do stream-based
+parsing. It is also possible to use the <b>Pod::Parser::parse_text</b> function
+to do more sophisticated tree-based parsing. See <a href="#TREE-BASED-PARSING">TREE-BASED PARSING</a>.</p>
+<a name="PARSING-OPTIONS"></a><h1>PARSING OPTIONS</h1>
+<p>A <i>parse-option</i> is simply a named option of <b>Pod::Parser</b> with a
+value that corresponds to a certain specified behavior. These various
+behaviors of <b>Pod::Parser</b> may be enabled/disabled by setting
+or unsetting one or more <i>parse-options</i> using the <b>parseopts()</b> method.
+The set of currently accepted parse-options is as follows:</p>
+<ul>
+<li><a name="*-want_nonPODs*-(default%3a-unset)"></a><b><b>-want_nonPODs</b> (default: unset)</b>
+<p>Normally (by default) <b>Pod::Parser</b> will only provide access to
+the POD sections of the input. Input paragraphs that are not part
+of the POD-format documentation are not made available to the caller
+(not even using <b>preprocess_paragraph()</b>). Setting this option to a
+non-empty, non-zero value will allow <b>preprocess_paragraph()</b> to see
+non-POD sections of the input as well as POD sections. The <b>cutting()</b>
+method can be used to determine if the corresponding paragraph is a POD
+paragraph, or some other input paragraph.</p>
+</li>
+<li><a name="*-process_cut_cmd*-(default%3a-unset)"></a><b><b>-process_cut_cmd</b> (default: unset)</b>
+<p>Normally (by default) <b>Pod::Parser</b> handles the <code class="inline"><span class="pd">=cut</span></code>
+ POD directive
+by itself and does not pass it on to the caller for processing. Setting
+this option to a non-empty, non-zero value will cause <b>Pod::Parser</b> to
+pass the <code class="inline"><span class="pd">=cut</span></code>
+ directive to the caller just like any other POD command
+(and hence it may be processed by the <b>command()</b> method).</p>
+<p><b>Pod::Parser</b> will still interpret the <code class="inline"><span class="pd">=cut</span></code>
+ directive to mean that
+"cutting mode" has been (re)entered, but the caller will get a chance
+to capture the actual <code class="inline"><span class="pd">=cut</span></code>
+ paragraph itself for whatever purpose
+it desires.</p>
+</li>
+<li><a name="*-warnings*-(default%3a-unset)"></a><b><b>-warnings</b> (default: unset)</b>
+<p>Normally (by default) <b>Pod::Parser</b> recognizes a bare minimum of
+pod syntax errors and warnings and issues diagnostic messages
+for errors, but not for warnings. (Use <b>Pod::Checker</b> to do more
+thorough checking of POD syntax.) Setting this option to a non-empty,
+non-zero value will cause <b>Pod::Parser</b> to issue diagnostics for
+the few warnings it recognizes as well as the errors.</p>
+</li>
+</ul>
+<p>Please see <a href="#parseopts()">parseopts()</a> for a complete description of the interface
+for the setting and unsetting of parse-options.</p>
+<a name="RECOMMENDED-SUBROUTINE%2fMETHOD-OVERRIDES"></a><h1>RECOMMENDED SUBROUTINE/METHOD OVERRIDES</h1>
+<p><b>Pod::Parser</b> provides several methods which most subclasses will probably
+want to override. These methods are as follows:</p>
+<a name="*command()*"></a><h1><b>command()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;command</span><span class="s">(</span><span class="i">$cmd</span><span class="cm">,</span><span class="i">$text</span><span class="cm">,</span><span class="i">$line_num</span><span class="cm">,</span><span class="i">$pod_para</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method should be overridden by subclasses to take the appropriate
+action when a POD command paragraph (denoted by a line beginning with
+"=") is encountered. When such a POD directive is seen in the input,
+this method is called and is passed:</p>
+<ul>
+<li><a name="%24cmd"></a><b><code class="inline"><span class="i">$cmd</span></code>
+</b>
+<p>the name of the command for this POD paragraph</p>
+</li>
+<li><a name="%24text"></a><b><code class="inline"><span class="i">$text</span></code>
+</b>
+<p>the paragraph text for the given POD paragraph command.</p>
+</li>
+<li><a name="%24line_num"></a><b><code class="inline"><span class="i">$line_num</span></code>
+</b>
+<p>the line-number of the beginning of the paragraph</p>
+</li>
+<li><a name="%24pod_para"></a><b><code class="inline"><span class="i">$pod_para</span></code>
+</b>
+<p>a reference to a <code class="inline"><span class="w">Pod::Paragraph</span></code>
+ object which contains further
+information about the paragraph command (see <a href="../Pod/InputObjects.html">Pod::InputObjects</a>
+for details).</p>
+</li>
+</ul>
+<p><b>Note</b> that this method <i>is</i> called for <code class="inline"><span class="pd">=pod</span></code>
+ paragraphs.</p>
+<p>The base class implementation of this method simply treats the raw POD
+command as normal block of paragraph text (invoking the <b>textblock()</b>
+method with the command paragraph).</p>
+<a name="*verbatim()*"></a><h1><b>verbatim()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;verbatim</span><span class="s">(</span><span class="i">$text</span><span class="cm">,</span><span class="i">$line_num</span><span class="cm">,</span><span class="i">$pod_para</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method may be overridden by subclasses to take the appropriate
+action when a block of verbatim text is encountered. It is passed the
+following parameters:</p>
+<ul>
+<li><a name="%24text"></a><b><code class="inline"><span class="i">$text</span></code>
+</b>
+<p>the block of text for the verbatim paragraph</p>
+</li>
+<li><a name="%24line_num"></a><b><code class="inline"><span class="i">$line_num</span></code>
+</b>
+<p>the line-number of the beginning of the paragraph</p>
+</li>
+<li><a name="%24pod_para"></a><b><code class="inline"><span class="i">$pod_para</span></code>
+</b>
+<p>a reference to a <code class="inline"><span class="w">Pod::Paragraph</span></code>
+ object which contains further
+information about the paragraph (see <a href="../Pod/InputObjects.html">Pod::InputObjects</a>
+for details).</p>
+</li>
+</ul>
+<p>The base class implementation of this method simply prints the textblock
+(unmodified) to the output filehandle.</p>
+<a name="*textblock()*"></a><h1><b>textblock()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;textblock</span><span class="s">(</span><span class="i">$text</span><span class="cm">,</span><span class="i">$line_num</span><span class="cm">,</span><span class="i">$pod_para</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method may be overridden by subclasses to take the appropriate
+action when a normal block of POD text is encountered (although the base
+class method will usually do what you want). It is passed the following
+parameters:</p>
+<ul>
+<li><a name="%24text"></a><b><code class="inline"><span class="i">$text</span></code>
+</b>
+<p>the block of text for the a POD paragraph</p>
+</li>
+<li><a name="%24line_num"></a><b><code class="inline"><span class="i">$line_num</span></code>
+</b>
+<p>the line-number of the beginning of the paragraph</p>
+</li>
+<li><a name="%24pod_para"></a><b><code class="inline"><span class="i">$pod_para</span></code>
+</b>
+<p>a reference to a <code class="inline"><span class="w">Pod::Paragraph</span></code>
+ object which contains further
+information about the paragraph (see <a href="../Pod/InputObjects.html">Pod::InputObjects</a>
+for details).</p>
+</li>
+</ul>
+<p>In order to process interior sequences, subclasses implementations of
+this method will probably want to invoke either <b>interpolate()</b> or
+<b>parse_text()</b>, passing it the text block <code class="inline"><span class="i">$text</span></code>
+, and the corresponding
+line number in <code class="inline"><span class="i">$line_num</span></code>
+, and then perform any desired processing upon
+the returned result.</p>
+<p>The base class implementation of this method simply prints the text block
+as it occurred in the input stream).</p>
+<a name="*interior_sequence()*"></a><h1><b>interior_sequence()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;interior_sequence</span><span class="s">(</span><span class="i">$seq_cmd</span><span class="cm">,</span><span class="i">$seq_arg</span><span class="cm">,</span><span class="i">$pod_seq</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method should be overridden by subclasses to take the appropriate
+action when an interior sequence is encountered. An interior sequence is
+an embedded command within a block of text which appears as a command
+name (usually a single uppercase character) followed immediately by a
+string of text which is enclosed in angle brackets. This method is
+passed the sequence command <code class="inline"><span class="i">$seq_cmd</span></code>
+ and the corresponding text
+<code class="inline"><span class="i">$seq_arg</span></code>
+. It is invoked by the <b>interpolate()</b> method for each interior
+sequence that occurs in the string that it is passed. It should return
+the desired text string to be used in place of the interior sequence.
+The <code class="inline"><span class="i">$pod_seq</span></code>
+ argument is a reference to a <code class="inline"><span class="w">Pod::InteriorSequence</span></code>
+
+object which contains further information about the interior sequence.
+Please see <a href="../Pod/InputObjects.html">Pod::InputObjects</a> for details if you need to access this
+additional information.</p>
+<p>Subclass implementations of this method may wish to invoke the 
+<b>nested()</b> method of <code class="inline"><span class="i">$pod_seq</span></code>
+ to see if it is nested inside
+some other interior-sequence (and if so, which kind).</p>
+<p>The base class implementation of the <b>interior_sequence()</b> method
+simply returns the raw text of the interior sequence (as it occurred
+in the input) to the caller.</p>
+<a name="OPTIONAL-SUBROUTINE%2fMETHOD-OVERRIDES"></a><h1>OPTIONAL SUBROUTINE/METHOD OVERRIDES</h1>
+<p><b>Pod::Parser</b> provides several methods which subclasses may want to override
+to perform any special pre/post-processing. These methods do <i>not</i> have to
+be overridden, but it may be useful for subclasses to take advantage of them.</p>
+<a name="*new()*"></a><h1><b>new()</b></h1>
+<pre class="verbatim"><ol><li>            <a class="l_k" href="../functions/my.html">my</a> <span class="i">$parser</span> = <span class="w">Pod::Parser</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This is the constructor for <b>Pod::Parser</b> and its subclasses. You
+<i>do not</i> need to override this method! It is capable of constructing
+subclass objects as well as base class objects, provided you use
+any of the following constructor invocation styles:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$parser1</span> = <span class="w">MyParser</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$parser2</span> = <span class="w">new</span> <span class="i">MyParser</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$parser3</span> = <span class="i">$parser2</span><span class="i">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>where <code class="inline"><span class="w">MyParser</span></code>
+ is some subclass of <b>Pod::Parser</b>.</p>
+<p>Using the syntax <code class="inline"><span class="i">MyParser::new</span><span class="s">(</span><span class="s">)</span></code>
+ to invoke the constructor is <i>not</i>
+recommended, but if you insist on being able to do this, then the
+subclass <i>will</i> need to override the <b>new()</b> constructor method. If
+you do override the constructor, you <i>must</i> be sure to invoke the
+<b>initialize()</b> method of the newly blessed object.</p>
+<p>Using any of the above invocations, the first argument to the
+constructor is always the corresponding package name (or object
+reference). No other arguments are required, but if desired, an
+associative array (or hash-table) my be passed to the <b>new()</b>
+constructor, as in:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$parser1</span> = <span class="w">MyParser</span><span class="w">-&gt;new</span><span class="s">(</span> <span class="w">MYDATA</span> <span class="cm">=&gt;</span> <span class="i">$value1</span><span class="cm">,</span> <span class="w">MOREDATA</span> <span class="cm">=&gt;</span> <span class="i">$value2</span> <span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$parser2</span> = <span class="w">new</span> <span class="i">MyParser</span><span class="s">(</span> -<span class="w">myflag</span> <span class="cm">=&gt;</span> <span class="n">1</span> <span class="s">)</span><span class="sc">;</span></li></ol></pre><p>All arguments passed to the <b>new()</b> constructor will be treated as
+key/value pairs in a hash-table. The newly constructed object will be
+initialized by copying the contents of the given hash-table (which may
+have been empty). The <b>new()</b> constructor for this class and all of its
+subclasses returns a blessed reference to the initialized object (hash-table).</p>
+<a name="*initialize()*"></a><h1><b>initialize()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;initialize</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method performs any necessary object initialization. It takes no
+arguments (other than the object instance of course, which is typically
+copied to a local variable named <code class="inline"><span class="i">$self</span></code>
+). If subclasses override this
+method then they <i>must</i> be sure to invoke <code class="inline"><span class="i">$self</span><span class="i">-&gt;SUPER::initialize</span><span class="s">(</span><span class="s">)</span></code>
+.</p>
+<a name="*begin_pod()*"></a><h1><b>begin_pod()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;begin_pod</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method is invoked at the beginning of processing for each POD
+document that is encountered in the input. Subclasses should override
+this method to perform any per-document initialization.</p>
+<a name="*begin_input()*"></a><h1><b>begin_input()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;begin_input</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method is invoked by <b>parse_from_filehandle()</b> immediately <i>before</i>
+processing input from a filehandle. The base class implementation does
+nothing, however, subclasses may override it to perform any per-file
+initializations.</p>
+<p>Note that if multiple files are parsed for a single POD document
+(perhaps the result of some future <code class="inline"><span class="pd">=include</span></code>
+ directive) this method
+is invoked for every file that is parsed. If you wish to perform certain
+initializations once per document, then you should use <b>begin_pod()</b>.</p>
+<a name="*end_input()*"></a><h1><b>end_input()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;end_input</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method is invoked by <b>parse_from_filehandle()</b> immediately <i>after</i>
+processing input from a filehandle. The base class implementation does
+nothing, however, subclasses may override it to perform any per-file
+cleanup actions.</p>
+<p>Please note that if multiple files are parsed for a single POD document
+(perhaps the result of some kind of <code class="inline"><span class="pd">=include</span></code>
+ directive) this method
+is invoked for every file that is parsed. If you wish to perform certain
+cleanup actions once per document, then you should use <b>end_pod()</b>.</p>
+<a name="*end_pod()*"></a><h1><b>end_pod()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;end_pod</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method is invoked at the end of processing for each POD document
+that is encountered in the input. Subclasses should override this method
+to perform any per-document finalization.</p>
+<a name="*preprocess_line()*"></a><h1><b>preprocess_line()</b></h1>
+<pre class="verbatim"><ol><li>          <span class="i">$textline</span> = <span class="i">$parser</span><span class="i">-&gt;preprocess_line</span><span class="s">(</span><span class="i">$text</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method should be overridden by subclasses that wish to perform
+any kind of preprocessing for each <i>line</i> of input (<i>before</i> it has
+been determined whether or not it is part of a POD paragraph). The
+parameter <code class="inline"><span class="i">$text</span></code>
+ is the input line; and the parameter <code class="inline"><span class="i">$line_num</span></code>
+ is
+the line number of the corresponding text line.</p>
+<p>The value returned should correspond to the new text to use in its
+place.  If the empty string or an undefined value is returned then no
+further processing will be performed for this line.</p>
+<p>Please note that the <b>preprocess_line()</b> method is invoked <i>before</i>
+the <b>preprocess_paragraph()</b> method. After all (possibly preprocessed)
+lines in a paragraph have been assembled together and it has been
+determined that the paragraph is part of the POD documentation from one
+of the selected sections, then <b>preprocess_paragraph()</b> is invoked.</p>
+<p>The base class implementation of this method returns the given text.</p>
+<a name="*preprocess_paragraph()*"></a><h1><b>preprocess_paragraph()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$textblock</span> = <span class="i">$parser</span><span class="i">-&gt;preprocess_paragraph</span><span class="s">(</span><span class="i">$text</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method should be overridden by subclasses that wish to perform any
+kind of preprocessing for each block (paragraph) of POD documentation
+that appears in the input stream. The parameter <code class="inline"><span class="i">$text</span></code>
+ is the POD
+paragraph from the input file; and the parameter <code class="inline"><span class="i">$line_num</span></code>
+ is the
+line number for the beginning of the corresponding paragraph.</p>
+<p>The value returned should correspond to the new text to use in its
+place If the empty string is returned or an undefined value is
+returned, then the given <code class="inline"><span class="i">$text</span></code>
+ is ignored (not processed).</p>
+<p>This method is invoked after gathering up all the lines in a paragraph
+and after determining the cutting state of the paragraph,
+but before trying to further parse or interpret them. After
+<b>preprocess_paragraph()</b> returns, the current cutting state (which
+is returned by <code class="inline"><span class="i">$self</span><span class="i">-&gt;cutting</span><span class="s">(</span><span class="s">)</span></code>
+) is examined. If it evaluates
+to true then input text (including the given <code class="inline"><span class="i">$text</span></code>
+) is cut (not
+processed) until the next POD directive is encountered.</p>
+<p>Please note that the <b>preprocess_line()</b> method is invoked <i>before</i>
+the <b>preprocess_paragraph()</b> method. After all (possibly preprocessed)
+lines in a paragraph have been assembled together and either it has been
+determined that the paragraph is part of the POD documentation from one
+of the selected sections or the <code class="inline">-<span class="w">want_nonPODs</span></code>
+ option is true,
+then <b>preprocess_paragraph()</b> is invoked.</p>
+<p>The base class implementation of this method returns the given text.</p>
+<a name="METHODS-FOR-PARSING-AND-PROCESSING"></a><h1>METHODS FOR PARSING AND PROCESSING</h1>
+<p><b>Pod::Parser</b> provides several methods to process input text. These
+methods typically won't need to be overridden (and in some cases they
+can't be overridden), but subclasses may want to invoke them to exploit
+their functionality.</p>
+<a name="*parse_text()*"></a><h1><b>parse_text()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$ptree1</span> = <span class="i">$parser</span><span class="i">-&gt;parse_text</span><span class="s">(</span><span class="i">$text</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span><span class="sc">;</span></li><li>            <span class="i">$ptree2</span> = <span class="i">$parser</span><span class="i">-&gt;parse_text</span><span class="s">(</span><span class="s">{</span><span class="i">%opts</span><span class="s">}</span><span class="cm">,</span> <span class="i">$text</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span><span class="sc">;</span></li><li>            <span class="i">$ptree3</span> = <span class="i">$parser</span><span class="i">-&gt;parse_text</span><span class="s">(</span>\<span class="i">%opts</span><span class="cm">,</span> <span class="i">$text</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method is useful if you need to perform your own interpolation 
+of interior sequences and can't rely upon <b>interpolate</b> to expand
+them in simple bottom-up order.</p>
+<p>The parameter <code class="inline"><span class="i">$text</span></code>
+ is a string or block of text to be parsed
+for interior sequences; and the parameter <code class="inline"><span class="i">$line_num</span></code>
+ is the
+line number corresponding to the beginning of <code class="inline"><span class="i">$text</span></code>
+.</p>
+<p><b>parse_text()</b> will parse the given text into a parse-tree of "nodes."
+and interior-sequences.  Each "node" in the parse tree is either a
+text-string, or a <b>Pod::InteriorSequence</b>.  The result returned is a
+parse-tree of type <b>Pod::ParseTree</b>. Please see <a href="../Pod/InputObjects.html">Pod::InputObjects</a>
+for more information about <b>Pod::InteriorSequence</b> and <b>Pod::ParseTree</b>.</p>
+<p>If desired, an optional hash-ref may be specified as the first argument
+to customize certain aspects of the parse-tree that is created and
+returned. The set of recognized option keywords are:</p>
+<ul>
+<li><a name="*-expand_seq*-%3d%3e-_code-ref_%7c_method-name_"></a><b><b>-expand_seq</b> =&gt; <i>code-ref</i>|<i>method-name</i></b>
+<p>Normally, the parse-tree returned by <b>parse_text()</b> will contain an
+unexpanded <code class="inline"><span class="w">Pod::InteriorSequence</span></code>
+ object for each interior-sequence
+encountered. Specifying <b>-expand_seq</b> tells <b>parse_text()</b> to "expand"
+every interior-sequence it sees by invoking the referenced function
+(or named method of the parser object) and using the return value as the
+expanded result.</p>
+<p>If a subroutine reference was given, it is invoked as:</p>
+<pre class="verbatim"><ol><li>  <span class="i">&amp;$code_ref</span><span class="s">(</span> <span class="i">$parser</span><span class="cm">,</span> <span class="i">$sequence</span> <span class="s">)</span></li></ol></pre><p>and if a method-name was given, it is invoked as:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$parser</span><span class="i">-&gt;method_name</span><span class="s">(</span> <span class="i">$sequence</span> <span class="s">)</span></li></ol></pre><p>where <code class="inline"><span class="i">$parser</span></code>
+ is a reference to the parser object, and <code class="inline"><span class="i">$sequence</span></code>
+
+is a reference to the interior-sequence object.
+[<i>NOTE</i>: If the <b>interior_sequence()</b> method is specified, then it is
+invoked according to the interface specified in <a href="#interior_sequence()">interior_sequence()</a>].</p>
+</li>
+<li><a name="*-expand_text*-%3d%3e-_code-ref_%7c_method-name_"></a><b><b>-expand_text</b> =&gt; <i>code-ref</i>|<i>method-name</i></b>
+<p>Normally, the parse-tree returned by <b>parse_text()</b> will contain a
+text-string for each contiguous sequence of characters outside of an
+interior-sequence. Specifying <b>-expand_text</b> tells <b>parse_text()</b> to
+"preprocess" every such text-string it sees by invoking the referenced
+function (or named method of the parser object) and using the return value
+as the preprocessed (or "expanded") result. [Note that if the result is
+an interior-sequence, then it will <i>not</i> be expanded as specified by the
+<b>-expand_seq</b> option; Any such recursive expansion needs to be handled by
+the specified callback routine.]</p>
+<p>If a subroutine reference was given, it is invoked as:</p>
+<pre class="verbatim"><ol><li>  <span class="i">&amp;$code_ref</span><span class="s">(</span> <span class="i">$parser</span><span class="cm">,</span> <span class="i">$text</span><span class="cm">,</span> <span class="i">$ptree_node</span> <span class="s">)</span></li></ol></pre><p>and if a method-name was given, it is invoked as:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$parser</span><span class="i">-&gt;method_name</span><span class="s">(</span> <span class="i">$text</span><span class="cm">,</span> <span class="i">$ptree_node</span> <span class="s">)</span></li></ol></pre><p>where <code class="inline"><span class="i">$parser</span></code>
+ is a reference to the parser object, <code class="inline"><span class="i">$text</span></code>
+ is the
+text-string encountered, and <code class="inline"><span class="i">$ptree_node</span></code>
+ is a reference to the current
+node in the parse-tree (usually an interior-sequence object or else the
+top-level node of the parse-tree).</p>
+</li>
+<li><a name="*-expand_ptree*-%3d%3e-_code-ref_%7c_method-name_"></a><b><b>-expand_ptree</b> =&gt; <i>code-ref</i>|<i>method-name</i></b>
+<p>Rather than returning a <code class="inline"><span class="w">Pod::ParseTree</span></code>
+, pass the parse-tree as an
+argument to the referenced subroutine (or named method of the parser
+object) and return the result instead of the parse-tree object.</p>
+<p>If a subroutine reference was given, it is invoked as:</p>
+<pre class="verbatim"><ol><li>  <span class="i">&amp;$code_ref</span><span class="s">(</span> <span class="i">$parser</span><span class="cm">,</span> <span class="i">$ptree</span> <span class="s">)</span></li></ol></pre><p>and if a method-name was given, it is invoked as:</p>
+<pre class="verbatim"><ol><li>  <span class="i">$parser</span><span class="i">-&gt;method_name</span><span class="s">(</span> <span class="i">$ptree</span> <span class="s">)</span></li></ol></pre><p>where <code class="inline"><span class="i">$parser</span></code>
+ is a reference to the parser object, and <code class="inline"><span class="i">$ptree</span></code>
+
+is a reference to the parse-tree object.</p>
+</li>
+</ul>
+<a name="*interpolate()*"></a><h1><b>interpolate()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$textblock</span> = <span class="i">$parser</span><span class="i">-&gt;interpolate</span><span class="s">(</span><span class="i">$text</span><span class="cm">,</span> <span class="i">$line_num</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method translates all text (including any embedded interior sequences)
+in the given text string <code class="inline"><span class="i">$text</span></code>
+ and returns the interpolated result. The
+parameter <code class="inline"><span class="i">$line_num</span></code>
+ is the line number corresponding to the beginning
+of <code class="inline"><span class="i">$text</span></code>
+.</p>
+<p><b>interpolate()</b> merely invokes a private method to recursively expand
+nested interior sequences in bottom-up order (innermost sequences are
+expanded first). If there is a need to expand nested sequences in
+some alternate order, use <b>parse_text</b> instead.</p>
+<a name="*parse_from_filehandle()*"></a><h1><b>parse_from_filehandle()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;parse_from_filehandle</span><span class="s">(</span><span class="i">$in_fh</span><span class="cm">,</span><span class="i">$out_fh</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method takes an input filehandle (which is assumed to already be
+opened for reading) and reads the entire input stream looking for blocks
+(paragraphs) of POD documentation to be processed. If no first argument
+is given the default input filehandle <code class="inline"><span class="w">STDIN</span></code>
+ is used.</p>
+<p>The <code class="inline"><span class="i">$in_fh</span></code>
+ parameter may be any object that provides a <b>getline()</b>
+method to retrieve a single line of input text (hence, an appropriate
+wrapper object could be used to parse PODs from a single string or an
+array of strings).</p>
+<p>Using <code class="inline"><span class="i">$in_fh</span><span class="i">-&gt;getline</span><span class="s">(</span><span class="s">)</span></code>
+, input is read line-by-line and assembled
+into paragraphs or "blocks" (which are separated by lines containing
+nothing but whitespace). For each block of POD documentation
+encountered it will invoke a method to parse the given paragraph.</p>
+<p>If a second argument is given then it should correspond to a filehandle where
+output should be sent (otherwise the default output filehandle is
+<code class="inline"><span class="w">STDOUT</span></code>
+ if no output filehandle is currently in use).</p>
+<p><b>NOTE:</b> For performance reasons, this method caches the input stream at
+the top of the stack in a local variable. Any attempts by clients to
+change the stack contents during processing when in the midst executing
+of this method <i>will not affect</i> the input stream used by the current
+invocation of this method.</p>
+<p>This method does <i>not</i> usually need to be overridden by subclasses.</p>
+<a name="*parse_from_file()*"></a><h1><b>parse_from_file()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;parse_from_file</span><span class="s">(</span><span class="i">$filename</span><span class="cm">,</span><span class="i">$outfile</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>This method takes a filename and does the following:</p>
+<ul>
+<li>
+<p>opens the input and output files for reading
+(creating the appropriate filehandles)</p>
+</li>
+<li>
+<p>invokes the <b>parse_from_filehandle()</b> method passing it the
+corresponding input and output filehandles.</p>
+</li>
+<li>
+<p>closes the input and output files.</p>
+</li>
+</ul>
+<p>If the special input filename "", "-" or "&lt;&amp;STDIN" is given then the STDIN
+filehandle is used for input (and no open or close is performed). If no
+input filename is specified then "-" is implied. Filehandle references,
+or objects that support the regular IO operations (like <code class="inline"><span class="q">&lt;$fh&gt;</span></code>
+
+or <code class="inline">$fh-&lt;Egt</code>getline&gt;) are also accepted; the handles must already be 
+opened.</p>
+<p>If a second argument is given then it should be the name of the desired
+output file. If the special output filename "-" or "&gt;&amp;STDOUT" is given
+then the STDOUT filehandle is used for output (and no open or close is
+performed). If the special output filename "&gt;&amp;STDERR" is given then the
+STDERR filehandle is used for output (and no open or close is
+performed). If no output filehandle is currently in use and no output
+filename is specified, then "-" is implied.
+Alternatively, filehandle references or objects that support the regular
+IO operations (like <code class="inline"><a class="l_k" href="../functions/print.html">print</a></code>, e.g. <a href="http://search.cpan.org/perldoc/IO::String">IO::String</a>) are also accepted;
+the object must already be opened.</p>
+<p>This method does <i>not</i> usually need to be overridden by subclasses.</p>
+<a name="ACCESSOR-METHODS"></a><h1>ACCESSOR METHODS</h1>
+<p>Clients of <b>Pod::Parser</b> should use the following methods to access
+instance data fields:</p>
+<a name="*errorsub()*"></a><h1><b>errorsub()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;errorsub</span><span class="s">(</span><span class="q">&quot;method_name&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>            <span class="i">$parser</span><span class="i">-&gt;errorsub</span><span class="s">(</span>\<span class="i">&amp;warn_user</span><span class="s">)</span><span class="sc">;</span></li><li>            <span class="i">$parser</span><span class="i">-&gt;errorsub</span><span class="s">(</span><a class="l_k" href="../functions/sub.html">sub</a> <span class="s">{</span> <a class="l_k" href="../functions/print.html">print</a> <span class="i">STDERR</span><span class="cm">,</span> <span class="i">@_</span> <span class="s">}</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Specifies the method or subroutine to use when printing error messages
+about POD syntax. The supplied method/subroutine <i>must</i> return TRUE upon
+successful printing of the message. If <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> is given, then the <b>carp</b>
+builtin is used to issue error messages (this is the default behavior).</p>
+<pre class="verbatim"><ol><li>            my $errorsub = $parser-&gt;errorsub()</li><li>            my $errmsg = "This is an error message!\n"</li><li>            (ref $errorsub) and &amp;{$errorsub}($errmsg)</li><li>                or (defined $errorsub) and $parser-&gt;$errorsub($errmsg)</li><li>                    or  carp($errmsg);</li></ol></pre><p>Returns a method name, or else a reference to the user-supplied subroutine
+used to print error messages. Returns <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> if the <b>carp</b> builtin
+is used to issue error messages (this is the default behavior).</p>
+<a name="*cutting()*"></a><h1><b>cutting()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$boolean</span> = <span class="i">$parser</span><span class="i">-&gt;cutting</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns the current <code class="inline"><span class="w">cutting</span></code>
+ state: a boolean-valued scalar which
+evaluates to true if text from the input file is currently being "cut"
+(meaning it is <i>not</i> considered part of the POD document).</p>
+<pre class="verbatim"><ol><li>            <span class="i">$parser</span><span class="i">-&gt;cutting</span><span class="s">(</span><span class="i">$boolean</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Sets the current <code class="inline"><span class="w">cutting</span></code>
+ state to the given value and returns the
+result.</p>
+<a name="*parseopts()*"></a><h1><b>parseopts()</b></h1>
+<p>When invoked with no additional arguments, <b>parseopts</b> returns a hashtable
+of all the current parsing options.</p>
+<pre class="verbatim"><ol><li>            ## See if we are parsing non-POD sections as well as POD ones</li><li>            my %opts = $parser-&gt;parseopts();</li><li>            $opts{'-want_nonPODs}' and print "-want_nonPODs\n";</li></ol></pre><p>When invoked using a single string, <b>parseopts</b> treats the string as the
+name of a parse-option and returns its corresponding value if it exists
+(returns <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> if it doesn't).</p>
+<pre class="verbatim"><ol><li>            <span class="c">## Did we ask to see &#39;=cut&#39; paragraphs?</span></li><li>            <a class="l_k" href="../functions/my.html">my</a> <span class="i">$want_cut</span> = <span class="i">$parser</span><span class="i">-&gt;parseopts</span><span class="s">(</span><span class="q">&#39;-process_cut_cmd&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>            <span class="i">$want_cut</span> and <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;-process_cut_cmd\n&quot;</span><span class="sc">;</span></li></ol></pre><p>When invoked with multiple arguments, <b>parseopts</b> treats them as
+key/value pairs and the specified parse-option names are set to the
+given values. Any unspecified parse-options are unaffected.</p>
+<pre class="verbatim"><ol><li>            <span class="c">## Set them back to the default</span></li><li>            <span class="i">$parser</span><span class="i">-&gt;parseopts</span><span class="s">(</span>-<span class="w">warnings</span> <span class="cm">=&gt;</span> <span class="n">0</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>When passed a single hash-ref, <b>parseopts</b> uses that hash to completely
+reset the existing parse-options, all previous parse-option values
+are lost.</p>
+<pre class="verbatim"><ol><li>            <span class="c">## Reset all options to default </span></li><li>            <span class="i">$parser</span><span class="i">-&gt;parseopts</span><span class="s">(</span> <span class="s">{</span> <span class="s">}</span> <span class="s">)</span><span class="sc">;</span></li></ol></pre><p>See <a href="#PARSING-OPTIONS">PARSING OPTIONS</a> for more information on the name and meaning of each
+parse-option currently recognized.</p>
+<a name="*output_file()*"></a><h1><b>output_file()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$fname</span> = <span class="i">$parser</span><span class="i">-&gt;output_file</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns the name of the output file being written.</p>
+<a name="*output_handle()*"></a><h1><b>output_handle()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$fhandle</span> = <span class="i">$parser</span><span class="i">-&gt;output_handle</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns the output filehandle object.</p>
+<a name="*input_file()*"></a><h1><b>input_file()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$fname</span> = <span class="i">$parser</span><span class="i">-&gt;input_file</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns the name of the input file being read.</p>
+<a name="*input_handle()*"></a><h1><b>input_handle()</b></h1>
+<pre class="verbatim"><ol><li>            <span class="i">$fhandle</span> = <span class="i">$parser</span><span class="i">-&gt;input_handle</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns the current input filehandle object.</p>
+<a name="PRIVATE-METHODS-AND-DATA"></a><h1>PRIVATE METHODS AND DATA</h1>
+<p><b>Pod::Parser</b> makes use of several internal methods and data fields
+which clients should not need to see or use. For the sake of avoiding
+name collisions for client data and methods, these methods and fields
+are briefly discussed here. Determined hackers may obtain further
+information about them by reading the <b>Pod::Parser</b> source code.</p>
+<p>Private data fields are stored in the hash-object whose reference is
+returned by the <b>new()</b> constructor for this class. The names of all
+private methods and data-fields used by <b>Pod::Parser</b> begin with a
+prefix of "_" and match the regular expression <code class="inline"><span class="q">/^_\w+$/</span></code>
+.</p>
+<a name="TREE-BASED-PARSING"></a><h1>TREE-BASED PARSING</h1>
+<p>If straightforward stream-based parsing wont meet your needs (as is
+likely the case for tasks such as translating PODs into structured
+markup languages like HTML and XML) then you may need to take the
+tree-based approach. Rather than doing everything in one pass and
+calling the <b>interpolate()</b> method to expand sequences into text, it
+may be desirable to instead create a parse-tree using the <b>parse_text()</b>
+method to return a tree-like structure which may contain an ordered
+list of children (each of which may be a text-string, or a similar
+tree-like structure).</p>
+<p>Pay special attention to <a href="#METHODS-FOR-PARSING-AND-PROCESSING">METHODS FOR PARSING AND PROCESSING</a> and
+to the objects described in <a href="../Pod/InputObjects.html">Pod::InputObjects</a>. The former describes
+the gory details and parameters for how to customize and extend the
+parsing behavior of <b>Pod::Parser</b>. <b>Pod::InputObjects</b> provides
+several objects that may all be used interchangeably as parse-trees. The
+most obvious one is the <b>Pod::ParseTree</b> object. It defines the basic
+interface and functionality that all things trying to be a POD parse-tree
+should do. A <b>Pod::ParseTree</b> is defined such that each "node" may be a
+text-string, or a reference to another parse-tree.  Each <b>Pod::Paragraph</b>
+object and each <b>Pod::InteriorSequence</b> object also supports the basic
+parse-tree interface.</p>
+<p>The <b>parse_text()</b> method takes a given paragraph of text, and
+returns a parse-tree that contains one or more children, each of which
+may be a text-string, or an InteriorSequence object. There are also
+callback-options that may be passed to <b>parse_text()</b> to customize
+the way it expands or transforms interior-sequences, as well as the
+returned result. These callbacks can be used to create a parse-tree
+with custom-made objects (which may or may not support the parse-tree
+interface, depending on how you choose to do it).</p>
+<p>If you wish to turn an entire POD document into a parse-tree, that process
+is fairly straightforward. The <b>parse_text()</b> method is the key to doing
+this successfully. Every paragraph-callback (i.e. the polymorphic methods
+for <b>command()</b>, <b>verbatim()</b>, and <b>textblock()</b> paragraphs) takes
+a <b>Pod::Paragraph</b> object as an argument. Each paragraph object has a
+<b>parse_tree()</b> method that can be used to get or set a corresponding
+parse-tree. So for each of those paragraph-callback methods, simply call
+<b>parse_text()</b> with the options you desire, and then use the returned
+parse-tree to assign to the given paragraph object.</p>
+<p>That gives you a parse-tree for each paragraph - so now all you need is
+an ordered list of paragraphs. You can maintain that yourself as a data
+element in the object/hash. The most straightforward way would be simply
+to use an array-ref, with the desired set of custom "options" for each
+invocation of <b>parse_text</b>. Let's assume the desired option-set is
+given by the hash <code class="inline"><span class="i">%options</span></code>
+. Then we might do something like the
+following:</p>
+<pre class="verbatim"><ol><li><a name="package-MyPodParserTree"></a>    package <span class="i">MyPodParserTree</span><span class="sc">;</span></li><li></li><li>    <span class="i">@ISA</span> = <span class="q">qw( Pod::Parser )</span><span class="sc">;</span></li><li></li><li>    ...</li><li></li><li><a name="begin_pod"></a>    sub <span class="m">begin_pod</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$self</span> = <a class="l_k" href="../functions/shift.html">shift</a><span class="sc">;</span></li><li>        <span class="i">$self</span>-&gt;{<span class="q">&#39;-paragraphs&#39;</span>} = <span class="s">[</span><span class="s">]</span><span class="sc">;</span>  <span class="c">## initialize paragraph list</span></li><li>    <span class="s">}</span></li><li></li><li><a name="command"></a>    sub <span class="m">command</span> <span class="s">{</span> </li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$parser</span><span class="cm">,</span> <span class="i">$command</span><span class="cm">,</span> <span class="i">$paragraph</span><span class="cm">,</span> <span class="i">$line_num</span><span class="cm">,</span> <span class="i">$pod_para</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$ptree</span> = <span class="i">$parser</span><span class="i">-&gt;parse_text</span><span class="s">(</span><span class="s">{</span><span class="i">%options</span><span class="s">}</span><span class="cm">,</span> <span class="i">$paragraph</span><span class="cm">,</span> ...<span class="s">)</span><span class="sc">;</span></li><li>        <span class="i">$pod_para</span><span class="i">-&gt;parse_tree</span><span class="s">(</span> <span class="i">$ptree</span> <span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/push.html">push</a> <span class="i">@</span>{ <span class="i">$self</span>-&gt;{<span class="q">&#39;-paragraphs&#39;</span>} }<span class="cm">,</span> <span class="i">$pod_para</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li><a name="verbatim"></a>    sub <span class="m">verbatim</span> <span class="s">{</span> </li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$parser</span><span class="cm">,</span> <span class="i">$paragraph</span><span class="cm">,</span> <span class="i">$line_num</span><span class="cm">,</span> <span class="i">$pod_para</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/push.html">push</a> <span class="i">@</span>{ <span class="i">$self</span>-&gt;{<span class="q">&#39;-paragraphs&#39;</span>} }<span class="cm">,</span> <span class="i">$pod_para</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li><a name="textblock"></a>    sub <span class="m">textblock</span> <span class="s">{</span> </li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$parser</span><span class="cm">,</span> <span class="i">$paragraph</span><span class="cm">,</span> <span class="i">$line_num</span><span class="cm">,</span> <span class="i">$pod_para</span><span class="s">)</span> = <span class="i">@_</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$ptree</span> = <span class="i">$parser</span><span class="i">-&gt;parse_text</span><span class="s">(</span><span class="s">{</span><span class="i">%options</span><span class="s">}</span><span class="cm">,</span> <span class="i">$paragraph</span><span class="cm">,</span> ...<span class="s">)</span><span class="sc">;</span></li><li>        <span class="i">$pod_para</span><span class="i">-&gt;parse_tree</span><span class="s">(</span> <span class="i">$ptree</span> <span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/push.html">push</a> <span class="i">@</span>{ <span class="i">$self</span>-&gt;{<span class="q">&#39;-paragraphs&#39;</span>} }<span class="cm">,</span> <span class="i">$pod_para</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    ...</li><li></li><li><a name="package-main"></a>    package <span class="i">main</span><span class="sc">;</span></li><li>    ...</li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$parser</span> = <span class="w">new</span> <span class="i">MyPodParserTree</span><span class="s">(</span>...<span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$parser</span><span class="i">-&gt;parse_from_file</span><span class="s">(</span>...<span class="s">)</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$paragraphs_ref</span> = <span class="i">$parser</span>-&gt;{<span class="q">&#39;-paragraphs&#39;</span>}<span class="sc">;</span></li></ol></pre><p>Of course, in this module-author's humble opinion, I'd be more inclined to
+use the existing <b>Pod::ParseTree</b> object than a simple array. That way
+everything in it, paragraphs and sequences, all respond to the same core
+interface for all parse-tree nodes. The result would look something like:</p>
+<pre class="verbatim"><ol><li>    package MyPodParserTree2;</li><li></li><li>    ...</li><li></li><li>    sub begin_pod {</li><li>        my $self = shift;</li><li>        $self-&gt;{'-ptree'} = new Pod::ParseTree;  ## initialize parse-tree</li><li>    }</li><li></li><li>    sub parse_tree {</li><li>        ## convenience method to get/set the parse-tree for the entire POD</li><li>        (@_ &gt; 1)  and  $_[0]-&gt;{'-ptree'} = $_[1];</li><li>        return $_[0]-&gt;{'-ptree'};</li><li>    }</li><li></li><li>    sub command { </li><li>        my ($parser, $command, $paragraph, $line_num, $pod_para) = @_;</li><li>        my $ptree = $parser-&gt;parse_text({&lt;&lt;options&gt;&gt;}, $paragraph, ...);</li><li>        $pod_para-&gt;parse_tree( $ptree );</li><li>        $parser-&gt;parse_tree()-&gt;append( $pod_para );</li><li>    }</li><li></li><li>    sub verbatim { </li><li>        my ($parser, $paragraph, $line_num, $pod_para) = @_;</li><li>        $parser-&gt;parse_tree()-&gt;append( $pod_para );</li><li>    }</li><li></li><li>    sub textblock { </li><li>        my ($parser, $paragraph, $line_num, $pod_para) = @_;</li><li>        my $ptree = $parser-&gt;parse_text({&lt;&lt;options&gt;&gt;}, $paragraph, ...);</li><li>        $pod_para-&gt;parse_tree( $ptree );</li><li>        $parser-&gt;parse_tree()-&gt;append( $pod_para );</li><li>    }</li><li></li><li>    ...</li><li></li><li>    package main;</li><li>    ...</li><li>    my $parser = new MyPodParserTree2(...);</li><li>    $parser-&gt;parse_from_file(...);</li><li>    my $ptree = $parser-&gt;parse_tree;</li><li>    ...</li></ol></pre><p>Now you have the entire POD document as one great big parse-tree. You
+can even use the <b>-expand_seq</b> option to <b>parse_text</b> to insert
+whole different kinds of objects. Just don't expect <b>Pod::Parser</b>
+to know what to do with them after that. That will need to be in your
+code. Or, alternatively, you can insert any object you like so long as
+it conforms to the <b>Pod::ParseTree</b> interface.</p>
+<p>One could use this to create subclasses of <b>Pod::Paragraphs</b> and
+<b>Pod::InteriorSequences</b> for specific commands (or to create your own
+custom node-types in the parse-tree) and add some kind of <b>emit()</b>
+method to each custom node/subclass object in the tree. Then all you'd
+need to do is recursively walk the tree in the desired order, processing
+the children (most likely from left to right) by formatting them if
+they are text-strings, or by calling their <b>emit()</b> method if they
+are objects/references.</p>
+<a name="CAVEATS"></a><h1>CAVEATS</h1>
+<p>Please note that POD has the notion of "paragraphs": this is something
+starting <i>after</i> a blank (read: empty) line, with the single exception
+of the file start, which is also starting a paragraph. That means that
+especially a command (e.g. <code class="inline"><span class="pd">=head1</span></code>
+) <i>must</i> be preceded with a blank
+line; <code class="inline"><a name="__END__"></a>__END__</code>
+ is <i>not</i> a blank line.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../Pod/InputObjects.html">Pod::InputObjects</a>, <a href="../Pod/Select.html">Pod::Select</a></p>
+<p><b>Pod::InputObjects</b> defines POD input objects corresponding to
+command paragraphs, parse-trees, and interior-sequences.</p>
+<p><b>Pod::Select</b> is a subclass of <b>Pod::Parser</b> which provides the ability
+to selectively include and/or exclude sections of a POD document from being
+translated based upon the current heading, subheading, subsubheading, etc.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Please report bugs using <a href="http://rt.cpan.org">http://rt.cpan.org</a>.</p>
+<p>Brad Appleton &lt;bradapp@enteract.com&gt;</p>
+<p>Based on code for <b>Pod::Text</b> written by
+Tom Christiansen &lt;tchrist@mox.perl.com&gt;</p>
+<a name="LICENSE"></a><h1>LICENSE</h1>
+<p>Pod-Parser is free software; you can redistribute it and/or modify it
+under the terms of the Artistic License distributed with Perl version
+5.000 or (at your option) any later version. Please refer to the
+Artistic License that came with your Perl distribution for more
+details. If your version of Perl was not distributed under the
+terms of the Artistic License, than you may distribute PodParser
+under the same terms as Perl itself.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#REQUIRES">REQUIRES</a><li><a href="#EXPORTS">EXPORTS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#QUICK-OVERVIEW">QUICK OVERVIEW</a><li><a href="#PARSING-OPTIONS">PARSING OPTIONS</a><li><a href="#RECOMMENDED-SUBROUTINE%2fMETHOD-OVERRIDES">RECOMMENDED SUBROUTINE/METHOD OVERRIDES</a><li><a href="#*command()*">*command()*</a><li><a href="#*verbatim()*">*verbatim()*</a><li><a href="#*textblock()*">*textblock()*</a><li><a href="#*interior_sequence()*">*interior_sequence()*</a><li><a href="#OPTIONAL-SUBROUTINE%2fMETHOD-OVERRIDES">OPTIONAL SUBROUTINE/METHOD OVERRIDES</a><li><a href="#*new()*">*new()*</a><li><a href="#*initialize()*">*initialize()*</a><li><a href="#*begin_pod()*">*begin_pod()*</a><li><a href="#*begin_input()*">*begin_input()*</a><li><a href="#*end_input()*">*end_input()*</a><li><a href="#*end_pod()*">*end_pod()*</a><li><a href="#*preprocess_line()*">*preprocess_line()*</a><li><a href="#*preprocess_paragraph()*">*preprocess_paragraph()*</a><li><a href="#METHODS-FOR-PARSING-AND-PROCESSING">METHODS FOR PARSING AND PROCESSING</a><li><a href="#*parse_text()*">*parse_text()*</a><li><a href="#*interpolate()*">*interpolate()*</a><li><a href="#*parse_from_filehandle()*">*parse_from_filehandle()*</a><li><a href="#*parse_from_file()*">*parse_from_file()*</a><li><a href="#ACCESSOR-METHODS">ACCESSOR METHODS</a><li><a href="#*errorsub()*">*errorsub()*</a><li><a href="#*cutting()*">*cutting()*</a><li><a href="#*parseopts()*">*parseopts()*</a><li><a href="#*output_file()*">*output_file()*</a><li><a href="#*output_handle()*">*output_handle()*</a><li><a href="#*input_file()*">*input_file()*</a><li><a href="#*input_handle()*">*input_handle()*</a><li><a href="#PRIVATE-METHODS-AND-DATA">PRIVATE METHODS AND DATA</a><li><a href="#TREE-BASED-PARSING">TREE-BASED PARSING</a><li><a href="#CAVEATS">CAVEATS</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#LICENSE">LICENSE</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Pod::Parser';
+  perldoc.pageAddress = 'Pod/Parser.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

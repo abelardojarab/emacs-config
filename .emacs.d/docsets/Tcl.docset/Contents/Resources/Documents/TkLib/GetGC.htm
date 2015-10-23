@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetGC manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetGC</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetGC, Tk_FreeGC &mdash; maintain database of read-only graphics contexts
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+GC<BR>
+<B>Tk_GetGC</B>(<I>tkwin, valueMask, valuePtr</I>)<BR>
+<B>Tk_FreeGC(</B><I>display, gc</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TkLib/WindowId.htm">Tk_Window</A> <B>tkwin</B> (in)<DD>
+Token for window in which the graphics context will be used.
+<P><DT>unsigned long <B>valueMask</B> (in)<DD>
+Mask of bits (such as <B>GCForeground</B> or <B>GCStipple</B>)
+indicating which fields of <I>*valuePtr</I> are valid.
+<P><DT>XGCValues <B>*valuePtr</B> (in)<DD>
+Pointer to structure describing the desired values for the
+graphics context.
+<P><DT>Display <B>*display</B> (in)<DD>
+Display for which <I>gc</I> was allocated.
+<P><DT>GC <B>gc</B> (in)<DD>
+X identifier for graphics context that is no longer needed.
+Must have been allocated by <B>Tk_GetGC</B>.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetGC</B> and <B>Tk_FreeGC</B> manage a collection of graphics contexts
+being used by an application.  The procedures allow graphics contexts to be
+shared, thereby avoiding the server overhead that would be incurred
+if a separate GC were created for each use.  <B>Tk_GetGC</B> takes arguments
+describing the desired graphics context and returns an X identifier
+for a GC that fits the description.  The graphics context that is returned
+will have default values in all of the fields not specified explicitly
+by <I>valueMask</I> and <I>valuePtr</I>.
+<P>
+<B>Tk_GetGC</B> maintains a
+database of all the graphics contexts it has created.  Whenever possible,
+a call to <B>Tk_GetGC</B> will
+return an existing graphics context rather than creating a new one.  This
+approach can substantially reduce server overhead, so <B>Tk_GetGC</B>
+should generally be used in preference to the Xlib procedure
+<B>XCreateGC</B>, which creates a new graphics context on each call.
+<P>
+Since the return values of <B>Tk_GetGC</B>
+are shared, callers should never modify the graphics contexts
+returned by <B>Tk_GetGC</B>.
+If a graphics context must be modified dynamically, then it should be
+created by calling <B>XCreateGC</B> instead of <B>Tk_GetGC</B>.
+<P>
+When a graphics context
+is no longer needed, <B>Tk_FreeGC</B> should be called to release it.
+There should be exactly one call to <B>Tk_FreeGC</B> for
+each call to <B>Tk_GetGC</B>.
+When a graphics context is no longer in use anywhere (i.e. it has
+been freed as many times as it has been gotten) <B>Tk_FreeGC</B>
+will release it to the X server and delete it from the database.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/G.htm#graphics context">graphics context</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

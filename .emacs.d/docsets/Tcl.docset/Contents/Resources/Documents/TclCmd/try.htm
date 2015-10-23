@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>try manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl Commands, version 8.6.0</a> <small>&gt;</small> try</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+try &mdash; Trap and process errors and exceptions
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>try</B><I> body</I> ?<I>handler...</I>? ?<B>finally</B><I> script</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+This command executes the script <I>body</I> and, depending on what the outcome
+of that script is (normal exit, error, or some other exceptional result), runs
+a handler script to deal with the case. Once that has all happened, if the
+<B>finally</B> clause is present, the <I>script</I> it includes will be run and
+the result of the handler (or the <I>body</I> if no handler matched) is allowed
+to continue to propagate. Note that the <B>finally</B> clause is processed even
+if an error occurs and irrespective of which, if any, <I>handler</I> is used.
+<P>
+The <I>handler</I> clauses are each expressed as several words, and must have
+one of the following forms:
+<P>
+<DL class="description">
+<DT><A NAME="M5"><B>on </B><I>code variableList script</I></A><DD>
+This clause matches if the evaluation of <I>body</I> completed with the
+exception code <I>code</I>. The <I>code</I> may be expressed as an integer or
+one of the following literal words: <B>ok</B>, <B><A HREF="../TclCmd/error.htm">error</A></B>, <B><A HREF="../TclCmd/return.htm">return</A></B>,
+<B><A HREF="../TclCmd/break.htm">break</A></B>, or <B><A HREF="../TclCmd/continue.htm">continue</A></B>. Those literals correspond to the integers 0
+through 4 respectively.
+<P><DT><A NAME="M6"><B>trap </B><I>pattern variableList script</I></A><DD>
+This clause matches if the evaluation of <I>body</I> resulted in an error and
+the prefix of the <B>-errorcode</B> from the interpreter's status dictionary
+is equal to the <I>pattern</I>. The number of prefix words taken from the
+<B>-errorcode</B> is equal to the list-length of <I>pattern</I>, and inter-word
+spaces are normalized in both the <B>-errorcode</B> and <I>pattern</I> before
+comparison.
+<P></DL>
+<P>
+The <I>variableList</I> word in each <I>handler</I> is always interpreted as a
+list of variable names. If the first word of the list is present and
+non-empty, it names a variable into which the result of the evaluation of
+<I>body</I> (from the main <B>try</B>) will be placed; this will contain the
+human-readable form of any errors. If the second word of the list is present
+and non-empty, it names a variable into which the options dictionary of the
+interpreter at the moment of completion of execution of <I>body</I>
+will be placed.
+<P>
+The <I>script</I> word of each <I>handler</I> is also always interpreted the
+same: as a Tcl script to evaluate if the clause is matched. If <I>script</I> is
+a literal
+&#8220;-&#8221;
+and the <I>handler</I> is not the last one, the <I>script</I> of the following
+<I>handler</I> is invoked instead (just like with the <B><A HREF="../TclCmd/switch.htm">switch</A></B> command).
+<P>
+Note that <I>handler</I> clauses are matched against in order, and that the
+first matching one is always selected. At most one <I>handler</I> clause will
+selected. As a consequence, an <B>on error</B> will mask any subsequent
+<B>trap</B> in the <B>try</B>. Also note that <B>on error</B> is equivalent to
+<B>trap {}</B>.
+<P>
+If an exception (i.e. any non-<B>ok</B> result) occurs during the evaluation of
+either the <I>handler</I> or the <B>finally</B> clause, the original exception's
+status dictionary will be added to the new exception's status dictionary under
+the <B>-during</B> key.
+<H3><A NAME="M7">EXAMPLES</A></H3>
+Ensure that a file is closed no matter what:
+<P>
+<PRE>set f [open /some/file/name a]
+<B>try</B> {
+    puts $f &quot;some message&quot;
+    # ...
+} <B>finally</B> {
+    close $f
+}</PRE>
+<P>
+Handle different reasons for a file to not be openable for reading:
+<P>
+<PRE><B>try</B> {
+    set f [open /some/file/name]
+} <B>trap</B> {POSIX EISDIR} {} {
+    puts &quot;failed to open /some/file/name: it's a directory&quot;
+} <B>trap</B> {POSIX ENOENT} {} {
+    puts &quot;failed to open /some/file/name: it doesn't exist&quot;
+}</PRE>
+<H3><A NAME="M8">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/catch.htm">catch</A></B>, <B><A HREF="../TclCmd/error.htm">error</A></B>, <B><A HREF="../TclCmd/return.htm">return</A></B>, <B><A HREF="../TclCmd/throw.htm">throw</A></B>
+<H3><A NAME="M9">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#cleanup">cleanup</A>, <A href="../Keywords/E.htm#error">error</A>, <A href="../Keywords/E.htm#exception">exception</A>, <A href="../Keywords/F.htm#final">final</A>, <A href="../Keywords/R.htm#resource management">resource management</A>
+<div class="copy">Copyright &copy; 2008 Donal K. Fellows
+</div>
+</BODY></HTML>

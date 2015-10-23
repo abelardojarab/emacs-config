@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetReliefFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetRelief</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetRelief.htm#M2" NAME="L361">NAME</A>
+<DL><DD>Tk_GetReliefFromObj, Tk_GetRelief, Tk_NameOfRelief &mdash; translate between strings and relief values</DD></DL>
+<DD><A HREF="GetRelief.htm#M3" NAME="L362">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetReliefFromObj(</B><I>interp, objPtr, reliefPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetRelief(</B><I>interp, name, reliefPtr</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfRelief(</B><I>relief</I><B>)</B>
+</DL>
+<DD><A HREF="GetRelief.htm#M4" NAME="L363">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetRelief.htm#M5" NAME="L364">DESCRIPTION</A>
+<DD><A HREF="GetRelief.htm#M6" NAME="L365">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetReliefFromObj, Tk_GetRelief, Tk_NameOfRelief &mdash; translate between strings and relief values
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_GetReliefFromObj(</B><I>interp, objPtr, reliefPtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_GetRelief(</B><I>interp, name, reliefPtr</I><B>)</B><BR>
+const char *<BR>
+<B>Tk_NameOfRelief(</B><I>relief</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*objPtr</B> (in/out)<DD>
+String value contains name of relief, one of
+&#8220;<B>flat</B>&#8221;,
+&#8220;<B>groove</B>&#8221;,
+&#8220;<B>raised</B>&#8221;,
+&#8220;<B>ridge</B>&#8221;,
+&#8220;<B>solid</B>&#8221;,
+or
+&#8220;<B>sunken</B>&#8221;
+(or any unique abbreviation thereof on input);
+the internal rep will be modified to cache corresponding relief value.
+<P><DT>char <B>*string</B> (in)<DD>
+Same as <I>objPtr</I> except description of relief is passed as
+a string.
+<P><DT>int <B>*reliefPtr</B> (out)<DD>
+Pointer to location in which to store relief value corresponding to
+<I>objPtr</I> or <I>name</I>.
+<P><DT>const char <B>*name</B> ()<DD>
+Name of the relief.
+<P><DT>int <B>relief</B> (in)<DD>
+Relief value (one of <B>TK_RELIEF_FLAT</B>, <B>TK_RELIEF_RAISED</B>,
+<B>TK_RELIEF_SUNKEN</B>, <B>TK_RELIEF_GROOVE</B>, <B>TK_RELIEF_SOLID</B>,
+or <B>TK_RELIEF_RIDGE</B>).
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetReliefFromObj</B> places in <I>*reliefPtr</I> the relief value
+corresponding to the value of <I>objPtr</I>.  This value will be one of
+<B>TK_RELIEF_FLAT</B>, <B>TK_RELIEF_RAISED</B>, <B>TK_RELIEF_SUNKEN</B>,
+<B>TK_RELIEF_GROOVE</B>, <B>TK_RELIEF_SOLID</B>, or <B>TK_RELIEF_RIDGE</B>.
+Under normal circumstances the return value is <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> and
+<I>interp</I> is unused.
+If <I>objPtr</I> does not contain one of the valid relief names
+or an abbreviation of one of them, then <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned,
+<I>*reliefPtr</I> is unmodified, and an error message
+is stored in <I>interp</I>'s result if <I>interp</I> is not NULL.
+<B>Tk_GetReliefFromObj</B> caches information about the return
+value in <I>objPtr</I>, which speeds up future calls to
+<B>Tk_GetReliefFromObj</B> with the same <I>objPtr</I>.
+<P>
+<B>Tk_GetRelief</B> is identical to <B>Tk_GetReliefFromObj</B> except
+that the description of the relief is specified with a string instead
+of an object.  This prevents <B>Tk_GetRelief</B> from caching the
+return value, so <B>Tk_GetRelief</B> is less efficient than
+<B>Tk_GetReliefFromObj</B>.
+<P>
+<B>Tk_NameOfRelief</B> is the logical inverse of <B>Tk_GetRelief</B>.
+Given a relief value it returns the corresponding string (<B>flat</B>,
+<B>raised</B>, <B>sunken</B>, <B>groove</B>, <B>solid</B>, or <B>ridge</B>).
+If <I>relief</I> is not a legal relief value, then
+&#8220;unknown relief&#8221;
+is returned.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/N.htm#name">name</A>, <A href="../Keywords/R.htm#relief">relief</A>, <A href="../Keywords/S.htm#string">string</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

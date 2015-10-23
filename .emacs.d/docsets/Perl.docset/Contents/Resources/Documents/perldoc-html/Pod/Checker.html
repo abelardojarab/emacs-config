@@ -1,0 +1,875 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Pod::Checker</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Pod::Checker</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-P.html">Core modules (P)</a> &gt;
+      
+    
+    Pod::Checker
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Pod::Checker</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#OPTIONS%2fARGUMENTS">OPTIONS/ARGUMENTS</a><ul><li><a href="#podchecker()">podchecker()</a></ul><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#DIAGNOSTICS">DIAGNOSTICS</a><ul><li><a href="#Errors">Errors</a><li><a href="#Warnings">Warnings</a><li><a href="#Hyperlinks">Hyperlinks</a></ul><li><a href="#RETURN-VALUE">RETURN VALUE</a><li><a href="#EXAMPLES">EXAMPLES</a><li><a href="#INTERFACE">INTERFACE</a><li><a href="#AUTHOR">AUTHOR</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Pod::Checker, podchecker() - check pod documents for syntax errors</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Pod::Checker</span><span class="sc">;</span></li><li></li><li>  <span class="i">$num_errors</span> = <span class="i">podchecker</span><span class="s">(</span><span class="i">$filepath</span><span class="cm">,</span> <span class="i">$outputpath</span><span class="cm">,</span> <span class="i">%options</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$checker</span> = <span class="w">new</span> <span class="w">Pod::Checker</span> <span class="i">%options</span><span class="sc">;</span></li><li>  <span class="i">$checker</span><span class="i">-&gt;parse_from_file</span><span class="s">(</span><span class="i">$filepath</span><span class="cm">,</span> \<span class="i">*STDERR</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="OPTIONS%2fARGUMENTS"></a><h1>OPTIONS/ARGUMENTS</h1>
+<p><code class="inline"><span class="i">$filepath</span></code>
+ is the input POD to read and <code class="inline"><span class="i">$outputpath</span></code>
+ is
+where to write POD syntax error messages. Either argument may be a scalar
+indicating a file-path, or else a reference to an open filehandle.
+If unspecified, the input-file it defaults to <code class="inline">\<span class="i">*STDIN</span></code>
+, and
+the output-file defaults to <code class="inline">\<span class="i">*STDERR</span></code>
+.</p>
+<a name="podchecker()"></a><h2>podchecker()</h2>
+<p>This function can take a hash of options:</p>
+<ul>
+<li><a name="*-warnings*-%3d%3e-_val_"></a><b><b>-warnings</b> =&gt; <i>val</i></b>
+<p>Turn warnings on/off. <i>val</i> is usually 1 for on, but higher values
+trigger additional warnings. See <a href="#Warnings">Warnings</a>.</p>
+</li>
+</ul>
+<a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p><b>podchecker</b> will perform syntax checking of Perl5 POD format documentation.</p>
+<p>Curious/ambitious users are welcome to propose additional features they wish
+to see in <b>Pod::Checker</b> and <b>podchecker</b> and verify that the checks are
+consistent with <a href="../perlpod.html">perlpod</a>.</p>
+<p>The following checks are currently performed:</p>
+<ul>
+<li>
+<p>Unknown '=xxxx' commands, unknown 'X&lt;...&gt;' interior-sequences,
+and unterminated interior sequences.</p>
+</li>
+<li>
+<p>Check for proper balancing of <code class="inline"><span class="pd">=begin</span></code>
+ and <code class="inline"><span class="pd">=end</span></code>
+. The contents of such
+a block are generally ignored, i.e. no syntax checks are performed.</p>
+</li>
+<li>
+<p>Check for proper nesting and balancing of <code class="inline"><span class="pd">=over</span></code>
+, <code class="inline"><span class="pd">=item</span></code>
+ and <code class="inline"><span class="pd">=back</span></code>
+.</p>
+</li>
+<li>
+<p>Check for same nested interior-sequences (e.g.
+<code class="inline">L&lt;...L&lt;...&gt;...&gt;</code>).</p>
+</li>
+<li>
+<p>Check for malformed or non-existing entities <code class="inline"><span class="w">E</span><span class="q">&lt;...&gt;</span></code>
+.</p>
+</li>
+<li>
+<p>Check for correct syntax of hyperlinks <code class="inline"><span class="w">L</span><span class="q">&lt;...&gt;</span></code>
+. See <a href="../perlpod.html">perlpod</a>
+for details.</p>
+</li>
+<li>
+<p>Check for unresolved document-internal links. This check may also reveal
+misspelled links that seem to be internal links but should be links
+to something else.</p>
+</li>
+</ul>
+<a name="DIAGNOSTICS"></a><h1>DIAGNOSTICS</h1>
+<a name="Errors"></a><h2>Errors</h2>
+<ul>
+<li><a name="*-empty-%3dheadn"></a><b>empty =headn</b>
+<p>A heading (<code class="inline"><span class="pd">=head1</span></code>
+ or <code class="inline"><span class="pd">=head2</span></code>
+) without any text? That ain't no
+heading!</p>
+</li>
+<li><a name="*-%3dover-on-line-_N_-without-closing-%3dback"></a><b>=over on line <i>N</i> without closing =back</b>
+<p>The <code class="inline"><span class="pd">=over</span></code>
+ command does not have a corresponding <code class="inline"><span class="pd">=back</span></code>
+ before the
+next heading (<code class="inline"><span class="pd">=head1</span></code>
+ or <code class="inline"><span class="pd">=head2</span></code>
+) or the end of the file.</p>
+</li>
+<li><a name="*-%3ditem-without-previous-%3dover"></a><b>=item without previous =over</b>
+</li>
+<li><a name="*-%3dback-without-previous-%3dover"></a><b>=back without previous =over</b>
+<p>An <code class="inline"><span class="pd">=item</span></code>
+ or <code class="inline"><span class="pd">=back</span></code>
+ command has been found outside a
+<code class="inline"><span class="pd">=over</span></code>
+/<code class="inline"><span class="pd">=back</span></code>
+ block.</p>
+</li>
+<li><a name="*-No-argument-for-%3dbegin"></a><b>No argument for =begin</b>
+<p>A <code class="inline"><span class="pd">=begin</span></code>
+ command was found that is not followed by the formatter
+specification.</p>
+</li>
+<li><a name="*-%3dend-without-%3dbegin"></a><b>=end without =begin</b>
+<p>A standalone <code class="inline"><span class="pd">=end</span></code>
+ command was found.</p>
+</li>
+<li><a name="*-Nested-%3dbegin's"></a><b>Nested =begin's</b>
+<p>There were at least two consecutive <code class="inline"><span class="pd">=begin</span></code>
+ commands without
+the corresponding <code class="inline"><span class="pd">=end</span></code>
+. Only one <code class="inline"><span class="pd">=begin</span></code>
+ may be active at
+a time.</p>
+</li>
+<li><a name="*-%3dfor-without-formatter-specification"></a><b>=for without formatter specification</b>
+<p>There is no specification of the formatter after the <code class="inline"><span class="pd">=for</span></code>
+ command.</p>
+</li>
+<li><a name="*-Apparent-command-%3dfoo-not-preceded-by-blank-line"></a><b>Apparent command =foo not preceded by blank line</b>
+<p>A command which has ended up in the middle of a paragraph or other command,
+such as</p>
+<pre class="verbatim"><ol><li>  =<span class="w">item</span> <span class="w">one</span></li><li>  =<span class="w">item</span> <span class="w">two</span> &lt;-- <span class="w">bad</span></li></ol></pre></li>
+<li><a name="*-unresolved-internal-link-_NAME_"></a><b>unresolved internal link <i>NAME</i></b>
+<p>The given link to <i>NAME</i> does not have a matching node in the current
+POD. This also happened when a single word node name is not enclosed in
+<code class="inline"><span class="q">&quot;&quot;</span></code>
+.</p>
+</li>
+<li><a name="*-Unknown-command-%22_CMD_%22"></a><b>Unknown command "<i>CMD</i>"</b>
+<p>An invalid POD command has been found. Valid are <code class="inline"><span class="pd">=head1</span></code>
+, <code class="inline"><span class="pd">=head2</span></code>
+,
+<code class="inline"><span class="pd">=head3</span></code>
+, <code class="inline"><span class="pd">=head4</span></code>
+, <code class="inline"><span class="pd">=over</span></code>
+, <code class="inline"><span class="pd">=item</span></code>
+, <code class="inline"><span class="pd">=back</span></code>
+, <code class="inline"><span class="pd">=begin</span></code>
+, <code class="inline"><span class="pd">=end</span></code>
+,
+<code class="inline"><span class="pd">=for</span></code>
+, <code class="inline"><span class="pd">=pod</span></code>
+, <code class="inline"><span class="pd">=cut</span></code>
+</p>
+</li>
+<li><a name="*-Unknown-interior-sequence-%22_SEQ_%22"></a><b>Unknown interior-sequence "<i>SEQ</i>"</b>
+<p>An invalid markup command has been encountered. Valid are:
+<code class="inline"><span class="w">B</span>&lt;&gt;</code>
+, <code class="inline"><span class="w">C</span>&lt;&gt;</code>
+, <code class="inline"><span class="w">E</span>&lt;&gt;</code>
+, <code class="inline"><span class="w">F</span>&lt;&gt;</code>
+,
+<code class="inline"><span class="w">I</span>&lt;&gt;</code>
+, <code class="inline"><span class="w">L</span>&lt;&gt;</code>
+, <code class="inline"><span class="w">S</span>&lt;&gt;</code>
+, <code class="inline"><span class="w">X</span>&lt;&gt;</code>
+,
+<code class="inline"><span class="w">Z</span>&lt;&gt;</code>
+</p>
+</li>
+<li><a name="*-nested-commands-_CMD_%3c..._CMD_%3c...%3e...%3e"></a><b>nested commands <i>CMD</i>&lt;...<i>CMD</i>&lt;...&gt;...&gt;</b>
+<p>Two nested identical markup commands have been found. Generally this
+does not make sense.</p>
+</li>
+<li><a name="*-garbled-entity-_STRING_"></a><b>garbled entity <i>STRING</i></b>
+<p>The <i>STRING</i> found cannot be interpreted as a character entity.</p>
+</li>
+<li><a name="*-Entity-number-out-of-range"></a><b>Entity number out of range</b>
+<p>An entity specified by number (dec, hex, oct) is out of range (1-255).</p>
+</li>
+<li><a name="*-malformed-link-L%3c%3e"></a><b>malformed link L&lt;&gt;</b>
+<p>The link found cannot be parsed because it does not conform to the
+syntax described in <a href="../perlpod.html">perlpod</a>.</p>
+</li>
+<li><a name="*-nonempty-Z%3c%3e"></a><b>nonempty Z&lt;&gt;</b>
+<p>The <code class="inline"><span class="w">Z</span>&lt;&gt;</code>
+ sequence is supposed to be empty.</p>
+</li>
+<li><a name="*-empty-X%3c%3e"></a><b>empty X&lt;&gt;</b>
+<p>The index entry specified contains nothing but whitespace.</p>
+</li>
+<li><a name="*-Spurious-text-after-%3dpod-%2f-%3dcut"></a><b>Spurious text after =pod / =cut</b>
+<p>The commands <code class="inline"><span class="pd">=pod</span></code>
+ and <code class="inline"><span class="pd">=cut</span></code>
+ do not take any arguments.</p>
+</li>
+<li><a name="*-Spurious-%3dcut-command"></a><b>Spurious =cut command</b>
+<p>A <code class="inline"><span class="pd">=cut</span></code>
+ command was found without a preceding POD paragraph.</p>
+</li>
+<li><a name="*-Spurious-%3dpod-command"></a><b>Spurious =pod command</b>
+<p>A <code class="inline"><span class="pd">=pod</span></code>
+ command was found after a preceding POD paragraph.</p>
+</li>
+<li><a name="*-Spurious-character(s)-after-%3dback"></a><b>Spurious character(s) after =back</b>
+<p>The <code class="inline"><span class="pd">=back</span></code>
+ command does not take any arguments.</p>
+</li>
+</ul>
+<a name="Warnings"></a><h2>Warnings</h2>
+<p>These may not necessarily cause trouble, but indicate mediocre style.</p>
+<ul>
+<li><a name="*-multiple-occurrence-of-link-target-_name_"></a><b>multiple occurrence of link target <i>name</i></b>
+<p>The POD file has some <code class="inline"><span class="pd">=item</span></code>
+ and/or <code class="inline"><span class="pd">=head</span></code>
+ commands that have
+the same text. Potential hyperlinks to such a text cannot be unique then.
+This warning is printed only with warning level greater than one.</p>
+</li>
+<li><a name="*-line-containing-nothing-but-whitespace-in-paragraph"></a><b>line containing nothing but whitespace in paragraph</b>
+<p>There is some whitespace on a seemingly empty line. POD is very sensitive
+to such things, so this is flagged. <b>vi</b> users switch on the <b>list</b>
+option to avoid this problem.</p>
+</li>
+<li><a name="*-previous-%3ditem-has-no-contents"></a><b>previous =item has no contents</b>
+<p>There is a list <code class="inline"><span class="pd">=item</span></code>
+ right above the flagged line that has no
+text contents. You probably want to delete empty items.</p>
+</li>
+<li><a name="*-preceding-non-item-paragraph(s)"></a><b>preceding non-item paragraph(s)</b>
+<p>A list introduced by <code class="inline"><span class="pd">=over</span></code>
+ starts with a text or verbatim paragraph,
+but continues with <code class="inline"><span class="pd">=item</span></code>
+s. Move the non-item paragraph out of the
+<code class="inline"><span class="pd">=over</span></code>
+/<code class="inline"><span class="pd">=back</span></code>
+ block.</p>
+</li>
+<li><a name="*-%3ditem-type-mismatch-(_one_-vs.-_two_)"></a><b>=item type mismatch (<i>one</i> vs. <i>two</i>)</b>
+<p>A list started with e.g. a bullet-like <code class="inline"><span class="pd">=item</span></code>
+ and continued with a
+numbered one. This is obviously inconsistent. For most translators the
+type of the <i>first</i> <code class="inline"><span class="pd">=item</span></code>
+ determines the type of the list.</p>
+</li>
+<li><a name="*-_N_-unescaped-%3c%3e-in-paragraph"></a><b><i>N</i> unescaped <code class="inline">&lt;&gt;</code>
+ in paragraph</b>
+<p>Angle brackets not written as <code class="inline"><span class="q">&lt;lt&gt;</span></code>
+ and <code class="inline"><span class="q">&lt;gt&gt;</span></code>
+
+can potentially cause errors as they could be misinterpreted as
+markup commands. This is only printed when the -warnings level is
+greater than 1.</p>
+</li>
+<li><a name="*-Unknown-entity"></a><b>Unknown entity</b>
+<p>A character entity was found that does not belong to the standard
+ISO set or the POD specials <code class="inline"><span class="w">verbar</span></code>
+ and <code class="inline"><span class="w">sol</span></code>
+.</p>
+</li>
+<li><a name="*-No-items-in-%3dover"></a><b>No items in =over</b>
+<p>The list opened with <code class="inline"><span class="pd">=over</span></code>
+ does not contain any items.</p>
+</li>
+<li><a name="*-No-argument-for-%3ditem"></a><b>No argument for =item</b>
+<p><code class="inline"><span class="pd">=item</span></code>
+ without any parameters is deprecated. It should either be followed
+by <code class="inline"><span class="i">*</span></code>
+ to indicate an unordered list, by a number (optionally followed
+by a dot) to indicate an ordered (numbered) list or simple text for a
+definition list.</p>
+</li>
+<li><a name="*-empty-section-in-previous-paragraph"></a><b>empty section in previous paragraph</b>
+<p>The previous section (introduced by a <code class="inline"><span class="pd">=head</span></code>
+ command) does not contain
+any text. This usually indicates that something is missing. Note: A
+<code class="inline"><span class="pd">=head1</span></code>
+ followed immediately by <code class="inline"><span class="pd">=head2</span></code>
+ does not trigger this warning.</p>
+</li>
+<li><a name="*-Verbatim-paragraph-in-NAME-section"></a><b>Verbatim paragraph in NAME section</b>
+<p>The NAME section (<code class="inline"><span class="pd">=head1 NAME</span></code>
+) should consist of a single paragraph
+with the script/module name, followed by a dash `-' and a very short
+description of what the thing is good for.</p>
+</li>
+<li><a name="*-%3dhead_n_-without-preceding-higher-level"></a><b>=head<i>n</i> without preceding higher level</b>
+<p>For example if there is a <code class="inline"><span class="pd">=head2</span></code>
+ in the POD file prior to a
+<code class="inline"><span class="pd">=head1</span></code>
+.</p>
+</li>
+</ul>
+<a name="Hyperlinks"></a><h2>Hyperlinks</h2>
+<p>There are some warnings with respect to malformed hyperlinks:</p>
+<ul>
+<li><a name="*-ignoring-leading%2ftrailing-whitespace-in-link"></a><b>ignoring leading/trailing whitespace in link</b>
+<p>There is whitespace at the beginning or the end of the contents of
+L&lt;...&gt;.</p>
+</li>
+<li><a name="*-(section)-in-'%24page'-deprecated"></a><b>(section) in '$page' deprecated</b>
+<p>There is a section detected in the page name of L&lt;...&gt;, e.g.
+<code class="inline"><span class="w">L</span><span class="q">&lt;passwd(2)&gt;</span></code>
+. POD hyperlinks may point to POD documents only.
+Please write <code class="inline"><span class="w">C</span><span class="q">&lt;passwd(2)&gt;</span></code>
+ instead. Some formatters are able
+to expand this to appropriate code. For links to (builtin) functions,
+please say <code class="inline"><span class="w">L</span><span class="q">&lt;perlfunc/mkdir&gt;</span></code>
+, without ().</p>
+</li>
+<li><a name="*-alternative-text%2fnode-'%25s'-contains-non-escaped-%7c-or-%2f"></a><b>alternative text/node '%s' contains non-escaped | or /</b>
+<p>The characters <code class="inline">|</code> and <code class="inline">/</code> are special in the L&lt;...&gt; context.
+Although the hyperlink parser does its best to determine which "/" is
+text and which is a delimiter in case of doubt, one ought to escape
+these literal characters like this:</p>
+<pre class="verbatim"><ol><li>  /     E&lt;sol&gt;</li><li>  |     E&lt;verbar&gt;</li></ol></pre></li>
+</ul>
+<a name="RETURN-VALUE"></a><h1>RETURN VALUE</h1>
+<p><b>podchecker</b> returns the number of POD syntax errors found or -1 if
+there were no POD commands at all found in the file.</p>
+<a name="EXAMPLES"></a><h1>EXAMPLES</h1>
+<p>See <a href="#SYNOPSIS">SYNOPSIS</a></p>
+<a name="INTERFACE"></a><h1>INTERFACE</h1>
+<p>While checking, this module collects document properties, e.g. the nodes
+for hyperlinks (<code class="inline"><span class="pd">=headX</span></code>
+, <code class="inline"><span class="pd">=item</span></code>
+) and index entries (<code class="inline"><span class="w">X</span>&lt;&gt;</code>
+).
+POD translators can use this feature to syntax-check and get the nodes in
+a first pass before actually starting to convert. This is expensive in terms
+of execution time, but allows for very robust conversions.</p>
+<p>Since PodParser-1.24 the <b>Pod::Checker</b> module uses only the <b>poderror</b>
+method to print errors and warnings. The summary output (e.g.
+"Pod syntax OK") has been dropped from the module and has been included in
+<b>podchecker</b> (the script). This allows users of <b>Pod::Checker</b> to
+control completely the output behavior. Users of <b>podchecker</b> (the script)
+get the well-known behavior.</p>
+<ul>
+<li><a name="Pod%3a%3aChecker-%3enew(-%25options-)"></a><b><code class="inline"><span class="w">Pod::Checker</span><span class="w">-&gt;new</span><span class="s">(</span> <span class="i">%options</span> <span class="s">)</span></code>
+</b>
+<p>Return a reference to a new Pod::Checker object that inherits from
+Pod::Parser and is used for calling the required methods later. The
+following options are recognized:</p>
+<p><code class="inline">-<span class="w">warnings</span> <span class="cm">=&gt;</span> <span class="w">num</span></code>
+
+  Print warnings if <code class="inline"><span class="w">num</span></code>
+ is true. The higher the value of <code class="inline"><span class="w">num</span></code>
+,
+the more warnings are printed. Currently there are only levels 1 and 2.</p>
+<p><code class="inline">-<span class="w">quiet</span> <span class="cm">=&gt;</span> <span class="w">num</span></code>
+
+  If <code class="inline"><span class="w">num</span></code>
+ is true, do not print any errors/warnings. This is useful
+when Pod::Checker is used to munge POD code into plain text from within
+POD formatters.</p>
+</li>
+<li><a name="%24checker-%3epoderror(-%40args-)"></a><b><code class="inline"><span class="i">$checker</span><span class="i">-&gt;poderror</span><span class="s">(</span> <span class="i">@args</span> <span class="s">)</span></code>
+</b>
+</li>
+<li><a name="%24checker-%3epoderror(-%7b%25opts%7d%2c-%40args-)"></a><b><code class="inline"><span class="i">$checker</span><span class="i">-&gt;poderror</span><span class="s">(</span> <span class="s">{</span><span class="i">%opts</span><span class="s">}</span><span class="cm">,</span> <span class="i">@args</span> <span class="s">)</span></code>
+</b>
+<p>Internal method for printing errors and warnings. If no options are
+given, simply prints "@_". The following options are recognized and used
+to form the output:</p>
+<pre class="verbatim"><ol><li>  -<span class="w">msg</span></li></ol></pre><p>A message to print prior to <code class="inline"><span class="i">@args</span></code>
+.</p>
+<pre class="verbatim"><ol><li>  -<span class="w">line</span></li></ol></pre><p>The line number the error occurred in.</p>
+<pre class="verbatim"><ol><li>  -<span class="w">file</span></li></ol></pre><p>The file (name) the error occurred in.</p>
+<pre class="verbatim"><ol><li>  -<span class="w">severity</span></li></ol></pre><p>The error level, should be 'WARNING' or 'ERROR'.</p>
+</li>
+<li><a name="%24checker-%3enum_errors()"></a><b><code class="inline"><span class="i">$checker</span><span class="i">-&gt;num_errors</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Set (if argument specified) and retrieve the number of errors found.</p>
+</li>
+<li><a name="%24checker-%3enum_warnings()"></a><b><code class="inline"><span class="i">$checker</span><span class="i">-&gt;num_warnings</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Set (if argument specified) and retrieve the number of warnings found.</p>
+</li>
+<li><a name="%24checker-%3ename()"></a><b><code class="inline"><span class="i">$checker</span><span class="i">-&gt;name</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Set (if argument specified) and retrieve the canonical name of POD as
+found in the <code class="inline"><span class="pd">=head1 NAME</span></code>
+ section.</p>
+</li>
+<li><a name="%24checker-%3enode()"></a><b><code class="inline"><span class="i">$checker</span><span class="i">-&gt;node</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Add (if argument specified) and retrieve the nodes (as defined by <code class="inline"><span class="pd">=headX</span></code>
+
+and <code class="inline"><span class="pd">=item</span></code>
+) of the current POD. The nodes are returned in the order of
+their occurrence. They consist of plain text, each piece of whitespace is
+collapsed to a single blank.</p>
+</li>
+<li><a name="%24checker-%3eidx()"></a><b><code class="inline"><span class="i">$checker</span><span class="i">-&gt;idx</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Add (if argument specified) and retrieve the index entries (as defined by
+<code class="inline"><span class="w">X</span>&lt;&gt;</code>
+) of the current POD. They consist of plain text, each piece
+of whitespace is collapsed to a single blank.</p>
+</li>
+<li><a name="%24checker-%3ehyperlink()"></a><b><code class="inline"><span class="i">$checker</span><span class="i">-&gt;hyperlink</span><span class="s">(</span><span class="s">)</span></code>
+</b>
+<p>Add (if argument specified) and retrieve the hyperlinks (as defined by
+<code class="inline"><span class="w">L</span>&lt;&gt;</code>
+) of the current POD. They consist of a 2-item array: line
+number and <code class="inline"><span class="w">Pod::Hyperlink</span></code>
+ object.</p>
+</li>
+</ul>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Please report bugs using <a href="http://rt.cpan.org">http://rt.cpan.org</a>.</p>
+<p>Brad Appleton &lt;bradapp@enteract.com&gt; (initial version),
+Marek Rouchal &lt;marekr@cpan.org&gt;</p>
+<p>Based on code for <b>Pod::Text::pod2text()</b> written by
+Tom Christiansen &lt;tchrist@mox.perl.com&gt;</p>
+<p><b>Pod::Checker</b> is part of the Pod-Checker distribution, and is based on
+<a href="../Pod/Parser.html">Pod::Parser</a>.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#OPTIONS%2fARGUMENTS">OPTIONS/ARGUMENTS</a><ul><li><a href="#podchecker()">podchecker()</a></ul><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#DIAGNOSTICS">DIAGNOSTICS</a><ul><li><a href="#Errors">Errors</a><li><a href="#Warnings">Warnings</a><li><a href="#Hyperlinks">Hyperlinks</a></ul><li><a href="#RETURN-VALUE">RETURN VALUE</a><li><a href="#EXAMPLES">EXAMPLES</a><li><a href="#INTERFACE">INTERFACE</a><li><a href="#AUTHOR">AUTHOR</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Pod::Checker';
+  perldoc.pageAddress = 'Pod/Checker.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

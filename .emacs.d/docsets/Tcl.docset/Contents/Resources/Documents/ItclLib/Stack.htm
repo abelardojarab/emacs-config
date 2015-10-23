@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Itcl_InitStack manual page - [incr Tcl] Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">[incr Tcl] Package C API, version 4.0.0</a> <small>&gt;</small> Stack</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Itcl_InitStack, Itcl_DeleteStack, Itcl_PushStack, Itcl_PopStack, Itcl_PeekStack, Itcl_GetStackValue, Itcl_GetStackSize &mdash; Manipulate an Itcl stack object.
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;itcl.h&gt;</B><BR>
+<BR>
+int<BR>
+<B>Itcl_InitStack</B>(<I>stack</I>)<BR>
+<BR>
+int<BR>
+<B>Itcl_DeleteStack</B>(<I>stack</I>)<BR>
+<BR>
+int<BR>
+<B>Itcl_PushStack</B>(<I>cdata, stack</I>)<BR>
+<BR>
+ClientData<BR>
+<B>Itcl_PopStack</B>(<I>stack</I>)<BR>
+<BR>
+ClientData<BR>
+<B>Itcl_PeekStack</B>(<I>stack</I>)<BR>
+<BR>
+ClientData<BR>
+<B>Itcl_GetStackValue</B>(<I>stack, pos</I>)<BR>
+<BR>
+int<BR>
+<B>Itcl_GetStackSize</B>(<I>stack</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT>Itcl_Stack <B>*stack</B> (in)<DD>
+Stack info structure.
+<P><DT>int <B>pos</B> (in)<DD>
+position in stack order from the top.
+<P><DT>ClientData <B>clientData</B> (in)<DD>
+Arbitrary one-word value to save in the stack.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Itcl_InitStack</B> initializes a stack structure and <B>Itcl_DeleteStack</B>
+deletes it. <B>Itcl_PushStack</B> pushes the <I>cdata</I> value onto the stack.
+<B>Itcl_PopStack</B> removes and returns the top most <I>cdata</I> value.
+<B>Itcl_PeekStack</B> returns the top most value, but does not remove it.
+<B>Itcl_GetStackValue</B> gets a value at some index within the stack.  Index
+&quot;0&quot; is the first value pushed onto the stack. <B>Itcl_GetStackSize</B>
+returns the count of entries on the stack.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/S.htm#stack">stack</A>
+<div class="copy">Copyright &copy; 1993-1998 Lucent Technologies, Inc.
+</div>
+</BODY></HTML>

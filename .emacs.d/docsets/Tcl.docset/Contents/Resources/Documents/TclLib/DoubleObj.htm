@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_DoubleObj manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tcl C API, version 8.6.0</a> <small>&gt;</small> DoubleObj</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="DoubleObj.htm#M2" NAME="L220">NAME</A>
+<DL><DD>Tcl_NewDoubleObj, Tcl_SetDoubleObj, Tcl_GetDoubleFromObj &mdash; manipulate Tcl values as floating-point values</DD></DL>
+<DD><A HREF="DoubleObj.htm#M3" NAME="L221">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Obj *
+<DD><B>Tcl_NewDoubleObj</B>(<I>doubleValue</I>)
+<DD><B>Tcl_SetDoubleObj</B>(<I>objPtr, doubleValue</I>)
+<DD>int
+<DD><B>Tcl_GetDoubleFromObj</B>(<I>interp, objPtr, doublePtr</I>)
+</DL>
+<DD><A HREF="DoubleObj.htm#M4" NAME="L222">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="DoubleObj.htm#M5" NAME="L223">DESCRIPTION</A>
+<DD><A HREF="DoubleObj.htm#M6" NAME="L224">SEE ALSO</A>
+<DD><A HREF="DoubleObj.htm#M7" NAME="L225">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_NewDoubleObj, Tcl_SetDoubleObj, Tcl_GetDoubleFromObj &mdash; manipulate Tcl values as floating-point values
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+<A HREF="../TclLib/Object.htm">Tcl_Obj</A> *<BR>
+<B>Tcl_NewDoubleObj</B>(<I>doubleValue</I>)<BR>
+<B>Tcl_SetDoubleObj</B>(<I>objPtr, doubleValue</I>)<BR>
+int<BR>
+<B>Tcl_GetDoubleFromObj</B>(<I>interp, objPtr, doublePtr</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT>double <B>doubleValue</B> (in)<DD>
+A double-precision floating-point value used to initialize or set a Tcl value.
+<P><DT><A HREF="../TclLib/Object.htm">Tcl_Obj</A> <B>*objPtr</B> (in/out)<DD>
+For <B>Tcl_SetDoubleObj</B>, this points to the value in which to store a
+double value.
+For <B>Tcl_GetDoubleFromObj</B>, this refers to the value
+from which to retrieve a double value. 
+<P><DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in/out)<DD>
+When non-NULL, an error message is left here when double value retrieval fails.
+<P><DT>double <B>*doublePtr</B> (out)<DD>
+Points to place to store the double value obtained from <I>objPtr</I>.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These procedures are used to create, modify, and read Tcl values that
+hold double-precision floating-point values.
+<P>
+<B>Tcl_NewDoubleObj</B> creates and returns a new Tcl value initialized to
+the double value <I>doubleValue</I>.  The returned Tcl value is unshared.
+<P>
+<B>Tcl_SetDoubleObj</B> sets the value of an existing Tcl value pointed to
+by <I>objPtr</I> to the double value <I>doubleValue</I>.  The <I>objPtr</I>
+argument must point to an unshared Tcl value.  Any attempt to set the value
+of a shared Tcl value violates Tcl's copy-on-write policy.  Any existing
+string representation or internal representation in the unshared Tcl value
+will be freed as a consequence of setting the new value.
+<P>
+<B>Tcl_GetDoubleFromObj</B> attempts to retrieve a double value from the
+Tcl value <I>objPtr</I>.  If the attempt succeeds, then <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> is
+returned, and the double value is written to the storage pointed to by
+<I>doublePtr</I>.  If the attempt fails, then <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned,
+and if <I>interp</I> is non-NULL, an error message is left in <I>interp</I>.
+The <B><A HREF="../TclLib/ObjectType.htm">Tcl_ObjType</A></B> of <I>objPtr</I> may be changed to make subsequent
+calls to <B>Tcl_GetDoubleFromObj</B> more efficient. 
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TclLib/Object.htm">Tcl_NewObj</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_DecrRefCount</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_IncrRefCount</A></B>, <B><A HREF="../TclLib/SetResult.htm">Tcl_GetObjResult</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/D.htm#double">double</A>, <A href="../Keywords/D.htm#double value">double value</A>, <A href="../Keywords/D.htm#double type">double type</A>, <A href="../Keywords/I.htm#internal representation">internal representation</A>, <A href="../Keywords/V.htm#value">value</A>, <A href="../Keywords/V.htm#value type">value type</A>, <A href="../Keywords/S.htm#string representation">string representation</A>
+<div class="copy">Copyright &copy; 1996-1997 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

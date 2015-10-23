@@ -1,0 +1,217 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>numpy.polynomial.hermite.Hermite.fit — NumPy v1.10 Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html">
+    <link rel="top" title="NumPy v1.10 Manual" href="../../index.html">
+    <link rel="up" title="numpy.polynomial.hermite.Hermite" href="numpy.polynomial.hermite.Hermite.html">
+    <link rel="next" title="numpy.polynomial.hermite.Hermite.fromroots" href="numpy.polynomial.hermite.Hermite.fromroots.html">
+    <link rel="prev" title="numpy.polynomial.hermite.Hermite.deriv" href="numpy.polynomial.hermite.Hermite.deriv.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        
+        <li class="active"><a href="../../index.html">NumPy v1.10 Manual</a></li>
+        
+
+          <li class="active"><a href="../index.html">NumPy Reference</a></li>
+          <li class="active"><a href="../routines.html">Routines</a></li>
+          <li class="active"><a href="../routines.polynomials.html">Polynomials</a></li>
+          <li class="active"><a href="../routines.polynomials.package.html">Polynomial Package</a></li>
+          <li class="active"><a href="../routines.polynomials.hermite.html">Hermite Module, “Physicists’” (<tt class="docutils literal"><span class="pre">numpy.polynomial.hermite</span></tt>)</a></li>
+          <li class="active"><a href="numpy.polynomial.hermite.Hermite.html" accesskey="U">numpy.polynomial.hermite.Hermite</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.hermite.Hermite.fromroots.html" title="numpy.polynomial.hermite.Hermite.fromroots" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="numpy.polynomial.hermite.Hermite.deriv.html" title="numpy.polynomial.hermite.Hermite.deriv" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.polynomial.hermite.Hermite.deriv.html" title="previous chapter">numpy.polynomial.hermite.Hermite.deriv</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="numpy.polynomial.hermite.Hermite.fromroots.html" title="next chapter">numpy.polynomial.hermite.Hermite.fromroots</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="numpy-polynomial-hermite-hermite-fit">
+<h1>numpy.polynomial.hermite.Hermite.fit<a class="headerlink" href="#numpy-polynomial-hermite-hermite-fit" title="Permalink to this headline">¶</a></h1>
+<dl class="classmethod">
+<a class="dashAnchor" name="//apple_ref/Method/numpy.polynomial.hermite.Hermite.fit"></a><dt id="numpy.polynomial.hermite.Hermite.fit">
+<em class="property">classmethod </em><tt class="descclassname">Hermite.</tt><tt class="descname">fit</tt><big>(</big><em>x</em>, <em>y</em>, <em>deg</em>, <em>domain=None</em>, <em>rcond=None</em>, <em>full=False</em>, <em>w=None</em>, <em>window=None</em><big>)</big><a class="reference external" href="http://github.com/numpy/numpy/blob/v1.10.1/numpy/polynomial/_polybase.py#L724-L807"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy.polynomial.hermite.Hermite.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Least squares fit to data.</p>
+<p>Return a series instance that is the least squares fit to the data
+<em class="xref py py-obj">y</em> sampled at <em class="xref py py-obj">x</em>. The domain of the returned instance can be
+specified and this will often result in a superior fit with less
+chance of ill conditioning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like, shape (M,)</p>
+<blockquote>
+<div><p>x-coordinates of the M sample points <tt class="docutils literal"><span class="pre">(x[i],</span> <span class="pre">y[i])</span></tt>.</p>
+</div></blockquote>
+<p><strong>y</strong> : array_like, shape (M,) or (M, K)</p>
+<blockquote>
+<div><p>y-coordinates of the sample points. Several data sets of sample
+points sharing the same x-coordinates can be fitted at once by
+passing in a 2D-array that contains one dataset per column.</p>
+</div></blockquote>
+<p><strong>deg</strong> : int</p>
+<blockquote>
+<div><p>Degree of the fitting polynomial.</p>
+</div></blockquote>
+<p><strong>domain</strong> : {None, [beg, end], []}, optional</p>
+<blockquote>
+<div><p>Domain to use for the returned series. If <tt class="docutils literal"><span class="pre">None</span></tt>,
+then a minimal domain that covers the points <em class="xref py py-obj">x</em> is chosen.  If
+<tt class="docutils literal"><span class="pre">[]</span></tt> the class domain is used. The default value was the
+class domain in NumPy 1.4 and <tt class="docutils literal"><span class="pre">None</span></tt> in later versions.
+The <tt class="docutils literal"><span class="pre">[]</span></tt> option was added in numpy 1.5.0.</p>
+</div></blockquote>
+<p><strong>rcond</strong> : float, optional</p>
+<blockquote>
+<div><p>Relative condition number of the fit. Singular values smaller
+than this relative to the largest singular value will be
+ignored. The default value is len(x)*eps, where eps is the
+relative precision of the float type, about 2e-16 in most
+cases.</p>
+</div></blockquote>
+<p><strong>full</strong> : bool, optional</p>
+<blockquote>
+<div><p>Switch determining nature of return value. When it is False
+(the default) just the coefficients are returned, when True
+diagnostic information from the singular value decomposition is
+also returned.</p>
+</div></blockquote>
+<p><strong>w</strong> : array_like, shape (M,), optional</p>
+<blockquote>
+<div><p>Weights. If not None the contribution of each point
+<tt class="docutils literal"><span class="pre">(x[i],y[i])</span></tt> to the fit is weighted by <em class="xref py py-obj">w[i]</em>. Ideally the
+weights are chosen so that the errors of the products
+<tt class="docutils literal"><span class="pre">w[i]*y[i]</span></tt> all have the same variance.  The default value is
+None.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.5.0.</span></p>
+</div>
+</div></blockquote>
+<p><strong>window</strong> : {[beg, end]}, optional</p>
+<blockquote>
+<div><p>Window to use for the returned series. The default
+value is the default class domain</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.6.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new_series</strong> : series</p>
+<blockquote>
+<div><p>A series that represents the least squares fit to the data and
+has the domain specified in the call.</p>
+</div></blockquote>
+<p><strong>[resid, rank, sv, rcond]</strong> : list</p>
+<blockquote class="last">
+<div><p>These values are only returned if <em class="xref py py-obj">full</em> = True</p>
+<p>resid – sum of squared residuals of the least squares fit
+rank – the numerical rank of the scaled Vandermonde matrix
+sv – singular values of the scaled Vandermonde matrix
+rcond – value of <em class="xref py py-obj">rcond</em>.</p>
+<p>For more details, see <em class="xref py py-obj">linalg.lstsq</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2009, The Scipy community.
+      </li>
+      <li>
+      Last updated on Oct 18, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

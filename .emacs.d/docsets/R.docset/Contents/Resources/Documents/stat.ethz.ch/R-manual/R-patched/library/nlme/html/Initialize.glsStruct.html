@@ -1,0 +1,76 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/nlme/html/Initialize.glsStruct.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:33:59 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Initialize a glsStruct Object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for Initialize.glsStruct {nlme}"><tbody><tr><td>Initialize.glsStruct {nlme}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Initialize a glsStruct Object</h2>
+
+<h3>Description</h3>
+
+<p>The individual linear model components of the <code>glsStruct</code> list
+are initialized.  
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>## S3 method for class 'glsStruct'
+Initialize(object, data, control, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>object</code></td>
+<td>
+<p>an object inheriting from class <code>"<a href="glsStruct.html">glsStruct</a>"</code>,
+representing a list of linear model components, such as
+<code>corStruct</code> and <code>varFunc</code> objects.</p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame in which to evaluate the variables defined in
+<code>formula(object)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>control</code></td>
+<td>
+<p>an optional list with control parameters for the
+initialization and optimization algorithms used in
+<code>gls</code>. Defaults to <code>list(singular.ok = FALSE)</code>, implying that linear dependencies are not allowed in the model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>some methods for this generic require additional
+arguments.  None are used in this method.</p>
+</td></tr> 
+</tbody></table>
+
+
+<h3>Value</h3>
+
+<p>a <code>glsStruct</code> object similar to <code>object</code>, but with
+initialized model components. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>JosÃ© Pinheiro and Douglas Bates bates@stat.wisc.edu</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="gls.html">gls</a></code>,
+<code><a href="Initialize.corStruct.html">Initialize.corStruct</a></code>,
+<code><a href="Initialize.varFunc.html">Initialize.varFunc</a></code>,
+<code><a href="Initialize.html">Initialize</a></code></p>
+
+<hr><div style="text-align: center;">[Package <em>nlme</em> version 3.1-121 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/nlme/html/Initialize.glsStruct.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2015 02:33:59 GMT -->
+
+</body></html>

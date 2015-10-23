@@ -1,0 +1,735 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Hash::Util</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Hash::Util</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-H.html">Core modules (H)</a> &gt;
+      
+    
+    Hash::Util
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Hash::Util</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Restricted-hashes">Restricted hashes</a><li><a href="#Operating-on-references-to-hashes.">Operating on references to hashes.</a></ul><li><a href="#CAVEATS">CAVEATS</a><li><a href="#BUGS">BUGS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Hash::Util - A selection of general-utility hash subroutines</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>  <span class="c"># Restricted hashes</span></li><li></li><li>  <a class="l_k" href="../functions/use.html">use</a> <span class="w">Hash::Util</span> <span class="q">qw(</span></li><li>                     <span class="q">fieldhash fieldhashes</span></li><li></li><li>                     <span class="q">all_keys</span></li><li>                     <span class="q">lock_keys unlock_keys</span></li><li>                     <span class="q">lock_value unlock_value</span></li><li>                     <span class="q">lock_hash unlock_hash</span></li><li>                     <span class="q">lock_keys_plus</span></li><li>                     <span class="q">hash_locked hash_unlocked</span></li><li>                     <span class="q">hashref_locked hashref_unlocked</span></li><li>                     <span class="q">hidden_keys legal_keys</span></li><li></li><li>                     <span class="q">lock_ref_keys unlock_ref_keys</span></li><li>                     <span class="q">lock_ref_value unlock_ref_value</span></li><li>                     <span class="q">lock_hashref unlock_hashref</span></li><li>                     <span class="q">lock_ref_keys_plus</span></li><li>                     <span class="q">hidden_ref_keys legal_ref_keys</span></li><li></li><li>                     <span class="q">hash_seed hash_value hv_store</span></li><li>                     <span class="q">bucket_stats bucket_info bucket_array</span></li><li>                     <span class="q">lock_hash_recurse unlock_hash_recurse</span></li><li></li><li>                     <span class="q">hash_traversal_mask</span></li><li>                   <span class="q">)</span><span class="sc">;</span></li><li></li><li>  <span class="i">%hash</span> = <span class="s">(</span><span class="w">foo</span> <span class="cm">=&gt;</span> <span class="n">42</span><span class="cm">,</span> <span class="w">bar</span> <span class="cm">=&gt;</span> <span class="n">23</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="c"># Ways to restrict a hash</span></li><li>  <span class="i">lock_keys</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">lock_keys</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span> <span class="i">@keyset</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">lock_keys_plus</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span> <span class="i">@additional_keys</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Ways to inspect the properties of a restricted hash</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">@legal</span> = <span class="i">legal_keys</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">@hidden</span> = <span class="i">hidden_keys</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$ref</span> = <span class="i">all_keys</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span><span class="i">@keys</span><span class="cm">,</span><span class="i">@hidden</span><span class="s">)</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$is_locked</span> = <span class="i">hash_locked</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Remove restrictions on the hash</span></li><li>  <span class="i">unlock_keys</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Lock individual values in a hash</span></li><li>  <span class="w">lock_value</span>  <span class="s">(</span><span class="i">%hash</span><span class="cm">,</span> <span class="q">&#39;foo&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">unlock_value</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span> <span class="q">&#39;foo&#39;</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="c"># Ways to change the restrictions on both keys and values</span></li><li>  <span class="w">lock_hash</span>  <span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">unlock_hash</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$hashes_are_randomised</span> = <span class="i">hash_seed</span><span class="s">(</span><span class="s">)</span> != <span class="n">0</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$int_hash_value</span> = <span class="i">hash_value</span><span class="s">(</span> <span class="q">&#39;string&#39;</span> <span class="s">)</span><span class="sc">;</span></li><li></li><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$mask</span>= <span class="i">hash_traversal_mask</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>  <span class="i">hash_traversal_mask</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span><span class="n">1234</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p><code class="inline"><span class="w">Hash::Util</span></code>
+ and <code class="inline"><span class="w">Hash::Util::FieldHash</span></code>
+ contain special functions
+for manipulating hashes that don't really warrant a keyword.</p>
+<p><code class="inline"><span class="w">Hash::Util</span></code>
+ contains a set of functions that support
+<a href="#Restricted-hashes">restricted hashes</a>. These are described in
+this document.  <code class="inline"><span class="w">Hash::Util::FieldHash</span></code>
+ contains an (unrelated)
+set of functions that support the use of hashes in
+<i>inside-out classes</i>, described in <a href="../Hash/Util/FieldHash.html">Hash::Util::FieldHash</a>.</p>
+<p>By default <code class="inline"><span class="w">Hash::Util</span></code>
+ does not export anything.</p>
+<a name="Restricted-hashes"></a><h2>Restricted hashes</h2>
+<p>5.8.0 introduces the ability to restrict a hash to a certain set of
+keys.  No keys outside of this set can be added.  It also introduces
+the ability to lock an individual key so it cannot be deleted and the
+ability to ensure that an individual value cannot be changed.</p>
+<p>This is intended to largely replace the deprecated pseudo-hashes.</p>
+<ul>
+<li><a name="*lock_keys*"></a><b><b>lock_keys</b></b>
+</li>
+<li><a name="*unlock_keys*"></a><b><b>unlock_keys</b></b>
+<pre class="verbatim"><ol><li>  <span class="i">lock_keys</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">lock_keys</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span> <span class="i">@keys</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Restricts the given %hash's set of keys to @keys.  If @keys is not
+given it restricts it to its current keyset.  No more keys can be
+added. delete() and exists() will still work, but will not alter
+the set of allowed keys. <b>Note</b>: the current implementation prevents
+the hash from being bless()ed while it is in a locked state. Any attempt
+to do so will raise an exception. Of course you can still bless()
+the hash before you call lock_keys() so this shouldn't be a problem.</p>
+<pre class="verbatim"><ol><li>  <span class="i">unlock_keys</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Removes the restriction on the %hash's keyset.</p>
+<p><b>Note</b> that if any of the values of the hash have been locked they will not
+be unlocked after this sub executes.</p>
+<p>Both routines return a reference to the hash operated on.</p>
+</li>
+<li><a name="*lock_keys_plus*"></a><b><b>lock_keys_plus</b></b>
+<pre class="verbatim"><ol><li>  <span class="i">lock_keys_plus</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span><span class="i">@additional_keys</span><span class="s">)</span></li></ol></pre><p>Similar to <code class="inline"><span class="i">lock_keys</span><span class="s">(</span><span class="s">)</span></code>
+, with the difference being that the optional key list
+specifies keys that may or may not be already in the hash. Essentially this is
+an easier way to say</p>
+<pre class="verbatim"><ol><li>  <span class="i">lock_keys</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span><span class="i">@additional_keys</span><span class="cm">,</span><a class="l_k" href="../functions/keys.html">keys</a> <span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns a reference to %hash</p>
+</li>
+<li><a name="*lock_value*"></a><b><b>lock_value</b></b>
+</li>
+<li><a name="*unlock_value*"></a><b><b>unlock_value</b></b>
+<pre class="verbatim"><ol><li>  <span class="w">lock_value</span>  <span class="s">(</span><span class="i">%hash</span><span class="cm">,</span> <span class="i">$key</span><span class="s">)</span><span class="sc">;</span></li><li>  <span class="i">unlock_value</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span> <span class="i">$key</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Locks and unlocks the value for an individual key of a hash.  The value of a
+locked key cannot be changed.</p>
+<p>Unless %hash has already been locked the key/value could be deleted
+regardless of this setting.</p>
+<p>Returns a reference to the %hash.</p>
+</li>
+<li><a name="*lock_hash*"></a><b><b>lock_hash</b></b>
+</li>
+<li><a name="*unlock_hash*"></a><b><b>unlock_hash</b></b>
+<pre class="verbatim"><ol><li>    <span class="i">lock_hash</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>lock_hash() locks an entire hash, making all keys and values read-only.
+No value can be changed, no keys can be added or deleted.</p>
+<pre class="verbatim"><ol><li>    <span class="i">unlock_hash</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>unlock_hash() does the opposite of lock_hash().  All keys and values
+are made writable.  All values can be changed and keys can be added
+and deleted.</p>
+<p>Returns a reference to the %hash.</p>
+</li>
+<li><a name="*lock_hash_recurse*"></a><b><b>lock_hash_recurse</b></b>
+</li>
+<li><a name="*unlock_hash_recurse*"></a><b><b>unlock_hash_recurse</b></b>
+<pre class="verbatim"><ol><li>    <span class="i">lock_hash_recurse</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>lock_hash() locks an entire hash and any hashes it references recursively,
+making all keys and values read-only. No value can be changed, no keys can
+be added or deleted.</p>
+<p>This method <b>only</b> recurses into hashes that are referenced by another hash.
+Thus a Hash of Hashes (HoH) will all be restricted, but a Hash of Arrays of
+Hashes (HoAoH) will only have the top hash restricted.</p>
+<pre class="verbatim"><ol><li>    <span class="i">unlock_hash_recurse</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>unlock_hash_recurse() does the opposite of lock_hash_recurse().  All keys and
+values are made writable.  All values can be changed and keys can be added
+and deleted. Identical recursion restrictions apply as to lock_hash_recurse().</p>
+<p>Returns a reference to the %hash.</p>
+</li>
+<li><a name="*hashref_locked*"></a><b><b>hashref_locked</b></b>
+</li>
+<li><a name="*hash_locked*"></a><b><b>hash_locked</b></b>
+<pre class="verbatim"><ol><li>  <span class="i">hashref_locked</span><span class="s">(</span>\<span class="i">%hash</span><span class="s">)</span> <a class="l_k" href="../functions/and.html">and</a> <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;Hash is locked!\n&quot;</span><span class="sc">;</span></li><li>  <span class="i">hash_locked</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span> <a class="l_k" href="../functions/and.html">and</a> <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;Hash is locked!\n&quot;</span><span class="sc">;</span></li></ol></pre><p>Returns true if the hash and its keys are locked.</p>
+</li>
+<li><a name="*hashref_unlocked*"></a><b><b>hashref_unlocked</b></b>
+</li>
+<li><a name="*hash_unlocked*"></a><b><b>hash_unlocked</b></b>
+<pre class="verbatim"><ol><li>  <span class="i">hashref_unlocked</span><span class="s">(</span>\<span class="i">%hash</span><span class="s">)</span> <a class="l_k" href="../functions/and.html">and</a> <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;Hash is unlocked!\n&quot;</span><span class="sc">;</span></li><li>  <span class="i">hash_unlocked</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span> <a class="l_k" href="../functions/and.html">and</a> <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;Hash is unlocked!\n&quot;</span><span class="sc">;</span></li></ol></pre><p>Returns true if the hash and its keys are unlocked.</p>
+</li>
+<li><a name="*legal_keys*"></a><b><b>legal_keys</b></b>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">@keys</span> = <span class="i">legal_keys</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns the list of the keys that are legal in a restricted hash.
+In the case of an unrestricted hash this is identical to calling
+keys(%hash).</p>
+</li>
+<li><a name="*hidden_keys*"></a><b><b>hidden_keys</b></b>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">@keys</span> = <span class="i">hidden_keys</span><span class="s">(</span><span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns the list of the keys that are legal in a restricted hash but
+do not have a value associated to them. Thus if 'foo' is a
+"hidden" key of the %hash it will return false for both <code class="inline"><a class="l_k" href="../functions/defined.html">defined</a></code>
+and <code class="inline"><a class="l_k" href="../functions/exists.html">exists</a></code> tests.</p>
+<p>In the case of an unrestricted hash this will return an empty list.</p>
+<p><b>NOTE</b> this is an experimental feature that is heavily dependent
+on the current implementation of restricted hashes. Should the
+implementation change, this routine may become meaningless, in which
+case it will return an empty list.</p>
+</li>
+<li><a name="*all_keys*"></a><b><b>all_keys</b></b>
+<pre class="verbatim"><ol><li>  <span class="i">all_keys</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span><span class="i">@keys</span><span class="cm">,</span><span class="i">@hidden</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Populates the arrays @keys with the all the keys that would pass
+an <code class="inline"><a class="l_k" href="../functions/exists.html">exists</a></code> tests, and populates @hidden with the remaining legal
+keys that have not been utilized.</p>
+<p>Returns a reference to the hash.</p>
+<p>In the case of an unrestricted hash this will be equivalent to</p>
+<pre class="verbatim"><ol><li>  <span class="i">$ref</span> = <a class="l_k" href="../functions/do.html">do</a> <span class="s">{</span></li><li>      <span class="i">@keys</span> = <a class="l_k" href="../functions/keys.html">keys</a> <span class="i">%hash</span><span class="sc">;</span></li><li>      <span class="i">@hidden</span> = <span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>      \<span class="i">%hash</span></li><li>  <span class="s">}</span><span class="sc">;</span></li></ol></pre><p><b>NOTE</b> this is an experimental feature that is heavily dependent
+on the current implementation of restricted hashes. Should the
+implementation change this routine may become meaningless in which
+case it will behave identically to how it would behave on an
+unrestricted hash.</p>
+</li>
+<li><a name="*hash_seed*"></a><b><b>hash_seed</b></b>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$hash_seed</span> = <span class="i">hash_seed</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>hash_seed() returns the seed bytes used to randomise hash ordering.</p>
+<p><b>Note that the hash seed is sensitive information</b>: by knowing it one
+can craft a denial-of-service attack against Perl code, even remotely,
+see <a href="../perlsec.html#Algorithmic-Complexity-Attacks">Algorithmic Complexity Attacks in perlsec</a> for more information.
+<b>Do not disclose the hash seed</b> to people who don't need to know it.
+See also <a href="../perlrun.html#PERL_HASH_SEED_DEBUG">PERL_HASH_SEED_DEBUG in perlrun</a>.</p>
+<p>Prior to Perl 5.17.6 this function returned a UV, it now returns a string,
+which may be of nearly any size as determined by the hash function your
+Perl has been built with. Possible sizes may be but are not limited to
+4 bytes (for most hash algorithms) and 16 bytes (for siphash).</p>
+</li>
+<li><a name="*hash_value*"></a><b><b>hash_value</b></b>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$hash_value</span> = <span class="i">hash_value</span><span class="s">(</span><span class="i">$string</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>hash_value() returns the current perl's internal hash value for a given
+string.</p>
+<p>Returns a 32 bit integer representing the hash value of the string passed
+in. This value is only reliable for the lifetime of the process. It may
+be different depending on invocation, environment variables,  perl version,
+architectures, and build options.</p>
+<p><b>Note that the hash value of a given string is sensitive information</b>:
+by knowing it one can deduce the hash seed which in turn can allow one to
+craft a denial-of-service attack against Perl code, even remotely,
+see <a href="../perlsec.html#Algorithmic-Complexity-Attacks">Algorithmic Complexity Attacks in perlsec</a> for more information.
+<b>Do not disclose the hash value of a string</b> to people who don't need to
+know it. See also <a href="../perlrun.html#PERL_HASH_SEED_DEBUG">PERL_HASH_SEED_DEBUG in perlrun</a>.</p>
+</li>
+<li><a name="*bucket_info*"></a><b><b>bucket_info</b></b>
+<p>Return a set of basic information about a hash.</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$keys</span><span class="cm">,</span> <span class="i">$buckets</span><span class="cm">,</span> <span class="i">$used</span><span class="cm">,</span> <span class="i">@length_counts</span><span class="s">)</span>= <span class="i">bucket_info</span><span class="s">(</span><span class="i">$hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Fields are as follows:</p>
+<pre class="verbatim"><ol><li>    <span class="n">0</span><span class="co">:</span> <span class="w">Number</span> <span class="w">of</span> <a class="l_k" href="../functions/keys.html">keys</a> <span class="w">in</span> <span class="w">the</span> <span class="w">hash</span></li><li>    <span class="n">1</span><span class="co">:</span> <span class="w">Number</span> <span class="w">of</span> <span class="w">buckets</span> <span class="w">in</span> <span class="w">the</span> <span class="w">hash</span></li><li>    <span class="n">2</span><span class="co">:</span> <span class="w">Number</span> <span class="w">of</span> <span class="w">used</span> <span class="w">buckets</span> <span class="w">in</span> <span class="w">the</span> <span class="w">hash</span></li><li>    <span class="w">rest</span> <span class="co">:</span> <span class="w">list</span> <span class="w">of</span> <span class="w">counts</span><span class="cm">,</span> <span class="w">Kth</span> <span class="w">element</span> <span class="w">is</span> <span class="w">the</span> <span class="w">number</span> <span class="w">of</span> <span class="w">buckets</span></li><li>           <span class="w">with</span> <span class="w">K</span> <a class="l_k" href="../functions/keys.html">keys</a> <span class="w">in</span> <span class="w">it</span>.</li></ol></pre><p>See also bucket_stats() and bucket_array().</p>
+</li>
+<li><a name="*bucket_stats*"></a><b><b>bucket_stats</b></b>
+<p>Returns a list of statistics about a hash.</p>
+<pre class="verbatim"><ol><li> <a class="l_k" href="../functions/my.html">my</a> <span class="s">(</span><span class="i">$keys</span><span class="cm">,</span> <span class="i">$buckets</span><span class="cm">,</span> <span class="i">$used</span><span class="cm">,</span> <span class="i">$quality</span><span class="cm">,</span> <span class="i">$utilization_ratio</span><span class="cm">,</span></li><li>        <span class="i">$collision_pct</span><span class="cm">,</span> <span class="i">$mean</span><span class="cm">,</span> <span class="i">$stddev</span><span class="cm">,</span> <span class="i">@length_counts</span><span class="s">)</span></li><li>    = <span class="i">bucket_stats</span><span class="s">(</span><span class="i">$hashref</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Fields are as follows:</p>
+<pre class="verbatim"><ol><li>    <span class="n">0</span><span class="co">:</span> <span class="w">Number</span> <span class="w">of</span> <a class="l_k" href="../functions/keys.html">keys</a> <span class="w">in</span> <span class="w">the</span> <span class="w">hash</span></li><li>    <span class="n">1</span><span class="co">:</span> <span class="w">Number</span> <span class="w">of</span> <span class="w">buckets</span> <span class="w">in</span> <span class="w">the</span> <span class="w">hash</span></li><li>    <span class="n">2</span><span class="co">:</span> <span class="w">Number</span> <span class="w">of</span> <span class="w">used</span> <span class="w">buckets</span> <span class="w">in</span> <span class="w">the</span> <span class="w">hash</span></li><li>    <span class="n">3</span><span class="co">:</span> <span class="w">Hash</span> <span class="w">Quality</span> <span class="w">Score</span></li><li>    <span class="n">4</span><span class="co">:</span> <span class="w">Percent</span> <span class="w">of</span> <span class="w">buckets</span> <span class="w">used</span></li><li>    <span class="n">5</span><span class="co">:</span> <span class="w">Percent</span> <span class="w">of</span> <a class="l_k" href="../functions/keys.html">keys</a> <span class="w">which</span> <span class="w">are</span> <span class="w">in</span> <span class="w">collision</span></li><li>    <span class="n">6</span><span class="co">:</span> <span class="w">Mean</span> <span class="w">bucket</span> <a class="l_k" href="../functions/length.html">length</a> <span class="w">of</span> <span class="w">occupied</span> <span class="w">buckets</span></li><li>    <span class="n">7</span><span class="co">:</span> <span class="w">Standard</span> <span class="w">Deviation</span> <span class="w">of</span> <span class="w">bucket</span> <span class="w">lengths</span> <span class="w">of</span> <span class="w">occupied</span> <span class="w">buckets</span></li><li>    <span class="w">rest</span> <span class="co">:</span> <span class="w">list</span> <span class="w">of</span> <span class="w">counts</span><span class="cm">,</span> <span class="w">Kth</span> <span class="w">element</span> <span class="w">is</span> <span class="w">the</span> <span class="w">number</span> <span class="w">of</span> <span class="w">buckets</span></li><li>           <span class="w">with</span> <span class="w">K</span> <a class="l_k" href="../functions/keys.html">keys</a> <span class="w">in</span> <span class="w">it</span>.</li></ol></pre><p>See also bucket_info() and bucket_array().</p>
+<p>Note that Hash Quality Score would be 1 for an ideal hash, numbers
+close to and below 1 indicate good hashing, and number significantly
+above indicate a poor score. In practice it should be around 0.95 to 1.05.
+It is defined as:</p>
+<pre class="verbatim"><ol><li> <span class="i">$score</span>= <span class="i">sum</span><span class="s">(</span> <span class="i">$count</span>[<span class="i">$length</span>] * <span class="s">(</span><span class="i">$length</span> * <span class="s">(</span><span class="i">$length</span> + <span class="n">1</span><span class="s">)</span> / <span class="n">2</span><span class="s">)</span> <span class="s">)</span></li><li>            /</li><li>            <span class="s">(</span> <span class="s">(</span> <span class="i">$keys</span> / <span class="n">2</span> * <span class="i">$buckets</span> <span class="s">)</span> *</li><li>              <span class="s">(</span> <span class="i">$keys</span> + <span class="s">(</span> <span class="n">2</span> * <span class="i">$buckets</span> <span class="s">)</span> - <span class="n">1</span> <span class="s">)</span> <span class="s">)</span></li></ol></pre><p>The formula is from the Red Dragon book (reformulated to use the data available)
+and is documented at <a href="http://www.strchr.com/hash_functions">http://www.strchr.com/hash_functions</a></p>
+</li>
+<li><a name="*bucket_array*"></a><b><b>bucket_array</b></b>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$array</span>= <span class="i">bucket_array</span><span class="s">(</span>\<span class="i">%hash</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Returns a packed representation of the bucket array associated with a hash. Each element
+of the array is either an integer K, in which case it represents K empty buckets, or
+a reference to another array which contains the keys that are in that bucket.</p>
+<p><b>Note that the information returned by bucket_array is sensitive information</b>:
+by knowing it one can directly attack perl's hash function which in turn may allow
+one to craft a denial-of-service attack against Perl code, even remotely,
+see <a href="../perlsec.html#Algorithmic-Complexity-Attacks">Algorithmic Complexity Attacks in perlsec</a> for more information.
+<b>Do not disclose the output of this function</b> to people who don't need to
+know it. See also <a href="../perlrun.html#PERL_HASH_SEED_DEBUG">PERL_HASH_SEED_DEBUG in perlrun</a>. This function is provided strictly
+for  debugging and diagnostics purposes only, it is hard to imagine a reason why it
+would be used in production code.</p>
+</li>
+<li><a name="*bucket_stats_formatted*"></a><b><b>bucket_stats_formatted</b></b>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/print.html">print</a> <span class="i">bucket_stats_formatted</span><span class="s">(</span><span class="i">$hashref</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Return a formatted report of the information returned by bucket_stats().
+An example report looks like this:</p>
+<pre class="verbatim"><ol><li> <span class="j">Keys:</span> <span class="n">50</span> <span class="w">Buckets</span><span class="co">:</span> <span class="n">33</span>/<span class="n">64</span> <span class="w">Quality</span>-<span class="w">Score</span><span class="co">:</span> <span class="n">1.01</span> <span class="s">(</span><span class="w">Good</span><span class="s">)</span></li><li> <span class="w">Utilized</span> <span class="w">Buckets</span><span class="co">:</span> <span class="n">51.56</span>% <span class="w">Optimal</span><span class="co">:</span> <span class="n">78.12</span>% <span class="w">Keys</span> <span class="w">In</span> <span class="w">Collision</span><span class="co">:</span> <span class="n">34.00</span>%</li><li> <span class="w">Chain</span> <span class="w">Length</span> - <span class="w">mean</span><span class="co">:</span> <span class="n">1.52</span> <span class="w">stddev</span><span class="co">:</span> <span class="n">0.66</span></li><li> <span class="w">Buckets</span> <span class="n">64</span>          <span class="s">[</span><span class="n">0000000000000000000000000000000111111111111111111122222222222333</span><span class="s">]</span></li><li> <span class="w">Len</span>   <span class="n">0</span> <span class="w">Pct</span><span class="co">:</span>  <span class="n">48.44</span> <span class="s">[</span><span class="c">###############################]</span></li><li> <span class="w">Len</span>   <span class="n">1</span> <span class="w">Pct</span><span class="co">:</span>  <span class="n">29.69</span> <span class="s">[</span><span class="c">###################]</span></li><li> <span class="w">Len</span>   <span class="n">2</span> <span class="w">Pct</span><span class="co">:</span>  <span class="n">17.19</span> <span class="s">[</span><span class="c">###########]</span></li><li> <span class="w">Len</span>   <span class="n">3</span> <span class="w">Pct</span><span class="co">:</span>   <span class="n">4.69</span> <span class="s">[</span><span class="c">###]</span></li><li> <span class="w">Keys</span>    <span class="n">50</span>          <span class="s">[</span><span class="n">11111111111111111111111111111111122222222222222333</span><span class="s">]</span></li><li> <span class="w">Pos</span>   <span class="n">1</span> <span class="w">Pct</span><span class="co">:</span>  <span class="n">66.00</span> <span class="s">[</span><span class="c">#################################]</span></li><li> <span class="w">Pos</span>   <span class="n">2</span> <span class="w">Pct</span><span class="co">:</span>  <span class="n">28.00</span> <span class="s">[</span><span class="c">##############]</span></li><li> <span class="w">Pos</span>   <span class="n">3</span> <span class="w">Pct</span><span class="co">:</span>   <span class="n">6.00</span> <span class="s">[</span><span class="c">###]</span></li></ol></pre><p>The first set of stats gives some summary statistical information,
+including the quality score translated into "Good", "Poor" and "Bad",
+(score&lt;=1.05, score&lt;=1.2, score&gt;1.2). See the documentation in
+bucket_stats() for more details.</p>
+<p>The two sets of barcharts give stats and a visual indication of performance
+of the hash.</p>
+<p>The first gives data on bucket chain lengths and provides insight on how
+much work a fetch *miss* will take. In this case we have to inspect every item
+in a bucket before we can be sure the item is not in the list. The performance
+for an insert is equivalent to this case, as is a delete where the item
+is not in the hash.</p>
+<p>The second gives data on how many keys are at each depth in the chain, and
+gives an idea of how much work a fetch *hit* will take. The performance for
+an update or delete of an item in the hash is equivalent to this case.</p>
+<p>Note that these statistics are summary only. Actual performance will depend
+on real hit/miss ratios accessing the hash. If you are concerned by hit ratios
+you are recommended to "oversize" your hash by using something like:</p>
+<pre class="verbatim"><ol><li>   <a class="l_k" href="../functions/keys.html">keys</a><span class="s">(</span><span class="i">%hash</span><span class="s">)</span>= <a class="l_k" href="../functions/keys.html">keys</a><span class="s">(</span><span class="i">%hash</span><span class="s">)</span> &lt;&lt; <span class="i">$k</span><span class="sc">;</span></li></ol></pre><p>With $k chosen carefully, and likely to be a small number like 1 or 2. In
+theory the larger the bucket array the less chance of collision.</p>
+</li>
+<li><a name="*hv_store*"></a><b><b>hv_store</b></b>
+<pre class="verbatim"><ol><li>  <a class="l_k" href="../functions/my.html">my</a> <span class="i">$sv</span> = <span class="n">0</span><span class="sc">;</span></li><li>  <span class="i">hv_store</span><span class="s">(</span><span class="i">%hash</span><span class="cm">,</span><span class="i">$key</span><span class="cm">,</span><span class="i">$sv</span><span class="s">)</span> or <a class="l_k" href="../functions/die.html">die</a> <span class="q">&quot;Failed to alias!&quot;</span><span class="sc">;</span></li><li>  <span class="i">$hash</span>{<span class="i">$key</span>} = <span class="n">1</span><span class="sc">;</span></li><li>  <a class="l_k" href="../functions/print.html">print</a> <span class="i">$sv</span><span class="sc">;</span> <span class="c"># prints 1</span></li></ol></pre><p>Stores an alias to a variable in a hash instead of copying the value.</p>
+</li>
+<li><a name="*hash_traversal_mask*"></a><b><b>hash_traversal_mask</b></b>
+<p>As of Perl 5.18 every hash has its own hash traversal order, and this order
+changes every time a new element is inserted into the hash. This functionality
+is provided by maintaining an unsigned integer mask (U32) which is xor'ed
+with the actual bucket id during a traversal of the hash buckets using keys(),
+values() or each().</p>
+<p>You can use this subroutine to get and set the traversal mask for a specific
+hash. Setting the mask ensures that a given hash will produce the same key
+order. <b>Note</b> that this does <b>not</b> guarantee that <b>two</b> hashes will produce
+the same key order for the same hash seed and traversal mask, items that
+collide into one bucket may have different orders regardless of this setting.</p>
+</li>
+</ul>
+<a name="Operating-on-references-to-hashes."></a><h2>Operating on references to hashes.</h2>
+<p>Most subroutines documented in this module have equivalent versions
+that operate on references to hashes instead of native hashes.
+The following is a list of these subs. They are identical except
+in name and in that instead of taking a %hash they take a $hashref,
+and additionally are not prototyped.</p>
+<ul>
+<li><a name="lock_ref_keys"></a><b>lock_ref_keys</b>
+</li>
+<li><a name="unlock_ref_keys"></a><b>unlock_ref_keys</b>
+</li>
+<li><a name="lock_ref_keys_plus"></a><b>lock_ref_keys_plus</b>
+</li>
+<li><a name="lock_ref_value"></a><b>lock_ref_value</b>
+</li>
+<li><a name="unlock_ref_value"></a><b>unlock_ref_value</b>
+</li>
+<li><a name="lock_hashref"></a><b>lock_hashref</b>
+</li>
+<li><a name="unlock_hashref"></a><b>unlock_hashref</b>
+</li>
+<li><a name="lock_hashref_recurse"></a><b>lock_hashref_recurse</b>
+</li>
+<li><a name="unlock_hashref_recurse"></a><b>unlock_hashref_recurse</b>
+</li>
+<li><a name="hash_ref_unlocked"></a><b>hash_ref_unlocked</b>
+</li>
+<li><a name="legal_ref_keys"></a><b>legal_ref_keys</b>
+</li>
+<li><a name="hidden_ref_keys"></a><b>hidden_ref_keys</b>
+</li>
+</ul>
+<a name="CAVEATS"></a><h1>CAVEATS</h1>
+<p>Note that the trapping of the restricted operations is not atomic:
+for example</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/eval.html">eval</a> <span class="s">{</span> <span class="i">%hash</span> = <span class="s">(</span><span class="w">illegal_key</span> <span class="cm">=&gt;</span> <span class="n">1</span><span class="s">)</span> <span class="s">}</span></li></ol></pre><p>leaves the <code class="inline"><span class="i">%hash</span></code>
+ empty rather than with its original contents.</p>
+<a name="BUGS"></a><h1>BUGS</h1>
+<p>The interface exposed by this module is very close to the current
+implementation of restricted hashes. Over time it is expected that
+this behavior will be extended and the interface abstracted further.</p>
+<a name="AUTHOR"></a><h1>AUTHOR</h1>
+<p>Michael G Schwern &lt;schwern@pobox.com&gt; on top of code by Nick
+Ing-Simmons and Jeffrey Friedl.</p>
+<p>hv_store() is from Array::RefElem, Copyright 2000 Gisle Aas.</p>
+<p>Additional code by Yves Orton.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../Scalar/Util.html">Scalar::Util</a>, <a href="../List/Util.html">List::Util</a> and <a href="../perlsec.html#Algorithmic-Complexity-Attacks">Algorithmic Complexity Attacks in perlsec</a>.</p>
+<p><a href="../Hash/Util/FieldHash.html">Hash::Util::FieldHash</a>.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Restricted-hashes">Restricted hashes</a><li><a href="#Operating-on-references-to-hashes.">Operating on references to hashes.</a></ul><li><a href="#CAVEATS">CAVEATS</a><li><a href="#BUGS">BUGS</a><li><a href="#AUTHOR">AUTHOR</a><li><a href="#SEE-ALSO">SEE ALSO</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Hash::Util';
+  perldoc.pageAddress = 'Hash/Util.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

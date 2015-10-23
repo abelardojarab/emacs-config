@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_FindPhoto manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> FindPhoto</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="FindPhoto.htm#M2" NAME="L203">NAME</A>
+<DL><DD>Tk_FindPhoto, Tk_PhotoPutBlock, Tk_PhotoPutZoomedBlock, Tk_PhotoGetImage, Tk_PhotoBlank, Tk_PhotoExpand, Tk_PhotoGetSize, Tk_PhotoSetSize &mdash; manipulate the image data stored in a photo image.</DD></DL>
+<DD><A HREF="FindPhoto.htm#M3" NAME="L204">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_PhotoHandle
+<DD><B>Tk_FindPhoto</B>(<I>interp, imageName</I>)
+<DD>int
+<DD><B>Tk_PhotoPutBlock</B>(<I>interp, handle, blockPtr, x, y, width, height,
+<DD>compRule</I>)
+<DD>int
+<DD><B>Tk_PhotoPutZoomedBlock</B>(<I>interp, handle, blockPtr, x, y, width, height,
+<DD>zoomX, zoomY, subsampleX, subsampleY, compRule</I>)
+<DD>int
+<DD><B>Tk_PhotoGetImage</B>(<I>handle, blockPtr</I>)
+<DD>void
+<DD><B>Tk_PhotoBlank</B>(<I>handle</I>)
+<DD>int
+<DD><B>Tk_PhotoExpand</B>(<I>interp, handle, width, height</I>)
+<DD>void
+<DD><B>Tk_PhotoGetSize</B>(<I>handle, widthPtr, heightPtr</I>)
+<DD>int
+<DD><B>Tk_PhotoSetSize</B>(<I>interp. handle, width, height</I>)
+</DL>
+<DD><A HREF="FindPhoto.htm#M4" NAME="L205">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="FindPhoto.htm#M5" NAME="L206">DESCRIPTION</A>
+<DD><A HREF="FindPhoto.htm#M6" NAME="L207">PORTABILITY</A>
+<DD><A HREF="FindPhoto.htm#M7" NAME="L208">CREDITS</A>
+<DD><A HREF="FindPhoto.htm#M8" NAME="L209">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_FindPhoto, Tk_PhotoPutBlock, Tk_PhotoPutZoomedBlock, Tk_PhotoGetImage, Tk_PhotoBlank, Tk_PhotoExpand, Tk_PhotoGetSize, Tk_PhotoSetSize &mdash; manipulate the image data stored in a photo image.
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+Tk_PhotoHandle<BR>
+<B>Tk_FindPhoto</B>(<I>interp, imageName</I>)<BR>
+int<BR>
+<B>Tk_PhotoPutBlock</B>(<I>interp, handle, blockPtr, x, y, width, height,<BR>
+compRule</I>)<BR>
+int<BR>
+<B>Tk_PhotoPutZoomedBlock</B>(<I>interp, handle, blockPtr, x, y, width, height,<BR>
+zoomX, zoomY, subsampleX, subsampleY, compRule</I>)<BR>
+int<BR>
+<B>Tk_PhotoGetImage</B>(<I>handle, blockPtr</I>)<BR>
+void<BR>
+<B>Tk_PhotoBlank</B>(<I>handle</I>)<BR>
+int<BR>
+<B>Tk_PhotoExpand</B>(<I>interp, handle, width, height</I>)<BR>
+void<BR>
+<B>Tk_PhotoGetSize</B>(<I>handle, widthPtr, heightPtr</I>)<BR>
+int<BR>
+<B>Tk_PhotoSetSize</B>(<I>interp. handle, width, height</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter in which image was created and in which error reporting is
+to be done.
+<P><DT>const char <B>*imageName</B> (in)<DD>
+Name of the photo image.
+<P><DT>Tk_PhotoHandle <B>handle</B> (in)<DD>
+Opaque handle identifying the photo image to be affected.
+<P><DT>Tk_PhotoImageBlock <B>*blockPtr</B> (in)<DD>
+Specifies the address and storage layout of image data.
+<P><DT>int <B>x</B> (in)<DD>
+Specifies the X coordinate where the top-left corner of the block is
+to be placed within the image.
+<P><DT>int <B>y</B> (in)<DD>
+Specifies the Y coordinate where the top-left corner of the block is
+to be placed within the image.
+<P><DT>int <B>width</B> (in)<DD>
+Specifies the width of the image area to be affected (for
+<B>Tk_PhotoPutBlock</B>) or the desired image width (for
+<B>Tk_PhotoExpand</B> and <B>Tk_PhotoSetSize</B>).
+<P><DT>int <B>compRule</B> (in)<DD>
+Specifies the compositing rule used when combining transparent pixels
+in a block of data with a photo image.  Must be one of
+<B>TK_PHOTO_COMPOSITE_OVERLAY</B> (which puts the block of data over the top
+of the existing photo image, with the previous contents showing
+through in the transparent bits) or <B>TK_PHOTO_COMPOSITE_SET</B> (which
+discards the existing photo image contents in the rectangle covered by
+the data block.)
+<P><DT>int <B>height</B> (in)<DD>
+Specifies the height of the image area to be affected (for
+<B>Tk_PhotoPutBlock</B>) or the desired image height (for
+<B>Tk_PhotoExpand</B> and <B>Tk_PhotoSetSize</B>).
+<P><DT>int <B>*widthPtr</B> (out)<DD>
+Pointer to location in which to store the image width.
+<P><DT>int <B>*heightPtr</B> (out)<DD>
+Pointer to location in which to store the image height.
+<P><DT>int <B>subsampleX</B> (in)<DD>
+Specifies the subsampling factor in the X direction for input
+image data.
+<P><DT>int <B>subsampleY</B> (in)<DD>
+Specifies the subsampling factor in the Y direction for input
+image data.
+<P><DT>int <B>zoomX</B> (in)<DD>
+Specifies the zoom factor to be applied in the X direction to pixels
+being written to the photo image.
+<P><DT>int <B>zoomY</B> (in)<DD>
+Specifies the zoom factor to be applied in the Y direction to pixels
+being written to the photo image.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_FindPhoto</B> returns an opaque handle that is used to identify a
+particular photo image to the other procedures.  The parameter is the
+name of the image, that is, the name specified to the <B>image create
+photo</B> command, or assigned by that command if no name was specified.
+<P>
+<B>Tk_PhotoPutBlock</B> is used to supply blocks of image data to be
+displayed.  The call affects an area of the image of size
+<I>width</I> x <I>height</I> pixels, with its top-left corner at
+coordinates (<I>x</I>,<I>y</I>).  All of <I>width</I>, <I>height</I>,
+<I>x</I>, and <I>y</I> must be non-negative.
+If part of this area lies outside the
+current bounds of the image, the image will be expanded to include the
+area, unless the user has specified an explicit image size with the
+<B>-width</B> and/or <B>-height</B> widget configuration options
+(see photo(n)); in that
+case the area is silently clipped to the image boundaries.
+<P>
+The <I>block</I> parameter is a pointer to a
+<B>Tk_PhotoImageBlock</B> structure, defined as follows:
+<PRE>typedef struct {
+    unsigned char *<I>pixelPtr</I>;
+    int <I>width</I>;
+    int <I>height</I>;
+    int <I>pitch</I>;
+    int <I>pixelSize</I>;
+    int <I>offset</I>[4];
+} <B>Tk_PhotoImageBlock</B>;</PRE>
+The <I>pixelPtr</I> field points to the first pixel, that is, the
+top-left pixel in the block.
+The <I>width</I> and <I>height</I> fields specify the dimensions of the
+block of pixels.  The <I>pixelSize</I> field specifies the address
+difference between two horizontally adjacent pixels.  Often it is 3
+or 4, but it can have any value.  The <I>pitch</I> field specifies the
+address difference between two vertically adjacent pixels.  The
+<I>offset</I> array contains the offsets from the address of a pixel
+to the addresses of the bytes containing the red, green, blue and alpha
+(transparency) components.  These are normally 0, 1, 2 and 3, but can
+have other values, e.g., for images that are stored as separate red,
+green and blue planes.
+<P>
+The <I>compRule</I> parameter to <B>Tk_PhotoPutBlock</B> specifies a
+compositing rule that says what to do with transparent pixels.  The
+value <B>TK_PHOTO_COMPOSITE_OVERLAY</B> says that the previous contents of
+the photo image should show through, and the value
+<B>TK_PHOTO_COMPOSITE_SET</B> says that the previous contents of the photo
+image should be completely ignored, and the values from the block be
+copied directly across.  The behavior in Tk8.3 and earlier was
+equivalent to having <B>TK_PHOTO_COMPOSITE_OVERLAY</B> as a compositing rule.
+<P>
+The value given for the <I>width</I> and <I>height</I> parameters to
+<B>Tk_PhotoPutBlock</B> do not have to correspond to the values specified
+in <I>block</I>.  If they are smaller, <B>Tk_PhotoPutBlock</B> extracts a
+sub-block from the image data supplied.  If they are larger, the data
+given are replicated (in a tiled fashion) to fill the specified area.
+These rules operate independently in the horizontal and vertical
+directions.
+<P>
+<B>Tk_PhotoPutBlock</B> normally returns <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B>, though if it cannot
+allocate sufficient memory to hold the resulting image, <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is
+returned instead and, if the <I>interp</I> argument is non-NULL, an
+error message is placed in the interpreter's result.
+<P>
+<B>Tk_PhotoPutZoomedBlock</B> works like <B>Tk_PhotoPutBlock</B> except that
+the image can be reduced or enlarged for display.  The
+<I>subsampleX</I> and <I>subsampleY</I> parameters allow the size of the
+image to be reduced by subsampling.
+<B>Tk_PhotoPutZoomedBlock</B> will use only pixels from the input image
+whose X coordinates are multiples of <I>subsampleX</I>, and whose Y
+coordinates are multiples of <I>subsampleY</I>.  For example, an image
+of 512x512 pixels can be reduced to 256x256 by setting
+<I>subsampleX</I> and <I>subsampleY</I> to 2.
+<P>
+The <I>zoomX</I> and <I>zoomY</I> parameters allow the image to be
+enlarged by pixel replication.  Each pixel of the (possibly subsampled)
+input image will be written to a block <I>zoomX</I> pixels wide and
+<I>zoomY</I> pixels high of the displayed image.  Subsampling and
+zooming can be used together for special effects.
+<P>
+<B>Tk_PhotoGetImage</B> can be used to retrieve image data from a photo
+image.  <B>Tk_PhotoGetImage</B> fills
+in the structure pointed to by the <I>blockPtr</I> parameter with values
+that describe the address and layout of the image data that the
+photo image has stored internally.  The values are valid
+until the image is destroyed or its size is changed.
+<B>Tk_PhotoGetImage</B> returns 1 for compatibility with the
+corresponding procedure in the old photo widget.
+<P>
+<B>Tk_PhotoBlank</B> blanks the entire area of the
+photo image.  Blank areas of a photo image are transparent.
+<P>
+<B>Tk_PhotoExpand</B> requests that the widget's image be expanded to be
+at least <I>width</I> x <I>height</I> pixels in size.  The width and/or
+height are unchanged if the user has specified an explicit image width
+or height with the <B>-width</B> and/or <B>-height</B> configuration
+options, respectively.
+If the image data
+are being supplied in many small blocks, it is more efficient to use
+<B>Tk_PhotoExpand</B> or <B>Tk_PhotoSetSize</B> at the beginning rather than
+allowing the image to expand in many small increments as image blocks
+are supplied.
+<P>
+<B>Tk_PhotoExpand</B> normally returns <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B>, though if it cannot
+allocate sufficient memory to hold the resulting image, <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is
+returned instead and, if the <I>interp</I> argument is non-NULL, an
+error message is placed in the interpreter's result.
+<P>
+<B>Tk_PhotoSetSize</B> specifies the size of the image, as if the user
+had specified the given <I>width</I> and <I>height</I> values to the
+<B>-width</B> and <B>-height</B> configuration options.  A value of
+zero for <I>width</I> or <I>height</I> does not change the image's width
+or height, but allows the width or height to be changed by subsequent
+calls to <B>Tk_PhotoPutBlock</B>, <B>Tk_PhotoPutZoomedBlock</B> or
+<B>Tk_PhotoExpand</B>.
+<P>
+<B>Tk_PhotoSetSize</B> normally returns <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B>, though if it cannot
+allocate sufficient memory to hold the resulting image, <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is
+returned instead and, if the <I>interp</I> argument is non-NULL, an
+error message is placed in the interpreter's result.
+<P>
+<B>Tk_PhotoGetSize</B> returns the dimensions of the image in
+*<I>widthPtr</I> and *<I>heightPtr</I>.
+<H3><A NAME="M6">PORTABILITY</A></H3>
+In Tk 8.3 and earlier, <B>Tk_PhotoPutBlock</B> and
+<B>Tk_PhotoPutZoomedBlock</B> had different signatures. If you want to
+compile code that uses the old interface against 8.4 without updating
+your code, compile it with the flag
+-DUSE_COMPOSITELESS_PHOTO_PUT_BLOCK.  Code linked using Stubs against
+older versions of Tk will continue to work.
+<P>
+In Tk 8.4, <B>Tk_PhotoPutBlock</B>, <B>Tk_PhotoPutZoomedBlock</B>,
+<B>Tk_PhotoExpand</B> and <B>Tk_PhotoSetSize</B> did not take an
+<I>interp</I> argument or return any result code.  If insufficient
+memory was available for an image, Tk would panic.  This behaviour is
+still supported if you compile your extension with the additional flag
+-DUSE_PANIC_ON_PHOTO_ALLOC_FAILURE.  Code linked using Stubs against
+older versions of Tk will continue to work.
+<H3><A NAME="M7">CREDITS</A></H3>
+The code for the photo image type was developed by Paul Mackerras,
+based on his earlier photo widget code.
+<H3><A NAME="M8">KEYWORDS</A></H3>
+<A href="../Keywords/P.htm#photo">photo</A>, <A href="../Keywords/I.htm#image">image</A>
+<div class="copy">Copyright &copy; 1994 The Australian National University
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

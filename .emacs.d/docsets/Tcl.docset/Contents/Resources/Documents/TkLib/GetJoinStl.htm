@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetJoinStyle manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> GetJoinStl</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<DL>
+<DD><A HREF="GetJoinStl.htm#M2" NAME="L328">NAME</A>
+<DL><DD>Tk_GetJoinStyle, Tk_NameOfJoinStyle &mdash; translate between strings and join styles</DD></DL>
+<DD><A HREF="GetJoinStl.htm#M3" NAME="L329">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetJoinStyle(</B><I>interp, string, joinPtr</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfJoinStyle(</B><I>join</I><B>)</B>
+</DL>
+<DD><A HREF="GetJoinStl.htm#M4" NAME="L330">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetJoinStl.htm#M5" NAME="L331">DESCRIPTION</A>
+<DD><A HREF="GetJoinStl.htm#M6" NAME="L332">KEYWORDS</A>
+</DL>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetJoinStyle, Tk_NameOfJoinStyle &mdash; translate between strings and join styles
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_GetJoinStyle(</B><I>interp, string, joinPtr</I><B>)</B><BR>
+const char *<BR>
+<B>Tk_NameOfJoinStyle(</B><I>join</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.
+<P><DT>const char <B>*string</B> (in)<DD>
+String containing name of join style - one of
+&#8220;<B>bevel</B>&#8221;,
+&#8220;<B>miter</B>&#8221;,
+or
+&#8220;<B>round</B>&#8221;
+- or a unique abbreviation of one.
+<P><DT>int <B>*joinPtr</B> (out)<DD>
+Pointer to location in which to store X join style corresponding to
+<I>string</I>.
+<P><DT>int <B><A HREF="../TclCmd/join.htm">join</A></B> (in)<DD>
+Join style: one of <B>JoinBevel</B>, <B>JoinMiter</B>, <B>JoinRound</B>.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetJoinStyle</B> places in <I>*joinPtr</I> the X join style
+corresponding to <I>string</I>, which will be one of
+<B>JoinBevel</B>, <B>JoinMiter</B>, or <B>JoinRound</B>.
+Join styles are typically used in X graphics contexts to indicate
+how adjacent line segments should be joined together.
+See the X documentation for information on what each style
+implies.
+<P>
+Under normal circumstances the return value is <B><A HREF="../TclCmd/catch.htm">TCL_OK</A></B> and
+<I>interp</I> is unused.
+If <I>string</I> does not contain a valid join style
+or an abbreviation of one of these names, then an error message is
+stored in interpreter <I>interp</I>'s result, <B><A HREF="../TclCmd/catch.htm">TCL_ERROR</A></B> is returned, and
+<I>*joinPtr</I> is unmodified.
+<P>
+<B>Tk_NameOfJoinStyle</B> is the logical inverse of <B>Tk_GetJoinStyle</B>.
+Given a join style such as <B>JoinBevel</B> it returns a
+statically-allocated string corresponding to <I>join</I>.
+If <I>join</I> is not a legal join style, then
+&#8220;unknown join style&#8221;
+is returned.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/B.htm#bevel">bevel</A>, <A href="../Keywords/J.htm#join style">join style</A>, <A href="../Keywords/M.htm#miter">miter</A>, <A href="../Keywords/R.htm#round">round</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

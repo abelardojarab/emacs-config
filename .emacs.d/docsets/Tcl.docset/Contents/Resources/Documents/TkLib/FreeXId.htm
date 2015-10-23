@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_FreeXId manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.6.0/Tk8.6.0 Documentation</a> <small>&gt;</small> <a href="contents.htm">Tk C API, version 8.6.0</a> <small>&gt;</small> FreeXId</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../ItclCmd/contents.htm">[incr Tcl] Package Commands</A> | <A HREF="../Sqlite3Cmd/contents.htm">SQLite Package Commands</A> | <A HREF="../TdbcCmd/contents.htm">TDBC Package Commands</A> | <A HREF="../TdbcmysqlCmd/contents.htm">tdbc::mysql Package Commands</A> | <A HREF="../TdbcodbcCmd/contents.htm">tdbc::odbc Package Commands</A> | <A HREF="../TdbcpostgresCmd/contents.htm">tdbc::postgres Package Commands</A> | <A HREF="../Tdbcsqlite3Cmd/contents.htm">tdbc::sqlite3 Package Commands</A> | <A HREF="../ThreadCmd/contents.htm">Thread Package Commands</A> | <A HREF="../TclLib/contents.htm">Tcl C API</A> | <A HREF="../TkLib/contents.htm">Tk C API</A> | <A HREF="../ItclLib/contents.htm">[incr Tcl] Package C API</A> | <A HREF="../TdbcLib/contents.htm">TDBC Package C API</A></H3>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_FreeXId &mdash; make X resource identifier available for reuse
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+<B>Tk_FreeXId(</B><I>display, id</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL class="arguments">
+<DT>Display <B>*display</B> (in)<DD>
+Display for which <I>id</I> was allocated.
+<P><DT>XID <B>id</B> (in)<DD>
+Identifier of X resource (window, font, pixmap, cursor, graphics
+context, or colormap) that is no longer in use.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+The default allocator for resource identifiers provided by Xlib is very
+simple-minded and does not allow resource identifiers to be re-used.
+If a long-running application reaches the end of the resource id
+space, it will generate an X protocol error and crash.
+Tk replaces the default id allocator with its own allocator, which
+allows identifiers to be reused.
+In order for this to work, <B>Tk_FreeXId</B> must be called to
+tell the allocator about resources that have been freed.
+Tk automatically calls <B>Tk_FreeXId</B> whenever it frees a
+resource, so if you use procedures like <B><A HREF="../TkLib/GetFont.htm">Tk_GetFont</A></B>,
+<B><A HREF="../TkLib/GetGC.htm">Tk_GetGC</A></B>, and <B><A HREF="../TkLib/GetPixmap.htm">Tk_GetPixmap</A></B> then you need not call
+<B>Tk_FreeXId</B>.
+However, if you allocate resources directly from Xlib, for example
+by calling <B>XCreatePixmap</B>, then you should call <B>Tk_FreeXId</B>
+when you call the corresponding Xlib free procedure, such as
+<B>XFreePixmap</B>.
+If you do not call <B>Tk_FreeXId</B> then the resource identifier will
+be lost, which could cause problems if the application runs long enough
+to lose all of the available identifiers.
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/R.htm#resource identifier">resource identifier</A>
+<div class="copy">Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
+</BODY></HTML>

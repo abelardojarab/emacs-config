@@ -1,0 +1,825 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Math::BigFloat</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>Math::BigFloat</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-M.html">Core modules (M)</a> &gt;
+      
+    
+    Math::BigFloat
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>Math::BigFloat</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Input">Input</a><li><a href="#Output">Output</a><li><a href="#mantissa()%2c-exponent()-and-parts()">mantissa(), exponent() and parts()</a><li><a href="#Accuracy-vs.-Precision">Accuracy vs. Precision</a><li><a href="#Rounding">Rounding</a></ul><li><a href="#METHODS">METHODS</a><li><a href="#Autocreating-constants">Autocreating constants</a><ul><li><a href="#Math-library">Math library</a><li><a href="#Using-Math%3a%3aBigInt%3a%3aLite">Using Math::BigInt::Lite</a></ul><li><a href="#EXPORTS">EXPORTS</a><li><a href="#CAVEATS">CAVEATS</a><li><a href="#BUGS">BUGS</a><li><a href="#SUPPORT">SUPPORT</a><li><a href="#LICENSE">LICENSE</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#AUTHORS">AUTHORS</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>Math::BigFloat - Arbitrary size floating point math package</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li> <a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li><li></li><li> <span class="c"># Number creation</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="i">$str</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># defaults to 0</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$y</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>			<span class="c"># make a true copy</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$nan</span>  = <span class="w">Math::BigFloat</span><span class="w">-&gt;bnan</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># create a NotANumber</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$zero</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;bzero</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># create a +0</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$inf</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;binf</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># create a +inf</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$inf</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;binf</span><span class="s">(</span><span class="q">&#39;-&#39;</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># create a -inf</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$one</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;bone</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># create a +1</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$mone</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;bone</span><span class="s">(</span><span class="q">&#39;-&#39;</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># create a -1</span></li><li></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$pi</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;bpi</span><span class="s">(</span><span class="n">100</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># PI to 100 digits</span></li><li></li><li> <span class="c"># the following examples compute their result to 100 digits accuracy:</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$cos</span>  = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="i">-&gt;bcos</span><span class="s">(</span><span class="n">100</span><span class="s">)</span><span class="sc">;</span>	      <span class="c"># cosinus(1)</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$sin</span>  = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="i">-&gt;bsin</span><span class="s">(</span><span class="n">100</span><span class="s">)</span><span class="sc">;</span>	      <span class="c"># sinus(1)</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$atan</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="i">-&gt;batan</span><span class="s">(</span><span class="n">100</span><span class="s">)</span><span class="sc">;</span>	      <span class="c"># arcus tangens(1)</span></li><li></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$atan2</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span>  <span class="n">1</span> <span class="s">)</span><span class="i">-&gt;batan2</span><span class="s">(</span> <span class="n">1</span> <span class="cm">,</span><span class="n">100</span><span class="s">)</span><span class="sc">;</span> <span class="c"># batan(1)</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$atan2</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span>  <span class="n">1</span> <span class="s">)</span><span class="i">-&gt;batan2</span><span class="s">(</span> <span class="n">8</span> <span class="cm">,</span><span class="n">100</span><span class="s">)</span><span class="sc">;</span> <span class="c"># batan(1/8)</span></li><li> <a class="l_k" href="../functions/my.html">my</a> <span class="i">$atan2</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span> <span class="n">-2</span> <span class="s">)</span><span class="i">-&gt;batan2</span><span class="s">(</span> <span class="n">1</span> <span class="cm">,</span><span class="n">100</span><span class="s">)</span><span class="sc">;</span> <span class="c"># batan(-2)</span></li><li></li><li> <span class="c"># Testing</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_zero</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># true if arg is +0</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_nan</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># true if arg is NaN</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_one</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># true if arg is +1</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_one</span><span class="s">(</span><span class="q">&#39;-&#39;</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># true if arg is -1</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_odd</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># true if odd, false for even</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_even</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># true if even, false for odd</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_pos</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># true if &gt;= 0</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_neg</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># true if &lt;  0</span></li><li> <span class="i">$x</span><span class="i">-&gt;is_inf</span><span class="s">(</span><span class="w">sign</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># true if +inf, or -inf (default is &#39;+&#39;)</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;bcmp</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># compare numbers (undef,&lt;0,=0,&gt;0)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bacmp</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># compare absolutely (undef,&lt;0,=0,&gt;0)</span></li><li> <span class="i">$x</span><span class="i">-&gt;sign</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># return the sign, either +,- or NaN</span></li><li> <span class="i">$x</span><span class="i">-&gt;digit</span><span class="s">(</span><span class="i">$n</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># return the nth digit, counting from right</span></li><li> <span class="i">$x</span><span class="i">-&gt;digit</span><span class="s">(</span>-<span class="i">$n</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># return the nth digit, counting from left </span></li><li></li><li> <span class="c"># The following all modify their first argument. If you want to pre-</span></li><li> <span class="c"># serve $x, use $z = $x-&gt;copy()-&gt;bXXX($y); See under L&lt;/CAVEATS&gt; for</span></li><li> <span class="c"># necessary when mixing $a = $b assignments with non-overloaded math.</span></li><li></li><li> <span class="c"># set </span></li><li> <span class="i">$x</span><span class="i">-&gt;bzero</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># set $i to 0</span></li><li> <span class="i">$x</span><span class="i">-&gt;bnan</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># set $i to NaN</span></li><li> <span class="i">$x</span><span class="i">-&gt;bone</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># set $x to +1</span></li><li> <span class="i">$x</span><span class="i">-&gt;bone</span><span class="s">(</span><span class="q">&#39;-&#39;</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># set $x to -1</span></li><li> <span class="i">$x</span><span class="i">-&gt;binf</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># set $x to inf</span></li><li> <span class="i">$x</span><span class="i">-&gt;binf</span><span class="s">(</span><span class="q">&#39;-&#39;</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># set $x to -inf</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;bneg</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># negation</span></li><li> <span class="i">$x</span><span class="i">-&gt;babs</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># absolute value</span></li><li> <span class="i">$x</span><span class="i">-&gt;bnorm</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># normalize (no-op)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bnot</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># two&#39;s complement (bit wise not)</span></li><li> <span class="i">$x</span><span class="i">-&gt;binc</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># increment x by 1</span></li><li> <span class="i">$x</span><span class="i">-&gt;bdec</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># decrement x by 1</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;badd</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># addition (add $y to $x)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bsub</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># subtraction (subtract $y from $x)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bmul</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># multiplication (multiply $x by $y)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># divide, set $x to quotient</span></li><li>			 <span class="c"># return (quo,rem) or quo if scalar</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;bmod</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># modulus ($x % $y)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bpow</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># power of arguments ($x ** $y)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bmodpow</span><span class="s">(</span><span class="i">$exp</span><span class="cm">,</span><span class="i">$mod</span><span class="s">)</span><span class="sc">;</span> <span class="c"># modular exponentiation (($num**$exp) % $mod))</span></li><li> <span class="i">$x</span><span class="i">-&gt;blsft</span><span class="s">(</span><span class="i">$y</span><span class="cm">,</span> <span class="i">$n</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># left shift by $y places in base $n</span></li><li> <span class="i">$x</span><span class="i">-&gt;brsft</span><span class="s">(</span><span class="i">$y</span><span class="cm">,</span> <span class="i">$n</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># right shift by $y places in base $n</span></li><li>			 <span class="c"># returns (quo,rem) or quo if in scalar context</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;blog</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># logarithm of $x to base e (Euler&#39;s number)</span></li><li> <span class="i">$x</span><span class="i">-&gt;blog</span><span class="s">(</span><span class="i">$base</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># logarithm of $x to base $base (f.i. 2)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bexp</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># calculate e ** $x where e is Euler&#39;s number</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;band</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># bit-wise and</span></li><li> <span class="i">$x</span><span class="i">-&gt;bior</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># bit-wise inclusive or</span></li><li> <span class="i">$x</span><span class="i">-&gt;bxor</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># bit-wise exclusive or</span></li><li> <span class="i">$x</span><span class="i">-&gt;bnot</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># bit-wise not (two&#39;s complement)</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;bsqrt</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># calculate square-root</span></li><li> <span class="i">$x</span><span class="i">-&gt;broot</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># $y&#39;th root of $x (e.g. $y == 3 =&gt; cubic root)</span></li><li> <span class="i">$x</span><span class="i">-&gt;bfac</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># factorial of $x (1*2*3*4*..$x)</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;bround</span><span class="s">(</span><span class="i">$N</span><span class="s">)</span><span class="sc">;</span> 	 <span class="c"># accuracy: preserve $N digits</span></li><li> <span class="i">$x</span><span class="i">-&gt;bfround</span><span class="s">(</span><span class="i">$N</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># precision: round to the $Nth digit</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;bfloor</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># return integer less or equal than $x</span></li><li> <span class="i">$x</span><span class="i">-&gt;bceil</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># return integer greater or equal than $x</span></li><li> <span class="i">$x</span><span class="i">-&gt;bint</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>             <span class="c"># round towards zero</span></li><li></li><li>  <span class="c"># The following do not modify their arguments:</span></li><li></li><li> <span class="i">bgcd</span><span class="s">(</span><span class="i">@values</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># greatest common divisor</span></li><li> <span class="i">blcm</span><span class="s">(</span><span class="i">@values</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># lowest common multiplicator</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;bstr</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># return string</span></li><li> <span class="i">$x</span><span class="i">-&gt;bsstr</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># return string in scientific notation</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;as_int</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># return $x as BigInt </span></li><li> <span class="i">$x</span><span class="i">-&gt;exponent</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># return exponent as BigInt</span></li><li> <span class="i">$x</span><span class="i">-&gt;mantissa</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># return mantissa as BigInt</span></li><li> <span class="i">$x</span><span class="i">-&gt;parts</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># return (mantissa,exponent) as BigInt</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;length</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>		 <span class="c"># number of digits (w/o sign and &#39;.&#39;)</span></li><li> <span class="s">(</span><span class="i">$l</span><span class="cm">,</span><span class="i">$f</span><span class="s">)</span> = <span class="i">$x</span><span class="i">-&gt;length</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span> <span class="c"># number of digits, and length of fraction</span></li><li></li><li> <span class="i">$x</span><span class="i">-&gt;precision</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># return P of $x (or global, if P of $x undef)</span></li><li> <span class="i">$x</span><span class="i">-&gt;precision</span><span class="s">(</span><span class="i">$n</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># set P of $x to $n</span></li><li> <span class="i">$x</span><span class="i">-&gt;accuracy</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># return A of $x (or global, if A of $x undef)</span></li><li> <span class="i">$x</span><span class="i">-&gt;accuracy</span><span class="s">(</span><span class="i">$n</span><span class="s">)</span><span class="sc">;</span>	 <span class="c"># set A $x to $n</span></li><li></li><li> <span class="c"># these get/set the appropriate global value for all BigFloat objects</span></li><li> <span class="w">Math::BigFloat</span><span class="w">-&gt;precision</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># Precision</span></li><li> <span class="w">Math::BigFloat</span><span class="w">-&gt;accuracy</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># Accuracy</span></li><li> <span class="w">Math::BigFloat</span><span class="w">-&gt;round_mode</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># rounding mode</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p>All operators (including basic math operations) are overloaded if you
+declare your big floating point numbers as</p>
+<pre class="verbatim"><ol><li>  <span class="i">$i</span> = <span class="w">new</span> <span class="w">Math::BigFloat</span> <span class="q">&#39;12_3.456_789_123_456_789E-2&#39;</span><span class="sc">;</span></li></ol></pre><p>Operations with overloaded operators preserve the arguments, which is
+exactly what you expect.</p>
+<a name="Input"></a><h2>Input</h2>
+<p>Input to these routines are either BigFloat objects, or strings of the
+following four forms:</p>
+<ul>
+<li>
+<p><code class="inline"><span class="q">/^[+-]\d+$/</span></code>
+</p>
+</li>
+<li>
+<p><code class="inline"><span class="q">/^[+-]\d+\.\d*$/</span></code>
+</p>
+</li>
+<li>
+<p><code class="inline"><span class="q">/^[+-]\d+E[+-]?\d+$/</span></code>
+</p>
+</li>
+<li>
+<p><code class="inline"><span class="q">/^[+-]\d*\.\d+E[+-]?\d+$/</span></code>
+</p>
+</li>
+</ul>
+<p>all with optional leading and trailing zeros and/or spaces. Additionally,
+numbers are allowed to have an underscore between any two digits.</p>
+<p>Empty strings as well as other illegal numbers results in 'NaN'.</p>
+<p>bnorm() on a BigFloat object is now effectively a no-op, since the numbers 
+are always stored in normalized form. On a string, it creates a BigFloat 
+object.</p>
+<a name="Output"></a><h2>Output</h2>
+<p>Output values are BigFloat objects (normalized), except for bstr() and bsstr().</p>
+<p>The string output will always have leading and trailing zeros stripped and drop
+a plus sign. <code class="inline"><span class="i">bstr</span><span class="s">(</span><span class="s">)</span></code>
+ will give you always the form with a decimal point,
+while <code class="inline"><span class="i">bsstr</span><span class="s">(</span><span class="s">)</span></code>
+ (s for scientific) gives you the scientific notation.</p>
+<pre class="verbatim"><ol><li>	Input			bstr()		bsstr()</li><li>	'-0'			'0'		'0E1'</li><li>   	'  -123 123 123'	'-123123123'	'-123123123E0'</li><li>	'00.0123'		'0.0123'	'123E-4'</li><li>	'123.45E-2'		'1.2345'	'12345E-4'</li><li>	'10E+3'			'10000'		'1E4'</li></ol></pre><p>Some routines (<code class="inline"><span class="i">is_odd</span><span class="s">(</span><span class="s">)</span></code>
+, <code class="inline"><span class="i">is_even</span><span class="s">(</span><span class="s">)</span></code>
+, <code class="inline"><span class="i">is_zero</span><span class="s">(</span><span class="s">)</span></code>
+, <code class="inline"><span class="i">is_one</span><span class="s">(</span><span class="s">)</span></code>
+,
+<code class="inline"><span class="i">is_nan</span><span class="s">(</span><span class="s">)</span></code>
+) return true or false, while others (<code class="inline"><span class="i">bcmp</span><span class="s">(</span><span class="s">)</span></code>
+, <code class="inline"><span class="i">bacmp</span><span class="s">(</span><span class="s">)</span></code>
+)
+return either undef, &lt;0, 0 or &gt;0 and are suited for sort.</p>
+<p>Actual math is done by using the class defined with <code class="inline"><span class="w">with</span> <span class="cm">=&gt;</span> <span class="w">Class</span><span class="sc">;</span></code>
+
+(which defaults to BigInts) to represent the mantissa and exponent.</p>
+<p>The sign <code class="inline"><span class="q">/^[+-]$/</span></code>
+ is stored separately. The string 'NaN' is used to 
+represent the result when input arguments are not numbers, as well as 
+the result of dividing by zero.</p>
+<a name="mantissa()%2c-exponent()-and-parts()"></a><h2>mantissa(), exponent() and parts()</h2>
+<p>mantissa() and exponent() return the said parts of the BigFloat
+as BigInts such that:</p>
+<pre class="verbatim"><ol><li>	<span class="i">$m</span> = <span class="i">$x</span><span class="i">-&gt;mantissa</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>	<span class="i">$e</span> = <span class="i">$x</span><span class="i">-&gt;exponent</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>	<span class="i">$y</span> = <span class="i">$m</span> * <span class="s">(</span> <span class="n">10</span> ** <span class="i">$e</span> <span class="s">)</span><span class="sc">;</span></li><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;ok\n&quot;</span> if <span class="i">$x</span> == <span class="i">$y</span><span class="sc">;</span></li></ol></pre><p><code class="inline"><span class="s">(</span><span class="i">$m</span><span class="cm">,</span><span class="i">$e</span><span class="s">)</span> = <span class="i">$x</span><span class="i">-&gt;parts</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></code>
+ is just a shortcut giving you both of them.</p>
+<p>A zero is represented and returned as <code class="inline"><span class="n">0E1</span></code>
+, <b>not</b> <code class="inline"><span class="n">0E0</span></code>
+ (after Knuth).</p>
+<p>Currently the mantissa is reduced as much as possible, favouring higher
+exponents over lower ones (e.g. returning 1e7 instead of 10e6 or 10000000e0).
+This might change in the future, so do not depend on it.</p>
+<a name="Accuracy-vs.-Precision"></a><h2>Accuracy vs. Precision</h2>
+<p>See also: <a href="#Rounding">Rounding</a>.</p>
+<p>Math::BigFloat supports both precision (rounding to a certain place before or
+after the dot) and accuracy (rounding to a certain number of digits). For a
+full documentation, examples and tips on these topics please see the large
+section about rounding in <a href="../Math/BigInt.html">Math::BigInt</a>.</p>
+<p>Since things like <code class="inline"><a class="l_k" href="../functions/sqrt.html">sqrt(2)</a></code> or <code class="inline"><span class="n">1</span> / <span class="n">3</span></code>
+ must presented with a limited
+accuracy lest a operation consumes all resources, each operation produces
+no more than the requested number of digits.</p>
+<p>If there is no global precision or accuracy set, <b>and</b> the operation in
+question was not called with a requested precision or accuracy, <b>and</b> the
+input $x has no accuracy or precision set, then a fallback parameter will
+be used. For historical reasons, it is called <code class="inline"><span class="w">div_scale</span></code>
+ and can be accessed
+via:</p>
+<pre class="verbatim"><ol><li>	<span class="i">$d</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;div_scale</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># query</span></li><li>	<span class="w">Math::BigFloat</span><span class="w">-&gt;div_scale</span><span class="s">(</span><span class="i">$n</span><span class="s">)</span><span class="sc">;</span>		<span class="c"># set to $n digits</span></li></ol></pre><p>The default value for <code class="inline"><span class="w">div_scale</span></code>
+ is 40.</p>
+<p>In case the result of one operation has more digits than specified,
+it is rounded. The rounding mode taken is either the default mode, or the one
+supplied to the operation after the <i>scale</i>:</p>
+<pre class="verbatim"><ol><li>    <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">2</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="w">Math::BigFloat</span><span class="w">-&gt;accuracy</span><span class="s">(</span><span class="n">5</span><span class="s">)</span><span class="sc">;</span>	      <span class="c"># 5 digits max</span></li><li>    <span class="i">$y</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="n">3</span><span class="s">)</span><span class="sc">;</span>		      <span class="c"># will give 0.66667</span></li><li>    <span class="i">$y</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="n">3</span><span class="cm">,</span><span class="n">6</span><span class="s">)</span><span class="sc">;</span>		      <span class="c"># will give 0.666667</span></li><li>    <span class="i">$y</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="n">3</span><span class="cm">,</span><span class="n">6</span><span class="cm">,</span><a class="l_k" href="../functions/undef.html">undef</a><span class="cm">,</span><span class="q">&#39;odd&#39;</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># will give 0.666667</span></li><li>    <span class="w">Math::BigFloat</span><span class="w">-&gt;round_mode</span><span class="s">(</span><span class="q">&#39;zero&#39;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="i">$y</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="n">3</span><span class="cm">,</span><span class="n">6</span><span class="s">)</span><span class="sc">;</span>		      <span class="c"># will also give 0.666667</span></li></ol></pre><p>Note that <code class="inline"><span class="w">Math::BigFloat</span><span class="w">-&gt;accuracy</span><span class="s">(</span><span class="s">)</span></code>
+ and <code class="inline"><span class="w">Math::BigFloat</span><span class="w">-&gt;precision</span><span class="s">(</span><span class="s">)</span></code>
+
+set the global variables, and thus <b>any</b> newly created number will be subject
+to the global rounding <b>immediately</b>. This means that in the examples above, the
+<code class="inline"><span class="n">3</span></code>
+ as argument to <code class="inline"><span class="i">bdiv</span><span class="s">(</span><span class="s">)</span></code>
+ will also get an accuracy of <b>5</b>.</p>
+<p>It is less confusing to either calculate the result fully, and afterwards
+round it explicitly, or use the additional parameters to the math
+functions like so:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li><li>	<span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">2</span><span class="s">)</span><span class="sc">;</span></li><li>	<span class="i">$y</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="n">3</span><span class="s">)</span><span class="sc">;</span></li><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="i">$y</span><span class="i">-&gt;bround</span><span class="s">(</span><span class="n">5</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span>		<span class="c"># will give 0.66667</span></li><li></li><li>	or</li><li></li><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li><li>	<span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">2</span><span class="s">)</span><span class="sc">;</span></li><li>	<span class="i">$y</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="n">3</span><span class="cm">,</span><span class="n">5</span><span class="s">)</span><span class="sc">;</span>		<span class="c"># will give 0.66667</span></li><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$y\n&quot;</span><span class="sc">;</span></li></ol></pre><a name="Rounding"></a><h2>Rounding</h2>
+<ul>
+<li><a name="ffround-(-%2b%24scale-)"></a><b>ffround ( +$scale )</b>
+<p>Rounds to the $scale'th place left from the '.', counting from the dot.
+The first digit is numbered 1.</p>
+</li>
+<li><a name="ffround-(--%24scale-)"></a><b>ffround ( -$scale )</b>
+<p>Rounds to the $scale'th place right from the '.', counting from the dot.</p>
+</li>
+<li><a name="ffround-(-0-)"></a><b>ffround ( 0 )</b>
+<p>Rounds to an integer.</p>
+</li>
+<li><a name="fround--(-%2b%24scale-)"></a><b>fround  ( +$scale )</b>
+<p>Preserves accuracy to $scale digits from the left (aka significant digits)
+and pads the rest with zeros. If the number is between 1 and -1, the
+significant digits count from the first non-zero after the '.'</p>
+</li>
+<li><a name="fround--(--%24scale-)-and-fround-(-0-)"></a><b>fround  ( -$scale ) and fround ( 0 )</b>
+<p>These are effectively no-ops.</p>
+</li>
+</ul>
+<p>All rounding functions take as a second parameter a rounding mode from one of
+the following: 'even', 'odd', '+inf', '-inf', 'zero', 'trunc' or 'common'.</p>
+<p>The default rounding mode is 'even'. By using
+<code class="inline"><span class="w">Math::BigFloat</span><span class="w">-&gt;round_mode</span><span class="s">(</span><span class="i">$round_mode</span><span class="s">)</span><span class="sc">;</span></code>
+ you can get and set the default
+mode for subsequent rounding. The usage of <code class="inline">$Math::BigFloat::$round_mode</code> is
+no longer supported.
+The second parameter to the round functions then overrides the default
+temporarily.</p>
+<p>The <code class="inline"><span class="i">as_number</span><span class="s">(</span><span class="s">)</span></code>
+ function returns a BigInt from a Math::BigFloat. It uses
+'trunc' as rounding mode to make it equivalent to:</p>
+<pre class="verbatim"><ol><li>	<span class="i">$x</span> = <span class="n">2.5</span><span class="sc">;</span></li><li>	<span class="i">$y</span> = <a class="l_k" href="../functions/int.html">int</a><span class="s">(</span><span class="i">$x</span><span class="s">)</span> + <span class="n">2</span><span class="sc">;</span></li></ol></pre><p>You can override this by passing the desired rounding mode as parameter to
+<code class="inline"><span class="i">as_number</span><span class="s">(</span><span class="s">)</span></code>
+:</p>
+<pre class="verbatim"><ol><li>	<span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">2.5</span><span class="s">)</span><span class="sc">;</span></li><li>	<span class="i">$y</span> = <span class="i">$x</span><span class="i">-&gt;as_number</span><span class="s">(</span><span class="q">&#39;odd&#39;</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># $y = 3</span></li></ol></pre><a name="METHODS"></a><h1>METHODS</h1>
+<p>Math::BigFloat supports all methods that Math::BigInt supports, except it
+calculates non-integer results when possible. Please see <a href="../Math/BigInt.html">Math::BigInt</a>
+for a full description of each method. Below are just the most important
+differences:</p>
+<ul>
+<li><a name="accuracy()"></a><b>accuracy()</b>
+<pre class="verbatim"><ol><li>      <span class="i">$x</span><span class="i">-&gt;accuracy</span><span class="s">(</span><span class="n">5</span><span class="s">)</span><span class="sc">;</span>           <span class="c"># local for $x</span></li><li>      <span class="w">CLASS</span><span class="w">-&gt;accuracy</span><span class="s">(</span><span class="n">5</span><span class="s">)</span><span class="sc">;</span>        <span class="c"># global for all members of CLASS</span></li><li>                                 <span class="c"># Note: This also applies to new()!</span></li><li></li><li>      <span class="i">$A</span> = <span class="i">$x</span><span class="i">-&gt;accuracy</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>       <span class="c"># read out accuracy that affects $x</span></li><li>      <span class="i">$A</span> = <span class="w">CLASS</span><span class="w">-&gt;accuracy</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>    <span class="c"># read out global accuracy</span></li></ol></pre><p>Set or get the global or local accuracy, aka how many significant digits the
+results have. If you set a global accuracy, then this also applies to new()!</p>
+<p>Warning! The accuracy <i>sticks</i>, e.g. once you created a number under the
+influence of <code class="inline"><span class="w">CLASS</span><span class="w">-&gt;accuracy</span><span class="s">(</span><span class="i">$A</span><span class="s">)</span></code>
+, all results from math operations with
+that number will also be rounded.</p>
+<p>In most cases, you should probably round the results explicitly using one of
+<a href="../Math/BigInt.html#round()">round() in Math::BigInt</a>, <a href="../Math/BigInt.html#bround()">bround() in Math::BigInt</a> or <a href="../Math/BigInt.html#bfround()">bfround() in Math::BigInt</a> or by passing the desired accuracy
+to the math operation as additional parameter:</p>
+<pre class="verbatim"><ol><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigInt</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">30000</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/my.html">my</a> <span class="i">$y</span> = <span class="w">Math::BigInt</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">7</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <a class="l_k" href="../functions/scalar.html">scalar</a> <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="i">$y</span><span class="cm">,</span> <span class="n">2</span><span class="s">)</span><span class="sc">;</span>           <span class="c"># print 4300</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <a class="l_k" href="../functions/scalar.html">scalar</a> <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="i">-&gt;bround</span><span class="s">(</span><span class="n">2</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># print 4300</span></li></ol></pre></li>
+<li><a name="precision()"></a><b>precision()</b>
+<pre class="verbatim"><ol><li>      <span class="i">$x</span><span class="i">-&gt;precision</span><span class="s">(</span><span class="n">-2</span><span class="s">)</span><span class="sc">;</span>      <span class="c"># local for $x, round at the second</span></li><li>                              <span class="c"># digit right of the dot</span></li><li>      <span class="i">$x</span><span class="i">-&gt;precision</span><span class="s">(</span><span class="n">2</span><span class="s">)</span><span class="sc">;</span>       <span class="c"># ditto, round at the second digit</span></li><li>                              <span class="c"># left of the dot</span></li><li></li><li>      <span class="w">CLASS</span><span class="w">-&gt;precision</span><span class="s">(</span><span class="n">5</span><span class="s">)</span><span class="sc">;</span>    <span class="c"># Global for all members of CLASS</span></li><li>                              <span class="c"># This also applies to new()!</span></li><li>      <span class="w">CLASS</span><span class="w">-&gt;precision</span><span class="s">(</span><span class="n">-5</span><span class="s">)</span><span class="sc">;</span>   <span class="c"># ditto</span></li><li></li><li>      <span class="i">$P</span> = <span class="w">CLASS</span><span class="w">-&gt;precision</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># read out global precision</span></li><li>      <span class="i">$P</span> = <span class="i">$x</span><span class="i">-&gt;precision</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span>     <span class="c"># read out precision that affects $x</span></li></ol></pre><p>Note: You probably want to use <a href="#accuracy()">accuracy()</a> instead. With <a href="#accuracy()">accuracy()</a> you
+set the number of digits each result should have, with <a href="#precision()">precision()</a> you
+set the place where to round!</p>
+</li>
+<li><a name="bexp()"></a><b>bexp()</b>
+<pre class="verbatim"><ol><li>	<span class="i">$x</span><span class="i">-&gt;bexp</span><span class="s">(</span><span class="i">$accuracy</span><span class="s">)</span><span class="sc">;</span>		<span class="c"># calculate e ** X</span></li></ol></pre><p>Calculates the expression <code class="inline"><span class="w">e</span> ** <span class="i">$x</span></code>
+ where <code class="inline"><span class="w">e</span></code>
+ is Euler's number.</p>
+<p>This method was added in v1.82 of Math::BigInt (April 2007).</p>
+</li>
+<li><a name="bnok()"></a><b>bnok()</b>
+<pre class="verbatim"><ol><li>	<span class="i">$x</span><span class="i">-&gt;bnok</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="sc">;</span>	<span class="c"># x over y (binomial coefficient n over k)</span></li></ol></pre><p>Calculates the binomial coefficient n over k, also called the "choose"
+function. The result is equivalent to:</p>
+<pre class="verbatim"><ol><li>	( n )      n!</li><li>	| - |  = -------</li><li>	( k )    k!(n-k)!</li></ol></pre><p>This method was added in v1.84 of Math::BigInt (April 2007).</p>
+</li>
+<li><a name="bpi()"></a><b>bpi()</b>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="i">Math::BigFloat</span><span class="i">-&gt;bpi</span><span class="s">(</span><span class="n">100</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><p>Calculate PI to N digits (including the 3 before the dot). The result is
+rounded according to the current rounding mode, which defaults to "even".</p>
+<p>This method was added in v1.87 of Math::BigInt (June 2007).</p>
+</li>
+<li><a name="bcos()"></a><b>bcos()</b>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="sc">;</span></li><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="i">$x</span><span class="i">-&gt;bcos</span><span class="s">(</span><span class="n">100</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><p>Calculate the cosinus of $x, modifying $x in place.</p>
+<p>This method was added in v1.87 of Math::BigInt (June 2007).</p>
+</li>
+<li><a name="bsin()"></a><b>bsin()</b>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="sc">;</span></li><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="i">$x</span><span class="i">-&gt;bsin</span><span class="s">(</span><span class="n">100</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><p>Calculate the sinus of $x, modifying $x in place.</p>
+<p>This method was added in v1.87 of Math::BigInt (June 2007).</p>
+</li>
+<li><a name="batan2()"></a><b>batan2()</b>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/my.html">my</a> <span class="i">$y</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">2</span><span class="s">)</span><span class="sc">;</span></li><li>	<a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">3</span><span class="s">)</span><span class="sc">;</span></li><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="i">$y</span><span class="i">-&gt;batan2</span><span class="s">(</span><span class="i">$x</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><p>Calculate the arcus tanges of <code class="inline"><span class="i">$y</span></code>
+ divided by <code class="inline"><span class="i">$x</span></code>
+, modifying $y in place.
+See also <a href="#batan()">batan()</a>.</p>
+<p>This method was added in v1.87 of Math::BigInt (June 2007).</p>
+</li>
+<li><a name="batan()"></a><b>batan()</b>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">1</span><span class="s">)</span><span class="sc">;</span></li><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="i">$x</span><span class="i">-&gt;batan</span><span class="s">(</span><span class="n">100</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><p>Calculate the arcus tanges of $x, modifying $x in place. See also <a href="#batan2()">batan2()</a>.</p>
+<p>This method was added in v1.87 of Math::BigInt (June 2007).</p>
+</li>
+<li><a name="bmuladd()"></a><b>bmuladd()</b>
+<pre class="verbatim"><ol><li>	<span class="i">$x</span><span class="i">-&gt;bmuladd</span><span class="s">(</span><span class="i">$y</span><span class="cm">,</span><span class="i">$z</span><span class="s">)</span><span class="sc">;</span></li></ol></pre><p>Multiply $x by $y, and then add $z to the result.</p>
+<p>This method was added in v1.87 of Math::BigInt (June 2007).</p>
+</li>
+</ul>
+<a name="Autocreating-constants"></a><h1>Autocreating constants</h1>
+<p>After <code class="inline"><a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="q">&#39;:constant&#39;</span></code>
+ all the floating point constants
+in the given scope are converted to <code class="inline"><span class="w">Math::BigFloat</span></code>
+. This conversion
+happens at compile time.</p>
+<p>In particular</p>
+<pre class="verbatim"><ol><li>  perl -MMath::BigFloat=:constant -e 'print 2E-100,"\n"'</li></ol></pre><p>prints the value of <code class="inline"><span class="n">2E-100</span></code>
+. Note that without conversion of 
+constants the expression 2E-100 will be calculated as normal floating point 
+number.</p>
+<p>Please note that ':constant' does not affect integer constants, nor binary 
+nor hexadecimal constants. Use <a href="../bignum.html">bignum</a> or <a href="../Math/BigInt.html">Math::BigInt</a> to get this to
+work.</p>
+<a name="Math-library"></a><h2>Math library</h2>
+<p>Math with the numbers is done (by default) by a module called
+Math::BigInt::Calc. This is equivalent to saying:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="w">lib</span> <span class="cm">=&gt;</span> <span class="q">&#39;Calc&#39;</span><span class="sc">;</span></li></ol></pre><p>You can change this by using:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="w">lib</span> <span class="cm">=&gt;</span> <span class="q">&#39;GMP&#39;</span><span class="sc">;</span></li></ol></pre><p><b>Note</b>: General purpose packages should not be explicit about the library
+to use; let the script author decide which is best.</p>
+<p>Note: The keyword 'lib' will warn when the requested library could not be
+loaded. To suppress the warning use 'try' instead:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="w">try</span> <span class="cm">=&gt;</span> <span class="q">'GMP'</span><span class="sc">;</span></li></ol></pre><p>If your script works with huge numbers and Calc is too slow for them,
+you can also for the loading of one of these libraries and if none
+of them can be used, the code will die:</p>
+<pre class="verbatim"><ol><li>        <a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="w">only</span> <span class="cm">=&gt;</span> <span class="q">'GMP,Pari'</span><span class="sc">;</span></li></ol></pre><p>The following would first try to find Math::BigInt::Foo, then
+Math::BigInt::Bar, and when this also fails, revert to Math::BigInt::Calc:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="w">lib</span> <span class="cm">=&gt;</span> <span class="q">&#39;Foo,Math::BigInt::Bar&#39;</span><span class="sc">;</span></li></ol></pre><p>See the respective low-level library documentation for further details.</p>
+<p>Please note that Math::BigFloat does <b>not</b> use the denoted library itself,
+but it merely passes the lib argument to Math::BigInt. So, instead of the need
+to do:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigInt</span> <span class="w">lib</span> <span class="cm">=&gt;</span> <span class="q">&#39;GMP&#39;</span><span class="sc">;</span></li><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li></ol></pre><p>you can roll it all into one line:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="w">lib</span> <span class="cm">=&gt;</span> <span class="q">&#39;GMP&#39;</span><span class="sc">;</span></li></ol></pre><p>It is also possible to just require Math::BigFloat:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/require.html">require</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li></ol></pre><p>This will load the necessary things (like BigInt) when they are needed, and
+automatically.</p>
+<p>See <a href="../Math/BigInt.html">Math::BigInt</a> for more details than you ever wanted to know about using
+a different low-level library.</p>
+<a name="Using-Math%3a%3aBigInt%3a%3aLite"></a><h2>Using Math::BigInt::Lite</h2>
+<p>For backwards compatibility reasons it is still possible to
+request a different storage class for use with Math::BigFloat:</p>
+<pre class="verbatim"><ol><li>        <a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="w">with</span> <span class="cm">=&gt;</span> <span class="q">'Math::BigInt::Lite'</span><span class="sc">;</span></li></ol></pre><p>However, this request is ignored, as the current code now uses the low-level
+math library for directly storing the number parts.</p>
+<a name="EXPORTS"></a><h1>EXPORTS</h1>
+<p><code class="inline"><span class="w">Math::BigFloat</span></code>
+ exports nothing by default, but can export the <code class="inline"><span class="i">bpi</span><span class="s">(</span><span class="s">)</span></code>
+ method:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span> <span class="q">qw/bpi/</span><span class="sc">;</span></li><li></li><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="i">bpi</span><span class="s">(</span><span class="n">10</span><span class="s">)</span><span class="cm">,</span> <span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><a name="CAVEATS"></a><h1>CAVEATS</h1>
+<p>Do not try to be clever to insert some operations in between switching
+libraries:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/require.html">require</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$matter</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;bone</span><span class="s">(</span><span class="s">)</span> + <span class="n">4</span><span class="sc">;</span>	<span class="c"># load BigInt and Calc</span></li><li>    <span class="w">Math::BigFloat</span><span class="w">-&gt;import</span><span class="s">(</span> <span class="w">lib</span> <span class="cm">=&gt;</span> <span class="q">&#39;Pari&#39;</span> <span class="s">)</span><span class="sc">;</span>	<span class="c"># load Pari, too</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$anti_matter</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;bone</span><span class="s">(</span><span class="s">)</span>+<span class="n">4</span><span class="sc">;</span>	<span class="c"># now use Pari</span></li></ol></pre><p>This will create objects with numbers stored in two different backend libraries,
+and <b>VERY BAD THINGS</b> will happen when you use these together:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/my.html">my</a> <span class="i">$flash_and_bang</span> = <span class="i">$matter</span> + <span class="i">$anti_matter</span><span class="sc">;</span>	<span class="c"># Don't do this!</span></li></ol></pre><ul>
+<li><a name="stringify%2c-bstr()"></a><b>stringify, bstr()</b>
+<p>Both stringify and bstr() now drop the leading '+'. The old code would return
+'+1.23', the new returns '1.23'. See the documentation in <a href="../Math/BigInt.html">Math::BigInt</a> for
+reasoning and details.</p>
+</li>
+<li><a name="bdiv()"></a><b>bdiv()</b>
+<p>The following will probably not print what you expect:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/print.html">print</a> <span class="i">$c</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="n">123.456</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><p>It prints both quotient and remainder since print works in list context. Also,
+bdiv() will modify $c, so be careful. You probably want to use</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$c</span> / <span class="n">123.456</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span></li><li>    <span class="c"># or if you want to modify $c:</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <a class="l_k" href="../functions/scalar.html">scalar</a> <span class="i">$c</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="n">123.456</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><p>instead.</p>
+</li>
+<li><a name="brsft()"></a><b>brsft()</b>
+<p>The following will probably not print what you expect:</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/my.html">my</a> <span class="i">$c</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="q">'3.14159'</span><span class="s">)</span><span class="sc">;</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">$c</span><span class="i">-&gt;brsft</span><span class="s">(</span><span class="n">3</span><span class="cm">,</span><span class="n">10</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span>	<span class="c"># prints 0.00314153.1415</span></li></ol></pre><p>It prints both quotient and remainder, since print calls <code class="inline"><span class="i">brsft</span><span class="s">(</span><span class="s">)</span></code>
+ in list
+context. Also, <code class="inline"><span class="i">$c</span><span class="i">-&gt;brsft</span><span class="s">(</span><span class="s">)</span></code>
+ will modify $c, so be careful.
+You probably want to use</p>
+<pre class="verbatim"><ol><li>	<a class="l_k" href="../functions/print.html">print</a> <a class="l_k" href="../functions/scalar.html">scalar</a> <span class="i">$c</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;brsft</span><span class="s">(</span><span class="n">3</span><span class="cm">,</span><span class="n">10</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span></li><li>	<span class="c"># or if you really want to modify $c</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <a class="l_k" href="../functions/scalar.html">scalar</a> <span class="i">$c</span><span class="i">-&gt;brsft</span><span class="s">(</span><span class="n">3</span><span class="cm">,</span><span class="n">10</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span></li></ol></pre><p>instead.</p>
+</li>
+<li><a name="Modifying-and-%3d"></a><b>Modifying and =</b>
+<p>Beware of:</p>
+<pre class="verbatim"><ol><li>	<span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">5</span><span class="s">)</span><span class="sc">;</span></li><li>	<span class="i">$y</span> = <span class="i">$x</span><span class="sc">;</span></li></ol></pre><p>It will not do what you think, e.g. making a copy of $x. Instead it just makes
+a second reference to the <b>same</b> object and stores it in $y. Thus anything
+that modifies $x will modify $y (except overloaded math operators), and vice
+versa. See <a href="../Math/BigInt.html">Math::BigInt</a> for details and how to avoid that.</p>
+</li>
+<li><a name="bpow()"></a><b>bpow()</b>
+<p><code class="inline"><span class="i">bpow</span><span class="s">(</span><span class="s">)</span></code>
+ now modifies the first argument, unlike the old code which left
+it alone and only returned the result. This is to be consistent with
+<code class="inline"><span class="i">badd</span><span class="s">(</span><span class="s">)</span></code>
+ etc. The first will modify $x, the second one won't:</p>
+<pre class="verbatim"><ol><li>	print bpow($x,$i),"\n"; 	# modify $x</li><li>	print $x-&gt;bpow($i),"\n"; 	# ditto</li><li>	print $x ** $i,"\n";		# leave $x alone</li></ol></pre></li>
+<li><a name="precision()-vs.-accuracy()"></a><b>precision() vs. accuracy()</b>
+<p>A common pitfall is to use <a href="#precision()">precision()</a> when you want to round a result to
+a certain number of digits:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li><li></li><li>    <span class="w">Math::BigFloat</span><span class="w">-&gt;precision</span><span class="s">(</span><span class="n">4</span><span class="s">)</span><span class="sc">;</span>	    <span class="c"># does not do what you</span></li><li>					    <span class="c"># think it does</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">12345</span><span class="s">)</span><span class="sc">;</span>	    <span class="c"># rounds $x to &quot;12000&quot;!</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$x\n&quot;</span><span class="sc">;</span>			    <span class="c"># print &quot;12000&quot;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$y</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">3</span><span class="s">)</span><span class="sc">;</span>	    <span class="c"># rounds $y to &quot;0&quot;!</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$y\n&quot;</span><span class="sc">;</span>			    <span class="c"># print &quot;0&quot;</span></li><li>    <span class="i">$z</span> = <span class="i">$x</span> / <span class="i">$y</span><span class="sc">;</span>			    <span class="c"># 12000 / 0 =&gt; NaN!</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$z\n&quot;</span><span class="sc">;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$z</span><span class="i">-&gt;precision</span><span class="s">(</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span>		    <span class="c"># 4</span></li></ol></pre><p>Replacing <a href="#precision()">precision()</a> with <a href="#accuracy()">accuracy()</a> is probably not what you want, either:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li><li></li><li>    <span class="w">Math::BigFloat</span><span class="w">-&gt;accuracy</span><span class="s">(</span><span class="n">4</span><span class="s">)</span><span class="sc">;</span>	  <span class="c"># enables global rounding:</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">123456</span><span class="s">)</span><span class="sc">;</span>  <span class="c"># rounded immediately</span></li><li>                                          <span class="c">#   to &quot;12350&quot;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$x\n&quot;</span><span class="sc">;</span>			  <span class="c"># print &quot;123500&quot;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$y</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">3</span><span class="s">)</span><span class="sc">;</span>	  <span class="c"># rounded to &quot;3</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$y\n&quot;</span><span class="sc">;</span>			  <span class="c"># print &quot;3&quot;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$z</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="i">$y</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span> <span class="c"># 41170</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$z</span><span class="i">-&gt;accuracy</span><span class="s">(</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span>		  <span class="c"># 4</span></li></ol></pre><p>What you want to use instead is:</p>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">Math::BigFloat</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$x</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">123456</span><span class="s">)</span><span class="sc">;</span>    <span class="c"># no rounding</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$x\n&quot;</span><span class="sc">;</span>			    <span class="c"># print &quot;123456&quot;</span></li><li>    <a class="l_k" href="../functions/my.html">my</a> <span class="i">$y</span> = <span class="w">Math::BigFloat</span><span class="w">-&gt;new</span><span class="s">(</span><span class="n">3</span><span class="s">)</span><span class="sc">;</span>	    <span class="c"># no rounding</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="q">&quot;$y\n&quot;</span><span class="sc">;</span>			    <span class="c"># print &quot;3&quot;</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$z</span> = <span class="i">$x</span><span class="i">-&gt;copy</span><span class="s">(</span><span class="s">)</span><span class="i">-&gt;bdiv</span><span class="s">(</span><span class="i">$y</span><span class="cm">,</span><span class="n">4</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span> <span class="c"># 41150</span></li><li>    <a class="l_k" href="../functions/print.html">print</a> <span class="i">$z</span><span class="i">-&gt;accuracy</span><span class="s">(</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;\n&quot;</span><span class="sc">;</span>		    <span class="c"># undef</span></li></ol></pre><p>In addition to computing what you expected, the last example also does <b>not</b>
+"taint" the result with an accuracy or precision setting, which would
+influence any further operation.</p>
+</li>
+</ul>
+<a name="BUGS"></a><h1>BUGS</h1>
+<p>Please report any bugs or feature requests to
+<code class="inline"><span class="w">bug</span>-<span class="w">math</span>-<span class="w">bigint</span> <span class="w">at</span> <span class="w">rt</span>.<span class="w">cpan</span>.<span class="w">org</span></code>
+, or through the web interface at
+<a href="https://rt.cpan.org/Ticket/Create.html?Queue=Math-BigInt">https://rt.cpan.org/Ticket/Create.html?Queue=Math-BigInt</a>
+(requires login).
+We will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.</p>
+<a name="SUPPORT"></a><h1>SUPPORT</h1>
+<p>You can find documentation for this module with the perldoc command.</p>
+<pre class="verbatim"><ol><li>    <span class="w">perldoc</span> <span class="w">Math::BigFloat</span></li></ol></pre><p>You can also look for information at:</p>
+<ul>
+<li><a name="*-RT%3a-CPAN's-request-tracker"></a><b>RT: CPAN's request tracker</b>
+<p><a href="https://rt.cpan.org/Public/Dist/Display.html?Name=Math-BigInt">https://rt.cpan.org/Public/Dist/Display.html?Name=Math-BigInt</a></p>
+</li>
+<li><a name="*-AnnoCPAN%3a-Annotated-CPAN-documentation"></a><b>AnnoCPAN: Annotated CPAN documentation</b>
+<p><a href="http://annocpan.org/dist/Math-BigInt">http://annocpan.org/dist/Math-BigInt</a></p>
+</li>
+<li><a name="*-CPAN-Ratings"></a><b>CPAN Ratings</b>
+<p><a href="http://cpanratings.perl.org/dist/Math-BigInt">http://cpanratings.perl.org/dist/Math-BigInt</a></p>
+</li>
+<li><a name="*-Search-CPAN"></a><b>Search CPAN</b>
+<p><a href="http://search.cpan.org/dist/Math-BigInt/">http://search.cpan.org/dist/Math-BigInt/</a></p>
+</li>
+<li><a name="*-CPAN-Testers-Matrix"></a><b>CPAN Testers Matrix</b>
+<p><a href="http://matrix.cpantesters.org/?dist=Math-BigInt">http://matrix.cpantesters.org/?dist=Math-BigInt</a></p>
+</li>
+<li><a name="*-The-Bignum-mailing-list"></a><b>The Bignum mailing list</b>
+<ul>
+<li><a name="*-Post-to-mailing-list"></a><b>Post to mailing list</b>
+<p><code class="inline"><span class="w">bignum</span> <span class="w">at</span> <span class="w">lists</span>.<span class="w">scsys</span>.<span class="w">co</span>.<span class="w">uk</span></code>
+</p>
+</li>
+<li><a name="*-View-mailing-list"></a><b>View mailing list</b>
+<p><a href="http://lists.scsys.co.uk/pipermail/bignum/">http://lists.scsys.co.uk/pipermail/bignum/</a></p>
+</li>
+<li><a name="*-Subscribe%2fUnsubscribe"></a><b>Subscribe/Unsubscribe</b>
+<p><a href="http://lists.scsys.co.uk/cgi-bin/mailman/listinfo/bignum">http://lists.scsys.co.uk/cgi-bin/mailman/listinfo/bignum</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<a name="LICENSE"></a><h1>LICENSE</h1>
+<p>This program is free software; you may redistribute it and/or modify it under
+the same terms as Perl itself.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../Math/BigFloat.html">Math::BigFloat</a> and <a href="../Math/BigInt.html">Math::BigInt</a> as well as the backends
+<a href="../Math/BigInt/FastCalc.html">Math::BigInt::FastCalc</a>, <a href="http://search.cpan.org/perldoc/Math::BigInt::GMP">Math::BigInt::GMP</a>, and <a href="http://search.cpan.org/perldoc/Math::BigInt::Pari">Math::BigInt::Pari</a>.</p>
+<p>The pragmas <a href="../bignum.html">bignum</a>, <a href="../bigint.html">bigint</a> and <a href="../bigrat.html">bigrat</a> also might be of interest
+because they solve the autoupgrading/downgrading issue, at least partly.</p>
+<a name="AUTHORS"></a><h1>AUTHORS</h1>
+<p>Mark Biggar, overloaded interface by Ilya Zakharevich.
+Completely rewritten by Tels <a href="http://bloodgate.com">http://bloodgate.com</a> in 2001 - 2006, and still
+at it in 2007.</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><ul><li><a href="#Input">Input</a><li><a href="#Output">Output</a><li><a href="#mantissa()%2c-exponent()-and-parts()">mantissa(), exponent() and parts()</a><li><a href="#Accuracy-vs.-Precision">Accuracy vs. Precision</a><li><a href="#Rounding">Rounding</a></ul><li><a href="#METHODS">METHODS</a><li><a href="#Autocreating-constants">Autocreating constants</a><ul><li><a href="#Math-library">Math library</a><li><a href="#Using-Math%3a%3aBigInt%3a%3aLite">Using Math::BigInt::Lite</a></ul><li><a href="#EXPORTS">EXPORTS</a><li><a href="#CAVEATS">CAVEATS</a><li><a href="#BUGS">BUGS</a><li><a href="#SUPPORT">SUPPORT</a><li><a href="#LICENSE">LICENSE</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#AUTHORS">AUTHORS</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'Math::BigFloat';
+  perldoc.pageAddress = 'Math/BigFloat.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>

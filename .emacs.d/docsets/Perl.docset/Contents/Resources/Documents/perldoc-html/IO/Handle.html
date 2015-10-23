@@ -1,0 +1,680 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>IO::Handle</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-gb">
+  <link rel="search" type="application/opensearchdescription+xml" title="Search perldoc.perl.org" href="/static/search.xml"/>
+  <link href="../static/css-20100830.css" rel="stylesheet" rev="stylesheet" type="text/css" media="screen">
+  <link href="../static/exploreperl.css" rel="stylesheet" rev="stylesheet" type="text/css">
+</head>
+
+<body onLoad="perldoc.startup();" onPageShow="if (event.persisted) perldoc.startup();">
+    <div id="page">
+      
+      <div id="header">
+	<div id="homepage_link">
+	  <a href="../index.html"></a>
+	</div>
+	<div id="strapline">
+	  Perl Programming Documentation
+	</div>
+	<div id="download_link" class="download">
+	  <a href="http://www.perl.org/get.html">Download Perl</a>
+	</div>
+	<div id="explore_link" class="download">
+	  <a id="explore_anchor" href="#">Explore</a>
+	</div>
+      </div>
+      
+      <div id="body">
+        <div id="left_column">
+          <div class="side_group">
+            
+	    <div class="side_panel doc_panel">
+              <p>Manual</p>
+              <ul>
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">History / Changes</a>
+                <li><a href="../index-licence.html">License</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Reference</p>
+              <ul>
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Special Variables</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platform Specific</a>
+              </ul>
+            </div>
+            <div class="side_panel doc_panel">
+              <p>Modules</p>
+              <ul>
+		<li>
+		
+                
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+                  
+		    
+		  
+		
+                  
+		
+                  
+		
+		
+                    <a href="../index-modules-A.html">A</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-B.html">B</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-C.html">C</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-D.html">D</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-E.html">E</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-F.html">F</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-G.html">G</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-H.html">H</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-I.html">I</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-L.html">L</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-M.html">M</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-N.html">N</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-O.html">O</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-P.html">P</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-S.html">S</a>
+                    
+                      
+                        <li>
+                      
+                    
+                
+                    <a href="../index-modules-T.html">T</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-U.html">U</a>
+                    
+                      
+                        &bull;
+                      
+                    
+                
+                    <a href="../index-modules-X.html">X</a>
+                    
+                
+              </ul>
+            </div>
+            
+	      <div class="side_panel doc_panel">
+		<p>Tools</p>
+		<ul>
+		  <li><a href="../preferences.html">Preferences</a>
+		</ul>
+	      </div>
+            
+          </div>
+        </div>
+        <div id="centre_column">
+          <div id="content_header">
+            <div id="title_bar">
+              <div id="page_name">
+                <h1>IO::Handle</h1>
+              </div>
+              <div id="perl_version">
+                Perl 5 version 22.0 documentation
+              </div>
+              <div class="page_links" id="page_links_top">
+                <a href="#" onClick="toolbar.goToTop();return false;">Go to top</a>
+		
+              </div>
+	      <div class="page_links" id="page_links_bottom">
+		
+                  <a href="#" id="page_index_toggle">Show page index</a> &bull;
+		
+                <a href="#" id="recent_pages_toggle">Show recent pages</a>		
+	      </div>
+	      <div id="search_form">
+		<form action="../search.html" method="GET" id="search">
+		  <input type="text" name="q" id="search_box" alt="Search">
+		</form>
+	      </div>
+            </div>
+            <div id="breadcrumbs">
+                
+    <a href="../index.html">Home</a> &gt;
+    
+      
+        <a href="../index-modules-I.html">Core modules (I)</a> &gt;
+      
+    
+    IO::Handle
+  
+
+            </div>
+          </div>
+          <div id="content_body">
+	    <!--[if lt IE 7]>
+ <div class="noscript">
+   <p>
+     <strong>It looks like you're using Internet Explorer 6. This is a very old
+     browser which does not offer full support for modern websites.</strong>
+   </p>
+   <p>
+     Unfortunately this means that this website will not work on
+     your computer.
+   </p>
+   <p>
+     Don't miss out though! To view the site (and get a better experience from
+     many other websites), simply upgrade to
+     <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet
+Explorer 8</a>
+     or download an alternative browser such as
+     <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>,
+     <a href="http://www.apple.com/safari/download/">Safari</a>, or
+     <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+   </p>
+   <p>
+     All of these browsers are free. If you're using a PC at work, you may
+     need to contact your IT administrator.
+   </p>
+ </div>
+<![endif]-->
+	    <noscript>
+	      <div class="noscript">
+	      <p>
+                <strong>Please note: Many features of this site require JavaScript. You appear to have JavaScript disabled,
+	        or are running a non-JavaScript capable web browser.</strong>
+	      </p>
+	      <p>
+		To get the best experience, please enable JavaScript or download a modern web browser such as <a href="http://www.microsoft.com/windows/Internet-explorer/default.aspx">Internet Explorer 8</a>, <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a>, <a href="http://www.apple.com/safari/download/">Safari</a>, or <a href="http://www.google.co.uk/chrome">Google Chrome</a>.
+              </p>
+	      </div>
+	    </noscript>
+
+	    <div id="recent_pages" class="hud_container">
+	      <div id="recent_pages_header" class="hud_header">
+		<div id="recent_pages_close" class="hud_close"><a href="#" onClick="recentPages.hide();return false;"></a></div>
+		<div id="recent_pages_title" class="hud_title"><span class="hud_span_top">Recently read</span></div>
+		<div id="recent_pages_topright" class="hud_topright"></div>
+	      </div>
+	      <div id="recent_pages_content" class="hud_content">
+	      </div>
+	      <div id="recent_pages_footer" class="hud_footer">
+		<div id="recent_pages_bottomleft" class="hud_bottomleft"></div>
+		<div id="recent_pages_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+		<div id="recent_pages_resize" class="hud_resize"></div>
+	      </div>
+	    </div>
+  
+	    <div id="from_search"></div>
+            <h1>IO::Handle</h1>
+
+
+  <!--    -->
+<ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#METHODS">METHODS</a><li><a href="#NOTE">NOTE</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#BUGS">BUGS</a><li><a href="#HISTORY">HISTORY</a></ul><a name="NAME"></a><h1>NAME</h1>
+<p>IO::Handle - supply object methods for I/O handles</p>
+<a name="SYNOPSIS"></a><h1>SYNOPSIS</h1>
+<pre class="verbatim"><ol><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Handle</span><span class="sc">;</span></li><li></li><li>    <span class="i">$io</span> = <span class="w">IO::Handle</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    if <span class="s">(</span><span class="i">$io</span><span class="i">-&gt;fdopen</span><span class="s">(</span><a class="l_k" href="../functions/fileno.html">fileno</a><span class="s">(</span><span class="w">STDIN</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;r&quot;</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>        <a class="l_k" href="../functions/print.html">print</a> <span class="i">$io</span><span class="i">-&gt;getline</span><span class="sc">;</span></li><li>        <span class="i">$io</span><span class="i">-&gt;close</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="i">$io</span> = <span class="w">IO::Handle</span><span class="w">-&gt;new</span><span class="s">(</span><span class="s">)</span><span class="sc">;</span></li><li>    if <span class="s">(</span><span class="i">$io</span><span class="i">-&gt;fdopen</span><span class="s">(</span><a class="l_k" href="../functions/fileno.html">fileno</a><span class="s">(</span><span class="w">STDOUT</span><span class="s">)</span><span class="cm">,</span><span class="q">&quot;w&quot;</span><span class="s">)</span><span class="s">)</span> <span class="s">{</span></li><li>        <span class="i">$io</span><span class="i">-&gt;print</span><span class="s">(</span><span class="q">&quot;Some text\n&quot;</span><span class="s">)</span><span class="sc">;</span></li><li>    <span class="s">}</span></li><li></li><li>    <span class="c"># setvbuf is not available by default on Perls 5.8.0 and later.</span></li><li>    <a class="l_k" href="../functions/use.html">use</a> <span class="w">IO::Handle</span> <span class="q">&#39;_IOLBF&#39;</span><span class="sc">;</span></li><li>    <span class="i">$io</span><span class="i">-&gt;setvbuf</span><span class="s">(</span><span class="i">$buffer_var</span><span class="cm">,</span> <span class="w">_IOLBF</span><span class="cm">,</span> <span class="n">1024</span><span class="s">)</span><span class="sc">;</span></li><li></li><li>    <a class="l_k" href="../functions/undef.html">undef</a> <span class="i">$io</span><span class="sc">;</span>       <span class="c"># automatically closes the file if it&#39;s open</span></li><li></li><li>    <span class="w">autoflush</span> <span class="w">STDOUT</span> <span class="n">1</span><span class="sc">;</span></li></ol></pre><a name="DESCRIPTION"></a><h1>DESCRIPTION</h1>
+<p><code class="inline"><span class="w">IO::Handle</span></code>
+ is the base class for all other IO handle classes. It is
+not intended that objects of <code class="inline"><span class="w">IO::Handle</span></code>
+ would be created directly,
+but instead <code class="inline"><span class="w">IO::Handle</span></code>
+ is inherited from by several other classes
+in the IO hierarchy.</p>
+<p>If you are reading this documentation, looking for a replacement for
+the <code class="inline"><span class="w">FileHandle</span></code>
+ package, then I suggest you read the documentation
+for <code class="inline"><span class="w">IO::File</span></code>
+ too.</p>
+<a name="CONSTRUCTOR"></a><h1>CONSTRUCTOR</h1>
+<ul>
+<li><a name="new-()"></a><b>new ()</b>
+<p>Creates a new <code class="inline"><span class="w">IO::Handle</span></code>
+ object.</p>
+</li>
+<li><a name="new_from_fd-(-FD%2c-MODE-)"></a><b>new_from_fd ( FD, MODE )</b>
+<p>Creates an <code class="inline"><span class="w">IO::Handle</span></code>
+ like <code class="inline"><span class="w">new</span></code>
+ does.
+It requires two parameters, which are passed to the method <code class="inline"><span class="w">fdopen</span></code>
+;
+if the fdopen fails, the object is destroyed. Otherwise, it is returned
+to the caller.</p>
+</li>
+</ul>
+<a name="METHODS"></a><h1>METHODS</h1>
+<p>See <a href="../perlfunc.html">perlfunc</a> for complete descriptions of each of the following
+supported <code class="inline"><span class="w">IO::Handle</span></code>
+ methods, which are just front ends for the
+corresponding built-in functions:</p>
+<pre class="verbatim"><ol><li>    $io-&gt;close</li><li>    $io-&gt;eof</li><li>    $io-&gt;fcntl( FUNCTION, SCALAR )</li><li>    $io-&gt;fileno</li><li>    $io-&gt;format_write( [FORMAT_NAME] )</li><li>    $io-&gt;getc</li><li>    $io-&gt;ioctl( FUNCTION, SCALAR )</li><li>    $io-&gt;read ( BUF, LEN, [OFFSET] )</li><li>    $io-&gt;print ( ARGS )</li><li>    $io-&gt;printf ( FMT, [ARGS] )</li><li>    $io-&gt;say ( ARGS )</li><li>    $io-&gt;stat</li><li>    $io-&gt;sysread ( BUF, LEN, [OFFSET] )</li><li>    $io-&gt;syswrite ( BUF, [LEN, [OFFSET]] )</li><li>    $io-&gt;truncate ( LEN )</li></ol></pre><p>See <a href="../perlvar.html">perlvar</a> for complete descriptions of each of the following
+supported <code class="inline"><span class="w">IO::Handle</span></code>
+ methods.  All of them return the previous
+value of the attribute and takes an optional single argument that when
+given will set the value.  If no argument is given the previous value
+is unchanged (except for $io-&gt;autoflush will actually turn ON
+autoflush by default).</p>
+<pre class="verbatim"><ol><li>    $io-&gt;autoflush ( [BOOL] )                         $|</li><li>    $io-&gt;format_page_number( [NUM] )                  $%</li><li>    $io-&gt;format_lines_per_page( [NUM] )               $=</li><li>    $io-&gt;format_lines_left( [NUM] )                   $-</li><li>    $io-&gt;format_name( [STR] )                         $~</li><li>    $io-&gt;format_top_name( [STR] )                     $^</li><li>    $io-&gt;input_line_number( [NUM])                    $.</li></ol></pre><p>The following methods are not supported on a per-filehandle basis.</p>
+<pre class="verbatim"><ol><li>    IO::Handle-&gt;format_line_break_characters( [STR] ) $:</li><li>    IO::Handle-&gt;format_formfeed( [STR])               $^L</li><li>    IO::Handle-&gt;output_field_separator( [STR] )       $,</li><li>    IO::Handle-&gt;output_record_separator( [STR] )      $\</li><li></li><li>    IO::Handle-&gt;input_record_separator( [STR] )       $/</li></ol></pre><p>Furthermore, for doing normal I/O you might need these:</p>
+<ul>
+<li><a name="%24io-%3efdopen-(-FD%2c-MODE-)"></a><b>$io-&gt;fdopen ( FD, MODE )</b>
+<p><code class="inline"><span class="w">fdopen</span></code>
+ is like an ordinary <code class="inline"><a class="l_k" href="../functions/open.html">open</a></code> except that its first parameter
+is not a filename but rather a file handle name, an IO::Handle object,
+or a file descriptor number.  (For the documentation of the <code class="inline"><a class="l_k" href="../functions/open.html">open</a></code>
+method, see <a href="../IO/File.html">IO::File</a>.)</p>
+</li>
+<li><a name="%24io-%3eopened"></a><b>$io-&gt;opened</b>
+<p>Returns true if the object is currently a valid file descriptor, false
+otherwise.</p>
+</li>
+<li><a name="%24io-%3egetline"></a><b>$io-&gt;getline</b>
+<p>This works like &lt;$io&gt; described in <a href="../perlop.html#I%2fO-Operators">I/O Operators in perlop</a>
+except that it's more readable and can be safely called in a
+list context but still returns just one line.  If used as the conditional
++within a <code class="inline">while</code>
+ or C-style <code class="inline">for</code>
+ loop, however, you will need to
++emulate the functionality of &lt;$io&gt; with <code class="inline"><a class="l_k" href="../functions/defined.html">defined</a><span class="s">(</span><span class="i">$_</span> = <span class="i">$io</span><span class="i">-&gt;getline</span><span class="s">)</span></code>
+.</p>
+</li>
+<li><a name="%24io-%3egetlines"></a><b>$io-&gt;getlines</b>
+<p>This works like &lt;$io&gt; when called in a list context to read all
+the remaining lines in a file, except that it's more readable.
+It will also croak() if accidentally called in a scalar context.</p>
+</li>
+<li><a name="%24io-%3eungetc-(-ORD-)"></a><b>$io-&gt;ungetc ( ORD )</b>
+<p>Pushes a character with the given ordinal value back onto the given
+handle's input stream.  Only one character of pushback per handle is
+guaranteed.</p>
+</li>
+<li><a name="%24io-%3ewrite-(-BUF%2c-LEN-%5b%2c-OFFSET-%5d-)"></a><b>$io-&gt;write ( BUF, LEN [, OFFSET ] )</b>
+<p>This <code class="inline"><a class="l_k" href="../functions/write.html">write</a></code> is somewhat like <code class="inline"><a class="l_k" href="../functions/write.html">write</a></code> found in C, in that it is the
+opposite of read. The wrapper for the perl <code class="inline"><a class="l_k" href="../functions/write.html">write</a></code> function is
+called <code class="inline"><span class="w">format_write</span></code>
+. However, whilst the C <code class="inline"><a class="l_k" href="../functions/write.html">write</a></code> function returns
+the number of bytes written, this <code class="inline"><a class="l_k" href="../functions/write.html">write</a></code> function simply returns true
+if successful (like <code class="inline"><a class="l_k" href="../functions/print.html">print</a></code>). A more C-like <code class="inline"><a class="l_k" href="../functions/write.html">write</a></code> is <code class="inline"><a class="l_k" href="../functions/syswrite.html">syswrite</a></code>
+(see above).</p>
+</li>
+<li><a name="%24io-%3eerror"></a><b>$io-&gt;error</b>
+<p>Returns a true value if the given handle has experienced any errors
+since it was opened or since the last call to <code class="inline"><span class="w">clearerr</span></code>
+, or if the
+handle is invalid. It only returns false for a valid handle with no
+outstanding errors.</p>
+</li>
+<li><a name="%24io-%3eclearerr"></a><b>$io-&gt;clearerr</b>
+<p>Clear the given handle's error indicator. Returns -1 if the handle is
+invalid, 0 otherwise.</p>
+</li>
+<li><a name="%24io-%3esync"></a><b>$io-&gt;sync</b>
+<p><code class="inline"><span class="w">sync</span></code>
+ synchronizes a file's in-memory state  with  that  on the
+physical medium. <code class="inline"><span class="w">sync</span></code>
+ does not operate at the perlio api level, but
+operates on the file descriptor (similar to sysread, sysseek and
+systell). This means that any data held at the perlio api level will not
+be synchronized. To synchronize data that is buffered at the perlio api
+level you must use the flush method. <code class="inline"><span class="w">sync</span></code>
+ is not implemented on all
+platforms. Returns "0 but true" on success, <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> on error, <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code>
+for an invalid handle. See <i>fsync(3c)</i>.</p>
+</li>
+<li><a name="%24io-%3eflush"></a><b>$io-&gt;flush</b>
+<p><code class="inline"><span class="w">flush</span></code>
+ causes perl to flush any buffered data at the perlio api level.
+Any unread data in the buffer will be discarded, and any unwritten data
+will be written to the underlying file descriptor. Returns "0 but true"
+on success, <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> on error.</p>
+</li>
+<li><a name="%24io-%3eprintflush-(-ARGS-)"></a><b>$io-&gt;printflush ( ARGS )</b>
+<p>Turns on autoflush, print ARGS and then restores the autoflush status of the
+<code class="inline"><span class="w">IO::Handle</span></code>
+ object. Returns the return value from print.</p>
+</li>
+<li><a name="%24io-%3eblocking-(-%5b-BOOL-%5d-)"></a><b>$io-&gt;blocking ( [ BOOL ] )</b>
+<p>If called with an argument <code class="inline"><span class="w">blocking</span></code>
+ will turn on non-blocking IO if
+<code class="inline"><span class="w">BOOL</span></code>
+ is false, and turn it off if <code class="inline"><span class="w">BOOL</span></code>
+ is true.</p>
+<p><code class="inline"><span class="w">blocking</span></code>
+ will return the value of the previous setting, or the
+current setting if <code class="inline"><span class="w">BOOL</span></code>
+ is not given.</p>
+<p>If an error occurs <code class="inline"><span class="w">blocking</span></code>
+ will return undef and <code class="inline"><span class="i">$!</span></code>
+ will be set.</p>
+</li>
+</ul>
+<p>If the C functions setbuf() and/or setvbuf() are available, then
+<code class="inline"><span class="w">IO::Handle::setbuf</span></code>
+ and <code class="inline"><span class="w">IO::Handle::setvbuf</span></code>
+ set the buffering
+policy for an IO::Handle.  The calling sequences for the Perl functions
+are the same as their C counterparts--including the constants <code class="inline"><span class="w">_IOFBF</span></code>
+,
+<code class="inline"><span class="w">_IOLBF</span></code>
+, and <code class="inline"><span class="w">_IONBF</span></code>
+ for setvbuf()--except that the buffer parameter
+specifies a scalar variable to use as a buffer. You should only
+change the buffer before any I/O, or immediately after calling flush.</p>
+<p>WARNING: The IO::Handle::setvbuf() is not available by default on
+Perls 5.8.0 and later because setvbuf() is rather specific to using
+the stdio library, while Perl prefers the new perlio subsystem instead.</p>
+<p>WARNING: A variable used as a buffer by <code class="inline"><span class="w">setbuf</span></code>
+ or <code class="inline"><span class="w">setvbuf</span></code>
+ <b>must not
+be modified</b> in any way until the IO::Handle is closed or <code class="inline"><span class="w">setbuf</span></code>
+ or
+<code class="inline"><span class="w">setvbuf</span></code>
+ is called again, or memory corruption may result! Remember that
+the order of global destruction is undefined, so even if your buffer
+variable remains in scope until program termination, it may be undefined
+before the file IO::Handle is closed. Note that you need to import the
+constants <code class="inline"><span class="w">_IOFBF</span></code>
+, <code class="inline"><span class="w">_IOLBF</span></code>
+, and <code class="inline"><span class="w">_IONBF</span></code>
+ explicitly. Like C, setbuf
+returns nothing. setvbuf returns "0 but true", on success, <code class="inline"><a class="l_k" href="../functions/undef.html">undef</a></code> on
+failure.</p>
+<p>Lastly, there is a special method for working under <b>-T</b> and setuid/gid
+scripts:</p>
+<ul>
+<li><a name="%24io-%3euntaint"></a><b>$io-&gt;untaint</b>
+<p>Marks the object as taint-clean, and as such data read from it will also
+be considered taint-clean. Note that this is a very trusting action to
+take, and appropriate consideration for the data source and potential
+vulnerability should be kept in mind. Returns 0 on success, -1 if setting
+the taint-clean flag failed. (eg invalid handle)</p>
+</li>
+</ul>
+<a name="NOTE"></a><h1>NOTE</h1>
+<p>An <code class="inline"><span class="w">IO::Handle</span></code>
+ object is a reference to a symbol/GLOB reference (see
+the <code class="inline"><span class="w">Symbol</span></code>
+ package).  Some modules that
+inherit from <code class="inline"><span class="w">IO::Handle</span></code>
+ may want to keep object related variables
+in the hash table part of the GLOB. In an attempt to prevent modules
+trampling on each other I propose the that any such module should prefix
+its variables with its own name separated by _'s. For example the IO::Socket
+module keeps a <code class="inline"><span class="w">timeout</span></code>
+ variable in 'io_socket_timeout'.</p>
+<a name="SEE-ALSO"></a><h1>SEE ALSO</h1>
+<p><a href="../perlfunc.html">perlfunc</a>, 
+<a href="../perlop.html#I%2fO-Operators">I/O Operators in perlop</a>,
+<a href="../IO/File.html">IO::File</a></p>
+<a name="BUGS"></a><h1>BUGS</h1>
+<p>Due to backwards compatibility, all filehandles resemble objects
+of class <code class="inline"><span class="w">IO::Handle</span></code>
+, or actually classes derived from that class.
+They actually aren't.  Which means you can't derive your own 
+class from <code class="inline"><span class="w">IO::Handle</span></code>
+ and inherit those methods.</p>
+<a name="HISTORY"></a><h1>HISTORY</h1>
+<p>Derived from FileHandle.pm by Graham Barr &lt;<i>gbarr@pobox.com</i>&gt;</p>
+
+
+
+
+  <div id="page_index" class="hud_container">
+    <div id="page_index_header" class="hud_header">
+      <div id="page_index_close" class="hud_close"><a href="#" onClick="pageIndex.hide();return false;"></a></div>
+      <div id="page_index_title" class="hud_title"><span class="hud_span_top">Page index</span></div>
+      <div id="page_index_topright" class="hud_topright"></div>
+    </div>
+    <div id="page_index_content" class="hud_content">
+      <ul><li><a href="#NAME">NAME</a><li><a href="#SYNOPSIS">SYNOPSIS</a><li><a href="#DESCRIPTION">DESCRIPTION</a><li><a href="#CONSTRUCTOR">CONSTRUCTOR</a><li><a href="#METHODS">METHODS</a><li><a href="#NOTE">NOTE</a><li><a href="#SEE-ALSO">SEE ALSO</a><li><a href="#BUGS">BUGS</a><li><a href="#HISTORY">HISTORY</a></ul>
+    </div>
+    <div id="page_index_footer" class="hud_footer">
+      <div id="page_index_bottomleft" class="hud_bottomleft"></div>
+      <div id="page_index_bottom" class="hud_bottom"><span class="hud_span_bottom"></span></div>
+      <div id="page_index_resize" class="hud_resize"></div>
+    </div>
+  </div>
+
+
+	    &nbsp;
+          </div>
+          <div id="content_footer">
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      
+    <div id="footer">
+      <div id="footer_content">
+        <div id="footer_strapline">
+          perldoc.perl.org - Official documentation for the Perl programming language
+        </div>
+        <div id="footer_links">
+          <div id="address">
+            <p class="name">Contact details</p>
+            <p class="address">
+	      Site maintained by <a href="mailto:jj@jonallen.info">Jon Allen (JJ)</a><br>
+	    </p>
+            <p class="contact">
+              Documentation maintained by the <a href="http://lists.cpan.org/showlist.cgi?name=perl5-porters">Perl 5 Porters</a>
+            </p>
+          </div>
+          <ul class="f1">
+            <li>Manual
+              <ul class="f2">
+                <li><a href="../index-overview.html">Overview</a>
+                <li><a href="../index-tutorials.html">Tutorials</a>
+                <li><a href="../index-faq.html">FAQs</a>
+                <li><a href="../index-history.html">Changes</a>
+              </ul>
+            <li>Reference
+              <ul class="f2">
+                <li><a href="../index-language.html">Language</a>
+                <li><a href="../index-functions.html">Functions</a>
+                <li><a href="../perlop.html">Operators</a>
+                <li><a href="../perlvar.html">Variables</a>
+              </ul>
+            <li>Modules
+              <ul class="f2">
+                <li><a href="../index-modules-A.html">Modules</a>
+                <li><a href="../index-pragmas.html">Pragmas</a>
+                <li><a href="../index-utilities.html">Utilities</a>
+              </ul>
+            <li>Misc
+              <ul class="f2">
+                <li><a href="../index-licence.html">License</a>
+                <li><a href="../index-internals.html">Internals</a>
+                <li><a href="../index-platforms.html">Platforms</a>
+              </ul>          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div id="footer_end">
+      </div>
+    </div>
+      
+    </div>
+      <script language="JavaScript" type="text/javascript" src="../static/exploreperl.js"></script>
+      <script language="JavaScript" src="../static/combined-20100403.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  perldoc.setPath(1);
+  perldoc.pageName    = 'IO::Handle';
+  perldoc.pageAddress = 'IO/Handle.html';
+  perldoc.contentPage = 1;
+  explorePerl.render();
+  explorePerl.addEvents('explore_anchor');
+</script>
+    
+  </body>
+</html>
