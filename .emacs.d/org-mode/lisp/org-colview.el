@@ -1,6 +1,6 @@
 ;;; org-colview.el --- Column View in Org-mode
 
-;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -145,6 +145,11 @@ This is the compiled version of the format.")
     ["Open link" org-columns-open-link t]
     "--"
     ["Quit" org-columns-quit t]))
+
+(defun org-columns--value (property pos)
+  "Return value for PROPERTY at buffer position POS."
+  (or (cdr (assoc-string property (get-text-property pos 'org-summaries) t))
+      (org-entry-get pos property 'selective t)))
 
 (defun org-columns-new-overlay (beg end &optional string face)
   "Create a new column overlay and add it to the list."
@@ -543,7 +548,7 @@ Where possible, use the standard interface for changing this line."
       (condition-case nil (org-no-warnings (next-line 1)) (error nil))
       (setq hidep (org-at-heading-p 1)))
     (eval form)
-    (and hidep (hide-entry))))
+    (and hidep (outline-hide-entry))))
 
 (defun org-columns-previous-allowed-value ()
   "Switch to the previous allowed value for this column."
@@ -675,11 +680,14 @@ around it."
     fmt))
 
 (defun org-columns-goto-top-level ()
-  (when (condition-case nil (org-back-to-heading) (error nil))
-    (org-entry-get nil "COLUMNS" t))
-  (if (marker-position org-entry-property-inherited-from)
-      (move-marker org-columns-top-level-marker org-entry-property-inherited-from)
-    (move-marker org-columns-top-level-marker (point))))
+  "Move to the beginning of the column view area.
+Also sets `org-columns-top-level-marker' to the new position."
+  (goto-char
+   (move-marker
+    org-columns-top-level-marker
+    (cond ((org-before-first-heading-p) (point-min))
+	  ((org-entry-get nil "COLUMNS" t) org-entry-property-inherited-from)
+	  (t (org-back-to-heading) (point))))))
 
 ;;;###autoload
 (defun org-columns (&optional columns-fmt-string)
@@ -698,9 +706,8 @@ When COLUMNS-FMT-STRING is non-nil, use it as the column format."
   (save-excursion
     (save-restriction
       (narrow-to-region
-       org-columns-top-level-marker
-       (or (ignore-errors (org-end-of-subtree t t)) (point-max)))
-      (goto-char (point-min))
+       (point)
+       (if (org-at-heading-p) (org-end-of-subtree t t) (point-max)))
       (when (assoc "CLOCKSUM" org-columns-current-fmt-compiled)
 	(org-clock-sum))
       (when (assoc "CLOCKSUM_T" org-columns-current-fmt-compiled)
@@ -710,10 +717,9 @@ When COLUMNS-FMT-STRING is non-nil, use it as the column format."
 	      (org-map-entries
 	       (lambda ()
 		 (cons (point)
-		       (mapcar
-			(lambda (p)
-			  (cons p (org-entry-get nil p 'selective t)))
-			column-names)))
+		       (mapcar (lambda (p)
+				 (cons p (org-columns--value p (point))))
+			       column-names)))
 	       nil nil (and org-columns-skip-archived-trees 'archive))))
 	(when cache
 	  (org-set-local 'org-columns-current-maxwidths
@@ -1410,7 +1416,7 @@ and tailing newline characters."
 		(org-with-point-at m
 		  (mapcar
 		   (lambda (name)
-		     (let ((value (org-entry-get (point) name 'selective t)))
+		     (let ((value (org-columns--value name (point))))
 		       (cons
 			name
 			(if (and org-agenda-columns-add-appointments-to-effort-sum

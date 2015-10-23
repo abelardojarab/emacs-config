@@ -161,7 +161,6 @@
     (:html-todo-kwd-class-prefix nil nil org-html-todo-kwd-class-prefix)
     (:html-toplevel-hlevel nil nil org-html-toplevel-hlevel)
     (:html-use-infojs nil nil org-html-use-infojs)
-    (:html-use-unicode-chars nil nil org-html-use-unicode-chars)
     (:html-validation-link nil nil org-html-validation-link)
     (:html-viewport nil nil org-html-viewport)
     (:html-inline-images nil nil org-html-inline-images)
@@ -608,13 +607,6 @@ Warning: non-nil may break indentation of source code blocks."
   :package-version '(Org . "8.0")
   :type 'boolean)
 
-(defcustom org-html-use-unicode-chars nil
-  "Non-nil means to use unicode characters instead of HTML entities."
-  :group 'org-export-html
-  :version "24.4"
-  :package-version '(Org . "8.0")
-  :type 'boolean)
-
 ;;;; Drawers
 
 (defcustom org-html-format-drawer-function (lambda (name contents) contents)
@@ -881,7 +873,7 @@ you can reuse them:
 For example:
 
 \(setq org-html-table-row-tags
-      (cons '(cond (top-row-p \"<tr class=\\\"tr-top\\\">\")
+      (cons \\='(cond (top-row-p \"<tr class=\\\"tr-top\\\">\")
                    (bottom-row-p \"<tr class=\\\"tr-bottom\\\">\")
                    (t (if (= (mod row-number 2) 1)
 			  \"<tr class=\\\"tr-odd\\\">\"
@@ -1005,7 +997,7 @@ org-info.js for your website."
     (content   "div" "content")
     (postamble "div" "postamble"))
   "Alist of the three section elements for HTML export.
-The car of each entry is one of 'preamble, 'content or 'postamble.
+The car of each entry is one of `preamble', `content' or `postamble'.
 The cdrs of each entry are the ELEMENT_TYPE and ID for each
 section of the exported document.
 
@@ -1096,10 +1088,10 @@ linebreaks    Let MathJax perform automatic linebreaks.  Valid values
 indent        If align is not center, how far from the left/right side?
               Valid values are \"left\" and \"right\"
 multlinewidth The width of the multline environment.
-autonumber    How to number equations.  Valid values are \"None\", 
+autonumber    How to number equations.  Valid values are \"None\",
               \"all\" and \"AMS Math\".
 tagindent     The amount tags are indented.
-tagside       Which side to show tags/labels on.  Valid values are 
+tagside       Which side to show tags/labels on.  Valid values are
               \"left\" and \"right\"
 
 You can also customize this for each buffer, using something like
@@ -1124,14 +1116,14 @@ MathJax CDN Terms of Service.
 	       (list :tag "align  (alignment of displayed equations)"
 		     (const :format "       " align) (string))
 	       (list :tag "font (used to display math)"
-	       	     (const :format "            " font)
-	       	     (choice (const "TeX")
-	       		     (const "STIX-Web")
-	       		     (const "Asana-Math")
-	       		     (const "Neo-Euler")
-	       		     (const "Gyre-Pagella")
-	       		     (const "Gyre-Termes")
-	       		     (const "Latin-Modern")))
+		     (const :format "            " font)
+		     (choice (const "TeX")
+			     (const "STIX-Web")
+			     (const "Asana-Math")
+			     (const "Neo-Euler")
+			     (const "Gyre-Pagella")
+			     (const "Gyre-Termes")
+			     (const "Latin-Modern")))
 	       (list :tag "linebreaks (automatic line-breaking)"
 		     (const :format "      " linebreaks)
 		     (choice (const "true")
@@ -1184,7 +1176,7 @@ MathJax CDN Terms of Service.
 (defcustom org-html-postamble 'auto
   "Non-nil means insert a postamble in HTML export.
 
-When set to 'auto, check against the
+When set to `auto', check against the
 `org-export-with-author/email/creator/date' variables to set the
 content of the postamble.  When set to a string, use this string
 as the postamble.  When t, insert a string as defined by the
@@ -1481,6 +1473,12 @@ CSS classes, then this prefix can be very useful."
   (let ((dt (downcase (plist-get info :html-doctype))))
 	(member dt '("html5" "xhtml5" "<!doctype html>"))))
 
+(defun org-html--html5-fancy-p (info)
+  "Non-nil when exporting to HTML5 with fancy elements.
+INFO is the current state of the export process, as a plist."
+  (and (plist-get info :html-html5-fancy)
+       (org-html-html5-p info)))
+
 (defun org-html-close-tag (tag attr info)
   (concat "<" tag " " attr
 	  (if (org-html-xhtml-p info) " />" ">")))
@@ -1511,8 +1509,7 @@ attributes with a nil value will be omitted from the result."
 INFO is a plist used as a communication channel.  When optional
 arguments CAPTION and LABEL are given, use them for caption and
 \"id\" attribute."
-  (let ((html5-fancy (and (org-html-html5-p info)
-			  (plist-get info :html-html5-fancy))))
+  (let ((html5-fancy (org-html--html5-fancy-p info)))
     (format (if html5-fancy "\n<figure%s>%s%s\n</figure>"
 	      "\n<div%s class=\"figure\">%s%s\n</div>")
 	    ;; ID.
@@ -1814,7 +1811,7 @@ used in the preamble or postamble."
 
 (defun org-html--build-pre/postamble (type info)
   "Return document preamble or postamble as a string, or nil.
-TYPE is either 'preamble or 'postamble, INFO is a plist used as a
+TYPE is either `preamble' or `postamble', INFO is a plist used as a
 communication channel."
   (let ((section (plist-get info (intern (format ":html-%s" type))))
 	(spec (org-html-format-spec info)))
@@ -1937,16 +1934,17 @@ holding export options."
    ;; Document title.
    (when (plist-get info :with-title)
      (let ((title (plist-get info :title))
-	   (subtitle (plist-get info :subtitle)))
+	   (subtitle (plist-get info :subtitle))
+	   (html5-fancy (org-html--html5-fancy-p info)))
        (when title
 	 (format
-	  (if (plist-get info :html-html5-fancy)
+	  (if html5-fancy
 	      "<header>\n<h1 class=\"title\">%s</h1>\n%s</header>"
 	    "<h1 class=\"title\">%s%s</h1>\n")
 	  (org-export-data title info)
 	  (if subtitle
 	      (format
-	       (if (plist-get info :html-html5-fancy)
+	       (if html5-fancy
 		   "<p class=\"subtitle\">%s</p>\n"
 		 "\n<br>\n<span class=\"subtitle\">%s</span>\n")
 	       (org-export-data subtitle info))
@@ -2141,8 +2139,7 @@ of contents as a string, or nil if it is empty."
 			 (org-html--toc-text toc-entries)
 			 "</div>\n")))
 	(if scope toc
-	  (let ((outer-tag (if (and (org-html-html5-p info)
-				    (plist-get info :html-html5-fancy))
+	  (let ((outer-tag (if (org-html--html5-fancy-p info)
 			       "nav"
 			     "div")))
 	    (concat (format "<%s id=\"table-of-contents\">\n" outer-tag)
@@ -2308,7 +2305,7 @@ contextual information."
   "Transcode a CENTER-BLOCK element from Org to HTML.
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
-  (format "<div class=\"center\">\n%s</div>" contents))
+  (format "<div class=\"org-center\">\n%s</div>" contents))
 
 ;;;; Clock
 
@@ -2784,7 +2781,7 @@ Bind `org-html-standalone-image-predicate' to constrain paragraph
 further.  For example, to check for only captioned standalone
 images, set it to:
 
-  \(lambda (paragraph) (org-element-property :caption paragraph))"
+  (lambda (paragraph) (org-element-property :caption paragraph))"
   (let ((paragraph (case (org-element-type element)
 		     (paragraph element)
 		     (link (org-export-get-parent element)))))
@@ -2814,17 +2811,16 @@ INFO is a plist holding contextual information.  See
 		 (org-trim (plist-get info :html-link-home))))
 	 (use-abs-url (plist-get info :html-link-use-abs-url))
 	 (link-org-files-as-html-maybe
-	  (function
-	   (lambda (raw-path info)
-	     "Treat links to `file.org' as links to `file.html', if needed.
-           See `org-html-link-org-files-as-html'."
-	     (cond
-	      ((and (plist-get info :html-link-org-files-as-html)
-		    (string= ".org"
-			     (downcase (file-name-extension raw-path "."))))
-	       (concat (file-name-sans-extension raw-path) "."
-		       (plist-get info :html-extension)))
-	      (t raw-path)))))
+	  (lambda (raw-path info)
+	    ;; Treat links to `file.org' as links to `file.html', if
+	    ;; needed.  See `org-html-link-org-files-as-html'.
+	    (cond
+	     ((and (plist-get info :html-link-org-files-as-html)
+		   (string= ".org"
+			    (downcase (file-name-extension raw-path "."))))
+	      (concat (file-name-sans-extension raw-path) "."
+		      (plist-get info :html-extension)))
+	     (t raw-path))))
 	 (type (org-element-property :type link))
 	 (raw-path (org-element-property :path link))
 	 ;; Ensure DESC really exists, or set it to nil.
@@ -2832,9 +2828,8 @@ INFO is a plist holding contextual information.  See
 	 (path
 	  (cond
 	   ((member type '("http" "https" "ftp" "mailto"))
-	    (org-html-encode-plain-text
-	     (org-link-escape-browser
-	      (org-link-unescape (concat type ":" raw-path)))))
+	    (org-link-escape-browser
+	     (org-link-unescape (concat type ":" raw-path))))
 	   ((string= type "file")
 	    ;; Treat links to ".org" files as ".html", if needed.
 	    (setq raw-path
@@ -2953,21 +2948,25 @@ INFO is a plist holding contextual information.  See
      ;; Coderef: replace link with the reference name or the
      ;; equivalent line number.
      ((string= type "coderef")
-      (let ((fragment (concat "coderef-" path)))
+      (let ((fragment (concat "coderef-" (org-html-encode-plain-text path))))
 	(format "<a href=\"#%s\"%s%s>%s</a>"
 		fragment
-		(org-trim
-		 (format (concat "class=\"coderef\""
-				 " onmouseover=\"CodeHighlightOn(this, '%s');\""
-				 " onmouseout=\"CodeHighlightOff(this, '%s');\"")
-			 fragment fragment))
+		(format "class=\"coderef\" onmouseover=\"CodeHighlightOn(this, \
+'%s');\" onmouseout=\"CodeHighlightOff(this, '%s');\""
+			fragment fragment)
 		attributes
 		(format (org-export-get-coderef-format path desc)
 			(org-export-resolve-coderef path info)))))
      ;; External link with a description part.
-     ((and path desc) (format "<a href=\"%s\"%s>%s</a>" path attributes desc))
+     ((and path desc) (format "<a href=\"%s\"%s>%s</a>"
+			      (org-html-encode-plain-text path)
+			      attributes
+			      desc))
      ;; External link without a description part.
-     (path (format "<a href=\"%s\"%s>%s</a>" path attributes path))
+     (path (format "<a href=\"%s\"%s>%s</a>"
+		   (org-html-encode-plain-text path)
+		   attributes
+		   path))
      ;; No path, only description.  Try to do something useful.
      (t (format "<i>%s</i>" desc)))))
 
@@ -3189,8 +3188,7 @@ CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
   (let* ((block-type (org-element-property :type special-block))
 	 (contents (or contents ""))
-	 (html5-fancy (and (org-html-html5-p info)
-			   (plist-get info :html-html5-fancy)
+	 (html5-fancy (and (org-html--html5-fancy-p info)
 			   (member block-type org-html-html5-elements)))
 	 (attributes (org-export-read-attribute :attr_html special-block)))
     (unless html5-fancy
@@ -3500,9 +3498,6 @@ contextual information."
     (set-auto-mode t)
     (if (plist-get info :html-indent)
 	(indent-region (point-min) (point-max)))
-    (when (plist-get info :html-use-unicode-chars)
-      (require 'mm-url)
-      (mm-url-decode-entities))
     (buffer-substring-no-properties (point-min) (point-max))))
 
 

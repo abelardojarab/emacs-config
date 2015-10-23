@@ -404,6 +404,10 @@ Pass BUFFER to the XEmacs version of `move-to-column'."
 (unless (fboundp 'user-error)
   (defalias 'user-error 'error))
 
+;; ‘format-message’ is available only from 25 on
+(unless (fboundp 'format-message)
+  (defalias 'format-message 'format))
+
 ;; `font-lock-ensure' is only available from 24.4.50 on
 (unless (fboundp 'font-lock-ensure)
   (defalias 'font-lock-ensure 'font-lock-fontify-buffer))
@@ -534,6 +538,17 @@ Implements `file-equal-p' for older emacsen and XEmacs."
   (if (fboundp 'buffer-narrowed-p)
       (buffer-narrowed-p)
     (/= (- (point-max) (point-min)) (buffer-size))))
+
+;; As of Emacs 25.1, `outline-mode` functions are under the 'outline-'
+;; prefix.
+(when (< emacs-major-version 25)
+  (defalias 'outline-show-all 'show-all)
+  (defalias 'outline-hide-subtree 'hide-subtree)
+  (defalias 'outline-show-subtree 'show-subtree)
+  (defalias 'outline-show-branches 'show-branches)
+  (defalias 'outline-show-entry 'show-entry)
+  (defalias 'outline-hide-entry 'hide-entry)
+  (defalias 'outline-hide-sublevels 'hide-sublevels))
 
 (defmacro org-with-silent-modifications (&rest body)
   (if (fboundp 'with-silent-modifications)

@@ -283,37 +283,35 @@ which see.  BEG and END are buffer positions."
 DATUM is an element or object.  Return a list (BEG END CONTENTS)
 where BEG and END are buffer positions and CONTENTS is a string."
   (let ((type (org-element-type datum)))
-    (cond
-     ((eq type 'footnote-definition)
-      (let* ((beg (org-with-wide-buffer
-		   (goto-char (org-element-property :post-affiliated datum))
-		   (search-forward "]")))
-	     (end (or (org-element-property :contents-end datum) beg)))
-	(list beg end (buffer-substring-no-properties beg end))))
-     ((org-element-property :contents-begin datum)
-      (let ((beg (org-element-property :contents-begin datum))
-	    (end (org-element-property :contents-end datum)))
-	(list beg end (buffer-substring-no-properties beg end))))
-     ((memq type '(example-block export-block src-block))
-      (list (org-with-wide-buffer
-	     (goto-char (org-element-property :post-affiliated datum))
-	     (line-beginning-position 2))
-	    (org-with-wide-buffer
-	     (goto-char (org-element-property :end datum))
-	     (skip-chars-backward " \r\t\n")
-	     (line-beginning-position 1))
-	    (org-element-property :value datum)))
-     ((memq type '(fixed-width table))
-      (let ((beg (org-element-property :post-affiliated datum))
-	    (end (org-with-wide-buffer
-		  (goto-char (org-element-property :end datum))
-		  (skip-chars-backward " \r\t\n")
-		  (line-beginning-position 2))))
-	(list beg
-	      end
-	      (if (eq type 'fixed-width) (org-element-property :value datum)
-		(buffer-substring-no-properties beg end)))))
-     (t (error "Unsupported element or object: %s" type)))))
+    (org-with-wide-buffer
+     (cond
+      ((eq type 'footnote-definition)
+       (let* ((beg (progn
+		     (goto-char (org-element-property :post-affiliated datum))
+		     (search-forward "]")))
+	      (end (or (org-element-property :contents-end datum) beg)))
+	 (list beg end (buffer-substring-no-properties beg end))))
+      ((org-element-property :contents-begin datum)
+       (let ((beg (org-element-property :contents-begin datum))
+	     (end (org-element-property :contents-end datum)))
+	 (list beg end (buffer-substring-no-properties beg end))))
+      ((memq type '(example-block export-block src-block))
+       (list (progn (goto-char (org-element-property :post-affiliated datum))
+		    (line-beginning-position 2))
+	     (progn (goto-char (org-element-property :end datum))
+		    (skip-chars-backward " \r\t\n")
+		    (line-beginning-position 1))
+	     (org-element-property :value datum)))
+      ((memq type '(fixed-width table))
+       (let ((beg (org-element-property :post-affiliated datum))
+	     (end (progn (goto-char (org-element-property :end datum))
+			 (skip-chars-backward " \r\t\n")
+			 (line-beginning-position 2))))
+	 (list beg
+	       end
+	       (if (eq type 'fixed-width) (org-element-property :value datum)
+		 (buffer-substring-no-properties beg end)))))
+      (t (error "Unsupported element or object: %s" type))))))
 
 (defun org-src--make-source-overlay (beg end edit-buffer)
   "Create overlay between BEG and END positions and return it.
@@ -659,9 +657,9 @@ This command is not bound to a key by default, to avoid conflicts
 with language major mode bindings.  To bind it to C-c @ in all
 language major modes, you could use
 
-  (add-hook 'org-src-mode-hook
+  (add-hook \\='org-src-mode-hook
             (lambda () (define-key org-src-mode-map \"\\C-c@\"
-                    'org-src-do-key-sequence-at-code-block)))
+                    \\='org-src-do-key-sequence-at-code-block)))
 
 In that case, for example, C-c @ t issued in code edit buffers
 would tangle the current Org code block, C-c @ e would execute
@@ -721,6 +719,7 @@ If BUFFER is non-nil, test it instead."
     (unless label (user-error "Cannot edit remotely anonymous footnotes"))
     (let* ((definition (org-with-wide-buffer
 			(org-footnote-goto-definition label)
+			(backward-char)
 			(org-element-context)))
 	   (inline (eq (org-element-type definition) 'footnote-reference))
 	   (contents
@@ -758,7 +757,9 @@ If BUFFER is non-nil, test it instead."
 	    ;; table's structure.
 	    (when ,(org-element-lineage definition '(table-cell))
 	      (while (search-forward "\n" nil t) (delete-char -1)))))
-       contents
+       (concat contents
+	       (and (not (org-element-property :contents-begin definition))
+		    " "))
        'remote))
     ;; Report success.
     t))
@@ -850,13 +851,12 @@ name of the sub-editing buffer."
 	    `(lambda ()
 	       (unless ,(or org-src-preserve-indentation
 			    (org-element-property :preserve-indent element))
-		 (untabify (point-min) (point-max))
 		 (when (> org-edit-src-content-indentation 0)
-		   (let ((ind (make-string org-edit-src-content-indentation
-					   ?\s)))
-		     (while (not (eobp))
-		       (unless (looking-at "[ \t]*$") (insert ind))
-		       (forward-line)))))
+		   (while (not (eobp))
+		     (unless (looking-at "[ \t]*$")
+		       (indent-line-to (+ (org-get-indentation)
+					  org-edit-src-content-indentation)))
+		     (forward-line))))
 	       (org-escape-code-in-region (point-min) (point-max))))
        (and code (org-unescape-code-in-string code)))
       ;; Finalize buffer.

@@ -1,6 +1,6 @@
 ;;; org-mac-link.el --- Insert org-mode links to items selected in various Mac apps
 ;;
-;; Copyright (c) 2010-2014 Free Software Foundation, Inc.
+;; Copyright (c) 2010-2015 Free Software Foundation, Inc.
 ;;
 ;; Author: Anthony Lander <anthony.lander@gmail.com>
 ;;      John Wiegley <johnw@gnu.org>
@@ -18,6 +18,10 @@
 ;; Author: Mike McLean <mike.mclean@pobox.com>
 ;; Add support for Microsoft Outlook for Mac as Org mode links
 ;;
+;; Version: 1.3
+;; Author: Alan Schmitt <alan.schmitt@polytechnique.org>
+;; Consistently use `org-mac-paste-applescript-links'
+;; 
 ;; This file is not part of GNU Emacs.
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -165,6 +169,12 @@
   :group 'org-mac-link
   :type 'boolean)
 
+(defcustom org-mac-grab-Acrobat-app-p t
+  "Add menu option [A]crobat to grab page links from Acrobat.app."
+  :tag "Grab Acrobat.app page links"
+  :group 'org-mac-link
+  :type 'boolean)
+
 (defgroup org-mac-flagged-mail nil
   "Options foring linking to flagged Mail.app messages."
   :tag "Org Mail.app"
@@ -207,7 +217,8 @@ When done, go grab the link, and insert it at point."
 	    ("v" "imperator" org-mac-vimperator-insert-frontmost-url ,org-mac-grab-Firefox+Vimperator-p)
 	    ("c" "hrome" org-mac-chrome-insert-frontmost-url ,org-mac-grab-Chrome-app-p)
 	    ("t" "ogether" org-mac-together-insert-selected ,org-mac-grab-Together-app-p)
-	    ("S" "kim" org-mac-skim-insert-page ,org-mac-grab-Skim-app-p)))
+	    ("S" "kim" org-mac-skim-insert-page ,org-mac-grab-Skim-app-p)
+	    ("A" "crobat" org-mac-acrobat-insert-page ,org-mac-grab-Acrobat-app-p)))
          (menu-string (make-string 0 ?x))
          input)
 
@@ -299,15 +310,7 @@ The links are of the form <link>::split::<name>."
 (defun org-mac-firefox-get-frontmost-url ()
   (interactive)
   (message "Applescript: Getting Firefox url...")
-  (let* ((url-and-title (org-as-mac-firefox-get-frontmost-url))
-         (split-link (split-string url-and-title "::split::"))
-         (URL (car split-link))
-         (description (cadr split-link))
-         (org-link))
-    (when (not (string= URL ""))
-      (setq org-link (org-make-link-string URL description)))
-    (kill-new org-link)
-    org-link))
+  (org-mac-paste-applescript-links (org-as-mac-firefox-get-frontmost-url)))
 
 (defun org-mac-firefox-insert-frontmost-url ()
   (interactive)
@@ -345,15 +348,7 @@ The links are of the form <link>::split::<name>."
 (defun org-mac-vimperator-get-frontmost-url ()
   (interactive)
   (message "Applescript: Getting Vimperator url...")
-  (let* ((url-and-title (org-as-mac-vimperator-get-frontmost-url))
-         (split-link (split-string url-and-title "::split::"))
-         (URL (car split-link))
-         (description (cadr split-link))
-         (org-link))
-    (when (not (string= URL ""))
-      (setq org-link (org-make-link-string URL description)))
-    (kill-new org-link)
-    org-link))
+  (org-mac-paste-applescript-links (org-as-mac-vimperator-get-frontmost-url)))
 
 (defun org-mac-vimperator-insert-frontmost-url ()
   (interactive)
@@ -383,15 +378,7 @@ The links are of the form <link>::split::<name>."
 (defun org-mac-chrome-get-frontmost-url ()
   (interactive)
   (message "Applescript: Getting Chrome url...")
-  (let* ((url-and-title (org-as-mac-chrome-get-frontmost-url))
-         (split-link (split-string url-and-title "::split::"))
-         (URL (car split-link))
-         (description (cadr split-link))
-         (org-link))
-    (when (not (string= URL ""))
-      (setq org-link (org-make-link-string URL description)))
-    (kill-new org-link)
-    org-link))
+  (org-mac-paste-applescript-links (org-as-mac-chrome-get-frontmost-url)))
 
 (defun org-mac-chrome-insert-frontmost-url ()
   (interactive)
@@ -557,19 +544,62 @@ The links are of the form <link>::split::<name>."
 (defun org-mac-skim-get-page ()
   (interactive)
   (message "Applescript: Getting Skim page link...")
-  (let* ((link-and-descr (as-get-skim-page-link))
-         (split-link (split-string link-and-descr "::split::"))
-         (link (car split-link))
-         (description (cadr split-link))
-         (org-link))
-    (when (not (string= link ""))
-      (setq org-link (org-make-link-string link description)))
-    (kill-new org-link)
-    org-link))
+  (org-mac-paste-applescript-links (as-get-skim-page-link)))
 
 (defun org-mac-skim-insert-page ()
   (interactive)
   (insert (org-mac-skim-get-page)))
+
+;; Handle links from Adobe Acrobat Pro.app
+;;
+;; Original code & idea by Christopher Suckling (org-mac-protocol)
+;;
+;; The URI format is path_to_pdf_file::page_number
+
+(org-add-link-type "acrobat" 'org-mac-acrobat-open)
+
+(defun org-mac-acrobat-open (uri)
+  "Visit page of pdf in Acrobat"
+  (let* ((page (when (string-match "::\\(.+\\)\\'" uri)
+                 (match-string 1 uri)))
+         (document (substring uri 0 (match-beginning 0))))
+    (do-applescript
+     (concat
+      "tell application \"Adobe Acrobat Pro\"\n"
+      "  activate\n"
+      "  set theDoc to \"" document "\"\n"
+      "  set thePage to " page "\n"
+      "  open theDoc\n"
+      "  tell PDF Window 1\n"
+      "    goto page thePage\n"
+      "  end tell\n"
+      "end tell"))))
+
+;; The applescript returns link in the format
+;; "adobe:path_to_pdf_file::page_number::split::document_title, p.page_label"
+
+(defun org-mac-as-get-acrobat-page-link ()
+  (do-applescript
+   (concat
+    "tell application \"Adobe Acrobat Pro\"\n"
+    "  set theDoc to active doc\n"
+    "  set theWindow to (PDF Window 1 of theDoc)\n"
+    "  set thePath to (file alias of theDoc)\n"
+    "  set theTitle to (name of theWindow)\n"
+    "  set thePage to (page number of theWindow)\n"
+    "  set theLabel to (label text of (page thePage of theWindow))\n"
+    "end tell\n"
+    "set theResult to \"acrobat:\" & thePath & \"::\" & thePage & \"::split::\" & theTitle & \", p.\" & theLabel\n"
+    "return theResult as string\n")))
+
+(defun org-mac-acrobat-get-page ()
+  (interactive)
+  (message "Applescript: Getting Acrobat page link...")
+  (org-mac-paste-applescript-links (org-mac-as-get-acrobat-page-link)))
+
+(defun org-mac-acrobat-insert-page ()
+  (interactive)
+  (insert (org-mac-acrobat-get-page)))
 
 
 ;; Handle links from Microsoft Outlook.app
@@ -640,27 +670,12 @@ The Org-syntax text will be pushed to the kill ring, and also returned."
   (interactive "sLink to (s)elected or (f)lagged messages: ")
   (setq select-or-flag (or select-or-flag "s"))
   (message "Org Mac Outlook: searching mailboxes...")
-  (let* ((as-link-list
-          (if (string= select-or-flag "s")
-              (org-as-get-selected-outlook-mail)
-	    (if (string= select-or-flag "f")
-		(org-sh-get-flagged-outlook-mail)
-	      (error "Please select \"s\" or \"f\""))))
-         (link-list
-          (mapcar
-           (lambda (x) (if (string-match "\\`\"\\(.*\\)\"\\'" x) (setq x (match-string 1 x))) x)
-           (split-string as-link-list "[\r\n]+")))
-         split-link URL description orglink orglink-insert rtn orglink-list)
-    (while link-list
-      (setq split-link (split-string (pop link-list) "::split::"))
-      (setq URL (car split-link))
-      (setq description (cadr split-link))
-      (when (not (string= URL ""))
-        (setq orglink (org-make-link-string URL description))
-        (push orglink orglink-list)))
-    (setq rtn (mapconcat 'identity orglink-list "\n"))
-    (kill-new rtn)
-    rtn))
+  (org-mac-paste-applescript-links
+   (if (string= select-or-flag "s")
+	(org-as-get-selected-outlook-mail)
+      (if (string= select-or-flag "f")
+	  (org-sh-get-flagged-outlook-mail)
+	(error "Please select \"s\" or \"f\"")))))
 
 (defun org-mac-outlook-message-insert-selected ()
   "Insert a link to the messages currently selected in Microsoft Outlook.app.
@@ -734,25 +749,7 @@ selected items in DEVONthink Pro Office.app and make links out of
 it/them. This function will push the Org-syntax text to the kill
 ring, and also return it."
   (message "Org Mac DEVONthink: looking for selected items...")
-  (let* ((as-link-list (org-as-get-selected-devonthink-item))
-         (link-list (if as-link-list
-                        (mapcar
-                         (lambda (x) (if (string-match "\\`\"\\(.*\\)\"\\'" x)
-					 (setq x (match-string 1 x)))
-			   x)
-                         (split-string as-link-list "[\r\n]+"))
-                      nil))
-         orglink-list)
-    (while link-list
-      (let* ((current-item (pop link-list)))
-        (message "current item: %s" current-item)
-        (when (and current-item (not (string= current-item "")))
-          (let* ((split-link (split-string current-item "::split::"))
-                 (orglink (org-make-link-string
-			   (url-encode-url (car split-link))
-			   (cadr split-link))))
-            (push orglink orglink-list)))))
-    (kill-new (mapconcat 'identity orglink-list "\n"))))
+  (org-mac-paste-applescript-links (org-as-get-selected-devonthink-item)))
 
 (defun org-mac-devonthink-item-insert-selected ()
   "Insert a link to the item(s) currently selected in DEVONthink Pro Office.

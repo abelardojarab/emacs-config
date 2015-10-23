@@ -701,7 +701,7 @@ Using header arguments
 Specific header arguments
 
 * var::                         Pass arguments to code blocks
-* Results::                     Specify the type of results and how they will
+* results::                     Specify the type of results and how they will
                                 be collected and handled
 * file::                        Specify a path for file output
 * file-desc::                   Specify a description for file results
@@ -1693,7 +1693,7 @@ In that case, all items are closed.  Here is an example:
    But in the end, no individual scenes matter but the film as a whole.
    Important actors in this film are:
    - @b{Elijah Wood} :: He plays Frodo
-   - @b{Sean Austin} :: He plays Sam, Frodo's friend.  I still remember
+   - @b{Sean Astin} :: He plays Sam, Frodo's friend.  I still remember
      him very well from his role as Mikey Walsh in @i{The Goonies}.
 @end group
 @end example
@@ -2074,6 +2074,10 @@ It will output a list containing the buffer's content represented as an
 abstract structure.  The export engine relies on the information stored in
 this list.  Most interactive commands (e.g., for structure editing) also
 rely on the syntactic meaning of the surrounding context.
+
+@cindex syntax checker
+@cindex linter
+You can check syntax in your documents using @code{org-lint} command.
 
 @node Tables
 @chapter Tables
@@ -6512,7 +6516,7 @@ reset of the task @footnote{as recorded by the @code{LAST_REPEAT} property}
 will be shown.  More control over what time is shown can be exercised with
 the @code{CLOCK_MODELINE_TOTAL} property.  It may have the values
 @code{current} to show only the current clocking instance, @code{today} to
-show all time clocked on this tasks today (see also the variable
+show all time clocked on this task today (see also the variable
 @code{org-extend-today-until}), @code{all} to include all time, or
 @code{auto} which is the default@footnote{See also the variable
 @code{org-clock-modeline-total}.}.@* Clicking with @kbd{mouse-1} onto the
@@ -8042,6 +8046,20 @@ hash with anniversaries.  However, from then on things will be very fast---much
 faster in fact than a long list of @samp{%%(diary-anniversary)} entries
 in an Org or Diary file.
 
+If you would like to see upcoming anniversaries with a bit of forewarning,
+you can use the following instead:
+
+@example
+* Anniversaries
+  :PROPERTIES:
+  :CATEGORY: Anniv
+  :END:
+%%(org-bbdb-anniversaries-future 3)
+@end example
+
+That will give you three days' warning: on the anniversary date itself and the
+two days prior. The argument is optional: if omitted, it defaults to 7.
+
 @subsubheading Appointment reminders
 @cindex @file{appt.el}
 @cindex appointment reminders
@@ -8616,9 +8634,10 @@ selected.
 @vindex org-agenda-category-filter-preset
 
 Filter the current agenda view with respect to the category of the item at
-point.  Pressing @code{<} another time will remove this filter.  You can add
-a filter preset through the option @code{org-agenda-category-filter-preset}
-(see below.)
+point.  Pressing @code{<} another time will remove this filter.  When called
+with a prefix argument exclude the category of the item at point from the
+agenda.  You can add a filter preset through the option
+@code{org-agenda-category-filter-preset} (see below.)
 
 @orgcmd{^,org-agenda-filter-by-top-headline}
 Filter the current agenda view and only display the siblings and the parent
@@ -8637,7 +8656,7 @@ be accumulated.  You can add a filter preset through the option
 @orgcmd{_,org-agenda-filter-by-effort}
 @vindex org-agenda-effort-filter-preset
 @vindex org-sort-agenda-noeffort-is-high
-Filter the agenda view with respect to effort estimates.  
+Filter the agenda view with respect to effort estimates.
 You first need to set up allowed efforts globally, for example
 @lisp
 (setq org-global-properties
@@ -10216,16 +10235,20 @@ export.
 
 @item @{@{@{date@}@}@}
 @itemx @{@{@{date(@var{FORMAT})@}@}@}
-@itemx @{@{@{time(@var{FORMAT})@}@}@}
-@itemx @{@{@{modification-time(@var{FORMAT})@}@}@}
 @cindex date, macro
+This macro refers to the @code{#+DATE} keyword. @var{FORMAT} is an optional
+argument to the @code{@{@{@{date@}@}@}} macro that will be used only if
+@code{#+DATE} is a single timestamp.  @var{FORMAT} should be a format string
+understood by @code{format-time-string}.
+
+@item @{@{@{time(@var{FORMAT})@}@}@}
+@itemx @{@{@{modification-time(@var{FORMAT})@}@}@}
 @cindex time, macro
 @cindex modification time, macro
-These macros refer to the @code{#+DATE} keyword, the current date, and the
-modification time of the file being exported, respectively.  @var{FORMAT}
-should be a format string understood by @code{format-time-string}.  Note that
-@var{FORMAT} is an optional argument to the @code{@{@{@{date@}@}@}} macro,
-and that it will only be used if @code{#+DATE} is a single timestamp.
+These macros refer to the date and time when the document is exported and to
+the modification date and time of the file being exported, respectively.
+@var{FORMAT} should be a format string understood by
+@code{format-time-string}.
 
 @item @{@{@{input-file@}@}@}
 @cindex input file, macro
@@ -10591,8 +10614,7 @@ toggle export options@footnote{It is also possible to use a less intrusive
 interface by setting @code{org-export-dispatch-use-expert-ui} to a
 non-@code{nil} value.  In that case, only a prompt is visible from the
 minibuffer.  From there one can still switch back to regular menu by pressing
-@key{?}.} from which it is possible to select an export format and to toggle
-export options.
+@key{?}.}.
 
 @table @asis
 @orgcmd{C-c C-e,org-export-dispatch}
@@ -10797,6 +10819,12 @@ process the headline, skipping its contents
 @vindex org-export-with-author
 Toggle inclusion of author name into exported file
 (@code{org-export-with-author}).
+
+@item broken-links:
+@vindex org-export-with-broken-links
+Decide whether to raise an error or not when encountering a broken internal
+link.  When set to @code{mark}, signal the problem clearly in the output
+(@code{org-export-with-broken-links}).
 
 @item c:
 @vindex org-export-with-clocks
@@ -11891,16 +11919,14 @@ pages, configure the variable @code{org-html-use-infojs}.
 @cindex @LaTeX{} export
 @cindex PDF export
 
-@LaTeX{} export can produce an arbitrarily complex LaTeX document of any
-standard or custom document class.  With further processing@footnote{The
-default @LaTeX{} output is designed for processing with @code{pdftex} or
-@code{latex}.  The @LaTeX{} exporter can be configured to support alternative
-TeX engines, see see @code{org-latex-pdf-process}, and alternative packages,
-see @code{org-latex-default-packages-alist} and
-@code{org-latex-packages-alist}.}, which the @LaTeX{} exporter is able to
-control, this back-end is able to produce PDF output.  Because the @LaTeX{}
-exporter can be configured to use the @code{hyperref} package, the default
-setup produces fully-linked PDF output.
+The @LaTeX{} exporter can produce an arbitrarily complex @LaTeX{} document of
+any standard or custom document class@footnote{The @LaTeX{} exporter can be
+configured to support alternative @LaTeX{} engines (see
+@code{org-latex-compiler}), build sequences (see
+@code{org-latex-pdf-process}), and packages, (see
+@code{org-latex-default-packages-alist} and
+@code{org-latex-packages-alist}).}.  The Org @LaTeX{} exporter is geared
+towards producing fully-linked PDF output.
 
 As in @LaTeX{}, blank lines are meaningful for this back-end: a paragraph
 will not be started if two contiguous syntactical elements are not separated
@@ -11934,6 +11960,19 @@ Export as @LaTeX{} and then process to PDF.
 Export as @LaTeX{} and then process to PDF, then open the resulting PDF file.
 @end table
 
+@vindex org-latex-compiler
+@vindex org-latex-bibtex-compiler
+@vindex org-latex-default-packages-alist
+The exporter supports several @LaTeX{} engines, namely @samp{pdflatex},
+@samp{xelatex} and @samp{lualatex}.  The default @LaTeX{} compiler can be set
+via @code{org-latex-compiler} or the @code{#+LATEX_COMPILER} keyword.  It is
+possible to only load some packages with certain compilers (see the docstring
+of @code{org-latex-default-packages-alist}).  The bibliography compiler may
+also be set via @code{org-latex-bibtex-compiler}@footnote{You cannot set the
+bibliography compiler on a file basis via a keyword.  However, ``smart''
+@LaTeX{} compilation systems, such as @samp{latexmk}, are usually able to
+select the correct bibliography compiler.}.
+
 @node @LaTeX{} specific export settings
 @subsection @LaTeX{} specific export settings
 The @LaTeX{} exporter introduces a number of keywords, similar to the general
@@ -11959,6 +11998,11 @@ The predefined preamble and headline level mapping to use
 @item LATEX_CLASS_OPTIONS
 @cindex #+LATEX_CLASS_OPTIONS
 Options given to the @LaTeX{} document class.
+
+@item LATEX_COMPILER
+@cindex #+LATEX_COMPILER
+@vindex org-latex-compiler
+The compiler used to produce the PDF (@code{org-latex-compiler}).
 
 @item LATEX_HEADER
 @cindex #+LATEX_HEADER
@@ -14253,6 +14297,8 @@ however, override everything.
 @item @code{:section-numbers}       @tab @code{org-export-with-section-numbers}
 @item @code{:select-tags}           @tab @code{org-export-select-tags}
 @item @code{:with-author}           @tab @code{org-export-with-author}
+@item @code{:with-broken-links}     @tab @code{org-export-with-broken-links}
+@item @code{:with-clocks}           @tab @code{org-export-with-clocks}
 @item @code{:with-creator}          @tab @code{org-export-with-creator}
 @item @code{:with-date}             @tab @code{org-export-with-date}
 @item @code{:with-drawers}          @tab @code{org-export-with-drawers}
@@ -14361,7 +14407,6 @@ however, override everything.
 @item @code{:html-todo-kwd-class-prefix}      @tab @code{org-html-todo-kwd-class-prefix}
 @item @code{:html-toplevel-hlevel}            @tab @code{org-html-toplevel-hlevel}
 @item @code{:html-use-infojs}                 @tab @code{org-html-use-infojs}
-@item @code{:html-use-unicode-chars}          @tab @code{org-html-use-unicode-chars}
 @item @code{:html-validation-link}            @tab @code{org-html-validation-link}
 @item @code{:html-viewport}                   @tab @code{org-html-viewport}
 @item @code{:html-xml-declaration}            @tab @code{org-html-xml-declaration}
@@ -14369,11 +14414,12 @@ however, override everything.
 
 @subsubheading @LaTeX{} specific properties
 
-@multitable {@code{:latex-link-with-unknown-path-format}} {@code{org-latex-link-with-unknown-path-format}} 
+@multitable {@code{:latex-link-with-unknown-path-format}} {@code{org-latex-link-with-unknown-path-format}}
 @item @code{:latex-active-timestamp-format}    @tab @code{org-latex-active-timestamp-format}
 @item @code{:latex-caption-above}              @tab @code{org-latex-caption-above}
 @item @code{:latex-classes}                    @tab @code{org-latex-classes}
 @item @code{:latex-class}                      @tab @code{org-latex-default-class}
+@item @code{:latex-compiler}                   @tab @code{org-latex-compiler}
 @item @code{:latex-default-figure-position}    @tab @code{org-latex-default-figure-position}
 @item @code{:latex-default-table-environment}  @tab @code{org-latex-default-table-environment}
 @item @code{:latex-default-table-mode}         @tab @code{org-latex-default-table-mode}
@@ -14817,13 +14863,13 @@ can be used to map arbitrary language names to existing major modes.
 Controls the way Emacs windows are rearranged when the edit buffer is created.
 @item org-src-preserve-indentation
 @cindex indentation, in source blocks
-By default, the value is @code{nil}, which means that when code blocks are
-evaluated during export or tangled, they are re-inserted into the code block,
-which may replace sequences of spaces with tab characters.  When non-@code{nil},
-whitespace in code blocks will be preserved during export or tangling,
-exactly as it appears.  This variable is especially useful for tangling
-languages such as Python, in which whitespace indentation in the output is
-critical.
+By default, the value is @code{nil}, which means that code blocks evaluated
+during export or tangled are indented according to context, possibly altering
+leading sequences of spaces and tab characters in the process.  When
+non-@code{nil}, indentation is relative to left column, and therefore, not
+modified during export or tangling.  This variable is especially useful for
+tangling languages such as Python, in which whitespace indentation in the
+output is critical.
 @item org-src-ask-before-returning-to-edit-buffer
 By default, Org will ask before returning to an open edit buffer.  Set this
 variable to @code{nil} to switch without asking.
@@ -14843,7 +14889,8 @@ of code block evaluation, @emph{both} the code and the results of code block
 evaluation, or @emph{none}.  For most languages, the default exports code.
 However, for some languages (e.g., @code{ditaa}) the default exports the
 results of code block evaluation.  For information on exporting code block
-bodies, see @ref{Literal examples}.
+bodies, see @ref{Literal examples}.  For information on exporting
+parts of Org documents, see @ref{Exporting}.
 
 The @code{:exports} header argument can be used to specify export
 behavior (note that these arguments are only relevant for code blocks, not
@@ -14943,7 +14990,7 @@ The @code{org-babel-tangle-jump-to-org} function provides this jumping from
 code to Org-mode functionality.  Two header arguments are required for
 jumping to work, first the @code{padline} (@ref{padline}) option must be set
 to true (the default setting), second the @code{comments} (@ref{comments})
-header argument must be set to @code{links}, which will insert comments into
+header argument must be set to @code{link}, which will insert comments into
 the source code buffer which point back to the original Org-mode file.
 
 @node Evaluating code blocks
@@ -14964,10 +15011,9 @@ and/or the name of the evaluated code block.  The default value of
 @code{org-babel-results-keyword}.
 
 By default, the evaluation facility is only enabled for Lisp code blocks
-specified as @code{emacs-lisp}.  However, source code blocks in many languages
-can be evaluated within Org mode (see @ref{Languages} for a list of supported
-languages and @ref{Structure of code blocks} for information on the syntax
-used to define a code block).
+specified as @code{emacs-lisp}.  See @ref{Languages} to enable other
+supported languages.  See @ref{Structure of code blocks} for information on
+the syntax used to define a code block.
 
 @kindex C-c C-c
 There are a number of ways to evaluate code blocks.  The simplest is to press
@@ -15060,22 +15106,22 @@ Code blocks in the following languages are supported.
 @multitable @columnfractions 0.25 0.25 0.25 0.25
 @headitem @b{Language} @tab @b{Identifier} @tab @b{Language} @tab @b{Identifier}
 @item Asymptote @tab asymptote @tab Awk @tab awk
-@item C @tab C @tab C++ @tab C++ 
-@item Clojure @tab clojure @tab CSS @tab css 
-@item D @tab d @tab ditaa @tab ditaa 
+@item C @tab C @tab C++ @tab C++
+@item Clojure @tab clojure @tab CSS @tab css
+@item D @tab d @tab ditaa @tab ditaa
 @item Graphviz @tab dot @tab Emacs Calc @tab calc
 @item Emacs Lisp @tab emacs-lisp @tab Fortran @tab fortran
-@item gnuplot @tab gnuplot @tab Haskell @tab haskell 
-@item Java @tab java @tab Javascript @tab js 
-@item LaTeX @tab latex @tab Ledger @tab ledger 
-@item Lisp @tab lisp @tab Lilypond @tab lilypond 
-@item MATLAB @tab matlab @tab Mscgen @tab mscgen 
-@item Objective Caml @tab ocaml @tab Octave @tab octave 
-@item Org mode @tab org @tab Oz @tab oz 
-@item Perl @tab perl @tab Plantuml @tab plantuml 
-@item Processing.js @tab processing @tab Python @tab python 
-@item R @tab R @tab Ruby @tab ruby 
-@item Sass @tab sass @tab Scheme @tab scheme 
+@item gnuplot @tab gnuplot @tab Haskell @tab haskell
+@item Java @tab java @tab Javascript @tab js
+@item LaTeX @tab latex @tab Ledger @tab ledger
+@item Lisp @tab lisp @tab Lilypond @tab lilypond
+@item MATLAB @tab matlab @tab Mscgen @tab mscgen
+@item Objective Caml @tab ocaml @tab Octave @tab octave
+@item Org mode @tab org @tab Oz @tab oz
+@item Perl @tab perl @tab Plantuml @tab plantuml
+@item Processing.js @tab processing @tab Python @tab python
+@item R @tab R @tab Ruby @tab ruby
+@item Sass @tab sass @tab Scheme @tab scheme
 @item GNU Screen @tab screen @tab Sed @tab sed
 @item shell @tab sh @tab SQL @tab sql
 @item SQLite @tab sqlite @tab @tab
@@ -15336,7 +15382,7 @@ argument in lowercase letters.  The following header arguments are defined:
 
 @menu
 * var::                         Pass arguments to code blocks
-* Results::                     Specify the type of results and how they will
+* results::                     Specify the type of results and how they will
                                 be collected and handled
 * file::                        Specify a path for file output
 * file-desc::                   Specify a description for file results
@@ -15630,7 +15676,7 @@ Emacs Lisp, as shown in the following example.
 : (a b c)
 @end example
 
-@node Results
+@node results
 @subsubsection @code{:results}
 @cindex @code{:results}, src header argument
 
@@ -16467,7 +16513,7 @@ block body before execution.  Also see @ref{prologue}.
 The way in which results are handled depends on whether a session is invoked,
 as well as on whether @code{:results value} or @code{:results output} is
 used.  The following table shows the table possibilities.  For a full listing
-of the possible results header arguments see @ref{Results}.
+of the possible results header arguments see @ref{results}.
 
 @multitable @columnfractions 0.26 0.33 0.41
 @item @tab @b{Non-session} @tab @b{Session}

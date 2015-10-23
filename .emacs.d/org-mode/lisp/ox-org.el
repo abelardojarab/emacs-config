@@ -45,7 +45,7 @@ look bad if different people with different fontification setup
 work on the same website.  When this variable is non-nil,
 creating an htmlized version of an Org buffer using
 `org-org-export-as-org' will include a link to this URL if the
-setting of `org-html-htmlize-output-type' is 'css."
+setting of `org-html-htmlize-output-type' is `css'."
   :group 'org-export-org
   :type '(choice
 	  (const :tag "Don't include external stylesheet link" nil)
@@ -298,7 +298,7 @@ Return output file name."
 	   newbuf)
       (with-current-buffer work-buffer
         (font-lock-ensure)
-        (show-all)
+        (outline-show-all)
         (org-show-block-all)
         (setq newbuf (htmlize-buffer)))
       (with-current-buffer newbuf

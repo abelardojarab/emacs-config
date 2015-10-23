@@ -1,6 +1,6 @@
 ;;; ob-fortran.el --- org-babel functions for fortran
 
-;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2015 Free Software Foundation, Inc.
 
 ;; Authors: Sergey Litvinov
 ;;       Eric Schulte
@@ -110,7 +110,7 @@ it's header arguments."
   "Wrap body in a \"program ... end program\" block if none exists."
   (if (string-match "^[ \t]*program[ \t]*.*" (capitalize body))
       (let ((vars (mapcar #'cdr (org-babel-get-header params :var))))
-	(if vars (error "Cannot use :vars if 'program' statement is present"))
+	(if vars (error "Cannot use :vars if `program' statement is present"))
 	body)
     (format "program main\n%s\nend program main\n" body)))
 
