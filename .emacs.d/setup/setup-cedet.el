@@ -99,6 +99,12 @@
   (semanticdb-enable-gnu-global-databases 'c-mode)
   (semanticdb-enable-gnu-global-databases 'c++-mode))
 
+;; Put c++-mode as default for *.h files (improves parsing)
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+;; Enable case-insensitive searching
+(set-default 'semantic-case-fold t)
+
 ;; Include settings
 (require 'semantic/bovine/c)
 (require 'semantic/bovine/gcc)
