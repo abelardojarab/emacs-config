@@ -104,6 +104,8 @@
 ;; Smart tab
 (add-to-list 'load-path "~/.emacs.d/smart-tab")
 (require 'smart-tab)
+(cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list)
+(setq smart-tab-using-hippie-expand t)
 (global-smart-tab-mode)
 
 ;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
