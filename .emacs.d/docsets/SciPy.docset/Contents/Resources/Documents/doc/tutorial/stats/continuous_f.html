@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Fratio (or F) Distribution</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../../index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../../scipy-optimize-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="fratio-or-f-distribution">
+<span id="continuous-f"></span><h1>Fratio (or F) Distribution<a class="headerlink" href="#fratio-or-f-distribution" title="Permalink to this headline">¶</a></h1>
+<p>Defined for <span class="math">\(x&gt;0\)</span> . The distribution of <span class="math">\(\left(X_{1}/X_{2}\right)\left(\nu_{2}/\nu_{1}\right)\)</span> if <span class="math">\(X_{1}\)</span> is chi-squared with <span class="math">\(v_{1}\)</span> degrees of freedom and <span class="math">\(X_{2}\)</span> is chi-squared with <span class="math">\(v_{2}\)</span> degrees of freedom.</p>
+<div class="math">
+\[ \begin{eqnarray*} f\left(x;\nu_{1},\nu_{2}\right) & = & \frac{\nu_{2}^{\nu_{2}/2}\nu_{1}^{\nu_{1}/2}x^{\nu_{1}/2-1}}{\left(\nu_{2}+\nu_{1}x\right)^{\left(\nu_{1}+\nu_{2}\right)/2}B\left(\frac{\nu_{1}}{2},\frac{\nu_{2}}{2}\right)}\\ F\left(x;v_{1},v_{2}\right) & = & I\left(\frac{\nu_{1}}{2},\frac{\nu_{2}}{2},\frac{\nu_{2}x}{\nu_{2}+\nu_{1}x}\right)\\ G\left(q;\nu_{1},\nu_{2}\right) & = & \left[\frac{\nu_{2}}{I^{-1}\left(\nu_{1}/2,\nu_{2}/2,q\right)}-\frac{\nu_{1}}{\nu_{2}}\right]^{-1}.\end{eqnarray*}\]</div><div class="math">
+\[ \begin{eqnarray*} \mu & = & \frac{\nu_{2}}{\nu_{2}-2}\quad\nu_{2}>2\\ \mu_{2} & = & \frac{2\nu_{2}^{2}\left(\nu_{1}+\nu_{2}-2\right)}{\nu_{1}\left(\nu_{2}-2\right)^{2}\left(\nu_{2}-4\right)}\quad v_{2}>4\\ \gamma_{1} & = & \frac{2\left(2\nu_{1}+\nu_{2}-2\right)}{\nu_{2}-6}\sqrt{\frac{2\left(\nu_{2}-4\right)}{\nu_{1}\left(\nu_{1}+\nu_{2}-2\right)}}\quad\nu_{2}>6\\ \gamma_{2} & = & \frac{3\left[8+\left(\nu_{2}-6\right)\gamma_{1}^{2}\right]}{2\nu-16}\quad\nu_{2}>8\end{eqnarray*}\]</div><p>Implementation: <a class="reference internal" href="../../generated/scipy.stats.f.html#scipy.stats.f" title="scipy.stats.f"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.stats.f</span></tt></a></p>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

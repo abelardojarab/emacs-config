@@ -1,0 +1,170 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.spatial.ConvexHull.add_points</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="scipy.spatial.ConvexHull" href="scipy.spatial.ConvexHull.html">
+    <link rel="next" title="scipy.spatial.ConvexHull.close" href="scipy.spatial.ConvexHull.close.html">
+    <link rel="prev" title="scipy.spatial.ConvexHull" href="scipy.spatial.ConvexHull.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../spatial.html">Spatial algorithms and data structures (<tt class="docutils literal"><span class="pre">scipy.spatial</span></tt>)</a></li>
+          <li class="active"><a href="scipy.spatial.ConvexHull.html" accesskey="U">scipy.spatial.ConvexHull</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.spatial.ConvexHull.close.html" title="scipy.spatial.ConvexHull.close" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.spatial.ConvexHull.html" title="scipy.spatial.ConvexHull" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.spatial.ConvexHull.html" title="previous chapter">scipy.spatial.ConvexHull</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.spatial.ConvexHull.close.html" title="next chapter">scipy.spatial.ConvexHull.close</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-spatial-convexhull-add-points">
+<h1>scipy.spatial.ConvexHull.add_points<a class="headerlink" href="#scipy-spatial-convexhull-add-points" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<a class="dashAnchor" name="//apple_ref/Method/scipy.spatial.ConvexHull.add_points"></a><dt id="scipy.spatial.ConvexHull.add_points">
+<tt class="descclassname">ConvexHull.</tt><tt class="descname">add_points</tt><big>(</big><em>points</em>, <em>restart=False</em><big>)</big><a class="headerlink" href="#scipy.spatial.ConvexHull.add_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a set of additional new points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> : ndarray</p>
+<blockquote>
+<div><p>New points to add. The dimensionality should match that of the
+initial points.</p>
+</div></blockquote>
+<p><strong>restart</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to restart processing from scratch, rather than
+adding points incrementally.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>QhullError</strong></p>
+<blockquote class="last">
+<div><p>Raised when Qhull encounters an error condition, such as
+geometrical degeneracy when options to resolve are not enabled.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="scipy.spatial.ConvexHull.close.html#scipy.spatial.ConvexHull.close" title="scipy.spatial.ConvexHull.close"><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>You need to specify <tt class="docutils literal"><span class="pre">incremental=True</span></tt> when constructing the
+object to be able to add points incrementally. Incremental addition
+of points is also not possible after <a class="reference internal" href="scipy.spatial.ConvexHull.close.html#scipy.spatial.ConvexHull.close" title="scipy.spatial.ConvexHull.close"><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt></a> has been called.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

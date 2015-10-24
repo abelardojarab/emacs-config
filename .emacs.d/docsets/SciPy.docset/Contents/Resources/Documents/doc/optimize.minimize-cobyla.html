@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>minimize(method=’COBYLA’)</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="index.html" >
+    <link rel="up" title="Optimization and root finding (scipy.optimize)" href="optimize.html" >
+    <link rel="next" title="minimize(method=’SLSQP’)" href="optimize.minimize-slsqp.html" >
+    <link rel="prev" title="minimize(method=’TNC’)" href="optimize.minimize-tnc.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="optimize.html" accesskey="U">Optimization and root finding (<tt class="docutils literal"><span class="pre">scipy.optimize</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy-optimize-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="optimize.minimize-slsqp.html" title="minimize(method=’SLSQP’)"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="optimize.minimize-tnc.html" title="minimize(method=’TNC’)"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="optimize.minimize-tnc.html"
+                        title="previous chapter">minimize(method=&#8217;TNC&#8217;)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="optimize.minimize-slsqp.html"
+                        title="next chapter">minimize(method=&#8217;SLSQP&#8217;)</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="minimize-method-cobyla">
+<span id="optimize-minimize-cobyla"></span><h1>minimize(method=&#8217;COBYLA&#8217;)<a class="headerlink" href="#minimize-method-cobyla" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt>
+<tt class="descclassname">scipy.optimize.</tt><tt class="descname">minimize</tt><big>(</big><em>fun</em>, <em>x0</em>, <em>args=()</em>, <em>method='COBYLA'</em>, <em>constraints=()</em>, <em>tol=None</em>, <em>callback=None</em>, <em>options={'iprint': 1</em>, <em>'disp': False</em>, <em>'maxiter': 1000</em>, <em>'catol': 0.0002</em>, <em>'rhobeg': 1.0}</em><big>)</big></dt>
+<dd><p>Minimize a scalar function of one or more variables using the
+Constrained Optimization BY Linear Approximation (COBYLA) algorithm.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">For documentation for the rest of the parameters, see <a class="reference internal" href="generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="scipy.optimize.minimize"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.optimize.minimize</span></tt></a></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><p class="first"><strong>rhobeg</strong> : float</p>
+<blockquote>
+<div><p>Reasonable initial changes to the variables.</p>
+</div></blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<div><p>Final accuracy in the optimization (not precisely guaranteed).
+This is a lower bound on the size of the trust region.</p>
+</div></blockquote>
+<p><strong>disp</strong> : bool</p>
+<blockquote>
+<div><p>Set to True to print convergence messages. If False,
+<em class="xref py py-obj">verbosity</em> is ignored as set to 0.</p>
+</div></blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<div><p>Maximum number of function evaluations.</p>
+</div></blockquote>
+<p><strong>catol</strong> : float</p>
+<blockquote class="last">
+<div><p>Tolerance (absolute) for constraint violations</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,197 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/Learn/HTML/Howto/Mark_abbreviations_and_make_them_understandable$samples/Exercise?revision=799225 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:54:35 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+                <style type="text/css">
+            body {
+  font: 1em/100% sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.exercise {
+  background: #F9FAFB;
+  border-radius: 5px;
+  height: 13em;
+  overflow: hidden;
+}
+
+.instruction, .count {
+  padding: .5em;
+  font-style: italic;
+  font-size: .95em;
+}
+
+.playground {
+  padding: 0 .5em;
+}
+
+.playground textarea {
+  display: block;
+  font-size : 1em;
+  line-height: 1.5em;
+  font-family: monospace;
+  box-sizing: border-box;
+  width     : 100%;
+  padding   : .5em;
+  height    : 9.7em;
+}
+
+.checking {
+  padding: .5em;
+}
+
+.checking button {
+  box-sizing: border-box;
+  box-shadow:inset 0 1px 0 0 #bcd9a3;
+  background:linear-gradient(to bottom, #b4d665 5%, #89a646 100%);
+  background-color:#b4d665;
+  border-radius:5px;
+  border:1px solid #8aa164;
+  cursor:pointer;
+  font-size:1em;
+  padding:.5em;
+  text-decoration:none;
+}
+.checking button:hover {
+  background:linear-gradient(to bottom, #89a646 5%, #b4d665 100%);
+  background-color:#89a646;
+}
+.checking button:active {
+  transform: translate(0, 1px);
+}
+
+.result {
+  height: 10em;
+  line-height: 1.4em;
+  padding: .5em;
+  box-sizing: border-box;
+}
+
+main {
+  transform: translate(0,0);
+  transition: transform 300ms;
+}
+
+.next main {
+  transform: translate(0, -10em);
+}
+
+abbr {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+abbr.ok {
+  color: green;
+}
+
+abbr.ok:after {
+  content: ' ✔︎';
+}
+
+abbr.fail {
+  color: red;
+}
+
+abbr.fail:after {
+  content: ' ✘';
+}
+
+abbr.warning {
+  color: orange;
+}
+
+abbr.warning:after {
+  content: ' !';
+  font-weight: bold;
+}
+        </style>
+            </head>
+    <body>
+                    <div class="exercise">
+  <main>
+    <div class="instruction">Mark all the abbreviations with the <code>&lt;abbr&gt;</code> element</div>
+    <div class="playground"><textarea spellcheck="false"></textarea></div>
+    <div class="checking">
+      <button>Show results</button><span class="count"></span>
+    </div>
+    <div class="result">Web <abbr title="developers">dev.</abbr> use <abbr title="Hypertext Markup Language">HTML</abbr> to structure documents, <abbr title="Cascading StyleSheet">CSS</abbr> to style them, and JavaScript to add special effects by using some dedicated <abbr title="Application Programming Interface">API</abbr>s.</div>
+  </main>
+</div>
+                            <script type="text/javascript">
+                window.addEventListener('load', function () {
+  var content = document.querySelector('.exercise');
+  var input   = document.querySelector('.playground textarea');
+  var button  = document.querySelector('.checking button');
+  var message = document.querySelector('.checking .count');
+  var abbr    = Array.prototype.slice.call(document.querySelectorAll('.result abbr'));
+  var data    = {
+    pass : 0, fail : 0, warning : 0
+  };
+
+  input.value = document.querySelector('.result').textContent;
+
+  function toggleResult(e) {
+    e.preventDefault();
+    var classList = content.className.split(' ');
+
+    if (classList.length === 1 && checkResult()) {
+      content.className = 'exercise next';
+      message.innerHTML = 'Get '  + data.pass    + ', ' +
+                          'Get '  + data.warning + ' without full description, ' +
+                          'Miss ' + data.fail    + '.';
+      button.innerHTML  = 'Try again';
+    } else {
+      content.className = 'exercise';
+      message.innerHTML = '';
+      button.innerHTML  = 'Show results';
+    }
+  }
+
+  function checkResult() {
+    var i, j, node = document.createElement('div');
+    node.innerHTML = input.value;
+    data = { pass : 0, fail : 0, warning : 0 };
+
+    var userAbbr = Array.prototype.slice.call(node.querySelectorAll('abbr'));
+
+    if (userAbbr.length === 0) {
+      alert("You haven't marked any abbreviations (there are " + abbr.length + " to find).");
+      return false;
+    }
+
+    for (i in abbr) {
+      var txt  = abbr[i].textContent;
+      var fail = true;
+
+      for (j in userAbbr) {
+        var userText = userAbbr[j].textContent;
+
+        if (userText.match(new RegExp('^\\s*' + txt.replace('.','') + '\\s*$'))) {
+          fail = false;
+          if (userAbbr[j].title) {
+            data.pass += 1;
+            abbr[i].className = 'ok';
+          } else {
+            data.warning += 1;
+            abbr[i].className = 'warning';
+          }
+        }
+      }
+
+      if (fail) {
+        data.fail += 1;
+        abbr[i].className = 'fail';
+      }
+    }
+
+    return true;
+  }
+
+  button.addEventListener('click', toggleResult);
+});
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/Learn/HTML/Howto/Mark_abbreviations_and_make_them_understandable$samples/Exercise?revision=799225 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:54:36 GMT -->
+</body></html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Tukey-Lambda Distribution</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../../index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../../scipy-optimize-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="tukey-lambda-distribution">
+<span id="continuous-tukeylambda"></span><h1>Tukey-Lambda Distribution<a class="headerlink" href="#tukey-lambda-distribution" title="Permalink to this headline">¶</a></h1>
+<div class="math">
+\[ \begin{eqnarray*} f\left(x;\lambda\right) & = & F^{\prime}\left(x;\lambda\right)=\frac{1}{G^{\prime}\left(F\left(x;\lambda\right);\lambda\right)}=\frac{1}{F^{\lambda-1}\left(x;\lambda\right)+\left[1-F\left(x;\lambda\right)\right]^{\lambda-1}}\\ F\left(x;\lambda\right) & = & G^{-1}\left(x;\lambda\right)\\ G\left(p;\lambda\right) & = & \frac{p^{\lambda}-\left(1-p\right)^{\lambda}}{\lambda}\end{eqnarray*}\]</div><div class="math">
+\[ \begin{eqnarray*} \mu & = & 0\\ \mu_{2} & = & \int_{0}^{1}G^{2}\left(p;\lambda\right)dp\\  & = & \frac{2\Gamma\left(\lambda+\frac{3}{2}\right)-\lambda4^{-\lambda}\sqrt{\pi}\Gamma\left(\lambda\right)\left(1-2\lambda\right)}{\lambda^{2}\left(1+2\lambda\right)\Gamma\left(\lambda+\frac{3}{2}\right)}\\ \gamma_{1} & = & 0\\ \gamma_{2} & = & \frac{\mu_{4}}{\mu_{2}^{2}}-3\\ \mu_{4} & = & \frac{3\Gamma\left(\lambda\right)\Gamma\left(\lambda+\frac{1}{2}\right)2^{-2\lambda}}{\lambda^{3}\Gamma\left(2\lambda+\frac{3}{2}\right)}+\frac{2}{\lambda^{4}\left(1+4\lambda\right)}\\  &  & -\frac{2\sqrt{3}\Gamma\left(\lambda\right)2^{-6\lambda}3^{3\lambda}\Gamma\left(\lambda+\frac{1}{3}\right)\Gamma\left(\lambda+\frac{2}{3}\right)}{\lambda^{3}\Gamma\left(2\lambda+\frac{3}{2}\right)\Gamma\left(\lambda+\frac{1}{2}\right)}.\end{eqnarray*}\]</div><p>Notice that the <span class="math">\(\lim_{\lambda\rightarrow0}G\left(p;\lambda\right)=\log\left(p/\left(1-p\right)\right)\)</span></p>
+<div class="math">
+\[ \begin{eqnarray*} h\left[X\right] & = & \int_{0}^{1}\log\left[G^{\prime}\left(p\right)\right]dp\\  & = & \int_{0}^{1}\log\left[p^{\lambda-1}+\left(1-p\right)^{\lambda-1}\right]dp.\end{eqnarray*}\]</div><p>Implementation: <a class="reference internal" href="../../generated/scipy.stats.tukeylambda.html#scipy.stats.tukeylambda" title="scipy.stats.tukeylambda"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.stats.tukeylambda</span></tt></a></p>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

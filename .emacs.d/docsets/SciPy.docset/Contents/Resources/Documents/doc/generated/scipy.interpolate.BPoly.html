@@ -1,0 +1,263 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.interpolate.BPoly</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Interpolation (scipy.interpolate)" href="../interpolate.html">
+    <link rel="next" title="scipy.interpolate.BPoly.__call__" href="scipy.interpolate.BPoly.__call__.html">
+    <link rel="prev" title="scipy.interpolate.PPoly.construct_fast" href="scipy.interpolate.PPoly.construct_fast.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../interpolate.html" accesskey="U">Interpolation (<tt class="docutils literal"><span class="pre">scipy.interpolate</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.BPoly.__call__.html" title="scipy.interpolate.BPoly.__call__" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.PPoly.construct_fast.html" title="scipy.interpolate.PPoly.construct_fast" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.interpolate.PPoly.construct_fast.html" title="previous chapter">scipy.interpolate.PPoly.construct_fast</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.interpolate.BPoly.__call__.html" title="next chapter">scipy.interpolate.BPoly.__call__</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-interpolate-bpoly">
+<h1>scipy.interpolate.BPoly<a class="headerlink" href="#scipy-interpolate-bpoly" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<a class="dashAnchor" name="//apple_ref/Class/scipy.interpolate.BPoly"></a><dt id="scipy.interpolate.BPoly">
+<em class="property">class </em><tt class="descclassname">scipy.interpolate.</tt><tt class="descname">BPoly</tt><big>(</big><em>c</em>, <em>x</em>, <em>extrapolate=None</em>, <em>axis=0</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/interpolate/interpolate.py#L1036"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.interpolate.BPoly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Piecewise polynomial in terms of coefficients and breakpoints</p>
+<p>The polynomial in the <tt class="docutils literal"><span class="pre">i</span></tt>-th interval <tt class="docutils literal"><span class="pre">x[i]</span> <span class="pre">&lt;=</span> <span class="pre">xp</span> <span class="pre">&lt;</span> <span class="pre">x[i+1]</span></tt>
+is written in the Bernstein polynomial basis:</p>
+<div class="highlight-python"><div class="highlight"><pre>S = sum(c[a, i] * b(a, k; x) for a in range(k+1))
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">k</span></tt> is the degree of the polynomial, and:</p>
+<div class="highlight-python"><div class="highlight"><pre>b(a, k; x) = comb(k, a) * t**k * (1 - t)**(k - a)
+</pre></div>
+</div>
+<p>with <tt class="docutils literal"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">(x</span> <span class="pre">-</span> <span class="pre">x[i])</span> <span class="pre">/</span> <span class="pre">(x[i+1]</span> <span class="pre">-</span> <span class="pre">x[i])</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : ndarray, shape (k, m, ...)</p>
+<blockquote>
+<div><p>Polynomial coefficients, order <em class="xref py py-obj">k</em> and <em class="xref py py-obj">m</em> intervals</p>
+</div></blockquote>
+<p><strong>x</strong> : ndarray, shape (m+1,)</p>
+<blockquote>
+<div><p>Polynomial breakpoints. These must be sorted in
+increasing order.</p>
+</div></blockquote>
+<p><strong>extrapolate</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to extrapolate to ouf-of-bounds points based on first
+and last intervals, or to return NaNs. Default: True.</p>
+</div></blockquote>
+<p><strong>axis</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Interpolation axis. Default is zero.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="scipy.interpolate.PPoly.html#scipy.interpolate.PPoly" title="scipy.interpolate.PPoly"><tt class="xref py py-obj docutils literal"><span class="pre">PPoly</span></tt></a></dt>
+<dd>piecewise polynomials in the power basis</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>Properties of Bernstein polynomials are well documented in the literature.
+Here’s a non-exhaustive list:</p>
+<table class="docutils citation" frame="void" id="r40" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R40]</td><td><a class="reference external" href="http://en.wikipedia.org/wiki/Bernstein_polynomial">http://en.wikipedia.org/wiki/Bernstein_polynomial</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r41" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R41]</td><td>Kenneth I. Joy, Bernstein polynomials,
+<a class="reference external" href="http://www.idav.ucdavis.edu/education/CAGDNotes/Bernstein-Polynomials.pdf">http://www.idav.ucdavis.edu/education/CAGDNotes/Bernstein-Polynomials.pdf</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r42" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R42]</td><td>E. H. Doha, A. H. Bhrawy, and M. A. Saker, Boundary Value Problems,
+vol 2011, article ID 829546, doi:10.1155/2011/829543</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bp</span> <span class="o">=</span> <span class="n">BPoly</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This creates a 2nd order polynomial</p>
+<div class="math">
+\[\begin{split}B(x) = 1 \times b_{0, 2}(x) + 2 \times b_{1, 2}(x) + 3 \times b_{2, 2}(x) \\
+     = 1 \times (1-x)^2 + 2 \times 2 x (1 - x) + 3 \times x^2\end{split}\]</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="2%">
+<col width="98%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>x</td>
+<td>(ndarray) Breakpoints.</td>
+</tr>
+<tr class="row-even"><td>c</td>
+<td>(ndarray) Coefficients of the polynomials. They are reshaped to a 3-dimensional array with the last dimension representing the trailing dimensions of the original coefficient array.</td>
+</tr>
+<tr class="row-odd"><td>axis</td>
+<td>(int) Interpolation axis.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%">
+<col width="90%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="scipy.interpolate.BPoly.__call__.html#scipy.interpolate.BPoly.__call__" title="scipy.interpolate.BPoly.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x[,&nbsp;nu,&nbsp;extrapolate])</td>
+<td>Evaluate the piecewise polynomial or its derivative</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.interpolate.BPoly.extend.html#scipy.interpolate.BPoly.extend" title="scipy.interpolate.BPoly.extend"><tt class="xref py py-obj docutils literal"><span class="pre">extend</span></tt></a>(c,&nbsp;x[,&nbsp;right])</td>
+<td>Add additional breakpoints and coefficients to the polynomial.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.interpolate.BPoly.derivative.html#scipy.interpolate.BPoly.derivative" title="scipy.interpolate.BPoly.derivative"><tt class="xref py py-obj docutils literal"><span class="pre">derivative</span></tt></a>([nu])</td>
+<td>Construct a new piecewise polynomial representing the derivative.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.interpolate.BPoly.antiderivative.html#scipy.interpolate.BPoly.antiderivative" title="scipy.interpolate.BPoly.antiderivative"><tt class="xref py py-obj docutils literal"><span class="pre">antiderivative</span></tt></a>([nu])</td>
+<td>Construct a new piecewise polynomial representing the antiderivative.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.interpolate.BPoly.integrate.html#scipy.interpolate.BPoly.integrate" title="scipy.interpolate.BPoly.integrate"><tt class="xref py py-obj docutils literal"><span class="pre">integrate</span></tt></a>(a,&nbsp;b[,&nbsp;extrapolate])</td>
+<td>Compute a definite integral over a piecewise polynomial.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.interpolate.BPoly.construct_fast.html#scipy.interpolate.BPoly.construct_fast" title="scipy.interpolate.BPoly.construct_fast"><tt class="xref py py-obj docutils literal"><span class="pre">construct_fast</span></tt></a>(c,&nbsp;x[,&nbsp;extrapolate,&nbsp;axis])</td>
+<td>Construct the piecewise polynomial without making checks.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.interpolate.BPoly.from_power_basis.html#scipy.interpolate.BPoly.from_power_basis" title="scipy.interpolate.BPoly.from_power_basis"><tt class="xref py py-obj docutils literal"><span class="pre">from_power_basis</span></tt></a>(pp[,&nbsp;extrapolate])</td>
+<td>Construct a piecewise polynomial in Bernstein basis from a power basis polynomial.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.interpolate.BPoly.from_derivatives.html#scipy.interpolate.BPoly.from_derivatives" title="scipy.interpolate.BPoly.from_derivatives"><tt class="xref py py-obj docutils literal"><span class="pre">from_derivatives</span></tt></a>(xi,&nbsp;yi[,&nbsp;orders,&nbsp;extrapolate])</td>
+<td>Construct a piecewise polynomial in the Bernstein basis, compatible with the specified values and derivatives at breakpoints.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

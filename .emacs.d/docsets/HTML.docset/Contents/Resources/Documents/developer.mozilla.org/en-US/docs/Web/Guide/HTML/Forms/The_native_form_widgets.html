@@ -1,0 +1,2002 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:50:54 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>The native form widgets</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets$json">
+  <link rel="canonical" href="The_native_form_widgets.html">
+
+            <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/Guide/HTML/Formulaires/Les_blocs_de_formulaires_natifs" title="Les blocs de formulaires natifs">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Forms/The_native_form_widgets" title="ネイティブフォームウィジェット">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="The native form widgets">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets">
+  <meta name="twitter:title" content="The native form widgets">
+    <meta property="og:description" content="HTML forms are made of widgets. Those widgets are built-in controls supported by each browser. In this article we will dig into each of them, see how they work, and learn how well various browsers support them.">
+  <meta name="description" content="HTML forms are made of widgets. Those widgets are built-in controls supported by each browser. In this article we will dig into each of them, see how they work, and learn how well various browsers support them.">
+  <meta name="twitter:description" content="HTML forms are made of widgets. Those widgets are built-in controls supported by each browser. In this article we will dig into each of them, see how they work, and learn how well various browsers support them.">
+  
+      
+  </head>
+<body data-slug="Web/Guide/HTML/Forms/The_native_form_widgets" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FForms%2FThe_native_form_widgets" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FForms%2FThe_native_form_widgets" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/Guide/HTML/Formulaires/Les_blocs_de_formulaires_natifs" title="Les blocs de formulaires natifs">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Forms/The_native_form_widgets" title="ネイティブフォームウィジェット">日本語</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../HTML.html" rel="v:url" property="v:title">HTML developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Forms.html" rel="v:url" property="v:title">HTML forms guide</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">The native form widgets</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>The native form widgets</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 7 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/toraritte" title="View profile: toraritte">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="toraritte" data-src="../../../../../../../secure.gravatar.com/avatar/2a7f53f1d991f2ab18a4957a1f1929606aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">toraritte</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ajedi32" title="View profile: Ajedi32">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ajedi32" data-src="../../../../../../../secure.gravatar.com/avatar/5c9d0ecbe3045579b72f96744c62735c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ajedi32</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/aksht" title="View profile: aksht">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="aksht" data-src="../../../../../../../secure.gravatar.com/avatar/576a1523f23a75b1365f2f653c7457976aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">aksht</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/lemgrb" title="View profile: lemgrb">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lemgrb" data-src="../../../../../../../secure.gravatar.com/avatar/1321cbbbc4ee205508eb9e340497958b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">lemgrb</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Text_input_fields" rel="internal">Text input fields</a><ol><li><a href="#Single_line_text_fields" rel="internal">Single line text fields</a><ol><li><a href="#E-mail_address_field" rel="internal">E-mail address field</a></li><li><a href="#Password_field" rel="internal">Password field</a></li><li><a href="#Search_field" rel="internal">Search field</a></li><li><a href="#Phone_number_field" rel="internal">Phone number field</a></li><li><a href="#URL_field" rel="internal">URL field</a></li></ol></li><li><a href="#Multi-line_text_fields" rel="internal">Multi-line text fields</a></li></ol></li><li><a href="#Drop-down_content" rel="internal">Drop-down content</a><ol><li><a href="#Select_box" rel="internal">Select box</a></li><li><a href="#Multi-choice_select_box" rel="internal">Multi-choice select box</a></li><li><a href="#Auto-complete_content" rel="internal">Auto-complete content</a></li></ol></li><li><a href="#Checkable_items" rel="internal">Checkable items</a><ol><li><a href="#Check_box" rel="internal">Check box</a></li><li><a href="#Radio_button" rel="internal">Radio button</a></li></ol></li><li><a href="#Buttons" rel="internal">Buttons</a><ol><li><a href="#submit" rel="internal">submit</a></li><li><a href="#reset" rel="internal">reset</a></li><li><a href="#anonymous" rel="internal">anonymous</a></li></ol></li><li><a href="#Advanced_form_widgets" rel="internal">Advanced form widgets</a><ol><li><a href="#Numbers" rel="internal">Numbers</a><ol><li><a href="#Example" rel="internal">Example</a></li></ol></li><li><a href="#Sliders" rel="internal">Sliders</a><ol><li><a href="#Example_2" rel="internal">Example</a></li></ol></li><li><a href="#Date_and_time_picker" rel="internal">Date and time picker</a><ol><li><a href="#date" rel="internal"><code>date</code></a></li><li><a href="#datetime" rel="internal"><code>datetime</code></a></li><li><a href="#datetime-local" rel="internal"><code>datetime-local</code></a></li><li><a href="#month" rel="internal"><code>month</code></a></li><li><a href="#time" rel="internal"><code>time</code></a></li><li><a href="#week" rel="internal"><code>week</code></a></li></ol></li><li><a href="#Color_picker" rel="internal">Color picker</a></li></ol></li><li><a href="#Other_widgets" rel="internal">Other widgets</a><ol><li><a href="#File_picker" rel="internal">File picker</a><ol><li><a href="#Example_3" rel="internal">Example</a></li></ol></li><li><a href="#Hidden_content" rel="internal">Hidden content</a></li><li><a href="#Image_button" rel="internal">Image button</a></li><li><a href="#Meters_and_progress_bars" rel="internal">Meters and progress bars</a></li></ol></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p><a href="../../../../HTML/Forms.png" title="/en-US/docs/HTML/Forms">HTML forms</a> are made of widgets. Those widgets are built-in controls supported by each browser. In this article we will dig into each of them, see how they work, and learn how well various browsers support them.</p>
+
+<p>We will focus on the built-in form widgets, but because HTML forms remain quite limited and the quality of the implementations can be very different from one browser to another, web developers sometimes build their own form widgets. This will be detailed in the article: <a href="How_to_build_custom_form_widgets.html" title="/en-US/docs/HTML/Forms/How_to_build_custom_form_widgets">How to build custom form widgets</a>.</p>
+
+<h2 id="Text_input_fields">Text input fields</h2>
+
+<p>Text input fields are the most basic form widgets. They are a very convenient way to let the user enter any kind of data. However, some text fields can be specialized to achieve particular needs.</p>
+
+<p>It's worth noting that HTML form text fields are simple plain text input controls. This means that you cannot use them to perform <a href="https://developer.mozilla.org/en-US/docs/Rich-Text_Editing_in_Mozilla" title="/en-US/docs/Rich-Text_Editing_in_Mozilla">rich editing</a> (bold, italic, etc.). All rich text editors out there are custom widgets.</p>
+
+<p>All text fields share some common behaviors:</p>
+
+<ul>
+ <li>They can be marked as <code><a href="../../../HTML/Element/input.html#attr-readonly">readonly</a></code> (the user cannot modify the input value) or even <code><a href="../../../HTML/Element/input.html#attr-disabled">disabled</a></code> (the input value is never sent with the rest of the form data).</li>
+ <li>They can have a <code><a href="../../../HTML/Element/input.html#attr-placeholder">placeholder</a></code>; this is text that appears inside the text input box that describes the purpose of the box briefly.</li>
+ <li>They can be constrained in <code><a href="../../../HTML/Element/input.html#attr-size">size</a></code> (the physical size of the box) and <a href="../../../HTML/Element/Input-2.html#attr-maxlength" title="/en-US/docs/HTML/Element/input#attr-maxlength">length</a> (the maximum number of characters that can be entered into the box).</li>
+ <li>They can benefit from <a href="../../../HTML/Element/Input-2.html#attr-spellcheck" title="/en-US/docs/HTML/Element/input#attr-spellcheck">spell checking</a>, if the browser supports it.</li>
+</ul>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-readonly">readonly</a></code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>6</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-disabled">disabled</a></code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>6</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-placeholder">placeholder</a></code></td>
+   <td>10.0</td>
+   <td>Unknown (4.0)</td>
+   <td>10</td>
+   <td>11.10</td>
+   <td>4.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a>.<code><a href="../../../HTML/Element/textarea.html#attr-placeholder">placeholder</a></code></td>
+   <td>10.0</td>
+   <td>Unknown (4.0)</td>
+   <td>10</td>
+   <td>11.50</td>
+   <td>5.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-size">size</a></code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-maxlength">maxlength</a></code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-spellcheck">spellcheck</a></code></td>
+   <td>10.0</td>
+   <td>Unknown (3.6)</td>
+   <td>10</td>
+   <td>11.0</td>
+   <td>4.0</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-readonly">readonly</a></code></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-disabled">disabled</a></code></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-placeholder">placeholder</a></code></td>
+   <td>2.3</td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td>11.10</td>
+   <td>4</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a>.<code><a href="../../../HTML/Element/textarea.html#attr-placeholder">placeholder</a></code></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td>11.50</td>
+   <td>4</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-size">size</a></code></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-maxlength">maxlength</a></code></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>.<code><a href="../../../HTML/Element/input.html#attr-spellcheck">spellcheck</a></code></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td>11.0</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Single_line_text_fields">Single line text fields</h3>
+
+<p>A single line text field is created using an <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element whose <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute value is set to <code>text</code> (also, if you don't provide the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute, <code>text</code> is the default value). The value <code>text</code> for this attribute is also the the fallback value if the value you specify for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute is unknown by the browser.</p>
+
+<pre class="brush: html">&lt;input type="text"&gt;</pre>
+
+<p>Single line text fields have only one true constraint: if you type text with line breaks, the browser removes those line breaks before sending the data.</p>
+
+<p><img alt="Screenshots of single line text fields on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4273/all-single-line-text-field.png" style="width: 655px; height: 235px;"></p>
+
+<p>That said, it's possible to add some "on demand" constraints to a single line text field. To do this, you use the <code><a href="../../../HTML/Element/input.html#attr-pattern">pattern</a></code> attribute; this tells the browser to check the validity of the value against a <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Regular_Expressions" title="/en-US/docs/JavaScript/Guide/Regular_Expressions">regular expression</a> of your choice.</p>
+
+<pre class="brush: html">&lt;input type="text" pattern="^cherry|banana$"&gt;</pre>
+
+<p>But HTML5 enhances the basic single line text field by adding special values for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute. Those values still turn an <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element into a single line text field but they add a few extra constraints and features to the field.</p>
+
+<h4 id="E-mail_address_field">E-mail address field</h4>
+
+<p>This type of field is set with the value <code>email</code> for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute:</p>
+
+<pre class="brush: html">&lt;input type="email" multiple&gt;</pre>
+
+<p>It adds this special validation constraint on the field: the user is required to type a valid e-mail address; any other content causes the field to be declared in error. It's also possible to let the user type several e-mail addresses by using the <code><a href="../../../HTML/Element/input.html#attr-multiple">multiple</a></code> attribute.</p>
+
+<h4 id="Password_field">Password field</h4>
+
+<p>This type of field is set using the value <code>password</code> for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute:</p>
+
+<pre class="brush: html">&lt;input type="password"&gt;</pre>
+
+<p>It doesn't add any special constraints to the entered text, but it obscures the value of the field so it can't be read.</p>
+
+<div class="note"><strong>Note:</strong> Keep in mind this is just a user interface feature; unless you encode the text yourself using JavaScript code, it gets sent in plain text.</div>
+
+<h4 id="Search_field">Search field</h4>
+
+<p>This type of field is set by using the value <code>search</code> for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute:</p>
+
+<pre class="brush: html">&lt;input type="search" autosave&gt;</pre>
+
+<p>The main difference between a text field and a search field is one of look-and-feel (often, search fields are rendered with rounded corners). However, there is also one added feature to search fields: their values can be automatically saved to be auto completed across multiple pages on the same site.</p>
+
+<p><img alt="Screenshots of search fields on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4269/all-search-field.png" style="width: 655px; height: 235px;"></p>
+
+<h4 id="Phone_number_field">Phone number field</h4>
+
+<p>This type of field is set using <code>tel</code> as the value of the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute:</p>
+
+<pre class="brush: html">&lt;input type="tel"&gt;</pre>
+
+<p>Due to the wide variety of phone number formats around the world, this type of field does not enforce any constraints on the value entered by a user. This is primarily a semantic difference, although on some devices (especially on mobile), a different virtual keypad might be presented.</p>
+
+<h4 id="URL_field">URL field</h4>
+
+<p>This type of field is set using the value <code>url</code> for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute:</p>
+
+<pre class="brush: html">&lt;input type="url"&gt;</pre>
+
+<p>It adds special validation constraints on the field, ensuring that only valid URLs are entered; if a value is entered that isn't a well-formed URL, the form is considered to be in an error state.</p>
+
+<div class="note"><strong>Note:</strong> Just because the URL is well-formed doesn't necessarily mean that the URL refers to a location that actually exists.</div>
+
+<p>Fields that have special constraints and are in error prevent the form from being sent; in addition, they can be styled so as to make the error clear. We will discuss this in detail in the article: <a href="Data_form_validation.html" title="/en-US/docs/HTML/Forms/Data_form_validation">Data form validation</a>.</p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="text"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="email"</code></td>
+   <td>10.0</td>
+   <td>Unknown (4.0)</td>
+   <td>10</td>
+   <td>10.62</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="password"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="search"</code></td>
+   <td>5.0</td>
+   <td>Unknown (4.0)</td>
+   <td>10</td>
+   <td>11.01</td>
+   <td>5.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="tel"</code></td>
+   <td>5.0</td>
+   <td>Unknown (4.0)</td>
+   <td>10</td>
+   <td>11.01</td>
+   <td>5.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="url"</code></td>
+   <td>10.0</td>
+   <td>Unknown (4.0)</td>
+   <td>10</td>
+   <td>10.62</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="text"</code></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="email"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="password"</code></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="search"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="tel"</code></td>
+   <td>2.3</td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>3.1</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="url"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>3.1</td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Multi-line_text_fields">Multi-line text fields</h3>
+
+<p>A multi-line text field is specified using a <a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a> element, rather than using the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element.</p>
+
+<pre class="brush: html">&lt;textarea cols="20" rows="10"&gt;&lt;/textarea&gt;</pre>
+
+<p>The main difference between a textarea and a regular single line text field is that users are allowed to type text that includes hard line break (meaning it allows the characters carriage return [CR] and line feed [LF]).</p>
+
+<p>It's also worth noting that, thanks to the CSS property <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/resize" title="The resize CSS property lets you control the resizability of an element."><code>resize</code></a>, users can resize multi-line text boxes directly if you want to let them do so.</p>
+
+<p><img alt="Screenshots of multi-lines text fields on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4271/all-multi-lines-text-field.png" style="width: 745px; height: 330px;"></p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Drop-down_content">Drop-down content</h2>
+
+<p>Drop-down widgets are a simple way to let the user select one of many options. HTML has two forms of drop down content: the select box and autocomplete content. In both cases the interaction is the same. Once the control is activated, the browser displays a list of values the user can select among. This list of values is displayed on top of the page content.</p>
+
+<h3 id="Select_box">Select box</h3>
+
+<p>A select box is created with a <a href="../../../HTML/Element/select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a> element with one or more <a href="../../../HTML/Element/option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a> elements as its children, each of which specifies one of its possible values.</p>
+
+<pre class="brush: html">&lt;select&gt;
+  &lt;option&gt;Banana&lt;/option&gt;
+  &lt;option&gt;Cherry&lt;/option&gt;
+  &lt;option&gt;Lemon&lt;/option&gt;
+&lt;/select&gt;</pre>
+
+<p>If needed, the default value for the select box can be set using the <code><a href="../../../HTML/Element/option.html#attr-selected">selected</a></code> attribute on the desired <a href="../../../HTML/Element/option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a> element. The <a href="../../../HTML/Element/option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a> elements can also be nested inside some <a href="../../../HTML/Element/optgroup.html" title="In a Web form, the HTML &lt;optgroup&gt; element&nbsp; creates a grouping of options within a &lt;select&gt; element."><code>&lt;optgroup&gt;</code></a> elements to create visual groups of values:</p>
+
+<pre class="brush: html">&lt;select&gt;
+&nbsp; &lt;optgroup label="fruits"&gt;
+&nbsp;&nbsp;&nbsp; &lt;option&gt;Banana&lt;/option&gt;
+&nbsp;&nbsp;&nbsp; &lt;option selected&gt;Cherry&lt;/option&gt;
+&nbsp;&nbsp;&nbsp; &lt;option&gt;Lemon&lt;/option&gt;
+&nbsp; &lt;/optgroup&gt;
+&nbsp; &lt;optgroup label="vegetables"&gt;
+&nbsp;&nbsp;&nbsp; &lt;option&gt;Carrot&lt;/option&gt;
+&nbsp;&nbsp;&nbsp; &lt;option&gt;Eggplant&lt;/option&gt;
+&nbsp;&nbsp;&nbsp; &lt;option&gt;Potatoe&lt;/option&gt;
+&nbsp; &lt;/optgroup&gt;
+&lt;/select&gt;</pre>
+
+<p><img alt="Screenshots of single line select box on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4517/all-select.png" style="width: 887px; height: 636px;"></p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/optgroup.html" title="In a Web form, the HTML &lt;optgroup&gt; element&nbsp; creates a grouping of options within a &lt;select&gt; element."><code>&lt;optgroup&gt;</code></a></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/optgroup.html" title="In a Web form, the HTML &lt;optgroup&gt; element&nbsp; creates a grouping of options within a &lt;select&gt; element."><code>&lt;optgroup&gt;</code></a></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Multi-choice_select_box">Multi-choice select box</h3>
+
+<p>By default, a select box only lets the user select a single value. By adding the <code><a href="../../../HTML/Element/select.html#attr-multiple">multiple</a></code> attribut to the <a href="../../../HTML/Element/select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a> element, the user becomes able to select several values. In that case, however, the select box no longer displays the values as dropdown content; instead, it's displayed as a regular list box.</p>
+
+<pre class="brush: html">&lt;select multiple&gt;
+  &lt;option&gt;Banana&lt;/option&gt;
+  &lt;option&gt;Cherry&lt;/option&gt;
+  &lt;option&gt;Lemon&lt;/option&gt;
+&lt;/select&gt;</pre>
+
+<p><img alt="Screenshots of multi-lines select box on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4559/all-multi-lines-select.png" style="width: 734px; height: 531px;"></p>
+
+<div class="note"><strong>Note:</strong> All browsers that support the <a href="../../../HTML/Element/select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a> element also support the <code><a href="../../../HTML/Element/select.html#attr-multiple">multiple</a></code> attribute on it.</div>
+
+<h3 id="Auto-complete_content">Auto-complete content</h3>
+
+<p>You can provide suggested, automatically-completed values for form widgets using the <a href="../../../HTML/Element/datalist.html" title="The HTML Datalist&nbsp;Element&nbsp;(&lt;datalist&gt;) contains a set of &lt;option&gt; elements that represent the values available for other controls."><code>&lt;datalist&gt;</code></a> element with some child <a href="../../../HTML/Element/option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a> elements to specify the values to display. Once set, the data list is bound to another widget using the <code><a href="../../../HTML/Element/input.html#attr-list">list</a></code> attribute.</p>
+
+<p>Once a data list is affiliated with a form widget, its options are used to auto-complete text entered by the user; typically, this is done by presenting a drop-down box listing possible matches.</p>
+
+<pre class="brush: html">&lt;label for="myFruit"&gt;What's your favorite fruit?&lt;/label&gt;
+&lt;input type="text" id="myFruit" list="mySuggestion" /&gt;
+&lt;datalist id="mySuggestion"&gt;
+&nbsp; &lt;option&gt;Apple&lt;/option&gt;
+&nbsp; &lt;option&gt;Banana&lt;/option&gt;
+&nbsp; &lt;option&gt;Blackberry&lt;/option&gt;
+&nbsp; &lt;option&gt;Blueberry&lt;/option&gt;
+&nbsp; &lt;option&gt;Lemon&lt;/option&gt;
+&nbsp; &lt;option&gt;Lychee&lt;/option&gt;
+&nbsp; &lt;option&gt;Peach&lt;/option&gt;
+&nbsp; &lt;option&gt;Pear&lt;/option&gt;
+&lt;/datalist&gt;</pre>
+
+<div class="note"><strong>Note:</strong> According to <a class="external" href="http://www.w3.org/TR/html5/common-input-element-attributes.html#attr-input-list" rel="external" title="http://www.w3.org/TR/html5/common-input-element-attributes.html#attr-input-list">the HTML specification</a>, the <code><a href="../../../HTML/Element/input.html#attr-list">list</a></code> attribute and the <a href="../../../HTML/Element/datalist.html" title="The HTML Datalist&nbsp;Element&nbsp;(&lt;datalist&gt;) contains a set of &lt;option&gt; elements that represent the values available for other controls."><code>&lt;datalist&gt;</code></a> element can be used with any kind of widget requiring a user input. However, it is unclear how it should work with controls other than text (color or date for example), and different browsers behave differently from case to case. Because of that, be cautious using this feature with anything but text fields</div>
+
+<div><img alt="Screenshots of datalist on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4593/all-datalist.png" style="width: 437px; height: 329px;"></div>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/datalist.html" title="The HTML Datalist&nbsp;Element&nbsp;(&lt;datalist&gt;) contains a set of &lt;option&gt; elements that represent the values available for other controls."><code>&lt;datalist&gt;</code></a></td>
+   <td>20.0</td>
+   <td>Unknown (4.0)</td>
+   <td>10</td>
+   <td>9.6</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-list">list</a></code></td>
+   <td>20.0</td>
+   <td>Unknown (4.0)</td>
+   <td>10</td>
+   <td>9.6</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/datalist.html" title="The HTML Datalist&nbsp;Element&nbsp;(&lt;datalist&gt;) contains a set of &lt;option&gt; elements that represent the values available for other controls."><code>&lt;datalist&gt;</code></a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-list">list</a></code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>4.0 (4.0)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Checkable_items">Checkable items</h2>
+
+<p>Checkable items are widgets whose state you can change by clicking on them. There are two kinds of checkable item: the check box and the radio button. Both use the <code><a href="../../../HTML/Element/input.html#attr-checked">checked</a></code> attribute to indicate whether the widget is checked by default or not.</p>
+
+<p>It's worth noting that these widgets do not behave exactly like other form widgets. For most form widgets, once the form is sent, all widgets that have a <code><a href="../../../HTML/Element/input.html#attr-name">name</a></code> attribute are sent, even if there is no value. In the case of checkable items, their values are sent only if they are checked. If they are not checked, nothing is sent, not even their name.</p>
+
+<h3 id="Check_box">Check box</h3>
+
+<p>A check box is created by using the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element with its <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to the value <code>checkbox</code>.</p>
+
+<pre class="brush: html">&lt;input type="checkbox" checked&gt;
+</pre>
+
+<p>The checkbox created by the preceding HTML is checked by default.</p>
+
+<p><img alt="Screenshots of check boxes on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4595/all-checkbox.png" style="width: 352px; height: 198px;"></p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="checkbox"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="</code><code>checkbox</code><code>"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Radio_button">Radio button</h3>
+
+<p>A radio button is created by using the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element with its <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to the value <code>radio</code>.</p>
+
+<pre class="brush: html">&lt;input type="radio" checked&gt;</pre>
+
+<p>Several radio buttons can be tied together. If they share the same value for their <code><a href="../../../HTML/Element/input.html#attr-name">name</a></code> attribute, they will be considered to be in the same group of buttons. Only one button in a given group may be checked at the same time; this means that when one of them is checked all the others automatically get unchecked. When the form is sent, only the value of the checked radio button is sent. If none of them are checked, the whole pool of radio buttons is considered to be in an unknown state and no value is sent with the form.</p>
+
+<pre class="brush: html">&lt;fieldset&gt;
+  &lt;legend&gt;What gender are you?&lt;/legend&gt;
+  &lt;p&gt;&lt;label for="g1"&gt;&lt;input type="radio" name="g" id="g1" value="M"&gt; Male&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label for="g2"&gt;&lt;input type="radio" name="g" id="g2" value="F"&gt; Female&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label for="g3"&gt;&lt;input type="radio" name="g" id="g3" value="B"&gt; Both&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label for="g4"&gt;&lt;input type="radio" name="g" id="g4" value="N"&gt; None&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label for="g5"&gt;&lt;input type="radio" name="g" id="g5" value="!"&gt; This is not your concern!&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label for="g6"&gt;&lt;input type="radio" name="g" id="g6" value="?"&gt; Who cares?&lt;/label&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;label for="g7"&gt;&lt;input type="radio" name="g" id="g7" value="\o/"&gt; Obi-Wan Kenobi&lt;/label&gt;&lt;/p&gt;
+&lt;/fieldset&gt;</pre>
+
+<p><img alt="Screenshots of radio buttons on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4597/all-radio.png" style="width: 352px; height: 198px;"></p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="radio"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="radio"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Buttons">Buttons</h2>
+
+<p>Within HTML forms, there are three kinds of button:</p>
+
+<dl>
+ <dt>Submit</dt>
+ <dd>Sends the form data to the server.</dd>
+ <dt>Reset</dt>
+ <dd>Resets all form widgets to their default values.</dd>
+ <dt>Anonymous</dt>
+ <dd>Buttons that have no automatic effect but can be customized using JavaScript code.</dd>
+</dl>
+
+<p>A button is created using a <a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> element or an <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element. It's the value of the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute that specifies what kind of button is displayed:</p>
+
+<h3 id="submit">submit</h3>
+
+<pre class="brush: html">&lt;button type="submit"&gt;
+    This a &lt;br&gt;&lt;strong&gt;submit button&lt;/strong&gt;
+&lt;/button&gt;
+
+&lt;input type="submit" value="This is a submit button"&gt;</pre>
+
+<h3 id="reset">reset</h3>
+
+<pre class="brush: html">&lt;button type="reset"&gt;
+    This a &lt;br&gt;&lt;strong&gt;reset button&lt;/strong&gt;
+&lt;/button&gt;
+
+&lt;input type="reset" value="This is a reset button"&gt;</pre>
+
+<h3 id="anonymous">anonymous</h3>
+
+<pre class="brush: html">&lt;button type="button"&gt;
+    This an &lt;br&gt;&lt;strong&gt;anonymous button&lt;/strong&gt;
+&lt;/button&gt;
+
+&lt;input type="button" value="This is an anonymous button"&gt;</pre>
+
+<p>The buttons always behave the same whether you use a <a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> element or an <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element. There are, however, some minor differences:</p>
+
+<ul>
+ <li>As you can see in the previous examples, <a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> elements let you use HTML content as their label, while <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> elements only accept plain text content.</li>
+ <li>With <a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> elements, it's possible to have a value different than the button's label (this isn't reliable in versions of Internet Explorer prior to IE 8, however).</li>
+</ul>
+
+<p><img alt="Screenshots of buttons on several platforms." src="../../../../../../../mdn.mozillademos.org/files/4599/all-buttons.png" style="width: 464px; height: 235px;"></p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="submit"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="reset"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="button"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>3</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span><br>
+    (Buggy before IE8)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="number"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="reset"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="button"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a></td>
+   <td>1.0</td>
+   <td>1.0 (1.0)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Advanced_form_widgets">Advanced form widgets</h2>
+
+<p>Those widgets are form controls that let user input some complex or highly structured data. This includes exact or approximate numbers, date and time, or colors.</p>
+
+<h3 id="Numbers">Numbers</h3>
+
+<p>Widgets for numbers are created with the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element with its <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to the value <code>number</code>. This control looks like a text field but allows only floating-point numbers, and usually provides some buttons to increase or decrease the value of the widget.</p>
+
+<p>It's also possible to constrain the value by setting the <code><a href="../../../HTML/Element/input.html#attr-min">min</a></code> and <code><a href="../../../HTML/Element/input.html#attr-max">max</a></code> attributes. You can also specify the amount by which the increase and decrease buttons change the widget's value by setting the <code><a href="../../../HTML/Element/input.html#attr-step">step</a></code> attribute.</p>
+
+<h4 id="Example">Example</h4>
+
+<pre class="brush: html">&lt;input type="number" min="1" max="10" step="2"&gt;</pre>
+
+<p>This creates a number widget whose value is restricted to be between 1 and 10 whose increase and decrease buttons change its value by 2.</p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="number"</code></td>
+   <td>11.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=344616" title="FIXED: Implement &lt;input type=&quot;number&quot;&gt;">bug&nbsp;344616</a></td>
+   <td>10<br>
+    (<em>recognized but no UI</em>)</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>5.2</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="number"</code></td>
+   <td>2.3</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td>4.0</td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Sliders">Sliders</h3>
+
+<p>Another way to pick a number is to use a slider. Because, visually speaking, these are less accurate than text fields, sliders are used to pick a number whose exact value is not necessarily important.</p>
+
+<p>A slider is created by using the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> with its <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to the value <code>range</code>. It's important to properly configure it your slider; to that end, it's highly recommended that you set the <code><a href="../../../HTML/Element/input.html#attr-min">min</a></code>, <code><a href="../../../HTML/Element/input.html#attr-max">max</a></code>, and <code><a href="../../../HTML/Element/input.html#attr-step">step</a></code> attributes.</p>
+
+<h4 id="Example_2">Example</h4>
+
+<pre class="brush: html">&lt;input type="range" min="1" max="5" step="1"&gt;</pre>
+
+<p>This example creates a slider whose value may range between 1 and 5, and whose increment/decrement buttons change the value by +1 and -1.</p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="range"</code></td>
+   <td>5.0</td>
+   <td>23.0</td>
+   <td>10</td>
+   <td>10.62</td>
+   <td>4.0</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="range"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>23.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td>5.0</td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Date_and_time_picker">Date and time picker</h3>
+
+<p>Gathering date and time values has traditionally been a nightmare for web developers. HTML5 brings some enhancements here by providing a special control to handle this specific kind of data.</p>
+
+<p>A date and time control is created using the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element and the proper value for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute. Because you may wish to collect a date, a time, or both, there are several different available values for the <code>type</code> attribute:</p>
+
+<h4 id="date"><code>date</code></h4>
+
+<p>This creates a widget to display and pick a date but without any time.</p>
+
+<pre class="brush: html">&lt;input type="date"&gt;</pre>
+
+<h4 id="datetime"><code>datetime</code></h4>
+
+<p>This creates a widget to display and pick a date with time in the UTC time zone.</p>
+
+<pre class="brush: html">&lt;input type="datetime"&gt;</pre>
+
+<h4 id="datetime-local"><code>datetime-local</code></h4>
+
+<p>This creates a widget to display and pick a date with time in any specific time zone.</p>
+
+<pre class="brush: html">&lt;input type="datetime-local"&gt;</pre>
+
+<h4 id="month"><code>month</code></h4>
+
+<p>This creates a widget to display and pick a month with a year.</p>
+
+<pre class="brush: html">&lt;input type="month"&gt;</pre>
+
+<h4 id="time"><code>time</code></h4>
+
+<p>This creates a widget to display and pick a time value.</p>
+
+<pre class="brush: html">&lt;input type="time"&gt;</pre>
+
+<h4 id="week"><code>week</code></h4>
+
+<p>This creates a widget to display and pick a week number and its year.</p>
+
+<pre class="brush: html">&lt;input type="week"&gt;</pre>
+
+<p>All date and time control can be constrained using the <code><a href="../../../HTML/Element/input.html#attr-min">min</a></code> and <code><a href="../../../HTML/Element/input.html#attr-max">max</a></code> attributes.</p>
+
+<pre class="brush: html">&lt;label for="myDate"&gt;When are you available this summer?&lt;/label&gt;
+&lt;input type="date" min="2013-06-01" max="2013-08-31" id="myDate"&gt;</pre>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="date"</code></td>
+   <td>20.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=825294" title="Implement date/time input types on Desktop">bug&nbsp;825294</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="datetime"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=825294" title="Implement date/time input types on Desktop">bug&nbsp;825294</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="datetime-local"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=825294" title="Implement date/time input types on Desktop">bug&nbsp;825294</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="month"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=825294" title="Implement date/time input types on Desktop">bug&nbsp;825294</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="time"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=825294" title="Implement date/time input types on Desktop">bug&nbsp;825294</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="week"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=825294" title="Implement date/time input types on Desktop">bug&nbsp;825294</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="date"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=446510" title="FIXED: Implement date/time input types on Mobile">bug&nbsp;446510</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td>5.0</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="datetime"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=446510" title="FIXED: Implement date/time input types on Mobile">bug&nbsp;446510</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="datetime-local"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=446510" title="FIXED: Implement date/time input types on Mobile">bug&nbsp;446510</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="month"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=446510" title="FIXED: Implement date/time input types on Mobile">bug&nbsp;446510</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="time"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=446510" title="FIXED: Implement date/time input types on Mobile">bug&nbsp;446510</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="week"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=446510" title="FIXED: Implement date/time input types on Mobile">bug&nbsp;446510</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>10.62</td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<div class="warning"><strong>Warning:</strong> The date and time widgets are very new, and even browsers that claim to support them often have significant user interface problems that make them difficult to use. Test your content thoroughly with different browsers before you deploy it!</div>
+
+<h3 id="Color_picker">Color picker</h3>
+
+<p>Colors are always a bit difficult to handle. There are many ways to express them: RGB values (decimal or hexadecimal), HSL values, keywords, etc. The color widget lets users pick a color in both textual and visual ways.</p>
+
+<p>A color widget is created using the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element with its <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to the value <code>color</code>.</p>
+
+<pre class="brush: html">&lt;input type="color"&gt;</pre>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="color"</code></td>
+   <td>21.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span> <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=547004" title="Implement &lt;input type=&quot;color&quot;&gt;">bug&nbsp;547004</a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>11.01</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="color"</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Other_widgets">Other widgets</h2>
+
+<p>There are a few other widgets that cannot be easily classified due to their very specific behaviors, but which are still very useful.</p>
+
+<h3 id="File_picker">File picker</h3>
+
+<p>HTML forms are able to send files to a server; this specific action is detailed in the article: <a href="Sending_and_retrieving_form_data.html" title="/en-US/docs/HTML/Forms/Sending_and_retrieving_form_data">Sending and retrieving form data</a>. The file picker widget is how the user can choose one or more files to send.</p>
+
+<p>To create a file picker widget, you use the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element with its <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to <code>file</code>. The types of files that are accepted can be constrained using the <code><a href="../../../HTML/Element/input.html#attr-accept">accept</a></code> attribute. In addition, if you want to let the user pick more than one file, you can do so by adding the <code><a href="../../../HTML/Element/input.html#attr-multiple">multiple</a></code> attribute.</p>
+
+<h4 id="Example_3">Example</h4>
+
+<p>In this example, a file picker is created requesting graphic image files. The user is allowed to select multiple files.</p>
+
+<pre class="brush: html">&lt;input type="file" accept="image/*" multiple&gt;</pre>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="file"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>3.02</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="file"</code></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Hidden_content">Hidden content</h3>
+
+<p>It's sometimes convenient for technical reasons to have pieces of data that are sent with a form but not displayed to the user. To do this, you can add an invisible element in your form. To do this, use an <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> with its <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to the value <code>hidden</code>.</p>
+
+<p>If you create such an element, it's required to set its <code>name</code> and <code>value</code> attributes:</p>
+
+<pre class="brush: html">&lt;input type="hidden" name="timestamp" value="1286705410"&gt;</pre>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="hidden"</code></td>
+   <td>1.0</td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="hidden"</code></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Image_button">Image button</h3>
+
+<p>The <strong>image button</strong> control is one which is displayed exactly like an <a href="../../../HTML/Element/img.html" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image of the document."><code>&lt;img&gt;</code></a> element, except that when the user clicks on it, it behaves like a submit button (see above).</p>
+
+<p>An image button is created using an <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element with its <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to the value <code>image</code>. This element supports exactly the same set of attributes as the <a href="../../../HTML/Element/img.html" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image of the document."><code>&lt;img&gt;</code></a> element, plus all the attributes supported by any form buttons.</p>
+
+<pre class="brush: html">&lt;input type="image" alt="Click me!" src="my-img.png" width="80" height="30" /&gt;</pre>
+
+<p>If the image button is used to submit the form, this widget doesn't submit its value but instead the X and Y coordinates of the click on the image (the coordinates are relative to the image, meaning that the upper-left corner of the image represents the coordinate 0, 0). The coordinates are sent as two key/value pairs. The X value key is the value of the <code><a href="../../../HTML/Element/input.html#attr-name">name</a></code> attribute followed by the string "<em>.x</em>" and the Y value key is the value of the <code><a href="../../../HTML/Element/input.html#attr-name">name</a></code> attribute followed by the string "<em>.y</em>". This is a very convenient way to build a "hot map".</p>
+
+<p>Let's see an example:</p>
+
+<pre class="brush: html">&lt;form action="http://foo.com" method="get"&gt;
+  &lt;input type="image" value="pos" alt="" src="map.png" /&gt;
+&lt;/form&gt;
+</pre>
+
+<p>When you click on the image of this form, you are sent to the following URL:</p>
+
+<pre>http://foo.com?pos.x=123&amp;pos.y=456</pre>
+
+<p>The value of the <code>pos.x</code> and <code>pos.y</code> parameters depends on where you click on the image. How those value are sent and retrieve is detailed on the <a href="Sending_and_retrieving_form_data.html" title="/en-US/docs/HTML/Forms/Sending_and_retrieving_form_data"><span>Sending and retrieving form data</span></a> article.</p>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="image"</code></td>
+   <td>1.0</td>
+   <td>1.0</td>
+   <td>2</td>
+   <td>1.0</td>
+   <td>1.0</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a><code>.</code><code><a href="../../../HTML/Element/input.html#attr-type">type</a></code><code>="image"</code></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+   <td><span style="color: #888;" title="Please update this with the earliest version of support.">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Meters_and_progress_bars">Meters and progress bars</h3>
+
+<p>Meters and progress bars are visual representations of numeric values.</p>
+
+<p>A progress bar represents a value that changes over time up to a maximum value specified by the <code><a href="../../../HTML/Element/progress.html#attr-max">max</a></code> attribute. Such a bar is created using a <a href="../../../HTML/Element/progress.html" title="The HTML &lt;progress&gt; Element is used to view the completion progress of a task. While the specifics of how it's displayed is left up to the browser developer, it's typically displayed as a progress bar. Javascript can be used to manipulate the value of progress bar."><code>&lt;progress&gt;</code></a> element. The content inside the <a href="../../../HTML/Element/progress.html" title="The HTML &lt;progress&gt; Element is used to view the completion progress of a task. While the specifics of how it's displayed is left up to the browser developer, it's typically displayed as a progress bar. Javascript can be used to manipulate the value of progress bar."><code>&lt;progress&gt;</code></a> element is a fallback for browsers that don't support the element and for assistive technologies to vocalize it.</p>
+
+<pre class="brush: html">&lt;progress max="100" value="75"&gt;75/100&lt;/progress&gt;</pre>
+
+<p>A meter bar represents a fixed value in a range delimited by a <code><a href="../../../HTML/Element/meter.html#attr-min">min</a></code> and a <code><a href="../../../HTML/Element/meter.html#attr-max">max</a></code> value. This value is visualy renderd as a bar, and to know how this bar looks, we compare the value to some others values:</p>
+
+<ul>
+ <li>the <code><a href="../../../HTML/Element/meter.html#attr-low">low</a></code> and <code><a href="../../../HTML/Element/meter.html#attr-high">high</a></code> values divide the range in three parts:
+  <ul>
+   <li>The lower part of the range is between the <code><a href="../../../HTML/Element/meter.html#attr-min">min</a></code> and <code><a href="../../../HTML/Element/meter.html#attr-low">low</a></code> values (including those values)</li>
+   <li>The medium part of the range is between the <code><a href="../../../HTML/Element/meter.html#attr-low">low</a></code> and <code><a href="../../../HTML/Element/meter.html#attr-high">high</a></code> values (excluding those values)</li>
+   <li>The higher part of the range is between the <code><a href="../../../HTML/Element/meter.html#attr-high">high</a></code> and <code><a href="../../../HTML/Element/meter.html#attr-max">max</a></code> values (including those values)</li>
+  </ul>
+ </li>
+ <li>The <code><a href="../../../HTML/Element/meter.html#attr-optimum">optimum</a></code> value define the optimum value for the <a href="../../../HTML/Element/meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a> element. In conjuction with the <code><a href="../../../HTML/Element/meter.html#attr-low">low</a></code> and <code><a href="../../../HTML/Element/meter.html#attr-high">high</a></code> value, it defines which part of the range is prefered:
+  <ul>
+   <li>If the <code><a href="../../../HTML/Element/meter.html#attr-optimum">optimum</a></code> value is in the lower part of the range, the lower range is considered to be the prefered part, the medium range is considered to be the average part and the higher range is considered to be the worst part.</li>
+   <li>If the <code><a href="../../../HTML/Element/meter.html#attr-optimum">optimum</a></code> value is in the medium part of the range, the lower range is considered to be the average part, the medium range is considered to be the prefered part and the higher range is considered to be the average part as well.</li>
+   <li>If the <code><a href="../../../HTML/Element/meter.html#attr-optimum">optimum</a></code> value is in the higher part of the range, the lower range is considered to be the worst part, the medium range is considered to be the average part and the higher range is considered to be the prefered part.</li>
+  </ul>
+ </li>
+</ul>
+
+<p>All browsers that implement the <a href="../../../HTML/Element/meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a> element use those values to change the color of the meter bar:</p>
+
+<ul>
+ <li>If the current value is in the prefered part of the range, the bar is green.</li>
+ <li>If the current value is in the average part of the range, the bar is yellow.</li>
+ <li>If the current value is in the worst part of the range, the bar is red.</li>
+</ul>
+
+<p>Such a bar is created using a <a href="../../../HTML/Element/meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a> element. The content inside the <a href="../../../HTML/Element/meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a> element is a fallback for browsers that don't support the element and for assistive technologies to vocalize it.</p>
+
+<pre class="brush: html">&lt;meter min="0" max="100" value="75" low="33" high="66" optimum="50"&gt;75&lt;/meter&gt;</pre>
+
+<table class="standard-table">
+ <caption>Compatibility table</caption>
+ <tbody>
+  <tr>
+   <th>Feature Desktop</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/progress.html" title="The HTML &lt;progress&gt; Element is used to view the completion progress of a task. While the specifics of how it's displayed is left up to the browser developer, it's typically displayed as a progress bar. Javascript can be used to manipulate the value of progress bar."><code>&lt;progress&gt;</code></a></td>
+   <td>6.0</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/6" title="Released on 2011-08-16.">6.0</a> (6.0)</td>
+   <td>10</td>
+   <td>10.6</td>
+   <td>5.2</td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a></td>
+   <td>6.0</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/16" title="Released on 2012-10-09.">16.0</a> (16.0)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>11.0</td>
+   <td>5.2</td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr>
+   <th>Feature Mobile</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/progress.html" title="The HTML &lt;progress&gt; Element is used to view the completion progress of a task. While the specifics of how it's displayed is left up to the browser developer, it's typically displayed as a progress bar. Javascript can be used to manipulate the value of progress bar."><code>&lt;progress&gt;</code></a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>6.0 (6.0)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>11.0</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+  </tr>
+  <tr>
+   <td><a href="../../../HTML/Element/meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>16.0 (16.0)</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>11.0</td>
+   <td><span style="color: rgb(255, 153, 0);" title="Compatibility unknown; please update this.">?</span></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="See_also">See also</h2>
+
+<p>To dig into the different form widgets, there are some useful external resources you should check out:</p>
+
+<ul>
+ <li><a class="external" href="http://wufoo.com/html5/" rel="external" title="http://wufoo.com/html5/">The Current State of HTML5 Forms</a> by Wufoo</li>
+ <li><a class="external" href="http://www.quirksmode.org/html5/inputs.html" rel="external" title="http://www.quirksmode.org/html5/inputs.html">HTML5 Tests - inputs</a> on Quirksmode (also <a class="external" href="http://www.quirksmode.org/html5/inputs_mobile.html" rel="external" title="http://www.quirksmode.org/html5/inputs_mobile.html">available for mobile</a> browsers)</li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Example">Example</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Forms">Forms</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="../../../../tag/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Intermediate">Intermediate</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/toraritte">toraritte</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ajedi32">Ajedi32</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/aksht">aksht</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/lemgrb">lemgrb</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/toraritte">toraritte</a>,
+                      <time datetime="2015-03-28T15:17:01-07:00">Mar 28, 2015, 3:17:01 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets" selected="">
+          English (US)
+        </option>
+                  <option value="/fr/docs/Web/Guide/HTML/Formulaires/Les_blocs_de_formulaires_natifs">
+            Français
+          </option>          <option value="/ja/docs/Web/Guide/HTML/Forms/The_native_form_widgets">
+            日本語
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/The_native_form_widgets by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:51:04 GMT -->
+</body></html>

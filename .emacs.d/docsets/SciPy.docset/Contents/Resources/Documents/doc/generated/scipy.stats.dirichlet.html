@@ -1,0 +1,216 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.stats.dirichlet</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Statistical functions (scipy.stats)" href="../stats.html">
+    <link rel="next" title="scipy.stats.wishart" href="scipy.stats.wishart.html">
+    <link rel="prev" title="scipy.stats.multivariate_normal" href="scipy.stats.multivariate_normal.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../stats.html" accesskey="U">Statistical functions (<tt class="docutils literal"><span class="pre">scipy.stats</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.wishart.html" title="scipy.stats.wishart" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.multivariate_normal.html" title="scipy.stats.multivariate_normal" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.stats.multivariate_normal.html" title="previous chapter">scipy.stats.multivariate_normal</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.stats.wishart.html" title="next chapter">scipy.stats.wishart</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-stats-dirichlet">
+<h1>scipy.stats.dirichlet<a class="headerlink" href="#scipy-stats-dirichlet" title="Permalink to this headline">¶</a></h1>
+<dl class="data">
+<a class="dashAnchor" name="//apple_ref/Method/scipy.stats.dirichlet"></a><dt id="scipy.stats.dirichlet">
+<tt class="descclassname">scipy.stats.</tt><tt class="descname">dirichlet</tt><em class="property"> = &lt;scipy.stats._multivariate.dirichlet_gen object at 0x7fa40e148fd0&gt;</em><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/stats/_multivariate.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.stats.dirichlet" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Dirichlet random variable.</p>
+<p>The <a class="reference internal" href="scipy.stats.alpha.html#scipy.stats.alpha" title="scipy.stats.alpha"><tt class="xref py py-obj docutils literal"><span class="pre">alpha</span></tt></a> keyword specifies the concentration parameters of the
+distribution.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.15.0.</span></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<div><p>Quantiles, with the last axis of <em class="xref py py-obj">x</em> denoting the components.</p>
+</div></blockquote>
+<p><strong>alpha</strong> : array_like</p>
+<blockquote>
+<div><p>The concentration parameters. The number of entries determines the
+dimensionality of the distribution.</p>
+</div></blockquote>
+<p><strong>random_state</strong> : None or int or np.random.RandomState instance, optional</p>
+<blockquote>
+<div><p>If int or RandomState, use it for drawing the random variates.
+If None (or np.random), the global np.random state is used.
+Default is None.</p>
+</div></blockquote>
+<p><strong>Alternatively, the object may be called (as a function) to fix</strong></p>
+<p><strong>concentration parameters, returning a “frozen” Dirichlet</strong></p>
+<p><strong>random variable:</strong></p>
+<p><strong>rv = dirichlet(alpha)</strong></p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Frozen object with the same methods but holding the given
+concentration parameters fixed.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Each <span class="math">\(\alpha\)</span> entry must be positive. The distribution has only
+support on the simplex defined by</p>
+<div class="math">
+\[\sum_{i=1}^{K} x_i \le 1\]</div>
+<p>The probability density function for <a class="reference internal" href="#scipy.stats.dirichlet" title="scipy.stats.dirichlet"><tt class="xref py py-obj docutils literal"><span class="pre">dirichlet</span></tt></a> is</p>
+<div class="math">
+\[f(x) = \frac{1}{\mathrm{B}(\boldsymbol\alpha)} \prod_{i=1}^K x_i^{\alpha_i - 1}\]</div>
+<p>where</p>
+<div class="math">
+\[\mathrm{B}(\boldsymbol\alpha) = \frac{\prod_{i=1}^K \Gamma(\alpha_i)}
+                             {\Gamma\bigl(\sum_{i=1}^K \alpha_i\bigr)}\]</div>
+<p>and <span class="math">\(\boldsymbol\alpha=(\alpha_1,\ldots,\alpha_K)\)</span>, the
+concentration parameters and <span class="math">\(K\)</span> is the dimension of the space
+where <span class="math">\(x\)</span> takes values.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="41%">
+<col width="59%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">pdf(x,</span> <span class="pre">alpha)</span></tt></td>
+<td>Probability density function.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">logpdf(x,</span> <span class="pre">alpha)</span></tt></td>
+<td>Log of the probability density function.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">rvs(alpha,</span> <span class="pre">size=1,</span> <span class="pre">random_state=None)</span></tt></td>
+<td>Draw random samples from a Dirichlet distribution.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">mean(alpha)</span></tt></td>
+<td>The mean of the Dirichlet distribution</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">var(alpha)</span></tt></td>
+<td>The variance of the Dirichlet distribution</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">entropy(alpha)</span></tt></td>
+<td>Compute the differential entropy of the multivariate normal.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

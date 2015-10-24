@@ -1,0 +1,1159 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:51:45 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Data form validation</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation$json">
+  <link rel="canonical" href="Data_form_validation.html">
+
+            <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Forms/Data_form_validation" title="データフォームの検証">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Data form validation">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation">
+  <meta name="twitter:title" content="Data form validation">
+    <meta property="og:description" content="While you should always validate data on your servers, there are many benefits to additional validation of data on the Web page itself. In many ways, users are annoyed by forms. By validating form data while the user is filling it out, the user can know immediately if they've made any mistakes; this saves the user the time of waiting on an HTTP response, and saves your server from dealing with bad form input. This article covers how to go about validating form data within your form's Web content.">
+  <meta name="description" content="While you should always validate data on your servers, there are many benefits to additional validation of data on the Web page itself. In many ways, users are annoyed by forms. By validating form data while the user is filling it out, the user can know immediately if they've made any mistakes; this saves the user the time of waiting on an HTTP response, and saves your server from dealing with bad form input. This article covers how to go about validating form data within your form's Web content.">
+  <meta name="twitter:description" content="While you should always validate data on your servers, there are many benefits to additional validation of data on the Web page itself. In many ways, users are annoyed by forms. By validating form data while the user is filling it out, the user can know immediately if they've made any mistakes; this saves the user the time of waiting on an HTTP response, and saves your server from dealing with bad form input. This article covers how to go about validating form data within your form's Web content.">
+  
+      
+  </head>
+<body data-slug="Web/Guide/HTML/Forms/Data_form_validation" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FForms%2FData_form_validation" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FForms%2FData_form_validation" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Forms/Data_form_validation" title="データフォームの検証">日本語</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../HTML.html" rel="v:url" property="v:title">HTML developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Forms.html" rel="v:url" property="v:title">HTML forms guide</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Data form validation</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Data form validation</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 8 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/gto1" title="View profile: gto1">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gto1" data-src="../../../../../../../secure.gravatar.com/avatar/98ae3d6dc6593e389687b847091130d86aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">gto1</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dalex" title="View profile: dalex">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dalex" data-src="../../../../../../../secure.gravatar.com/avatar/da459a9de9f8c4ee357ce3d0cd249ea46aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dalex</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbuch" title="View profile: dbuch">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbuch" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dbuch</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jumpnett" title="View profile: jumpnett">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jumpnett" data-src="../../../../../../../secure.gravatar.com/avatar/f4f428f9cbcae4b4a896d0e910ebef4f6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jumpnett</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Havvy" title="View profile: Havvy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Havvy" data-src="../../../../../../../secure.gravatar.com/avatar/e799a79441c7543be48562403411cd136aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Havvy</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Using_browser-supplied_form_validation" rel="internal">Using browser-supplied form validation</a><ol><li><a href="#When_an_element_is_invalid" rel="internal">When an element is invalid</a></li><li><a href="#Validation_constraints_on_&lt;input&gt;_elements" rel="internal">Validation constraints on <code>&lt;input&gt;</code> elements</a><ol><li><a href="#A_simple_example" rel="internal">A simple example</a></li><li><a href="#The_required_attribute" rel="internal">The required attribute</a></li></ol></li><li><a href="#Other_validation_constraints" rel="internal">Other validation constraints</a></li><li><a href="#Customized_error_messages" rel="internal">Customized error messages</a></li></ol></li><li><a href="#Validating_forms_using_JavaScript" rel="internal">Validating forms using JavaScript</a><ol><li><a href="#The_HTML5_constraint_validation_API" rel="internal">The HTML5 constraint validation API</a><ol><li><a href="#Constraint_validation_API_properties" rel="internal">Constraint validation API properties</a></li><li><a href="#Constraint_validation_API_methods" rel="internal">Constraint validation API methods</a></li><li><a href="#Example_using_the_constraint_validation_API" rel="internal">Example using the constraint validation API</a></li></ol></li><li><a href="#Validating_forms_without_a_built-in_API" rel="internal">Validating forms without a built-in API</a><ol><li><a href="#Example_that_doesn't_use_the_constraint_validation_API" rel="internal">Example that doesn't use the constraint validation API</a></li><li><a href="#Remote_validation" rel="internal">Remote validation</a></li></ol></li></ol></li><li><a href="#Conclusion" rel="internal">Conclusion</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>While you should always validate data on your servers, there are many benefits to additional validation of data on the Web page itself. In many ways, <a class="external" href="http://www.slideshare.net/jwegesin/forms-suck" rel="external" title="http://www.slideshare.net/jwegesin/forms-suck">users are annoyed by forms</a>. By validating form data while the user is filling it out, the user can know immediately if they've made any mistakes; this saves the user the time of waiting on an HTTP response, and saves your server from dealing with bad form input. This article covers how to go about validating form data within your form's Web content.</p>
+<h2 id="Using_browser-supplied_form_validation">Using browser-supplied form validation</h2>
+<p>One of the features of <a href="../HTML5.html" title="/en-US/docs/HTML/HTML5">HTML5</a> is the ability to validate most user data without relying on scripts. This is done using <a href="../HTML5/Constraint_validation.html" title="/en-US/docs/HTML/HTML5/Constraint_validation">validation attributes</a> on form elements.</p>
+<h3 id="When_an_element_is_invalid">When an element is invalid</h3>
+<p>When an element is invalid, two things occur:</p>
+<ul>
+ <li>The element matches the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> CSS pseudo-class; this lets you apply a specific style to invalid elements. Similarly, valid elements match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:valid" title="The :valid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content validates correctly according to the input's type setting. This allows to easily make valid fields adopt an appearance that helps the user confirm that their data is formatted properly."><code>:valid</code></a> pseudo-class.</li>
+ <li>If the user tries to send the data, the browser will block the form and display an error message.</li>
+</ul>
+<h3 id="Validation_constraints_on_&lt;input&gt;_elements">Validation constraints on <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> elements</h3>
+<p>All <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> elements can be validated using the <code><a href="../../../HTML/Element/input.html#attr-pattern">pattern</a></code> attribute. This attribute expects a case sensitive <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Regular_Expressions" title="/en-US/docs/JavaScript/Guide/Regular_Expressions">Regular Expression</a> as its value. If the element's value is not empty and doesn't match the regular expression specified by the <code><a href="../../../HTML/Element/input.html#attr-pattern">pattern</a></code> attribute, the element is considered invalid.</p>
+<h4 id="A_simple_example">A simple example</h4>
+<pre class="brush: html">&lt;form&gt;
+  &lt;label for="choose"&gt;Would you prefer a banana or a cherry?&lt;/label&gt;
+  &lt;input id="choose" name="i_like" pattern="banana|cherry"&gt;
+  &lt;button&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</pre>
+<pre class="brush: css">input:invalid {
+  border: 1px solid red;
+}
+
+input:valid {
+  border: 1px solid green;
+}</pre>
+<p><iframe class="live-sample-frame" frameborder="0" height="50" src="../../../../../../../mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation%24samples/A_simple_example80c8.html?revision=566329" width="100%"></iframe></p>
+<p>In this example, the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element accepts one of three possible values: the empty string, the string "banana" or the string "cherry".</p>
+<h4 id="The_required_attribute">The required attribute</h4>
+<p>If an element requires a value before the form should be submitted, you can mark the element using the <code><a href="../../../HTML/Element/input.html#attr-required">required</a></code> attribute. When this attribute is true, the field is not allowed to be empty.</p>
+<pre class="brush: html">&lt;form&gt;
+  &lt;label for="choose"&gt;Would you prefer a banana or cherry?&lt;/label&gt;
+  &lt;input id="choose" name="i_like" pattern="banana|cherry" required&gt;
+  &lt;button&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</pre>
+<pre class="brush: css">input:invalid {
+  border: 1px solid red;
+}
+
+input:valid {
+  border: 1px solid green;
+}</pre>
+<p>Notice how the field's border is different from the previous example.</p>
+<p><iframe class="live-sample-frame" frameborder="0" height="50" src="../../../../../../../mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation%24samples/The_required_attribute80c8.html?revision=566329" width="100%"></iframe></p>
+<div class="note">
+ <p><strong>Note:</strong> <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> elements with their <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute set to the value <code>email</code> or <code>url</code> do not need a <code><a href="../../../HTML/Element/input.html#attr-pattern">pattern</a></code> attribute to be validated. Specifying the <code>email</code> type requires that the field's value be a well-formed email address (or a comma-separated list of email addresses if it has the <code><a href="../../../HTML/Element/input.html#attr-multiple">multiple</a></code> attribute). Fields with the <code>url</code> type automatically requires a properly-formed URL.</p>
+</div>
+<h3 id="Other_validation_constraints">Other validation constraints</h3>
+<p>All form elements that can receive user inputs (<a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a>, <a href="../../../HTML/Element/select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a>, etc.) support the <code><a href="../../../HTML/Element/input.html#attr-required">required</a></code> attribute, but it's worth noting that the <a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a> element does not support the <code><a href="../../../HTML/Element/input.html#attr-pattern">pattern</a></code> attribute.</p>
+<p>All text fields (<a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> or <a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a>) can be constrained in size using the <code><a href="../../../HTML/Element/input.html#attr-maxlength">maxlength</a></code> attribute. A field is invalid if its value is longer than the <code><a href="../../../HTML/Element/input.html#attr-maxlength">maxlength</a></code> attribute's value. Most of the time, however, browsers don't let the user type a longer value than expected into text fields.</p>
+<p>For the number fields, the <code><a href="../../../HTML/Element/input.html#attr-min">min</a></code> and <code><a href="../../../HTML/Element/input.html#attr-max">max</a></code> attributes also provide a validation constraint. If the field's value is lower than the <code><a href="../../../HTML/Element/input.html#attr-min">min</a></code> attribute or higher than the <code><a href="../../../HTML/Element/input.html#attr-max">max</a></code> attribute, the field will be invalid.</p>
+<p>Here is a full example:</p>
+<pre class="brush: html">&lt;form&gt;
+  &lt;p&gt;
+    &lt;fieldset&gt;
+      &lt;legend&gt;Title&lt;abbr title="This field is mandatory"&gt;*&lt;/abbr&gt;&lt;/legend&gt;
+      &lt;input type="radio" required name="title" id="r1" value="Mr" &gt;&lt;label for="r1"&gt;Mr. &lt;/label&gt;
+      &lt;input type="radio" required name="title" id="r2" value="Ms"&gt;&lt;label for="r2"&gt;Ms.&lt;/label&gt;
+    &lt;/fieldset&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label for="n1"&gt;How old are you?&lt;/label&gt;
+    &lt;!-- The pattern attribute is not required on number field but 
+         it can act as a fallback for browsers which don't implement 
+         the number field but support the pattern attribute such as Firefox --&gt;
+    &lt;input type="number" min="12" max="120" step="1" id="n1" name="age"
+           pattern="\d+"&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label for="t1"&gt;What's your favorite fruit?&lt;abbr title="This field is mandatory"&gt;*&lt;/abbr&gt;&lt;/label&gt;
+    &lt;input type="text" id="t1" name="fruit" list="l1" required
+           pattern="[Bb]anana|[Cc]herry|[Aa]pple|[Ss]trawberry|[Ll]emon|[Oo]range"&gt;
+    &lt;datalist id="l1"&gt;
+        &lt;option&gt;Banana&lt;/option&gt;
+        &lt;option&gt;Cherry&lt;/option&gt;
+        &lt;option&gt;Apple&lt;/option&gt;
+        &lt;option&gt;Strawberry&lt;/option&gt;
+        &lt;option&gt;Lemon&lt;/option&gt;
+        &lt;option&gt;Orange&lt;/option&gt;
+    &lt;/datalist&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label for="t2"&gt;What's your e-mail?&lt;/label&gt;
+    &lt;input type="email" id="t2" name="email"&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label for="t3"&gt;Leave a short message&lt;/label&gt;
+    &lt;textarea id="t3" name="msg" maxlength="140" rows="5"&gt;&lt;/textarea&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;button&gt;Submit&lt;/button&gt;
+  &lt;/p&gt;
+&lt;/form&gt;</pre>
+<pre class="brush: css">body {
+  font: 1em sans-serif;
+  padding: 0;
+  margin : 0;
+}
+
+form {
+  max-width: 200px;
+  margin: 0;
+  padding: 0 5px;
+}
+
+p &gt; label {
+  display: block;
+}
+
+input[type=text],
+input[type=email],
+input[type=number],
+textarea,
+fieldset {
+/* required to properly style form 
+   elements on WebKit based browsers */
+  -webkit-appearance: none;
+  
+  width : 100%;
+  border: 1px solid #333;
+  margin: 0;
+  
+  font-family: inherit;
+  font-size: 90%;
+  
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+input:invalid {
+  box-shadow: 0 0 5px 1px red;
+}
+
+input:focus:invalid {
+  outline: none;
+}</pre>
+<p><iframe class="live-sample-frame" frameborder="0" height="420" src="../../../../../../../mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation%24samples/Other_validation_constraints80c8.html?revision=566329" width="100%"></iframe></p>
+<h3 id="Customized_error_messages">Customized error messages</h3>
+<p>As we saw in all of the above examples, each time the user tries to send an invalid form, the browser displays an error message. The way this message is displayed depends on the browser.</p>
+<p>These automated messages have two drawbacks:</p>
+<ul>
+ <li>There is no standard way to change their look and feel with CSS.</li>
+ <li>They depend on the browser locale, which means that you can have a page in one language but an error message displayed in another language.</li>
+</ul>
+<table>
+ <caption>
+  French versions of browsers on an English page</caption>
+ <thead>
+  <tr>
+   <th scope="col">Browser</th>
+   <th scope="col">Rendering</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td>Firefox 17 (Windows 7)</td>
+   <td><img alt="Example of an error message with Firefox in French on an English page" src="../../../../../../../mdn.mozillademos.org/files/4329/error-firefox-win7.png" style="width: 228px; height: 97px;"></td>
+  </tr>
+  <tr>
+   <td>Chrome 22 (Windows 7)</td>
+   <td><img alt="Example of an error message with Chrome in French on an English page" src="../../../../../../../mdn.mozillademos.org/files/4327/error-chrome-win7.png" style="width: 261px; height: 96px;"></td>
+  </tr>
+  <tr>
+   <td>Opera 12.10 (Mac OSX)</td>
+   <td><img alt="Example of an error message with Opera in French on an English page" src="../../../../../../../mdn.mozillademos.org/files/4331/error-opera-macos.png" style="width: 218px; height: 83px;"></td>
+  </tr>
+ </tbody>
+</table>
+<p>To customize the appearance and text of these messages, you must use JavaScript; there is no way to do it using just HTML and CSS.</p>
+<p>HTML5 provides <a class="external" href="http://www.w3.org/TR/html5/forms.html#the-constraint-validation-api" rel="external" title="http://www.w3.org/TR/html5/forms.html#the-constraint-validation-api">the constraint validation API</a> to check and customize the state of a form element. Among other things, it's possible to change the text of the error message. Let's see a quick example:</p>
+<pre class="brush: html">&lt;form&gt;
+  &lt;label for="mail"&gt;I would like you to provide me an e-mail&lt;/label&gt;
+  &lt;input type="email" id="mail" name="mail"&gt;
+  &lt;button&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</pre>
+<p>In JavaScript, you call the <a href="../HTML5/Constraint_validation.html#Constraint_API's_element.setCustomValidity()" title="/en-US/docs/HTML/HTML5/Constraint_validation#Constraint_API's_element.setCustomValidity()"><code>setCustomValidity()</code></a> method:</p>
+<pre class="brush: js">var email = document.getElementById("mail");
+
+email.addEventListener("keyup", function (event) {
+&nbsp; if(email.validity.typeMismatch) {
+&nbsp;&nbsp;&nbsp; email.setCustomValidity("I expect an e-mail, darling!");
+&nbsp; } else {
+&nbsp;&nbsp;&nbsp; email.setCustomValidity("");
+&nbsp; }
+});</pre>
+<p><iframe class="live-sample-frame" frameborder="0" height="50" src="../../../../../../../mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation%24samples/Customized_error_messages80c8.html?revision=566329" width="100%"></iframe></p>
+<h2 id="Validating_forms_using_JavaScript">Validating forms using JavaScript</h2>
+<p>If you want to take control over the native error message look and feel, or if you want to deal with browsers that do not support HTML5 forms validation, there is no way but to use JavaScript.</p>
+<h3 id="The_HTML5_constraint_validation_API">The HTML5 constraint validation API</h3>
+<p>More and more browsers now support the constraint validation API, and and it's becoming reliable. This API consists of a set of methods and properties available on each form element.</p>
+<h4 id="Constraint_validation_API_properties">Constraint validation API properties</h4>
+<table>
+ <thead>
+  <tr>
+   <th scope="col">Property</th>
+   <th scope="col">Description</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><code>validationMessage</code></td>
+   <td>A localized message that describes the validation constraints that the control does not satisfy (if any), or the empty string if the control is not a candidate for constraint validation (<code>willValidate</code> is <code>false</code>), or the element's value satisfies its constraints.</td>
+  </tr>
+  <tr>
+   <td><code>validity</code></td>
+   <td>A <a href="https://developer.mozilla.org/en-US/docs/Web/API/ValidityState" title="The ValidityState interface represents the validity states that an element can be in, with respect to constraint validation. Together, they help explain why an element's value fails to validate, if it's not valid."><code>ValidityState</code></a> object describing the validity state of the element.</td>
+  </tr>
+  <tr>
+   <td><code>validity.customError</code></td>
+   <td>Returns <code>true</code> if the element has a custom error; <code>false</code> otherwise.</td>
+  </tr>
+  <tr>
+   <td><code>validity.patternMismatch</code></td>
+   <td>Returns <code>true</code> if the element's value doesn't match the provided pattern; <code>false</code> otherwise.<br>
+    <br>
+    If it returns <code>true</code>, the element will match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> CSS pseudo-class.</td>
+  </tr>
+  <tr>
+   <td><code>validity.rangeOverflow</code></td>
+   <td>Returns <code>true</code> if the element's value is higher than the provided maximum; <code>false</code> otherwise.<br>
+    <br>
+    If it returns <code>true</code>, the element will match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:out-of-range" title="The :out-of-range CSS pseudo-class matches when an element has its value attribute outside the specified range limitations for this element. It allows the page to give a feedback that the value currently defined using the element is outside the range limits. A value can be outside of a range if it is either smaller or larger than maximum and minimum set values."><code>:out-of-range</code></a> and CSS pseudo-class.</td>
+  </tr>
+  <tr>
+   <td><code>validity.rangeUnderflow</code></td>
+   <td>Returns <code>true</code> if the element's value is lower than the provided minimum; <code>false</code> otherwise.<br>
+    <br>
+    If it returns <code>true</code>, the element will match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:out-of-range" title="The :out-of-range CSS pseudo-class matches when an element has its value attribute outside the specified range limitations for this element. It allows the page to give a feedback that the value currently defined using the element is outside the range limits. A value can be outside of a range if it is either smaller or larger than maximum and minimum set values."><code>:out-of-range</code></a> CSS pseudo-class.</td>
+  </tr>
+  <tr>
+   <td><code>validity.stepMismatch</code></td>
+   <td>Returns <code>true</code> if the element's value doesn't fit the rules given by the step attribute; <code>false</code> otherwise.<br>
+    <br>
+    If it returns <code>true</code>, the element will match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:out-of-range" title="The :out-of-range CSS pseudo-class matches when an element has its value attribute outside the specified range limitations for this element. It allows the page to give a feedback that the value currently defined using the element is outside the range limits. A value can be outside of a range if it is either smaller or larger than maximum and minimum set values."><code>:out-of-range</code></a> CSS pseudo-class.</td>
+  </tr>
+  <tr>
+   <td><code>validity.tooLong</code></td>
+   <td>Returns <code>true</code> if the element's value is longer than the provided maximum length; false otherwise.<br>
+    <br>
+    If it returns <code>true</code>, the element will match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:out-of-range" title="The :out-of-range CSS pseudo-class matches when an element has its value attribute outside the specified range limitations for this element. It allows the page to give a feedback that the value currently defined using the element is outside the range limits. A value can be outside of a range if it is either smaller or larger than maximum and minimum set values."><code>:out-of-range</code></a> CSS pseudo-class.</td>
+  </tr>
+  <tr>
+   <td><code>validity.typeMismatch</code></td>
+   <td>Returns true if the element's value is not in the correct syntax; false otherwise.<br>
+    <br>
+    If it returns <code>true</code>, the element will match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> css pseudo-class.</td>
+  </tr>
+  <tr>
+   <td><code>validity.valid</code></td>
+   <td>Returns true if the element's value has no validity problems; false otherwise.<br>
+    <br>
+    If it returns <code>true</code>, the element will match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:valid" title="The :valid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content validates correctly according to the input's type setting. This allows to easily make valid fields adopt an appearance that helps the user confirm that their data is formatted properly."><code>:valid</code></a> css pseudo-class; the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> CSS pseudo-class otherwise.</td>
+  </tr>
+  <tr>
+   <td><code>validity.valueMissing</code></td>
+   <td>Returns true if the element has no value but is a required field; false otherwise.<br>
+    <br>
+    If it returns <code>true</code>, the element will match the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> CSS pseudo-class.</td>
+  </tr>
+  <tr>
+   <td><code>willValidate</code></td>
+   <td>Returns <code>true</code> if the element will be validated when the form is submitted; <code>false</code> otherwise.</td>
+  </tr>
+ </tbody>
+</table>
+<h4 id="Constraint_validation_API_methods">Constraint validation API methods</h4>
+<table>
+ <thead>
+  <tr>
+   <th scope="col">Method</th>
+   <th scope="col">Description</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><code>checkValidity()</code></td>
+   <td>Returns <code>true</code> if the element's value has no validity problems; <code>false</code> otherwise. If the element is invalid, this method also causes an <code><a href="https://developer.mozilla.org/en-US/docs/Web/Events/invalid" title="/en-US/docs/Web/Events/invalid">invalid</a></code> event at the element.</td>
+  </tr>
+  <tr>
+   <td><code>setCustomValidity(<em>message</em>)</code></td>
+   <td>Adds a custom error message to the element; if you set a custom error message, the element is considered to be invalid, and the specified error is displayed. This lets you use JavaScript code to establish a validation failure other than those offered by the standard constraint validation API. The message is shown to the user when reporting the problem.<br>
+    <br>
+    If the argument is the empty string, the custom error is cleared.</td>
+  </tr>
+ </tbody>
+</table>
+<p>For legacy browsers, it's possible to use a <a class="external" href="https://github.com/ryanseddon/H5F" rel="external" title="https://github.com/ryanseddon/H5F">polyfill such as H5F</a> to compensate for the lack of support for the constraint validation API. Since you're already using JavaScript anyway, using a polyfill isn't an added burden to your Web site or Web application's design or implementation.</p>
+<h4 id="Example_using_the_constraint_validation_API">Example using the constraint validation API</h4>
+<p>Let's see how to use this API to build custom error messages. First, the HTML:</p>
+<pre class="brush: html">&lt;form novalidate&gt;
+  &lt;p&gt;
+    &lt;label for="mail"&gt;
+      &lt;span&gt;Please enter an email address:&lt;/span&gt;
+      &lt;input type="email" id="mail" name="mail"&gt;
+      &lt;span class="error" aria-live="polite"&gt;&lt;/span&gt;
+    &lt;/label&gt;
+  &lt;p&gt;
+  &lt;button&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</pre>
+<p>This simple form uses the <code><a href="../../../HTML/Element/form.html#attr-novalidate">novalidate</a></code> attribute to turn off the browser's automatic validation; this lets our script take control over validation. However, this doesn't disable support for the constraint validation API nor the application of the CSS pseudo-class <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:valid" title="The :valid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content validates correctly according to the input's type setting. This allows to easily make valid fields adopt an appearance that helps the user confirm that their data is formatted properly."><code>:valid</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:in-range" title="The :in-range CSS pseudo-class matches when an element has its value attribute inside the specified range limitations for this element. It allows the page to give a feedback that the value currently defined using the element is inside the range limits."><code>:in-range</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:out-of-range" title="The :out-of-range CSS pseudo-class matches when an element has its value attribute outside the specified range limitations for this element. It allows the page to give a feedback that the value currently defined using the element is outside the range limits. A value can be outside of a range if it is either smaller or larger than maximum and minimum set values."><code>:out-of-range</code></a> classes. That means that even though the browser doesn't automatically check the validity of the form before sending its data, you can still do it yourself and style the form accordingly.</p>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Accessibility/ARIA/ARIA_Live_Regions" title="/en-US/docs/Accessibility/ARIA/ARIA_Live_Regions"><code>aria-live</code></a> attribute makes sure that our custom error message will be presented to everyone, including those using assistive technologies such as screen readers.</p>
+<h5 id="CSS">CSS</h5>
+<p>This CSS styles our form and the error output to look more attractive.</p>
+<pre class="brush: css">/* This is just to make the example nicer */
+body {
+  font: 1em sans-serif;
+  padding: 0;
+  margin : 0;
+}
+
+form {
+  max-width: 200px;
+}
+
+p * {
+  display: block;
+}
+
+input[type=email]{
+  -webkit-appearance: none;
+
+  width: 100%;
+  border: 1px solid #333;
+  margin: 0;
+
+  font-family: inherit;
+  font-size: 90%;
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* This is our style for the invalid fields */
+input:invalid{
+  border-color: #900;
+  background-color: #FDD;
+}
+
+input:focus:invalid {
+  outline: none;
+}
+
+/* This is the style of our error messages */
+.error {
+  width  : 100%;
+  padding: 0;
+ 
+  font-size: 80%;
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+ 
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}</pre>
+<h5 id="JavaScript">JavaScript</h5>
+<p>The following JavaScript code handles the custom error validation.</p>
+<pre class="brush: js">// There are many ways to pick a DOM node; here we get the form itself and the email
+// input box, as well as the span element into which we will place the error message.
+
+var form  = document.getElementsByTagName('form')[0];
+var email = document.getElementById('mail');
+var error = document.querySelector('.error');
+
+email.addEventListener("keyup", function (event) {
+  // Each time the user types something, we check if the
+  // email field is valid.
+  if (email.validity.valid) {
+    // In case there is an error message visible, if the field
+    // is valid, we remove the error message.
+    error.innerHTML = ""; // Reset the content of the message
+    error.className = "error"; // Reset the visual state of the message
+  }
+}, false);
+form.addEventListener("submit", function (event) {
+  // Each time the user tries to send the data, we check
+  // if the email field is valid.
+  if (!email.validity.valid) {
+    
+    // If the field is not valid, we display a custom
+    // error message.
+    error.innerHTML = "I expect an e-mail, darling!";
+    error.className = "error active";
+    // And we prevent the form to be sent by canceling the event
+    event.preventDefault();
+  }
+}, false);</pre>
+<p>Here is the live result:</p>
+<p><iframe class="live-sample-frame" frameborder="0" height="130" src="../../../../../../../mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation%24samples/Example_using_the_constraint_validation_API80c8.html?revision=566329" width="100%"></iframe></p>
+<p>The constraint validation API gives you a powerful tool to handle form validation, letting you have enormous control over the user interface above and beyond what you can do just with HTML and CSS alone.</p>
+<h3 id="Validating_forms_without_a_built-in_API">Validating forms without a built-in API</h3>
+<p>Sometimes, such as with legacy browsers or <a href="How_to_build_custom_form_widgets.html" title="/en-US/docs/HTML/Forms/How_to_build_custom_form_widgets">custom widgets</a>, you will not be able to (or will not want to) use the constraint validation API. In that case, you're still able to use JavaScript to validate your form. Validating a form is more a question of user interface than real data validation.</p>
+<p>To validate a form, you have to ask yourself a few questions:</p>
+<dl>
+ <dt>
+  What kind of validation should I perform?</dt>
+ <dd>
+  You need to determine how to validate your data: string operations, type conversion, regular expressions, etc. It's up to you. Just remember that form data is always text and is always provided to your script as strings.</dd>
+ <dt>
+  What should I do if the form does not validate?</dt>
+ <dd>
+  This is clearly a UI matter. You have to decide how the form will behave: Does the form send the data anyway? Should you highlight the fields which are in error? Should you display error messages?</dd>
+ <dt>
+  How can I help the user to correct invalid data?</dt>
+ <dd>
+  In order to reduce the user's frustration, it's very important to provide as much helpful information as possible in order to guide them toward correcting their inputs. You should offer up-front suggestions so they know what's expected, as well as clear error messages.<br>
+  <p>If you want to dig into form validation UI requirements, there are some useful articles you should read:</p>
+  <ul>
+   <li>SmashingMagazine: <a class="external" href="http://uxdesign.smashingmagazine.com/2012/06/27/form-field-validation-errors-only-approach/" rel="external" title="http://uxdesign.smashingmagazine.com/2012/06/27/form-field-validation-errors-only-approach/">Form-Field Validation: The Errors-Only Approach</a></li>
+   <li>SmashingMagazine: <a class="external" href="http://www.smashingmagazine.com/2009/07/07/web-form-validation-best-practices-and-tutorials/" rel="external" title="http://www.smashingmagazine.com/2009/07/07/web-form-validation-best-practices-and-tutorials/">Web Form Validation: Best Practices and Tutorials</a></li>
+   <li>Six Revision: <a class="external" href="http://sixrevisions.com/user-interface/best-practices-for-hints-and-validation-in-web-forms/" rel="external" title="http://sixrevisions.com/user-interface/best-practices-for-hints-and-validation-in-web-forms/">Best Practices for Hints and Validation in Web Forms</a></li>
+   <li>A List Apart: <a class="external" href="http://www.alistapart.com/articles/inline-validation-in-web-forms/" rel="external" title="http://www.alistapart.com/articles/inline-validation-in-web-forms/">Inline Validation in Web Forms</a></li>
+  </ul>
+ </dd>
+</dl>
+<h4 id="Example_that_doesn't_use_the_constraint_validation_API">Example that doesn't use the constraint validation API</h4>
+<p>In order to illustrate this, let's rebuild the previous example so that it works with legacy browsers:</p>
+<pre class="brush: html">&lt;form&gt;
+  &lt;p&gt;
+    &lt;label for="mail"&gt;
+        &lt;span&gt;Please enter an email address:&lt;/span&gt;
+        &lt;input type="text" class="mail" id="mail" name="mail"&gt;
+        &lt;span class="error" aria-live="polite"&gt;&lt;/span&gt;
+    &lt;/label&gt;
+  &lt;p&gt;
+  &lt;!-- Some legacy browsers need to have the `type` attribute
+       explicitly set to `submit` on the `button`element --&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</pre>
+<p>As you can see, the HTML is almost the same; we just removed the HTML5 parts. Note that <a href="https://developer.mozilla.org/en-US/docs/Accessibility/ARIA" title="/en-US/docs/Accessibility/ARIA">ARIA</a> is an independent specification that's not specifically related to HTML5, so it's still here.</p>
+<h5 id="CSS_2">CSS</h5>
+<p>Similarly, the CSS doesn't need to change very much; we just turn the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a> pseudo-class into a real class and avoid using the attribute selector that does not work on Internet Explorer 6.</p>
+<pre class="brush: css">/* This is just to make the example nicer */
+body {
+  font: 1em sans-serif;
+  padding: 0;
+  margin : 0;
+}
+
+form {
+  max-width: 200px;
+}
+
+p * {
+  display: block;
+}
+
+input.mail {
+  -webkit-appearance: none;
+
+  width: 100%;
+  border: 1px solid #333;
+  margin: 0;
+
+  font-family: inherit;
+  font-size: 90%;
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* This is our style for the invalid fields */
+input.invalid{
+  border-color: #900;
+  background-color: #FDD;
+}
+
+input:focus.invalid {
+  outline: none;
+}
+
+/* This is the style of our error messages */
+.error {
+  width  : 100%;
+  padding: 0;
+ 
+  font-size: 80%;
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+ 
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}</pre>
+<h5 id="JavaScript_2">JavaScript</h5>
+<p>The big changes are in the JavaScript code, which needs to do much more of the heavy lifting.</p>
+<pre class="brush: js">// There are less ways to pick a DOM node with legacy browsers
+var form  = document.getElementsByTagName('form')[0];
+var email = document.getElementById('mail');
+
+// The following is a trick to reach the next sibling Element node in the DOM
+// This is dangerous because you can easily build an infinite loop.
+// In modern browsers, you should prefer using element.nextElementSibling
+var error = email;
+while ((error = error.nextSibling).nodeType != 1);
+
+// As per the HTML5 Specification
+var emailRegExp = /^[a-zA-Z0-9.!#$%&amp;'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+// Many legacy browsers do not support the addEventListener method.
+// Here is a simple way to handle this; it's fare from the only one.
+function addEvent(element, event, callback) {
+  var previousEventCallBack = element["on"+event];
+  element["on"+event] = function (e) {
+    var output = callback(e);
+    
+    // A callback that return `false` stop the callback chain
+    // and interupt the execution of the event callback.
+    if (output === false) return false;
+
+    if (typeof previousEventCallBack === 'function') {
+      output = previousEventCallBack(e);
+      if(output === false) return false;
+    }
+  }
+};
+
+// Now we can rebuild our validation constraint
+// Because we do not rely on CSS pseudo-class, we have to  
+// set explicitly the valid/invalid class on our email field
+addEvent(window, "load", function () {
+  // Here, we test if the field is empty (remember, the field is not required)
+  // If it is not, we check if its content is a well-formed e-mail address.
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+ 
+  email.className = test ? "valid" : "invalid";
+});
+
+// This defines what happens when the user type on the field
+addEvent(email, "keyup", function () {
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+  if (test) {
+    email.className = "valid";
+    error.innerHTML = "";
+    error.className = "error";
+  } else {
+    email.className = "invalid";
+  }
+});
+
+// This defines what happens when the user try to submit the data
+addEvent(form, "submit", function () {
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+ 
+  if (!test) {
+    email.className = "invalid";
+    error.innerHTML = "I expect an e-mail, darling!";
+    error.className = "error active";
+
+    // Some legacy browsers do not support the event.reventDefault() method
+    return false;
+  } else {
+    email.className = "valid";
+    error.innerHTML = "";
+    error.className = "error";
+  }
+});</pre>
+<p>The result looks like this:</p>
+<p><iframe class="live-sample-frame" frameborder="0" height="130" src="../../../../../../../mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation%24samples/Example_that_doesn%27t_use_the_constraint_validation_API80c8.html?revision=566329" width="100%"></iframe></p>
+<p>As you can see it's not that hard to build a validation system on your own. The difficult part is to make it generic enough to use it both cross-platform and on any form you might create. There are many libraries available to perform form validation; you shouldn't hesitate to use them. Here are a few examples:</p>
+<ul>
+ <li>Standalone library
+  <ul>
+   <li><a class="external" href="http://validatious.org/" rel="external" title="/http://validatious.org">Validatious</a></li>
+   <li><a class="external" href="http://rickharrison.github.com/validate.js/" rel="external" title="http://rickharrison.github.com/validate.js/">Validate.js</a></li>
+  </ul>
+ </li>
+ <li>jQuery plug-in:
+  <ul>
+   <li><a class="external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/" rel="external" title="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">Validation</a></li>
+   <li><a class="external" href="http://unwrongest.com/projects/valid8/" rel="external" title="http://unwrongest.com/projects/valid8/">Valid8</a><span style="display: none;">&nbsp;</span></li>
+  </ul>
+ </li>
+</ul>
+<h4 id="Remote_validation">Remote validation</h4>
+<p>In some cases it can be useful to perform some remote validation. This kind of validation is necessary when the data entered by the user is tied to additional data stored on the server side of your application. One use case for this is registration forms, where you ask for a user name. To avoid duplication, it's smarter to perform an AJAX request to check the availability of the user name rather than asking the user to send the data, then send back the form with an error.</p>
+<p>Performing such a validation requires taking a few precautions:</p>
+<ul>
+ <li>It requires exposing an API and some data publicly; be sure it is not sensitive data.</li>
+ <li>Network lag requires performing asynchronous validation. This requires some UI work in order to be sure that the user will not be blocked if the validation is not performed properly.</li>
+</ul>
+<h2 id="Conclusion">Conclusion</h2>
+<p>Form validation does not require complex JavaScript, but it does require thinking carefully about the user. Always remember to help your user to correct the data he provides. To that end, be sure to:</p>
+<ul>
+ <li>Display explicit error messages.</li>
+ <li>Be permissive about the input format.</li>
+ <li>Point at exactly where the error occurs (especially on large forms).</li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Example">Example</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Forms">Forms</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="../../../../tag/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Intermediate">Intermediate</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/gto1">gto1</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dalex">dalex</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dbuch">dbuch</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jumpnett">jumpnett</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Havvy">Havvy</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/gto1">gto1</a>,
+                      <time datetime="2014-04-23T13:15:11-07:00">Apr 23, 2014, 1:15:11 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation" selected="">
+          English (US)
+        </option>
+                  <option value="/ja/docs/Web/Guide/HTML/Forms/Data_form_validation">
+            日本語
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:51:53 GMT -->
+</body></html>

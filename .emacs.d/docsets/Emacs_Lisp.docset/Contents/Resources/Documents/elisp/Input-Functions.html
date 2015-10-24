@@ -1,0 +1,108 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Input Functions</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Input-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Output-Streams.html#Output-Streams">Output Streams</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Input-Streams.html#Input-Streams">Input Streams</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Read-and-Print.html#Read-and-Print">Read and Print</a>
+
+</p></div>
+
+<h3 class="section">18.3 Input Functions</h3>
+
+<p>This section describes the Lisp functions and variables that pertain
+to reading.
+
+   </p><p>In the functions below, <var>stream</var> stands for an input stream (see
+the previous section).  If <var>stream</var> is <code>nil</code> or omitted, it
+defaults to the value of <code>standard-input</code>.
+
+   </p><p><a name="index-end_002dof_002dfile-1093"></a>  An <code>end-of-file</code> error is signaled if reading encounters an
+unterminated list, vector, or string.
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/read"></a><a name="DASH-1105"></a>— Function: <b>read</b><var> &amp;optional stream<a name="index-read-1094"></a></var><br>
+<blockquote><p>This function reads one textual Lisp expression from <var>stream</var>,
+returning it as a Lisp object.  This is the basic Lisp input function. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/read%2Dfrom%2Dstring"></a><a name="DASH-1106"></a>— Function: <b>read-from-string</b><var> string &amp;optional start end<a name="index-read_002dfrom_002dstring-1095"></a></var><br>
+<blockquote><p><a name="index-string-to-object-1096"></a>This function reads the first textual Lisp expression from the text in
+<var>string</var>.  It returns a cons cell whose <span class="sc">car</span> is that expression,
+and whose <span class="sc">cdr</span> is an integer giving the position of the next
+remaining character in the string (i.e., the first one not read).
+
+        </p><p>If <var>start</var> is supplied, then reading begins at index <var>start</var> in
+the string (where the first character is at index 0).  If you specify
+<var>end</var>, then reading is forced to stop just before that index, as if
+the rest of the string were not there.
+
+        </p><p>For example:
+
+     </p><pre class="example">          (read-from-string "(setq x 55) (setq y 5)")
+               ⇒ ((setq x 55) . 11)
+          (read-from-string "\"A short string\"")
+               ⇒ ("A short string" . 16)
+          
+          ;; <span class="roman">Read starting at the first character.</span>
+          (read-from-string "(list 112)" 0)
+               ⇒ ((list 112) . 10)
+          ;; <span class="roman">Read starting at the second character.</span>
+          (read-from-string "(list 112)" 1)
+               ⇒ (list . 5)
+          ;; <span class="roman">Read starting at the seventh character,</span>
+          ;;   <span class="roman">and stopping at the ninth.</span>
+          (read-from-string "(list 112)" 6 8)
+               ⇒ (11 . 8)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/standard%2Dinput"></a><a name="DASH-1107"></a>— Variable: <b>standard-input</b><var><a name="index-standard_002dinput-1097"></a></var><br>
+<blockquote><p>This variable holds the default input stream—the stream that
+<code>read</code> uses when the <var>stream</var> argument is <code>nil</code>. 
+The default is <code>t</code>, meaning use the minibuffer. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/read%2Dcircle"></a><a name="DASH-1108"></a>— Variable: <b>read-circle</b><var><a name="index-read_002dcircle-1098"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this variable enables the reading of circular and
+shared structures.  See <a href="Circular-Objects.html#Circular-Objects">Circular Objects</a>.  Its default value is
+<code>t</code>. 
+</p></blockquote></div>
+
+   
+
+</body></html>

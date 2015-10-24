@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Half-Logistic Distribution</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../../index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../../scipy-optimize-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="half-logistic-distribution">
+<span id="continuous-halflogistic"></span><h1>Half-Logistic Distribution<a class="headerlink" href="#half-logistic-distribution" title="Permalink to this headline">¶</a></h1>
+<p>In the limit as <span class="math">\(c\rightarrow\infty\)</span> for the generalized half-logistic we have the half-logistic defined
+over <span class="math">\(x\geq0.\)</span> Also, the distribution of <span class="math">\(\left|X\right|\)</span> where <span class="math">\(X\)</span> has logistic distribtution.</p>
+<div class="math">
+\[ \begin{eqnarray*} f\left(x\right) & = & \frac{2e^{-x}}{\left(1+e^{-x}\right)^{2}}=\frac{1}{2}\mathrm{sech}^{2}\left(\frac{x}{2}\right)\\ F\left(x\right) & = & \frac{1-e^{-x}}{1+e^{-x}}=\tanh\left(\frac{x}{2}\right)\\ G\left(q\right) & = & \log\left(\frac{1+q}{1-q}\right)=2\mathrm{arctanh}\left(q\right)\end{eqnarray*}\]</div><div class="math">
+\[M\left(t\right)=1-t\psi_{0}\left(\frac{1}{2}-\frac{t}{2}\right)+t\psi_{0}\left(1-\frac{t}{2}\right)\]</div>
+<div class="math">
+\[\mu_{n}^{\prime}=2\left(1-2^{1-n}\right)n!\zeta\left(n\right)\quad n\neq1\]</div>
+<div class="math">
+\[ \begin{eqnarray*} \mu_{1}^{\prime} & = & 2\log\left(2\right)\\ \mu_{2}^{\prime} & = & 2\zeta\left(2\right)=\frac{\pi^{2}}{3}\\ \mu_{3}^{\prime} & = & 9\zeta\left(3\right)\\ \mu_{4}^{\prime} & = & 42\zeta\left(4\right)=\frac{7\pi^{4}}{15}\end{eqnarray*}\]</div><div class="math">
+\[ \begin{eqnarray*} h\left[X\right] & = & 2-\log\left(2\right)\\  & \approx & 1.3068528194400546906.\end{eqnarray*}\]</div><p>Implementation: <a class="reference internal" href="../../generated/scipy.stats.halflogistic.html#scipy.stats.halflogistic" title="scipy.stats.halflogistic"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.stats.halflogistic</span></tt></a></p>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

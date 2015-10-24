@@ -1,0 +1,198 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.interpolate.interpn</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Interpolation (scipy.interpolate)" href="../interpolate.html">
+    <link rel="next" title="scipy.interpolate.RegularGridInterpolator" href="scipy.interpolate.RegularGridInterpolator.html">
+    <link rel="prev" title="scipy.interpolate.interp2d.__call__" href="scipy.interpolate.interp2d.__call__.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../interpolate.html" accesskey="U">Interpolation (<tt class="docutils literal"><span class="pre">scipy.interpolate</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.RegularGridInterpolator.html" title="scipy.interpolate.RegularGridInterpolator" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.interp2d.__call__.html" title="scipy.interpolate.interp2d.__call__" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.interpolate.interp2d.__call__.html" title="previous chapter">scipy.interpolate.interp2d.__call__</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.interpolate.RegularGridInterpolator.html" title="next chapter">scipy.interpolate.RegularGridInterpolator</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-interpolate-interpn">
+<h1>scipy.interpolate.interpn<a class="headerlink" href="#scipy-interpolate-interpn" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.interpolate.interpn"></a><dt id="scipy.interpolate.interpn">
+<tt class="descclassname">scipy.interpolate.</tt><tt class="descname">interpn</tt><big>(</big><em>points</em>, <em>values</em>, <em>xi</em>, <em>method='linear'</em>, <em>bounds_error=True</em>, <em>fill_value=nan</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/interpolate/interpolate.py#L1751"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.interpolate.interpn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multidimensional interpolation on regular grids.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> : tuple of ndarray of float, with shapes (m1, ), ..., (mn, )</p>
+<blockquote>
+<div><p>The points defining the regular grid in n dimensions.</p>
+</div></blockquote>
+<p><strong>values</strong> : array_like, shape (m1, ..., mn, ...)</p>
+<blockquote>
+<div><p>The data on the regular grid in n dimensions.</p>
+</div></blockquote>
+<p><strong>xi</strong> : ndarray of shape (..., ndim)</p>
+<blockquote>
+<div><p>The coordinates to sample the gridded data at</p>
+</div></blockquote>
+<p><strong>method</strong> : str, optional</p>
+<blockquote>
+<div><p>The method of interpolation to perform. Supported are “linear” and
+“nearest”, and “splinef2d”. “splinef2d” is only supported for
+2-dimensional data.</p>
+</div></blockquote>
+<p><strong>bounds_error</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True, when interpolated values are requested outside of the
+domain of the input data, a ValueError is raised.
+If False, then <em class="xref py py-obj">fill_value</em> is used.</p>
+</div></blockquote>
+<p><strong>fill_value</strong> : number, optional</p>
+<blockquote>
+<div><p>If provided, the value to use for points outside of the
+interpolation domain. If None, values outside
+the domain are extrapolated.  Extrapolation is not supported by method
+“splinef2d”.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>values_x</strong> : ndarray, shape xi.shape[:-1] + values.shape[ndim:]</p>
+<blockquote class="last">
+<div><p>Interpolated values at input coordinates.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="scipy.interpolate.NearestNDInterpolator.html#scipy.interpolate.NearestNDInterpolator" title="scipy.interpolate.NearestNDInterpolator"><tt class="xref py py-obj docutils literal"><span class="pre">NearestNDInterpolator</span></tt></a></dt>
+<dd>Nearest neighbour interpolation on unstructured data in N dimensions</dd>
+<dt><a class="reference internal" href="scipy.interpolate.LinearNDInterpolator.html#scipy.interpolate.LinearNDInterpolator" title="scipy.interpolate.LinearNDInterpolator"><tt class="xref py py-obj docutils literal"><span class="pre">LinearNDInterpolator</span></tt></a></dt>
+<dd>Piecewise linear interpolant on unstructured data in N dimensions</dd>
+<dt><a class="reference internal" href="scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="scipy.interpolate.RegularGridInterpolator"><tt class="xref py py-obj docutils literal"><span class="pre">RegularGridInterpolator</span></tt></a></dt>
+<dd>Linear and nearest-neighbor Interpolation on a regular grid in arbitrary dimensions</dd>
+<dt><a class="reference internal" href="scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="scipy.interpolate.RectBivariateSpline"><tt class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></tt></a></dt>
+<dd>Bivariate spline approximation over a rectangular mesh</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.14.</span></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

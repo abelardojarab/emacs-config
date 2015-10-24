@@ -1,0 +1,177 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.interpolate.LSQSphereBivariateSpline.__call__</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="scipy.interpolate.LSQSphereBivariateSpline" href="scipy.interpolate.LSQSphereBivariateSpline.html">
+    <link rel="next" title="scipy.interpolate.LSQSphereBivariateSpline.ev" href="scipy.interpolate.LSQSphereBivariateSpline.ev.html">
+    <link rel="prev" title="scipy.interpolate.LSQSphereBivariateSpline" href="scipy.interpolate.LSQSphereBivariateSpline.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../interpolate.html">Interpolation (<tt class="docutils literal"><span class="pre">scipy.interpolate</span></tt>)</a></li>
+          <li class="active"><a href="scipy.interpolate.LSQSphereBivariateSpline.html" accesskey="U">scipy.interpolate.LSQSphereBivariateSpline</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.LSQSphereBivariateSpline.ev.html" title="scipy.interpolate.LSQSphereBivariateSpline.ev" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.LSQSphereBivariateSpline.html" title="scipy.interpolate.LSQSphereBivariateSpline" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.interpolate.LSQSphereBivariateSpline.html" title="previous chapter">scipy.interpolate.LSQSphereBivariateSpline</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.interpolate.LSQSphereBivariateSpline.ev.html" title="next chapter">scipy.interpolate.LSQSphereBivariateSpline.ev</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-interpolate-lsqspherebivariatespline-call">
+<h1>scipy.interpolate.LSQSphereBivariateSpline.__call__<a class="headerlink" href="#scipy-interpolate-lsqspherebivariatespline-call" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<a class="dashAnchor" name="//apple_ref/Method/scipy.interpolate.LSQSphereBivariateSpline.__call__"></a><dt id="scipy.interpolate.LSQSphereBivariateSpline.__call__">
+<tt class="descclassname">LSQSphereBivariateSpline.</tt><tt class="descname">__call__</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>dtheta=0</em>, <em>dphi=0</em>, <em>grid=True</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/interpolate/fitpack2.py#L1208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.interpolate.LSQSphereBivariateSpline.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the spline or its derivatives at given positions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta, phi</strong> : array_like</p>
+<blockquote>
+<div><p>Input coordinates.</p>
+<p>If <em class="xref py py-obj">grid</em> is False, evaluate the spline at points
+<tt class="docutils literal"><span class="pre">(theta[i],</span> <span class="pre">phi[i]),</span> <span class="pre">i=0,</span> <span class="pre">...,</span> <span class="pre">len(x)-1</span></tt>.  Standard
+Numpy broadcasting is obeyed.</p>
+<p>If <em class="xref py py-obj">grid</em> is True: evaluate spline at the grid points
+defined by the coordinate arrays theta, phi. The arrays
+must be sorted to increasing order.</p>
+</div></blockquote>
+<p><strong>dtheta</strong> : int, optional</p>
+<blockquote>
+<div><p>Order of theta-derivative</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.14.0.</span></p>
+</div>
+</div></blockquote>
+<p><strong>dphi</strong> : int</p>
+<blockquote>
+<div><p>Order of phi-derivative</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.14.0.</span></p>
+</div>
+</div></blockquote>
+<p><strong>grid</strong> : bool</p>
+<blockquote class="last">
+<div><p>Whether to evaluate the results on a grid spanned by the
+input arrays, or at points specified by the input arrays.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.14.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

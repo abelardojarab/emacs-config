@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+<key>CFBundleIdentifier</key>
+<string>markdown</string>
+<key>CFBundleName</key>
+<string>Markdown</string>
+<key>DocSetPlatformFamily</key>
+<string>markdown</string>
+<key>isDashDocset</key><true/><key>dashIndexFilePath</key><string>index.html</string></dict>
+</plist>
+

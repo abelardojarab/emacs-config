@@ -1,0 +1,992 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/HTML/Element/legend by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:05:09 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>&lt;legend&gt;</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend$json">
+  <link rel="canonical" href="legend.html">
+
+            <link rel="alternate" hreflang="es" href="../../../../../es/docs/Web/HTML/Elemento/legend.html" title="legend">
+          <link rel="alternate" hreflang="fr" href="../../../../../fr/docs/Web/HTML/Element/Legend.html" title="&lt;legend&gt;">
+          <link rel="alternate" hreflang="ja" href="../../../../../ja/docs/Web/HTML/Element/legend.html" title="legend 要素">
+          <link rel="alternate" hreflang="ko" href="../../../../../ko/docs/Web/HTML/Element/legend.html" title="&lt;legend&gt;">
+          <link rel="alternate" hreflang="pt-BR" href="../../../../../pt-BR/docs/Web/HTML/Element/legend.html" title="&lt;legend&gt;">
+          <link rel="alternate" hreflang="zh-CN" href="../../../../../zh-CN/docs/Web/HTML/Element/legend.html" title="&lt;legend&gt;">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="&lt;legend&gt;">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend">
+  <meta name="twitter:title" content="&lt;legend&gt;">
+    <meta property="og:description" content="The HTML legend Element (or HTML Legend Field Element) represents a caption for the content of its parent fieldset.">
+  <meta name="description" content="The HTML legend Element (or HTML Legend Field Element) represents a caption for the content of its parent fieldset.">
+  <meta name="twitter:description" content="The HTML legend Element (or HTML Legend Field Element) represents a caption for the content of its parent fieldset.">
+  
+      
+  </head>
+<body data-slug="Web/HTML/Element/legend" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/HTML/Element/legend" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FHTML%2FElement%2Flegend" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/HTML/Element/legend" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FHTML%2FElement%2Flegend" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="../../../../../es/docs/Web/HTML/Elemento/legend.html" title="legend">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../fr/docs/Web/HTML/Element/Legend.html" title="&lt;legend&gt;">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../ja/docs/Web/HTML/Element/legend.html" title="legend 要素">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../ko/docs/Web/HTML/Element/legend.html" title="&lt;legend&gt;">한국어</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../pt-BR/docs/Web/HTML/Element/legend.html" title="&lt;legend&gt;">Português (do&nbsp;Brasil)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../../../zh-CN/docs/Web/HTML/Element/legend.html" title="&lt;legend&gt;">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../HTML.html" rel="v:url" property="v:title">HTML (HyperText Markup Language)</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Element.html" rel="v:url" property="v:title">HTML element reference</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">&lt;legend&gt;</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>&lt;legend&gt;</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 14 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz" title="View profile: Sebastianz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sebastianz" data-src="../../../../../../secure.gravatar.com/avatar/337fa9c543a4f881977b6d2fbbd2dea86aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sebastianz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/cvrebert" title="View profile: cvrebert">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cvrebert" data-src="../../../../../../secure.gravatar.com/avatar/ab4acd574384edcfe0aba24cafc882496aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cvrebert</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Delapouite" title="View profile: Delapouite">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Delapouite" data-src="../../../../../../secure.gravatar.com/avatar/1de6337421c1eac0227c88502b2759526aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Delapouite</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/rufwork" title="View profile: rufwork">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rufwork" data-src="../../../../../../secure.gravatar.com/avatar/8ed4bc18193c194d998d549dabb85b5b6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">rufwork</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/tregagnon" title="View profile: tregagnon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tregagnon" data-src="../../../../../../secure.gravatar.com/avatar/8431892ef37f88fe820096de721c00ba6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tregagnon</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/medicdude" title="View profile: medicdude">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="medicdude" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">medicdude</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/FreakCERS" title="View profile: FreakCERS">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="FreakCERS" data-src="../../../../../../secure.gravatar.com/avatar/f707fa6760548904567df014d76a4f046aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">FreakCERS</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/McGurk" title="View profile: McGurk">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="McGurk" data-src="../../../../../../secure.gravatar.com/avatar/dcf5220f84cecf5b4eec14f0c43a589a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">McGurk</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Attributes" rel="internal">Attributes</a></li><li><a href="#Examples" rel="internal">Examples</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>The <strong>HTML <code>&lt;legend&gt;</code> Element</strong> (or <em>HTML Legend Field Element</em>) represents a caption for the content of its parent <a href="fieldset.html" title="The HTML &lt;fieldset&gt; element is used to group several controls as well as labels (&lt;label&gt;) within a web form."><code>&lt;fieldset&gt;</code></a>.</p>
+
+<ul class="htmlelt">
+ <li><dfn><a href="../../Guide/HTML/Content_categories.html">Content categories</a></dfn> None.</li>
+ <li><dfn>Permitted content</dfn> <a href="../../Guide/HTML/Content_categories.html#Phrasing_content">Phrasing content</a>.</li>
+ <li><dfn>Tag omission</dfn> None, both the starting and ending tag are mandatory.</li>
+ <li><dfn>Permitted parent elements</dfn> A <a href="fieldset.html" title="The HTML &lt;fieldset&gt; element is used to group several controls as well as labels (&lt;label&gt;) within a web form."><code>&lt;fieldset&gt;</code></a> whose first child is this <code>&lt;legend&gt;</code> element</li>
+ <li><dfn>DOM interface</dfn> <a href="../../API/HTMLLegendElement.html" title="The HTMLLegendElement is an interface allowing to access properties of the &lt;legend&gt; elements. It inherits properties and methods from the HTMLElement interface."><code>HTMLLegendElement</code></a></li>
+</ul>
+
+<h2 id="Attributes">Attributes</h2>
+
+<p>This element only includes the <a href="../Global_attributes.html">global attributes</a>.</p>
+
+<h2 id="Examples">Examples</h2>
+
+<p>See <a href="form.html" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a> for examples on <code>&lt;legend&gt;</code>.</p>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a href="https://html.spec.whatwg.org/multipage/forms.html#the-legend-element" class="external" lang="en" hreflang="en">WHATWG HTML Living Standard<br><small lang="en-US">The definition of '&lt;legend&gt;' in that specification.</small></a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>Definition of the <code>legend</code> element</td>
+  </tr>
+  <tr>
+   <td><a href="https://html.spec.whatwg.org/multipage/rendering.html#the-fieldset-and-legend-elements" class="external" lang="en" title="The 'WHATWG HTML Living Standard' specification" hreflang="en">WHATWG HTML Living Standard</a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>Suggested default rendering of the <code>fieldset</code> and <code>legend</code> elements</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/html5/forms.html#the-legend-element" class="external" lang="en" hreflang="en">HTML5<br><small lang="en-US">The definition of '&lt;legend&gt;' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.10" class="external" lang="en" hreflang="en">HTML 4.01 Specification<br><small lang="en-US">The definition of '&lt;legend&gt;' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Initial definition</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>1.0 (1.0)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li>Others form-related elements: <a href="form.html" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a>, <a href="option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a>, <a href="label.html" title="The HTML Label&nbsp;Element (&lt;label&gt;) represents a caption for an item in a user interface. It can be associated with a control either by placing the control element inside the &lt;label&gt; element, or by using the for attribute. Such a control is called the labeled control of the label element."><code>&lt;label&gt;</code></a>, <a href="button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a>, <a href="select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a>, <a href="datalist.html" title="The HTML Datalist&nbsp;Element&nbsp;(&lt;datalist&gt;) contains a set of &lt;option&gt; elements that represent the values available for other controls."><code>&lt;datalist&gt;</code></a>, <a href="optgroup.html" title="In a Web form, the HTML &lt;optgroup&gt; element&nbsp; creates a grouping of options within a &lt;select&gt; element."><code>&lt;optgroup&gt;</code></a>, <a href="fieldset.html" title="The HTML &lt;fieldset&gt; element is used to group several controls as well as labels (&lt;label&gt;) within a web form."><code>&lt;fieldset&gt;</code></a>, <a href="textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a>, <a href="keygen.html" title="The HTML &lt;keygen&gt; element exists to facilitate generation of key material, and submission of the public key as part of an HTML form. This mechanism is designed for use with Web-based certificate management systems. It is expected that the &lt;keygen&gt; element will be used in an HTML form along with other information needed to construct a certificate request, and that the result of the process will be a signed certificate."><code>&lt;keygen&gt;</code></a>, <a href="input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>, <a href="output.html" title="The HTML &lt;output&gt; element represents the result of a calculation or user action."><code>&lt;output&gt;</code></a>, <a href="progress.html" title="The HTML &lt;progress&gt; Element is used to view the completion progress of a task. While the specifics of how it's displayed is left up to the browser developer, it's typically displayed as a progress bar. Javascript can be used to manipulate the value of progress bar."><code>&lt;progress&gt;</code></a> and <a href="meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a>.</li>
+</ul>
+
+<p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Element">Element</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Elément">Elément</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Élément">Élément</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/forms">forms</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Forms">Forms</a></li>
+              <li><a href="../../../tag/HTML.html">HTML</a></li>
+              <li><a href="../../../tag/HTML%20forms.html">HTML forms</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cvrebert">cvrebert</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Delapouite">Delapouite</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/rufwork">rufwork</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tregagnon">tregagnon</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/medicdude">medicdude</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/FreakCERS">FreakCERS</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/McGurk">McGurk</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>,
+                      <time datetime="2015-07-21T01:47:41-07:00">Jul 21, 2015, 1:47:41 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                
+                                  <!-- quick links -->
+                    <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+  <ol> 
+    
+            <li><a href="button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a></li> 
+   
+            <li><a href="datalist.html" title="The HTML Datalist&nbsp;Element&nbsp;(&lt;datalist&gt;) contains a set of &lt;option&gt; elements that represent the values available for other controls."><code>&lt;datalist&gt;</code></a></li> 
+   
+            <li><a href="fieldset.html" title="The HTML &lt;fieldset&gt; element is used to group several controls as well as labels (&lt;label&gt;) within a web form."><code>&lt;fieldset&gt;</code></a></li> 
+   
+            <li><a href="form.html" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a></li> 
+   
+            <li><a href="input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a></li> 
+   
+            <li><a href="keygen.html" title="The HTML &lt;keygen&gt; element exists to facilitate generation of key material, and submission of the public key as part of an HTML form. This mechanism is designed for use with Web-based certificate management systems. It is expected that the &lt;keygen&gt; element will be used in an HTML form along with other information needed to construct a certificate request, and that the result of the process will be a signed certificate."><code>&lt;keygen&gt;</code></a></li> 
+   
+            <li><a href="label.html" title="The HTML Label&nbsp;Element (&lt;label&gt;) represents a caption for an item in a user interface. It can be associated with a control either by placing the control element inside the &lt;label&gt; element, or by using the for attribute. Such a control is called the labeled control of the label element."><code>&lt;label&gt;</code></a></li> 
+   
+            <li><a href="legend.html" title="The HTML &lt;legend&gt; Element (or HTML Legend Field Element) represents a caption for the content of its parent &lt;fieldset&gt;."><code>&lt;legend&gt;</code></a></li> 
+   
+            <li><a href="meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a></li> 
+   
+            <li><a href="optgroup.html" title="In a Web form, the HTML &lt;optgroup&gt; element&nbsp; creates a grouping of options within a &lt;select&gt; element."><code>&lt;optgroup&gt;</code></a></li> 
+   
+            <li><a href="option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a></li> 
+   
+            <li><a href="output.html" title="The HTML &lt;output&gt; element represents the result of a calculation or user action."><code>&lt;output&gt;</code></a></li> 
+   
+            <li><a href="progress.html" title="The HTML &lt;progress&gt; Element is used to view the completion progress of a task. While the specifics of how it's displayed is left up to the browser developer, it's typically displayed as a progress bar. Javascript can be used to manipulate the value of progress bar."><code>&lt;progress&gt;</code></a></li> 
+   
+            <li><a href="select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a></li> 
+   
+            <li><a href="textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a></li> 
+   
+   <li><a href="../../HTML.html">HTML Elements</a><ol> 
+   <li>A 
+ <ol> 
+  <li><a href="a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink"><code>&lt;a&gt;</code></a></li> 
+  <li><a href="abbr.html" title="The HTML Abbreviation element (&lt;abbr&gt;) represents an abbreviation and optionally provides a full description for it. If present, the title attribute must contain this full description and nothing else."><code>&lt;abbr&gt;</code></a></li> 
+  <li><s class="obsoleteElement"><a href="acronym.html" title="The HTML Acronym Element (&lt;acronym&gt;) allows authors to clearly indicate a sequence of characters that compose an acronym or abbreviation for a word."><code>&lt;acronym&gt;</code></a></s></li> 
+  <li><a href="address.html" title="The HTML Address Element (&lt;address&gt;) should be used by authors to supply contact information for its nearest &lt;article&gt; or &lt;body&gt; ancestor; in the latter case, it applies to the whole document."><code>&lt;address&gt;</code></a></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="applet.html" title="The HTML Applet Element (&lt;applet&gt;) identifies the inclusion of a Java applet."><code>&lt;applet&gt;</code></a></s></li> 
+  <li><a href="area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></li> 
+  <li class="html5"><a href="article.html" title="The HTML Article Element (&lt;article&gt;) represents a self-contained composition in a document, page, application, or site, which is intended to be independently distributable or reusable, e.g., in syndication. This could be a forum post, a magazine or newspaper article, a blog entry, or any other independent item of content. Each &lt;article&gt; should be identified, typically by including a heading (h1-h6 element) as a child of the &lt;article&gt; element."><code>&lt;article&gt;</code></a></li> 
+  <li class="html5"><a href="aside.html" title="The HTML &lt;aside&gt; element represents a section of the page with content connected tangentially to the rest, which could be considered separate from that content. These sections are often represented as sidebars or inserts. They often contain the definitions on the sidebars, such as definitions from the glossary; there may also be other types of information, such as related advertisements; the biography of the author; web applications; profile information or related links on the blog."><code>&lt;aside&gt;</code></a></li> 
+  <li class="html5"><a href="audio.html" title="The HTML &lt;audio&gt; element is used to embed sound content in documents. It may contain several audio sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;audio&gt;</code></a></li> 
+ </ol> 
+ </li><li>B 
+ <ol> 
+  <li><a href="b.html" title="The HTML &lt;b&gt; Element represents a span of text stylistically different from normal text, without conveying any special importance or relevance. It is typically used for keywords in a summary, product names in a review, or other spans of text whose typical presentation would be boldfaced. Another example of its use is to mark the lead sentence of each paragraph of an article."><code>&lt;b&gt;</code></a></li> 
+  <li><a href="base.html" title="The HTML Base Element (&lt;base&gt;) specifies the base URL to use for all relative URLs contained within a document. There can be only one &lt;base&gt; element in a document."><code>&lt;base&gt;</code></a></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="basefont.html" title="The HTML basefont element (&lt;basefont&gt;) establishes a default font size for a document. Font size then can be varied relative to the base font size using the &lt;font&gt; element."><code>&lt;basefont&gt;</code></a></s></li> 
+  <li class="html5"><a href="bdi.html" title="The HTML &lt;bdi&gt; Element (or Bi-Directional Isolation Element) isolates a span of text that might be formatted in a different direction from other text outside it."><code>&lt;bdi&gt;</code></a></li> 
+  <li><a href="bdo.html" title="The HTML &lt;bdo&gt; Element (or HTML bidirectional override element) is used to override the current directionality of text. It causes the directionality of the characters to be ignored in favor of the specified directionality."><code>&lt;bdo&gt;</code></a></li> 
+  <li><s class="nonStdElement"><a href="bgsound.html" title="The HTML Background Sound Element () is an Internet Explorer element associating a background sound with a page."><code>&lt;bgsound&gt;</code></a></s></li> 
+  <li><s class="obsoleteElement"><a href="big.html" title="The HTML Big Element (&lt;big&gt;)&nbsp;makes the text font size one size bigger (for example, from small to medium, or from large to x-large) up to the browser's maximum font size."><code>&lt;big&gt;</code></a></s></li> 
+  <li><s class="nonStdElement"><a href="blink.html" title="The HTML Blink Element (&lt;blink&gt;) is a non-standard element causing the enclosed text to flash slowly."><code>&lt;blink&gt;</code></a></s></li> 
+  <li><a href="blockquote.html" title="The HTML &lt;blockquote&gt; Element (or HTML Block Quotation Element) indicates that the enclosed text is an extended quotation. Usually, this is rendered visually by indentation (see Notes for how to change it). A URL for the source of the quotation may be given using the cite attribute, while a text representation of the source can be given using the &lt;cite&gt; element."><code>&lt;blockquote&gt;</code></a></li> 
+  <li><a href="body.html" title="The HTML Body Element (&lt;body&gt;) represents the content of an HTML&nbsp;document. There can be only one &lt;body&gt; element in a document."><code>&lt;body&gt;</code></a></li> 
+  <li><a href="br.html" title="The HTML &lt;br&gt; Element (or HTML Line Break Element) produces a line break in text (carriage-return). It is useful for writing a poem or an address, where the division of lines is significant."><code>&lt;br&gt;</code></a></li> 
+  <li><a href="button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a></li> 
+ </ol> 
+ </li><li>C 
+ <ol> 
+  <li class="html5"><a href="canvas.html" title="The HTML &lt;canvas&gt; Element can be used to draw graphics via scripting (usually JavaScript). For example, it can be used to draw graphs, make photo compositions or even perform animations. You may (and should) provide alternate content inside the &lt;canvas&gt; block. That content will be rendered both on older browsers that don't support canvas and in browsers with JavaScript disabled."><code>&lt;canvas&gt;</code></a></li> 
+  <li><a href="caption.html" title="The HTML &lt;caption&gt; Element (or HTML Table Caption Element) represents the title of a table. Though it is always the first descendant of a &lt;table&gt;, its styling, using CSS, may place it elsewhere, relative to the table."><code>&lt;caption&gt;</code></a></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="center.html" title="The HTML Center Element (&lt;center&gt;) is a block-level element that can contain paragraphs and other block-level and inline elements. The entire content of this element is centered horizontally within its containing element (typically, the &lt;body&gt;)."><code>&lt;center&gt;</code></a></s></li> 
+  <li><a href="cite.html" title="The&nbsp;HTML Citation Element&nbsp;(&lt;cite&gt;) represents a reference to a creative work. It must include the title of a work or a URL reference,&nbsp;which may be in an abbreviated form according to the conventions used for the addition of citation metadata."><code>&lt;cite&gt;</code></a></li> 
+  <li><a href="code.html" title="The HTML Code&nbsp;Element&nbsp;(&lt;code&gt;) represents a fragment of computer code. By default, it is displayed in the browser's default monospace font."><code>&lt;code&gt;</code></a></li> 
+  <li><a href="col.html" title="The&nbsp;HTML Table Column Element&nbsp;(&lt;col&gt;) defines a column within a table and is used for defining common semantics on all common cells. It is generally found within a &lt;colgroup&gt; element."><code>&lt;col&gt;</code></a></li> 
+  <li><a href="colgroup.html" title="The&nbsp;HTML Table Column Group Element&nbsp;(&lt;colgroup&gt;) defines a group of columns within a table."><code>&lt;colgroup&gt;</code></a></li> 
+  <li class="webcomp"><a href="content.html" title="The HTML&nbsp;&lt;content&gt;&nbsp;element is used inside of Shadow DOM as an insertion point. It is not intended to be used in ordinary HTML. It is used with Web Components."><code>&lt;content&gt;</code></a></li> 
+ </ol> 
+ </li><li>D 
+ <ol> 
+  <li class="html5"><a href="data.html" title="The HTML &lt;data&gt; Element links a given content with a machine-readable translation. If the content is time- or date-related, the &lt;time&gt; must be used."><code>&lt;data&gt;</code></a></li> 
+  <li class="html5"><a href="datalist.html" title="The HTML Datalist&nbsp;Element&nbsp;(&lt;datalist&gt;) contains a set of &lt;option&gt; elements that represent the values available for other controls."><code>&lt;datalist&gt;</code></a></li> 
+  <li><a href="dd.html" title="The&nbsp;HTML Description Element&nbsp;(&lt;dd&gt;) indicates the description of a term in a description list (&lt;dl&gt;) element. This element can occur only as a child element of a definition list and it must follow a &lt;dt&gt; element."><code>&lt;dd&gt;</code></a></li> 
+  <li class="webcomp"><a href="decorator.html" title="This article hasn't been written yet. Please consider contributing!"><code>&lt;decorator&gt;</code></a></li> 
+  <li><a href="del.html" title="The&nbsp;HTML Deleted Text Element&nbsp;(&lt;del&gt;) represents a range of text that has been deleted from a document. This element is often (but need not be) rendered with strike-through text."><code>&lt;del&gt;</code></a></li> 
+  <li class="html5"><a href="details.html" title="The HTML Details&nbsp;Element&nbsp;(&lt;details&gt;) is used as a disclosure widget from which the user can retrieve additional information."><code>&lt;details&gt;</code></a></li> 
+  <li><a href="dfn.html" title="The&nbsp;HTML Definition Element&nbsp;(&lt;dfn&gt;) represents the defining instance of a term."><code>&lt;dfn&gt;</code></a></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="dir.html" title="The HTML directory element (&lt;dir&gt;) represents a directory, namely a collection of filenames."><code>&lt;dir&gt;</code></a></s></li> 
+  <li><a href="div.html" title="The HTML &lt;div&gt; element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as &lt;article&gt; or &lt;nav&gt;) is appropriate."><code>&lt;div&gt;</code></a></li> 
+  <li><a href="dl.html" title="The HTML &lt;dl&gt; Element (or HTML Description List Element) encloses a list of pairs of terms and descriptions. Common uses for this element are to implement a glossary or to display metadata (a list of key-value pairs)."><code>&lt;dl&gt;</code></a></li> 
+  <li><a href="dt.html" title="The HTML &lt;dt&gt; element (or HTML Definition Term Element) identifies a term in a definition list. This element can occur only as a child element of a &lt;dl&gt;. It is usually followed by a &lt;dd&gt; element; however, multiple &lt;dt&gt; elements in a row indicate several terms that are all defined by the immediate next &lt;dd&gt; element."><code>&lt;dt&gt;</code></a></li> 
+ </ol> 
+ </li><li>E 
+ <ol> 
+  <li><a href="em.html" title="The&nbsp;HTML Emphasis Element&nbsp;(&lt;em&gt;) marks text that has stress emphasis. The &lt;em&gt; element can be nested, with each level of nesting indicating a greater degree of emphasis."><code>&lt;em&gt;</code></a></li> 
+  <li class="html5"><a href="embed.html" title="The HTML &lt;embed&gt; Element represents an integration point for an external application or interactive content (in other words, a plug-in)."><code>&lt;embed&gt;</code></a></li> 
+ </ol> 
+ </li><li>F 
+ <ol> 
+  <li><a href="fieldset.html" title="The HTML &lt;fieldset&gt; element is used to group several controls as well as labels (&lt;label&gt;) within a web form."><code>&lt;fieldset&gt;</code></a></li> 
+  <li class="html5"><a href="figcaption.html" title="The HTML &lt;figcaption&gt; Element represents a caption or a legend associated with a figure or an illustration described by the rest of the data of the &lt;figure&gt; element which is its immediate ancestor which means &lt;figcaption&gt; can be the first or last element inside a &lt;figure&gt; block.&nbsp;Also, the HTML Figcaption Element&nbsp;is optional; if not provided, then the parent figure element will have no caption."><code>&lt;figcaption&gt;</code></a></li> 
+  <li class="html5"><a href="figure.html" title="The HTML &lt;figure&gt; Element represents self-contained content, frequently with a caption&nbsp;(&lt;figcaption&gt;), and is&nbsp;typically referenced as a single unit. While it is related to the main flow, its position is independent of the main flow. Usually this is an image, an illustration, a diagram, a code snippet, or a schema that is referenced in the main text, but that can be moved to another page or to an appendix without affecting the main flow."><code>&lt;figure&gt;</code></a></li> 
+  <li><s class="deprecatedElement obsoleteElement"><a href="font.html" title="The HTML Font Element (&lt;font&gt;) defines the font size, color and face for its content."><code>&lt;font&gt;</code></a></s></li> 
+  <li class="html5"><a href="footer.html" title="The HTML Footer Element (&lt;footer&gt;) represents a footer for its nearest sectioning content or sectioning root element. A footer typically contains information about the author of the section, copyright data or links to related documents."><code>&lt;footer&gt;</code></a></li> 
+  <li><a href="form.html" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a></li> 
+  <li><s class="obsoleteElement"><a href="frame.html" title="&lt;frame&gt; is an HTML element which defines a particular area in which another HTML document can be displayed. A frame should be used within a &lt;frameset&gt;."><code>&lt;frame&gt;</code></a></s></li> 
+  <li><s class="obsoleteElement"><a href="frameset.html" title="&lt;frameset&gt; is an HTML element which is used to contain &lt;frame&gt; elements."><code>&lt;frameset&gt;</code></a></s></li> 
+ </ol> 
+ </li><li>G H 
+ <ol> 
+  <li><a href="Heading_Elements.html" title="Heading elements implement six levels of document headings, &lt;h1&gt; is the most important and &lt;h6&gt; is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically."><code>&lt;h1&gt;</code></a></li> 
+  <li><a href="Heading_Elements.html" title="Heading elements implement six levels of document headings, &lt;h1&gt; is the most important and &lt;h6&gt; is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically."><code>&lt;h2&gt;</code></a></li> 
+  <li><a href="Heading_Elements.html" title="Heading elements implement six levels of document headings, &lt;h1&gt; is the most important and &lt;h6&gt; is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically."><code>&lt;h3&gt;</code></a></li> 
+  <li><a href="Heading_Elements.html" title="REDIRECT Heading elements [en-US]"><code>&lt;h4&gt;</code></a></li> 
+  <li><a href="Heading_Elements.html" title="Heading elements implement six levels of document headings, &lt;h1&gt; is the most important and &lt;h6&gt; is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically."><code>&lt;h5&gt;</code></a></li> 
+  <li><a href="Heading_Elements.html" title="Heading elements implement six levels of document headings, &lt;h1&gt; is the most important and &lt;h6&gt; is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically."><code>&lt;h6&gt;</code></a></li> 
+  <li><a href="head.html" title="The HTML Head Element (&lt;head&gt;) provides general information (metadata) about the document, including its title and links to or definitions of scripts and style sheets"><code>&lt;head&gt;</code></a></li> 
+  <li class="html5"><a href="header.html" title="The HTML &lt;header&gt; Element represents a group of introductory or navigational aids. It may contain some heading elements but also other elements like a logo, wrapped section's header, a search form, and so on."><code>&lt;header&gt;</code></a></li> 
+  <li class="html5"><s class="deprecatedElement obsoleteElement"><a href="hgroup.html" title="The HTML &lt;hgroup&gt; Element (HTML Headings Group Element) represents the heading of a section. It defines a single title that participates in the outline of the document as the heading of the implicit or explicit section that it belongs to."><code>&lt;hgroup&gt;</code></a></s></li> 
+  <li><a href="hr.html" title="The HTML &lt;hr&gt; element represents a thematic break between paragraph-level elements (for example, a change of scene in a story, or a shift of topic with a section). In previous versions of HTML, it represented a horizontal rule. It may still be displayed as a horizontal rule in visual browsers, but is now defined in semantic terms, rather than presentational terms."><code>&lt;hr&gt;</code></a></li> 
+  <li><a href="html.html" title="The HTML Root Element (&lt;html&gt;) represents the root of an HTML document. All other elements must be descendants of this element."><code>&lt;html&gt;</code></a></li> 
+ </ol> 
+ </li><li>I 
+ <ol> 
+  <li><a href="i.html" title="The HTML &lt;i&gt; Element represents a range of text that is set off from the normal text for some reason, for example, technical terms, foreign language phrases, or fictional character thoughts. It is typically displayed in italic type."><code>&lt;i&gt;</code></a></li> 
+  <li><a href="iframe.html" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a></li> 
+  <li><a href="img.html" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image of the document."><code>&lt;img&gt;</code></a></li> 
+  <li><a href="input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a></li> 
+  <li><a href="ins.html" title="The HTML &lt;ins&gt; Element (or HTML Inserted Text) HTML represents a range of text that has been added to a document."><code>&lt;ins&gt;</code></a></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="isindex.html" title="&lt;isindex&gt; is an HTML element which is used for putting a text field in the document for querying document. &lt;isindex&gt; is intented to use inside of &lt;head&gt; element by W3C, however browsers provide support wherever it is used in the document."><code>&lt;isindex&gt;</code></a></s></li> 
+ </ol> 
+ </li><li>J K 
+ <ol> 
+  <li><a href="kbd.html" title="The HTML Keyboard Input Element (&lt;kbd&gt;) represents user input and produces an inline element displayed in the browser's default monospace font."><code>&lt;kbd&gt;</code></a></li> 
+  <li class="html5"><a href="keygen.html" title="The HTML &lt;keygen&gt; element exists to facilitate generation of key material, and submission of the public key as part of an HTML form. This mechanism is designed for use with Web-based certificate management systems. It is expected that the &lt;keygen&gt; element will be used in an HTML form along with other information needed to construct a certificate request, and that the result of the process will be a signed certificate."><code>&lt;keygen&gt;</code></a></li> 
+ </ol> 
+ </li><li>L 
+ <ol> 
+  <li><a href="label.html" title="The HTML Label&nbsp;Element (&lt;label&gt;) represents a caption for an item in a user interface. It can be associated with a control either by placing the control element inside the &lt;label&gt; element, or by using the for attribute. Such a control is called the labeled control of the label element."><code>&lt;label&gt;</code></a></li> 
+  <li><a href="legend.html" title="The HTML &lt;legend&gt; Element (or HTML Legend Field Element) represents a caption for the content of its parent &lt;fieldset&gt;."><code>&lt;legend&gt;</code></a></li> 
+  <li><a href="li.html" title="The HTML List Item Element (&lt;li&gt;) is used to represent an item in a list. It must be contained in a parent element: an ordered list (&lt;ol&gt;), an unordered list (&lt;ul&gt;), or a menu (&lt;menu&gt;). In menus and unordered lists, list items are usually displayed using bullet points. In ordered lists, they are usually displayed with an ascending counter on the left, such as a number or letter."><code>&lt;li&gt;</code></a></li> 
+  <li><a href="link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="listing.html" title="The HTML Listing Element (&lt;listing&gt;) renders text between the start and end tags without interpreting the HTML in between and using a monospaced font. The HTML 2 standard recommended that lines shouldn't be broken when not greater than 132 characters."><code>&lt;listing&gt;</code></a></s></li> 
+ </ol> 
+ </li><li>M 
+ <ol> 
+  <li class="html5"><a href="main.html" title="The HTML Main Element (&lt;main&gt;) can be used as a container for the dominant contents of another element. The main content area consists of content that is directly related to, or expands upon the central topic of a section or the central functionality of an application. This content should be unique to the document, excluding any content that is repeated across a set of documents such as sidebars, navigation links, copyright information, site logos, and search forms (unless, of course, the document's main function is as a search form). Unlike &lt;article&gt; and &lt;section&gt;, this element does not contribute to the document outline."><code>&lt;main&gt;</code></a></li> 
+  <li><a href="map.html" title="The HTML &lt;map&gt; element is used with &lt;area&gt; elements to define an image map (a clickable link area)."><code>&lt;map&gt;</code></a></li> 
+  <li class="html5"><a href="mark.html" title="The HTML Mark&nbsp;Element&nbsp;(&lt;mark&gt;) represents highlighted text, i.e., a run of text marked for reference purpose, due to its relevance in a particular context. For example it can be used in a page showing search results to highlight every instance of the searched-for word."><code>&lt;mark&gt;</code></a></li> 
+  <li><s class="nonStdElement"><a href="marquee.html" title="The HTML &lt;marquee&gt; element is used to insert a scrolling area of text."><code>&lt;marquee&gt;</code></a></s></li> 
+  <li class="html5"><a href="menu.html" title="The HTML &lt;menu&gt; element represents a group of commands that a user can perform or activate. This includes both list menus, which might appear across the top of a screen, as well as context menus, such as those that might appear underneath a button after it has been clicked."><code>&lt;menu&gt;</code></a></li> 
+  <li class="html5"><a href="menuitem.html" title="The HTML &lt;menuitem&gt; element represents a command that a user is able to invoke through a popup menu. This includes context menus, as well as menus that might be attached to a menu button."><code>&lt;menuitem&gt;</code></a></li> 
+  <li><a href="meta.html" title="The HTML Meta Element (&lt;meta&gt;) represents any metadata information that cannot be represented by one of the other HTML meta-related elements (&lt;base&gt;, &lt;link&gt;, &lt;script&gt;, &lt;style&gt; or &lt;title&gt;)."><code>&lt;meta&gt;</code></a></li> 
+  <li class="html5"><a href="meter.html" title="The HTML &lt;meter&gt; Element represents either a scalar value within a known range or a fractional value."><code>&lt;meter&gt;</code></a></li> 
+ </ol> 
+ </li><li>N 
+ <ol> 
+  <li class="html5"><a href="nav.html" title="The HTML Navigation Element (&lt;nav&gt;) represents a section of a page that links to other pages or to parts within the page: a section with navigation links."><code>&lt;nav&gt;</code></a></li> 
+  <li><s class="nonStdElement"><a href="nobr.html" title="The HTML &lt;nobr&gt; element prevents a text from breaking into a new line automatically, so it is displayed on one long line and scrolling might be necessary. This tag is not standard HTML and should not be used."><code>&lt;nobr&gt;</code></a></s></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="noframes.html" title="&lt;noframes&gt; is an HTML element which is used to supporting browsers which are not able to support &lt;frame&gt; elements or configured to do so."><code>&lt;noframes&gt;</code></a></s></li> 
+  <li><a href="noscript.html" title="The HTML &lt;noscript&gt; Element defines a section of html to be inserted if a script type on the page is unsupported or if scripting is currently turned off in the browser."><code>&lt;noscript&gt;</code></a></li> 
+ </ol> 
+ </li><li>O 
+ <ol> 
+  <li><a href="object.html" title="The&nbsp;HTML Embedded Object Element&nbsp;(&lt;object&gt;) represents an external resource, which can be treated as an image, a nested browsing context, or a resource to be handled by a plugin."><code>&lt;object&gt;</code></a></li> 
+  <li><a href="ol.html" title="The HTML &lt;ol&gt; Element (or HTML Ordered List Element) represents an ordered list of items. Typically, ordered-list items are displayed with a preceding numbering, which can be of any form, like numerals, letters or Romans numerals or even simple bullets. This numbered style is not defined in the HTML description of the page, but in its associated CSS, using the list-style-type property."><code>&lt;ol&gt;</code></a></li> 
+  <li><a href="optgroup.html" title="In a Web form, the HTML &lt;optgroup&gt; element&nbsp; creates a grouping of options within a &lt;select&gt; element."><code>&lt;optgroup&gt;</code></a></li> 
+  <li><a href="option.html" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a></li> 
+  <li class="html5"><a href="output.html" title="The HTML &lt;output&gt; element represents the result of a calculation or user action."><code>&lt;output&gt;</code></a></li> 
+ </ol> 
+ </li><li>P 
+ <ol> 
+  <li><a href="p.html" title="The HTML &lt;p&gt; element (or HTML Paragraph Element) represents a paragraph of text."><code>&lt;p&gt;</code></a></li> 
+  <li><a href="param.html" title="The HTML &lt;param&gt; Element (or HTML Parameter Element) defines parameters for &lt;object&gt;."><code>&lt;param&gt;</code></a></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="plaintext.html" title="The HTML Plaintext Element (&lt;plaintext&gt;) renders everything following the start tag as raw text, without interpreting any HTML. There is no closing tag, since everything after it is considered raw text."><code>&lt;plaintext&gt;</code></a></s></li> 
+  <li><a href="pre.html" title="The HTML Preformatted Text&nbsp;(&lt;pre&gt;)&nbsp;represents preformatted text. Text within this element is typically displayed in a non-proportional font exactly as it is laid out in the file. Whitespaces inside this element are displayed as typed."><code>&lt;pre&gt;</code></a></li> 
+  <li class="html5"><a href="progress.html" title="The HTML &lt;progress&gt; Element is used to view the completion progress of a task. While the specifics of how it's displayed is left up to the browser developer, it's typically displayed as a progress bar. Javascript can be used to manipulate the value of progress bar."><code>&lt;progress&gt;</code></a></li> 
+ </ol> 
+ </li><li>Q 
+ <ol> 
+  <li><a href="q.html" title="The&nbsp;HTML Quote Element&nbsp;(&lt;q&gt;) indicates that the enclosed text is a short inline quotation. This element is intended for short quotations that don't require paragraph breaks; for long quotations use &lt;blockquote&gt; element."><code>&lt;q&gt;</code></a></li> 
+ </ol> 
+ </li><li>R 
+ <ol> 
+  <li class="html5"><a href="rp.html" title="The HTML &lt;rp&gt; element is used to provide fall-back parenthesis for browsers non-supporting ruby annotations. Ruby annotations are for showing pronounciation of East Asian characters, like using Japanese furigana or Taiwainese bopomofo characters. The &lt;rp&gt; element is used in the case of lack of &lt;ruby&gt; element support its content has what should be displayed in order to indicate the presence of a ruby annotation, usually parentheses."><code>&lt;rp&gt;</code></a></li> 
+  <li class="html5"><a href="rt.html" title="Editorial review completed."><code>&lt;rt&gt;</code></a></li> 
+  <li class="html5"><a href="ruby.html" title="The HTML &lt;ruby&gt; Element represents a ruby annotation. Ruby annotations are for showing pronunciation of East Asian characters."><code>&lt;ruby&gt;</code></a></li> 
+ </ol> 
+ </li><li>S 
+ <ol> 
+  <li><a href="s.html" title="The HTML Strikethrough Element (&lt;s&gt;) renders text with a strikethrough, or a line through it. Use the &lt;s&gt; element to represent things that are no longer relevant or no longer accurate. However, &lt;s&gt; is not appropriate when indicating document edits; for that, use the &lt;del&gt; and &lt;ins&gt; elements, as appropriate."><code>&lt;s&gt;</code></a></li> 
+  <li><a href="samp.html" title="The HTML &lt;samp&gt; element is an element intended to identify sample output from a computer program. It is usually displayed in the browser's default monotype font (such as Lucida Console)."><code>&lt;samp&gt;</code></a></li> 
+  <li><a href="script.html" title="The HTML Script Element (&lt;script&gt;) is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a></li> 
+  <li class="html5"><a href="section.html" title="The HTML Section Element (&lt;section&gt;) represents a generic section of a document, i.e., a thematic grouping of content, typically with a heading. Each &lt;section&gt; should be identified, typically by including a heading (&lt;h1&gt;-&lt;h6&gt; element) as a child of the &lt;section&gt; element."><code>&lt;section&gt;</code></a></li> 
+  <li><a href="select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a></li> 
+  <li class="webcomp"><a href="shadow-2.html" title="The HTML&nbsp;&lt;shadow&gt;&nbsp;element is used as a shadow DOM insertion point. You might use it if you have created multiple shadow roots under a shadow host. It is not useful in ordinary HTML. It is used with Web Components."><code>&lt;shadow&gt;</code></a></li> 
+  <li><a href="small.html" title="The HTML Small Element (&lt;small&gt;) makes the text font size one size smaller (for example, from large to medium, or from small to x-small) down to the browser's minimum font size.&nbsp; In HTML5, this element is repurposed to represent side-comments and small print, including copyright and legal text, independent of its styled presentation."><code>&lt;small&gt;</code></a></li> 
+  <li class="html5"><a href="source.html" title="The HTML &lt;source&gt; element is used to specify multiple media resources for &lt;picture&gt;, &lt;audio&gt; and &lt;video&gt; elements. It is an empty element. It is commonly used to serve the same media in multiple formats supported by different browsers."><code>&lt;source&gt;</code></a></li> 
+  <li><s class="nonStdElement"><a href="spacer.html" title="&lt;spacer&gt; is an HTML element which is used for inserting white spaces to web pages. It was created by NetScape for achieving same effect as a single-pixel layout GIF image, which was something web designers used to use to add white spaces to web pages, without actually using a GIF. However &lt;spacer&gt; is not supported by any major browser and same effects can be created with various CSS rules. In Mozilla applications, support for this element was removed in Gecko&nbsp;2.0. Therefore usage of &lt;spacer&gt; is unnecessary."><code>&lt;spacer&gt;</code></a></s></li> 
+  <li><a href="span.html" title="The HTML &lt;span&gt; element is a generic inline container for phrasing content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element is appropriate. &lt;span&gt; is very much like a &lt;div&gt; element, but &lt;div&gt; is a block-level element whereas a &lt;span&gt; is an inline element."><code>&lt;span&gt;</code></a></li> 
+  <li><s class="obsoleteElement deprecatedElement"><a href="strike.html" title="The HTML Strikethrough Element (&lt;strike&gt;) renders text with a strikethrough, or a line through it."><code>&lt;strike&gt;</code></a></s></li> 
+  <li><a href="strong.html" title="The HTML Strong Element (&lt;strong&gt;) gives text strong importance, and is typically displayed in bold."><code>&lt;strong&gt;</code></a></li> 
+  <li><a href="style.html" title="The HTML Style Element (&lt;style&gt;) contains style information for a document, or part of a document. By default, the style instructions written inside that element are expected to be CSS."><code>&lt;style&gt;</code></a></li> 
+  <li><a href="sub.html" title="The HTML Subscript Element (&lt;sub&gt;) defines a span of text that should be displayed, for typographic reasons, lower, and often smaller, than the main span of text."><code>&lt;sub&gt;</code></a></li> 
+  <li class="html5"><a href="summary.html" title="The HTML summary element (&lt;summary&gt;) is used as a summary, caption, or legend for the content of a &lt;details&gt; element."><code>&lt;summary&gt;</code></a></li> 
+  <li><a href="sup.html" title="The HTML Superscript Element (&lt;sup&gt;) defines a span of text that should be displayed, for typographic reasons, higher, and often smaller, than the main span of text."><code>&lt;sup&gt;</code></a></li> 
+ </ol> 
+ </li><li>T 
+ <ol> 
+  <li><a href="table.html" title="The HTML Table Element (&lt;table&gt;) represents data in two dimensions or more."><code>&lt;table&gt;</code></a></li> 
+  <li><a href="tbody.html" title="The HTML Table Body Element () defines one or more &lt;tr&gt; element data-rows to be the body of its parent &lt;table&gt; element (as long as no &lt;tr&gt; elements are immediate children of that table element.)&nbsp; In conjunction with a preceding &lt;thead&gt; and/or &lt;tfoot&gt; element, &lt;tbody&gt; provides additional semantic information for devices such as printers and displays. Of the parent table's child elements, &lt;tbody&gt; represents the content which, when longer than a page, will most likely differ for each page printed; while the content of &lt;thead&gt; and &lt;tfoot&gt; will be the same or similar for each page printed. For displays, &lt;tbody&gt; will enable separate scrolling of the &lt;thead&gt;, &lt;tfoot&gt;, and &lt;caption&gt; elements of the same parent &lt;table&gt; element.&nbsp; Note that unlike the &lt;thead&gt;, &lt;tfoot&gt;, and &lt;caption&gt; elements however, multiple&nbsp;&lt;tbody&gt; elements are permitted (if consecutive), allowing the data-rows in long tables to be divided into different sections, each separately formatted as needed."><code>&lt;tbody&gt;</code></a></li> 
+  <li><a href="td.html" title="The Table cell HTML element (&lt;td&gt;) defines a cell of a table that contains data. It participates in the table model."><code>&lt;td&gt;</code></a></li> 
+  <li class="webcomp"><a href="template.html" title="The HTML template element &lt;template&gt; is a mechanism for holding client-side content that is not to be rendered when a page is loaded but may subsequently be instantiated during runtime using JavaScript.&nbsp;"><code>&lt;template&gt;</code></a></li> 
+  <li><a href="textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a></li> 
+  <li><a href="tfoot.html" title="The HTML Table Foot Element (&lt;tfoot&gt;) defines a set of rows summarizing the columns of the table."><code>&lt;tfoot&gt;</code></a></li> 
+  <li><a href="th.html" title="The HTML Table Header Cell Element (&lt;th&gt;) defines a cell that is a header for a group of cells of a table. The group of cells that the header refers to is defined by the scope and headers attribute."><code>&lt;th&gt;</code></a></li> 
+  <li><a href="thead.html" title="The HTML Table Head Element (&lt;thead&gt;) defines a set of rows defining the head of the columns of the table."><code>&lt;thead&gt;</code></a></li> 
+  <li class="html5"><a href="time.html" title="The HTML &lt;time&gt; element represents either a time on a 24-hour clock or a precise date in the Gregorian calendar (with optional time and timezone information)."><code>&lt;time&gt;</code></a></li> 
+  <li><a href="title.html" title="The HTML Title Element (&lt;title&gt;) defines the title of the document, shown in a browser's title bar or on the page's tab. It can only contain text and any contained tags are not interpreted."><code>&lt;title&gt;</code></a></li> 
+  <li><a href="tr.html" title="The HTML Table Row Element (&lt;tr&gt;) defines a row of cells in a table. Those can be a mix of &lt;td&gt; and &lt;th&gt; elements."><code>&lt;tr&gt;</code></a></li> 
+  <li class="html5"><a href="track.html" title="The HTML &lt;track&gt; element is used as a child of the media elements—&lt;audio&gt; and &lt;video&gt;. It lets you specify timed text tracks (or time-based data), for example to automatically handle subtitles. The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks."><code>&lt;track&gt;</code></a></li> 
+  <li><s class="obsoleteElement"><a href="tt.html" title="The HTML Teletype Text Element (&lt;tt&gt;) produces an inline element displayed in the browser's default monotype font. This element was intended to style text as it would display on a fixed width display, such as a teletype. It probably is more common to display fixed width type using the &lt;code&gt; element."><code>&lt;tt&gt;</code></a></s></li> 
+ </ol> 
+ </li><li>U 
+ <ol> 
+  <li><a href="u.html" title="The HTML Underline Element (&lt;u&gt;) renders text with an underline, a line under the baseline of its content."><code>&lt;u&gt;</code></a></li> 
+  <li><a href="ul.html" title="The HTML unordered list element (&lt;ul&gt;) represents an unordered list of items, namely a collection of items that do not have a numerical ordering, and their order in the list is meaningless. Typically, unordered-list items are displayed with a bullet, which can be of several forms, like a dot, a circle or a squared. The bullet style is not defined in the HTML description of the page, but in its associated CSS, using the list-style-type property."><code>&lt;ul&gt;</code></a></li> 
+ </ol> 
+ </li><li>V 
+ <ol> 
+  <li><a href="var.html" title="The HTML Variable Element (&lt;var&gt;) represents a variable in a mathematical expression or a programming context."><code>&lt;var&gt;</code></a></li> 
+  <li class="html5"><a href="video.html" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a></li> 
+ </ol> 
+ </li><li>W 
+ <ol> 
+  <li class="html5"><a href="wbr.html" title="The Word Break Opportunity (&lt;wbr&gt;) HTML element represents a position within text where the browser may optionally break a line, though its line-breaking rules would not otherwise create a break at that location."><code>&lt;wbr&gt;</code></a></li> 
+ </ol> 
+ </li><li>X Y Z  
+ <ol> 
+  <li><a href="xmp.html" title="The HTML Example Element (&lt;xmp&gt;) renders text between the start and end tags without interpreting the HTML in between and using a monospaced font. The HTML2 specification recommended that it should be rendered wide enough to allow 80 characters per line."><code>&lt;xmp&gt;</code></a></li> 
+ </ol> 
+    </li>   
+   </ol></li> 
+   </ol> 
+  
+  </div>
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/HTML/Element/legend$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/HTML/Element/legend$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/HTML/Element/legend" selected="">
+          English (US)
+        </option>
+                  <option value="/es/docs/Web/HTML/Elemento/legend">
+            Español
+          </option>          <option value="/fr/docs/Web/HTML/Element/Legend">
+            Français
+          </option>          <option value="/ja/docs/Web/HTML/Element/legend">
+            日本語
+          </option>          <option value="/ko/docs/Web/HTML/Element/legend">
+            한국어
+          </option>          <option value="/pt-BR/docs/Web/HTML/Element/legend">
+            Português (do&nbsp;Brasil)
+          </option>          <option value="/zh-CN/docs/Web/HTML/Element/legend">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/HTML/Element/legend by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:05:12 GMT -->
+</body></html>

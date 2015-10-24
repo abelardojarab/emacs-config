@@ -1,0 +1,817 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:16:05 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Tips for authoring fast-loading HTML pages</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages$json">
+  <link rel="canonical" href="Tips_for_authoring_fast-loading_HTML_pages.html">
+
+            <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/HTML/Consejos_para_la_creaci%25C3%25B3n_de_p%25C3%25A1ginas_HTML_de_carga_r%25C3%25A1pida" title="Consejos para la creación de páginas HTML de carga rápida">
+          <link rel="alternate" hreflang="fa" href="https://developer.mozilla.org/fa/docs/Web/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="نکاتی درباره‌ی ایجاد صفحات HTML سریع">
+          <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/Guide/HTML/Astuces_de_création_de_pages_HTML_à_affichage_rapide" title="Astuces de création de pages HTML à affichage rapide">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="読み込みが速い HTML ページを作成するための Tips">
+          <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/Tips_for_Authoring_Fast-loading_HTML_Pages" title="Tips for Authoring Fast-loading HTML Pages">
+          <link rel="alternate" hreflang="ms" href="https://developer.mozilla.org/ms/docs/HTML/Tip_menulis_LamanHTML_dengan_pemuatan_pantas" title="Tip menulis Laman HTML dengan pemuatan pantas">
+          <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Dicas_para_criar_páginas_HTML_de_carregamento_rápido" title="Dicas para criar páginas HTML de carregamento rápido">
+          <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="Tips for authoring fast-loading HTML pages">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="Tips for Authoring Fast-loading HTML Pages">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Tips for authoring fast-loading HTML pages">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages">
+  <meta name="twitter:title" content="Tips for authoring fast-loading HTML pages">
+    <meta property="og:description" content="These tips are based upon common knowledge and experimentation.">
+  <meta name="description" content="These tips are based upon common knowledge and experimentation.">
+  <meta name="twitter:description" content="These tips are based upon common knowledge and experimentation.">
+  
+      
+  </head>
+<body data-slug="Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FTips_for_authoring_fast-loading_HTML_pages" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FTips_for_authoring_fast-loading_HTML_pages" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/HTML/Consejos_para_la_creaci%25C3%25B3n_de_p%25C3%25A1ginas_HTML_de_carga_r%25C3%25A1pida" title="Consejos para la creación de páginas HTML de carga rápida">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fa/docs/Web/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="نکاتی درباره‌ی ایجاد صفحات HTML سریع">فارسی</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/Guide/HTML/Astuces_de_création_de_pages_HTML_à_affichage_rapide" title="Astuces de création de pages HTML à affichage rapide">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="読み込みが速い HTML ページを作成するための Tips">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/Tips_for_Authoring_Fast-loading_HTML_Pages" title="Tips for Authoring Fast-loading HTML Pages">한국어</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ms/docs/HTML/Tip_menulis_LamanHTML_dengan_pemuatan_pantas" title="Tip menulis Laman HTML dengan pemuatan pantas">Melayu</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Dicas_para_criar_páginas_HTML_de_carregamento_rápido" title="Dicas para criar páginas HTML de carregamento rápido">Português (do&nbsp;Brasil)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="Tips for authoring fast-loading HTML pages">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" title="Tips for Authoring Fast-loading HTML Pages">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../HTML.html" rel="v:url" property="v:title">HTML developer guide</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Tips for authoring fast-loading HTML pages</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Tips for authoring fast-loading HTML pages</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 33 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/xfq" title="View profile: xfq">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xfq" data-src="../../../../../../secure.gravatar.com/avatar/d37eb6e5701cb30b871077f04cf2ebb76aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">xfq</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dbs" title="View profile: Dbs">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dbs" data-src="../../../../../../secure.gravatar.com/avatar/bb90709be0297214309fe0e8b19d653b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dbs</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/gmerencio" title="View profile: gmerencio">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gmerencio" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">gmerencio</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/gbrown" title="View profile: gbrown">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gbrown" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">gbrown</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/haboqueferus" title="View profile: haboqueferus">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="haboqueferus" data-src="../../../../../../secure.gravatar.com/avatar/87d659da4bb92cd4d843829b58b3e6b66aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">haboqueferus</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/brunoais" title="View profile: brunoais">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="brunoais" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">brunoais</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/tolbon" title="View profile: tolbon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tolbon" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tolbon</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/leo89" title="View profile: leo89">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="leo89" data-src="../../../../../../secure.gravatar.com/avatar/18888d989808ea554f09d130a88da41e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">leo89</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tw2113" title="View profile: tw2113">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tw2113" data-src="../../../../../../secure.gravatar.com/avatar/a5d7c934621fa1c025b83ee79bc623666aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tw2113</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/inma_610" title="View profile: inma_610">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="inma_610" data-src="../../../../../../secure.gravatar.com/avatar/bdc39d1a570f34b1aca764a6dd6822586aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">inma_610</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/xaky" title="View profile: xaky">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xaky" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">xaky</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Shz" title="View profile: Shz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Shz" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Shz</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JaredWBurt" title="View profile: JaredWBurt">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JaredWBurt" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">JaredWBurt</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/alicethomas222" title="View profile: alicethomas222">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="alicethomas222" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">alicethomas222</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/peterson.victor222" title="View profile: peterson.victor222">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="peterson.victor222" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">peterson.victor222</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Carrie zhxj" title="View profile: Carrie zhxj">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Carrie zhxj" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Carrie zhxj</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ptak82" title="View profile: Ptak82">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ptak82" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ptak82</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Satyr-wayfarer" title="View profile: Satyr-wayfarer">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Satyr-wayfarer" data-src="../../../../../../secure.gravatar.com/avatar/64c7fe5067fd42e1a93344f46b70120a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Satyr-wayfarer</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/NickolayBot" title="View profile: NickolayBot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="NickolayBot" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">NickolayBot</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dria" title="View profile: Dria">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dria" data-src="../../../../../../secure.gravatar.com/avatar/c6c044311a2c98b383718e00964cda726aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dria</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Yworfg" title="View profile: Yworfg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Yworfg" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Yworfg</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Biesi" title="View profile: Biesi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Biesi" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Biesi</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nerf" title="View profile: Nerf">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nerf" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Nerf</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Grauw" title="View profile: Grauw">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Grauw" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Grauw</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/CitizenK" title="View profile: CitizenK">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="CitizenK" data-src="../../../../../../secure.gravatar.com/avatar/2b0e74986cbba99f558df3df79168dbf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">CitizenK</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jens.B" title="View profile: Jens.B">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jens.B" data-src="../../../../../../secure.gravatar.com/avatar/85114a94fef7c07f18853b754f3ae2466aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jens.B</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Tips" rel="internal">Tips</a><ol><li><a href="#Reduce_page_weight" rel="internal">Reduce page weight</a></li><li><a href="#Minimize_the_number_of_files" rel="internal">Minimize the number of files</a></li><li><a href="#Reduce_domain_lookups" rel="internal">Reduce domain lookups</a></li><li><a href="#Cache_reused_content" rel="internal">Cache reused content</a></li><li><a href="#Optimally_order_the_components_of_the_page" rel="internal">Optimally order the components of the page</a></li><li><a href="#Reduce_the_number_of_inline_scripts" rel="internal">Reduce the number of inline scripts</a></li><li><a href="#Use_modern_CSS_and_valid_markup" rel="internal">Use modern CSS and valid markup</a></li><li><a href="#Chunk_your_content" rel="internal">Chunk your content</a></li><li><a href="#Minify_and_compress_SVG_assets" rel="internal">Minify and compress SVG assets</a></li><li><a href="#Specify_sizes_for_images_and_tables" rel="internal">Specify sizes for images and tables</a></li><li><a href="#Choose_your_user-agent_requirements_wisely" rel="internal">Choose your user-agent requirements wisely</a></li></ol></li><li><a href="#Example_page_structure" rel="internal">Example page structure</a></li><li><a href="#Use_async_and_defer.2C_if_possible" rel="internal">Use async and defer, if possible</a></li><li><a href="#Related_Links" rel="internal">Related Links</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>These tips are based upon common knowledge and experimentation.</p>
+<p>An optimized web page not only provides for a more responsive site for your visitors, but also reduces the load on your web servers and Internet connection. This can be crucial for high volume sites or sites which have a spike in traffic due to unusual circumstances such as breaking news stories.</p>
+<p>Optimizing page load performance is not just for content which will be viewed by narrow band dial-up or mobile device visitors. It is just as important for broadband content and can lead to dramatic improvements even for your visitors with the fastest connections.</p>
+<h2 id="Tips">Tips</h2>
+<h3 id="Reduce_page_weight">Reduce page weight</h3>
+<p>Page weight is by far the most important factor in page-load performance.</p>
+<p>Reducing page weight through the elimination of unnecessary whitespace and comments, commonly known as minimization, and by moving inline script and CSS into external files, can improve download performance with minimal need for other changes in the page structure.</p>
+<p>Tools such as <a class="external" href="http://tidy.sourceforge.net/">HTML Tidy</a> can automatically strip leading whitespace and extra blank lines from valid HTML source. Other tools can "compress" JavaScript by reformatting the source or by obfuscating the source and replacing long identifiers with shorter versions.</p>
+<h3 id="Minimize_the_number_of_files">Minimize the number of files</h3>
+<p>Reducing the number of files referenced in a web page lowers the number of <a href="https://developer.mozilla.org/en-US/docs/HTTP" title="en-US/docs/HTTP">HTTP</a> connections required to download a page.</p>
+<p>Depending on a browser's cache settings, it may send an <code>If-Modified-Since</code> request to the web server for each CSS, JavaScript or image file, asking whether the file has been modified since the last time it was downloaded.</p>
+<p>By reducing the number of files that are referenced within a web page, you reduce the time required for these requests to be sent, and for their responses to be received.</p>
+<p>If you use background images a lot in your CSS, you can reduce the amount of HTTP lookups needed by combining the images into one, known as an image sprite. Then you just apply the same image each time you need it for a background, and adjust the x/y coordinates appropriately. This technique works best with elements that will have limited dimensions, and will not work for every use of a background image. However, the fewer HTTP requests and single image caching can help reduce pageload time.</p>
+<p>Too much time spent querying the last modified time of referenced files can delay the initial display of a web page, since the browser must check the modification time for each CSS or JavaScript file, before rendering the page.</p>
+<h3 id="Reduce_domain_lookups">Reduce domain lookups</h3>
+<p>Since each separate domain costs time in a DNS lookup, the page load time will grow along with the number of separate domains appearing in CSS link(s) and JavaScript and image src(es).</p>
+<p>This may not always be practical; however, you should always take care to use only the minimum necessary number of different domains in your pages.</p>
+<h3 id="Cache_reused_content">Cache reused content</h3>
+<p>Make sure that any content that can be cached, is cached, and with appropriate expiration times.</p>
+<p>In particular, pay attention to the <code>Last-Modified</code> header. It allows for efficient page caching; by means of this header, information is conveyed to the user agent about the file it wants to load, such as when it was last modified. Most web servers automatically append the <code>Last-Modified</code> header to static pages (e.g. <code>.html</code>, <code>.css</code>), based on the last-modified date stored in the file system. With dynamic pages (e.g. <code>.php</code>, <code>.aspx</code>), this, of course, can't be done, and the header is not sent.</p>
+<p>So, in particular for pages which are generated dynamically, a little research on this subject is beneficial. It can be somewhat involved, but it will save a lot in page requests on pages which would normally not be cacheable.</p>
+<p>More information:</p>
+<ol>
+ <li><a class="external" href="http://fishbowl.pastiche.org/2002/10/21/http_conditional_get_for_rss_hackers">HTTP Conditional Get for RSS Hackers</a></li>
+ <li><a class="external" href="http://annevankesteren.nl/archives/2005/05/http-304">HTTP 304: Not Modified</a></li>
+ <li><a class="external" href="http://en.wikipedia.org/wiki/HTTP_ETag">HTTP ETag on Wikipedia</a></li>
+ <li><a class="external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html">Caching in HTTP</a></li>
+</ol>
+<h3 id="Optimally_order_the_components_of_the_page">Optimally order the components of the page</h3>
+<p>Download page content first, along with any CSS or JavaScript that may be required for its initial display, so that the user gets the quickest apparent response during the page loading. This content is typically text, and can therefore benefit from text compression in transit, thus providing an even quicker response to the user.</p>
+<p>Any dynamic features that require the page to complete loading before being used, should be initially disabled, and then only enabled after the page has loaded. This will cause the JavaScript to be loaded after the page contents, which will improve the overall appearance of the page load.</p>
+<h3 id="Reduce_the_number_of_inline_scripts" name="Reduce_the_number_of_inline_scripts">Reduce the number of inline scripts</h3>
+<p>Inline scripts can be expensive for page loading, since the parser must assume that an inline script could modify the page structure while parsing is in progress. Reducing the use of inline scripts in general, and reducing the use of <code>document.write()</code> to output content in particular, can improve overall page loading. Use modern <a href="https://developer.mozilla.org/en-US/docs/AJAX" title="en-US/docs/AJAX">AJAX</a> methods to manipulate page content for modern browsers, rather than the older approaches based on <code>document.write()</code>.</p>
+<h3 id="Use_modern_CSS_and_valid_markup">Use modern CSS and valid markup</h3>
+<p>Use of modern CSS reduces the amount of markup, can reduce the need for (spacer) images, in terms of layout, and can very often replace images of stylized text -- that "cost" much more than the equivalent text-and-CSS.</p>
+<p>Using valid markup has other advantages. First, browsers will have no need to perform error-correction when parsing the HTML (this is aside from the philosophical issue of whether to allow format variation in user input, and then programmatically "correct" or normalize it; or whether, instead, to enforce a strict, no-tolerance input format).</p>
+<p>Moreover, valid markup allows for the free use of other tools which can <em>pre-process</em> your web pages. For example, <a class="external" href="http://tidy.sourceforge.net/">HTML Tidy</a> can remove whitespace and optional ending tags; however, it will refuse to run on a page with serious markup errors.</p>
+<h3 id="Chunk_your_content">Chunk your content</h3>
+<p>Tables for layouts are a legacy method that should not be used any more. Layouts utilizing <a href="../../HTML/Element/div.html" title="The HTML &lt;div&gt; element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as &lt;article&gt; or &lt;nav&gt;) is appropriate."><code>&lt;div&gt;</code></a> blocks, and in the near future, <a href="https://developer.mozilla.org/en-US/docs/CSS/Using_CSS_multi-column_layouts" title="en-US/docs/CSS3_Columns">CSS3 Multi-column Layout</a> or <a href="https://developer.mozilla.org/en-US/docs/Using_flexbox" title="en-US/docs/Using_flexbox">CSS3 Flexible Box Layout</a>, should be used instead.</p>
+<p>Tables are still considered valid markup, but should be used for displaying tabular data. To help the browser render your page quicker, you should avoid nesting your tables.</p>
+<p>Rather than deeply nesting tables as in:</p>
+<pre>&lt;TABLE&gt;
+  &lt;TABLE&gt;
+    &lt;TABLE&gt;
+          ...
+    &lt;/TABLE&gt;
+  &lt;/TABLE&gt;
+&lt;/TABLE&gt;</pre>
+<p>use non-nested tables or divs as in</p>
+<pre>&lt;TABLE&gt;...&lt;/TABLE&gt;
+&lt;TABLE&gt;...&lt;/TABLE&gt;
+&lt;TABLE&gt;...&lt;/TABLE&gt;
+</pre>
+<p>See also: <a class="external" href="http://www.w3.org/TR/css3-multicol/" title="http://www.w3.org/TR/css3-multicol/">CSS3 Multi-column Layout Spec</a> and <a class="external" href="http://www.w3.org/TR/css3-flexbox/" title="http://www.w3.org/TR/css3-flexbox/">CSS3 Flexible Box Layout</a></p>
+<h3 id="Minify_and_compress_SVG_assets">Minify and compress SVG assets</h3>
+<p>SVG produced by most drawing applications often contains unnecessary metadata which can be removed. Configure your servers apply gzip compression for SVG assets.</p>
+<h3 id="Specify_sizes_for_images_and_tables">Specify sizes for images and tables</h3>
+<p>If the browser can immediately determine the height and/or width of your images and tables, it will be able to display a web page without having to reflow the content. This not only speeds the display of the page but prevents annoying changes in a page's layout when the page completes loading. For this reason, <code>height</code> and <code>width</code> should be specified for images, whenever possible.</p>
+<p>Tables should use the CSS selector:property combination:</p>
+<pre>  table-layout: fixed;
+</pre>
+<p>and should specify widths of columns using the <code>COL</code> and <code>COLGROUP</code> HTML tags.</p>
+<h3 id="Choose_your_user-agent_requirements_wisely">Choose your user-agent requirements wisely</h3>
+<p>To achieve the greatest improvements in page design, make sure that reasonable user-agent requirements are specified for projects. Do not require your content to appear pixel-perfect in all browsers, especially not in down-version browsers.</p>
+<p>Ideally, your basic minimum requirements should be based on the consideration of modern browsers that support the relevant standards. This can include recent versions of Firefox, Internet Explorer, Google Chrome, Opera, and Safari.</p>
+<p>Note, however, that many of the tips listed in this article are common-sense techniques which apply to any user agent, and can be applied to any web page, regardless of browser-support requirements.</p>
+<h2 id="Example_page_structure" name="Example_page_structure">Example page structure</h2>
+<p>· <code>HTML</code></p>
+<dl>
+ <dd>
+  · <code>HEAD</code></dd>
+</dl>
+<dl>
+ <dd>
+  <dl>
+   <dd>
+    · <code>LINK </code>...<br>
+    CSS files required for page appearance. Minimize the number of files for performance while keeping unrelated CSS in separate files for maintenance.</dd>
+  </dl>
+ </dd>
+</dl>
+<dl>
+ <dd>
+  <dl>
+   <dd>
+    · <code>SCRIPT </code>...<br>
+    JavaScript files for functions <strong>required</strong> during the loading of the page, but not any DHTML that can only run after page loads.</dd>
+   <dd>
+    Minimize the number of files for performance while keeping unrelated JavaScript in separate files for maintenance.</dd>
+  </dl>
+ </dd>
+</dl>
+<dl>
+ <dd>
+  · <code>BODY</code></dd>
+ <dd>
+  · User visible page content in small chunks (tables / divs) that can be displayed without waiting for the full page to download.</dd>
+</dl>
+<dl>
+ <dd>
+  <dl>
+   <dd>
+    · <code>SCRIPT </code>...<br>
+    Any scripts which will be used to perform DHTML. DHTML script typically can only run after the page has completely loaded and all necessary objects have been initialized. There is no need to load these scripts before the page content. That only slows down the initial appearance of the page load.</dd>
+   <dd>
+    Minimize the number of files for performance while keeping unrelated JavaScript in separate files for maintenance.</dd>
+   <dd>
+    If any images are used for rollover effects, you should preload them here after the page content has downloaded.</dd>
+  </dl>
+ </dd>
+</dl>
+<h2 id="Use_async_and_defer.2C_if_possible">Use async and defer, if possible</h2>
+<p>Make the JavaScript scripts such that they are compatible with both the <a href="../../HTML/Element/script.html#Attributes" title="https://developer.mozilla.org/en-US/docs/HTML/Element/script">async</a> and the <a href="../../HTML/Element/script.html#Attributes" title="https://developer.mozilla.org/en-US/docs/HTML/Element/script">defer</a> and use <a href="../../HTML/Element/script.html#Attributes" title="https://developer.mozilla.org/en-US/docs/HTML/Element/script">async</a> whenever possible, specially if you have multiple script tags.<br>
+ With that, the page can stop rendering while JavaScript is still loading. Otherwise the browser will not render anything that is after the script tags that do not have these attributes.</p>
+<p>Note: Even though these attributes do help a lot for the first time a page is loaded, you should use them but not rely that it will work in all browsers. If you follow all guidelines to make good JavaScript code, there is no need to change your code.</p>
+<h2 id="Related_Links">Related Links</h2>
+<ul>
+ <li>Book: <a class="external" href="http://www.websiteoptimization.com/">"Speed Up Your Site" by Andy King</a></li>
+ <li>The excellent and very complete <a class="external" href="http://developer.yahoo.com/performance/rules.html" title="http://developer.yahoo.com/performance/rules.html">Best Practices for Speeding Up Your Web Site</a> (Yahoo!)</li>
+ <li>Tools for analyzing and optimizing performance: <a class="external" href="https://developers.google.com/speed/pagespeed/" title="https://developers.google.com/speed/pagespeed/">Google PageSpeed Tools</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Paint_Flashing_Tool">Paint Flashing Tool</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Advanced">Advanced</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="../../../tag/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsUpdate">NeedsUpdate</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Performance">Performance</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/xfq">xfq</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dbs">Dbs</a>,             <a href="https://developer.mozilla.org/en-US/profiles/gmerencio">gmerencio</a>,             <a href="https://developer.mozilla.org/en-US/profiles/gbrown">gbrown</a>,             <a href="https://developer.mozilla.org/en-US/profiles/haboqueferus">haboqueferus</a>,             <a href="https://developer.mozilla.org/en-US/profiles/brunoais">brunoais</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tolbon">tolbon</a>,             <a href="https://developer.mozilla.org/en-US/profiles/leo89">leo89</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tw2113">tw2113</a>,             <a href="https://developer.mozilla.org/en-US/profiles/inma_610">inma_610</a>,             <a href="https://developer.mozilla.org/en-US/profiles/xaky">xaky</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Shz">Shz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/JaredWBurt">JaredWBurt</a>,             <a href="https://developer.mozilla.org/en-US/profiles/alicethomas222">alicethomas222</a>,             <a href="https://developer.mozilla.org/en-US/profiles/peterson.victor222">peterson.victor222</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Carrie zhxj">Carrie zhxj</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ptak82">Ptak82</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Satyr-wayfarer">Satyr-wayfarer</a>,             <a href="https://developer.mozilla.org/en-US/profiles/NickolayBot">NickolayBot</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dria">Dria</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Yworfg">Yworfg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Biesi">Biesi</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Nerf">Nerf</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Grauw">Grauw</a>,             <a href="https://developer.mozilla.org/en-US/profiles/CitizenK">CitizenK</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jens.B">Jens.B</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,
+                      <time datetime="2014-11-02T04:28:22-08:00">Nov 2, 2014, 4:28:22 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages" selected="">
+          English (US)
+        </option>
+                  <option value="/es/docs/Web/HTML/Consejos_para_la_creaci%25C3%25B3n_de_p%25C3%25A1ginas_HTML_de_carga_r%25C3%25A1pida">
+            Español
+          </option>          <option value="/fa/docs/Web/HTML/Tips_for_authoring_fast-loading_HTML_pages">
+            فارسی
+          </option>          <option value="/fr/docs/Web/Guide/HTML/Astuces_de_cr%C3%A9ation_de_pages_HTML_%C3%A0_affichage_rapide">
+            Français
+          </option>          <option value="/ja/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages">
+            日本語
+          </option>          <option value="/ko/docs/Tips_for_Authoring_Fast-loading_HTML_Pages">
+            한국어
+          </option>          <option value="/ms/docs/HTML/Tip_menulis_LamanHTML_dengan_pemuatan_pantas">
+            Melayu
+          </option>          <option value="/pt-BR/docs/Web/HTML/Dicas_para_criar_p%C3%A1ginas_HTML_de_carregamento_r%C3%A1pido">
+            Português (do&nbsp;Brasil)
+          </option>          <option value="/ru/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages">
+            Русский
+          </option>          <option value="/zh-CN/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Tips_for_authoring_fast-loading_HTML_pages by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:16:12 GMT -->
+</body></html>

@@ -1,0 +1,209 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.cluster.vq.kmeans2</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="K-means clustering and vector quantization (scipy.cluster.vq)" href="../cluster.vq.html">
+    <link rel="next" title="Hierarchical clustering (scipy.cluster.hierarchy)" href="../cluster.hierarchy.html">
+    <link rel="prev" title="scipy.cluster.vq.kmeans" href="scipy.cluster.vq.kmeans.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../cluster.html">Clustering package (<tt class="docutils literal"><span class="pre">scipy.cluster</span></tt>)</a></li>
+          <li class="active"><a href="../cluster.vq.html" accesskey="U">K-means clustering and vector quantization (<tt class="docutils literal"><span class="pre">scipy.cluster.vq</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../cluster.hierarchy.html" title="Hierarchical clustering (scipy.cluster.hierarchy)" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.cluster.vq.kmeans.html" title="scipy.cluster.vq.kmeans" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.cluster.vq.kmeans.html" title="previous chapter">scipy.cluster.vq.kmeans</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../cluster.hierarchy.html" title="next chapter">Hierarchical clustering (<tt class="docutils literal"><span class="pre">scipy.cluster.hierarchy</span></tt>)</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-cluster-vq-kmeans2">
+<h1>scipy.cluster.vq.kmeans2<a class="headerlink" href="#scipy-cluster-vq-kmeans2" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.cluster.vq.kmeans2"></a><dt id="scipy.cluster.vq.kmeans2">
+<tt class="descclassname">scipy.cluster.vq.</tt><tt class="descname">kmeans2</tt><big>(</big><em>data</em>, <em>k</em>, <em>iter=10</em>, <em>thresh=1e-05</em>, <em>minit='random'</em>, <em>missing='warn'</em>, <em>check_finite=True</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/cluster/vq.py#L660"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.cluster.vq.kmeans2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify a set of observations into k clusters using the k-means algorithm.</p>
+<p>The algorithm attempts to minimize the Euclidian distance between
+observations and centroids. Several initialization methods are
+included.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>A ‘M’ by ‘N’ array of ‘M’ observations in ‘N’ dimensions or a length
+‘M’ array of ‘M’ one-dimensional observations.</p>
+</div></blockquote>
+<p><strong>k</strong> : int or ndarray</p>
+<blockquote>
+<div><p>The number of clusters to form as well as the number of
+centroids to generate. If <em class="xref py py-obj">minit</em> initialization string is
+‘matrix’, or if a ndarray is given instead, it is
+interpreted as initial cluster to use instead.</p>
+</div></blockquote>
+<p><strong>iter</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of iterations of the k-means algrithm to run. Note
+that this differs in meaning from the iters parameter to
+the kmeans function.</p>
+</div></blockquote>
+<p><strong>thresh</strong> : float, optional</p>
+<blockquote>
+<div><p>(not used yet)</p>
+</div></blockquote>
+<p><strong>minit</strong> : str, optional</p>
+<blockquote>
+<div><p>Method for initialization. Available methods are ‘random’,
+‘points’, ‘uniform’, and ‘matrix’:</p>
+<p>‘random’: generate k centroids from a Gaussian with mean and
+variance estimated from the data.</p>
+<p>‘points’: choose k observations (rows) at random from data for
+the initial centroids.</p>
+<p>‘uniform’: generate k observations from the data from a uniform
+distribution defined by the data set (unsupported).</p>
+<p>‘matrix’: interpret the k parameter as a k by M (or length k
+array for one-dimensional data) array of initial centroids.</p>
+</div></blockquote>
+<p><strong>missing</strong> : str, optional</p>
+<blockquote>
+<div><p>Method to deal with empty clusters. Available methods are
+‘warn’ and ‘raise’:</p>
+<p>‘warn’: give a warning and continue.</p>
+<p>‘raise’: raise an ClusterError and terminate the algorithm.</p>
+</div></blockquote>
+<p><strong>check_finite</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to check that the input matrices contain only finite numbers.
+Disabling may give a performance gain, but may result in problems
+(crashes, non-termination) if the inputs do contain infinities or NaNs.
+Default: True</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>centroid</strong> : ndarray</p>
+<blockquote>
+<div><p>A ‘k’ by ‘N’ array of centroids found at the last iteration of
+k-means.</p>
+</div></blockquote>
+<p><strong>label</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>label[i] is the code or index of the centroid the
+i’th observation is closest to.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

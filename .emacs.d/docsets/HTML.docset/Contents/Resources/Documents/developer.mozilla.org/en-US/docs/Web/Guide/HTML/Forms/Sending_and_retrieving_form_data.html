@@ -1,0 +1,835 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:51:39 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Sending form data</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data$json">
+  <link rel="canonical" href="Sending_and_retrieving_form_data.html">
+
+            <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data" title="フォームデータの送信と取得">
+          <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/Web/Guide/HTML/폼/Sending_and_retrieving_form_data" title="Sending and retrieving form data">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Sending form data">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data">
+  <meta name="twitter:title" content="Sending form data">
+    <meta property="og:description" content="In many cases, the purpose of an HTML Form is to send data to a server. The server processes the data and then sends a response to the user. This seems simple, but it's important to keep a few things in mind to ensure that the data does not damage your server or cause trouble for your users.">
+  <meta name="description" content="In many cases, the purpose of an HTML Form is to send data to a server. The server processes the data and then sends a response to the user. This seems simple, but it's important to keep a few things in mind to ensure that the data does not damage your server or cause trouble for your users.">
+  <meta name="twitter:description" content="In many cases, the purpose of an HTML Form is to send data to a server. The server processes the data and then sends a response to the user. This seems simple, but it's important to keep a few things in mind to ensure that the data does not damage your server or cause trouble for your users.">
+  
+      
+  </head>
+<body data-slug="Web/Guide/HTML/Forms/Sending_and_retrieving_form_data" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FForms%2FSending_and_retrieving_form_data" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FForms%2FSending_and_retrieving_form_data" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data" title="フォームデータの送信と取得">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/Web/Guide/HTML/폼/Sending_and_retrieving_form_data" title="Sending and retrieving form data">한국어</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../HTML.html" rel="v:url" property="v:title">HTML developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Forms.html" rel="v:url" property="v:title">HTML forms guide</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Sending form data</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Sending form data</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 14 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/douglas-j-bothwell" title="View profile: douglas-j-bothwell">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="douglas-j-bothwell" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">douglas-j-bothwell</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Markus Prokott" title="View profile: Markus Prokott">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Markus Prokott" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Markus Prokott</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wrannaman" title="View profile: wrannaman">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wrannaman" data-src="../../../../../../../secure.gravatar.com/avatar/46454e196124226ab603c512236812116aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">wrannaman</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/etmoore" title="View profile: etmoore">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="etmoore" data-src="../../../../../../../secure.gravatar.com/avatar/e441f1320eae0aeabfb0fb5ae73b7afc6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">etmoore</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AestheticArson" title="View profile: AestheticArson">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AestheticArson" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">AestheticArson</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/sekularac" title="View profile: sekularac">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sekularac" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">sekularac</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Lexas" title="View profile: Lexas">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Lexas" data-src="../../../../../../../secure.gravatar.com/avatar/c7a967cff1cd201a7d267d5cd6e373d26aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Lexas</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/iammattmurphy" title="View profile: iammattmurphy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="iammattmurphy" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">iammattmurphy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ben010783" title="View profile: ben010783">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ben010783" data-src="../../../../../../../secure.gravatar.com/avatar/ccb6f78ab5737fb1f29e67bb557b3d176aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ben010783</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ckeschnat" title="View profile: ckeschnat">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ckeschnat" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ckeschnat</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/gtwhite" title="View profile: gtwhite">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gtwhite" data-src="../../../../../../../secure.gravatar.com/avatar/656dc2df5adfb807dc22a53a061002a86aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">gtwhite</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Where_does_the_data_go.3F" rel="internal">Where does the data go?</a><ol><li><a href="#About_client.2Fserver_architecture" rel="internal">About client/server architecture</a></li><li><a href="#On_the_client_side.3A_defining_how_to_send_the_data" rel="internal">On the client side: defining how to send the data</a><ol><li><a href="#The_action_attribute" rel="internal">The <code>action</code> attribute</a></li><li><a href="#The_method_attribute" rel="internal">The <code>method</code> attribute</a></li></ol></li><li><a href="#On_the_server_side.3A_retrieving_the_data" rel="internal">On the server side: retrieving the data</a><ol><li><a href="#Example.3A_Raw_PHP" rel="internal">Example: Raw PHP</a></li><li><a href="#Example.3A_Raw_Python" rel="internal">Example: Raw Python</a></li><li><a href="#Other_languages_and_frameworks" rel="internal">Other languages and frameworks</a></li></ol></li></ol></li><li><a href="#A_special_case.3A_sending_files" rel="internal">A special case: sending files</a><ol><li><a href="#The_enctype_attribute" rel="internal">The <code>enctype</code> attribute</a></li></ol></li><li><a href="#Security_concerns" rel="internal">Security concerns</a><ol><li><a href="#Common_security_flaws" rel="internal">Common security flaws</a><ol><li><a href="#XSS_and_CSRF" rel="internal">XSS and CSRF</a></li><li><a href="#SQL_injection" rel="internal">SQL injection</a></li><li><a href="#HTTP_header_injection_and_email_injection" rel="internal">HTTP header injection and email injection</a></li></ol></li><li><a href="#Be_paranoid.3A_Never_trust_your_users" rel="internal">Be paranoid: Never trust your users</a></li></ol></li><li><a href="#Conclusion" rel="internal">Conclusion</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>In many cases, the purpose of an <a href="../../../../HTML/Forms.png" title="/en-US/docs/HTML/Forms">HTML Form</a> is to send data to a server. The server processes the data and then sends a response to the user. This seems simple, but it's important to keep a few things in mind to ensure that the data does not damage your server or cause trouble for your users.</p>
+
+<h2 id="Where_does_the_data_go.3F">Where does the data go?</h2>
+
+<h3 id="About_client.2Fserver_architecture">About client/server architecture</h3>
+
+<p>The web is based on a very basic client/server architecture that can be summarized as follows: a client (usually a Web browser) sends a request to a server (most of the time a web server like <a class="external" href="http://httpd.apache.org/" rel="external" title="http://www.apache.org/">Apache</a>, <a class="external" href="http://nginx.com/" rel="external" title="http://nginx.com/">Nginx</a>, <a class="external" href="http://www.iis.net/" rel="external" title="http://www.iis.net/">IIS</a>, <a class="external" href="http://tomcat.apache.org/" rel="external" title="http://tomcat.apache.org/">Tomcat</a>, etc.), using the <a href="https://developer.mozilla.org/en-US/docs/HTTP" title="/en-US/docs/HTTP">HTTP protocol</a>. The server answers the request using the same protocol.</p>
+
+<p><img alt="A basic schema of the Web client/server architecture" src="../../../../../../../mdn.mozillademos.org/files/4291/client-server.png" style="height: 141px; width: 400px;"></p>
+
+<p>On the client side, an HTML form is nothing more than a convenient user-friendly way to configure an HTTP request to send data to a server. This enables the user to provide information to be delivered in the HTTP request.</p>
+
+<h3 id="On_the_client_side.3A_defining_how_to_send_the_data">On the client side: defining how to send the data</h3>
+
+<p>The <a href="../../../HTML/Element/form.html" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a> element defines how the data will be sent. All of its attributes are designed to let you configure the request to be sent when a user hits a submit button. The two most important attributes are <code><a href="../../../HTML/Element/form.html#attr-action">action</a></code> and <code><a href="../../../HTML/Element/form.html#attr-method">method</a></code>.</p>
+
+<h4 id="The_action_attribute">The <code><a href="../../../HTML/Element/form.html#attr-action">action</a></code> attribute</h4>
+
+<p>This attribute defines where the data gets sent. Its value must be a valid URL. If this attribute isn't provided, the data will be sent to the URL of the page containing the form.</p>
+
+<h5 id="Examples">Examples</h5>
+
+<p>In this example, the data is sent to http://foo.com:</p>
+
+<pre class="brush: html">&lt;form action="http://foo.com"&gt;</pre>
+
+<p class="brush: html">Here, the data is sent to the same server that hosts the form's page, but to a different URL on the server:</p>
+
+<pre class="brush: html">&lt;form action="/somewhere_else"&gt;</pre>
+
+<p class="brush: html">When specified with no attributes, as below, the <a href="../../../HTML/Element/form.html" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a> attribute causes the data to be sent to the page that includes the form:</p>
+
+<pre class="brush: html">&lt;form&gt;</pre>
+
+<p class="brush: html">Many older pages use the following notation to indicate that the data should be sent to the same page that contains the form; this was required because until HTML5, the <code><a href="../../../HTML/Element/form.html#attr-action">action</a></code> attribute was required. This is no longer needed.</p>
+
+<pre class="brush: html">&lt;form action="#"&gt;</pre>
+
+<div class="note">
+<p><strong>Note:</strong> It's possible to specify a URL that uses the HTTPS (secure HTTP) protocol. When you do this, the data is encrypted along with the rest of the request, even if the form itself is hosted on an insecure page accessed using HTTP. On the other hand, if the form is hosted on secure page but you specify an insecure HTTP URL with the <code><a href="../../../HTML/Element/form.html#attr-action">action</a></code> attribute, all browsers display a security warning to the user each time they try to send data because the data will not be encrypted.</p>
+</div>
+
+<h4 id="The_method_attribute">The <code><a href="../../../HTML/Element/form.html#attr-method">method</a></code> attribute</h4>
+
+<p>This attribute defines how data is sent. The <a href="https://developer.mozilla.org/en-US/docs/HTTP" title="/en-US/docs/HTTP">HTTP protocol</a> provides several ways to perform a request; HTML forms data can be sent through at least two of them: the <code>GET</code> method and the <code>POST</code> method.</p>
+
+<p>To understand the difference between those two methods, let's step back and examine how HTTP works. Each time you want to reach a resource on the Web, the browser sends a request to a URL. An HTTP request consists of two parts: a header that contains a set of global metadata about the browser's capabilities, and a body that can contain information necessary to the server to process the specific request.</p>
+
+<h5 id="The_GET_method">The GET method</h5>
+
+<p>The <code>GET</code> method is the method used by the browser to ask the server to send back a given resource: "Hey server, I want to get this resource." In this case, the browser sends an empty body. Because the body is empty, if a form is sent using this method, the data sent to the server is appended to the URL.</p>
+
+<h6 id="Example">Example</h6>
+
+<p>Consider the following form:</p>
+
+<pre class="brush: html">&lt;form action="http://foo.com" method="get"&gt;
+  &lt;input name="say" value="Hi"&gt;
+  &lt;input name="to" value="Mom"&gt;
+  &lt;button&gt;Send my greetings&lt;/button&gt;
+&lt;/form&gt;</pre>
+
+<p>With the <code>GET</code> method, the HTTP request looks like this:</p>
+
+<pre>GET /?say=Hi&amp;to=Mom HTTP/1.1
+Host: foo.com</pre>
+
+<h5 id="The_POST_method">The POST method</h5>
+
+<p>The <code>POST</code> method is a little different. It's the method the browser sends the server to ask for a response that takes into account the data provided in the body of the HTTP request: "Hey server, take a look at this data and send me back an appropriate result." If a form is sent using this method, the data is appended to the body of the HTTP request.</p>
+
+<h6 id="Example_2">Example</h6>
+
+<p>Consider this form (the same one as above):</p>
+
+<pre class="brush: html">&lt;form action="http://foo.com" method="post"&gt;
+  &lt;input name="say" value="Hi"&gt;
+  &lt;input name="to" value="Mom"&gt;
+  &lt;button&gt;Send my greetings&lt;/button&gt;
+&lt;/form&gt;</pre>
+
+<p>When sent using the <code>POST</code> method, the HTTP request looks like this:</p>
+
+<pre>POST / HTTP/1.1
+Host: foo.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 13
+
+say=Hi&amp;to=Mom</pre>
+
+<p>The <code>Content-Length</code> header indicates the size of the body, and the <code>Content-Type</code> header indicates the type of resource sent to the server. We'll discuss these headers in a bit.</p>
+
+<p>Of course, HTTP requests are never displayed to the user (if you want to see them, you need &nbsp;to use tools such as the Firefox <a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console" title="/en-US/docs/Tools/Web_Console">Web Console</a> or the <a class="external" href="https://developers.google.com/chrome-developer-tools/" title="https://developers.google.com/chrome-developer-tools/">Chrome Developer Tools</a>). The only thing displayed to the user is the URL called. So with a <code>GET</code> request, the user will see the data in their URL bar, but with a <code>POST</code> request, they won't. This can be very important for two reasons:</p>
+
+<ol>
+ <li>If you need to send a password (or any sensitive piece of data), never use the <code>GET</code> method or you risk displaying it in the URL bar.</li>
+ <li>If you need to send a large amount of data, the <code>POST</code> method is preferred because some browsers limit the sizes of URLs. In addition, many servers limit the length of URLs they accept.</li>
+</ol>
+
+<h3 id="On_the_server_side.3A_retrieving_the_data">On the server side: retrieving the data</h3>
+
+<p>Whichever HTTP method you choose, the server receives a string that will be parsed in order to get the data as a list of key/value pairs. The way you access this list depends on the development platform you use and on any specific frameworks you may be using with it. The technology you use also determines how duplicate keys are handled; often, the most recently received value for a given key is given priority.</p>
+
+<h4 id="Example.3A_Raw_PHP">Example: Raw PHP</h4>
+
+<p>PHP offers some global objects to access the data. Assuming you've used the <code>POST</code> method, the following example just takes the data and displays it to the user. Of course, what you do with the data is up to you. You might display it, store it into a database, send them by email, or process it in some other way.</p>
+
+<pre class="brush: php">&lt;?php
+  // The global $_POST variable allows you to access the data sent with the POST method
+  // To access the data sent with the GET method, you can use $_GET
+  $say = htmlspecialchars($_POST['say']);
+  $to  = htmlspecialchars($_POST['to']);
+
+  echo  $say, ' ', $to;</pre>
+
+<p>This example displays a page with the data we sent. In our example from before, the output would be:</p>
+
+<pre>Hi Mom</pre>
+
+<h4 id="Example.3A_Raw_Python">Example: Raw Python</h4>
+
+<p>This example uses Python to do the same thing--display the provided data on a web page. It uses the <a class="external" href="http://docs.python.org/3/library/cgi.html" rel="external" title="http://docs.python.org/3/library/cgi.html">CGI Python package</a> to access the form data.</p>
+
+<pre class="brush: python">#!/usr/bin/env python
+import html
+import cgi
+import cgitb; cgitb.enable()     # for troubleshooting
+
+print("Content-Type: text/html") # HTTP header to say HTML is following
+print()                          # blank line, end of headers
+
+form = cgi.FieldStorage()
+say  = html.escape(form["say"].value);
+to   = html.escape(form["to"].value);
+
+print(say, " ", to)</pre>
+
+<p>The result is the same as with PHP:</p>
+
+<pre>Hi Mom</pre>
+
+<h4 id="Other_languages_and_frameworks">Other languages and frameworks</h4>
+
+<p>There are many other server-side technologies you can use for form handling, including <a class="new" href="https://developer.mozilla.org/en-US/docs/" title="/en-US/docs/">Perl</a>, <a class="new" href="https://developer.mozilla.org/en-US/docs/" title="/en-US/docs/">Java</a>, <a class="external" href="http://www.microsoft.com/net" title="http://www.microsoft.com/net">.Net</a>, <a class="new" href="https://developer.mozilla.org/en-US/docs/" title="/en-US/docs/">Ruby</a>, etc. Just pick the one you like best. That said, it's worth noting that it's very uncommon to use these technologies directly because this can be tricky. It's more common to use one of the many nice frameworks that make handling forms easier, such as:</p>
+
+<ul>
+ <li><a class="external" href="http://symfony.com/" rel="external" title="http://symfony.com/">Symfony</a> for PHP</li>
+ <li><a class="external" href="https://www.djangoproject.com/" rel="external" title="https://www.djangoproject.com/">Django</a> for Python</li>
+ <li><a class="external" href="http://rubyonrails.org/" rel="external" title="http://rubyonrails.org/">Ruby On Rails</a> for Ruby</li>
+ <li><a class="external" href="http://grails.org/" rel="external" title="http://grails.org/">Grails</a> for Java</li>
+ <li>etc.</li>
+</ul>
+
+<p>It's worth noting that even using these frameworks, working with forms isn't necessarily <em>easy</em>. But it's much better, and will save you a lot of time.</p>
+
+<h2 id="A_special_case.3A_sending_files">A special case: sending files</h2>
+
+<p>Files are a special case with HTML forms. They are binary data—or considered as such—where all other data is text data. Because HTTP is a text protocol, there are special requirements to handle binary data.</p>
+
+<h3 id="The_enctype_attribute">The <code><a href="../../../HTML/Element/form.html#attr-enctype">enctype</a></code> attribute</h3>
+
+<p>This attribute lets you specify the value of the <code>Content-Type</code> HTTP header. This header is very important because it tells the server what kind of data is being sent. By default, its value is <code>application/x-www-form-urlencoded</code>. In human terms, this means: "This is form data that has been encoded into URL form."</p>
+
+<p>But if you want to send files, you need to do two things:</p>
+
+<ul>
+ <li>Set the <code><a href="../../../HTML/Element/form.html#attr-method">method</a></code> attribute to <code>POST</code> because file content can't be put inside a URL parameter using a form.</li>
+ <li>Set the value of <code><a href="../../../HTML/Element/form.html#attr-enctype">enctype</a></code> to <code>multipart/form-data</code> because the data will be split into multiple parts, one for each file plus one for the text of the form body that may be sent with them.</li>
+</ul>
+
+<p>For example:</p>
+
+<pre class="brush: html">&lt;form method="post" enctype="multipart/form-data"&gt;
+  &lt;input type="file" name="myFile"&gt;
+  &lt;button&gt;Send the file&lt;/button&gt;
+&lt;/form&gt;</pre>
+
+<div class="note">
+<p><strong>Note:</strong> Some browsers support the <code><a href="../../../HTML/Element/input.html#attr-multiple">multiple</a></code> attribute on the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an &lt;input&gt; varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element in order to send more than one file with only one input element. How&nbsp;the server handles those files really depends on the technology used on the server. As mentioned previously, using a framework will make your life a lot easier.</p>
+</div>
+
+<div class="warning">
+<p><strong>Warning:</strong> Many servers are configured with a size limit for files and HTTP requests in order to prevent abuse. It's important to check this limit with the server administrator before sending a file.</p>
+</div>
+
+<h2 id="Security_concerns">Security concerns</h2>
+
+<p>Each time you send data to a server, you need to consider security. HTML forms are one of the first attack vectors against servers. The problems never come from the HTML forms themselves; they come from how the server handles data.</p>
+
+<h3 id="Common_security_flaws">Common security flaws</h3>
+
+<p>Depending on what you're doing, there are some very well-known security issues:</p>
+
+<h4 id="XSS_and_CSRF">XSS and CSRF</h4>
+
+<p>Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF) are common types of attacks that occur when you display data sent by a user back to the user or to another user.</p>
+
+<p>XSS lets attackers inject client-side script into Web pages viewed by other users. A cross-site scripting vulnerability may be used by attackers to bypass access controls such as the <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Same_origin_policy_for_JavaScript" title="/en-US/docs/JavaScript/Same_origin_policy_for_JavaScript">same origin policy</a>. The effect of these attacks may range from a petty nuisance to a significant security risk.</p>
+
+<p>CSRF are similar to XSS attacks in that they start the same way—by injecting client-side script into Web pages—but their target is different. CSRF attackers try to escalate privileges to those of a higher-privileged user (such as a site administrator) to perform an action it shouldn't be able to do (for example, sending data to an untrusted user).</p>
+
+<p>XSS attacks exploit the trust a user has for a web site, while CSRF attacks exploit the trust a web site has for its users.</p>
+
+<p>To prevent these attacks, you should always check the data a user sends to your server and (if you need to display it) try not to display the HTML content as provided by the user. Intead, you should process the user-provided data so you don't display it verbatim.&nbsp;<span style="line-height: 1.5;">&nbsp;Almost all frameworks on the market today implement a minimal filter that removes the HTML <a href="../../../HTML/Element/script.html" title="The HTML &lt;script&gt; element is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a>, <a href="../../../HTML/Element/iframe.html" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> and <a href="../../../HTML/Element/object.html" title="The&nbsp;HTML Embedded Object Element&nbsp;(&lt;object&gt;) represents an external resource, which can be treated as an image, a nested browsing context, or a resource to be handled by a plugin."><code>&lt;object&gt;</code></a> elements from data sent by any user. This helps to mitigate the risk, but doesn't necessarily eradicate it.</span></p>
+
+<h4 id="SQL_injection">SQL injection</h4>
+
+<p>SQL injection is a type of attack that tries to perform actions on a database used by the target web site. This typically involves sending an SQL request in the hope that the server will execute it (many times when the application server tries to store the data). This is actually <a class="external" href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project" rel="external" title="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">one of the main vector attacks against web sites</a>.</p>
+
+<p>The consequences can be terrible, ranging from data loss to access to a whole infrastructure by using privilege escalation. This is a very serious threat and you should never store data sent by a user without performing some sanitization (for example, by using <code><a class="external" href="http://www.php.net/manual/en/function.mysql-real-escape-string.php" rel="external" title="http://www.php.net/manual/en/function.mysql-real-escape-string.php">mysql_real_escape_string()</a></code> on a PHP/MySQL infrastructure).</p>
+
+<h4 id="HTTP_header_injection_and_email_injection">HTTP header injection and email injection</h4>
+
+<p>These kinds of attacks can occur when your application builds HTTP headers or emails based on the data input by a user on a form. These won't directly damage your server or affect your users, but they are an open door to deeper problems such as session hijacking or phishing attacks.</p>
+
+<p>These attacks are mostly silent, and can turn your server into a <a class="external" href="http://en.wikipedia.org/wiki/Zombie_(computer_science)" rel="exernal" title="http://en.wikipedia.org/wiki/Zombie_(computer_science)">zombie</a>.</p>
+
+<h3 id="Be_paranoid.3A_Never_trust_your_users">Be paranoid: Never trust your users</h3>
+
+<p>So, how do you fight these threats? This is a topic far beyond this guide, but&nbsp;there are a few rules to keep in mind. The most important rule is: never ever trust your users, including yourself; even a trusted user could have been hijacked.</p>
+
+<p>All data that comes to your server must be checked and sanitized. Always. No exception.</p>
+
+<ul>
+ <li>Escape potentially dangerous characters. The specific characters you should be cautious with vary depending on the context in which the data is used and the server platform you employ, but all server-side languages have functions for this.</li>
+ <li>Limit the incoming amount of data to allow only what's necessary.</li>
+ <li>Sandbox uploaded files (store them on a different server and allow access to the file only through a different subdomain or even better through a fully different domain name).</li>
+</ul>
+
+<p>You should avoid many/most problems if you follow these three rules, but it's always a good idea to get a security review performed by a competent third party. Don't assume that you've seen all the possible problems.</p>
+
+<h2 id="Conclusion">Conclusion</h2>
+
+<p>As you can see, sending form data is easy, but securing an application can be tricky. Just remember that a front-end developer is not the one who should define the security model of the data. Yes, as we'll see, it's possible to <a href="Data_form_validation.html" title="/en-US/docs/HTML/Forms/Data_form_validation">perform client side data validation</a> but the server can't trust this validation because it has no way to truly know what really happens on the client side.</p>
+
+<h2 id="See_also">See also</h2>
+
+<p>If you want to learn more about securing a web application, you can dig into these resources:</p>
+
+<ul>
+ <li><a class="external" href="https://www.owasp.org/index.php/Main_Page" rel="external" title="https://www.owasp.org/index.php/Main_Page">The Open Web Application Security Project (OWASP)</a></li>
+ <li><a class="external" href="http://shiflett.org/" rel="external" title="http://shiflett.org/">Chris Shiflett's blog about PHP Security</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Forms">Forms</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="../../../../tag/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Intermediate">Intermediate</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Security">Security</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/douglas-j-bothwell">douglas-j-bothwell</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Markus Prokott">Markus Prokott</a>,             <a href="https://developer.mozilla.org/en-US/profiles/wrannaman">wrannaman</a>,             <a href="https://developer.mozilla.org/en-US/profiles/etmoore">etmoore</a>,             <a href="https://developer.mozilla.org/en-US/profiles/AestheticArson">AestheticArson</a>,             <a href="https://developer.mozilla.org/en-US/profiles/sekularac">sekularac</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Lexas">Lexas</a>,             <a href="https://developer.mozilla.org/en-US/profiles/iammattmurphy">iammattmurphy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ben010783">ben010783</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ckeschnat">ckeschnat</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/gtwhite">gtwhite</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/douglas-j-bothwell">douglas-j-bothwell</a>,
+                      <time datetime="2015-05-17T14:22:38-07:00">May 17, 2015, 2:22:38 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data" selected="">
+          English (US)
+        </option>
+                  <option value="/ja/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data">
+            日本語
+          </option>          <option value="/ko/docs/Web/Guide/HTML/%ED%8F%BC/Sending_and_retrieving_form_data">
+            한국어
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/Sending_and_retrieving_form_data by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:51:45 GMT -->
+</body></html>

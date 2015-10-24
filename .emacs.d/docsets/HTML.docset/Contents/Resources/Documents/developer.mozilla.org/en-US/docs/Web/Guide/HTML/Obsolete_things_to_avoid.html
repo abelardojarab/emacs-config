@@ -1,0 +1,705 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:15:59 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Obsolete practices to avoid</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid$json">
+  <link rel="canonical" href="Obsolete_things_to_avoid.html">
+
+            <link rel="alternate" hreflang="bn-BD" href="https://developer.mozilla.org/bn-BD/docs/Web_development/Historical_artifacts_to_avoid" title="প্রত্নতাত্ত্বিক না হয়ে ডেভেলপার হই!">
+          <link rel="alternate" hreflang="fa" href="https://developer.mozilla.org/fa/docs/Web_development/Historical_artifacts_to_avoid" title="عادت‌های بدی که باید از آن‌ها دوری کنید">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Obsolete_things_to_avoid" title="Historical artifacts to avoid">
+          <link rel="alternate" hreflang="ms" href="https://developer.mozilla.org/ms/docs/Web_development/artifak_sejarah_untuk_dielakkan" title="Artifak Sejarah untuk dielakkan">
+          <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/Web_開發/Historical_artifacts_to_avoid" title="應該避免的過時語法">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Obsolete practices to avoid">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid">
+  <meta name="twitter:title" content="Obsolete practices to avoid">
+    <meta property="og:description" content="This article tries to list older coding practices that over time have become unnecessary or bad practices.">
+  <meta name="description" content="This article tries to list older coding practices that over time have become unnecessary or bad practices.">
+  <meta name="twitter:description" content="This article tries to list older coding practices that over time have become unnecessary or bad practices.">
+  
+      
+  </head>
+<body data-slug="Web/Guide/HTML/Obsolete_things_to_avoid" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FObsolete_things_to_avoid" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FObsolete_things_to_avoid" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/bn-BD/docs/Web_development/Historical_artifacts_to_avoid" title="প্রত্নতাত্ত্বিক না হয়ে ডেভেলপার হই!">বাংলা (বাংলাদেশ)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fa/docs/Web_development/Historical_artifacts_to_avoid" title="عادت‌های بدی که باید از آن‌ها دوری کنید">فارسی</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Obsolete_things_to_avoid" title="Historical artifacts to avoid">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ms/docs/Web_development/artifak_sejarah_untuk_dielakkan" title="Artifak Sejarah untuk dielakkan">Melayu</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/Web_開發/Historical_artifacts_to_avoid" title="應該避免的過時語法">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../HTML.html" rel="v:url" property="v:title">HTML developer guide</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Obsolete practices to avoid</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Obsolete practices to avoid</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 19 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Lagg" title="View profile: Lagg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Lagg" data-src="../../../../../../secure.gravatar.com/avatar/6041f79089581200ceb58268ca0e5d316aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Lagg</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/xfq" title="View profile: xfq">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xfq" data-src="../../../../../../secure.gravatar.com/avatar/d37eb6e5701cb30b871077f04cf2ebb76aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">xfq</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/yjacket" title="View profile: yjacket">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yjacket" data-src="../../../../../../secure.gravatar.com/avatar/1ff3dcc75f113b0876dc0c2ea99180a56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">yjacket</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/meetparikh94" title="View profile: meetparikh94">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="meetparikh94" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">meetparikh94</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/CheeseTurtle" title="View profile: CheeseTurtle">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="CheeseTurtle" data-src="../../../../../../secure.gravatar.com/avatar/45ab16ae8d31af787214b1cc90d51f7d6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">CheeseTurtle</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/yohohoho" title="View profile: yohohoho">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yohohoho" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">yohohoho</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/slhuang" title="View profile: slhuang">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="slhuang" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">slhuang</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/haboqueferus" title="View profile: haboqueferus">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="haboqueferus" data-src="../../../../../../secure.gravatar.com/avatar/87d659da4bb92cd4d843829b58b3e6b66aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">haboqueferus</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tw2113" title="View profile: tw2113">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tw2113" data-src="../../../../../../secure.gravatar.com/avatar/a5d7c934621fa1c025b83ee79bc623666aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tw2113</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/berkerpeksag" title="View profile: berkerpeksag">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="berkerpeksag" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">berkerpeksag</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jens.B" title="View profile: Jens.B">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jens.B" data-src="../../../../../../secure.gravatar.com/avatar/85114a94fef7c07f18853b754f3ae2466aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jens.B</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sevenspade" title="View profile: Sevenspade">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sevenspade" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sevenspade</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dikrib" title="View profile: Dikrib">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dikrib" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dikrib</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Doctype" rel="internal">Doctype</a></li><li><a href="#&lt;meta&gt;_element_and_charset_attribute" rel="internal"><code>&lt;meta&gt;</code> element and <code>charset</code> attribute</a></li><li><a href="#Nonexistent_&lt;meta&gt;_elements" rel="internal">Nonexistent&nbsp;<code>&lt;meta&gt;</code> elements</a></li><li><a href="#HTML_comments_in_scripts" rel="internal">HTML comments in scripts</a></li><li><a href="#Elements_that_should_not_be_used_anymore" rel="internal">Elements that should not be used anymore</a><ol><li><a href="#font.2C_basefont" rel="internal">font, basefont</a></li><li><a href="#b.2C_i.2C_u" rel="internal">b, i, u</a></li><li><a href="#acronym" rel="internal">acronym</a></li><li><a href="#tt.2C_xmp" rel="internal">tt, xmp</a></li><li><a href="#applet" rel="internal">applet</a></li></ol></li>
+                </ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>Many people learned HTML, CSS, and JavaScript by viewing the source of pages and then copying and pasting them, without considering whether or not the original site was well implemented. This means that they have perpetuated coding practices that might have been necessary in the past, but are irrelevant now. <span class="seoSummary">This article tries to list older coding practices that over time have become unnecessary or bad practices.</span></p>
+
+<h2 id="Doctype">Doctype</h2>
+
+<p>There are about ten <a class="external" href="http://en.wikipedia.org/wiki/Document_Type_Declaration">(X)HTML doctypes</a>. Differences are subtle (and sometimes nonexistent). It is recommended that you use the HTML5 doctype:</p>
+
+<pre>&lt;!DOCTYPE html&gt;</pre>
+
+<p>which triggers standards mode in every browser (even Internet Explorer 6).</p>
+
+<h2 id="&lt;meta&gt;_element_and_charset_attribute"><code>&lt;meta&gt;</code> element and <code>charset</code> attribute</h2>
+
+<p>It is not uncommon to find source code with the following line:</p>
+
+<pre>&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;</pre>
+
+<p>However, all Web browsers (even Internet Explorer 6) will act the same if you reduce it to:</p>
+
+<pre>&lt;meta charset="UTF-8" /&gt;
+</pre>
+
+<p>This knowledge has been acquired by some amazing <a class="external" href="http://blog.whatwg.org/the-road-to-html-5-character-encoding">reverse engineering</a> and <a class="external" href="http://lists.w3.org/Archives/Public/public-html/2007Jul/0550.html#replies">pragmatism</a>. Use it.</p>
+
+<h2 id="Nonexistent_&lt;meta&gt;_elements">Nonexistent&nbsp;<code>&lt;meta&gt;</code> elements</h2>
+
+<p>Numerous deprecated values or non-standard values are still copied from one site to the other, perpetuating their use; although use of these elements is widespread, they are actually do not follow the specifications and are invalid. Especially, don't use:</p>
+
+<ul>
+ <li><code>&lt;meta name="MSSmartTagsPreventParsing" content="true"&gt;</code> which was useful only in one <em>beta</em> version of Internet Explorer 6. That version is not used anymore and the feature, smart tags, has been removed and won't come back.</li>
+ <li><code>&lt;meta name="robots" content="all"&gt;</code>. Although <code>name="robots"</code> is perfectly legitimate, you should only use <a href="../../HTML/Element/meta.html#attr-name">corresponding defined values for content</a>; <code>all</code> is not defined for <code>name="robots"</code>. The default is <code>content="index, follow"</code> which is basically what the nonexistant <code>all</code> is supposed to do. Just remove the whole <code>&lt;meta&gt;</code> element.</li>
+ <li><code>&lt;meta name="copyright" content="…"&gt;</code>. This meta attribute doesn't exist. Remove it and create a copyright page or div, or link to it using the <a href="../../HTML/Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a> HTML element with the <code>rel="copyright"</code> value.</li>
+ <li><code>&lt;meta name="rating" content="…"&gt;</code>. This meta attribute doesn't exist. Just remove the whole <code>&lt;meta&gt;</code> element.</li>
+</ul>
+
+<h2 id="HTML_comments_in_scripts">HTML comments in scripts</h2>
+
+<p>There was once a time in which some browsers understood the <a href="../../HTML/Element/script.html" title="The HTML &lt;script&gt; element is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a> tag and others didn't. This sometimes led to browsers rendering as text what should be interpreted as script. A natural idea was to put scripts as HTML comments. This way, browsers executing scripts would execute them and those who did not understand scripts would just ignore them.</p>
+
+<p>From this era, we inherit things like:</p>
+
+<pre>&lt;script&gt;
+//&lt;!--
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "bla.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//--&gt;
+&lt;/script&gt;
+</pre>
+
+<p>or:</p>
+
+<pre>&lt;script type="text/javascript"&gt;
+&lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+Blabla.extend(MyFramework.settings, { "basePath": "/" });
+//--&gt;&lt;!]]&gt;
+&lt;/script&gt;
+</pre>
+
+<p>The only remaining use case for this pattern to assist in strict XML validation, in which case the comments avoid false positives for unquoted markup. Otherwise, it is completely useless nowadays. Even browsers that do not execute scripts just ignore <a href="../../HTML/Element/script.html" title="The HTML &lt;script&gt; element is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a> tags. For simplicity, just write your scripts between the start and end <a href="../../HTML/Element/script.html" title="The HTML &lt;script&gt; element is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a> tags. Better, insert your scripts as separate files with the <code><a href="../../HTML/Element/script.html#attr-src">src</a></code> attribute; while you're at it, consider trying the HTML5 <code><a href="../../HTML/Element/script.html#attr-async">async</a></code> and <code><a href="../../HTML/Element/script.html#attr-defer">defer</a></code> attributes.</p>
+
+<h2 id="Elements_that_should_not_be_used_anymore">Elements that should not be used anymore</h2>
+
+<h3 id="font.2C_basefont">font, basefont</h3>
+
+<p>These tags should not be used any more. CSS is preferred to control typography appearance on the elements, targeted by element, or <code>id</code> or <code>class</code> attributes.</p>
+
+<h3 id="b.2C_i.2C_u">b, i, u</h3>
+
+<p>These tend to be a bit more controversial, but as much as possible, try to use respectively <a href="../../HTML/Element/strong.html" title="The HTML Strong Element (&lt;strong&gt;) gives text strong importance, and is typically displayed in bold."><code>&lt;strong&gt;</code></a>, <a href="../../HTML/Element/em.html" title="The HTML &lt;em&gt; element (or HTML Emphasis Element) marks text that has stress emphasis. The &lt;em&gt; element can be nested, with each level of nesting indicating a greater degree of emphasis."><code>&lt;em&gt;</code></a> or <a href="../../HTML/Element/span.html" title="The HTML &lt;span&gt; element is a generic inline container for phrasing content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element is appropriate. &lt;span&gt; is very much like a &lt;div&gt; element, but &lt;div&gt; is a block-level element whereas a &lt;span&gt; is an inline element."><code>&lt;span&gt;</code></a> and CSS (<code>text-decoration:underline</code>) when relevant.</p>
+
+<p>Exercise discretion when choosing which of these elements to use. Some development-oriented pages advise simply replacing <a href="../../HTML/Element/b.html" title="The HTML &lt;b&gt; Element represents a span of text stylistically different from normal text, without conveying any special importance or relevance. It is typically used for keywords in a summary, product names in a review, or other spans of text whose typical presentation would be boldfaced. Another example of its use is to mark the lead sentence of each paragraph of an article."><code>&lt;b&gt;</code></a> with <a href="../../HTML/Element/strong.html" title="The HTML Strong Element (&lt;strong&gt;) gives text strong importance, and is typically displayed in bold."><code>&lt;strong&gt;</code></a> and <a href="../../HTML/Element/i.html" title="The HTML &lt;i&gt; Element represents a range of text that is set off from the normal text for some reason, for example, technical terms, foreign language phrases, or fictional character thoughts. It is typically displayed in italic type."><code>&lt;i&gt;</code></a> with <a href="../../HTML/Element/em.html" title="The HTML &lt;em&gt; element (or HTML Emphasis Element) marks text that has stress emphasis. The &lt;em&gt; element can be nested, with each level of nesting indicating a greater degree of emphasis."><code>&lt;em&gt;</code></a>. <strong>It is a bad idea to follow this advice.</strong> <a href="../../HTML/Element/strong.html" title="The HTML Strong Element (&lt;strong&gt;) gives text strong importance, and is typically displayed in bold."><code>&lt;strong&gt;</code></a> is for statements of strong importance, while <a href="../../HTML/Element/em.html" title="The HTML &lt;em&gt; element (or HTML Emphasis Element) marks text that has stress emphasis. The &lt;em&gt; element can be nested, with each level of nesting indicating a greater degree of emphasis."><code>&lt;em&gt;</code></a> is for otherwise emphasized text. For example, it's a bad idea to use <a href="../../HTML/Element/em.html" title="The HTML &lt;em&gt; element (or HTML Emphasis Element) marks text that has stress emphasis. The &lt;em&gt; element can be nested, with each level of nesting indicating a greater degree of emphasis."><code>&lt;em&gt;</code></a> simply to achieve italicization; italic, non-emphasized text can be achieved by using <code>font-style:italic</code> in your pages' CSS. Similarly, titles of books and works of art are traditionally styled with italic text, but using the <a href="../../HTML/Element/cite.html" title="The HTML &lt;cite&gt; Element (or HTML Citation Element) represents a reference to a creative work. It must include the title of a work or a URL reference,&nbsp;which may be in an abbreviated form according to the conventions used for the addition of citation metadata."><code>&lt;cite&gt;</code></a> element for these items provides more semantic mark-up than <a href="../../HTML/Element/em.html" title="The HTML &lt;em&gt; element (or HTML Emphasis Element) marks text that has stress emphasis. The &lt;em&gt; element can be nested, with each level of nesting indicating a greater degree of emphasis."><code>&lt;em&gt;</code></a> or <a href="../../HTML/Element/i.html" title="The HTML &lt;i&gt; Element represents a range of text that is set off from the normal text for some reason, for example, technical terms, foreign language phrases, or fictional character thoughts. It is typically displayed in italic type."><code>&lt;i&gt;</code></a>.</p>
+
+<h3 id="acronym">acronym</h3>
+
+<p>The acronym tag should not be used any more. <a href="../../HTML/Element/abbr.html" title="The HTML &lt;abbr&gt; Element (or HTML Abbreviation Element) represents an abbreviation and optionally provides a full description for it. If present, the title attribute must contain this full description and nothing else."><code>&lt;abbr&gt;</code></a> is preferred to represent an abbreviation.</p>
+
+<h3 id="tt.2C_xmp">tt, xmp</h3>
+
+<p>Do not use these elements. To represent a fragment of computer code, use <a href="../../HTML/Element/code.html" title="The HTML &lt;code&gt; Element represents a fragment of computer code. By default, it is displayed in the browser's default monospace font."><code>&lt;code&gt;</code></a>. To represent preformatted text, use <a href="../../HTML/Element/pre.html" title="The HTML &lt;pre&gt; Element (or HTML Preformatted Text) represents preformatted text. Text within this element is typically displayed in a non-proportional font exactly as it is laid out in the file. Whitespaces inside this element are displayed as typed."><code>&lt;pre&gt;</code></a>. If you only want to use a monospaced font, you can use <code>font-family: monospace</code> in CSS.</p>
+
+<h3 id="applet">applet</h3>
+
+<p>This element shouldn't be used any more. <a href="../../HTML/Element/object.html" title="The HTML &lt;object&gt; Element (or HTML Embedded Object Element) represents an external resource, which can be treated as an image, a nested browsing context, or a resource to be handled by a plugin."><code>&lt;object&gt;</code></a> is preferred because it is more generic.</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="../../../tag/HTML.html">HTML</a></li>
+              <li><a href="../../../tag/HTML5.html">HTML5</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Intermediate">Intermediate</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsContent">NeedsContent</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Lagg">Lagg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/xfq">xfq</a>,             <a href="https://developer.mozilla.org/en-US/profiles/yjacket">yjacket</a>,             <a href="https://developer.mozilla.org/en-US/profiles/meetparikh94">meetparikh94</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/CheeseTurtle">CheeseTurtle</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/yohohoho">yohohoho</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/slhuang">slhuang</a>,             <a href="https://developer.mozilla.org/en-US/profiles/haboqueferus">haboqueferus</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tw2113">tw2113</a>,             <a href="https://developer.mozilla.org/en-US/profiles/berkerpeksag">berkerpeksag</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jens.B">Jens.B</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sevenspade">Sevenspade</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Dikrib">Dikrib</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,
+                      <time datetime="2015-02-18T09:41:38-08:00">Feb 18, 2015, 9:41:38 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid" selected="">
+          English (US)
+        </option>
+                  <option value="/bn-BD/docs/Web_development/Historical_artifacts_to_avoid">
+            বাংলা (বাংলাদেশ)
+          </option>          <option value="/fa/docs/Web_development/Historical_artifacts_to_avoid">
+            فارسی
+          </option>          <option value="/ja/docs/Web/Guide/HTML/Obsolete_things_to_avoid">
+            日本語
+          </option>          <option value="/ms/docs/Web_development/artifak_sejarah_untuk_dielakkan">
+            Melayu
+          </option>          <option value="/zh-TW/docs/Web_%E9%96%8B%E7%99%BC/Historical_artifacts_to_avoid">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Obsolete_things_to_avoid by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:16:02 GMT -->
+</body></html>

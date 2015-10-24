@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>scipy.sparse.linalg.splu</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../../index.html" >
+    <link rel="up" title="scipy.sparse.linalg" href="../scipy.sparse.linalg.html" >
+    <link rel="next" title="scipy.sparse.linalg.spilu" href="scipy.sparse.linalg.spilu.html" >
+    <link rel="prev" title="scipy.sparse.linalg.svds" href="scipy.sparse.linalg.svds.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../../sparse.html" >Sparse matrices (<tt class="docutils literal"><span class="pre">scipy.sparse</span></tt>)</a></li>
+          <li class="active"><a href="../scipy.sparse.linalg.html" accesskey="U">scipy.sparse.linalg</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../../scipy-optimize-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.sparse.linalg.spilu.html" title="scipy.sparse.linalg.spilu"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.sparse.linalg.svds.html" title="scipy.sparse.linalg.svds"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.sparse.linalg.svds.html"
+                        title="previous chapter">scipy.sparse.linalg.svds</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.sparse.linalg.spilu.html"
+                        title="next chapter">scipy.sparse.linalg.spilu</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-sparse-linalg-splu">
+<h1>scipy.sparse.linalg.splu<a class="headerlink" href="#scipy-sparse-linalg-splu" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="scipy.sparse.linalg.splu">
+<tt class="descclassname">scipy.sparse.linalg.</tt><tt class="descname">splu</tt><big>(</big><em>A</em>, <em>permc_spec=None</em>, <em>diag_pivot_thresh=None</em>, <em>drop_tol=None</em>, <em>relax=None</em>, <em>panel_size=None</em>, <em>options={}</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/sparse/linalg/dsolve/linsolve.py#L180"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.sparse.linalg.splu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the LU decomposition of a sparse, square matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : sparse matrix</p>
+<blockquote>
+<div><p>Sparse matrix to factorize. Should be in CSR or CSC format.</p>
+</div></blockquote>
+<p><strong>permc_spec</strong> : str, optional</p>
+<blockquote>
+<div><p>How to permute the columns of the matrix for sparsity preservation.
+(default: &#8216;COLAMD&#8217;)</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">NATURAL</span></tt>: natural ordering.</li>
+<li><tt class="docutils literal"><span class="pre">MMD_ATA</span></tt>: minimum degree ordering on the structure of A^T A.</li>
+<li><tt class="docutils literal"><span class="pre">MMD_AT_PLUS_A</span></tt>: minimum degree ordering on the structure of A^T+A.</li>
+<li><tt class="docutils literal"><span class="pre">COLAMD</span></tt>: approximate minimum degree column ordering</li>
+</ul>
+</div></blockquote>
+<p><strong>diag_pivot_thresh</strong> : float, optional</p>
+<blockquote>
+<div><p>Threshold used for a diagonal entry to be an acceptable pivot.
+See SuperLU user&#8217;s guide for details <a class="reference internal" href="#r35" id="id1">[R35]</a></p>
+</div></blockquote>
+<p><strong>drop_tol</strong> : float, optional</p>
+<blockquote>
+<div><p>(deprecated) No effect.</p>
+</div></blockquote>
+<p><strong>relax</strong> : int, optional</p>
+<blockquote>
+<div><p>Expert option for customizing the degree of relaxing supernodes.
+See SuperLU user&#8217;s guide for details <a class="reference internal" href="#r35" id="id2">[R35]</a></p>
+</div></blockquote>
+<p><strong>panel_size</strong> : int, optional</p>
+<blockquote>
+<div><p>Expert option for customizing the panel size.
+See SuperLU user&#8217;s guide for details <a class="reference internal" href="#r35" id="id3">[R35]</a></p>
+</div></blockquote>
+<p><strong>options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Dictionary containing additional expert options to SuperLU.
+See SuperLU user guide <a class="reference internal" href="#r35" id="id4">[R35]</a> (section 2.4 on the &#8216;Options&#8217; argument)
+for more details. For example, you can specify
+<tt class="docutils literal"><span class="pre">options=dict(Equil=False,</span> <span class="pre">IterRefine='SINGLE'))</span></tt>
+to turn equilibration off and perform a single iterative refinement.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>invA</strong> : scipy.sparse.linalg.SuperLU</p>
+<blockquote class="last">
+<div><p>Object, which has a <tt class="docutils literal"><span class="pre">solve</span></tt> method.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="../scipy.sparse.linalg.spilu.html#scipy.sparse.linalg.spilu" title="scipy.sparse.linalg.spilu"><tt class="xref py py-obj docutils literal"><span class="pre">spilu</span></tt></a></dt>
+<dd>incomplete LU decomposition</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>This function uses the SuperLU library.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r35" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R35]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>, <a class="fn-backref" href="#id3">3</a>, <a class="fn-backref" href="#id4">4</a>, <a class="fn-backref" href="#id5">5</a>)</em> SuperLU <a class="reference external" href="http://crd.lbl.gov/~xiaoye/SuperLU/">http://crd.lbl.gov/~xiaoye/SuperLU/</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

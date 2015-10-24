@@ -1,0 +1,165 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.interpolate.RectBivariateSpline.ev</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="scipy.interpolate.RectBivariateSpline" href="scipy.interpolate.RectBivariateSpline.html">
+    <link rel="next" title="scipy.interpolate.RectBivariateSpline.get_coeffs" href="scipy.interpolate.RectBivariateSpline.get_coeffs.html">
+    <link rel="prev" title="scipy.interpolate.RectBivariateSpline.__call__" href="scipy.interpolate.RectBivariateSpline.__call__.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../interpolate.html">Interpolation (<tt class="docutils literal"><span class="pre">scipy.interpolate</span></tt>)</a></li>
+          <li class="active"><a href="scipy.interpolate.RectBivariateSpline.html" accesskey="U">scipy.interpolate.RectBivariateSpline</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.RectBivariateSpline.get_coeffs.html" title="scipy.interpolate.RectBivariateSpline.get_coeffs" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.RectBivariateSpline.__call__.html" title="scipy.interpolate.RectBivariateSpline.__call__" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.interpolate.RectBivariateSpline.__call__.html" title="previous chapter">scipy.interpolate.RectBivariateSpline.__call__</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.interpolate.RectBivariateSpline.get_coeffs.html" title="next chapter">scipy.interpolate.RectBivariateSpline.get_coeffs</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-interpolate-rectbivariatespline-ev">
+<h1>scipy.interpolate.RectBivariateSpline.ev<a class="headerlink" href="#scipy-interpolate-rectbivariatespline-ev" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<a class="dashAnchor" name="//apple_ref/Method/scipy.interpolate.RectBivariateSpline.ev"></a><dt id="scipy.interpolate.RectBivariateSpline.ev">
+<tt class="descclassname">RectBivariateSpline.</tt><tt class="descname">ev</tt><big>(</big><em>xi</em>, <em>yi</em>, <em>dx=0</em>, <em>dy=0</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/interpolate/fitpack2.py#L932"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.interpolate.RectBivariateSpline.ev" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the spline at points</p>
+<p>Returns the interpolated value at <tt class="docutils literal"><span class="pre">(xi[i],</span> <span class="pre">yi[i]),</span>
+<span class="pre">i=0,...,len(xi)-1</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xi, yi</strong> : array_like</p>
+<blockquote>
+<div><p>Input coordinates. Standard Numpy broadcasting is obeyed.</p>
+</div></blockquote>
+<p><strong>dx</strong> : int, optional</p>
+<blockquote>
+<div><p>Order of x-derivative</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.14.0.</span></p>
+</div>
+</div></blockquote>
+<p><strong>dy</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Order of y-derivative</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.14.0.</span></p>
+</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

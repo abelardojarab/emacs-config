@@ -1,0 +1,158 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.interpolate.PiecewisePolynomial.extend</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="scipy.interpolate.PiecewisePolynomial" href="scipy.interpolate.PiecewisePolynomial.html">
+    <link rel="next" title="scipy.interpolate.PchipInterpolator" href="scipy.interpolate.PchipInterpolator.html">
+    <link rel="prev" title="scipy.interpolate.PiecewisePolynomial.derivatives" href="scipy.interpolate.PiecewisePolynomial.derivatives.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../interpolate.html">Interpolation (<tt class="docutils literal"><span class="pre">scipy.interpolate</span></tt>)</a></li>
+          <li class="active"><a href="scipy.interpolate.PiecewisePolynomial.html" accesskey="U">scipy.interpolate.PiecewisePolynomial</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.PchipInterpolator.html" title="scipy.interpolate.PchipInterpolator" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.PiecewisePolynomial.derivatives.html" title="scipy.interpolate.PiecewisePolynomial.derivatives" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.interpolate.PiecewisePolynomial.derivatives.html" title="previous chapter">scipy.interpolate.PiecewisePolynomial.derivatives</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.interpolate.PchipInterpolator.html" title="next chapter">scipy.interpolate.PchipInterpolator</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-interpolate-piecewisepolynomial-extend">
+<h1>scipy.interpolate.PiecewisePolynomial.extend<a class="headerlink" href="#scipy-interpolate-piecewisepolynomial-extend" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<a class="dashAnchor" name="//apple_ref/Method/scipy.interpolate.PiecewisePolynomial.extend"></a><dt id="scipy.interpolate.PiecewisePolynomial.extend">
+<tt class="descclassname">PiecewisePolynomial.</tt><tt class="descname">extend</tt><big>(</big><em>xi</em>, <em>yi</em>, <em>orders=None</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/interpolate/polyint.py#L816"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.interpolate.PiecewisePolynomial.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extend the PiecewisePolynomial by a list of points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xi</strong> : array_like</p>
+<blockquote>
+<div><p>A sorted list of x-coordinates.</p>
+</div></blockquote>
+<p><strong>yi</strong> : list of lists of length N1</p>
+<blockquote>
+<div><p><tt class="docutils literal"><span class="pre">yi[i]</span></tt> (if <tt class="docutils literal"><span class="pre">axis</span> <span class="pre">==</span> <span class="pre">0</span></tt>) is the list of derivatives known
+at <tt class="docutils literal"><span class="pre">xi[i]</span></tt>.</p>
+</div></blockquote>
+<p><strong>orders</strong> : int or list of ints, optional</p>
+<blockquote class="last">
+<div><p>A list of polynomial orders, or a single universal order.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

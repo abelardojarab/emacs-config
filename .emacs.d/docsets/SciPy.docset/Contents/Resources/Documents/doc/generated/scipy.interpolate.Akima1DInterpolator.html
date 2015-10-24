@@ -1,0 +1,200 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.interpolate.Akima1DInterpolator</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Interpolation (scipy.interpolate)" href="../interpolate.html">
+    <link rel="next" title="scipy.interpolate.Akima1DInterpolator.__call__" href="scipy.interpolate.Akima1DInterpolator.__call__.html">
+    <link rel="prev" title="scipy.interpolate.pchip_interpolate" href="scipy.interpolate.pchip_interpolate.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../interpolate.html" accesskey="U">Interpolation (<tt class="docutils literal"><span class="pre">scipy.interpolate</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.Akima1DInterpolator.__call__.html" title="scipy.interpolate.Akima1DInterpolator.__call__" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.pchip_interpolate.html" title="scipy.interpolate.pchip_interpolate" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.interpolate.pchip_interpolate.html" title="previous chapter">scipy.interpolate.pchip_interpolate</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.interpolate.Akima1DInterpolator.__call__.html" title="next chapter">scipy.interpolate.Akima1DInterpolator.__call__</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-interpolate-akima1dinterpolator">
+<h1>scipy.interpolate.Akima1DInterpolator<a class="headerlink" href="#scipy-interpolate-akima1dinterpolator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<a class="dashAnchor" name="//apple_ref/Class/scipy.interpolate.Akima1DInterpolator"></a><dt id="scipy.interpolate.Akima1DInterpolator">
+<em class="property">class </em><tt class="descclassname">scipy.interpolate.</tt><tt class="descname">Akima1DInterpolator</tt><big>(</big><em>x</em>, <em>y</em>, <em>axis=0</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/interpolate/_monotone.py#L192"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.interpolate.Akima1DInterpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Akima interpolator</p>
+<p>Fit piecewise cubic polynomials, given vectors x and y. The interpolation
+method by Akima uses a continuously differentiable sub-spline built from
+piecewise cubic polynomials. The resultant curve passes through the given
+data points and will appear smooth and natural.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray, shape (m, )</p>
+<blockquote>
+<div><p>1-D array of monotonically increasing real values.</p>
+</div></blockquote>
+<p><strong>y</strong> : ndarray, shape (m, ...)</p>
+<blockquote>
+<div><p>N-D array of real values. The length of <em class="xref py py-obj">y</em> along the first axis must
+be equal to the length of <a class="reference internal" href="scipy.interpolate.Akima1DInterpolator.x.html#scipy.interpolate.Akima1DInterpolator.x" title="scipy.interpolate.Akima1DInterpolator.x"><tt class="xref py py-obj docutils literal"><span class="pre">x</span></tt></a>.</p>
+</div></blockquote>
+<p><strong>axis</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Specifies the axis of <em class="xref py py-obj">y</em> along which to interpolate. Interpolation
+defaults to the first axis of <em class="xref py py-obj">y</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="scipy.interpolate.PchipInterpolator.html#scipy.interpolate.PchipInterpolator" title="scipy.interpolate.PchipInterpolator"><tt class="xref py py-obj docutils literal"><span class="pre">PchipInterpolator</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.14.</span></p>
+</div>
+<p>Use only for precise data, as the fitted curve passes through the given
+points exactly. This routine is useful for plotting a pleasingly smooth
+curve through a few given points for purposes of plotting.</p>
+<p class="rubric">References</p>
+<dl class="docutils">
+<dt>[1] A new method of interpolation and smooth curve fitting based</dt>
+<dd>on local procedures. Hiroshi Akima, J. ACM, October 1970, 17(4),
+589-602.</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%">
+<col width="90%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="scipy.interpolate.Akima1DInterpolator.__call__.html#scipy.interpolate.Akima1DInterpolator.__call__" title="scipy.interpolate.Akima1DInterpolator.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x[,&nbsp;nu,&nbsp;extrapolate])</td>
+<td>Evaluate the piecewise polynomial or its derivative</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.interpolate.Akima1DInterpolator.derivative.html#scipy.interpolate.Akima1DInterpolator.derivative" title="scipy.interpolate.Akima1DInterpolator.derivative"><tt class="xref py py-obj docutils literal"><span class="pre">derivative</span></tt></a>([nu])</td>
+<td>Construct a new piecewise polynomial representing the derivative.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.interpolate.Akima1DInterpolator.antiderivative.html#scipy.interpolate.Akima1DInterpolator.antiderivative" title="scipy.interpolate.Akima1DInterpolator.antiderivative"><tt class="xref py py-obj docutils literal"><span class="pre">antiderivative</span></tt></a>([nu])</td>
+<td>Construct a new piecewise polynomial representing the antiderivative.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.interpolate.Akima1DInterpolator.roots.html#scipy.interpolate.Akima1DInterpolator.roots" title="scipy.interpolate.Akima1DInterpolator.roots"><tt class="xref py py-obj docutils literal"><span class="pre">roots</span></tt></a>([discontinuity,&nbsp;extrapolate])</td>
+<td>Find real roots of the piecewise polynomial.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

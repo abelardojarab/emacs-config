@@ -1,0 +1,760 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:23:25 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Add audio or video content to a webpage</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+                  <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Learn$styles">
+          
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage$json">
+  <link rel="canonical" href="Add_audio_or_video_content_to_a_webpage.html">
+
+            <link rel="alternate" hreflang="fr" href="../../../../fr/Apprendre/HTML/Comment/Ajouter_contenu_audio_vid%c3%a9o_page_web.html" title="Ajouter du contenu audio ou vidéo à une page web">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Add audio or video content to a webpage">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage">
+  <meta name="twitter:title" content="Add audio or video content to a webpage">
+    <meta property="og:description" content="Web developers have been trying to use video and audio on the Web since forever. Following much experimentation, HTML5 offers the best solution yet, with the help of some shiny new JavaScript APIs.">
+  <meta name="description" content="Web developers have been trying to use video and audio on the Web since forever. Following much experimentation, HTML5 offers the best solution yet, with the help of some shiny new JavaScript APIs.">
+  <meta name="twitter:description" content="Web developers have been trying to use video and audio on the Web since forever. Following much experimentation, HTML5 offers the best solution yet, with the help of some shiny new JavaScript APIs.">
+  
+      
+  </head>
+<body data-slug="Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FLearn%2FHTML%2FHowto%2FAdd_audio_or_video_content_to_a_webpage" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FLearn%2FHTML%2FHowto%2FAdd_audio_or_video_content_to_a_webpage" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../../docs/Web/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+                <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Learn">Learning the Web</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+     <!-- end is_zone -->
+
+
+    <div class="wiki-main-content"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="../../../../fr/Apprendre/HTML/Comment/Ajouter_contenu_audio_vid%c3%a9o_page_web.html" title="Ajouter du contenu audio ou vidéo à une page web">Français</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Learn" rel="v:url" property="v:title">Learning the Web</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../../docs/Learn/HTML.png" rel="v:url" property="v:title">HTML</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Howto.html" rel="v:url" property="v:title">Learn HTML to solve problems</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Add audio or video content to a webpage</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Add audio or video content to a webpage</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 3 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Andrew_Pfeiffer" title="View profile: Andrew_Pfeiffer">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Andrew_Pfeiffer" data-src="../../../../../secure.gravatar.com/avatar/5eb09ead2ae59781536803335ec217646aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Andrew_Pfeiffer</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/hbloomer" title="View profile: hbloomer">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="hbloomer" data-src="../../../../../secure.gravatar.com/avatar/2c08d415ad9741668a67028e75bfb7d06aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">hbloomer</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Audio_and_video_on_the_web" rel="internal">Audio and video on the web</a></li><li><a href="#Quick_start" rel="internal">Quick start</a></li><li><a href="#Conquering_codec_obstacles" rel="internal">Conquering codec obstacles</a><ol><li><a href="#The_problem_browsers_differ_in_codec_support" rel="internal">The problem: browsers differ in codec support</a></li><li><a href="#Which_formats_should_I_offer" rel="internal">Which formats should I offer?</a></li><li><a href="#So_how_do_I_offer_the_same_content_in_several_formats" rel="internal">So how do I offer the same content in several formats?</a></li></ol></li><li><a href="#Transcripts_subtitles" rel="internal">Transcripts &amp; subtitles</a><ol><li><a href="#Text_tracks" rel="internal">Text tracks</a></li></ol></li><li><a href="#Fallback_for_legacy_browsers" rel="internal">Fallback for legacy browsers</a></li><li><a href="#Learn_more" rel="internal">Learn more</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div class="summary">
+<p>Here's how to provide a first-class audio and video experience to everyone, regardless of how they choose to consume media.</p>
+</div>
+
+<table class="learn-box nostripe standard-table">
+ <tbody>
+  <tr>
+   <th scope="row">Prerequisites:</th>
+   <td>You need to be familiar with <a href="../Write_a_simple_page_in_HTML.html">creating basic HTML documents</a>.</td>
+  </tr>
+  <tr>
+   <th scope="row">Objective:</th>
+   <td>Learn how to embed audio and video in your page.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Audio_and_video_on_the_web">Audio and video on the web</h2>
+
+<p>Web developers have been trying to use video and audio on the Web since forever. Following much experimentation, <a href="../../../docs/Glossary/HTML5.html" class="glossaryLink" title="HTML5: The latest stable release of HTML, HTML5 takes HTML from a simple markup for structuring a document to a full app development platform. Among other features, HTML5 includes new elements and JavaScript APIs to enhance storage, multimedia, and hardware access.">HTML5</a> offers the best solution yet, with the help of some shiny new <a href="https://developer.mozilla.org/en-US/docs/Glossary/JavaScript" class="glossaryLink" title="JavaScript: JavaScript (JS) is a programming language mostly used client-side to dynamically script webpages, but often also server-side.">JavaScript</a> <a href="https://developer.mozilla.org/en-US/docs/Glossary/API" class="glossaryLink" title="APIs: An API (Application Programming Interface) is a set of features and rules allowing interaction between the software providing the API and other software components. In Web development, API commonly means a set of standard methods, properties, events, and URLs for interacting with Web content.">APIs</a>.</p>
+
+<p>In this article, we explain how to embed audio and video files in your HTML documents. We're assuming you already have audio and video files, because producing those files takes a completely different skillset.</p>
+
+<p>Before you begin here, you should also know that there are a quite a few <a href="https://developer.mozilla.org/en-US/docs/Glossary/OVP" class="new glossaryLink" title="The definition of that term (OVPs) has not been written yet; please consider contributing it!">OVPs</a> (online video providers) like <a href="https://www.youtube.com/" class="external">YouTube</a>, <a href="http://www.dailymotion.com/" class="external">Dailymotion</a>, and <a href="https://vimeo.com/" class="external">Vimeo</a>. OVPs offer a convenient way to host and consume videos, so you don't have to worry about the enormous bandwidth consumption. OVPs even usually offer user-friendly JavaScript scripts for embedding video in your own webpages. If you go that route, you can avoid some of the difficulties we discuss in this article.</p>
+
+<h2 id="Quick_start">Quick start</h2>
+
+<p>The easiest way to embed a media file in a webpage is to use the <a href="../../../docs/Web/HTML/Element/audio.html" title="The HTML &lt;audio&gt; element is used to embed sound content in documents. It may contain several audio sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;audio&gt;</code></a> element for sound files and the <a href="../../../docs/Web/HTML/Element/video.html" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a> element for videos, like this:</p>
+
+<pre class="brush: html">&lt;audio src="example.ogg" controls&gt;&lt;/audio&gt;
+&lt;video src="example.webm" width="375" height="280" controls&gt;&lt;/video&gt;
+</pre>
+
+<p>Those two HTML elements come with some convenient attributes to control their behaviors:</p>
+
+<dl>
+ <dt><code><a href="../../../docs/Web/HTML/Element/video.html#attr-width">width</a></code> and <code><a href="../../../docs/Web/HTML/Element/video.html#attr-height">height</a></code> (video only)</dt>
+ <dd>You can control the video size either with these attributes or with <a href="https://developer.mozilla.org/en-US/docs/Glossary/CSS" class="glossaryLink" title="CSS: CSS (Cascading StyleSheets)&nbsp;is a declarative language that controls how webpages look in the browser. The browser applies CSS style declarations to selected elements to display them properly. A style declaration contains the properties, with their values, that determine how a webpage looks.">CSS</a>. In all cases, videos retain their native width-height ratio (black strips take up the empty space in the video element).</dd>
+ <dt><code><a href="../../../docs/Web/HTML/Element/video.html#attr-controls">controls</a></code></dt>
+ <dd>
+ <p>Users must be able to control video and audio playback (it's especially critical for victims of <a href="https://en.wikipedia.org/wiki/Epilepsy#Epidemiology" class="external">epilepsy</a>). You must either use <code>controls</code> to request the native control interface, or build your own interface using the appropriate <a href="../../../docs/Web/API/HTMLMediaElement.html">JavaScript API</a>. At a minimum, the interface must include a way to start and stop the media, and to adjust the volume.</p>
+ </dd>
+ <dt><code><a href="../../../docs/Web/HTML/Element/video.html#attr-autoplay">autoplay</a></code></dt>
+ <dd>This attribute makes the audio or video start playing right away, while the rest of the page is loading. Be careful, because users can find it quite annoying.</dd>
+ <dt><code><a href="../../../docs/Web/HTML/Element/video.html#attr-loop">loop</a></code></dt>
+ <dd>This attribute makes the video and/or audio start playing again whenever it finishes. Use this also with care.</dd>
+ <dt><code><a href="../../../docs/Web/HTML/Element/video.html#attr-muted">muted</a></code></dt>
+ <dd>This attribute plays the media with sound turned off by default.</dd>
+ <dt><code><a href="../../../docs/Web/HTML/Element/video.html#attr-poster">poster</a></code> (video only)</dt>
+ <dd>This attribute provides the URL of an image displayed before the video begins.</dd>
+</dl>
+
+<h2 id="Conquering_codec_obstacles">Conquering codec obstacles</h2>
+
+<h3 id="The_problem_browsers_differ_in_codec_support">The problem: browsers differ in codec support</h3>
+
+<p><strong><a href="https://developer.mozilla.org/en-US/docs/Glossary/Codec" class="glossaryLink" title="Codecs: A codec&nbsp; (a derivative from &quot;coder-decoder&quot;) is a computer program that encodes or decodes a data stream.">Codecs</a></strong> (like Vorbis or H.264) convert sound and video into binary digits and back. If you're missing the right codec, the binary data is just gibberish.</p>
+
+<div class="note"><strong>Container format</strong> (like Ogg) refers to how sound data, metadata, and/or image data are packaged into a file. Container format support is its own issue, but systems usually support the container formats typical for the codecs they support. (Ogg tends to go with Vorbis audio and Theora video. WebM often packages Vorbis audio with VP8/VP9 video; MP4 packages AAC audio and H.264 video.)</div>
+
+<p>Unfortunately, browsers don't all support the same codecs, so you may have to provide several files for each media production.</p>
+
+<h3 id="Which_formats_should_I_offer">Which formats should I offer?</h3>
+
+<p><strong>MP3 </strong> (for audio) and <strong>MP4/H.264</strong> (for video) are both widely supported. However, American patents cover MP3 until at least 2017, and H.264 until 2027 at the earliest. Many people avoid restricted software, and you can only retain those viewers if you also offer your media in free formats (like <a href="http://xiph.org/vorbis/" class="external">Ogg Vorbis</a> for audio and <a href="http://www.webmproject.org/" class="external">WebM</a> for video).</p>
+
+<p>Ideally, like Wikipedia, you'd provide files only in open formats, but Safari and Microsoft Edge (not to speak of Internet Explorer) don't support them. That leaves another large minority out in the cold.</p>
+
+<p>For more details, please see our <a href="https://developer.mozilla.org/en-US/Apps/Build/Manipulating_media/Cross-browser_audio_basics#Audio_Codec_Support">audio codec compatibility table</a> and our <a href="../../../docs/Web/HTML/Supported_media_formats.html#Browser_compatibility">audio-video codec compatibility table</a>.</p>
+
+<h3 id="So_how_do_I_offer_the_same_content_in_several_formats">So how do I offer the same content in several formats?</h3>
+
+<p>HTML provide de convinient <a href="../../../docs/Web/HTML/Element/source.html" title="The HTML &lt;source&gt; element is used to specify multiple media resources for &lt;picture&gt;, &lt;audio&gt; and &lt;video&gt; elements. It is an empty element. It is commonly used to serve the same media in multiple formats supported by different browsers."><code>&lt;source&gt;</code></a> element you can use with an <code><a href="../../../docs/Web/HTML/Element/source.html#attr-src">src</a></code> attribute. Don't include <code>src</code> in the <code>&lt;video&gt;</code> or <code>&lt;audio&gt;</code> tag itself, because <code>src</code> overrides the <code>&lt;source&gt;</code> elements. Here's an example:</p>
+
+<pre class="brush: html">&lt;audio controls&gt;
+  &lt;source src="example.mp3" type="audio/mpeg"&gt;
+  &lt;source src="example.ogg" type="audio/ogg"&gt;
+&lt;/audio&gt;</pre>
+
+<div class="note">
+<p>Remind to include the <code><a href="../../../docs/Web/HTML/Element/source.html#attr-type">type</a></code> attribute. Otherwise, browsers will load and try each file, taking even more time and resources. <code>type</code> lets browsers skip immediately whichever files they can't play (if need be, all of them). Our <a href="../../../docs/Web/HTML/Supported_media_formats.html">article on supported media formats</a> contains some common <a href="https://developer.mozilla.org/en-US/docs/Glossary/MIME_type" class="glossaryLink" title="MIME types: A&nbsp;MIME type&nbsp;(now properly called &quot;media type&quot;, but&nbsp;also sometimes &quot;content type&quot;) is a string sent along&nbsp;with a file indicating the file&nbsp;type (for example, a sound file might be labeled&nbsp;audio/ogg, or an image file&nbsp;image/png). It serves the same purpose as filename&nbsp;extensions traditionally do on Windows.">MIME types</a>.</p>
+</div>
+
+<h2 id="Transcripts_subtitles">Transcripts &amp; subtitles</h2>
+
+<p>"Transcribe" and "transcript" mean to write down spoken words as text.</p>
+
+<p>Many people cannot or don't want to consume audio and video content (for example, in noisy environments, or in the library). To serve these visitors, both as plain text and as a text track (i.e., as text that appears at various points in the video). It takes some time to produce, but it's worth the effort.</p>
+
+<p>Text tracks also help you with <a href="https://developer.mozilla.org/en-US/docs/Glossary/SEO" class="glossaryLink" title="SEO: SEO (Search Engine Optimization) is the process of making a website more visible in search results.">SEO</a>, since search engines especially thrive on text. Text tracks allow search engines even to link directly to a spot partway through the video.</p>
+
+<h3 id="Text_tracks">Text tracks</h3>
+
+<p>The text strings displayed during the video are called cues. Here are the most common kinds of cues:</p>
+
+<dl>
+ <dt>subtitles</dt>
+ <dd>translations of foreign material</dd>
+ <dt>captions</dt>
+ <dd>synchronized transcriptions of dialog or descriptions of significant sounds (to let people watch the film on mute)</dd>
+ <dt>timed descriptions</dt>
+ <dd>text for conversion into audio (to serve the sight-challenged)</dd>
+</dl>
+
+<p>HTML lets you include text tracks with audio and video content. Doing so is quite simple:</p>
+
+<ol>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format">Write one or more WebVTT text files.</a> A WebVTT file contains the cues and specifies when they should appear and disappear (this is where having a good transcript helps).</li>
+ <li>Link to the WebVTT text file(s) with the <a href="../../../docs/Web/HTML/Element/track.html" title="The HTML &lt;track&gt; element is used as a child of the media elements—&lt;audio&gt; and &lt;video&gt;. It lets you specify timed text tracks (or time-based data), for example to automatically handle subtitles. The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks."><code>&lt;track&gt;</code></a> element. <code>&lt;track&gt;</code> occurs within <code>&lt;audio&gt;</code> or <code>&lt;video&gt;</code>, but after all <code>&lt;source&gt;</code> elements. Use the <code><a href="../../../docs/Web/HTML/Element/track.html#attr-kind">kind</a></code> attribute to specify whether the cues are <code>subtitles</code>, <code>captions</code>, or <code>descriptions</code>. Further, use <code><a href="../../../docs/Web/HTML/Element/track.html#attr-srclang">srclang</a></code> to tell the browser what language you wrote the subtitles in.</li>
+</ol>
+
+<p>Here's an example:</p>
+
+<pre class="brush: html">&lt;video controls&gt;
+    &lt;source src="example.mp4" type="video/mp4"&gt;
+    &lt;source src="example.webm" type="video/webm"&gt;
+    &lt;track kind="subtitles" src="subtitles_en.vtt" srclang="en"&gt;
+&lt;/video&gt;</pre>
+
+<p>For more details, please read <a href="../../../Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video.html">Adding captions and subtitles to HTML5 video</a>.</p>
+
+<h2 id="Fallback_for_legacy_browsers">Fallback for legacy browsers</h2>
+
+<p>You can add fallback content for pre-HTML5 browsers immediately before the closing tag. For example, you can add a download link:</p>
+
+<pre class="brush: html">&lt;video src="example.webm" controls&gt;
+    &lt;track kind="captions" src="captions.vtt" srclang="en"&gt;
+    &lt;a href="example.webm"&gt;Download the video&lt;/a&gt;
+&lt;/video&gt;</pre>
+
+<p>A download link is not user-friendly (especially on mobile), but maybe it's better than just telling people they have a dated browser. There are <a href="https://dev.opera.com/articles/html5-video-flash-fallback-custom-controls/" class="external">more advanced fallback techniques</a>, but a dedicated third-party script might bring you the most satisfaction (like the scripts provided by OVPs).</p>
+
+<h2 id="Learn_more">Learn more</h2>
+
+<ul>
+ <li><a href="../../../docs/Web/Guide/HTML/Using_HTML5_audio_and_video.html">More detailed how-to</a></li>
+ <li><a href="../../../docs/Web/HTML/Element/audio.html" title="The HTML &lt;audio&gt; element is used to embed sound content in documents. It may contain several audio sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;audio&gt;</code></a></li>
+ <li><a href="../../../docs/Web/HTML/Element/video.html" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a></li>
+ <li><a href="../../../docs/Web/HTML/Element/source.html" title="The HTML &lt;source&gt; element is used to specify multiple media resources for &lt;picture&gt;, &lt;audio&gt; and &lt;video&gt; elements. It is an empty element. It is commonly used to serve the same media in multiple formats supported by different browsers."><code>&lt;source&gt;</code></a></li>
+ <li><a href="../../../docs/Web/HTML/Element/track.html" title="The HTML &lt;track&gt; element is used as a child of the media elements—&lt;audio&gt; and &lt;video&gt;. It lets you specify timed text tracks (or time-based data), for example to automatically handle subtitles. The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks."><code>&lt;track&gt;</code></a></li>
+ <li><a href="../../../Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video.html">Adding captions and subtitles to HTML5 video</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Audio">Audio</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Beginner">Beginner</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="../../../docs/tag/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/video">video</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Video">Video</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Andrew_Pfeiffer">Andrew_Pfeiffer</a>,             <a href="https://developer.mozilla.org/en-US/profiles/hbloomer">hbloomer</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,
+                      <time datetime="2015-08-17T02:41:48-07:00">Aug 17, 2015, 2:41:48 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/Getting_started_with_the_web">Getting started with the web</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/Skills">Learn the web</a>
+  <ol>
+   <li><a href="https://webmaker.org/en-US/literacy" rel="external">Web Literacy Map</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Web_Mechanics">Web mechanics</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Infrastructure">Infrastructure</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Coding-Scripting">Coding &amp; Scripting</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Design_and_Accessibility">Design &amp; Accessibility</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Composing_for_the_web">Writing &amp; planning</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Learn technologies</a>
+  <ol>
+   <li><a href="../../HTML.html">HTML</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/CSS">CSS</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/JavaScript">JavaScript</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Python">Python</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/tutorial">Learning tutorials</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/tutorial/How_to_build_a_web_site">How to build a web site?</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/tutorial/Information_Security_Basics">Information security basics</a></li>
+  </ol>
+ </li>
+ <li><a href="http://weblitmapper.webmakerprototypes.org/">Learning resources</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/help">Getting help</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/FAQ">FAQ</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Glossary">Glossary</a></li>
+   <li><a href="http://discourse.webmakerprototypes.org/" rel="external">Ask your questions</a></li>
+   <li><a href="https://events.webmaker.org/" rel="external">Meet teachers and mentors</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/How_to_contribute">How to contribute</a></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage" selected="">
+          English (US)
+        </option>
+                  <option value="/fr/docs/Apprendre/HTML/Comment/Ajouter_contenu_audio_vid%C3%A9o_page_web">
+            Français
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Learn/HTML/Howto/Add_audio_or_video_content_to_a_webpage by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:23:26 GMT -->
+</body></html>

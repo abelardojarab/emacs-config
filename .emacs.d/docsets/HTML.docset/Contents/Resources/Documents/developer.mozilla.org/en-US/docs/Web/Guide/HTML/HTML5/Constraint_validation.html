@@ -1,0 +1,936 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:24:26 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Constraint validation</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation$json">
+  <link rel="canonical" href="Constraint_validation.html">
+
+            <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/Guide/HTML/HTML5/Constraint_validation" title="Validation de contraintes (formulaires)">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Constraint validation">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation">
+  <meta name="twitter:title" content="Constraint validation">
+    <meta property="og:description" content="The creation of web forms has always been a complex task. While marking up the form itself is easy, checking whether each field has a valid and coherent value is even more difficult, and informing the user about the problem may become a headache. HTML5 introduced new mechanisms for forms: it added new semantic types for the input element and constraint validation to ease the work of checking the form content on the client side. Basic, usual constraints can be checked, without the need for JavaScript, by setting new attributes; more complex constraints can be tested using the HTML5 Constraint Validation API.">
+  <meta name="description" content="The creation of web forms has always been a complex task. While marking up the form itself is easy, checking whether each field has a valid and coherent value is even more difficult, and informing the user about the problem may become a headache. HTML5 introduced new mechanisms for forms: it added new semantic types for the input element and constraint validation to ease the work of checking the form content on the client side. Basic, usual constraints can be checked, without the need for JavaScript, by setting new attributes; more complex constraints can be tested using the HTML5 Constraint Validation API.">
+  <meta name="twitter:description" content="The creation of web forms has always been a complex task. While marking up the form itself is easy, checking whether each field has a valid and coherent value is even more difficult, and informing the user about the problem may become a headache. HTML5 introduced new mechanisms for forms: it added new semantic types for the input element and constraint validation to ease the work of checking the form content on the client side. Basic, usual constraints can be checked, without the need for JavaScript, by setting new attributes; more complex constraints can be tested using the HTML5 Constraint Validation API.">
+  
+      
+  </head>
+<body data-slug="Web/Guide/HTML/HTML5/Constraint_validation" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FHTML5%2FConstraint_validation" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FHTML5%2FConstraint_validation" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/Guide/HTML/HTML5/Constraint_validation" title="Validation de contraintes (formulaires)">Français</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../HTML.html" rel="v:url" property="v:title">HTML developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../HTML5.html" rel="v:url" property="v:title">HTML5</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Constraint validation</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Constraint validation</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 17 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dan-Dascalescu" title="View profile: Dan-Dascalescu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dan-Dascalescu" data-src="../../../../../../../secure.gravatar.com/avatar/fb5e3a539b1e23c54b080b6d12b411c26aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Dan-Dascalescu</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/cameronwp" title="View profile: cameronwp">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cameronwp" data-src="../../../../../../../secure.gravatar.com/avatar/fadb35b33601bae1060e508f41a83d9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">cameronwp</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Micr" title="View profile: Micr">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Micr" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Micr</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kosich" title="View profile: kosich">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kosich" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kosich</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Josh_Gallagher" title="View profile: Josh_Gallagher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Josh_Gallagher" data-src="../../../../../../../secure.gravatar.com/avatar/0381ad1f3eb001476e462fa2f55ce8196aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Josh_Gallagher</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/estelle" title="View profile: estelle">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="estelle" data-src="../../../../../../../secure.gravatar.com/avatar/8e75de08afdc1e0fe9333e758d3c72496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">estelle</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/johnpaxton" title="View profile: johnpaxton">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="johnpaxton" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">johnpaxton</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Gerrit" title="View profile: Gerrit">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Gerrit" data-src="../../../../../../../secure.gravatar.com/avatar/b50a5bdae61ce54ef28bc086bb6e11666aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Gerrit</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/spj4g" title="View profile: spj4g">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="spj4g" data-src="../../../../../../../secure.gravatar.com/avatar/aba57e70dd4b0d7f19e55a5333215b326aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">spj4g</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/claudepache" title="View profile: claudepache">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="claudepache" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">claudepache</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Delapouite" title="View profile: Delapouite">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Delapouite" data-src="../../../../../../../secure.gravatar.com/avatar/1de6337421c1eac0227c88502b2759526aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Delapouite</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/zay_montalbo" title="View profile: zay_montalbo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="zay_montalbo" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">zay_montalbo</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/matt.kantor" title="View profile: matt.kantor">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="matt.kantor" data-src="../../../../../../../secure.gravatar.com/avatar/225d0619e0b03ecd72c026954a0987cb6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">matt.kantor</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Intrinsic_and_basic_constraints" rel="internal">Intrinsic and basic constraints</a><ol><li><a href="#Semantic_input_types" rel="internal">Semantic input types</a></li><li><a href="#Validation-related_attributes" rel="internal">Validation-related attributes</a></li></ol></li><li><a href="#Constraint_validation_process" rel="internal">Constraint validation process</a></li><li><a href="#Complex_constraints_using_HTML5_Constraint_API" rel="internal">Complex constraints using HTML5 Constraint API</a><ol><li><a href="#Constraint_combining_several_fields_Postal_code_validation" rel="internal">Constraint combining several fields: Postal code validation</a></li><li><a href="#Limiting_the_size_of_a_file_before_its_upload" rel="internal">Limiting the size of a file before its upload</a></li></ol></li><li><a href="#Visual_styling_of_constraint_validation" rel="internal">Visual styling of constraint validation</a><ol><li><a href="#Controlling_the_look_of_elements" rel="internal">Controlling the look of elements</a><ol><li><a href="#required_and_optional_CSS_pseudo-classes" rel="internal">:required and :optional CSS pseudo-classes</a></li><li><a href="#-moz-placeholder_CSS_pseudo-class" rel="internal">:-moz-placeholder CSS pseudo-class</a></li><li><a href="#valid_invalid_CSS_pseudo-classes" rel="internal">:valid :invalid CSS pseudo-classes</a></li><li><a href="#Default_styles" rel="internal">Default styles</a></li></ol></li><li><a href="#Controlling_the_text_of_constraints_violation" rel="internal">Controlling the text of constraints violation</a><ol><li><a href="#The_x-moz-errormessage_attribute" rel="internal">The x-moz-errormessage attribute</a></li><li><a href="#Constraint_API's_element.setCustomValidity()" rel="internal">Constraint API's element.setCustomValidity()</a></li><li><a href="#Constraint_API's_ValidityState_object" rel="internal">Constraint API's ValidityState object</a></li></ol></li><li><a href="#Examples_of_personalized_styling" rel="internal">Examples of personalized styling</a></li><li><a href="#HTML4_fallback" rel="internal">HTML4 fallback</a><ol><li><a href="#Trivial_fallback" rel="internal">Trivial fallback</a></li><li><a href="#JS_fallback" rel="internal">JS fallback</a></li></ol></li></ol></li><li><a href="#Conclusion" rel="internal">Conclusion</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                <div class="warning warning-review"><p>This article is in need of a technical review.</p></div>
+                                                                            
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>The creation of web forms has always been a complex task. While marking up the form itself is easy, checking whether each field has a valid and coherent value is even more difficult, and informing the user about the problem may become a headache.<a href="../HTML5.html" title="en/HTML/HTML5"> HTML5</a> introduced new mechanisms for forms: it added new semantic types for the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element and <em>constraint validation</em> to ease the work of checking the form content on the client side. Basic, usual constraints can be checked, without the need for JavaScript, by setting new attributes; more complex constraints can be tested using the HTML5 <a href="../Forms_in_HTML.html#Constraint_Validation_API" title="en/HTML/HTML5/Forms in HTML5#Constraint Validation API">Constraint Validation API</a>.</p>
+
+<div class="note"><strong>Note:</strong> HTML5 Constraint validation doesn't remove the need for validation on the <em>server side</em>. Even though far fewer invalid form requests are to be expected, invalid ones can still be sent by non-compliant browsers (for instance, browsers without HTML5 and without JavaScript) or by bad guys trying to trick your web application. Therefore, like with HTML4, you need to also validate input constraints on the server side, in a way that is consistent with what is done on the client side.</div>
+
+<h2 id="Intrinsic_and_basic_constraints">Intrinsic and basic constraints</h2>
+
+<p>In HTML5, basic constraints are declared in two ways:</p>
+
+<ul>
+ <li>By choosing the most semantically appropriate value for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute of the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element, e.g., choosing the <span style="font-family: courier new;">email</span> type automatically creates a constraint that checks whether the value is a valid e-mail address.</li>
+ <li>By setting values on validation-related attributes, allowing basic constraints to be described in a simple way, without the need for JavaScript.</li>
+</ul>
+
+<h3 id="Semantic_input_types">Semantic input types</h3>
+
+<p>The intrinsic constraints for the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute are:</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Input type</th>
+   <th scope="col">Constraint description</th>
+   <th scope="col">Associated violation</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><span style="font-family: courier new;">&lt;input&nbsp;type="URL"&gt;</span></td>
+   <td>The value must be an absolute URL, i.e., one of:
+    <ul>
+     <li>a valid URI (as defined in <a href="http://www.ietf.org/rfc/rfc3986.txt" class="external" title="http://www.ietf.org/rfc/rfc3986.txt">RFC&nbsp;3986</a>)</li>
+     <li>a valid IRI, without a query component (as defined in <a href="http://www.ietf.org/rfc/rfc3987.txt" class="external" title="http://www.ietf.org/rfc/rfc3987.txt">RFC&nbsp;3987</a>)</li>
+     <li>a valid IRI, with a query component without any unescaped non-ASCII character (as defined in <a href="http://www.ietf.org/rfc/rfc3987.txt" class="external" title="http://www.ietf.org/rfc/rfc3987.txt">RFC&nbsp;3987</a>)</li>
+     <li>a valid IRI, and the character set for the document is UTF-8 or UTF-16 (as defined in <a href="http://www.ietf.org/rfc/rfc3987.txt" class="external" title="http://www.ietf.org/rfc/rfc3987.txt">RFC&nbsp;3987</a>)</li>
+    </ul>
+   </td>
+   <td><strong>Type mismatch </strong>constraint violation</td>
+  </tr>
+  <tr>
+   <td>&nbsp;<span style="font-family: courier new;">&lt;input&nbsp;type="email"&gt;</span></td>
+   <td>The value must follow the <a href="http://www.ietf.org/rfc/std/std68.txt" class="external" title="http://www.ietf.org/rfc/std/std68.txt">ABNF</a> production: <code>1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )</code> where:
+    <ul>
+     <li><code>atext</code> is defined in <a href="http://tools.ietf.org/html/rfc5322" class="external" title="http://tools.ietf.org/html/rfc5322">RFC 5322</a>, i.e., a US-ASCII letter (<span style="font-family: courier new;">A</span> to <span style="font-family: courier new;">Z</span> and <span style="font-family: courier new;">a</span>-<span style="font-family: courier new;">z</span>), a digit (<span style="font-family: courier new;">0</span> to <span style="font-family: courier new;">9</span>) or one of the following<span style="font-family: courier new;">! # $ % &amp; ' * + - / = ? ` { } | ~ </span>special character,</li>
+     <li><code>ldh-str</code> is defined in <a href="http://www.apps.ietf.org/rfc/rfc1034.html#sec-3.5" class="external" title="http://www.apps.ietf.org/rfc/rfc1034.html#sec-3.5">RFC 1034</a>, i.e., US-ASCII letters, mixed with digits and <span style="font-family: courier new;">-</span> grouped in words separated by a dot (<span style="font-family: courier new;">.</span>).</li>
+    </ul>
+
+    <div class="note"><strong>Note:</strong> if the <code><a href="../../../HTML/Element/input.html#attr-multiple">multiple</a></code> attribute is set, several e-mail addresses can be set, as a comma-separated list, for this input. If any of these do not satisfy the condition described here, the <strong>Type mismatch </strong>constraint violation is triggered.</div>
+   </td>
+   <td><strong>Type mismatch </strong>constraint violation</td>
+  </tr>
+ </tbody>
+</table>
+
+<p>Note that most input types don't have intrinsic constraints, as some are simply barred from constraint validation or have a sanitization algorithm transforming incorrect values to a correct default.&nbsp;</p>
+
+<h3 id="Validation-related_attributes">Validation-related attributes</h3>
+
+<p>The following attributes are used to describe basic constraints:</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Attribute</th>
+   <th scope="col">Input types supporting the attribute</th>
+   <th scope="col">Possible values</th>
+   <th scope="col">Constraint description</th>
+   <th scope="col">Associated violation</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><code><a href="../../../HTML/Element/input.html#attr-pattern">pattern</a></code></td>
+   <td>text, search, url, tel, email, password</td>
+   <td>A <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions" title="https://developer.mozilla.org/en/JavaScript/Guide/Regular_Expressions">JavaScript regular expression</a> (compiled with the <a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm" class="external" title="http://www.ecma-international.org/publications/standards/Ecma-262.htm">ECMAScript 5</a> <code title="">global</code>, <code title="">ignoreCase</code>, and <code title="">multiline</code> flags <em>disabled)</em></td>
+   <td>The value must match the pattern.</td>
+   <td><strong>Pattern mismatch</strong> constraint violation</td>
+  </tr>
+  <tr>
+   <td rowspan="3"><code><a href="../../../HTML/Element/input.html#attr-min">min</a></code></td>
+   <td>range, number</td>
+   <td>A valid number</td>
+   <td rowspan="3">The value must be greater than or equal to the value.</td>
+   <td rowspan="3"><strong>Underflow</strong> constraint violation</td>
+  </tr>
+  <tr>
+   <td>date, month, week</td>
+   <td>A valid date</td>
+  </tr>
+  <tr>
+   <td>datetime, datetime-local, time</td>
+   <td>A valid date and time</td>
+  </tr>
+  <tr>
+   <td rowspan="3"><code><a href="../../../HTML/Element/input.html#attr-max">max</a></code></td>
+   <td>range, number</td>
+   <td>A valid number</td>
+   <td rowspan="3">The value must be less than or equal to the value</td>
+   <td rowspan="3"><strong>Overflow</strong> constraint violation</td>
+  </tr>
+  <tr>
+   <td>date, month, week</td>
+   <td>A valid date</td>
+  </tr>
+  <tr>
+   <td>datetime, datetime-local, time</td>
+   <td>A valid date and time</td>
+  </tr>
+  <tr>
+   <td><code><a href="../../../HTML/Element/input.html#attr-required">required</a></code></td>
+   <td>text, search, url, tel, email, password, date, datetime, datetime-local, month, week, time, number, checkbox, radio, file; also on the <a href="../../../HTML/Element/select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a> and <a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a> elements</td>
+   <td><em>none</em> as it is a Boolean attribute: its presence means <em>true</em>, its absence means <em>false</em></td>
+   <td>There must be a value (if set).</td>
+   <td><strong>Missing</strong> constraint violation</td>
+  </tr>
+  <tr>
+   <td rowspan="5"><code><a href="../../../HTML/Element/input.html#attr-step">step</a></code></td>
+   <td>date</td>
+   <td>An integer number of days</td>
+   <td rowspan="5">Unless the step is set to the <span style="font-family: courier new;">any</span> literal, the value must be <strong>min</strong> + an integral multiple of the step.</td>
+   <td rowspan="5"><strong>Step mismatch </strong>constraint violation</td>
+  </tr>
+  <tr>
+   <td>month</td>
+   <td>An integer number of months</td>
+  </tr>
+  <tr>
+   <td>week</td>
+   <td>An integer number of weeks</td>
+  </tr>
+  <tr>
+   <td>datetime, datetime-local, time</td>
+   <td>An integer number of seconds</td>
+  </tr>
+  <tr>
+   <td>range, number</td>
+   <td>An integer</td>
+  </tr>
+  <tr>
+   <td><code><a href="../../../HTML/Element/input.html#attr-maxlength">maxlength</a></code></td>
+   <td>text, search, url, tel, email, password; also on the <a href="../../../HTML/Element/textarea.html" title="The HTML &lt;textarea&gt; element represents a multi-line plain-text editing control."><code>&lt;textarea&gt;</code></a> element</td>
+   <td>An integer length</td>
+   <td>The number of characters (code points) must not exceed the value of the attribute.</td>
+   <td><strong>Too long</strong> constraint violation</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Constraint_validation_process"><span class="author-g-by4vjwmiwjiydpj7">Constraint validation process</span></h2>
+
+<p>Constraint validation is done through the Constraint Validation API either on a single form element or at the form level, on the <a href="../../../HTML/Element/form.html" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a> element itself. The constraint validation is done in the following ways:</p>
+
+<ul>
+ <li>By a call to the checkValidity() method&nbsp;of&nbsp;a form-related <a href="https://developer.mozilla.org/en-US/docs/DOM" title="en/DOM">DOM</a> interface (<code><a href="../../../API/HTMLInputElement.html" title="en/DOM/HTMLInputElement">HTMLInputElement</a></code>, <code><a href="../../../API/HTMLSelectElement.html" title="en/DOM/HTMLSelectElement">HTMLSelectElement</a></code>, <code><a href="../../../API/HTMLButtonElement.html" title="en/DOM/HTMLButtonElement">HTMLButtonElement</a></code> or <code><a href="../../../API/HTMLTextAreaElement.html" title="en/DOM/HTMLTextAreaElement">HTMLTextAreaElement</a></code>), which evaluates the constraints only on this element, allowing a script to get this information. (This is typically done by the user-agent when determining which of the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" title="en/CSS">CSS</a> pseudo-classes, <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:valid" title="The :valid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content validates correctly according to the input's type setting. This allows to easily make valid fields adopt an appearance that helps the user confirm that their data is formatted properly."><code>:valid</code></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="The :invalid CSS pseudo-class represents any &lt;input&gt; or &lt;form&gt; element whose content fails to validate according to the input's type setting. This allows you to easily have invalid fields adopt an appearance that helps the user identify and correct errors."><code>:invalid</code></a>, applies.)</li>
+ <li>By a call to the checkValidity() function on the <code><a href="../../../API/HTMLFormElement.html" title="en/DOM/HTMLFormElement">HTMLFormElement</a></code> interface, which is called <em>statically validating the constraints</em>.</li>
+ <li>By submitting the form itself, which is called <em>interactively validating the constraints</em>.</li>
+</ul>
+
+<div class="note"><strong>Note: </strong>
+
+<ul>
+ <li>If the <code><a href="../../../HTML/Element/form.html#attr-novalidate">novalidate</a></code> attribute is set on the <a href="../../../HTML/Element/form.html" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a> element, interactive validation of the constraints doesn't happen.</li>
+ <li>Calling the send() method on the <a href="../../../API/HTMLFormElement.html" title="en/DOM/HTMLFormElement">HTMLFormElement</a> interface doesn't trigger a constraint validation. In other words, this method sends the form data to the server even if doesn't satisfy the constraints.</li>
+</ul>
+</div>
+
+<h2 id="Complex_constraints_using_HTML5_Constraint_API"><span class="author-g-by4vjwmiwjiydpj7">Complex constraints using HTML5 Constraint API</span></h2>
+
+<p><span class="author-g-by4vjwmiwjiydpj7">Using JavaScript and the Constraint API, it is possible to implement more complex constraints, for example, constraints combining several fields, or constraints involving complex calculations.</span></p>
+
+<p><span class="author-g-by4vjwmiwjiydpj7">Basically, the idea is to trigger JavaScript on some form field event (like <strong>onchange</strong>) to calculate whether the constraint is violated, and then to use the method <code><em>field</em>.setCustomValidity()</code> to set the result of the validation: an empty string means the constraint is satisfied, and any other string means there is an error and this string is the error message to display to the user.</span></p>
+
+<h3 id="Constraint_combining_several_fields_Postal_code_validation">Constraint combining several fields: Postal code validation</h3>
+
+<p>The postal code format varies from one country to another. Not only do most countries allow an optional prefix with the country code (like <code>D-</code> in Germany, <code>F- </code> in France or Switzerland), but some countries have postal codes with only a fixed number of digits; others, like the UK, have more complex structures, allowing letters at some specific positions.</p>
+
+<div class="note">
+<p><strong>Note:&nbsp;</strong>This is not a comprehensive postal code validation library, but rather a demonstration of the key concepts.&nbsp;</p>
+</div>
+
+<p><span style="line-height: 1.5;">As an example, we will add a script checking the constraint validation for this simple form:</span></p>
+
+<pre class="brush: html">&lt;form&gt;
+    &lt;label for="ZIP"&gt;ZIP : &lt;/label&gt;
+    &lt;input type="text" id="ZIP"&gt; 
+    &lt;label for="Country"&gt;Country : &lt;/label&gt;
+    &lt;select id="Country"&gt;
+      &lt;option value="ch"&gt;Switzerland&lt;/option&gt;
+      &lt;option value="fr"&gt;France&lt;/option&gt;
+      &lt;option value="de"&gt;Germany&lt;/option&gt;
+      &lt;option value="nl"&gt;The Nederlands&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;input type="submit" value="Validate"&gt;
+&lt;/form&gt;</pre>
+
+<p>This displays the following form:&nbsp;</p>
+
+<p><label>Postal Code: </label><input> <label>Country: </label><select><option value="ch">Switzerland</option><option value="fr">France</option><option value="de">Germany</option><option value="nl">The Netherlands</option></select></p>
+
+<p>First, we write a function checking the constraint itself:</p>
+
+<pre class="brush: js">function checkZIP() {
+  // For each country, defines the pattern that the ZIP has to follow
+  var constraints = {
+    ch : [ '^(CH-)?\\d{4}$', "Switzerland ZIPs must have exactly 4 digits: e.g. CH-1950 or 1950" ],
+    fr : [ '^(F-)?\\d{5}$' , "France ZIPs must have exactly 5 digits: e.g. F-75012 or 75012" ],
+    de : [ '^(D-)?\\d{5}$' , "Germany ZIPs must have exactly 5 digits: e.g. D-12345 or 12345" ],
+    nl : [ '^(NL-)?\\d{4}\\s*([A-RU-Z][A-Z]|S[BCE-RT-Z])$',
+                    "Nederland ZIPs must have exactly 4 digits, followed by 2 letters except SA, SD and SS" ]
+  };
+  
+  // Read the country id
+  var country = document.getElementById("Country").value;
+
+  // Get the NPA field
+  var ZIPField = document.getElementById("ZIP");
+
+  // Build the constraint checker
+  var constraint = new RegExp(constraints[country][0], "");
+    console.log(constraint);
+
+
+  // Check it!
+  if (constraint.test(ZIPField.value)) {
+    // The ZIP follows the constraint, we use the ConstraintAPI to tell it
+    ZIPField.setCustomValidity("");
+  }
+  else {
+    // The ZIP doesn't follow the constraint, we use the ConstraintAPI to
+    // give a message about the format required for this country
+    ZIPField.setCustomValidity(constraints[country][1]);
+  }
+}
+</pre>
+
+<p>Then we link it to the <strong>onchange</strong> event for the <a href="../../../HTML/Element/select.html" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a> and the <strong>oninput</strong> event for the <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>:</p>
+
+<pre class="brush: js">window.onload = function () {
+    document.getElementById("Country").onchange = checkZIP;
+    document.getElementById("ZIP").oninput = checkZIP;
+}</pre>
+
+<p>You can see a <a href="https://developer.mozilla.org/@api/deki/files/4744/=constraint.html" title="https://developer.mozilla.org/@api/deki/files/4744/=constraint.html">live example</a> of the postal code validation. &nbsp;</p>
+
+<h3 id="Limiting_the_size_of_a_file_before_its_upload">Limiting the size of a file before its upload</h3>
+
+<p>Another common constraint is to limit the size of a file to be uploaded. Checking this on the client side before the file is transmitted to the server requires combining the Constraint API, and especially the field.setCustomValidityUI() method, with another JavaScript API, here the HTML5 File API.</p>
+
+<p>Here is the HTML part:</p>
+
+<pre class="brush: html">&lt;label for="FS"&gt;Select a file smaller than 75 kB : &lt;/label&gt;
+&lt;input type="file" id="FS"&gt;</pre>
+
+<p>This displays:</p>
+
+<p><label>Select a file smaller than 75 kB : </label> <input></p>
+
+<p>&nbsp;</p>
+
+<p>The JavaScript reads the file selected, uses the File.size() method to get its size, compares it to the (hard coded) limit, and calls the Constraint API to inform the browser if there is a violation:</p>
+
+<pre class="brush: js">function checkFileSize() {
+  var FS = document.getElementById("FS");
+  var files = FS.files;
+
+  // If there is (at least) one file selected
+  if (files.length &gt; 0) {
+     if (files[0].size &gt; 75 * 1024) { // Check the constraint
+       FS.setCustomValidity("The selected file must not be larger than 75 kB");
+       return;
+     }
+  }
+  // No custom constraint violation
+  FS.setCustomValidity("");
+}</pre>
+
+<p>&nbsp;</p>
+
+<p>Finally we hook the method with the correct event:</p>
+
+<pre class="brush: js">window.onload = function () {
+  document.getElementById("FS").onchange = checkFileSize;
+}</pre>
+
+<p>You can see a <a href="https://developer.mozilla.org/@api/deki/files/4745/=fileconstraint.html" title="https://developer.mozilla.org/@api/deki/files/4745/=fileconstraint.html">live example</a> of the File size constraint validation.</p>
+
+<h2 id="Visual_styling_of_constraint_validation"><span class="author-g-by4vjwmiwjiydpj7">Visual styling of constraint validation</span></h2>
+
+<p>Apart from setting constraints, web developers want to control what messages are displayed to the users and how they are styled.</p>
+
+<h3 id="Controlling_the_look_of_elements">Controlling the look of elements</h3>
+
+<p>The look of elements can be controlled via CSS pseudo-classes.</p>
+
+<h4 id="required_and_optional_CSS_pseudo-classes">:required and :optional CSS pseudo-classes</h4>
+
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:required" title=":required"><code>:required</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:optional" title=":optional"><code>:optional</code></a> <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes" title="Pseudo-classes">pseudo-classes</a> allow writing selectors that match form elements that have the <code><a href="../../../HTML/Global_attributes.html#attr-required">required</a></code> attribute, or that don't have it.</p>
+
+
+<h4 id="-moz-placeholder_CSS_pseudo-class">:-moz-placeholder CSS pseudo-class</h4>
+
+<p>See <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:-moz-placeholder" title="/en-US/docs/Web/CSS/:-moz-placeholder">:-moz-placeholder</a>.</p>
+
+<h4 id="valid_invalid_CSS_pseudo-classes">:valid :invalid CSS pseudo-classes</h4>
+
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:valid" title="/en-US/docs/Web/CSS/:valid">:valid</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid" title="/en-US/docs/Web/CSS/:invalid?redirectlocale=en-US&amp;redirectslug=CSS%2F%3Ainvalid">:invalid</a> <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes" title="/en-US/docs/Web/CSS/Pseudo-classes?redirectlocale=en-US&amp;redirectslug=CSS%2FPseudo-classes">pseudo-classes</a> are used to represent &lt;input&gt; elements whose content validates and fails to validate respectively according to the input's type setting. These classes allow the user to style valid or invalid form elements to make it easier to identify elements that are either formatted correctly or incorrectly.</p>
+
+<h4 id="Default_styles">Default styles</h4>
+
+<h3 id="Controlling_the_text_of_constraints_violation">Controlling the text of constraints violation</h3>
+
+<h4 id="The_x-moz-errormessage_attribute">The x-moz-errormessage attribute</h4>
+
+<p>The x-moz-errormessage attribute is a Mozilla extension that allows you to specify the error message to display when a field does not successfully validate.</p>
+
+<div class="note">
+<p style="margin-left: 40px;">Note: This extension is non-standard.</p>
+</div>
+
+<h4 id="Constraint_API's_element.setCustomValidity()">Constraint API's element.setCustomValidity()</h4>
+
+<p>The element.setCustomValidity(error) method is used to set a custom error message to be displayed when a form is submitted. The method works by taking a string parameter error. If error is a non-empty string, the method assumes validation was unsuccessful and displays error as an error message. If error is an empty string, the element is considered validated and resets the error message.</p>
+
+<h4 id="Constraint_API's_ValidityState_object"><span class="author-g-by4vjwmiwjiydpj7">Constraint API's ValidityState object</span></h4>
+
+<p>The DOM&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/API/ValidityState" title="/en-US/docs/Web/API/ValidityState"><code>ValidityState</code></a> interface represents the <em>validity states</em> that an element can be in, with respect to constraint validation. Together, they help explain why an element's value fails to validate, if it's not valid.</p>
+
+<h3 id="Examples_of_personalized_styling"><span class="author-g-by4vjwmiwjiydpj7">Examples of personalized styling</span></h3>
+
+<h3 id="HTML4_fallback"><span class="author-g-by4vjwmiwjiydpj7">HTML4 fallback</span></h3>
+
+<h4 id="Trivial_fallback"><span class="author-g-by4vjwmiwjiydpj7">Trivial fallback</span></h4>
+
+<h4 id="JS_fallback"><span class="author-g-by4vjwmiwjiydpj7">JS fallback</span></h4>
+
+<h2 id="Conclusion"><span class="author-g-by4vjwmiwjiydpj7">Conclusion</span></h2>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/guide">guide</a></li>
+              <li><a href="../../../../tag/HTML5.html">HTML5</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsContent">NeedsContent</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Selectors">Selectors</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/Dan-Dascalescu">Dan-Dascalescu</a>,             <a href="https://developer.mozilla.org/en-US/profiles/cameronwp">cameronwp</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Micr">Micr</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kosich">kosich</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Josh_Gallagher">Josh_Gallagher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/estelle">estelle</a>,             <a href="https://developer.mozilla.org/en-US/profiles/johnpaxton">johnpaxton</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Gerrit">Gerrit</a>,             <a href="https://developer.mozilla.org/en-US/profiles/spj4g">spj4g</a>,             <a href="https://developer.mozilla.org/en-US/profiles/claudepache">claudepache</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Delapouite">Delapouite</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/zay_montalbo">zay_montalbo</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/matt.kantor">matt.kantor</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Dan-Dascalescu">Dan-Dascalescu</a>,
+                      <time datetime="2015-09-07T03:38:26-07:00">Sep 7, 2015, 3:38:26 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation" selected="">
+          English (US)
+        </option>
+                  <option value="/fr/docs/Web/Guide/HTML/HTML5/Constraint_validation">
+            Français
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:24:30 GMT -->
+</body></html>

@@ -1,0 +1,836 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/HTML/Link_types by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 07:57:07 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Link types</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types$json">
+  <link rel="canonical" href="Link_types.html">
+
+            <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/HTML/Link_types" title="Link types">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/HTML/Link_types" title="Link types">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Link_types" title="链接类型">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Link types">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types">
+  <meta name="twitter:title" content="Link types">
+    <meta property="og:description" content="In HTML, the following link types indicate the relationship between two documents, in which one links to the other using an a, area, or link element.">
+  <meta name="description" content="In HTML, the following link types indicate the relationship between two documents, in which one links to the other using an a, area, or link element.">
+  <meta name="twitter:description" content="In HTML, the following link types indicate the relationship between two documents, in which one links to the other using an a, area, or link element.">
+  
+      
+  </head>
+<body data-slug="Web/HTML/Link_types" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/HTML/Link_types" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FHTML%2FLink_types" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/HTML/Link_types" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FHTML%2FLink_types" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/HTML/Link_types" title="Link types">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/HTML/Link_types" title="Link types">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Link_types" title="链接类型">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../HTML.html" rel="v:url" property="v:title">HTML (HyperText Markup Language)</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Link types</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Link types</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 17 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/craigfrancis" title="View profile: craigfrancis">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="craigfrancis" data-src="../../../../../secure.gravatar.com/avatar/a79bbf35fa73213d7fbf1238cf94cbd96aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">craigfrancis</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jpmedley" title="View profile: jpmedley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jpmedley" data-src="../../../../../secure.gravatar.com/avatar/fde784135f738cc182672e703dea9a4b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jpmedley</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/bmintz" title="View profile: bmintz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bmintz" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">bmintz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/justinthrelkeld" title="View profile: justinthrelkeld">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="justinthrelkeld" data-src="../../../../../secure.gravatar.com/avatar/ae4484f901d9e987fcbbb7f4574163716aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">justinthrelkeld</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jgborges" title="View profile: jgborges">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jgborges" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jgborges</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wzhd" title="View profile: wzhd">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wzhd" data-src="../../../../../secure.gravatar.com/avatar/bc0b81ffb72bb533d2c1766cf6ae74b76aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">wzhd</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/udoline" title="View profile: udoline">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="udoline" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">udoline</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/charmander" title="View profile: charmander">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="charmander" data-src="../../../../../secure.gravatar.com/avatar/ac1ec936c9c89794aec47829185a507d6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">charmander</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/PixnBits" title="View profile: PixnBits">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="PixnBits" data-src="../../../../../secure.gravatar.com/avatar/75286f6a869fb81ee9199dd4fa6b5e7c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">PixnBits</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jsx" title="View profile: jsx">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jsx" data-src="../../../../../secure.gravatar.com/avatar/8cc61d4e2dc63e75976a334348d473bc6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jsx</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/enderandpeter" title="View profile: enderandpeter">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="enderandpeter" data-src="../../../../../secure.gravatar.com/avatar/e272c067cd5fe72f2992b1667340956b6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">enderandpeter</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/miloszj7" title="View profile: miloszj7">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="miloszj7" data-src="../../../../../secure.gravatar.com/avatar/492f0d9f1119e12169dcfc1ce5348dc96aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">miloszj7</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tregagnon" title="View profile: tregagnon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tregagnon" data-src="../../../../../secure.gravatar.com/avatar/8431892ef37f88fe820096de721c00ba6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">tregagnon</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-closed wiki-right-none wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-all wiki-column text-content">
+
+              
+              
+                                                <div class="warning warning-review"><p>This article is in need of a technical review.</p></div>
+                                                                            
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>In HTML, the following link types indicate the relationship between two documents, in which one links to the other using an <a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, or <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a> element.</p>
+
+<table class="standard-table">
+ <caption>List of the defined link types and their significance in HTML</caption>
+ <thead>
+  <tr>
+   <th scope="col">Link Type</th>
+   <th scope="col">Description</th>
+   <th style="width: 12em;" scope="col">Allowed in these elements</th>
+   <th scope="col">Not allowed in these elements</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><code>alternate</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>
+    <ul>
+     <li>If the element is <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a> and the <code><a href="Element/link.html#attr-rel">rel</a></code> attribute also contains the <code>stylesheet</code> type, the link defines an <a href="https://developer.mozilla.org/en-US/docs/Alternative_style_sheets">alternative style sheet</a>; in that case the <code><a href="Element/link.html#attr-title">title</a></code> attribute must be present and not be the empty string.</li>
+     <li>If the <code><a href="Element/link.html#attr-type">type</a></code> is set to <code>application/rss+xml</code> or <code>application/atom+xml</code>, the link defines a <a href="https://developer.mozilla.org/en-US/docs/RSS/Getting_Started/Syndicating">syndication feed</a>. The first one defined on the page is the default.</li>
+     <li>Otherwise, the link defines an alternative page, of one of these types:
+      <ul>
+       <li>for another medium, like a handheld device (if the <code><a href="Element/link.html#attr-media">media</a></code> attribute is set)</li>
+       <li>in another language (if the <code><a href="Element/link.html#attr-hreflang">hreflang</a></code> attribute is set),</li>
+       <li>in another format, such as a PDF (if the <code><a href="Element/link.html#attr-type">type</a></code> attribute is set)</li>
+       <li>a combination of these</li>
+      </ul>
+     </li>
+    </ul>
+   </td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None</em>.</td>
+  </tr>
+  <tr>
+   <td><code>archives</code></td>
+   <td>Defines a hyperlink to a document that contains an archive link to this one. For example, a blog entry could link to a monthly index page this way.<br>
+    <br>
+    <strong>Note:</strong> Although recognized, the singular <code>archive</code> is incorrect and must be avoided.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>author</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Defines a hyperlink to a page describing the author or providing a way to contact the author.<br>
+    <br>
+    <strong>Note:</strong> This may be a <code>mailto:</code> hyperlink, but this is not recommended on public pages as robot harvesters will quickly lead to a lot of spam sent to the address. In that case, it is better to lead to a page containing a contact form.<br>
+    <br>
+    Although recognized, the <code><a href="Element/link.html#attr-rev">rev</a></code> attribute on <a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a> or<a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a> elements with a link type of <code>made</code> is incorrect and should be replaced by the <code><a href="Element/link.html#attr-rel">rel</a></code> attribute with this link type.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>bookmark</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Indicates that the hyperlink is a <a href="https://developer.mozilla.org/en-US/docs/Permalink" class="new">permalink</a> for the nearest ancestor <a href="Element/article.html" title="The HTML Article Element (&lt;article&gt;) represents a self-contained composition in a document, page, application, or site, which is intended to be independently distributable or reusable (e.g., in syndication). This could be a forum post, a magazine or newspaper article, a blog entry, or any other independent item of content. Each &lt;article&gt; should be identified, typically by including a heading (h1-h6 element) as a child of the &lt;article&gt; element."><code>&lt;article&gt;</code></a> element. If none, it is a permalink for the <a href="../Guide/HTML/Sections_and_Outlines_of_an_HTML5_document.html">section</a> that the element is most closely associated to.<br>
+    <br>
+    This allows for bookmarking a single article in a page containing multiple articles, such as on a monthly summary blog page, or a blog aggregator.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>external</code></td>
+   <td>Indicates that the hyperlink leads to a resource outside the site of the current page; that is, following the link will make the user leave the site.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>first</code></td>
+   <td>Indicates that the hyperlink leads to the first resource of the <em>sequence</em> the current page is in.<br>
+    <br>
+    <strong>Note:</strong> Other link types related to linking resources in the same sequence are <code>last</code>, <code>prev</code>, <code>next</code>.<br>
+    <br>
+    Although recognized, the synomyns <code>begin</code> and <code>start</code> are incorrect and must be avoided.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>help</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>
+    <ul>
+     <li>If the element is <a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a> or <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, it indicates that the hyperlink leads to a resource giving further help about the parent of the element, and its descendants.</li>
+     <li>If the element is <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a> it indicates that the hyperlink leads to a resource giving further help about the page as a whole.</li>
+    </ul>
+   </td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>icon</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Defines a resource for representing the page in the user interface, usually an icon (auditory or visual).<br>
+    <br>
+    The <code><a href="Element/link.html#attr-media">media</a></code>, <code><a href="Element/link.html#attr-type">type</a></code> and <code><a href="Element/link.html#attr-sizes">sizes</a></code> attributes allow the browser to select the most appropriate icon for its context. If several resources match, the browser will select the last one declared, in tree order. As these attributes are merely hints, and the resources may be inappropriate upon further inspection, the browser will then select another one, if appropriate.<br>
+    <br>
+    <strong>Note:</strong> Apple's iOS does not use this link type, nor the <code><a href="Element/link.html#attr-sizes">sizes</a></code> attribute, like others mobile browsers do, to select a webpage icon for Web Clip or a start-up placeholder. Instead it uses the non-standard <a href="http://edr.euro.apple.com/library/safari/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW4" class="external"><code>apple-touch-icon</code></a> and <a href="http://edr.euro.apple.com/library/safari/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW6" class="external"><code>apple-touch-startup-image</code></a> respectively.<br>
+    <br>
+    The <code>shortcut</code> link type is often seen before <code>icon</code>, but this link type is non-conforming, ignored and <strong>web authors must not use it anymore</strong>.</td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>index</code></td>
+   <td>Indicates that the page is part of a <em>hierarchical</em> structure and that the hyperlink leads to the top level resource of that structure.<br>
+    <br>
+    If one or several <code>up</code> link types are also present, the number of these <code>up</code> indicates the depth of the current page in the hierarchy.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>last</code></td>
+   <td>Indicates that the hyperlink leads to the <em>last</em> resource of the <em>sequence</em> the current page is in.<br>
+    <br>
+    <strong>Note:</strong> Other link types related to linking resources in the same sequence are <code>first</code>, <code>prev</code>, <code>next</code>.<br>
+    <br>
+    Although recognized, the synomyn <code>end</code> is incorrect and must be avoided.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>license</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Indicates that the hyperlink leads to a document describing the licensing information. If not inside the <a href="Element/head.html" title="The HTML Head Element (&lt;head&gt;) provides general information (metadata) about the document, including its title and links to or definitions of scripts and style sheets"><code>&lt;head&gt;</code></a> element, the standard doesn't distinguish between a hyperlink applying to a specific part of the document or to the document as a whole. Only the data on the page can indicate this.<br>
+    <br>
+    <strong>Note: </strong>Although recognized, the synonym <code>copyright</code> is incorrect and must be avoided.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>next</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Indicates that the hyperlink leads to the <em>next</em> resource of the <em>sequence</em> the current page is in.<br>
+    <br>
+    <strong>Note:</strong> Other link types related to linking resources in the same sequence are <code>first</code>, <code>prev</code>, <code>last</code>.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>nofollow</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Indicates that the linked document is not endorsed by the author of this one, for example if it has no control over it, if it is a bad example or if there is commercial relationship between the two (sold link). This link type may be used by some search engines that use popularity ranking techniques.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>noreferrer</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>
+    <p>Prevents the browser, when navigating to another page, to send this page name, or any other value, as referrer via the <code>Referer:</code> HTTP header.<br>
+     (In Firefox, before Firefox 37, this worked only in links found in pages. Links clicked in the UI, like "Open in a new tab" via the contextual menu, doesn't abide for this value)</p>
+   </td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>pingback</code></td>
+   <td>Defines an external resource URI to call if one make a comment or a citation about the webpage. The protocol used to make such a call is defined in the <a href="http://www.hixie.ch/specs/pingback/pingback" class="external">Pingback 1.0</a> specification.<br>
+    <br>
+    <strong>Note:</strong> if the <code>X-Pingback:</code> HTTP header is also present, this header has precedence over the <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a> element with this link type</td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>preconnect</code></td>
+   <td>Hints the browser to open in advance the connection to the linked web site, without disclosing any private information.</td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>prefetch</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Hints the browser to fetch in advance the linked resource, as it will likely be requested by the user.<br>
+    <br>
+    <strong>Note:</strong> the <a href="https://developer.mozilla.org/en-US/docs/Link_prefetching_FAQ">Link Prefetch FAQ</a> has details on which links can be prefetched and on alternative methods.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a> <span class="inlineIndicator unimplemented unimplementedInline">Unimplemented</span>,<br>
+    <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a> <span class="inlineIndicator unimplemented unimplementedInline">Unimplemented</span>,<br>
+    <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>preload</code></td>
+   <td>Tells the browser to download a resource because this resource will be needed later during the current navigation.</td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>prev</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Indicates that the hyperlink leads to the <em>preceding</em> resource of the <em>sequence</em> the current page is in.<br>
+    <br>
+    <strong>Note:</strong> other link types related to linking resources in the same sequence are <code>first</code>, <code>last</code>, <code>next</code>.<br>
+    <br>
+    Although recognized, the synomyn <code>previous</code> is incorrect and must be avoided.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>search</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Indicates that the hyperlink reference a document whose interface is specially designing for searching in this document, or site, and its resources.<br>
+    <br>
+    If the <code><a href="Element/link.html#attr-type">type</a></code> attribute is set to <code>application/opensearchdescription+xml </code>the resource is an <a href="https://developer.mozilla.org/en-US/docs/Creating_OpenSearch_plugins_for_Firefox">OpenSearch plugin</a> that can be easily added to the interface of some browsers like Firefox or Internet Explorer.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>stylesheet</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Defines an external resource to be used as a stylesheet. If the <code>type</code> is not set, the browser should assume it is a <code>text/css</code> stylesheet until further inspection.<br>
+    <br>
+    If used in combination with the <code>alternate</code> keyword, it defines an <a href="https://developer.mozilla.org/en-US/docs/Alternative_style_sheets">alternative style sheet</a>; in that case the <code><a href="Element/link.html#attr-title">title</a></code> attribute must be present and not be the empty string.</td>
+   <td><a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a></td>
+  </tr>
+  <tr>
+   <td><code>sidebar</code></td>
+   <td>Indicates that the hyperlink leads to a resource that would be better suited for a secondary browsing context, like a <em>sidebar</em>. Browsers, that don't have such a context will ignore this keyword.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>tag</code><br>
+    <span class="inlineIndicator htmlVer htmlVerInline"><a href="../Guide/HTML/HTML5.html">HTML5</a></span></td>
+   <td>Indicates that the hyperlink refers to a document describing a <em>tag</em> that applies to this document.<br>
+    <br>
+    <strong>Note:</strong> this link type should not be set on links to a member of a tag cloud as these do not apply to a single document but to a set of pages.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+  <tr>
+   <td><code>up</code></td>
+   <td>Indicates that the page is part of a <em>hierarchical</em> structure and that the hyperlink leads to the higher level resource of that structure.<br>
+    <br>
+    The number of <code>up</code> link types indicates the depth difference between the current page and the linked resource.</td>
+   <td><a href="Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a>, <a href="Element/area.html" title="The HTML &lt;area&gt; element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a &lt;map&gt; element."><code>&lt;area&gt;</code></a>, <a href="Element/link.html" title="The HTML Link Element (&lt;link&gt;) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets."><code>&lt;link&gt;</code></a></td>
+   <td><em>None.</em></td>
+  </tr>
+ </tbody>
+</table>
+
+<p>&nbsp;</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="../../tag/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/craigfrancis">craigfrancis</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>,             <a href="https://developer.mozilla.org/en-US/profiles/bmintz">bmintz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,             <a href="https://developer.mozilla.org/en-US/profiles/justinthrelkeld">justinthrelkeld</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jgborges">jgborges</a>,             <a href="https://developer.mozilla.org/en-US/profiles/wzhd">wzhd</a>,             <a href="https://developer.mozilla.org/en-US/profiles/udoline">udoline</a>,             <a href="https://developer.mozilla.org/en-US/profiles/charmander">charmander</a>,             <a href="https://developer.mozilla.org/en-US/profiles/PixnBits">PixnBits</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jsx">jsx</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/enderandpeter">enderandpeter</a>,             <a href="https://developer.mozilla.org/en-US/profiles/miloszj7">miloszj7</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/tregagnon">tregagnon</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/craigfrancis">craigfrancis</a>,
+                      <time datetime="2015-09-10T06:52:34-07:00">Sep 10, 2015, 6:52:34 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/HTML/Link_types$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/HTML/Link_types$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/HTML/Link_types" selected="">
+          English (US)
+        </option>
+                  <option value="/fr/docs/Web/HTML/Link_types">
+            Français
+          </option>          <option value="/ja/docs/Web/HTML/Link_types">
+            日本語
+          </option>          <option value="/zh-CN/docs/Web/HTML/Link_types">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/HTML/Link_types by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 07:57:11 GMT -->
+</body></html>

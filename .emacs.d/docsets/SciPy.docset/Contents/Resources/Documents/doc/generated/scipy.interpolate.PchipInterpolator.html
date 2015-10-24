@@ -1,0 +1,204 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.interpolate.PchipInterpolator</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Interpolation (scipy.interpolate)" href="../interpolate.html">
+    <link rel="next" title="scipy.interpolate.PchipInterpolator.__call__" href="scipy.interpolate.PchipInterpolator.__call__.html">
+    <link rel="prev" title="scipy.interpolate.PiecewisePolynomial.extend" href="scipy.interpolate.PiecewisePolynomial.extend.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../interpolate.html" accesskey="U">Interpolation (<tt class="docutils literal"><span class="pre">scipy.interpolate</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.PchipInterpolator.__call__.html" title="scipy.interpolate.PchipInterpolator.__call__" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.interpolate.PiecewisePolynomial.extend.html" title="scipy.interpolate.PiecewisePolynomial.extend" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.interpolate.PiecewisePolynomial.extend.html" title="previous chapter">scipy.interpolate.PiecewisePolynomial.extend</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.interpolate.PchipInterpolator.__call__.html" title="next chapter">scipy.interpolate.PchipInterpolator.__call__</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-interpolate-pchipinterpolator">
+<h1>scipy.interpolate.PchipInterpolator<a class="headerlink" href="#scipy-interpolate-pchipinterpolator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<a class="dashAnchor" name="//apple_ref/Class/scipy.interpolate.PchipInterpolator"></a><dt id="scipy.interpolate.PchipInterpolator">
+<em class="property">class </em><tt class="descclassname">scipy.interpolate.</tt><tt class="descname">PchipInterpolator</tt><big>(</big><em>x</em>, <em>y</em>, <em>axis=0</em>, <em>extrapolate=None</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/interpolate/_monotone.py#L13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.interpolate.PchipInterpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>PCHIP 1-d monotonic cubic interpolation</p>
+<p>x and y are arrays of values used to approximate some function f,
+with <tt class="docutils literal"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">f(x)</span></tt>.  The interpolant uses monotonic cubic splines
+to find the value of new points. (PCHIP stands for Piecewise Cubic
+Hermite Interpolating Polynomial).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>A 1-D array of monotonically increasing real values.  <a class="reference internal" href="scipy.interpolate.PchipInterpolator.x.html#scipy.interpolate.PchipInterpolator.x" title="scipy.interpolate.PchipInterpolator.x"><tt class="xref py py-obj docutils literal"><span class="pre">x</span></tt></a> cannot
+include duplicate values (otherwise f is overspecified)</p>
+</div></blockquote>
+<p><strong>y</strong> : ndarray</p>
+<blockquote>
+<div><p>A 1-D array of real values.  <em class="xref py py-obj">y</em>‘s length along the interpolation
+axis must be equal to the length of <a class="reference internal" href="scipy.interpolate.PchipInterpolator.x.html#scipy.interpolate.PchipInterpolator.x" title="scipy.interpolate.PchipInterpolator.x"><tt class="xref py py-obj docutils literal"><span class="pre">x</span></tt></a>. If N-D array, use axis
+parameter to select correct axis.</p>
+</div></blockquote>
+<p><strong>axis</strong> : int, optional</p>
+<blockquote>
+<div><p>Axis in the y array corresponding to the x-coordinate values.</p>
+</div></blockquote>
+<p><strong>extrapolate</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Whether to extrapolate to ouf-of-bounds points based on first
+and last intervals, or to return NaNs.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="scipy.interpolate.Akima1DInterpolator.html#scipy.interpolate.Akima1DInterpolator" title="scipy.interpolate.Akima1DInterpolator"><tt class="xref py py-obj docutils literal"><span class="pre">Akima1DInterpolator</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The first derivatives are guaranteed to be continuous, but the second
+derivatives may jump at x_k.</p>
+<p>Preserves monotonicity in the interpolation data and does not overshoot
+if the data is not smooth.</p>
+<p>Determines the derivatives at the points x_k, d_k, by using PCHIP
+algorithm:</p>
+<p>Let m_k be the slope of the kth segment (between k and k+1)
+If m_k=0 or m_{k-1}=0 or sgn(m_k) != sgn(m_{k-1}) then d_k == 0
+else use weighted harmonic mean:</p>
+<blockquote>
+<div>w_1 = 2h_k + h_{k-1}, w_2 = h_k + 2h_{k-1}
+1/d_k = 1/(w_1 + w_2)*(w_1 / m_k + w_2 / m_{k-1})</div></blockquote>
+<p>where h_k is the spacing between x_k and x_{k+1}.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%">
+<col width="90%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="scipy.interpolate.PchipInterpolator.__call__.html#scipy.interpolate.PchipInterpolator.__call__" title="scipy.interpolate.PchipInterpolator.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x[,&nbsp;nu,&nbsp;extrapolate])</td>
+<td>Evaluate the piecewise polynomial or its derivative</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.interpolate.PchipInterpolator.derivative.html#scipy.interpolate.PchipInterpolator.derivative" title="scipy.interpolate.PchipInterpolator.derivative"><tt class="xref py py-obj docutils literal"><span class="pre">derivative</span></tt></a>([nu])</td>
+<td>Construct a new piecewise polynomial representing the derivative.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.interpolate.PchipInterpolator.antiderivative.html#scipy.interpolate.PchipInterpolator.antiderivative" title="scipy.interpolate.PchipInterpolator.antiderivative"><tt class="xref py py-obj docutils literal"><span class="pre">antiderivative</span></tt></a>([nu])</td>
+<td>Construct a new piecewise polynomial representing the antiderivative.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

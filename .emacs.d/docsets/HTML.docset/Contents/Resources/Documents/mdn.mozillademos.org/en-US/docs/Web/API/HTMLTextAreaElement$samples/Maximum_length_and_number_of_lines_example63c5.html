@@ -1,0 +1,36 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/HTMLTextAreaElement$samples/Maximum_length_and_number_of_lines_example?revision=893183 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 10:03:04 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body>
+                    <form>
+<p>Textarea with fixed number of characters per line:<br>
+<textarea cols="50" rows="10" name="myInput" onkeypress="return checkRows(this, event);" onpaste="return false;"></textarea></p>
+</form>
+                            <script type="text/javascript">
+                function checkRows(oField, oKeyEvent) {
+	var	nKey = (oKeyEvent || /* old IE */ window.event || /* check is not supported! */ { keyCode: 38 }).keyCode,
+
+		// put here the maximum number of characters per line:
+		nCols = 30,
+		// put here the maximum number of lines:
+		nRows = 5,
+
+		nSelS = oField.selectionStart, nSelE = oField.selectionEnd,
+		sVal = oField.value, nLen = sVal.length,
+
+		nBackward = nSelS >= nCols ? nSelS - nCols : 0,
+		nDeltaForw = sVal.substring(nBackward, nSelS).search(new RegExp("\\n(?!.{0," + String(nCols - 2) + "}\\n)")) + 1,
+		nRowStart = nBackward + nDeltaForw,
+		aReturns = (sVal.substring(0, nSelS) + sVal.substring(nSelE, sVal.length)).match(/\n/g),
+		nRowEnd = nSelE + nRowStart + nCols - nSelS,
+		sRow = sVal.substring(nRowStart, nSelS) + sVal.substring(nSelE, nRowEnd > nLen ? nLen : nRowEnd),
+		bKeepCols = nKey === 13 || nLen + 1 < nCols || /\n/.test(sRow) || ((nRowStart === 0 || nDeltaForw > 0 || nKey > 0) && (sRow.length < nCols || (nKey > 0 && (nLen === nRowEnd || sVal.charAt(nRowEnd) === "\n"))));
+
+	return (nKey !== 13 || (aReturns ? aReturns.length + 1 : 1) < nRows) && ((nKey > 32 && nKey < 41) || bKeepCols);
+}
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/HTMLTextAreaElement$samples/Maximum_length_and_number_of_lines_example?revision=893183 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 10:03:04 GMT -->
+</body></html>

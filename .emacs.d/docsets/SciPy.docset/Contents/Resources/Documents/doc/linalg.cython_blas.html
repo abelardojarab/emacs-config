@@ -1,0 +1,287 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>BLAS Functions for Cython</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="index.html">
+    <link rel="up" title="Linear algebra (scipy.linalg)" href="linalg.html">
+    <link rel="next" title="LAPACK functions for Cython" href="linalg.cython_lapack.html">
+    <link rel="prev" title="scipy.linalg.lapack.zlange" href="generated/scipy.linalg.lapack.zlange.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="linalg.html" accesskey="U">Linear algebra (<tt class="docutils literal"><span class="pre">scipy.linalg</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="linalg.cython_lapack.html" title="LAPACK functions for Cython" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="generated/scipy.linalg.lapack.zlange.html" title="scipy.linalg.lapack.zlange" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/scipy.linalg.lapack.zlange.html" title="previous chapter">scipy.linalg.lapack.zlange</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="linalg.cython_lapack.html" title="next chapter">LAPACK functions for Cython</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <a class="dashAnchor" name="//apple_ref/Module/scipy.linalg.cython_blas"></a><span class="target" id="module-scipy.linalg.cython_blas"></span><div class="section" id="blas-functions-for-cython">
+<h1>BLAS Functions for Cython<a class="headerlink" href="#blas-functions-for-cython" title="Permalink to this headline">¶</a></h1>
+<p>Usable from Cython via:</p>
+<div class="highlight-python"><div class="highlight"><pre>cimport scipy.linalg.cython_blas
+</pre></div>
+</div>
+<p>These wrappers do not check for alignment of arrays.
+Alignment should be checked before these wrappers are used.</p>
+<p>Raw function pointers (Fortran-style pointer arguments):</p>
+<ul class="simple">
+<li>caxpy</li>
+<li>ccopy</li>
+<li>cdotc</li>
+<li>cdotu</li>
+<li>cgbmv</li>
+<li>cgemm</li>
+<li>cgemv</li>
+<li>cgerc</li>
+<li>cgeru</li>
+<li>chbmv</li>
+<li>chemm</li>
+<li>chemv</li>
+<li>cher</li>
+<li>cher2</li>
+<li>cher2k</li>
+<li>cherk</li>
+<li>chpmv</li>
+<li>chpr</li>
+<li>chpr2</li>
+<li>crotg</li>
+<li>cscal</li>
+<li>csrot</li>
+<li>csscal</li>
+<li>cswap</li>
+<li>csymm</li>
+<li>csyr2k</li>
+<li>csyrk</li>
+<li>ctbmv</li>
+<li>ctbsv</li>
+<li>ctpmv</li>
+<li>ctpsv</li>
+<li>ctrmm</li>
+<li>ctrmv</li>
+<li>ctrsm</li>
+<li>ctrsv</li>
+<li>dasum</li>
+<li>daxpy</li>
+<li>dcabs1</li>
+<li>dcopy</li>
+<li>ddot</li>
+<li>dgbmv</li>
+<li>dgemm</li>
+<li>dgemv</li>
+<li>dger</li>
+<li>dnrm2</li>
+<li>drot</li>
+<li>drotg</li>
+<li>drotm</li>
+<li>drotmg</li>
+<li>dsbmv</li>
+<li>dscal</li>
+<li>dsdot</li>
+<li>dspmv</li>
+<li>dspr</li>
+<li>dspr2</li>
+<li>dswap</li>
+<li>dsymm</li>
+<li>dsymv</li>
+<li>dsyr</li>
+<li>dsyr2</li>
+<li>dsyr2k</li>
+<li>dsyrk</li>
+<li>dtbmv</li>
+<li>dtbsv</li>
+<li>dtpmv</li>
+<li>dtpsv</li>
+<li>dtrmm</li>
+<li>dtrmv</li>
+<li>dtrsm</li>
+<li>dtrsv</li>
+<li>dzasum</li>
+<li>dznrm2</li>
+<li>icamax</li>
+<li>idamax</li>
+<li>isamax</li>
+<li>izamax</li>
+<li>lsame</li>
+<li>sasum</li>
+<li>saxpy</li>
+<li>scasum</li>
+<li>scnrm2</li>
+<li>scopy</li>
+<li>sdot</li>
+<li>sdsdot</li>
+<li>sgbmv</li>
+<li>sgemm</li>
+<li>sgemv</li>
+<li>sger</li>
+<li>snrm2</li>
+<li>srot</li>
+<li>srotg</li>
+<li>srotm</li>
+<li>srotmg</li>
+<li>ssbmv</li>
+<li>sscal</li>
+<li>sspmv</li>
+<li>sspr</li>
+<li>sspr2</li>
+<li>sswap</li>
+<li>ssymm</li>
+<li>ssymv</li>
+<li>ssyr</li>
+<li>ssyr2</li>
+<li>ssyr2k</li>
+<li>ssyrk</li>
+<li>stbmv</li>
+<li>stbsv</li>
+<li>stpmv</li>
+<li>stpsv</li>
+<li>strmm</li>
+<li>strmv</li>
+<li>strsm</li>
+<li>strsv</li>
+<li>zaxpy</li>
+<li>zcopy</li>
+<li>zdotc</li>
+<li>zdotu</li>
+<li>zdrot</li>
+<li>zdscal</li>
+<li>zgbmv</li>
+<li>zgemm</li>
+<li>zgemv</li>
+<li>zgerc</li>
+<li>zgeru</li>
+<li>zhbmv</li>
+<li>zhemm</li>
+<li>zhemv</li>
+<li>zher</li>
+<li>zher2</li>
+<li>zher2k</li>
+<li>zherk</li>
+<li>zhpmv</li>
+<li>zhpr</li>
+<li>zhpr2</li>
+<li>zrotg</li>
+<li>zscal</li>
+<li>zswap</li>
+<li>zsymm</li>
+<li>zsyr2k</li>
+<li>zsyrk</li>
+<li>ztbmv</li>
+<li>ztbsv</li>
+<li>ztpmv</li>
+<li>ztpsv</li>
+<li>ztrmm</li>
+<li>ztrmv</li>
+<li>ztrsm</li>
+<li>ztrsv</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

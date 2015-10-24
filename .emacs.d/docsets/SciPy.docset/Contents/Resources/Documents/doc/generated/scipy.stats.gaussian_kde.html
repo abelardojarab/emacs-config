@@ -1,0 +1,321 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.stats.gaussian_kde</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Statistical functions (scipy.stats)" href="../stats.html">
+    <link rel="next" title="scipy.stats.gaussian_kde.evaluate" href="scipy.stats.gaussian_kde.evaluate.html">
+    <link rel="prev" title="scipy.stats.boxcox_normplot" href="scipy.stats.boxcox_normplot.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../stats.html" accesskey="U">Statistical functions (<tt class="docutils literal"><span class="pre">scipy.stats</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.gaussian_kde.evaluate.html" title="scipy.stats.gaussian_kde.evaluate" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.boxcox_normplot.html" title="scipy.stats.boxcox_normplot" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.stats.boxcox_normplot.html" title="previous chapter">scipy.stats.boxcox_normplot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.stats.gaussian_kde.evaluate.html" title="next chapter">scipy.stats.gaussian_kde.evaluate</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-stats-gaussian-kde">
+<h1>scipy.stats.gaussian_kde<a class="headerlink" href="#scipy-stats-gaussian-kde" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<a class="dashAnchor" name="//apple_ref/Class/scipy.stats.gaussian_kde"></a><dt id="scipy.stats.gaussian_kde">
+<em class="property">class </em><tt class="descclassname">scipy.stats.</tt><tt class="descname">gaussian_kde</tt><big>(</big><em>dataset</em>, <em>bw_method=None</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/stats/kde.py#L41"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.stats.gaussian_kde" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of a kernel-density estimate using Gaussian kernels.</p>
+<p>Kernel density estimation is a way to estimate the probability density
+function (PDF) of a random variable in a non-parametric way.
+<a class="reference internal" href="#scipy.stats.gaussian_kde" title="scipy.stats.gaussian_kde"><tt class="xref py py-obj docutils literal"><span class="pre">gaussian_kde</span></tt></a> works for both uni-variate and multi-variate data.   It
+includes automatic bandwidth determination.  The estimation works best for
+a unimodal distribution; bimodal or multi-modal distributions tend to be
+oversmoothed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dataset</strong> : array_like</p>
+<blockquote>
+<div><p>Datapoints to estimate from. In case of univariate data this is a 1-D
+array, otherwise a 2-D array with shape (# of dims, # of data).</p>
+</div></blockquote>
+<p><strong>bw_method</strong> : str, scalar or callable, optional</p>
+<blockquote class="last">
+<div><p>The method used to calculate the estimator bandwidth.  This can be
+‘scott’, ‘silverman’, a scalar constant or a callable.  If a scalar,
+this will be used directly as <em class="xref py py-obj">kde.factor</em>.  If a callable, it should
+take a <a class="reference internal" href="#scipy.stats.gaussian_kde" title="scipy.stats.gaussian_kde"><tt class="xref py py-obj docutils literal"><span class="pre">gaussian_kde</span></tt></a> instance as only parameter and return a scalar.
+If None (default), ‘scott’ is used.  See Notes for more details.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Bandwidth selection strongly influences the estimate obtained from the KDE
+(much more so than the actual shape of the kernel).  Bandwidth selection
+can be done by a “rule of thumb”, by cross-validation, by “plug-in
+methods” or by other means; see <a class="reference internal" href="#r322" id="id1">[R322]</a>, <a class="reference internal" href="#r323" id="id2">[R323]</a> for reviews.  <a class="reference internal" href="#scipy.stats.gaussian_kde" title="scipy.stats.gaussian_kde"><tt class="xref py py-obj docutils literal"><span class="pre">gaussian_kde</span></tt></a>
+uses a rule of thumb, the default is Scott’s Rule.</p>
+<p>Scott’s Rule <a class="reference internal" href="#r320" id="id3">[R320]</a>, implemented as <a class="reference internal" href="scipy.stats.gaussian_kde.scotts_factor.html#scipy.stats.gaussian_kde.scotts_factor" title="scipy.stats.gaussian_kde.scotts_factor"><tt class="xref py py-obj docutils literal"><span class="pre">scotts_factor</span></tt></a>, is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">n</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="mi">4</span><span class="p">)),</span>
+</pre></div>
+</div>
+<p>with <tt class="docutils literal"><span class="pre">n</span></tt> the number of data points and <tt class="docutils literal"><span class="pre">d</span></tt> the number of dimensions.
+Silverman’s Rule <a class="reference internal" href="#r321" id="id4">[R321]</a>, implemented as <a class="reference internal" href="scipy.stats.gaussian_kde.silverman_factor.html#scipy.stats.gaussian_kde.silverman_factor" title="scipy.stats.gaussian_kde.silverman_factor"><tt class="xref py py-obj docutils literal"><span class="pre">silverman_factor</span></tt></a>, is:</p>
+<div class="highlight-python"><div class="highlight"><pre>(n * (d + 2) / 4.)**(-1. / (d + 4)).
+</pre></div>
+</div>
+<p>Good general descriptions of kernel density estimation can be found in <a class="reference internal" href="#r320" id="id5">[R320]</a>
+and <a class="reference internal" href="#r321" id="id6">[R321]</a>, the mathematics for this multi-dimensional implementation can be
+found in <a class="reference internal" href="#r320" id="id7">[R320]</a>.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r320" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R320]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id5">2</a>, <a class="fn-backref" href="#id7">3</a>, <a class="fn-backref" href="#id8">4</a>)</em> D.W. Scott, “Multivariate Density Estimation: Theory, Practice, and
+Visualization”, John Wiley &amp; Sons, New York, Chicester, 1992.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r321" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R321]</td><td><em>(<a class="fn-backref" href="#id4">1</a>, <a class="fn-backref" href="#id6">2</a>, <a class="fn-backref" href="#id9">3</a>)</em> B.W. Silverman, “Density Estimation for Statistics and Data
+Analysis”, Vol. 26, Monographs on Statistics and Applied Probability,
+Chapman and Hall, London, 1986.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r322" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R322]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id10">2</a>)</em> B.A. Turlach, “Bandwidth Selection in Kernel Density Estimation: A
+Review”, CORE and Institut de Statistique, Vol. 19, pp. 1-33, 1993.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r323" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R323]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id11">2</a>)</em> D.M. Bashtannyk and R.J. Hyndman, “Bandwidth selection for kernel
+conditional density estimation”, Computational Statistics &amp; Data
+Analysis, Vol. 36, pp. 279-298, 2001.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Generate some random two-dimensional data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">measure</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="s">"Measurement model, return two coupled measurements."</span>
+<span class="gp">... </span>    <span class="n">m1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">m2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">m1</span><span class="o">+</span><span class="n">m2</span><span class="p">,</span> <span class="n">m1</span><span class="o">-</span><span class="n">m2</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span> <span class="o">=</span> <span class="n">measure</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xmin</span> <span class="o">=</span> <span class="n">m1</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xmax</span> <span class="o">=</span> <span class="n">m1</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ymin</span> <span class="o">=</span> <span class="n">m2</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ymax</span> <span class="o">=</span> <span class="n">m2</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Perform a kernel density estimate on the data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">:</span><span class="mi">100j</span><span class="p">,</span> <span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">:</span><span class="mi">100j</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kernel</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">gaussian_kde</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">kernel</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Plot the results:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">Z</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gist_earth_r</span><span class="p">,</span>
+<span class="gp">... </span>          <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="s">'k.'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../generated/scipy-stats-gaussian_kde-1.py">Source code</a>)</p>
+<div class="figure">
+<img alt="../_images/scipy-stats-gaussian_kde-1.png" src="../_images/scipy-stats-gaussian_kde-1.png">
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%">
+<col width="92%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>dataset</td>
+<td>(ndarray) The dataset with which <a class="reference internal" href="#scipy.stats.gaussian_kde" title="scipy.stats.gaussian_kde"><tt class="xref py py-obj docutils literal"><span class="pre">gaussian_kde</span></tt></a> was initialized.</td>
+</tr>
+<tr class="row-even"><td>d</td>
+<td>(int) Number of dimensions.</td>
+</tr>
+<tr class="row-odd"><td>n</td>
+<td>(int) Number of datapoints.</td>
+</tr>
+<tr class="row-even"><td>factor</td>
+<td>(float) The bandwidth factor, obtained from <em class="xref py py-obj">kde.covariance_factor</em>, with which the covariance matrix is multiplied.</td>
+</tr>
+<tr class="row-odd"><td>covariance</td>
+<td>(ndarray) The covariance matrix of <em class="xref py py-obj">dataset</em>, scaled by the calculated bandwidth (<em class="xref py py-obj">kde.factor</em>).</td>
+</tr>
+<tr class="row-even"><td>inv_cov</td>
+<td>(ndarray) The inverse of <em class="xref py py-obj">covariance</em>.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%">
+<col width="90%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="scipy.stats.gaussian_kde.evaluate.html#scipy.stats.gaussian_kde.evaluate" title="scipy.stats.gaussian_kde.evaluate"><tt class="xref py py-obj docutils literal"><span class="pre">evaluate</span></tt></a>(points)</td>
+<td>Evaluate the estimated pdf on a set of points.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.stats.gaussian_kde.__call__.html#scipy.stats.gaussian_kde.__call__" title="scipy.stats.gaussian_kde.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(points)</td>
+<td>Evaluate the estimated pdf on a set of points.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.stats.gaussian_kde.integrate_gaussian.html#scipy.stats.gaussian_kde.integrate_gaussian" title="scipy.stats.gaussian_kde.integrate_gaussian"><tt class="xref py py-obj docutils literal"><span class="pre">integrate_gaussian</span></tt></a>(mean,&nbsp;cov)</td>
+<td>Multiply estimated density by a multivariate Gaussian and integrate over the whole space.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.stats.gaussian_kde.integrate_box_1d.html#scipy.stats.gaussian_kde.integrate_box_1d" title="scipy.stats.gaussian_kde.integrate_box_1d"><tt class="xref py py-obj docutils literal"><span class="pre">integrate_box_1d</span></tt></a>(low,&nbsp;high)</td>
+<td>Computes the integral of a 1D pdf between two bounds.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.stats.gaussian_kde.integrate_box.html#scipy.stats.gaussian_kde.integrate_box" title="scipy.stats.gaussian_kde.integrate_box"><tt class="xref py py-obj docutils literal"><span class="pre">integrate_box</span></tt></a>(low_bounds,&nbsp;high_bounds[,&nbsp;maxpts])</td>
+<td>Computes the integral of a pdf over a rectangular interval.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.stats.gaussian_kde.integrate_kde.html#scipy.stats.gaussian_kde.integrate_kde" title="scipy.stats.gaussian_kde.integrate_kde"><tt class="xref py py-obj docutils literal"><span class="pre">integrate_kde</span></tt></a>(other)</td>
+<td>Computes the integral of the product of this  kernel density estimate with another.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.stats.gaussian_kde.pdf.html#scipy.stats.gaussian_kde.pdf" title="scipy.stats.gaussian_kde.pdf"><tt class="xref py py-obj docutils literal"><span class="pre">pdf</span></tt></a>(x)</td>
+<td>Evaluate the estimated pdf on a provided set of points.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.stats.gaussian_kde.logpdf.html#scipy.stats.gaussian_kde.logpdf" title="scipy.stats.gaussian_kde.logpdf"><tt class="xref py py-obj docutils literal"><span class="pre">logpdf</span></tt></a>(x)</td>
+<td>Evaluate the log of the estimated pdf on a provided set of points.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.stats.gaussian_kde.resample.html#scipy.stats.gaussian_kde.resample" title="scipy.stats.gaussian_kde.resample"><tt class="xref py py-obj docutils literal"><span class="pre">resample</span></tt></a>([size])</td>
+<td>Randomly sample a dataset from the estimated pdf.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.stats.gaussian_kde.set_bandwidth.html#scipy.stats.gaussian_kde.set_bandwidth" title="scipy.stats.gaussian_kde.set_bandwidth"><tt class="xref py py-obj docutils literal"><span class="pre">set_bandwidth</span></tt></a>([bw_method])</td>
+<td>Compute the estimator bandwidth with given method.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.stats.gaussian_kde.covariance_factor.html#scipy.stats.gaussian_kde.covariance_factor" title="scipy.stats.gaussian_kde.covariance_factor"><tt class="xref py py-obj docutils literal"><span class="pre">covariance_factor</span></tt></a>()</td>
+<td>Computes the coefficient (<em class="xref py py-obj">kde.factor</em>) that multiplies the data covariance matrix to obtain the kernel covariance matrix.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

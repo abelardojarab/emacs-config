@@ -1,0 +1,892 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>Low-level LAPACK functions</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="index.html">
+    <link rel="up" title="Linear algebra (scipy.linalg)" href="linalg.html">
+    <link rel="next" title="scipy.linalg.lapack.sgbsv" href="generated/scipy.linalg.lapack.sgbsv.html">
+    <link rel="prev" title="scipy.linalg.blas.zsyr2k" href="generated/scipy.linalg.blas.zsyr2k.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="linalg.html" accesskey="U">Linear algebra (<tt class="docutils literal"><span class="pre">scipy.linalg</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="generated/scipy.linalg.lapack.sgbsv.html" title="scipy.linalg.lapack.sgbsv" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="generated/scipy.linalg.blas.zsyr2k.html" title="scipy.linalg.blas.zsyr2k" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Low-level LAPACK functions</a></li>
+<li><a class="reference internal" href="#finding-functions">Finding functions</a></li>
+<li><a class="reference internal" href="#all-functions">All functions</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/scipy.linalg.blas.zsyr2k.html" title="previous chapter">scipy.linalg.blas.zsyr2k</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/scipy.linalg.lapack.sgbsv.html" title="next chapter">scipy.linalg.lapack.sgbsv</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <a class="dashAnchor" name="//apple_ref/Module/scipy.linalg.lapack"></a><span class="target" id="module-scipy.linalg.lapack"></span><div class="section" id="low-level-lapack-functions">
+<h1>Low-level LAPACK functions<a class="headerlink" href="#low-level-lapack-functions" title="Permalink to this headline">¶</a></h1>
+<p>This module contains low-level functions from the LAPACK library.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.12.0.</span></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">These functions do little to no error checking.
+It is possible to cause crashes by mis-using them,
+so prefer using the higher-level routines in <a class="reference internal" href="linalg.html#module-scipy.linalg" title="scipy.linalg"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.linalg</span></tt></a>.</p>
+</div>
+</div>
+<div class="section" id="finding-functions">
+<h1>Finding functions<a class="headerlink" href="#finding-functions" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%">
+<col width="90%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_lapack_funcs</span></tt>(names[,&nbsp;arrays,&nbsp;dtype])</td>
+<td>Return available LAPACK function objects from names.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="all-functions">
+<h1>All functions<a class="headerlink" href="#all-functions" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%">
+<col width="90%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgbsv.html#scipy.linalg.lapack.sgbsv" title="scipy.linalg.lapack.sgbsv"><tt class="xref py py-obj docutils literal"><span class="pre">sgbsv</span></tt></a>(kl,ku,ab,b,[overwrite_ab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgbsv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgbsv.html#scipy.linalg.lapack.dgbsv" title="scipy.linalg.lapack.dgbsv"><tt class="xref py py-obj docutils literal"><span class="pre">dgbsv</span></tt></a>(kl,ku,ab,b,[overwrite_ab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgbsv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgbsv.html#scipy.linalg.lapack.cgbsv" title="scipy.linalg.lapack.cgbsv"><tt class="xref py py-obj docutils literal"><span class="pre">cgbsv</span></tt></a>(kl,ku,ab,b,[overwrite_ab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgbsv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgbsv.html#scipy.linalg.lapack.zgbsv" title="scipy.linalg.lapack.zgbsv"><tt class="xref py py-obj docutils literal"><span class="pre">zgbsv</span></tt></a>(kl,ku,ab,b,[overwrite_ab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgbsv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgbtrf.html#scipy.linalg.lapack.sgbtrf" title="scipy.linalg.lapack.sgbtrf"><tt class="xref py py-obj docutils literal"><span class="pre">sgbtrf</span></tt></a>(ab,kl,ku,[m,n,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgbtrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgbtrf.html#scipy.linalg.lapack.dgbtrf" title="scipy.linalg.lapack.dgbtrf"><tt class="xref py py-obj docutils literal"><span class="pre">dgbtrf</span></tt></a>(ab,kl,ku,[m,n,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgbtrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgbtrf.html#scipy.linalg.lapack.cgbtrf" title="scipy.linalg.lapack.cgbtrf"><tt class="xref py py-obj docutils literal"><span class="pre">cgbtrf</span></tt></a>(ab,kl,ku,[m,n,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgbtrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgbtrf.html#scipy.linalg.lapack.zgbtrf" title="scipy.linalg.lapack.zgbtrf"><tt class="xref py py-obj docutils literal"><span class="pre">zgbtrf</span></tt></a>(ab,kl,ku,[m,n,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgbtrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgbtrs.html#scipy.linalg.lapack.sgbtrs" title="scipy.linalg.lapack.sgbtrs"><tt class="xref py py-obj docutils literal"><span class="pre">sgbtrs</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgbtrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgbtrs.html#scipy.linalg.lapack.dgbtrs" title="scipy.linalg.lapack.dgbtrs"><tt class="xref py py-obj docutils literal"><span class="pre">dgbtrs</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgbtrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgbtrs.html#scipy.linalg.lapack.cgbtrs" title="scipy.linalg.lapack.cgbtrs"><tt class="xref py py-obj docutils literal"><span class="pre">cgbtrs</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgbtrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgbtrs.html#scipy.linalg.lapack.zgbtrs" title="scipy.linalg.lapack.zgbtrs"><tt class="xref py py-obj docutils literal"><span class="pre">zgbtrs</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgbtrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgebal.html#scipy.linalg.lapack.sgebal" title="scipy.linalg.lapack.sgebal"><tt class="xref py py-obj docutils literal"><span class="pre">sgebal</span></tt></a>(a,[scale,permute,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgebal</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgebal.html#scipy.linalg.lapack.dgebal" title="scipy.linalg.lapack.dgebal"><tt class="xref py py-obj docutils literal"><span class="pre">dgebal</span></tt></a>(a,[scale,permute,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgebal</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgebal.html#scipy.linalg.lapack.cgebal" title="scipy.linalg.lapack.cgebal"><tt class="xref py py-obj docutils literal"><span class="pre">cgebal</span></tt></a>(a,[scale,permute,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgebal</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgebal.html#scipy.linalg.lapack.zgebal" title="scipy.linalg.lapack.zgebal"><tt class="xref py py-obj docutils literal"><span class="pre">zgebal</span></tt></a>(a,[scale,permute,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgebal</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgees.html#scipy.linalg.lapack.sgees" title="scipy.linalg.lapack.sgees"><tt class="xref py py-obj docutils literal"><span class="pre">sgees</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgees</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgees.html#scipy.linalg.lapack.dgees" title="scipy.linalg.lapack.dgees"><tt class="xref py py-obj docutils literal"><span class="pre">dgees</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgees</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgees.html#scipy.linalg.lapack.cgees" title="scipy.linalg.lapack.cgees"><tt class="xref py py-obj docutils literal"><span class="pre">cgees</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgees</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgees.html#scipy.linalg.lapack.zgees" title="scipy.linalg.lapack.zgees"><tt class="xref py py-obj docutils literal"><span class="pre">zgees</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgees</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgeev.html#scipy.linalg.lapack.sgeev" title="scipy.linalg.lapack.sgeev"><tt class="xref py py-obj docutils literal"><span class="pre">sgeev</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgeev</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgeev.html#scipy.linalg.lapack.dgeev" title="scipy.linalg.lapack.dgeev"><tt class="xref py py-obj docutils literal"><span class="pre">dgeev</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgeev</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgeev.html#scipy.linalg.lapack.cgeev" title="scipy.linalg.lapack.cgeev"><tt class="xref py py-obj docutils literal"><span class="pre">cgeev</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgeev</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgeev.html#scipy.linalg.lapack.zgeev" title="scipy.linalg.lapack.zgeev"><tt class="xref py py-obj docutils literal"><span class="pre">zgeev</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgeev</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgeev_lwork.html#scipy.linalg.lapack.sgeev_lwork" title="scipy.linalg.lapack.sgeev_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">sgeev_lwork</span></tt></a>(n,[compute_vl,compute_vr])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgeev_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgeev_lwork.html#scipy.linalg.lapack.dgeev_lwork" title="scipy.linalg.lapack.dgeev_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">dgeev_lwork</span></tt></a>(n,[compute_vl,compute_vr])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgeev_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgeev_lwork.html#scipy.linalg.lapack.cgeev_lwork" title="scipy.linalg.lapack.cgeev_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">cgeev_lwork</span></tt></a>(n,[compute_vl,compute_vr])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgeev_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgeev_lwork.html#scipy.linalg.lapack.zgeev_lwork" title="scipy.linalg.lapack.zgeev_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">zgeev_lwork</span></tt></a>(n,[compute_vl,compute_vr])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgeev_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgegv.html#scipy.linalg.lapack.sgegv" title="scipy.linalg.lapack.sgegv"><tt class="xref py py-obj docutils literal"><span class="pre">sgegv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgegv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgegv.html#scipy.linalg.lapack.dgegv" title="scipy.linalg.lapack.dgegv"><tt class="xref py py-obj docutils literal"><span class="pre">dgegv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgegv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgegv.html#scipy.linalg.lapack.cgegv" title="scipy.linalg.lapack.cgegv"><tt class="xref py py-obj docutils literal"><span class="pre">cgegv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgegv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgegv.html#scipy.linalg.lapack.zgegv" title="scipy.linalg.lapack.zgegv"><tt class="xref py py-obj docutils literal"><span class="pre">zgegv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgegv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgehrd.html#scipy.linalg.lapack.sgehrd" title="scipy.linalg.lapack.sgehrd"><tt class="xref py py-obj docutils literal"><span class="pre">sgehrd</span></tt></a>(a,[lo,hi,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgehrd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgehrd.html#scipy.linalg.lapack.dgehrd" title="scipy.linalg.lapack.dgehrd"><tt class="xref py py-obj docutils literal"><span class="pre">dgehrd</span></tt></a>(a,[lo,hi,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgehrd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgehrd.html#scipy.linalg.lapack.cgehrd" title="scipy.linalg.lapack.cgehrd"><tt class="xref py py-obj docutils literal"><span class="pre">cgehrd</span></tt></a>(a,[lo,hi,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgehrd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgehrd.html#scipy.linalg.lapack.zgehrd" title="scipy.linalg.lapack.zgehrd"><tt class="xref py py-obj docutils literal"><span class="pre">zgehrd</span></tt></a>(a,[lo,hi,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgehrd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgehrd_lwork.html#scipy.linalg.lapack.sgehrd_lwork" title="scipy.linalg.lapack.sgehrd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">sgehrd_lwork</span></tt></a>(n,[lo,hi])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgehrd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgehrd_lwork.html#scipy.linalg.lapack.dgehrd_lwork" title="scipy.linalg.lapack.dgehrd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">dgehrd_lwork</span></tt></a>(n,[lo,hi])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgehrd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgehrd_lwork.html#scipy.linalg.lapack.cgehrd_lwork" title="scipy.linalg.lapack.cgehrd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">cgehrd_lwork</span></tt></a>(n,[lo,hi])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgehrd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgehrd_lwork.html#scipy.linalg.lapack.zgehrd_lwork" title="scipy.linalg.lapack.zgehrd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">zgehrd_lwork</span></tt></a>(n,[lo,hi])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgehrd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgelss.html#scipy.linalg.lapack.sgelss" title="scipy.linalg.lapack.sgelss"><tt class="xref py py-obj docutils literal"><span class="pre">sgelss</span></tt></a>(a,b,[cond,lwork,overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgelss</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgelss.html#scipy.linalg.lapack.dgelss" title="scipy.linalg.lapack.dgelss"><tt class="xref py py-obj docutils literal"><span class="pre">dgelss</span></tt></a>(a,b,[cond,lwork,overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgelss</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgelss.html#scipy.linalg.lapack.cgelss" title="scipy.linalg.lapack.cgelss"><tt class="xref py py-obj docutils literal"><span class="pre">cgelss</span></tt></a>(a,b,[cond,lwork,overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgelss</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgelss.html#scipy.linalg.lapack.zgelss" title="scipy.linalg.lapack.zgelss"><tt class="xref py py-obj docutils literal"><span class="pre">zgelss</span></tt></a>(a,b,[cond,lwork,overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgelss</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgelss_lwork.html#scipy.linalg.lapack.sgelss_lwork" title="scipy.linalg.lapack.sgelss_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">sgelss_lwork</span></tt></a>(m,n,nrhs,[cond,lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgelss_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgelss_lwork.html#scipy.linalg.lapack.dgelss_lwork" title="scipy.linalg.lapack.dgelss_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">dgelss_lwork</span></tt></a>(m,n,nrhs,[cond,lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgelss_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgelss_lwork.html#scipy.linalg.lapack.cgelss_lwork" title="scipy.linalg.lapack.cgelss_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">cgelss_lwork</span></tt></a>(m,n,nrhs,[cond,lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgelss_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgelss_lwork.html#scipy.linalg.lapack.zgelss_lwork" title="scipy.linalg.lapack.zgelss_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">zgelss_lwork</span></tt></a>(m,n,nrhs,[cond,lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgelss_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgelsd.html#scipy.linalg.lapack.sgelsd" title="scipy.linalg.lapack.sgelsd"><tt class="xref py py-obj docutils literal"><span class="pre">sgelsd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgelsd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgelsd.html#scipy.linalg.lapack.dgelsd" title="scipy.linalg.lapack.dgelsd"><tt class="xref py py-obj docutils literal"><span class="pre">dgelsd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgelsd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgelsd.html#scipy.linalg.lapack.cgelsd" title="scipy.linalg.lapack.cgelsd"><tt class="xref py py-obj docutils literal"><span class="pre">cgelsd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgelsd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgelsd.html#scipy.linalg.lapack.zgelsd" title="scipy.linalg.lapack.zgelsd"><tt class="xref py py-obj docutils literal"><span class="pre">zgelsd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgelsd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgelsd_lwork.html#scipy.linalg.lapack.sgelsd_lwork" title="scipy.linalg.lapack.sgelsd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">sgelsd_lwork</span></tt></a>(m,n,nrhs,[cond,lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgelsd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgelsd_lwork.html#scipy.linalg.lapack.dgelsd_lwork" title="scipy.linalg.lapack.dgelsd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">dgelsd_lwork</span></tt></a>(m,n,nrhs,[cond,lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgelsd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgelsd_lwork.html#scipy.linalg.lapack.cgelsd_lwork" title="scipy.linalg.lapack.cgelsd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">cgelsd_lwork</span></tt></a>(m,n,nrhs,[cond,lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgelsd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgelsd_lwork.html#scipy.linalg.lapack.zgelsd_lwork" title="scipy.linalg.lapack.zgelsd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">zgelsd_lwork</span></tt></a>(m,n,nrhs,[cond,lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgelsd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgelsy.html#scipy.linalg.lapack.sgelsy" title="scipy.linalg.lapack.sgelsy"><tt class="xref py py-obj docutils literal"><span class="pre">sgelsy</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgelsy</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgelsy.html#scipy.linalg.lapack.dgelsy" title="scipy.linalg.lapack.dgelsy"><tt class="xref py py-obj docutils literal"><span class="pre">dgelsy</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgelsy</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgelsy.html#scipy.linalg.lapack.cgelsy" title="scipy.linalg.lapack.cgelsy"><tt class="xref py py-obj docutils literal"><span class="pre">cgelsy</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgelsy</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgelsy.html#scipy.linalg.lapack.zgelsy" title="scipy.linalg.lapack.zgelsy"><tt class="xref py py-obj docutils literal"><span class="pre">zgelsy</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgelsy</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgelsy_lwork.html#scipy.linalg.lapack.sgelsy_lwork" title="scipy.linalg.lapack.sgelsy_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">sgelsy_lwork</span></tt></a>(m,n,nrhs,cond,[lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgelsy_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgelsy_lwork.html#scipy.linalg.lapack.dgelsy_lwork" title="scipy.linalg.lapack.dgelsy_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">dgelsy_lwork</span></tt></a>(m,n,nrhs,cond,[lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgelsy_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgelsy_lwork.html#scipy.linalg.lapack.cgelsy_lwork" title="scipy.linalg.lapack.cgelsy_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">cgelsy_lwork</span></tt></a>(m,n,nrhs,cond,[lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgelsy_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgelsy_lwork.html#scipy.linalg.lapack.zgelsy_lwork" title="scipy.linalg.lapack.zgelsy_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">zgelsy_lwork</span></tt></a>(m,n,nrhs,cond,[lwork])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgelsy_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgeqp3.html#scipy.linalg.lapack.sgeqp3" title="scipy.linalg.lapack.sgeqp3"><tt class="xref py py-obj docutils literal"><span class="pre">sgeqp3</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgeqp3</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgeqp3.html#scipy.linalg.lapack.dgeqp3" title="scipy.linalg.lapack.dgeqp3"><tt class="xref py py-obj docutils literal"><span class="pre">dgeqp3</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgeqp3</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgeqp3.html#scipy.linalg.lapack.cgeqp3" title="scipy.linalg.lapack.cgeqp3"><tt class="xref py py-obj docutils literal"><span class="pre">cgeqp3</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgeqp3</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgeqp3.html#scipy.linalg.lapack.zgeqp3" title="scipy.linalg.lapack.zgeqp3"><tt class="xref py py-obj docutils literal"><span class="pre">zgeqp3</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgeqp3</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgeqrf.html#scipy.linalg.lapack.sgeqrf" title="scipy.linalg.lapack.sgeqrf"><tt class="xref py py-obj docutils literal"><span class="pre">sgeqrf</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgeqrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgeqrf.html#scipy.linalg.lapack.dgeqrf" title="scipy.linalg.lapack.dgeqrf"><tt class="xref py py-obj docutils literal"><span class="pre">dgeqrf</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgeqrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgeqrf.html#scipy.linalg.lapack.cgeqrf" title="scipy.linalg.lapack.cgeqrf"><tt class="xref py py-obj docutils literal"><span class="pre">cgeqrf</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgeqrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgeqrf.html#scipy.linalg.lapack.zgeqrf" title="scipy.linalg.lapack.zgeqrf"><tt class="xref py py-obj docutils literal"><span class="pre">zgeqrf</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgeqrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgerqf.html#scipy.linalg.lapack.sgerqf" title="scipy.linalg.lapack.sgerqf"><tt class="xref py py-obj docutils literal"><span class="pre">sgerqf</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgerqf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgerqf.html#scipy.linalg.lapack.dgerqf" title="scipy.linalg.lapack.dgerqf"><tt class="xref py py-obj docutils literal"><span class="pre">dgerqf</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgerqf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgerqf.html#scipy.linalg.lapack.cgerqf" title="scipy.linalg.lapack.cgerqf"><tt class="xref py py-obj docutils literal"><span class="pre">cgerqf</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgerqf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgerqf.html#scipy.linalg.lapack.zgerqf" title="scipy.linalg.lapack.zgerqf"><tt class="xref py py-obj docutils literal"><span class="pre">zgerqf</span></tt></a>(a,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgerqf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgesdd.html#scipy.linalg.lapack.sgesdd" title="scipy.linalg.lapack.sgesdd"><tt class="xref py py-obj docutils literal"><span class="pre">sgesdd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgesdd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgesdd.html#scipy.linalg.lapack.dgesdd" title="scipy.linalg.lapack.dgesdd"><tt class="xref py py-obj docutils literal"><span class="pre">dgesdd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgesdd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgesdd.html#scipy.linalg.lapack.cgesdd" title="scipy.linalg.lapack.cgesdd"><tt class="xref py py-obj docutils literal"><span class="pre">cgesdd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgesdd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgesdd.html#scipy.linalg.lapack.zgesdd" title="scipy.linalg.lapack.zgesdd"><tt class="xref py py-obj docutils literal"><span class="pre">zgesdd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgesdd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgesdd_lwork.html#scipy.linalg.lapack.sgesdd_lwork" title="scipy.linalg.lapack.sgesdd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">sgesdd_lwork</span></tt></a>(m,n,[compute_uv,full_matrices])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgesdd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgesdd_lwork.html#scipy.linalg.lapack.dgesdd_lwork" title="scipy.linalg.lapack.dgesdd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">dgesdd_lwork</span></tt></a>(m,n,[compute_uv,full_matrices])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgesdd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgesdd_lwork.html#scipy.linalg.lapack.cgesdd_lwork" title="scipy.linalg.lapack.cgesdd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">cgesdd_lwork</span></tt></a>(m,n,[compute_uv,full_matrices])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgesdd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgesdd_lwork.html#scipy.linalg.lapack.zgesdd_lwork" title="scipy.linalg.lapack.zgesdd_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">zgesdd_lwork</span></tt></a>(m,n,[compute_uv,full_matrices])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgesdd_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgesv.html#scipy.linalg.lapack.sgesv" title="scipy.linalg.lapack.sgesv"><tt class="xref py py-obj docutils literal"><span class="pre">sgesv</span></tt></a>(a,b,[overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgesv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgesv.html#scipy.linalg.lapack.dgesv" title="scipy.linalg.lapack.dgesv"><tt class="xref py py-obj docutils literal"><span class="pre">dgesv</span></tt></a>(a,b,[overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgesv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgesv.html#scipy.linalg.lapack.cgesv" title="scipy.linalg.lapack.cgesv"><tt class="xref py py-obj docutils literal"><span class="pre">cgesv</span></tt></a>(a,b,[overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgesv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgesv.html#scipy.linalg.lapack.zgesv" title="scipy.linalg.lapack.zgesv"><tt class="xref py py-obj docutils literal"><span class="pre">zgesv</span></tt></a>(a,b,[overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgesv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgetrf.html#scipy.linalg.lapack.sgetrf" title="scipy.linalg.lapack.sgetrf"><tt class="xref py py-obj docutils literal"><span class="pre">sgetrf</span></tt></a>(a,[overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgetrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgetrf.html#scipy.linalg.lapack.dgetrf" title="scipy.linalg.lapack.dgetrf"><tt class="xref py py-obj docutils literal"><span class="pre">dgetrf</span></tt></a>(a,[overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgetrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgetrf.html#scipy.linalg.lapack.cgetrf" title="scipy.linalg.lapack.cgetrf"><tt class="xref py py-obj docutils literal"><span class="pre">cgetrf</span></tt></a>(a,[overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgetrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgetrf.html#scipy.linalg.lapack.zgetrf" title="scipy.linalg.lapack.zgetrf"><tt class="xref py py-obj docutils literal"><span class="pre">zgetrf</span></tt></a>(a,[overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgetrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgetri.html#scipy.linalg.lapack.sgetri" title="scipy.linalg.lapack.sgetri"><tt class="xref py py-obj docutils literal"><span class="pre">sgetri</span></tt></a>(lu,piv,[lwork,overwrite_lu])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgetri</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgetri.html#scipy.linalg.lapack.dgetri" title="scipy.linalg.lapack.dgetri"><tt class="xref py py-obj docutils literal"><span class="pre">dgetri</span></tt></a>(lu,piv,[lwork,overwrite_lu])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgetri</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgetri.html#scipy.linalg.lapack.cgetri" title="scipy.linalg.lapack.cgetri"><tt class="xref py py-obj docutils literal"><span class="pre">cgetri</span></tt></a>(lu,piv,[lwork,overwrite_lu])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgetri</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgetri.html#scipy.linalg.lapack.zgetri" title="scipy.linalg.lapack.zgetri"><tt class="xref py py-obj docutils literal"><span class="pre">zgetri</span></tt></a>(lu,piv,[lwork,overwrite_lu])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgetri</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgetri_lwork.html#scipy.linalg.lapack.sgetri_lwork" title="scipy.linalg.lapack.sgetri_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">sgetri_lwork</span></tt></a>(n)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgetri_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgetri_lwork.html#scipy.linalg.lapack.dgetri_lwork" title="scipy.linalg.lapack.dgetri_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">dgetri_lwork</span></tt></a>(n)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgetri_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgetri_lwork.html#scipy.linalg.lapack.cgetri_lwork" title="scipy.linalg.lapack.cgetri_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">cgetri_lwork</span></tt></a>(n)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgetri_lwork</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgetri_lwork.html#scipy.linalg.lapack.zgetri_lwork" title="scipy.linalg.lapack.zgetri_lwork"><tt class="xref py py-obj docutils literal"><span class="pre">zgetri_lwork</span></tt></a>(n)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgetri_lwork</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgetrs.html#scipy.linalg.lapack.sgetrs" title="scipy.linalg.lapack.sgetrs"><tt class="xref py py-obj docutils literal"><span class="pre">sgetrs</span></tt></a>(lu,piv,b,[trans,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgetrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgetrs.html#scipy.linalg.lapack.dgetrs" title="scipy.linalg.lapack.dgetrs"><tt class="xref py py-obj docutils literal"><span class="pre">dgetrs</span></tt></a>(lu,piv,b,[trans,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgetrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgetrs.html#scipy.linalg.lapack.cgetrs" title="scipy.linalg.lapack.cgetrs"><tt class="xref py py-obj docutils literal"><span class="pre">cgetrs</span></tt></a>(lu,piv,b,[trans,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgetrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgetrs.html#scipy.linalg.lapack.zgetrs" title="scipy.linalg.lapack.zgetrs"><tt class="xref py py-obj docutils literal"><span class="pre">zgetrs</span></tt></a>(lu,piv,b,[trans,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgetrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgges.html#scipy.linalg.lapack.sgges" title="scipy.linalg.lapack.sgges"><tt class="xref py py-obj docutils literal"><span class="pre">sgges</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgges</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgges.html#scipy.linalg.lapack.dgges" title="scipy.linalg.lapack.dgges"><tt class="xref py py-obj docutils literal"><span class="pre">dgges</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgges</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgges.html#scipy.linalg.lapack.cgges" title="scipy.linalg.lapack.cgges"><tt class="xref py py-obj docutils literal"><span class="pre">cgges</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgges</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgges.html#scipy.linalg.lapack.zgges" title="scipy.linalg.lapack.zgges"><tt class="xref py py-obj docutils literal"><span class="pre">zgges</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgges</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sggev.html#scipy.linalg.lapack.sggev" title="scipy.linalg.lapack.sggev"><tt class="xref py py-obj docutils literal"><span class="pre">sggev</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sggev</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dggev.html#scipy.linalg.lapack.dggev" title="scipy.linalg.lapack.dggev"><tt class="xref py py-obj docutils literal"><span class="pre">dggev</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dggev</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cggev.html#scipy.linalg.lapack.cggev" title="scipy.linalg.lapack.cggev"><tt class="xref py py-obj docutils literal"><span class="pre">cggev</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cggev</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zggev.html#scipy.linalg.lapack.zggev" title="scipy.linalg.lapack.zggev"><tt class="xref py py-obj docutils literal"><span class="pre">zggev</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zggev</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.chbevd.html#scipy.linalg.lapack.chbevd" title="scipy.linalg.lapack.chbevd"><tt class="xref py py-obj docutils literal"><span class="pre">chbevd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">chbevd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zhbevd.html#scipy.linalg.lapack.zhbevd" title="scipy.linalg.lapack.zhbevd"><tt class="xref py py-obj docutils literal"><span class="pre">zhbevd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zhbevd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.chbevx.html#scipy.linalg.lapack.chbevx" title="scipy.linalg.lapack.chbevx"><tt class="xref py py-obj docutils literal"><span class="pre">chbevx</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">chbevx</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zhbevx.html#scipy.linalg.lapack.zhbevx" title="scipy.linalg.lapack.zhbevx"><tt class="xref py py-obj docutils literal"><span class="pre">zhbevx</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zhbevx</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cheev.html#scipy.linalg.lapack.cheev" title="scipy.linalg.lapack.cheev"><tt class="xref py py-obj docutils literal"><span class="pre">cheev</span></tt></a>(a,[compute_v,lower,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cheev</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zheev.html#scipy.linalg.lapack.zheev" title="scipy.linalg.lapack.zheev"><tt class="xref py py-obj docutils literal"><span class="pre">zheev</span></tt></a>(a,[compute_v,lower,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zheev</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cheevd.html#scipy.linalg.lapack.cheevd" title="scipy.linalg.lapack.cheevd"><tt class="xref py py-obj docutils literal"><span class="pre">cheevd</span></tt></a>(a,[compute_v,lower,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cheevd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zheevd.html#scipy.linalg.lapack.zheevd" title="scipy.linalg.lapack.zheevd"><tt class="xref py py-obj docutils literal"><span class="pre">zheevd</span></tt></a>(a,[compute_v,lower,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zheevd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cheevr.html#scipy.linalg.lapack.cheevr" title="scipy.linalg.lapack.cheevr"><tt class="xref py py-obj docutils literal"><span class="pre">cheevr</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cheevr</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zheevr.html#scipy.linalg.lapack.zheevr" title="scipy.linalg.lapack.zheevr"><tt class="xref py py-obj docutils literal"><span class="pre">zheevr</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zheevr</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.chegv.html#scipy.linalg.lapack.chegv" title="scipy.linalg.lapack.chegv"><tt class="xref py py-obj docutils literal"><span class="pre">chegv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">chegv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zhegv.html#scipy.linalg.lapack.zhegv" title="scipy.linalg.lapack.zhegv"><tt class="xref py py-obj docutils literal"><span class="pre">zhegv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zhegv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.chegvd.html#scipy.linalg.lapack.chegvd" title="scipy.linalg.lapack.chegvd"><tt class="xref py py-obj docutils literal"><span class="pre">chegvd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">chegvd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zhegvd.html#scipy.linalg.lapack.zhegvd" title="scipy.linalg.lapack.zhegvd"><tt class="xref py py-obj docutils literal"><span class="pre">zhegvd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zhegvd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.chegvx.html#scipy.linalg.lapack.chegvx" title="scipy.linalg.lapack.chegvx"><tt class="xref py py-obj docutils literal"><span class="pre">chegvx</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">chegvx</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zhegvx.html#scipy.linalg.lapack.zhegvx" title="scipy.linalg.lapack.zhegvx"><tt class="xref py py-obj docutils literal"><span class="pre">zhegvx</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zhegvx</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.slarf.html#scipy.linalg.lapack.slarf" title="scipy.linalg.lapack.slarf"><tt class="xref py py-obj docutils literal"><span class="pre">slarf</span></tt></a>(v,tau,c,work,[side,incv,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">slarf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dlarf.html#scipy.linalg.lapack.dlarf" title="scipy.linalg.lapack.dlarf"><tt class="xref py py-obj docutils literal"><span class="pre">dlarf</span></tt></a>(v,tau,c,work,[side,incv,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dlarf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.clarf.html#scipy.linalg.lapack.clarf" title="scipy.linalg.lapack.clarf"><tt class="xref py py-obj docutils literal"><span class="pre">clarf</span></tt></a>(v,tau,c,work,[side,incv,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">clarf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zlarf.html#scipy.linalg.lapack.zlarf" title="scipy.linalg.lapack.zlarf"><tt class="xref py py-obj docutils literal"><span class="pre">zlarf</span></tt></a>(v,tau,c,work,[side,incv,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zlarf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.slarfg.html#scipy.linalg.lapack.slarfg" title="scipy.linalg.lapack.slarfg"><tt class="xref py py-obj docutils literal"><span class="pre">slarfg</span></tt></a>(n,alpha,x,[incx,overwrite_x])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">slarfg</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dlarfg.html#scipy.linalg.lapack.dlarfg" title="scipy.linalg.lapack.dlarfg"><tt class="xref py py-obj docutils literal"><span class="pre">dlarfg</span></tt></a>(n,alpha,x,[incx,overwrite_x])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dlarfg</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.clarfg.html#scipy.linalg.lapack.clarfg" title="scipy.linalg.lapack.clarfg"><tt class="xref py py-obj docutils literal"><span class="pre">clarfg</span></tt></a>(n,alpha,x,[incx,overwrite_x])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">clarfg</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zlarfg.html#scipy.linalg.lapack.zlarfg" title="scipy.linalg.lapack.zlarfg"><tt class="xref py py-obj docutils literal"><span class="pre">zlarfg</span></tt></a>(n,alpha,x,[incx,overwrite_x])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zlarfg</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.slartg.html#scipy.linalg.lapack.slartg" title="scipy.linalg.lapack.slartg"><tt class="xref py py-obj docutils literal"><span class="pre">slartg</span></tt></a>(f,g)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">slartg</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dlartg.html#scipy.linalg.lapack.dlartg" title="scipy.linalg.lapack.dlartg"><tt class="xref py py-obj docutils literal"><span class="pre">dlartg</span></tt></a>(f,g)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dlartg</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.clartg.html#scipy.linalg.lapack.clartg" title="scipy.linalg.lapack.clartg"><tt class="xref py py-obj docutils literal"><span class="pre">clartg</span></tt></a>(f,g)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">clartg</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zlartg.html#scipy.linalg.lapack.zlartg" title="scipy.linalg.lapack.zlartg"><tt class="xref py py-obj docutils literal"><span class="pre">zlartg</span></tt></a>(f,g)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zlartg</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dlasd4.html#scipy.linalg.lapack.dlasd4" title="scipy.linalg.lapack.dlasd4"><tt class="xref py py-obj docutils literal"><span class="pre">dlasd4</span></tt></a>(i,d,z,[rho])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dlasd4</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.slasd4.html#scipy.linalg.lapack.slasd4" title="scipy.linalg.lapack.slasd4"><tt class="xref py py-obj docutils literal"><span class="pre">slasd4</span></tt></a>(i,d,z,[rho])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">slasd4</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.slaswp.html#scipy.linalg.lapack.slaswp" title="scipy.linalg.lapack.slaswp"><tt class="xref py py-obj docutils literal"><span class="pre">slaswp</span></tt></a>(a,piv,[k1,k2,off,inc,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">slaswp</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dlaswp.html#scipy.linalg.lapack.dlaswp" title="scipy.linalg.lapack.dlaswp"><tt class="xref py py-obj docutils literal"><span class="pre">dlaswp</span></tt></a>(a,piv,[k1,k2,off,inc,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dlaswp</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.claswp.html#scipy.linalg.lapack.claswp" title="scipy.linalg.lapack.claswp"><tt class="xref py py-obj docutils literal"><span class="pre">claswp</span></tt></a>(a,piv,[k1,k2,off,inc,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">claswp</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zlaswp.html#scipy.linalg.lapack.zlaswp" title="scipy.linalg.lapack.zlaswp"><tt class="xref py py-obj docutils literal"><span class="pre">zlaswp</span></tt></a>(a,piv,[k1,k2,off,inc,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zlaswp</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.slauum.html#scipy.linalg.lapack.slauum" title="scipy.linalg.lapack.slauum"><tt class="xref py py-obj docutils literal"><span class="pre">slauum</span></tt></a>(c,[lower,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">slauum</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dlauum.html#scipy.linalg.lapack.dlauum" title="scipy.linalg.lapack.dlauum"><tt class="xref py py-obj docutils literal"><span class="pre">dlauum</span></tt></a>(c,[lower,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dlauum</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.clauum.html#scipy.linalg.lapack.clauum" title="scipy.linalg.lapack.clauum"><tt class="xref py py-obj docutils literal"><span class="pre">clauum</span></tt></a>(c,[lower,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">clauum</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zlauum.html#scipy.linalg.lapack.zlauum" title="scipy.linalg.lapack.zlauum"><tt class="xref py py-obj docutils literal"><span class="pre">zlauum</span></tt></a>(c,[lower,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zlauum</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.spbsv.html#scipy.linalg.lapack.spbsv" title="scipy.linalg.lapack.spbsv"><tt class="xref py py-obj docutils literal"><span class="pre">spbsv</span></tt></a>(ab,b,[lower,ldab,overwrite_ab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">spbsv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dpbsv.html#scipy.linalg.lapack.dpbsv" title="scipy.linalg.lapack.dpbsv"><tt class="xref py py-obj docutils literal"><span class="pre">dpbsv</span></tt></a>(ab,b,[lower,ldab,overwrite_ab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dpbsv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cpbsv.html#scipy.linalg.lapack.cpbsv" title="scipy.linalg.lapack.cpbsv"><tt class="xref py py-obj docutils literal"><span class="pre">cpbsv</span></tt></a>(ab,b,[lower,ldab,overwrite_ab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cpbsv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zpbsv.html#scipy.linalg.lapack.zpbsv" title="scipy.linalg.lapack.zpbsv"><tt class="xref py py-obj docutils literal"><span class="pre">zpbsv</span></tt></a>(ab,b,[lower,ldab,overwrite_ab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zpbsv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.spbtrf.html#scipy.linalg.lapack.spbtrf" title="scipy.linalg.lapack.spbtrf"><tt class="xref py py-obj docutils literal"><span class="pre">spbtrf</span></tt></a>(ab,[lower,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">spbtrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dpbtrf.html#scipy.linalg.lapack.dpbtrf" title="scipy.linalg.lapack.dpbtrf"><tt class="xref py py-obj docutils literal"><span class="pre">dpbtrf</span></tt></a>(ab,[lower,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dpbtrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cpbtrf.html#scipy.linalg.lapack.cpbtrf" title="scipy.linalg.lapack.cpbtrf"><tt class="xref py py-obj docutils literal"><span class="pre">cpbtrf</span></tt></a>(ab,[lower,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cpbtrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zpbtrf.html#scipy.linalg.lapack.zpbtrf" title="scipy.linalg.lapack.zpbtrf"><tt class="xref py py-obj docutils literal"><span class="pre">zpbtrf</span></tt></a>(ab,[lower,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zpbtrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.spbtrs.html#scipy.linalg.lapack.spbtrs" title="scipy.linalg.lapack.spbtrs"><tt class="xref py py-obj docutils literal"><span class="pre">spbtrs</span></tt></a>(ab,b,[lower,ldab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">spbtrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dpbtrs.html#scipy.linalg.lapack.dpbtrs" title="scipy.linalg.lapack.dpbtrs"><tt class="xref py py-obj docutils literal"><span class="pre">dpbtrs</span></tt></a>(ab,b,[lower,ldab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dpbtrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cpbtrs.html#scipy.linalg.lapack.cpbtrs" title="scipy.linalg.lapack.cpbtrs"><tt class="xref py py-obj docutils literal"><span class="pre">cpbtrs</span></tt></a>(ab,b,[lower,ldab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cpbtrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zpbtrs.html#scipy.linalg.lapack.zpbtrs" title="scipy.linalg.lapack.zpbtrs"><tt class="xref py py-obj docutils literal"><span class="pre">zpbtrs</span></tt></a>(ab,b,[lower,ldab,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zpbtrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sposv.html#scipy.linalg.lapack.sposv" title="scipy.linalg.lapack.sposv"><tt class="xref py py-obj docutils literal"><span class="pre">sposv</span></tt></a>(a,b,[lower,overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sposv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dposv.html#scipy.linalg.lapack.dposv" title="scipy.linalg.lapack.dposv"><tt class="xref py py-obj docutils literal"><span class="pre">dposv</span></tt></a>(a,b,[lower,overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dposv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cposv.html#scipy.linalg.lapack.cposv" title="scipy.linalg.lapack.cposv"><tt class="xref py py-obj docutils literal"><span class="pre">cposv</span></tt></a>(a,b,[lower,overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cposv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zposv.html#scipy.linalg.lapack.zposv" title="scipy.linalg.lapack.zposv"><tt class="xref py py-obj docutils literal"><span class="pre">zposv</span></tt></a>(a,b,[lower,overwrite_a,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zposv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.spotrf.html#scipy.linalg.lapack.spotrf" title="scipy.linalg.lapack.spotrf"><tt class="xref py py-obj docutils literal"><span class="pre">spotrf</span></tt></a>(a,[lower,clean,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">spotrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dpotrf.html#scipy.linalg.lapack.dpotrf" title="scipy.linalg.lapack.dpotrf"><tt class="xref py py-obj docutils literal"><span class="pre">dpotrf</span></tt></a>(a,[lower,clean,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dpotrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cpotrf.html#scipy.linalg.lapack.cpotrf" title="scipy.linalg.lapack.cpotrf"><tt class="xref py py-obj docutils literal"><span class="pre">cpotrf</span></tt></a>(a,[lower,clean,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cpotrf</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zpotrf.html#scipy.linalg.lapack.zpotrf" title="scipy.linalg.lapack.zpotrf"><tt class="xref py py-obj docutils literal"><span class="pre">zpotrf</span></tt></a>(a,[lower,clean,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zpotrf</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.spotri.html#scipy.linalg.lapack.spotri" title="scipy.linalg.lapack.spotri"><tt class="xref py py-obj docutils literal"><span class="pre">spotri</span></tt></a>(c,[lower,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">spotri</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dpotri.html#scipy.linalg.lapack.dpotri" title="scipy.linalg.lapack.dpotri"><tt class="xref py py-obj docutils literal"><span class="pre">dpotri</span></tt></a>(c,[lower,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dpotri</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cpotri.html#scipy.linalg.lapack.cpotri" title="scipy.linalg.lapack.cpotri"><tt class="xref py py-obj docutils literal"><span class="pre">cpotri</span></tt></a>(c,[lower,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cpotri</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zpotri.html#scipy.linalg.lapack.zpotri" title="scipy.linalg.lapack.zpotri"><tt class="xref py py-obj docutils literal"><span class="pre">zpotri</span></tt></a>(c,[lower,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zpotri</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.spotrs.html#scipy.linalg.lapack.spotrs" title="scipy.linalg.lapack.spotrs"><tt class="xref py py-obj docutils literal"><span class="pre">spotrs</span></tt></a>(c,b,[lower,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">spotrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dpotrs.html#scipy.linalg.lapack.dpotrs" title="scipy.linalg.lapack.dpotrs"><tt class="xref py py-obj docutils literal"><span class="pre">dpotrs</span></tt></a>(c,b,[lower,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dpotrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cpotrs.html#scipy.linalg.lapack.cpotrs" title="scipy.linalg.lapack.cpotrs"><tt class="xref py py-obj docutils literal"><span class="pre">cpotrs</span></tt></a>(c,b,[lower,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cpotrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zpotrs.html#scipy.linalg.lapack.zpotrs" title="scipy.linalg.lapack.zpotrs"><tt class="xref py py-obj docutils literal"><span class="pre">zpotrs</span></tt></a>(c,b,[lower,overwrite_b])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zpotrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.crot.html#scipy.linalg.lapack.crot" title="scipy.linalg.lapack.crot"><tt class="xref py py-obj docutils literal"><span class="pre">crot</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">crot</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zrot.html#scipy.linalg.lapack.zrot" title="scipy.linalg.lapack.zrot"><tt class="xref py py-obj docutils literal"><span class="pre">zrot</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zrot</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.strsyl.html#scipy.linalg.lapack.strsyl" title="scipy.linalg.lapack.strsyl"><tt class="xref py py-obj docutils literal"><span class="pre">strsyl</span></tt></a>(a,b,c,[trana,tranb,isgn,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">strsyl</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dtrsyl.html#scipy.linalg.lapack.dtrsyl" title="scipy.linalg.lapack.dtrsyl"><tt class="xref py py-obj docutils literal"><span class="pre">dtrsyl</span></tt></a>(a,b,c,[trana,tranb,isgn,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dtrsyl</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ctrsyl.html#scipy.linalg.lapack.ctrsyl" title="scipy.linalg.lapack.ctrsyl"><tt class="xref py py-obj docutils literal"><span class="pre">ctrsyl</span></tt></a>(a,b,c,[trana,tranb,isgn,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ctrsyl</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ztrsyl.html#scipy.linalg.lapack.ztrsyl" title="scipy.linalg.lapack.ztrsyl"><tt class="xref py py-obj docutils literal"><span class="pre">ztrsyl</span></tt></a>(a,b,c,[trana,tranb,isgn,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ztrsyl</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.strtri.html#scipy.linalg.lapack.strtri" title="scipy.linalg.lapack.strtri"><tt class="xref py py-obj docutils literal"><span class="pre">strtri</span></tt></a>(c,[lower,unitdiag,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">strtri</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dtrtri.html#scipy.linalg.lapack.dtrtri" title="scipy.linalg.lapack.dtrtri"><tt class="xref py py-obj docutils literal"><span class="pre">dtrtri</span></tt></a>(c,[lower,unitdiag,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dtrtri</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ctrtri.html#scipy.linalg.lapack.ctrtri" title="scipy.linalg.lapack.ctrtri"><tt class="xref py py-obj docutils literal"><span class="pre">ctrtri</span></tt></a>(c,[lower,unitdiag,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ctrtri</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ztrtri.html#scipy.linalg.lapack.ztrtri" title="scipy.linalg.lapack.ztrtri"><tt class="xref py py-obj docutils literal"><span class="pre">ztrtri</span></tt></a>(c,[lower,unitdiag,overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ztrtri</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.strtrs.html#scipy.linalg.lapack.strtrs" title="scipy.linalg.lapack.strtrs"><tt class="xref py py-obj docutils literal"><span class="pre">strtrs</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">strtrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dtrtrs.html#scipy.linalg.lapack.dtrtrs" title="scipy.linalg.lapack.dtrtrs"><tt class="xref py py-obj docutils literal"><span class="pre">dtrtrs</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dtrtrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ctrtrs.html#scipy.linalg.lapack.ctrtrs" title="scipy.linalg.lapack.ctrtrs"><tt class="xref py py-obj docutils literal"><span class="pre">ctrtrs</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ctrtrs</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ztrtrs.html#scipy.linalg.lapack.ztrtrs" title="scipy.linalg.lapack.ztrtrs"><tt class="xref py py-obj docutils literal"><span class="pre">ztrtrs</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ztrtrs</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cunghr.html#scipy.linalg.lapack.cunghr" title="scipy.linalg.lapack.cunghr"><tt class="xref py py-obj docutils literal"><span class="pre">cunghr</span></tt></a>(a,tau,[lo,hi,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cunghr</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zunghr.html#scipy.linalg.lapack.zunghr" title="scipy.linalg.lapack.zunghr"><tt class="xref py py-obj docutils literal"><span class="pre">zunghr</span></tt></a>(a,tau,[lo,hi,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zunghr</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cungqr.html#scipy.linalg.lapack.cungqr" title="scipy.linalg.lapack.cungqr"><tt class="xref py py-obj docutils literal"><span class="pre">cungqr</span></tt></a>(a,tau,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cungqr</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zungqr.html#scipy.linalg.lapack.zungqr" title="scipy.linalg.lapack.zungqr"><tt class="xref py py-obj docutils literal"><span class="pre">zungqr</span></tt></a>(a,tau,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zungqr</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cungrq.html#scipy.linalg.lapack.cungrq" title="scipy.linalg.lapack.cungrq"><tt class="xref py py-obj docutils literal"><span class="pre">cungrq</span></tt></a>(a,tau,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cungrq</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zungrq.html#scipy.linalg.lapack.zungrq" title="scipy.linalg.lapack.zungrq"><tt class="xref py py-obj docutils literal"><span class="pre">zungrq</span></tt></a>(a,tau,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zungrq</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cunmqr.html#scipy.linalg.lapack.cunmqr" title="scipy.linalg.lapack.cunmqr"><tt class="xref py py-obj docutils literal"><span class="pre">cunmqr</span></tt></a>(side,trans,a,tau,c,lwork,[overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cunmqr</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zunmqr.html#scipy.linalg.lapack.zunmqr" title="scipy.linalg.lapack.zunmqr"><tt class="xref py py-obj docutils literal"><span class="pre">zunmqr</span></tt></a>(side,trans,a,tau,c,lwork,[overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zunmqr</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sgtsv.html#scipy.linalg.lapack.sgtsv" title="scipy.linalg.lapack.sgtsv"><tt class="xref py py-obj docutils literal"><span class="pre">sgtsv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sgtsv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dgtsv.html#scipy.linalg.lapack.dgtsv" title="scipy.linalg.lapack.dgtsv"><tt class="xref py py-obj docutils literal"><span class="pre">dgtsv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dgtsv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cgtsv.html#scipy.linalg.lapack.cgtsv" title="scipy.linalg.lapack.cgtsv"><tt class="xref py py-obj docutils literal"><span class="pre">cgtsv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cgtsv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zgtsv.html#scipy.linalg.lapack.zgtsv" title="scipy.linalg.lapack.zgtsv"><tt class="xref py py-obj docutils literal"><span class="pre">zgtsv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zgtsv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sptsv.html#scipy.linalg.lapack.sptsv" title="scipy.linalg.lapack.sptsv"><tt class="xref py py-obj docutils literal"><span class="pre">sptsv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sptsv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dptsv.html#scipy.linalg.lapack.dptsv" title="scipy.linalg.lapack.dptsv"><tt class="xref py py-obj docutils literal"><span class="pre">dptsv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dptsv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.cptsv.html#scipy.linalg.lapack.cptsv" title="scipy.linalg.lapack.cptsv"><tt class="xref py py-obj docutils literal"><span class="pre">cptsv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">cptsv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zptsv.html#scipy.linalg.lapack.zptsv" title="scipy.linalg.lapack.zptsv"><tt class="xref py py-obj docutils literal"><span class="pre">zptsv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zptsv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.slamch.html#scipy.linalg.lapack.slamch" title="scipy.linalg.lapack.slamch"><tt class="xref py py-obj docutils literal"><span class="pre">slamch</span></tt></a>(cmach)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">slamch</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dlamch.html#scipy.linalg.lapack.dlamch" title="scipy.linalg.lapack.dlamch"><tt class="xref py py-obj docutils literal"><span class="pre">dlamch</span></tt></a>(cmach)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dlamch</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sorghr.html#scipy.linalg.lapack.sorghr" title="scipy.linalg.lapack.sorghr"><tt class="xref py py-obj docutils literal"><span class="pre">sorghr</span></tt></a>(a,tau,[lo,hi,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sorghr</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dorghr.html#scipy.linalg.lapack.dorghr" title="scipy.linalg.lapack.dorghr"><tt class="xref py py-obj docutils literal"><span class="pre">dorghr</span></tt></a>(a,tau,[lo,hi,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dorghr</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sorgqr.html#scipy.linalg.lapack.sorgqr" title="scipy.linalg.lapack.sorgqr"><tt class="xref py py-obj docutils literal"><span class="pre">sorgqr</span></tt></a>(a,tau,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sorgqr</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dorgqr.html#scipy.linalg.lapack.dorgqr" title="scipy.linalg.lapack.dorgqr"><tt class="xref py py-obj docutils literal"><span class="pre">dorgqr</span></tt></a>(a,tau,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dorgqr</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sorgrq.html#scipy.linalg.lapack.sorgrq" title="scipy.linalg.lapack.sorgrq"><tt class="xref py py-obj docutils literal"><span class="pre">sorgrq</span></tt></a>(a,tau,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sorgrq</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dorgrq.html#scipy.linalg.lapack.dorgrq" title="scipy.linalg.lapack.dorgrq"><tt class="xref py py-obj docutils literal"><span class="pre">dorgrq</span></tt></a>(a,tau,[lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dorgrq</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.sormqr.html#scipy.linalg.lapack.sormqr" title="scipy.linalg.lapack.sormqr"><tt class="xref py py-obj docutils literal"><span class="pre">sormqr</span></tt></a>(side,trans,a,tau,c,lwork,[overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">sormqr</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dormqr.html#scipy.linalg.lapack.dormqr" title="scipy.linalg.lapack.dormqr"><tt class="xref py py-obj docutils literal"><span class="pre">dormqr</span></tt></a>(side,trans,a,tau,c,lwork,[overwrite_c])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dormqr</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssbev.html#scipy.linalg.lapack.ssbev" title="scipy.linalg.lapack.ssbev"><tt class="xref py py-obj docutils literal"><span class="pre">ssbev</span></tt></a>(ab,[compute_v,lower,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssbev</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsbev.html#scipy.linalg.lapack.dsbev" title="scipy.linalg.lapack.dsbev"><tt class="xref py py-obj docutils literal"><span class="pre">dsbev</span></tt></a>(ab,[compute_v,lower,ldab,overwrite_ab])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsbev</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssbevd.html#scipy.linalg.lapack.ssbevd" title="scipy.linalg.lapack.ssbevd"><tt class="xref py py-obj docutils literal"><span class="pre">ssbevd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssbevd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsbevd.html#scipy.linalg.lapack.dsbevd" title="scipy.linalg.lapack.dsbevd"><tt class="xref py py-obj docutils literal"><span class="pre">dsbevd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsbevd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssbevx.html#scipy.linalg.lapack.ssbevx" title="scipy.linalg.lapack.ssbevx"><tt class="xref py py-obj docutils literal"><span class="pre">ssbevx</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssbevx</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsbevx.html#scipy.linalg.lapack.dsbevx" title="scipy.linalg.lapack.dsbevx"><tt class="xref py py-obj docutils literal"><span class="pre">dsbevx</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsbevx</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssyev.html#scipy.linalg.lapack.ssyev" title="scipy.linalg.lapack.ssyev"><tt class="xref py py-obj docutils literal"><span class="pre">ssyev</span></tt></a>(a,[compute_v,lower,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssyev</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsyev.html#scipy.linalg.lapack.dsyev" title="scipy.linalg.lapack.dsyev"><tt class="xref py py-obj docutils literal"><span class="pre">dsyev</span></tt></a>(a,[compute_v,lower,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsyev</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssyevd.html#scipy.linalg.lapack.ssyevd" title="scipy.linalg.lapack.ssyevd"><tt class="xref py py-obj docutils literal"><span class="pre">ssyevd</span></tt></a>(a,[compute_v,lower,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssyevd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsyevd.html#scipy.linalg.lapack.dsyevd" title="scipy.linalg.lapack.dsyevd"><tt class="xref py py-obj docutils literal"><span class="pre">dsyevd</span></tt></a>(a,[compute_v,lower,lwork,overwrite_a])</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsyevd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssyevr.html#scipy.linalg.lapack.ssyevr" title="scipy.linalg.lapack.ssyevr"><tt class="xref py py-obj docutils literal"><span class="pre">ssyevr</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssyevr</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsyevr.html#scipy.linalg.lapack.dsyevr" title="scipy.linalg.lapack.dsyevr"><tt class="xref py py-obj docutils literal"><span class="pre">dsyevr</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsyevr</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssygv.html#scipy.linalg.lapack.ssygv" title="scipy.linalg.lapack.ssygv"><tt class="xref py py-obj docutils literal"><span class="pre">ssygv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssygv</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsygv.html#scipy.linalg.lapack.dsygv" title="scipy.linalg.lapack.dsygv"><tt class="xref py py-obj docutils literal"><span class="pre">dsygv</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsygv</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssygvd.html#scipy.linalg.lapack.ssygvd" title="scipy.linalg.lapack.ssygvd"><tt class="xref py py-obj docutils literal"><span class="pre">ssygvd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssygvd</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsygvd.html#scipy.linalg.lapack.dsygvd" title="scipy.linalg.lapack.dsygvd"><tt class="xref py py-obj docutils literal"><span class="pre">dsygvd</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsygvd</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.ssygvx.html#scipy.linalg.lapack.ssygvx" title="scipy.linalg.lapack.ssygvx"><tt class="xref py py-obj docutils literal"><span class="pre">ssygvx</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">ssygvx</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dsygvx.html#scipy.linalg.lapack.dsygvx" title="scipy.linalg.lapack.dsygvx"><tt class="xref py py-obj docutils literal"><span class="pre">dsygvx</span></tt></a>(...)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dsygvx</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.slange.html#scipy.linalg.lapack.slange" title="scipy.linalg.lapack.slange"><tt class="xref py py-obj docutils literal"><span class="pre">slange</span></tt></a>(norm,a)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">slange</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.dlange.html#scipy.linalg.lapack.dlange" title="scipy.linalg.lapack.dlange"><tt class="xref py py-obj docutils literal"><span class="pre">dlange</span></tt></a>(norm,a)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">dlange</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/scipy.linalg.lapack.clange.html#scipy.linalg.lapack.clange" title="scipy.linalg.lapack.clange"><tt class="xref py py-obj docutils literal"><span class="pre">clange</span></tt></a>(norm,a)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">clange</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/scipy.linalg.lapack.zlange.html#scipy.linalg.lapack.zlange" title="scipy.linalg.lapack.zlange"><tt class="xref py py-obj docutils literal"><span class="pre">zlange</span></tt></a>(norm,a)</td>
+<td>Wrapper for <tt class="docutils literal"><span class="pre">zlange</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

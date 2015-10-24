@@ -1,0 +1,681 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Writing_JavaScript_for_XHTML by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 10:03:23 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Writing JavaScript for XHTML</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Writing_JavaScript_for_XHTML$json">
+  <link rel="canonical" href="Writing_JavaScript_for_XHTML.html">
+
+  
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Writing JavaScript for XHTML">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Writing_JavaScript_for_XHTML">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Writing_JavaScript_for_XHTML">
+  <meta name="twitter:title" content="Writing JavaScript for XHTML">
+    <meta property="og:description" content="In practise, very few XHTML documents are served over the Web with the correct MIME media type, application/xhtml+xml. Whilst authored to the stricter rules of XML, they are sent with the media type for HTML (text/html). The receiving browser considers the content to be HTML, and does not utilise its XML parser.">
+  <meta name="description" content="In practise, very few XHTML documents are served over the Web with the correct MIME media type, application/xhtml+xml. Whilst authored to the stricter rules of XML, they are sent with the media type for HTML (text/html). The receiving browser considers the content to be HTML, and does not utilise its XML parser.">
+  <meta name="twitter:description" content="In practise, very few XHTML documents are served over the Web with the correct MIME media type, application/xhtml+xml. Whilst authored to the stricter rules of XML, they are sent with the media type for HTML (text/html). The receiving browser considers the content to be HTML, and does not utilise its XML parser.">
+  
+      
+  </head>
+<body data-slug="Writing_JavaScript_for_XHTML" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Writing_JavaScript_for_XHTML" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWriting_JavaScript_for_XHTML" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Writing_JavaScript_for_XHTML" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWriting_JavaScript_for_XHTML" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="Web/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                              <li class="smaller">No translations exist for this article.</li>
+              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Writing_JavaScript_for_XHTML$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Writing_JavaScript_for_XHTML$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Writing_JavaScript_for_XHTML$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Writing JavaScript for XHTML</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Writing JavaScript for XHTML</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 12 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dddh" title="View profile: dddh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dddh" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dddh</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dhodder" title="View profile: dhodder">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dhodder" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">dhodder</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Neil" title="View profile: Neil">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Neil" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Neil</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jake33" title="View profile: jake33">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jake33" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jake33</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Yuhong" title="View profile: Yuhong">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Yuhong" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Yuhong</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Fidlej" title="View profile: Fidlej">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Fidlej" data-src="../../../secure.gravatar.com/avatar/38168395787df89e47a79d059c4ef70a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Fidlej</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Manuel Strehl" title="View profile: Manuel Strehl">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Manuel Strehl" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Manuel Strehl</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Waldo" title="View profile: Waldo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Waldo" data-src="../../../secure.gravatar.com/avatar/d26a0ca7ae1134e0e1dbdddf82e289296aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Waldo</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <code></code><code></code><code></code><code></code><li><ol><li><a href="#Problem:_Nothing_Works" rel="internal">Problem: Nothing Works</a><ol><li><a href="#Solution:_The_CDATA_Trick" rel="internal">Solution: The CDATA Trick</a><code></code><code></code><code></code></li></ol></li><li><a href="#Problem.3A_Names_in_XHTML_and_HTML_are_represented_in_different_cases" rel="internal">Problem: Names in XHTML and HTML are represented in different cases</a></li><li><a href="#Solution.3A_Use_or_convert_to_lower_case" rel="internal">Solution: Use or convert to lower case</a></li><li><a href="#Problem:_My_Cookie_Won.27t_Be_Saved.21" rel="internal">Problem: My Cookie Won't Be Saved!</a><ol><li><a href="#Solution:_Use_the_Storage_Object" rel="internal">Solution: Use the Storage Object</a></li></ol></li><li><a href="#Problem:_I_Can.27t_Use_document.write.28.29" rel="internal">Problem: I Can't Use document.write()</a><ol><li><a href="#Solution:_Use_DOM_Methods" rel="internal">Solution: Use DOM Methods</a></li></ol></li><li><a href="#Problem.3A.C2.A0I.C2.A0want_to_remain_forward_compatible!" rel="internal">Problem:&nbsp;I&nbsp;want to remain forward compatible!</a></li><li><a href="#Solution.3A_Avoid_HTML-specific_DOM" rel="internal">Solution: Avoid HTML-specific DOM</a></li><li><a href="#Problem:_My_Favourite_JS_Library_still_Breaks" rel="internal">Problem: My Favourite JS Library still Breaks</a></li><li><a href="#I_Read_about_E4X._Now.2C_This_Is_Perfect.2C_Isn.27t_It.3F" rel="internal">I Read about E4X. Now, This Is Perfect, Isn't It?</a></li><li><a href="#Finally:_Content_Negotiation" rel="internal">Finally: Content Negotiation</a><code></code><code></code></li><li><a href="#Further_Reading" rel="internal">Further Reading</a></li><li><a href="#.C2.A0See_also" rel="internal">&nbsp;See also</a></li></ol></li>
+                </ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                <div class="warning warning-review"><p>This article is in need of a technical review.</p></div>
+                                                                            
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>In practise, very few XHTML documents are served over the Web with the correct MIME media type, <code>application/xhtml+xml</code>. Whilst authored to the stricter rules of XML, they are sent with the media type for HTML (<code>text/html</code>). The receiving browser considers the content to be HTML, and does not utilise its XML parser.</p>
+<p>There are a number of reasons for this. Partially it is because, prior to version 9, Internet Explorer was incapable of handling XHTML sent with the official XHTML media type at all. (Rather than displaying content, it would present the user with a file download dialog.) But it is also founded in the experience that JavaScript, authored carefully for HTML, can break when placed with an XML environment.</p>
+<p>This article shows some of the reasons alongside with strategies to remedy the problems. It will encourage web authors to use more XML features and make their JavaScript interoperable with real XHTML applications.</p>
+<p>(Note that XHTML documents which behave correctly in both <code>application/xhtml+xml</code> and <code>text/html</code> environments are sometimes known as 'polyglot' documents.)</p>
+<p>To test the following examples locally, use <a href="https://developer.mozilla.org/en/XML_in_Mozilla#XHTML" title="en/XML_in_Mozilla#XHTML">Firefox's extension switch</a>. Just write an ordinary (X)HTML file and save it once as <em>test.html</em> and once as <em>test.xhtml</em>.</p>
+<h3 id="Problem:_Nothing_Works" name="Problem:_Nothing_Works">Problem: Nothing Works</h3>
+<p>After switching the MIME type suddenly no inline script works anymore. Even the plain old <em>alert()</em> method is gone. The code looks something like this:</p>
+<pre class="brush: html"><span class="nowiki">&lt;script type="text/javascript"&gt;
+   //&lt;!--
+   window.alert("Hello World!");
+   //--&gt;
+ &lt;/script&gt;</span>
+</pre>
+<h4 id="Solution:_The_CDATA_Trick" name="Solution:_The_CDATA_Trick">Solution: The CDATA Trick</h4>
+<p>This problem usually arises, when inline scripts are included in comments. This was common practice in HTML, to hide the scripts from browsers not capable of JS. In the age of XML comments are what they were intended: comments. Before processing the file, all comments will be stripped from the document, so enclosing your script in them is like throwing your lunch in a Piranha pool. Moreover, there's really no point to commenting out your scripts -- <em>no browser written in the last ten years will display your code on the page</em>.</p>
+<p>The easy solution is to do away with the commenting entirely:</p>
+<pre class="brush: html"><span class="nowiki">&lt;script type="text/javascript"&gt;
+   window.alert("Hello World!");
+ &lt;/script&gt;</span>
+</pre>
+<p>This will work so long as your code doesn't contain characters which are "special" in XML, which usually means <code>&lt;</code> and <code>&amp;</code>. If your code contains either of these, you can work around this with CDATA sections:</p>
+<pre class="brush: html"><span class="nowiki">&lt;script type="text/javascript"&gt;
+ &lt;![CDATA[
+   // is the variable a non-negative integer less than 10?
+   if (variable &lt; 10 &amp;&amp; variable &gt;= 0)
+     action();
+ ]]&gt;
+ &lt;/script&gt;</span>
+</pre>
+<p>Note that the CDATA section is only necessary because of the <code>&lt;</code> in the code; otherwise you could have ignored it.</p>
+<p>A third solution is to <a href="Properly_Using_CSS_and_JavaScript_in_XHTML_Documents.html" title="en/Properly_Using_CSS_and_JavaScript_in_XHTML_Documents">use only external scripts</a>, neatly sidestepping the special-character problem.</p>
+<p>Alternatively, the CDATA section can be couched within comments so as to be able to work in either application/xhtml+xml or text/html:</p>
+<pre class="brush: html">&lt;script type="text/javascript"&gt;
+//&lt;![CDATA[
+        ...
+//]]&gt;
+&lt;/script&gt;
+
+&lt;!-- (For styles, it is different) --&gt;
+
+&lt;style type="text/css"&gt;
+/*&lt;![CDATA[*/
+        ...
+/*]]&gt;*/
+&lt;/style&gt;</pre>
+<p>And if you really need compatibility with very old browsers that do not recognize the script or style tags resulting in their contents displayed on the page, you can use this:</p>
+<pre class="brush: html">&lt;script type="text/javascript"&gt;&lt;!--//--&gt;&lt;![CDATA[//&gt;&lt;!--
+        ...
+//--&gt;&lt;!]]&gt;&lt;/script&gt;
+
+&lt;!-- (For styles, it is different) --&gt;
+
+&lt;style type="text/css"&gt;&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+        ...
+/*]]&gt;*/--&gt;&lt;/style&gt;
+</pre>
+<p>See <a class="external" href="http://hixie.ch/advocacy/xhtml" title="http://hixie.ch/advocacy/xhtml">this document</a> for more on the issues related to application/xhtml+xml and text/html (at least as far as XHTML 1.* and HTML 4; HTML5 addresses many of these problems).</p>
+<h3 id="Problem.3A_Names_in_XHTML_and_HTML_are_represented_in_different_cases">Problem: Names in XHTML and HTML are represented in different cases</h3>
+<p>Scripts that used getElementsByTagName() with an upper case HTML name no longer work, and attributes like nodeName or tagName return upper case in HTML and lower case in XHTML.</p>
+<h3 id="Solution.3A_Use_or_convert_to_lower_case">Solution: Use or convert to lower case</h3>
+<p>For methods like getElementsByTagName(), passing the name in lower case will work in both HTML&nbsp;and XHTML. For name comparisons, first convert to lower case before doing the comparison (e.g., "el.nodeName.toLowerCase() === 'html'"). This will ensure that documents in HTML will compare correctly and will do no harm in XHTML where the names are already lower case.</p>
+<h3 id="Problem:_My_Cookie_Won.27t_Be_Saved.21" name="Problem:_My_Cookie_Won.27t_Be_Saved.21">Problem: My Cookie Won't Be Saved!</h3>
+<p>We found out already, that the document object in XML files is different from the ones in HTML files. Now we take a look at one property, that is missing in XML files and that we will miss very bad. In XML documents there is no <em>document.cookie</em>. That is, you can write something like</p>
+<pre class="brush: js">document.cookie = "key=value";
+</pre>
+<p>in XML as well, but you will find out, that literally nothing is saved in the cookie storage.</p>
+<h4 id="Solution:_Use_the_Storage_Object" name="Solution:_Use_the_Storage_Object">Solution: Use the Storage Object</h4>
+<p>With Firefox 2 there was a new feature enabled, the <a href="https://developer.mozilla.org/en/DOM/Storage" title="en/DOM/Storage">HTML 5 Storage object</a>. Although this feature is not free of critics, you can use it to bypass the non-existing cookie, if your document is of type XML. Again, you will have to write your own wrapper to respect any given combination of MIME type and browser.</p>
+<h3 id="Problem:_I_Can.27t_Use_document.write.28.29" name="Problem:_I_Can.27t_Use_document.write.28.29">Problem: I Can't Use <em>document.write()</em></h3>
+<p>This problem has the same cause as the one above. This method does not exist in <em>XMLDocument</em>s anymore. There are reasons why this decision was made, one being that a string of invalid markup will instantly break the whole document.</p>
+<h4 id="Solution:_Use_DOM_Methods" name="Solution:_Use_DOM_Methods">Solution: Use DOM Methods</h4>
+<p>Many people avoided DOM methods because of the typing to create one simple element, when <em>document.write()</em> was completely satisfying. Now you can't do this as easily as before. Use DOM methods to create all of your elements, attributes and other nodes. This is XML proof, as long as you keep the namespace problem in focus (e.g., there is a <em>document.createElementNS</em> method).</p>
+<p>Now, not to be inhonest, you can still use strings like in document.write(), but it takes a little more effort. This code shows you, how to do it:</p>
+<pre class="brush: js">var string = '<span class="nowiki">&lt;div xmlns="http://www.w3.org/999/xhtml"&gt;&lt;h1&gt;Hello World!&lt;/h1&gt;&lt;/div&gt;</span>';
+var parser = new DOMParser();
+var documentFragment = parser.parseFromString(string, "text/xml");
+body.appendChild(documentFragment); // assuming 'body' is the body element
+</pre>
+<p>But be aware, that if your string is not well-formed XML (e.g., you have an &amp; where it should not be), then this method will crash, leaving you with a parser error.</p>
+<h3 id="Problem.3A.C2.A0I.C2.A0want_to_remain_forward_compatible!">Problem:&nbsp;I&nbsp;want to remain forward compatible!</h3>
+<p>Given the direction away from formatting attributes and the possibility of XHTML becoming eventually more prominent&nbsp;(or at least the document author having the possibility of later wanting to make documents available in XHTML for browsers that support it), one may wish to avoid features which are not likely to stay compatible into the future.</p>
+<h3 id="Solution.3A_Avoid_HTML-specific_DOM">Solution: Avoid HTML-specific DOM</h3>
+<p>The <a class="external" href="http://www.w3.org/TR/DOM-Level-2-HTML/html.html" title="http://www.w3.org/TR/DOM-Level-2-HTML/html.html">HTML&nbsp;DOM</a> , even though it is compatible with XHTML 1.0, is not guaranteed to work with future versions of XHTML (perhaps especially the formatting properties which have been deprecated as element attributes). The regular&nbsp;XML <a href="https://developer.mozilla.org/en/DOM" title="En/DOM">DOM</a> provides sufficient methods via the <a href="https://developer.mozilla.org/en/DOM/element" title="En/DOM/Element">Element</a> interface for getting/setting/removing attributes.</p>
+<h3 id="Problem:_My_Favourite_JS_Library_still_Breaks" name="Problem:_My_Favourite_JS_Library_still_Breaks">Problem: My Favourite JS Library still Breaks</h3>
+<p>If you use JavaScript libraries like the famous prototype.js or Yahoo's one, there is bad news for you: As long as the developers don't start to apply the points mentioned above, you won't be able to use them in your XML-XHTML applications.</p>
+<p>Two possible ways still are there, but neither is very promissing: Take the library, recode it and publish it or e-mail the developers, e-mail your friends to e-mail the developers and e-mail your customers to e-mail the developers. If they get the hint and are not too annoyed, perhaps they start to implement XML features in their libraries.</p>
+<h3 id="I_Read_about_E4X._Now.2C_This_Is_Perfect.2C_Isn.27t_It.3F" name="I_Read_about_E4X._Now.2C_This_Is_Perfect.2C_Isn.27t_It.3F">I Read about E4X. Now, This Is Perfect, Isn't It?</h3>
+<p>As a matter of fact, it isn't. <a href="https://developer.mozilla.org/en/E4X" title="en/E4X">E4X</a> is a new method of using and manipulating XML in JavaScript. But, standardized by ECMA, they neglected to implement an interface to let E4X objects interact with DOM objects our document consists of. So, with every advantage E4X has, without a DOM interface you can't use it productively to manipulate your document. However, it can be used for data, and be converted into a string which can then be converted into a DOM&nbsp;object. DOM objects can similarly be converted into strings which can then be converted into E4X.</p>
+<h3 id="Finally:_Content_Negotiation" name="Finally:_Content_Negotiation">Finally: Content Negotiation</h3>
+<p>Now, how do we decide, when to serve XHTML as XML? We can do this on server side by evaluating the <a href="https://developer.mozilla.org/en/HTTP" title="en/HTTP">HTTP</a> request header. Every browser sends with its request a list of MIME types it understands, as part of the <a href="https://developer.mozilla.org/en/HTTP/Content_negotiation" title="https://developer.mozilla.org/en/HTTP/Content_negotiation">HTTP content negotiation</a> mechanism. So if the browser tells our server, that it can handle XHTML as XML, that is, the <a href="https://developer.mozilla.org/en/HTTP/Content_negotiation#The_Accept.3a_header" title="https://developer.mozilla.org/en/HTTP/Content_negotiation#The_Accept.3a_header"><code>Accept:</code></a> field in the <a href="https://developer.mozilla.org/en/HTTP/Headers" title="https://developer.mozilla.org/en/HTTP/Headers">HTTP head</a> contains <code>application/xhtml+xml</code> somewhere, we are safe to send the content as XML.</p>
+<p>In PHP, for example, you would write something like this:</p>
+<pre class="brush: js">if( strpos( $_SERVER['HTTP_ACCEPT'], "application/xhtml+xml" ) ) {
+  header( "Content-type: application/xhtml+xml" );
+  echo '&lt;?xml version="1.0"&nbsp;?&gt;'."\n";
+} else {
+  header( "Content-type: text/html" );
+}
+</pre>
+<p>This distinction also sends the XML declaration, which is strongly recommended, when the document is an XML file. If the content is sent as HTML, an XML declaration would break IE's Doctype switch, so we don't want it there.</p>
+<p>For completeness here is the <em>Accept</em> field, that Firefox 2.0.0.9 sends with its requests:</p>
+<pre class="eval">Accept: text/xml,application/xml,<strong>application/xhtml+xml</strong>,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+</pre>
+<h3 id="Further_Reading" name="Further_Reading">Further Reading</h3>
+<p>You will find several useful articles in the developer wiki:</p>
+<ul>
+ <li><a href="https://developer.mozilla.org/en/XML_in_Mozilla" title="en/XML_in_Mozilla">XML in Mozilla</a></li>
+ <li><a href="https://developer.mozilla.org/en/DOM" title="en/DOM">DOM</a></li>
+ <li><a href="https://developer.mozilla.org/en/XML_Introduction" title="en/XML_Introduction">XML Introduction</a></li>
+ <li><a href="https://developer.mozilla.org/en/XML_Extras" title="en/XML_Extras">XML Extras</a></li>
+</ul>
+<p>DOM 2 methods you will need are:</p>
+<ul>
+ <li><a href="https://developer.mozilla.org/en/DOM/document.createElementNS" title="en/DOM/document.createElementNS">DOM:document.createElementNS</a></li>
+ <li><a href="https://developer.mozilla.org/en/DOM/document.getElementsByTagNameNS" title="en/DOM/document.getElementsByTagNameNS">DOM:document.getElementsByTagNameNS</a></li>
+</ul>
+<h3 id=".C2.A0See_also">&nbsp;See also</h3>
+<ul>
+ <li><a href="Properly_Using_CSS_and_JavaScript_in_XHTML_Documents.html" title="en/Properly_Using_CSS_and_JavaScript_in_XHTML_Documents">Properly Using CSS and JavaScript in XHTML Documents</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+              <li><a href="tag/XHTML.html">XHTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/XML">XML</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dddh">dddh</a>,             <a href="https://developer.mozilla.org/en-US/profiles/dhodder">dhodder</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Neil">Neil</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jake33">jake33</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Yuhong">Yuhong</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Fidlej">Fidlej</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Manuel Strehl">Manuel Strehl</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Waldo">Waldo</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,
+                      <time datetime="2013-11-15T05:43:42-08:00">Nov 15, 2013, 5:43:42 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Writing_JavaScript_for_XHTML$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Writing_JavaScript_for_XHTML$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                                  </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Writing_JavaScript_for_XHTML by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 10:03:26 GMT -->
+</body></html>

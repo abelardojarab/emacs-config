@@ -1,0 +1,143 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Bool-Vectors</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Bool-Vectors"></a>
+<a name="Bool_002dVectors"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Rings.html#Rings">Rings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Char_002dTables.html#Char_002dTables">Char-Tables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>
+
+</p></div>
+
+<h3 class="section">6.7 Bool-vectors</h3>
+
+<p><a name="index-Bool_002dvectors-433"></a>
+  A bool-vector is much like a vector, except that it stores only the
+values <code>t</code> and <code>nil</code>.  If you try to store any non-<code>nil</code>
+value into an element of the bool-vector, the effect is to store
+<code>t</code> there.  As with all arrays, bool-vector indices start from 0,
+and the length cannot be changed once the bool-vector is created. 
+Bool-vectors are constants when evaluated.
+
+   </p><p>There are two special functions for working with bool-vectors; aside
+from that, you manipulate them with same functions used for other kinds
+of arrays.
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/make%2Dbool%2Dvector"></a><a name="DASH-239"></a>— Function: <b>make-bool-vector</b><var> length initial<a name="index-make_002dbool_002dvector-434"></a></var><br>
+<blockquote><p>Return a new bool-vector of <var>length</var> elements,
+each one initialized to <var>initial</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dp"></a><a name="DASH-240"></a>— Function: <b>bool-vector-p</b><var> object<a name="index-bool_002dvector_002dp-435"></a></var><br>
+<blockquote><p>This returns <code>t</code> if <var>object</var> is a bool-vector,
+and <code>nil</code> otherwise. 
+</p></blockquote></div>
+
+   <p>There are also some bool-vector set operation functions, described below:
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dexclusive%2Dor"></a><a name="DASH-241"></a>— Function: <b>bool-vector-exclusive-or</b><var> a b &amp;optional c<a name="index-bool_002dvector_002dexclusive_002dor-436"></a></var><br>
+<blockquote><p>Return <dfn>bitwise exclusive or</dfn> of bool vectors <var>a</var> and <var>b</var>. 
+If optional argument <var>c</var> is given, the result of this operation is
+stored into <var>c</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dunion"></a><a name="DASH-242"></a>— Function: <b>bool-vector-union</b><var> a b &amp;optional c<a name="index-bool_002dvector_002dunion-437"></a></var><br>
+<blockquote><p>Return <dfn>bitwise or</dfn> of bool vectors <var>a</var> and <var>b</var>.  If
+optional argument <var>c</var> is given, the result of this operation is
+stored into <var>c</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dintersection"></a><a name="DASH-243"></a>— Function: <b>bool-vector-intersection</b><var> a b &amp;optional c<a name="index-bool_002dvector_002dintersection-438"></a></var><br>
+<blockquote><p>Return <dfn>bitwise and</dfn> of bool vectors <var>a</var> and <var>b</var>.  If
+optional argument <var>c</var> is given, the result of this operation is
+stored into <var>c</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dset%2Ddifference"></a><a name="DASH-244"></a>— Function: <b>bool-vector-set-difference</b><var> a b &amp;optional c<a name="index-bool_002dvector_002dset_002ddifference-439"></a></var><br>
+<blockquote><p>Return <dfn>set difference</dfn> of bool vectors <var>a</var> and <var>b</var>.  If
+optional argument <var>c</var> is given, the result of this operation is
+stored into <var>c</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dnot"></a><a name="DASH-245"></a>— Function: <b>bool-vector-not</b><var> a &amp;optional b<a name="index-bool_002dvector_002dnot-440"></a></var><br>
+<blockquote><p>Return <dfn>set complement</dfn> of bool vector <var>a</var>.  If optional
+argument <var>b</var> is given, the result of this operation is stored into
+<var>b</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dsubsetp"></a><a name="DASH-246"></a>— Function: <b>bool-vector-subsetp</b><var> a b<a name="index-bool_002dvector_002dsubsetp-441"></a></var><br>
+<blockquote><p>Return <code>t</code> if every <code>t</code> value in <var>a</var> is also t in
+<var>b</var>, <code>nil</code> otherwise.  All arguments should be bool vectors of the
+same length. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dcount%2Dconsecutive"></a><a name="DASH-247"></a>— Function: <b>bool-vector-count-consecutive</b><var> a b i<a name="index-bool_002dvector_002dcount_002dconsecutive-442"></a></var><br>
+<blockquote><p>Return the number of consecutive elements in <var>a</var> equal <var>b</var>
+starting at <var>i</var>.  <code>a</code> is a bool vector, <var>b</var> is <code>t</code>
+or <code>nil</code>, and <var>i</var> is an index into <code>a</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/bool%2Dvector%2Dcount%2Dpopulation"></a><a name="DASH-248"></a>— Function: <b>bool-vector-count-population</b><var> a<a name="index-bool_002dvector_002dcount_002dpopulation-443"></a></var><br>
+<blockquote><p>Return the number of elements that are <code>t</code> in bool vector <var>a</var>. 
+</p></blockquote></div>
+
+   <p>Here is an example of creating, examining, and updating a
+bool-vector.  Note that the printed form represents up to 8 boolean
+values as a single character.
+
+</p><pre class="example">     (setq bv (make-bool-vector 5 t))
+          ⇒ #&amp;5"^_"
+     (aref bv 1)
+          ⇒ t
+     (aset bv 3 nil)
+          ⇒ nil
+     bv
+          ⇒ #&amp;5"^W"
+</pre>
+   <p class="noindent">These results make sense because the binary codes for control-_ and
+control-W are 11111 and 10111, respectively.
+
+   
+
+</p></body></html>

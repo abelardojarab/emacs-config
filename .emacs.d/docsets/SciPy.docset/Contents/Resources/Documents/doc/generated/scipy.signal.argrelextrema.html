@@ -1,0 +1,196 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.signal.argrelextrema</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Signal processing (scipy.signal)" href="../signal.html">
+    <link rel="next" title="scipy.signal.periodogram" href="scipy.signal.periodogram.html">
+    <link rel="prev" title="scipy.signal.argrelmax" href="scipy.signal.argrelmax.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../signal.html" accesskey="U">Signal processing (<tt class="docutils literal"><span class="pre">scipy.signal</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.signal.periodogram.html" title="scipy.signal.periodogram" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.signal.argrelmax.html" title="scipy.signal.argrelmax" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.signal.argrelmax.html" title="previous chapter">scipy.signal.argrelmax</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.signal.periodogram.html" title="next chapter">scipy.signal.periodogram</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-signal-argrelextrema">
+<h1>scipy.signal.argrelextrema<a class="headerlink" href="#scipy-signal-argrelextrema" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.signal.argrelextrema"></a><dt id="scipy.signal.argrelextrema">
+<tt class="descclassname">scipy.signal.</tt><tt class="descname">argrelextrema</tt><big>(</big><em>data</em>, <em>comparator</em>, <em>axis=0</em>, <em>order=1</em>, <em>mode='clip'</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/signal/_peak_finding.py#L178"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.signal.argrelextrema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the relative extrema of <em class="xref py py-obj">data</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array in which to find the relative extrema.</p>
+</div></blockquote>
+<p><strong>comparator</strong> : callable</p>
+<blockquote>
+<div><p>Function to use to compare two data points.
+Should take 2 numbers as arguments.</p>
+</div></blockquote>
+<p><strong>axis</strong> : int, optional</p>
+<blockquote>
+<div><p>Axis over which to select from <em class="xref py py-obj">data</em>.  Default is 0.</p>
+</div></blockquote>
+<p><strong>order</strong> : int, optional</p>
+<blockquote>
+<div><p>How many points on each side to use for the comparison
+to consider <tt class="docutils literal"><span class="pre">comparator(n,</span> <span class="pre">n+x)</span></tt> to be True.</p>
+</div></blockquote>
+<p><strong>mode</strong> : str, optional</p>
+<blockquote>
+<div><p>How the edges of the vector are treated.  ‘wrap’ (wrap around) or
+‘clip’ (treat overflow as the same as the last (or first) element).
+Default is ‘clip’.  See <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.take.html#numpy.take" title="(in NumPy v1.9)"><tt class="xref py py-obj docutils literal"><span class="pre">numpy.take</span></tt></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>extrema</strong> : tuple of ndarrays</p>
+<blockquote class="last">
+<div><p>Indices of the maxima in arrays of integers.  <tt class="docutils literal"><span class="pre">extrema[k]</span></tt> is
+the array of indices of axis <em class="xref py py-obj">k</em> of <em class="xref py py-obj">data</em>.  Note that the
+return value is a tuple even when <em class="xref py py-obj">data</em> is one-dimensional.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="scipy.signal.argrelmin.html#scipy.signal.argrelmin" title="scipy.signal.argrelmin"><tt class="xref py py-obj docutils literal"><span class="pre">argrelmin</span></tt></a>, <a class="reference internal" href="scipy.signal.argrelmax.html#scipy.signal.argrelmax" title="scipy.signal.argrelmax"><tt class="xref py py-obj docutils literal"><span class="pre">argrelmax</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">argrelextrema</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">)</span>
+<span class="go">(array([3, 6]),)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>              <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>              <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">argrelextrema</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">(array([0, 2]), array([2, 1]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

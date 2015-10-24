@@ -1,0 +1,259 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.stats.wishart</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Statistical functions (scipy.stats)" href="../stats.html">
+    <link rel="next" title="scipy.stats.invwishart" href="scipy.stats.invwishart.html">
+    <link rel="prev" title="scipy.stats.dirichlet" href="scipy.stats.dirichlet.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../stats.html" accesskey="U">Statistical functions (<tt class="docutils literal"><span class="pre">scipy.stats</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.invwishart.html" title="scipy.stats.invwishart" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.dirichlet.html" title="scipy.stats.dirichlet" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.stats.dirichlet.html" title="previous chapter">scipy.stats.dirichlet</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.stats.invwishart.html" title="next chapter">scipy.stats.invwishart</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-stats-wishart">
+<h1>scipy.stats.wishart<a class="headerlink" href="#scipy-stats-wishart" title="Permalink to this headline">¶</a></h1>
+<dl class="data">
+<a class="dashAnchor" name="//apple_ref/Method/scipy.stats.wishart"></a><dt id="scipy.stats.wishart">
+<tt class="descclassname">scipy.stats.</tt><tt class="descname">wishart</tt><em class="property"> = &lt;scipy.stats._multivariate.wishart_gen object at 0x7fa40e156110&gt;</em><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/stats/_multivariate.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.stats.wishart" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Wishart random variable.</p>
+<p>The <em class="xref py py-obj">df</em> keyword specifies the degrees of freedom. The <em class="xref py py-obj">scale</em> keyword
+specifies the scale matrix, which must be symmetric and positive definite.
+In this context, the scale matrix is often interpreted in terms of a
+multivariate normal precision matrix (the inverse of the covariance
+matrix).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<div><p>Quantiles, with the last axis of <em class="xref py py-obj">x</em> denoting the components.</p>
+</div></blockquote>
+<p><strong>df</strong> : int</p>
+<blockquote>
+<div><p>Degrees of freedom, must be greater than or equal to dimension of the
+scale matrix</p>
+</div></blockquote>
+<p><strong>scale</strong> : array_like</p>
+<blockquote>
+<div><p>Symmetric positive definite scale matrix of the distribution</p>
+</div></blockquote>
+<p><strong>random_state</strong> : None or int or np.random.RandomState instance, optional</p>
+<blockquote>
+<div><p>If int or RandomState, use it for drawing the random variates.
+If None (or np.random), the global np.random state is used.
+Default is None.</p>
+</div></blockquote>
+<p><strong>Alternatively, the object may be called (as a function) to fix the degrees</strong></p>
+<p><strong>of freedom and scale parameters, returning a “frozen” Wishart random</strong></p>
+<p><strong>variable:</strong></p>
+<p><strong>rv = wishart(df=1, scale=1)</strong></p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Frozen object with the same methods but holding the given
+degrees of freedom and scale fixed.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="scipy.stats.invwishart.html#scipy.stats.invwishart" title="scipy.stats.invwishart"><tt class="xref py py-obj docutils literal"><span class="pre">invwishart</span></tt></a>, <a class="reference internal" href="scipy.stats.chi2.html#scipy.stats.chi2" title="scipy.stats.chi2"><tt class="xref py py-obj docutils literal"><span class="pre">chi2</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The scale matrix <em class="xref py py-obj">scale</em> must be a symmetric positive definite
+matrix. Singular matrices, including the symmetric positive semi-definite
+case, are not supported.</p>
+<p>The Wishart distribution is often denoted</p>
+<div class="math">
+\[W_p(\nu, \Sigma)\]</div>
+<p>where <span class="math">\(\nu\)</span> is the degrees of freedom and <span class="math">\(\Sigma\)</span> is the
+<span class="math">\(p \times p\)</span> scale matrix.</p>
+<p>The probability density function for <a class="reference internal" href="#scipy.stats.wishart" title="scipy.stats.wishart"><tt class="xref py py-obj docutils literal"><span class="pre">wishart</span></tt></a> has support over positive
+definite matrices <span class="math">\(S\)</span>; if <span class="math">\(S \sim W_p(\nu, \Sigma)\)</span>, then
+its PDF is given by:</p>
+<div class="math">
+\[f(S) = \frac{|S|^{\frac{\nu - p - 1}{2}}}{2^{ \frac{\nu p}{2} }
+       |\Sigma|^\frac{\nu}{2} \Gamma_p \left ( \frac{\nu}{2} \right )}
+       \exp\left( -tr(\Sigma^{-1} S) / 2 \right)\]</div>
+<p>If <span class="math">\(S \sim W_p(\nu, \Sigma)\)</span> (Wishart) then
+<span class="math">\(S^{-1} \sim W_p^{-1}(\nu, \Sigma^{-1})\)</span> (inverse Wishart).</p>
+<p>If the scale matrix is 1-dimensional and equal to one, then the Wishart
+distribution <span class="math">\(W_1(\nu, 1)\)</span> collapses to the <span class="math">\(\chi^2(\nu)\)</span>
+distribution.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r374" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R374]</a></td><td>M.L. Eaton, “Multivariate Statistics: A Vector Space Approach”,
+Wiley, 1983.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r375" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R375]</a></td><td>W.B. Smith and R.R. Hocking, “Algorithm AS 53: Wishart Variate
+Generator”, Applied Statistics, vol. 21, pp. 341-345, 1972.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">wishart</span><span class="p">,</span> <span class="n">chi2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">wishart</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span> <span class="n">w</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="go">array([ 0.00126156,  0.10892176,  0.14793434,  0.17400548,  0.1929669 ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">chi2</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span> <span class="n">c</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="go">array([ 0.00126156,  0.10892176,  0.14793434,  0.17400548,  0.1929669 ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The input quantiles can be any shape of array, as long as the last
+axis labels the components.</p>
+<p>(<a class="reference external" href="../generated/scipy-stats-wishart-1.py">Source code</a>)</p>
+<div class="figure">
+<img alt="../_images/scipy-stats-wishart-1.png" src="../_images/scipy-stats-wishart-1.png">
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%">
+<col width="58%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">pdf(x,</span> <span class="pre">df,</span> <span class="pre">scale)</span></tt></td>
+<td>Probability density function.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">logpdf(x,</span> <span class="pre">df,</span> <span class="pre">scale)</span></tt></td>
+<td>Log of the probability density function.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">rvs(df,</span> <span class="pre">scale,</span> <span class="pre">size=1,</span> <span class="pre">random_state=None)</span></tt></td>
+<td>Draw random samples from a Wishart distribution.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">entropy()</span></tt></td>
+<td>Compute the differential entropy of the Wishart distribution.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

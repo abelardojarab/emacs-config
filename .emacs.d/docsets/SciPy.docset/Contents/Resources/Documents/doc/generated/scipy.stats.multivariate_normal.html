@@ -1,0 +1,254 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.stats.multivariate_normal</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Statistical functions (scipy.stats)" href="../stats.html">
+    <link rel="next" title="scipy.stats.dirichlet" href="scipy.stats.dirichlet.html">
+    <link rel="prev" title="scipy.stats.wrapcauchy" href="scipy.stats.wrapcauchy.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../stats.html" accesskey="U">Statistical functions (<tt class="docutils literal"><span class="pre">scipy.stats</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.dirichlet.html" title="scipy.stats.dirichlet" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.wrapcauchy.html" title="scipy.stats.wrapcauchy" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.stats.wrapcauchy.html" title="previous chapter">scipy.stats.wrapcauchy</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.stats.dirichlet.html" title="next chapter">scipy.stats.dirichlet</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-stats-multivariate-normal">
+<h1>scipy.stats.multivariate_normal<a class="headerlink" href="#scipy-stats-multivariate-normal" title="Permalink to this headline">¶</a></h1>
+<dl class="data">
+<a class="dashAnchor" name="//apple_ref/Method/scipy.stats.multivariate_normal"></a><dt id="scipy.stats.multivariate_normal">
+<tt class="descclassname">scipy.stats.</tt><tt class="descname">multivariate_normal</tt><em class="property"> = &lt;scipy.stats._multivariate.multivariate_normal_gen object at 0x7fa40e148e90&gt;</em><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/stats/_multivariate.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.stats.multivariate_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>A multivariate normal random variable.</p>
+<p>The <em class="xref py py-obj">mean</em> keyword specifies the mean. The <em class="xref py py-obj">cov</em> keyword specifies the
+covariance matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<div><p>Quantiles, with the last axis of <em class="xref py py-obj">x</em> denoting the components.</p>
+</div></blockquote>
+<p><strong>mean</strong> : array_like, optional</p>
+<blockquote>
+<div><p>Mean of the distribution (default zero)</p>
+</div></blockquote>
+<p><strong>cov</strong> : array_like, optional</p>
+<blockquote>
+<div><p>Covariance matrix of the distribution (default one)</p>
+</div></blockquote>
+<p><strong>allow_singular</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to allow a singular covariance matrix.  (Default: False)</p>
+</div></blockquote>
+<p><strong>random_state</strong> : None or int or np.random.RandomState instance, optional</p>
+<blockquote>
+<div><p>If int or RandomState, use it for drawing the random variates.
+If None (or np.random), the global np.random state is used.
+Default is None.</p>
+</div></blockquote>
+<p><strong>Alternatively, the object may be called (as a function) to fix the mean</strong></p>
+<p><strong>and covariance parameters, returning a “frozen” multivariate normal</strong></p>
+<p><strong>random variable:</strong></p>
+<p><strong>rv = multivariate_normal(mean=None, cov=1, allow_singular=False)</strong></p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Frozen object with the same methods but holding the given
+mean and covariance fixed.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>Setting the parameter <em class="xref py py-obj">mean</em> to <em class="xref py py-obj">None</em> is equivalent to having <em class="xref py py-obj">mean</em></dt>
+<dd>be the zero-vector. The parameter <em class="xref py py-obj">cov</em> can be a scalar, in which case
+the covariance matrix is the identity times that value, a vector of
+diagonal entries for the covariance matrix, or a two-dimensional
+array_like.</dd>
+</dl>
+<p>The covariance matrix <em class="xref py py-obj">cov</em> must be a (symmetric) positive
+semi-definite matrix. The determinant and inverse of <em class="xref py py-obj">cov</em> are computed
+as the pseudo-determinant and pseudo-inverse, respectively, so
+that <em class="xref py py-obj">cov</em> does not need to have full rank.</p>
+<p>The probability density function for <a class="reference internal" href="#scipy.stats.multivariate_normal" title="scipy.stats.multivariate_normal"><tt class="xref py py-obj docutils literal"><span class="pre">multivariate_normal</span></tt></a> is</p>
+<div class="math">
+\[f(x) = \frac{1}{\sqrt{(2 \pi)^k \det \Sigma}}
+       \exp\left( -\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right),\]</div>
+<p>where <span class="math">\(\mu\)</span> is the mean, <span class="math">\(\Sigma\)</span> the covariance matrix,
+and <span class="math">\(k\)</span> is the dimension of the space where <span class="math">\(x\)</span> takes values.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.14.0.</span></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">multivariate_normal</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">multivariate_normal</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">cov</span><span class="o">=</span><span class="mf">0.5</span><span class="p">);</span> <span class="n">y</span>
+<span class="go">array([ 0.00108914,  0.01033349,  0.05946514,  0.20755375,  0.43939129,</span>
+<span class="go">        0.56418958,  0.43939129,  0.20755375,  0.05946514,  0.01033349])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig1</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The input quantiles can be any shape of array, as long as the last
+axis labels the components.  This allows us for instance to
+display the frozen pdf for a non-isotropic random variable in 2D as
+follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="o">.</span><span class="mo">01</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="o">.</span><span class="mo">01</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pos</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">pos</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rv</span> <span class="o">=</span> <span class="n">multivariate_normal</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">],</span> <span class="p">[[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax2</span> <span class="o">=</span> <span class="n">fig2</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax2</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">rv</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">pos</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../generated/scipy-stats-multivariate_normal-1.py">Source code</a>)</p>
+<div class="figure">
+<img alt="../_images/scipy-stats-multivariate_normal-1_00.png" src="../_images/scipy-stats-multivariate_normal-1_00.png">
+</div>
+<div class="figure">
+<img alt="../_images/scipy-stats-multivariate_normal-1_01.png" src="../_images/scipy-stats-multivariate_normal-1_01.png">
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%">
+<col width="53%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">pdf(x,</span> <span class="pre">mean=None,</span> <span class="pre">cov=1,</span> <span class="pre">allow_singular=False)</span></tt></td>
+<td>Probability density function.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">logpdf(x,</span> <span class="pre">mean=None,</span> <span class="pre">cov=1,</span> <span class="pre">allow_singular=False)</span></tt></td>
+<td>Log of the probability density function.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">rvs(mean=None,</span> <span class="pre">cov=1,</span> <span class="pre">size=1,</span> <span class="pre">random_state=None)</span></tt></td>
+<td>Draw random samples from a multivariate normal distribution.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">entropy()</span></tt></td>
+<td>Compute the differential entropy of the multivariate normal.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

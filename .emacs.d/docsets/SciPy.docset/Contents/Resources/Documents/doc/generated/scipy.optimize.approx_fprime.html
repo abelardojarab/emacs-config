@@ -1,0 +1,203 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.optimize.approx_fprime</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Optimization and root finding (scipy.optimize)" href="../optimize.html">
+    <link rel="next" title="scipy.optimize.bracket" href="scipy.optimize.bracket.html">
+    <link rel="prev" title="scipy.optimize.linprog" href="scipy.optimize.linprog.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../optimize.html" accesskey="U">Optimization and root finding (<tt class="docutils literal"><span class="pre">scipy.optimize</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.optimize.bracket.html" title="scipy.optimize.bracket" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.optimize.linprog.html" title="scipy.optimize.linprog" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.optimize.linprog.html" title="previous chapter">scipy.optimize.linprog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.optimize.bracket.html" title="next chapter">scipy.optimize.bracket</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-optimize-approx-fprime">
+<h1>scipy.optimize.approx_fprime<a class="headerlink" href="#scipy-optimize-approx-fprime" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.optimize.approx_fprime"></a><dt id="scipy.optimize.approx_fprime">
+<tt class="descclassname">scipy.optimize.</tt><tt class="descname">approx_fprime</tt><big>(</big><em>xk</em>, <em>f</em>, <em>epsilon</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/optimize/optimize.py#L563"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.optimize.approx_fprime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finite-difference approximation of the gradient of a scalar function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xk</strong> : array_like</p>
+<blockquote>
+<div><p>The coordinate vector at which to determine the gradient of <em class="xref py py-obj">f</em>.</p>
+</div></blockquote>
+<p><strong>f</strong> : callable</p>
+<blockquote>
+<div><p>The function of which to determine the gradient (partial derivatives).
+Should take <em class="xref py py-obj">xk</em> as first argument, other arguments to <em class="xref py py-obj">f</em> can be
+supplied in <tt class="docutils literal"><span class="pre">*args</span></tt>.  Should return a scalar, the value of the
+function at <em class="xref py py-obj">xk</em>.</p>
+</div></blockquote>
+<p><strong>epsilon</strong> : array_like</p>
+<blockquote>
+<div><p>Increment to <em class="xref py py-obj">xk</em> to use for determining the function gradient.
+If a scalar, uses the same finite difference delta for all partial
+derivatives.  If an array, should contain one value per element of
+<em class="xref py py-obj">xk</em>.</p>
+</div></blockquote>
+<p><strong>*args</strong> : args, optional</p>
+<blockquote>
+<div><p>Any other arguments that are to be passed to <em class="xref py py-obj">f</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>grad</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>The partial derivatives of <em class="xref py py-obj">f</em> to <em class="xref py py-obj">xk</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="scipy.optimize.check_grad.html#scipy.optimize.check_grad" title="scipy.optimize.check_grad"><tt class="xref py py-obj docutils literal"><span class="pre">check_grad</span></tt></a></dt>
+<dd>Check correctness of gradient function against approx_fprime.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The function gradient is determined by the forward finite difference
+formula:</p>
+<div class="highlight-python"><div class="highlight"><pre>         f(xk[i] + epsilon[i]) - f(xk[i])
+f'[i] = ---------------------------------
+                    epsilon[i]
+</pre></div>
+</div>
+<p>The main use of <a class="reference internal" href="#scipy.optimize.approx_fprime" title="scipy.optimize.approx_fprime"><tt class="xref py py-obj docutils literal"><span class="pre">approx_fprime</span></tt></a> is in scalar function optimizers like
+<a class="reference internal" href="scipy.optimize.fmin_bfgs.html#scipy.optimize.fmin_bfgs" title="scipy.optimize.fmin_bfgs"><tt class="xref py py-obj docutils literal"><span class="pre">fmin_bfgs</span></tt></a>, to determine numerically the Jacobian of a function.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">optimize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">c1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="s">"Coordinate vector `x` should be an array of size two."</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">c0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">c1</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c0</span><span class="p">,</span> <span class="n">c1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">optimize</span><span class="o">.</span><span class="n">approx_fprime</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="p">[</span><span class="n">eps</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="o">*</span> <span class="n">eps</span><span class="p">],</span> <span class="n">c0</span><span class="p">,</span> <span class="n">c1</span><span class="p">)</span>
+<span class="go">array([   2.        ,  400.00004198])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

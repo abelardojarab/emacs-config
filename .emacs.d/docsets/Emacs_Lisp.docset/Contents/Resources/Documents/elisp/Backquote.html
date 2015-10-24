@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Backquote</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Backquote"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Eval.html#Eval">Eval</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Quoting.html#Quoting">Quoting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Evaluation.html#Evaluation">Evaluation</a>
+
+</div>
+
+<h3 class="section">9.4 Backquote</h3>
+
+<p><a name="index-backquote-_0028list-substitution_0029-542"></a><a name="index-g_t_0060-_0028list-substitution_0029-543"></a><a name="index-g_t_0060-544"></a>
+  <dfn>Backquote constructs</dfn> allow you to quote a list, but
+selectively evaluate elements of that list.  In the simplest case, it
+is identical to the special form <code>quote</code>
+(described in the previous section; see <a href="Quoting.html#Quoting">Quoting</a>). 
+For example, these two forms yield identical results:
+
+<pre class="example">     `(a list of (+ 2 3) elements)
+          &rArr; (a list of (+ 2 3) elements)
+     '(a list of (+ 2 3) elements)
+          &rArr; (a list of (+ 2 3) elements)
+</pre>
+   <p><a name="index-g_t_002c-_0040r_007b_0028with-backquote_0029_007d-545"></a>  The special marker &lsquo;<samp><span class="samp">,</span></samp>&rsquo; inside of the argument to backquote
+indicates a value that isn't constant.  The Emacs Lisp evaluator
+evaluates the argument of &lsquo;<samp><span class="samp">,</span></samp>&rsquo;, and puts the value in the list
+structure:
+
+<pre class="example">     `(a list of ,(+ 2 3) elements)
+          &rArr; (a list of 5 elements)
+</pre>
+   <p class="noindent">Substitution with &lsquo;<samp><span class="samp">,</span></samp>&rsquo; is allowed at deeper levels of the list
+structure also.  For example:
+
+<pre class="example">     `(1 2 (3 ,(+ 4 5)))
+          &rArr; (1 2 (3 9))
+</pre>
+   <p><a name="index-g_t_002c_0040_0040-_0040r_007b_0028with-backquote_0029_007d-546"></a><a name="index-splicing-_0028with-backquote_0029-547"></a>  You can also <dfn>splice</dfn> an evaluated value into the resulting list,
+using the special marker &lsquo;<samp><span class="samp">,@</span></samp>&rsquo;.  The elements of the spliced list
+become elements at the same level as the other elements of the resulting
+list.  The equivalent code without using &lsquo;<samp><span class="samp">`</span></samp>&rsquo; is often unreadable. 
+Here are some examples:
+
+<pre class="example">     (setq some-list '(2 3))
+          &rArr; (2 3)
+     (cons 1 (append some-list '(4) some-list))
+          &rArr; (1 2 3 4 2 3)
+     `(1 ,@some-list 4 ,@some-list)
+          &rArr; (1 2 3 4 2 3)
+     
+     (setq list '(hack foo bar))
+          &rArr; (hack foo bar)
+     (cons 'use
+       (cons 'the
+         (cons 'words (append (cdr list) '(as elements)))))
+          &rArr; (use the words foo bar as elements)
+     `(use the words ,@(cdr list) as elements)
+          &rArr; (use the words foo bar as elements)
+</pre>
+   </body></html>
+

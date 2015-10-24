@@ -1,0 +1,729 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:15:52 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Drag and drop</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop$json">
+  <link rel="canonical" href="Drag_and_drop.html">
+
+            <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/DragDrop/Drag_and_Drop" title="Ziehen und Ablegen">
+          <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/DragDrop/Drag_and_Drop" title="Arrastrar y soltar">
+          <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Glisser_et_déposer/Glisser_et_déposer" title="Glisser et déposer">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/DragDrop/Drag_and_Drop" title="ドラッグ＆ドロップ">
+          <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/DragDrop/Drag_and_Drop" title="Arrastar e soltar">
+          <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Web/Guide/HTML/Drag_and_drop" title="Drag and drop">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/DragDrop/Drag_and_Drop" title="拖放操作">
+          <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/Web/Guide/HTML/Drag_and_drop" title="Drag and drop">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Drag and drop">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop">
+  <meta name="twitter:title" content="Drag and drop">
+    <meta property="og:description" content="Firefox and other Mozilla applications support a number of features for handling drag and drop. This allows the user to click and hold the mouse button down over an element, drag it to another location, and release the mouse button to drop the element there. A translucent representation of what is being dragged will follow the mouse pointer during the drag operation. The drop location may be a different application. Web sites, extensions, and XUL applications may make use of this functionality to customize what elements may be dragged and the drag feedback, as well as specify where elements may be dropped.">
+  <meta name="description" content="Firefox and other Mozilla applications support a number of features for handling drag and drop. This allows the user to click and hold the mouse button down over an element, drag it to another location, and release the mouse button to drop the element there. A translucent representation of what is being dragged will follow the mouse pointer during the drag operation. The drop location may be a different application. Web sites, extensions, and XUL applications may make use of this functionality to customize what elements may be dragged and the drag feedback, as well as specify where elements may be dropped.">
+  <meta name="twitter:description" content="Firefox and other Mozilla applications support a number of features for handling drag and drop. This allows the user to click and hold the mouse button down over an element, drag it to another location, and release the mouse button to drop the element there. A translucent representation of what is being dragged will follow the mouse pointer during the drag operation. The drop location may be a different application. Web sites, extensions, and XUL applications may make use of this functionality to customize what elements may be dragged and the drag feedback, as well as specify where elements may be dropped.">
+  
+      
+  </head>
+<body data-slug="Web/Guide/HTML/Drag_and_drop" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/HTML/Drag_and_drop" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FDrag_and_drop" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/HTML/Drag_and_drop" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FDrag_and_drop" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/DragDrop/Drag_and_Drop" title="Ziehen und Ablegen">Deutsch</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/DragDrop/Drag_and_Drop" title="Arrastrar y soltar">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Glisser_et_déposer/Glisser_et_déposer" title="Glisser et déposer">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/DragDrop/Drag_and_Drop" title="ドラッグ＆ドロップ">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/DragDrop/Drag_and_Drop" title="Arrastar e soltar">Português (do&nbsp;Brasil)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Web/Guide/HTML/Drag_and_drop" title="Drag and drop">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/DragDrop/Drag_and_Drop" title="拖放操作">中文 (简体)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/Web/Guide/HTML/Drag_and_drop" title="Drag and drop">正體中文 (繁體)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../HTML.html" rel="v:url" property="v:title">HTML developer guide</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Drag and drop</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Drag and drop</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;" data-has-hidden="1">
+            <span class="quickstat">
+            by 26 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jonathan_Watt" title="View profile: Jonathan_Watt">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jonathan_Watt" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jonathan_Watt</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/MDNion" title="View profile: MDNion">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MDNion" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">MDNion</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/yihangho" title="View profile: yihangho">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yihangho" data-src="../../../../../../secure.gravatar.com/avatar/861e82dff71c82e5301ef65ffa19467f6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">yihangho</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/serhalp" title="View profile: serhalp">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="serhalp" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">serhalp</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ajedi32" title="View profile: Ajedi32">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ajedi32" data-src="../../../../../../secure.gravatar.com/avatar/5c9d0ecbe3045579b72f96744c62735c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ajedi32</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/foxbrush" title="View profile: foxbrush">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="foxbrush" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">foxbrush</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/SultryHues" title="View profile: SultryHues">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SultryHues" data-src="../../../../../../secure.gravatar.com/avatar/301942220ab69879e9304163903809706aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">SultryHues</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/aurimas" title="View profile: aurimas">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="aurimas" data-src="../../../../../../secure.gravatar.com/avatar/c570d2ae788556be8837f9a858f5f8876aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">aurimas</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fibre-online" title="View profile: fibre-online">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fibre-online" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fibre-online</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jscheel" title="View profile: jscheel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jscheel" data-src="../../../../../../secure.gravatar.com/avatar/dbf1c72d0f365f7f97a1b52ed3bb7bd56aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jscheel</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JulianNeal" title="View profile: JulianNeal">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JulianNeal" data-src="../../../../../../secure.gravatar.com/avatar/47b180ea050bafdb549104506235a0c06aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">JulianNeal</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/openjck" title="View profile: openjck">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="openjck" data-src="../../../../../../secure.gravatar.com/avatar/990aba50a39806f6cb0f97e00ad5685c6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">openjck</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ketanpkr" title="View profile: ketanpkr">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ketanpkr" data-src="../../../../../../secure.gravatar.com/avatar/a14a99a1c573fc5a68f6232a28dfbb4c6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">ketanpkr</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/shawnl" title="View profile: shawnl">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="shawnl" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">shawnl</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/PPvG" title="View profile: PPvG">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="PPvG" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">PPvG</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/inma_610" title="View profile: inma_610">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="inma_610" data-src="../../../../../../secure.gravatar.com/avatar/bdc39d1a570f34b1aca764a6dd6822586aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">inma_610</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sebmozilla" title="View profile: sebmozilla">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sebmozilla" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">sebmozilla</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nfroidure" title="View profile: Nfroidure">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nfroidure" data-src="../../../../../../secure.gravatar.com/avatar/2791d5e5ad107d5ac604e07c92d4f2d16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Nfroidure</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Piro" title="View profile: Piro">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Piro" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Piro</noscript></a>
+                </li>
+                            <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Enn" title="View profile: Enn">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Enn" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Enn</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Drag_and_Drop_Basics" rel="internal">Drag and Drop Basics</a></li><li><a href="#events" rel="internal">Drag Events</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>Firefox and other Mozilla applications support a number of features for handling drag and drop. This allows the user to click and hold the mouse button down over an element, drag it to another location, and release the mouse button to drop the element there. A translucent representation of what is being dragged will follow the mouse pointer during the drag operation. The drop location may be a different application. Web sites, extensions, and XUL applications may make use of this functionality to customize what elements may be dragged and the drag feedback, as well as specify where elements may be dropped.</p>
+
+<div class="note">This section covers drag and drop in Firefox 3.5 (Gecko 1.9.1) and later. For the older API for Firefox 3.0 and earlier, which is not exposed to web pages, see the <a href="https://developer.mozilla.org/en-US/docs/Drag_and_Drop" title="Older Drag and Drop API">older API documentation</a>.</div>
+
+<h2 id="Drag_and_Drop_Basics">Drag and Drop Basics</h2>
+
+<p>To drag and drop, generally there are few steps to follow:</p>
+
+<ul>
+ <li>Define&nbsp;a draggable target. Specify the&nbsp;draggable attribute as true for the element we would like to drag. For&nbsp;information about this, see&nbsp;<a href="Drag_operations.html#draggableattribute">The Draggable Attribute</a>.</li>
+ <li>Define the data to be dragged, which may be of a number of different formats. For example, textual data containing a string of text being dragged. For information about this, see <a href="Drag_operations.html#dragdata" title="Drag Data">Drag Data</a>.</li>
+ <li>Optionally, define a custom drag feedback image which will appear beside the mouse pointer during the drag operation.&nbsp; If a custom image is not defined, a default image will automatically be generated based on the element where the mouse was pressed down (i.e. the element being dragged). To learn more about drag feedback images, see <a href="https://developer.mozilla.org/en-US/docs/DragDrop/Drag_Operations#dragfeedback" title="Setting the Drag Feedback Image">Setting the Drag Feedback Image</a>.</li>
+ <li>Define the drag effects that are allowed. Three such effects are possible: <code>copy</code> to indicate that the data being dragged will be copied from its present location to the drop location, <code>move</code> to indicate that the data being dragged will be moved, and <code>link</code> to indicate that some form of relationship or connection will be created between the source and drop locations. During the drag operation, the drag effects may be modified to indicate that certain effects are allowed at certain locations. If allowed, a drop may occur at that location. See <a href="Drag_operations.html#drageffects" title="Drag Effects">Drag Effects</a> for more details.</li>
+ <li>Define a drop area.&nbsp;By default, the browser prevents anything from happening when dropping something onto the HTML element. So to make an element a drop area, just stop the browser from doing the default action.&nbsp;That is, register the on "ondragenter" or "ondragover" event. For more infomation, please see&nbsp;<a href="Drag_operations.html#droptargets">Specifying Drop Targets</a>.</li>
+ <li>Do something when&nbsp;the drop occurs. You may want to retrieve the data carried by the draggable target and do something accordingly. For more infomation, please see <a href="Drag_operations.html#drop">Performing a Drop</a>.</li>
+</ul>
+
+<p>Mozilla and Firefox support a number of features not in the standard drag and drop model. These allow the user to drag multiple items and drag non-string data. For more information, see <a href="https://developer.mozilla.org/en-US/docs/DragDrop/Dragging_and_Dropping_Multiple_Items" title="Dragging and Dropping Multiple Items">Dragging and Dropping Multiple Items</a>.</p>
+
+<p>For a list of common data types used for drag and drop, see <a href="https://developer.mozilla.org/en-US/docs/DragDrop/Recommended_Drag_Types" title="Recommended Drag Types">Recommended Drag Types</a>.</p>
+
+<p>A quick reference is available for the best practice for dragging the following kinds of items:</p>
+
+<ul>
+ <li><a href="Recommended_Drag_Types.html#text" title="Text">Text</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/DragDrop/Recommended_Drag_Types#link" title="Links">Links</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/DragDrop/Recommended_Drag_Types#html" title="HTML and XML">HTML and XML</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/DragDrop/Recommended_Drag_Types#file" title="Files">Files</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/DragDrop/Recommended_Drag_Types#image" title="Images">Images</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/DragDrop/Recommended_Drag_Types#node" title="Document Nodes">Document Nodes</a></li>
+</ul>
+
+<p>See <a href="https://developer.mozilla.org/en-US/docs/DragDrop/DataTransfer" title="DataTransfer">DataTransfer</a> for a reference to the DataTransfer object.</p>
+
+<h2 name="events" id="events">Drag Events</h2>
+
+<p>A number of events are used which are fired during various stages of the drag and drop operation. Note that only drag events are fired during a drag operation; mouse events such as <code>mousemove</code> are not. Also note that <code>dragstart</code> and <code>dragend</code> are not fired when dragging a file into the browser from the OS.</p>
+
+<p>The <a href="https://developer.mozilla.org/en-US/docs/DragDrop/DataTransfer" title="dataTransfer">dataTransfer</a> property of all drag events holds data about the drag and drop operation.</p>
+
+<dl>
+ <dt><code>dragstart</code></dt>
+ <dd>Fired on an element when a drag is started. The user is requesting to drag the element where the <code>dragstart</code> event is fired. During this event, a listener would set information such as the drag data and image to be associated with the drag. This event is not fired when dragging a file into the browser from the OS. For information about this, see <a href="https://developer.mozilla.org/en-US/docs/DragDrop/Drag_Operations#dragstart" title="Starting a Drag Operation">Starting a Drag Operation</a>.</dd>
+ <dt><code>dragenter</code></dt>
+ <dd>Fired when the mouse enters an element while a drag is occurring. A listener for this event should indicate whether a drop is allowed over this location. If there are no listeners, or the listeners perform no operations, then a drop is not allowed by default. This is also the event to listen for in order to provide feedback that a drop is allowed, such as displaying a highlight or insertion marker. For information about this, see <a href="https://developer.mozilla.org/en-US/docs/DragDrop/Drag_Operations#droptargets" title="Specifying Drop Targets">Specifying Drop Targets</a>.</dd>
+ <dt><code>dragover</code></dt>
+ <dd>This event is fired each time the mouse pointer moves as it moves across an element when a drag is occurring. Much of the time, the operation that occurs during a listener will be the same as the dragenter event. For information about this, see <a href="https://developer.mozilla.org/en-US/docs/DragDrop/Drag_Operations#droptargets" title="Specifying Drop Targets">Specifying Drop Targets</a>.</dd>
+ <dt><code>dragleave</code></dt>
+ <dd>This event is fired when the mouse leaves an element while a drag is occurring. Listeners should remove any highlighting or insertion markers used for drop feedback.</dd>
+ <dt><code>drag</code></dt>
+ <dd>This event is fired at the source of the drag (the element that the <code>dragstart</code> event was fired at) each time the mouse cursor moves during the drag.&nbsp; If a webpage does not have access to the source of the drag (say the drag originated in an external application or a cross-domain window) then it will not be able to see this event.&nbsp; The page can still see the <code>dragover</code> events though.</dd>
+ <dt><code>drop</code></dt>
+ <dd>The <code>drop</code> event is fired on the element where the drop occurred at the end of the drag operation. A listener would be responsible for retrieving the data being dragged and inserting it at the drop location. This event will only fire if a drop is desired. It will not fire if the user cancelled the drag operation, for example by pressing the Escape key, or if the mouse button was released while the mouse was not over a valid drop target. For information about this, see <a href="https://developer.mozilla.org/en-US/docs/DragDrop/Drag_Operations#drop" title="Performing a Drop">Performing a Drop</a>.</dd>
+ <dt><code>dragend</code></dt>
+ <dd>This event is fired at the source of the drag (the element that the <code>dragstart</code> event was fired at) when the drag operation is complete, whether it was successful or not.&nbsp; If a webpage does not have access to the source of the drag (say the drag originated in an external application or a cross-domain window) then it will not be able to see this event.&nbsp; The page can still see the <code>drop</code> event though. For more information about this, see <a href="https://developer.mozilla.org/en-US/docs/DragDrop/Drag_Operations#dragend" title="Finishing a Drag">Finishing a Drag</a>.</dd>
+</dl>
+
+<h2 name="See_also" id="See_also">See also</h2>
+
+<ul>
+ <li><a href="https://developer.mozilla.org/En/DragDrop/Drag_Operations" class="internal" title="Drag and Drop">Drag Operations</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/DragDrop/Dragging_and_Dropping_Multiple_Items">Dragging and Dropping Multiple Items</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/DragDrop/Recommended_Drag_Types">Recommended Drag Types</a></li>
+ <li><a href="http://www.whatwg.org/specs/web-apps/current-work/#dnd" class="internal external" title="Drag and Drop">HTML5 Living Standard: Drag and Drop</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/demos/tag/tech:dragndrop" class="internal" title="Drag and Drop">DemoStudio: Drag and Drop</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDragService">nsIDragService</a></li>
+</ul>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Advanced">Advanced</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/drag and drop">drag and drop</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="../../../tag/HTML5.html">HTML5</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/XUL">XUL</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/Jonathan_Watt">Jonathan_Watt</a>,             <a href="https://developer.mozilla.org/en-US/profiles/MDNion">MDNion</a>,             <a href="https://developer.mozilla.org/en-US/profiles/yihangho">yihangho</a>,             <a href="https://developer.mozilla.org/en-US/profiles/serhalp">serhalp</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ajedi32">Ajedi32</a>,             <a href="https://developer.mozilla.org/en-US/profiles/foxbrush">foxbrush</a>,             <a href="https://developer.mozilla.org/en-US/profiles/SultryHues">SultryHues</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/aurimas">aurimas</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/fibre-online">fibre-online</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jscheel">jscheel</a>,             <a href="https://developer.mozilla.org/en-US/profiles/JulianNeal">JulianNeal</a>,             <a href="https://developer.mozilla.org/en-US/profiles/openjck">openjck</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>,             <a href="https://developer.mozilla.org/en-US/profiles/ketanpkr">ketanpkr</a>,             <a href="https://developer.mozilla.org/en-US/profiles/shawnl">shawnl</a>,             <a href="https://developer.mozilla.org/en-US/profiles/PPvG">PPvG</a>,             <a href="https://developer.mozilla.org/en-US/profiles/inma_610">inma_610</a>,             <a href="https://developer.mozilla.org/en-US/profiles/sebmozilla">sebmozilla</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Nfroidure">Nfroidure</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Piro">Piro</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Enn">Enn</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Jonathan_Watt">Jonathan_Watt</a>,
+                      <time datetime="2015-08-30T11:41:34-07:00">Aug 30, 2015, 11:41:34 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Drag_and_drop$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Drag_and_drop$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/HTML/Drag_and_drop" selected="">
+          English (US)
+        </option>
+                  <option value="/de/docs/DragDrop/Drag_and_Drop">
+            Deutsch
+          </option>          <option value="/es/docs/DragDrop/Drag_and_Drop">
+            Español
+          </option>          <option value="/fr/docs/Glisser_et_d%C3%A9poser/Glisser_et_d%C3%A9poser">
+            Français
+          </option>          <option value="/ja/docs/DragDrop/Drag_and_Drop">
+            日本語
+          </option>          <option value="/pt-BR/docs/DragDrop/Drag_and_Drop">
+            Português (do&nbsp;Brasil)
+          </option>          <option value="/ru/docs/Web/Guide/HTML/Drag_and_drop">
+            Русский
+          </option>          <option value="/zh-CN/docs/DragDrop/Drag_and_Drop">
+            中文 (简体)
+          </option>          <option value="/zh-TW/docs/Web/Guide/HTML/Drag_and_drop">
+            正體中文 (繁體)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:15:57 GMT -->
+</body></html>

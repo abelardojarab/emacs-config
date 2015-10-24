@@ -1,0 +1,225 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.stats.combine_pvalues</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Statistical functions (scipy.stats)" href="../stats.html">
+    <link rel="next" title="scipy.stats.ansari" href="scipy.stats.ansari.html">
+    <link rel="prev" title="scipy.stats.friedmanchisquare" href="scipy.stats.friedmanchisquare.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../stats.html" accesskey="U">Statistical functions (<tt class="docutils literal"><span class="pre">scipy.stats</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.ansari.html" title="scipy.stats.ansari" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.friedmanchisquare.html" title="scipy.stats.friedmanchisquare" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.stats.friedmanchisquare.html" title="previous chapter">scipy.stats.friedmanchisquare</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.stats.ansari.html" title="next chapter">scipy.stats.ansari</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-stats-combine-pvalues">
+<h1>scipy.stats.combine_pvalues<a class="headerlink" href="#scipy-stats-combine-pvalues" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.stats.combine_pvalues"></a><dt id="scipy.stats.combine_pvalues">
+<tt class="descclassname">scipy.stats.</tt><tt class="descname">combine_pvalues</tt><big>(</big><em>pvalues</em>, <em>method='fisher'</em>, <em>weights=None</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/stats/stats.py#L4462"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.stats.combine_pvalues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Methods for combining the p-values of independent tests bearing upon the
+same hypothesis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pvalues</strong> : array_like, 1-D</p>
+<blockquote>
+<div><p>Array of p-values assumed to come from independent tests.</p>
+</div></blockquote>
+<p><strong>method</strong> : {‘fisher’, ‘stouffer’}, optional</p>
+<blockquote>
+<div><p>Name of method to use to combine p-values. The following methods are
+available:
+- “fisher”: Fisher’s method (Fisher’s combined probability test),</p>
+<blockquote>
+<div><p>the default.</p>
+</div></blockquote>
+<ul class="simple">
+<li>“stouffer”: Stouffer’s Z-score method.</li>
+</ul>
+</div></blockquote>
+<p><strong>weights</strong> : array_like, 1-D, optional</p>
+<blockquote>
+<div><p>Optional array of weights used only for Stouffer’s Z-score method.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">statistic: float</p>
+<blockquote>
+<div><p>The statistic calculated by the specified method:
+- “fisher”: The chi-squared statistic
+- “stouffer”: The Z-score</p>
+</div></blockquote>
+<p>pval: float</p>
+<blockquote class="last">
+<div><p>The combined p-value.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Fisher’s method (also known as Fisher’s combined probability test) <a class="reference internal" href="#r309" id="id1">[R309]</a> uses
+a chi-squared statistic to compute a combined p-value. The closely related
+Stouffer’s Z-score method <a class="reference internal" href="#r310" id="id2">[R310]</a> uses Z-scores rather than p-values. The
+advantage of Stouffer’s method is that it is straightforward to introduce
+weights, which can make Stouffer’s method more powerful than Fisher’s
+method when the p-values are from studies of different size <a class="reference internal" href="#r311" id="id3">[R311]</a> <a class="reference internal" href="#r312" id="id4">[R312]</a>.</p>
+<p>Fisher’s method may be extended to combine p-values from dependent tests
+<a class="reference internal" href="#r313" id="id5">[R313]</a>. Extensions such as Brown’s method and Kost’s method are not currently
+implemented.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.15.0.</span></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r309" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R309]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id6">2</a>)</em> <a class="reference external" href="https://en.wikipedia.org/wiki/Fisher%27s_method">https://en.wikipedia.org/wiki/Fisher%27s_method</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r310" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R310]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id7">2</a>)</em> <a class="reference external" href="http://en.wikipedia.org/wiki/Fisher's_method#Relation_to_Stouffer.27s_Z-score_method">http://en.wikipedia.org/wiki/Fisher’s_method#Relation_to_Stouffer.27s_Z-score_method</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r311" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R311]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id8">2</a>)</em> Whitlock, M. C. “Combining probability from independent tests: the
+weighted Z-method is superior to Fisher’s approach.” Journal of
+Evolutionary Biology 18, no. 5 (2005): 1368-1373.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r312" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R312]</td><td><em>(<a class="fn-backref" href="#id4">1</a>, <a class="fn-backref" href="#id9">2</a>)</em> Zaykin, Dmitri V. “Optimally weighted Z-test is a powerful method
+for combining probabilities in meta-analysis.” Journal of
+Evolutionary Biology 24, no. 8 (2011): 1836-1841.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r313" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R313]</td><td><em>(<a class="fn-backref" href="#id5">1</a>, <a class="fn-backref" href="#id10">2</a>)</em> <a class="reference external" href="https://en.wikipedia.org/wiki/Extensions_of_Fisher%27s_method">https://en.wikipedia.org/wiki/Extensions_of_Fisher%27s_method</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

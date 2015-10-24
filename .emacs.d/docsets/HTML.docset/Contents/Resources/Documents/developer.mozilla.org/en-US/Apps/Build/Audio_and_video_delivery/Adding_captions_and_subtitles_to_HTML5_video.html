@@ -1,0 +1,968 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:24:24 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Adding captions and subtitles to HTML5 video</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+                  <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Web/Apps$styles">
+          
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video$json">
+  <link rel="canonical" href="Adding_captions_and_subtitles_to_HTML5_video.html">
+
+            <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video" title="Ajouter des légendes et des sous titres à des vidéos HTML 5">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/Apps/Build/Manipulating_media/Adding_captions_and_subtitles_to_HTML5_video" title="HTML5 videoにキャプションと字幕をつける方法">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Adding captions and subtitles to HTML5 video">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video">
+  <meta name="twitter:title" content="Adding captions and subtitles to HTML5 video">
+    <meta property="og:description" content="In other articles we looked at how to build a cross browser video player using the HTMLMediaElement and Window.fullScreen APIs, and also at how to style the player. This article will take the same player and show how to add captions and subtitles to it, using the WebVTT format and the track element.">
+  <meta name="description" content="In other articles we looked at how to build a cross browser video player using the HTMLMediaElement and Window.fullScreen APIs, and also at how to style the player. This article will take the same player and show how to add captions and subtitles to it, using the WebVTT format and the track element.">
+  <meta name="twitter:description" content="In other articles we looked at how to build a cross browser video player using the HTMLMediaElement and Window.fullScreen APIs, and also at how to style the player. This article will take the same player and show how to add captions and subtitles to it, using the WebVTT format and the track element.">
+  
+      
+  </head>
+<body data-slug="Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FApps%2FBuild%2FAudio_and_video_delivery%2FAdding_captions_and_subtitles_to_HTML5_video" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FApps%2FBuild%2FAudio_and_video_delivery%2FAdding_captions_and_subtitles_to_HTML5_video" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../../docs/Web/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+                <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">App Center</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+     <!-- end is_zone -->
+
+
+    <div class="wiki-main-content"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video" title="Ajouter des légendes et des sous titres à des vidéos HTML 5">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/Apps/Build/Manipulating_media/Adding_captions_and_subtitles_to_HTML5_video" title="HTML5 videoにキャプションと字幕をつける方法">日本語</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Apps" rel="v:url" property="v:title">App Center</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build" rel="v:url" property="v:title">Building Web apps</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Audio_and_video_delivery" rel="v:url" property="v:title">Audio and Video Delivery</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Adding captions and subtitles to HTML5 video</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Adding captions and subtitles to HTML5 video</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 5 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/bbbo" title="View profile: bbbo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bbbo" data-src="../../../../../secure.gravatar.com/avatar/4f57de77a38d7a4e6fa92b654365005a6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">bbbo</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ian-Devlin" title="View profile: Ian-Devlin">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ian-Devlin" data-src="../../../../../secure.gravatar.com/avatar/61361a635c980dfa6f631a60230447926aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Ian-Devlin</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/robnyman" title="View profile: robnyman">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="robnyman" data-src="../../../../../secure.gravatar.com/avatar/98a8f4f391111e31811a56f286cd3f6d6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">robnyman</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/MartinRinehart" title="View profile: MartinRinehart">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MartinRinehart" data-src="../../../../../secure.gravatar.com/avatar/bfc93c0b6445bf138e06986214be58786aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">MartinRinehart</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Captioned_video_example" rel="internal">Captioned video example</a></li><li><a href="#HTML5_and_Video_Captions" rel="internal">HTML5 and Video Captions</a><ol><li><a href="#Captions_versus_subtitles" rel="internal">Captions versus subtitles</a></li><li><a href="#The_&lt;track&gt;_element" rel="internal">The &lt;track&gt; element</a></li><li><a href="#WebVTT" rel="internal">WebVTT</a></li></ol></li><li><a href="#Modifications_to_the_HTML_and_CSS" rel="internal">Modifications to the HTML and CSS</a><ol><li><a href="#HTML_Markup" rel="internal">HTML Markup</a></li><li><a href="#CSS_Changes" rel="internal">CSS Changes</a></li></ol></li><li><a href="#Subtitle_implementation" rel="internal">Subtitle implementation</a><ol><li><a href="#Initial_setup" rel="internal">Initial setup</a></li><li><a href="#Building_a_caption_menu" rel="internal">Building a caption menu</a></li><li><a href="#Subtitle_menu_CSS" rel="internal">Subtitle menu CSS</a></li></ol></li><li><a href="#Styling_the_displayed_subtitles" rel="internal">Styling the displayed subtitles</a></li><li><a href="#Browser_Compatibility" rel="internal">Browser Compatibility</a><ol><li><a href="#Internet_Explorer" rel="internal">Internet Explorer</a></li><li><a href="#Safari" rel="internal">Safari</a></li><li><a href="#Chrome_and_Opera" rel="internal">Chrome and Opera</a></li><li><a href="#Firefox" rel="internal">Firefox</a></li></ol></li><li><a href="#Plugins" rel="internal">Plugins</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div class="summary">
+<p><span class="seoSummary">In other articles we looked at how to <a href="https://developer.mozilla.org/en-US/Apps/Build/Manipulating_media/cross_browser_video_player">build a cross browser video player</a> using the <a href="../../../docs/Web/API/HTMLMediaElement.html" title="The HTMLMediaElement interface adds to HTMLElement the properties and methods needed to support basic media-related functionality that's common to both audio and video. The HTMLVideoElement and HTMLAudioElement elements inherit this interface. special properties and methods (beyond the properties and methods available for all children of HTMLElement), that are common to all media-related objects."><code>HTMLMediaElement</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/fullScreen" title="This property indicates whether the window is displayed in full screen mode or not. It is only reliable in Gecko 1.9 (Firefox 3) and later, see the Notes below."><code>Window.fullScreen</code></a> APIs, and also at how to <a href="https://developer.mozilla.org/en-US/Apps/Build/Manipulating_media/Video_player_styling_basics">style the player</a>. This article will take the same player and show how to add captions and subtitles to it, using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format" title="WebVTT is a format for displaying timed text tracks (e.g. subtitles) with the &lt;track&gt; element. The primary purpose of WebVTT files is to add subtitles to a &lt;video&gt;."><code>the WebVTT format</code></a> and the <a href="../../../docs/Web/HTML/Element/track.html" title="The HTML &lt;track&gt; element is used as a child of the media elements—&lt;audio&gt; and &lt;video&gt;. It lets you specify timed text tracks (or time-based data), for example to automaticaly handle subtitles. The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks."><code>&lt;track&gt;</code></a> element.</span></p>
+</div>
+
+<h2 id="Captioned_video_example">Captioned video example</h2>
+
+<p>In this article, we will refer to the Video player with captions example. This example uses an excerpt from the <a class="external" href="http://www.sintel.org/">Sintel open movie</a>, created by the <a class="external" href="http://www.blender.org/foundation/">Blender Foundation</a>.</p>
+
+<p><img alt="Video player with stand controls such as play, stop, volume, and captions on and off. The video playing shows a scene of a man holding a spear-like weapon, and a caption reads &quot;Esta hoja tiene pasado oscuro.&quot;" src="../../../../../mdn.mozillademos.org/files/7887/video-player-with-captions.png" style="width: 593px; height: 365px; display: block; margin: 0px auto;"></p>
+
+<div class="note">
+<p><strong>Note</strong>: You can find the <a class="external" href="https://github.com/iandevlin/iandevlin.github.io/tree/master/mdn/video-player-with-captions">source on Github</a>, and also <a class="external" href="http://iandevlin.github.io/mdn/video-player-with-captions/">view the example live</a>.</p>
+</div>
+
+<h2 id="HTML5_and_Video_Captions">HTML5 and Video Captions</h2>
+
+<p>Before diving into how to add captions to the video player, there are a number of things that we will first mention, which you should be aware of before we start.</p>
+
+<h3 id="Captions_versus_subtitles">Captions versus subtitles</h3>
+
+<p><a class="external" href="http://screenfont.ca/learn/">Captions and subtitles are not the same thing</a>: they have significantly different audiences, and convey different information, and it is recommended that you read up on the differences if you are not sure what they are. They are however implemented in the same way technically, so the material in this article will apply to both.</p>
+
+<p>For this article we will refer to the text tracks displayed as subtitles, as their content is aimed at hearing people who have difficulty understanding the language of the film, rather than deaf or hard-of-hearing people.</p>
+
+<h3 id="The_&lt;track&gt;_element">The &lt;track&gt; element</h3>
+
+<p>HTML5 allows us to specify subtitles for a video using the <a href="../../../docs/Web/HTML/Element/track.html" title="The HTML &lt;track&gt; element is used as a child of the media elements—&lt;audio&gt; and &lt;video&gt;. It lets you specify timed text tracks (or time-based data), for example to automaticaly handle subtitles. The tracks are formatted in WebVTT format (.vtt files) — Web Video Text Tracks."><code>&lt;track&gt;</code></a> element. The various attributes of this element allow us to specify such things as the type of content that we're adding, the language it's in, and of course a reference to the text file that contains the actual subtitle information.</p>
+
+<h3 id="WebVTT">WebVTT</h3>
+
+<p>The files that contain the actual subtitle data are simple text files that follow a specified format, in this case the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format">Web Video Text Tracks</a> (WebVTT) format. The <a class="external" href="http://dev.w3.org/html5/webvtt/">WebVTT specification</a> is still being worked on, but major parts of it are stable so we can use it today.</p>
+
+<p>Video providers (such as the <a class="external" href="http://www.blender.org/foundation/">Blender Foundation</a>) provide captions and subtitles in a text format with their videos, but they're usually in the SubRip Text (SRT) format. These can be easily converted to WebVTT using an online converter such as <a class="external" href="https://atelier.u-sub.net/srt2vtt/">srt2vtt</a>.</p>
+
+<h2 id="Modifications_to_the_HTML_and_CSS">Modifications to the HTML and CSS</h2>
+
+<p>This section summarises the modifications made to the previous article's code in order to facilitate the addition of subtitles to the video. If you are not interested in thism and just want to get straight into the JavaScript and more relevant CSS, skip to the <a href="#Subtitle_implementation">Subtitle implementation</a> section.<br>
+ <br>
+ In this example we are using a different video, <a class="external" href="http://www.sintel.org/">Sintel</a>, as it actually has some speech in it and therefore is better for illustrating how subtitles work!</p>
+
+<h3 id="HTML_Markup">HTML Markup</h3>
+
+<p>As mentioned above, we need to make use of the new HTML5 <code>&lt;track&gt;</code> element to add our subtitle files to the HTML5 video. We actually have our subtitles in three different languages — English, German, and Spanish — so we will reference all three of the relevant VTT files by adding <code>&lt;track&gt;</code> elements inside our HTML5 <code>&lt;video&gt;</code> element:</p>
+
+<pre class="brush: html">&lt;video id="video" controls preload="metadata"&gt;
+   &lt;source src="video/sintel-short.mp4" type="video/mp4"&gt;
+   &lt;source src="video/sintel-short.webm" type="video/webm"&gt;
+   &lt;track label="English" kind="subtitles" srclang="en" src="captions/vtt/sintel-en.vtt" default&gt;
+   &lt;track label="Deutsch" kind="subtitles" srclang="de" src="captions/vtt/sintel-de.vtt"&gt;
+   &lt;track label="Español" kind="subtitles" srclang="es" src="captions/vtt/sintel-es.vtt"&gt;
+&lt;/video&gt;</pre>
+
+<p>As you can see, each <code>&lt;track&gt;</code> element has the following attributes set:</p>
+
+<ul>
+ <li><code>kind</code> is given a value of <code>subtitles</code>, indicating the type of content the files contain</li>
+ <li><code>label</code> is given a value indicating which language that subtitle set is for&nbsp; — for example <code>English</code> or <code>Deutsch</code> — these labels will appear in the user interface to allow the user to easily select which subtitle language they want to see.</li>
+ <li><code>src</code> is assigned a valid URL pointing to the relevant WebVTT subtitle file in each case.</li>
+ <li><code>srclang</code> indicates what language each subtitle files' contents are in.</li>
+ <li>The <code>default</code> attribute is set on the English <code>&lt;track&gt;</code> element, indicating to the browser that this is the default subtitle file definition to use when subtitles have been turned on and the user has not made a specific selection.</li>
+</ul>
+
+<p>In addition to adding the <code>&lt;track&gt;</code> elements, we have also added a new button to control the subtitles menu that we will build. As a consequence, the video controls now look as follows:</p>
+
+<pre class="brush: html;highlight[13]">&lt;div id="video-controls" class="controls" data-state="hidden"&gt;
+   &lt;button id="playpause" type="button" data-state="play"&gt;Play/Pause&lt;/button&gt;
+   &lt;button id="stop" type="button" data-state="stop"&gt;Stop&lt;/button&gt;
+   &lt;div class="progress"&gt;
+      &lt;progress id="progress" value="0" min="0"&gt;
+         &lt;span id="progress-bar"&gt;&lt;/span&gt;
+      &lt;/progress&gt;
+   &lt;/div&gt;
+   &lt;button id="mute" type="button" data-state="mute"&gt;Mute/Unmute&lt;/button&gt;
+   &lt;button id="volinc" type="button" data-state="volup"&gt;Vol+&lt;/button&gt;
+   &lt;button id="voldec" type="button" data-state="voldown"&gt;Vol-&lt;/button&gt;
+   &lt;button id="fs" type="button" data-state="go-fullscreen"&gt;Fullscreen&lt;/button&gt;
+   &lt;button id="subtitles" type="button" data-state="subtitles"&gt;CC&lt;/button&gt;
+&lt;/div&gt;</pre>
+
+<h3 id="CSS_Changes">CSS Changes</h3>
+
+<p>The video controls have undergone some minor changes in order to make space for the extra button, but these are relatively straightforward.<br>
+ <br>
+ No image is used for the captions button, so it is simply styled as:</p>
+
+<pre class="brush: css">.controls button[data-state="subtitles"] {
+    height:85%;
+    text-indent:0;
+    font-size:16px;
+    font-size:1rem;
+    font-weight:bold;
+    color:#666;
+    background:#000;
+    border-radius:2px;
+}</pre>
+
+<p>There are also other CSS changes that are specific to some extra JavaScript implementation, but these will be mentioned at the appropriate place below.</p>
+
+<h2 id="Subtitle_implementation">Subtitle implementation</h2>
+
+<p>A lot of what we do to access the video subtitles revolves around JavaScript. Similar to the video controls, if a browser supports HTML5 video subtitles, there will be a button provided within the native control set to access them. However, since we have defined our own video controls, this button is hidden, and we need to define our own.</p>
+
+<p>Browsers do vary as to what they support, so we will be attempting to bring a more unified UI to each browser where possible. There's more on browser compatibility issues later on.</p>
+
+<h3 id="Initial_setup">Initial setup</h3>
+
+<p>As with all the other buttons, one of the first things we need to do is store a handle to the subtitles' button:</p>
+
+<pre class="brush: js">var subtitles = document.getElementById('subtitles');</pre>
+
+<p>We also initially turn off all subtitles, in case the browser turns any of them on by default:</p>
+
+<pre class="brush: js">for (var i = 0; i &lt; video.textTracks.length; i++) {
+   video.textTracks[i].mode = 'hidden';
+}</pre>
+
+<p>The <code>video.textTracks</code> property contains an array of all the text tracks attached to the video. We loop through each one and set its <code>mode</code> to <code>hidden</code>.</p>
+
+<p>Note: The <a class="external" href="http://dev.w3.org/html5/webvtt/#api">WebVTT API</a> gives us access to all the text tracks that are defined for an HTML5 video using the <code>&lt;track&gt;</code> element.</p>
+
+<h3 id="Building_a_caption_menu">Building a caption menu</h3>
+
+<p>Our aim is to use the <code>subtitles</code> button we added earlier to display a menu that allows users to choose which language they want the subtitles displayed in, or to turn them off entirely.<br>
+ <br>
+ We have added the button, but before we make it do anything, we need to build the menu that goes with it. This menu is built dynamically, so that languages can be added or removed later by simply editing the <code>&lt;track&gt;</code> elements within the video's markup.</p>
+
+<p>All we need to do is to go through the video's <code>textTracks</code>, reading their properties and building the menu up from there:</p>
+
+<pre class="brush: js">var subtitlesMenu;
+if (video.textTracks) {
+   var df = document.createDocumentFragment();
+   var subtitlesMenu = df.appendChild(document.createElement('ul'));
+   subtitlesMenu.className = 'subtitles-menu';
+   subtitlesMenu.appendChild(createMenuItem('subtitles-off', '', 'Off'));
+   for (var i = 0; i &lt; video.textTracks.length; i++) {
+      subtitlesMenu.appendChild(createMenuItem('subtitles-' + video.textTracks[i].language, video.textTracks[i].language, video.textTracks[i].label));
+   }
+   videoContainer.appendChild(subtitlesMenu);
+}</pre>
+
+<p>This code creates a <a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment" title="The DocumentFragment interface represents a minimal document object that has no parent. It is used as a light-weight version of Document to store well-formed or potentially non-well-formed fragments of XML."><code>documentFragment</code></a>, which is used to hold an unordered list containing our subtitles menu. First of all an option is added to allow the user to switch all subtitles off, and then buttons are added for each text track, reading the language and label from each one.</p>
+
+<p>The creation of each list item and button is done by the <code>createMenuItem()</code> function, which is defined as follows:</p>
+
+<pre class="brush: js">var captionMenuButtons = [];
+var createMenuItem = function(id, lang, label) {
+   var listItem = document.createElement('li');
+   var button = listItem.appendChild(document.createElement('button'));
+   button.setAttribute('id', id);
+   button.className = 'subtitles-button';
+   if (lang.length &gt; 0) button.setAttribute('lang', lang);
+   button.value = label;
+   button.setAttribute('data-state', 'inactive');
+   button.appendChild(document.createTextNode(label));
+   button.addEventListener('click', function(e) {
+      // Set all buttons to inactive
+      subtitleMenuButtons.map(function(v, i, a) {
+         subtitleMenuButtons[i].setAttribute('data-state', 'inactive');
+      });
+      // Find the language to activate
+      var lang = this.getAttribute('lang');
+      for (var i = 0; i &lt; video.textTracks.length; i++) {
+         // For the 'subtitles-off' button, the first condition will never match so all will subtitles be turned off
+         if (video.textTracks[i].language == lang) {
+            video.textTracks[i].mode = 'showing';
+            this.setAttribute('data-state', 'active');
+         }
+         else {
+            video.textTracks[i].mode = 'hidden';
+         }
+      }
+      subtitlesMenu.style.display = 'none';
+   });
+   subtitleMenuButtons.push(button);
+   return listItem;
+}</pre>
+
+<p>This function builds the required <a href="../../../docs/Web/HTML/Element/li.html" title="The HTML List item element (&lt;li&gt;) is used to represent a list item. It should be contained in an ordered list (&lt;ol&gt;), an unordered list (&lt;ul&gt;) or a menu (&lt;menu&gt;), where it represents a single entity in that list. In menus and unordered lists, list items are ordinarily displayed using bullet points. In ordered lists, they are usually displayed with some ascending counter on the left such as a number or letter"><code>&lt;li&gt;</code></a> and <a href="../../../docs/Web/HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> elements, and returns them so they can be added to the subtitles menu list. It also sets up the required event listeners on the button to toggle the relevant subtitle set on or off. This is done by simply setting the required subtlte's <code>mode</code> attribute to <code>showing</code>, and setting the others to <code>hidden</code>.</p>
+
+<p>Once the menu is built, it is then inserted into the DOM at the bottom of the videoContainer.<br>
+ <br>
+ Initially the menu is hidden by default, so an event listener needs to be added to our subtitles button to toggle it:</p>
+
+<pre class="brush: js">subtitles.addEventListener('click', function(e) {
+   if (subtitlesMenu) {
+      subtitlesMenu.style.display = (subtitlesMenu.style.display == 'block' ? 'none' : 'block');
+   }
+});</pre>
+
+<h3 id="Subtitle_menu_CSS">Subtitle menu CSS</h3>
+
+<p>We also added some rudimentary styling for the newly created subtitles menu:</p>
+
+<pre class="brush: css">.subtitles-menu {
+    display:none;
+    position:absolute;
+    bottom:14.8%;
+    right:20px;
+    background:#666;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    width:100px;
+    padding:10px;
+}
+
+.subtitles-menu li {
+    padding:0;
+    text-align:center;
+}
+
+.subtitles-menu li button {
+    border:none;
+    background:#000;
+    color:#fff;
+    cursor:pointer;
+    width:90%;
+    padding:2px 5px;
+    border-radius:2px;
+}</pre>
+
+<h2 id="Styling_the_displayed_subtitles">Styling the displayed subtitles</h2>
+
+<p>One of the less well known about and supported features of WebVTT is the ability to style the individual subtitles (something called text cues) via <a class="external" href="http://dev.w3.org/html5/webvtt/#css-extensions">CSS Extensions</a>.</p>
+
+<p>The <code>::cue</code> pseudo-element is the key to targetting individual text track cues for styling, as it matches any defined cue. There are only a handful of CSS properties that can be applied to a text cue:</p>
+
+<ul>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color" title="The color property sets the foreground color of an element's text content, and its decorations. It doesn't affect any other characteristic of the element; it should really be called text-color and would have been named so, save for historical reasons and its appearance in CSS Level 1."><code>color</code></a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/opacity" title="The opacity CSS property specifies the transparency of an element, that is, the degree to which the background behind the element is overlaid."><code>opacity</code></a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/visibility" title="The visibility property can be used to hide an element while leaving the space where it would have been. It can also hide rows or columns of a table."><code>visibility</code></a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration" title="The text-decoration CSS property is used to set the text formatting to underline, overline, line-through or blink. Underline and overline decorations are positioned under the text, line-through over it."><code>text-decoration</code></a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow" title="The text-shadow property adds shadows to text. It accepts a comma-separated list of shadows to be applied to the text and text-decorations of the element."><code>text-shadow</code></a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/background" title="The background CSS property is a shorthand for setting the individual background values in a single place in the style sheet. background can be used to set the values for one or more of: background-clip, background-color, background-image, background-origin, background-position, background-repeat, background-size, and background-attachment."><code>background</code></a> shorthand properties</li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/outline" title="The CSS outline property is a shorthand property for setting one or more of the individual outline properties outline-style, outline-width and outline-color in a single declaration. In most cases the use of this shortcut is preferable and more convenient."><code>outline</code></a> shorthand properties</li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font" title="The font CSS property is either a shorthand property for setting font-style, font-variant, font-weight, font-size, line-height and font-family, or a way to set the element's font to a system font, using specific keywords."><code>font</code></a> shorthand properties, including <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/line-height" title="On block level elements, the line-height property specifies the minimum height of line boxes within the element."><code>line-height</code></a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/white-space" title="The white-space property is used to to describe how white spaces inside the element is handled."><code>white-space</code></a></li>
+</ul>
+
+<p>For example, to change the text colour of the text track cues you can write:</p>
+
+<pre class="brush: css">::cue {
+   color:#ccc;
+}</pre>
+
+<p>If the WebVTT file uses <a class="external" href="http://dev.w3.org/html5/webvtt/#dfn-webvtt-cue-voice-span">voice spans</a>, which allow cues to be defined as having a particular "voice":</p>
+
+<pre>0
+00:00:00.000 --&gt; 00:00:12.000
+&lt;v Test&gt;[Test]&lt;/v&gt;</pre>
+
+<p>Then this specific 'voice' will be stylable like so:</p>
+
+<pre class="brush: css">::cue(v[voice='Test']) {
+   color:#fff;
+   background:#0095dd;
+}</pre>
+
+<div class="note">
+<p><strong>Note</strong>: Some of the styling of cues with ::cue currently works on Chrome, Opera, and Safari, but not yet on Firefox.</p>
+</div>
+
+<h2 id="Browser_Compatibility">Browser Compatibility</h2>
+
+<p><a class="external" href="http://caniuse.com/webvtt">Browser support for WebVTT and the <code>&lt;track&gt;</code> element</a> is fairly good, although some browsers differ slightly in their implementation.</p>
+
+<h3 id="Internet_Explorer">Internet Explorer</h3>
+
+<p>Internet Explorer 10+ subtitles are enabled by default, and the default controls contain a button and a menu that offers the same functionality as the menu we just built. The <code>default</code> attribute is also supported.</p>
+
+<div class="note">
+<p><strong>Note</strong>: IE will completely ignore WebVTT files unless you define the MIME type. This can easily be done by adding an <code>.htaccess</code> file to an appropriate directory that contains <code>AddType text/vtt .vtt</code>.</p>
+</div>
+
+<h3 id="Safari">Safari</h3>
+
+<p>Safari 6.1+ has similar support to Internet Explorer 10+, displaying a menu with the different available options, with the addition of an "Auto" option, which allows the browser to choose.</p>
+
+<h3 id="Chrome_and_Opera">Chrome and Opera</h3>
+
+<p>These browsers have similar implementations again: subtitles are enabled by default and the default control set contains a 'cc' button that turns subtitles on and off. Chrome and Opera ignore the <code>default</code> attribute on the <code>&lt;track&gt;</code> element and will instead try to match the browser's language to the subtitle's language.</p>
+
+<h3 id="Firefox">Firefox</h3>
+
+<p>Firefox's implementation was completely broken due to a <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=981280">bug</a>, leading to Mozilla turning off WebVTT support by default (you can turn it on via the <code>media.webvtt.enabled</code> flag.) However, <strike>this bug looks to have been fixed and WebVTT support re-enabled as of Gecko 31, so this will not be a problem for Firefox final release users for much longer (on Gecko 29 as of the time of this writing)</strike> this has been fixed as of Firefox 31, and everything works as it should.</p>
+
+<h2 id="Plugins">Plugins</h2>
+
+<p>If, after reading through this article you decide that you can't be bothered to do all of this and want someone else to do it for you, there are plenty of plugins out there that offer caption and subtitle support that you can use.</p>
+
+<dl>
+ <dt><a class="external" href="http://www.delphiki.com/html5/playr/">playr</a></dt>
+ <dd>This small plugin implements subtitles, captions, and chapters as well as both WebVTT and SRT file formats.</dd>
+ <dt><a class="external" href="https://flowplayer.org/player/">Flowplayer</a></dt>
+ <dd>HTML5 player supporting WebVTT.</dd>
+ <dt><a class="external" href="http://www.jwplayer.com/">jwplayer</a></dt>
+ <dd>This video player is very extensive and does a lot more than simply support video captions. It supports WebVTT, SRT, and DFXP file formats.</dd>
+ <dt><a class="external" href="http://mediaelementjs.com/">MediaElement.js</a></dt>
+ <dd>Another complete video player that also support video captions, albeit only in SRT format.</dd>
+ <dt><a class="external" href="http://www.leanbackplayer.com/">LeanBack Player</a></dt>
+ <dd>Yet another video player that supports WebVTT captions as well as providing other standard player functionality.</dd>
+ <dt><a class="external" href="http://sublimevideo.net/">SublimeVideo</a></dt>
+ <dd>This player also supports captions through WebVTT and SRT files.</dd>
+ <dt><a class="external" href="http://www.videojs.com/">Video.js</a></dt>
+ <dd>Supports WebVTT video subtitles.</dd>
+</dl>
+
+<div class="note">
+<p><strong>Note</strong>: You can find an excellent list of HTML5 Video Players and their current "state" at <a class="external" href="http://praegnanz.de/html5video/">HTML5 Video Player Comparison</a>.</p>
+</div>
+
+<p>&nbsp;</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/captions">captions</a></li>
+              <li><a href="../../../docs/tag/HTML5.html">HTML5</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Media">Media</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/subtitles">subtitles</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/track">track</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/video">video</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebVTT">WebVTT</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/bbbo">bbbo</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Ian-Devlin">Ian-Devlin</a>,             <a href="https://developer.mozilla.org/en-US/profiles/robnyman">robnyman</a>,             <a href="https://developer.mozilla.org/en-US/profiles/MartinRinehart">MartinRinehart</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,
+                      <time datetime="2015-04-17T04:28:42-07:00">Apr 17, 2015, 4:28:42 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="https://developer.mozilla.org/en-US/Apps/Quickstart">Quickstart</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Apps/Design" title="Information regarding app and interface design practices.">Design</a>
+  <ol>
+   <li><strong><a href="https://developer.mozilla.org/en-US/Apps/Design">Design overview</a></strong></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Planning">Planning</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/UI_layout_basics">UI layout basics</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Firefox_OS_building_blocks">Firefox OS building blocks</a></li>
+   <li><a href="https://www.mozilla.org/en-US/styleguide/products/firefox-os/">Firefox OS visual styleguide</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Copy_styleguide">Firefox OS copy styleguide</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Firefox_OS_icon_font">Firefox OS icon font</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Firefox_OS_Design_asset_library">Firefox OS design asset library</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Firefox_OS_transitions">Firefox OS transitions</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Firefox_OS_in_Arabic">Firefox OS in Arabic</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Firefox_OS_TV_UX">Firefox OS for TV UX</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Design/Firefox_OS_TV_User_Interface_Animation_Design">Firefox OS TV User Interface &amp; Animation Design</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Apps/Build" title="This section contains documentation about building app functionality, with HTML5 and device APIs (WebAPIs).">Build</a>
+  <ol>
+   <li><strong><a href="https://developer.mozilla.org/en-US/Apps/Build">Build overview</a></strong></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/installable_apps_for_Firefox_OS">Apps for Firefox OS</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/Basic_data_flow">Basic data flow</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/gather_and_modify_data">Gather and modify data</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/User_notifications">User notifications</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/User_input_methods">User input and controls</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/Offline">Offline apps</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/Audio_and_video_delivery">Audio and video delivery</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/Audio_and_video_manipulation">Audio and video manipulation</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/Advanced_network_communication">Advanced network communication</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games">Develop games</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/Localization">Localization</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/Porting">Porting </a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/Performance">App performance</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Build/App_development_FAQ">App development FAQ</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Marketplace">Publish</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Apps/Tools_and_frameworks">Tools and frameworks</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Apps/Reference_apps">Reference apps</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference_apps/Chrono">Chrono</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference_apps/Face_value">Face Value</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference_apps/Podcasts">Podcasts</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference_apps/Roller">Roller</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference_apps/Webfighter">Webfighter</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference_apps/General_notes">General notes</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference_apps/rtcamera">rtcamera</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/Apps/Reference">Reference</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference/Layout_and_structure">Layout and structure</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference/Drawing_and_animation">Drawing and animation</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference/Firefox_OS_device_APIs">Firefox OS device APIs</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference/General_Web_APIs">General web APIs</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference/Firefox_Marketplace_services">Firefox Marketplace services</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Apps/Reference/Firefox_OS_app_tools">Firefox OS app tools</a></li>
+  </ol>
+ </li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video" selected="">
+          English (US)
+        </option>
+                  <option value="/fr/docs/Web/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video">
+            Français
+          </option>          <option value="/ja/docs/Web/Apps/Build/Manipulating_media/Adding_captions_and_subtitles_to_HTML5_video">
+            日本語
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Apps/Build/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:24:26 GMT -->
+</body></html>

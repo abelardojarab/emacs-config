@@ -1,0 +1,195 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.signal.tf2zpk</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Signal processing (scipy.signal)" href="../signal.html">
+    <link rel="next" title="scipy.signal.tf2sos" href="scipy.signal.tf2sos.html">
+    <link rel="prev" title="scipy.signal.dstep" href="scipy.signal.dstep.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../signal.html" accesskey="U">Signal processing (<tt class="docutils literal"><span class="pre">scipy.signal</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.signal.tf2sos.html" title="scipy.signal.tf2sos" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.signal.dstep.html" title="scipy.signal.dstep" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.signal.dstep.html" title="previous chapter">scipy.signal.dstep</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.signal.tf2sos.html" title="next chapter">scipy.signal.tf2sos</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-signal-tf2zpk">
+<h1>scipy.signal.tf2zpk<a class="headerlink" href="#scipy-signal-tf2zpk" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.signal.tf2zpk"></a><dt id="scipy.signal.tf2zpk">
+<tt class="descclassname">scipy.signal.</tt><tt class="descname">tf2zpk</tt><big>(</big><em>b</em>, <em>a</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/signal/filter_design.py#L521"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.signal.tf2zpk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return zero, pole, gain (z, p, k) representation from a numerator,
+denominator representation of a linear filter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>b</strong> : array_like</p>
+<blockquote>
+<div><p>Numerator polynomial coefficients.</p>
+</div></blockquote>
+<p><strong>a</strong> : array_like</p>
+<blockquote>
+<div><p>Denominator polynomial coefficients.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>z</strong> : ndarray</p>
+<blockquote>
+<div><p>Zeros of the transfer function.</p>
+</div></blockquote>
+<p><strong>p</strong> : ndarray</p>
+<blockquote>
+<div><p>Poles of the transfer function.</p>
+</div></blockquote>
+<p><strong>k</strong> : float</p>
+<blockquote class="last">
+<div><p>System gain.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If some values of <em class="xref py py-obj">b</em> are too close to 0, they are removed. In that case,
+a BadCoefficients warning is emitted.</p>
+<p>The <em class="xref py py-obj">b</em> and <em class="xref py py-obj">a</em> arrays are interpreted as coefficients for positive,
+descending powers of the transfer function variable.  So the inputs
+<span class="math">\(b = [b_0, b_1, ..., b_M]\)</span> and <span class="math">\(a =[a_0, a_1, ..., a_N]\)</span>
+can represent an analog filter of the form:</p>
+<div class="math">
+\[H(s) = \frac
+{b_0 s^M + b_1 s^{(M-1)} + \cdots + b_M}
+{a_0 s^N + a_1 s^{(N-1)} + \cdots + a_N}\]</div>
+<p>or a discrete-time filter of the form:</p>
+<div class="math">
+\[H(z) = \frac
+{b_0 z^M + b_1 z^{(M-1)} + \cdots + b_M}
+{a_0 z^N + a_1 z^{(N-1)} + \cdots + a_N}\]</div>
+<p>This “positive powers” form is found more commonly in controls
+engineering.  If <em class="xref py py-obj">M</em> and <em class="xref py py-obj">N</em> are equal (which is true for all filters
+generated by the bilinear transform), then this happens to be equivalent
+to the “negative powers” discrete-time form preferred in DSP:</p>
+<div class="math">
+\[H(z) = \frac
+{b_0 + b_1 z^{-1} + \cdots + b_M z^{-M}}
+{a_0 + a_1 z^{-1} + \cdots + a_N z^{-N}}\]</div>
+<p>Although this is true for common filters, remember that this is not true
+in the general case.  If <em class="xref py py-obj">M</em> and <em class="xref py py-obj">N</em> are not equal, the discrete-time
+transfer function coefficients must first be converted to the “positive
+powers” form before finding the poles and zeros.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

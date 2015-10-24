@@ -1,0 +1,878 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Learn/Getting_started_with_the_web/HTML_basics by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:23:16 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>HTML basics</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+                  <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Learn$styles">
+          
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics$json">
+  <link rel="canonical" href="HTML_basics.html">
+
+            <link rel="alternate" hreflang="cs" href="https://developer.mozilla.org/cs/docs/Learn/Getting_started_with_the_web/HTML_základ" title="HTML základ">
+          <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/Learn/Getting_started_with_the_web/HTML_basics" title="HTML-Grundlagen">
+          <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Learn/Getting_started_with_the_web/HTML_basics" title="HTML: lo básico">
+          <link rel="alternate" hreflang="fr" href="../../../fr/Apprendre/Commencer_avec_le_web/Les_bases_HTML.html" title="Les bases de HTML">
+          <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/Learn/Getting_started_with_the_web/HTML_기본" title="HTML 기본">
+          <link rel="alternate" hreflang="pt-BR" href="../../../pt-BR/docs/Aprender/Getting_started_with_the_web/HTML_basico.html" title="HTML básico">
+          <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Learn/Getting_started_with_the_web/HTML_basics" title="HTML basics">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Learn/Getting_started_with_the_web/HTML_basics" title="HTML 基础">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="HTML basics">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics">
+  <meta name="twitter:title" content="HTML basics">
+    <meta property="og:description" content="HTML is not a programming language; it is a markup language, and is used to tell your browser how to display the webpages you visit. It can be as complicated or as simple as the web designer wishes it to be. HTML consists of a series of elements, which you use to enclose, or wrap, different parts of the content to make it appear a certain way, or act a certain way. The enclosing tags can make a word or an image a hyperlink to somewhere else, can italicize words, and can make font bigger or smaller, and so on.&nbsp; For example, take the following line of content:">
+  <meta name="description" content="HTML is not a programming language; it is a markup language, and is used to tell your browser how to display the webpages you visit. It can be as complicated or as simple as the web designer wishes it to be. HTML consists of a series of elements, which you use to enclose, or wrap, different parts of the content to make it appear a certain way, or act a certain way. The enclosing tags can make a word or an image a hyperlink to somewhere else, can italicize words, and can make font bigger or smaller, and so on.&nbsp; For example, take the following line of content:">
+  <meta name="twitter:description" content="HTML is not a programming language; it is a markup language, and is used to tell your browser how to display the webpages you visit. It can be as complicated or as simple as the web designer wishes it to be. HTML consists of a series of elements, which you use to enclose, or wrap, different parts of the content to make it appear a certain way, or act a certain way. The enclosing tags can make a word or an image a hyperlink to somewhere else, can italicize words, and can make font bigger or smaller, and so on.&nbsp; For example, take the following line of content:">
+  
+      
+  </head>
+<body data-slug="Learn/Getting_started_with_the_web/HTML_basics" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Learn/Getting_started_with_the_web/HTML_basics" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FLearn%2FGetting_started_with_the_web%2FHTML_basics" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Learn/Getting_started_with_the_web/HTML_basics" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FLearn%2FGetting_started_with_the_web%2FHTML_basics" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../docs/Web/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+                <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Learn">Learning the Web</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+     <!-- end is_zone -->
+
+
+    <div class="wiki-main-content"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/cs/docs/Learn/Getting_started_with_the_web/HTML_základ" title="HTML základ">Čeština</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/Learn/Getting_started_with_the_web/HTML_basics" title="HTML-Grundlagen">Deutsch</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Learn/Getting_started_with_the_web/HTML_basics" title="HTML: lo básico">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../fr/Apprendre/Commencer_avec_le_web/Les_bases_HTML.html" title="Les bases de HTML">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/Learn/Getting_started_with_the_web/HTML_기본" title="HTML 기본">한국어</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="../../../pt-BR/docs/Aprender/Getting_started_with_the_web/HTML_basico.html" title="HTML básico">Português (do&nbsp;Brasil)</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Learn/Getting_started_with_the_web/HTML_basics" title="HTML basics">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Learn/Getting_started_with_the_web/HTML_basics" title="HTML 基础">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Learn" rel="v:url" property="v:title">Learning the Web</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web" rel="v:url" property="v:title">Getting started with the Web</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">HTML basics</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>HTML basics</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 11 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight" title="View profile: SphinxKnight">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SphinxKnight" data-src="../../../../secure.gravatar.com/avatar/8fb358ea9b7af22f5021a29e122ea0696aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">SphinxKnight</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Carmelina" title="View profile: Carmelina">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Carmelina" data-src="../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Carmelina</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/manderton" title="View profile: manderton">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="manderton" data-src="../../../../secure.gravatar.com/avatar/d8148fff091dda9e3aabca84e4478dff6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">manderton</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jlin" title="View profile: jlin">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jlin" data-src="../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jlin</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/karyse" title="View profile: karyse">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="karyse" data-src="../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">karyse</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/NickPapayiannakis" title="View profile: NickPapayiannakis">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="NickPapayiannakis" data-src="../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">NickPapayiannakis</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/odsantos" title="View profile: odsantos">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="odsantos" data-src="../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">odsantos</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/xfq" title="View profile: xfq">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xfq" data-src="../../../../secure.gravatar.com/avatar/d37eb6e5701cb30b871077f04cf2ebb76aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">xfq</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jsx" title="View profile: jsx">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jsx" data-src="../../../../secure.gravatar.com/avatar/8cc61d4e2dc63e75976a334348d473bc6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jsx</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Subnav" rel="internal">Subnav</a></li><li><a href="#So_what_is_HTML_really" rel="internal">So what is HTML, really?</a><ol><li><a href="#Anatomy_of_an_HTML_element" rel="internal">Anatomy of an HTML element</a></li><li><a href="#Nesting_elements" rel="internal">Nesting elements</a></li><li><a href="#Empty_elements" rel="internal">Empty elements</a></li><li><a href="#Anatomy_of_an_HTML_document" rel="internal">Anatomy of an HTML document</a></li></ol></li><li><a href="#Images" rel="internal">Images</a></li><li><a href="#Marking_up_text" rel="internal">Marking up text</a><ol><li><a href="#Headings" rel="internal">Headings</a></li><li><a href="#Paragraphs" rel="internal">Paragraphs</a></li><li><a href="#Lists" rel="internal">Lists</a></li></ol></li><li><a href="#Links" rel="internal">Links</a></li><li><a href="#Conclusion" rel="internal">Conclusion</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><!-- --></div>
+<p></p><div class="prevnext" style="text-align: right;"> 
+    <p><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/Dealing_with_files" style="float: left;">« Previous</a><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics">Next  »</a></p> 
+</div><p></p>
+
+<div class="summary">
+<p>HTML (<strong>H</strong>ypertext Markup Language) is the code that is used to structure and display a web page and its content. For example,&nbsp;content could be structured within a set of paragraphs,&nbsp; a list of bulleted points, or using images and data tables.&nbsp; As the title suggests, this article will give you a basic understanding of HTML and what its function is.</p>
+</div>
+
+<h2 id="So_what_is_HTML_really">So what is HTML, really?</h2>
+
+<p>HTML is not a programming language; it is a <em>markup language</em>, and is used to tell your browser how to display the webpages you visit. It can be as complicated or as simple as the web designer wishes it to be. HTML consists of a series of <strong>elements</strong>, which you use to enclose, or wrap, different parts of the content to make it appear a certain way, or act a certain way. The enclosing tags can make a word or an image a hyperlink to somewhere else, can italicize words, and can make font bigger or smaller, and so on.&nbsp; For example, take the following line of content:</p>
+
+<pre>My cat is very grumpy</pre>
+
+<p>If we wanted the line to stand by itself, we could specify that it is a paragraph by enclosing it in a paragraph tag&nbsp; (<a href="../../docs/Web/HTML/Element/p.html" title="The HTML &lt;p&gt; element (or HTML Paragraph Element) represents a paragraph of text."><code>&lt;p&gt;</code></a>) element:</p>
+
+<pre class="brush: html">&lt;p&gt;My cat is very grumpy&lt;/p&gt;</pre>
+
+<h3 id="Anatomy_of_an_HTML_element">Anatomy of an HTML element</h3>
+
+<p>Let's explore this paragraph element a bit further.</p>
+
+<p><img src="../../../../mdn.mozillademos.org/files/9347/grumpy-cat-small.png" style="display: block; height: 255px; margin: 0px auto; width: 821px;" alt=""></p>
+
+<p>The main parts of our element are:</p>
+
+<ol>
+ <li><strong>The opening tag:</strong> This consists of the name of the element (in this case, p), wrapped in opening and closing <strong>angle brackets</strong>. This states where the element begins, or starts to take effect — in this case where the start of the paragraph is.</li>
+ <li><strong>The closing tag:</strong> This is the same as the opening tag, except that it includes a forward slash before the element name. This states where the element ends — in this case where the end of the paragraph is. Failing to include a closing tag is one of the common beginner errors and can lead to strange results.</li>
+ <li><strong>The content:</strong> This is the content of the element, which in this case is just text.</li>
+ <li><strong>The element:</strong> The opening tag, plus the closing tag, plus the content, equals the element.</li>
+</ol>
+
+<p>Elements can also have attributes, which look like this:</p>
+
+<p><img src="../../../../mdn.mozillademos.org/files/9345/grumpy-cat-attribute-small.png" style="display: block; height: 156px; margin: 0px auto; width: 1287px;" alt=""></p>
+
+<p>Attributes contain extra information about the element&nbsp;which you don't want to appear in the actual content. In this case, the class attribute allows you to give the element an identifying name that can be later used to target the element with style information and other things.</p>
+
+<p>An attribute should always have:</p>
+
+<ol>
+ <li>A space between it and the element name (or the previous attribute, if the element already has one or more attributes.)</li>
+ <li>The attribute name, followed by an equals sign</li>
+ <li>Opening and closing quote marks wrapped around the attribute value</li>
+</ol>
+
+<h3 id="Nesting_elements">Nesting elements</h3>
+
+<p>You can put elements inside other elements too — this is called <strong>nesting</strong>. If we wanted to state that our cat is VERY grumpy, we could wrap the word "very" in a <a href="../../docs/Web/HTML/Element/strong.html" title="The HTML Strong Element (&lt;strong&gt;) gives text strong importance, and is typically displayed in bold."><code>&lt;strong&gt;</code></a> element, which means that the word is to be strongly emphasized:</p>
+
+<pre class="brush: html">&lt;p&gt;My cat is &lt;strong&gt;very&lt;/strong&gt; grumpy.&lt;/p&gt;</pre>
+
+<p>You do however need to make sure that your elements are properly nested: in the example above we opened the &lt;p&gt; element first, then the strong, therefore we have to close the strong element first, then the p. The following is incorrect:</p>
+
+<pre class="brush: html">&lt;p&gt;My cat is &lt;strong&gt;very grumpy.&lt;/p&gt;&lt;/strong&gt;</pre>
+
+<p>The elements have to open and close correctly so they are clearly inside or outside one another. If they overlap like above, then your web browser will try to make a best guess at what you were trying to say, and you may well get unexpected results. So don't do it!</p>
+
+<h3 id="Empty_elements">Empty elements</h3>
+
+<p>Some elements have no content, and are called <strong>empty elements</strong>. Take the <a href="../../docs/Web/HTML/Element/img.html" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image in the document."><code>&lt;img&gt;</code></a> element we already have in our HTML:</p>
+
+<pre class="brush: html">&lt;img src="images/firefox-icon.png" alt="My test image"&gt;</pre>
+
+<p>This contains two attributes, but there is no closing <code>&lt;/img&gt;</code> tag, and no inner content. This is because an image element doesn't wrap content to have an effect on it. Its purpose is to embed an image in the HTML page, in the place it appears.</p>
+
+<h3 id="Anatomy_of_an_HTML_document">Anatomy of an HTML document</h3>
+
+<p>That wraps up the basics of individual HTML elements, but they aren't very useful on their own. Now we'll look at how individual elements are combined to form an entire HTML page. Let's revisit the code we put into our <code>index.html</code> example (which we first met in the <a href="https://developer.mozilla.org/en-US/Learn/Getting_started_with_the_web/Dealing_with_files">Dealing with files</a> article):</p>
+
+<pre class="brush: html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;My test page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;img src="images/firefox-icon.png" alt="My test image"&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p>Here we have:</p>
+
+<ul>
+ <li><code>&lt;!DOCTYPE html&gt;</code> — the doctype. In the mists of time, when HTML was young (about 1991/2), doctypes were meant to act as links to a set of rules that the HTML page had to follow to be considered good HTML, which could mean automatic error checking and other useful things. However, these days no-one really cares about them, and they are really just a historical artifact that needs to be included for everything to work right. For now, that's all you need to know.</li>
+ <li><code>&lt;html&gt;&lt;/html&gt;</code> — the <code>&lt;html&gt;</code> element. This element wraps all the content on the entire page, and is sometimes known as the root element.</li>
+ <li><code>&lt;head&gt;&lt;/head&gt;</code> — the <code>&lt;head&gt;</code> element. This element acts as a container for all the stuff you want to include on the HTML page that <em>isn't</em> the content you are showing to your page's viewers. This includes things like keywords and a page description that you want to appear in search results, CSS to style our content, character set declarations, and more.</li>
+ <li><code>&lt;body&gt;&lt;/body&gt;</code> — the <code>&lt;body&gt;</code> element. This contains <em>all</em> the content that you want to show to web users when they visit your page, whether that's text, images, videos, games, playable audio tracks, or whatever else.</li>
+ <li><code>&lt;meta charset="utf-8"&gt;</code> — this element sets the character set your document should use&nbsp;to utf-8, which includes most characters from all known&nbsp;human languages. Essentially it can now handle any textual content you might put on it. There is no reason not to set this, and it can help avoid some problems later on.</li>
+ <li><code>&lt;title&gt;&lt;/title&gt;</code> — this sets the title of your page, which is the title that appears in the browser tab the page is loaded in, and is used to describe the page when you bookmark/favourite it.</li>
+</ul>
+
+<h2 id="Images">Images</h2>
+
+<p>Let's turn our attention to the image element again:</p>
+
+<pre class="brush: html">&lt;img src="images/firefox-icon.png" alt="My test image"&gt;</pre>
+
+<p>As we said before, it embeds an image into our page in the position it appears. It does this via the <code>src</code> (source) attribute, which contains the path to our image file.</p>
+
+<p>We have also included an <code>alt</code> (alternative) attribute.&nbsp;In this attribute, you specify descriptive text&nbsp;for&nbsp;users who cannot see the image, possibly&nbsp;because:</p>
+
+<ol>
+ <li>They are visually impaired. Users with significant visual impairments often use tools called Screen Readers to read out the alt text to them.</li>
+ <li>Something has gone wrong causing the image to not display. For example, try deliberately changing the path inside your <code>src</code> attribute to make it incorrect. If you save and reload the page, you should see something like this in place of the image:</li>
+</ol>
+
+<p><img src="../../../../mdn.mozillademos.org/files/9349/alt-text-example.png" style="display: block; height: 36px; margin: 0px auto; width: 108px;" alt=""></p>
+
+<p>The key words about alt text are "descriptive text". The alt text you write should provide the reader with enough information to have a good idea of what the image conveys. In this example,&nbsp;our current text of "My test image" is no good at all. A much better alternative for our Firefox logo would be "The Firefox logo: a flaming fox surrounding the Earth."</p>
+
+<p><strong>Try coming up with some better alt text for your image now.</strong></p>
+
+<div class="note">
+<p><strong>Note</strong>: Find out more about accessibility at <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">MDN's Accessibility landing page</a>.</p>
+</div>
+
+<h2 id="Marking_up_text">Marking up text</h2>
+
+<p>This section will cover some of the basic HTML elements you'll use for marking up text.</p>
+
+<h3 id="Headings">Headings</h3>
+
+<p>Heading elements allow you to specify that certain parts of your content are headings —or subheadings—&nbsp;of your content. In the same way that a book has a main title,&nbsp;chapter titles&nbsp;and subtitles, an HTML document can too. HTML contains six heading levels, <a href="../../docs/Web/HTML/Element/Heading_Elements.html" title="Heading elements implement six levels of document headings, &lt;h1&gt; is the most important and &lt;h6&gt; is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically."><code>&lt;h1&gt;</code></a>–<a href="../../docs/Web/HTML/Element/Heading_Elements.html" title="Heading elements implement six levels of document headings, &lt;h1&gt; is the most important and &lt;h6&gt; is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically."><code>&lt;h6&gt;</code></a> although you'll commonly only use 3–4 at most:</p>
+
+<pre class="brush: html">&lt;h1&gt;My main title&lt;/h1&gt;
+&lt;h2&gt;My top level heading&lt;/h2&gt;
+&lt;h3&gt;My subheading&lt;/h3&gt;
+&lt;h4&gt;My sub-subheading&lt;/h4&gt;</pre>
+
+<p>Now try&nbsp;adding a suitable title to your HTML page&nbsp;just above your <a href="../../docs/Web/HTML/Element/img.html" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image in the document."><code>&lt;img&gt;</code></a> element.</p>
+
+<h3 id="Paragraphs">Paragraphs</h3>
+
+<p>As explained above, <a href="../../docs/Web/HTML/Element/p.html" title="The HTML &lt;p&gt; element (or HTML Paragraph Element) represents a paragraph of text."><code>&lt;p&gt;</code></a> elements are for containing paragraphs of text; you'll use these frequently when marking up regular text content:</p>
+
+<pre class="brush: html">&lt;p&gt;This is a single paragraph&lt;/p&gt;</pre>
+
+<p><strong>Add your sample text (you should have it from <a href="https://developer.mozilla.org/en-US/Learn/Getting_started_with_the_web/What_should_your_web_site_be_like"><em>What should your website look like?</em></a>) into one or a few paragraphs, placed directly below your &lt;img&gt; element.</strong></p>
+
+<h3 id="Lists">Lists</h3>
+
+<p>A lot of the Web's content is lists and&nbsp;HTML has special elements for these. Marking up lists always consist of at least two elements. The most common list types are ordered and unordered lists:</p>
+
+<ol>
+ <li><strong>Unordered lists</strong> are for lists where the order of the items doesn't matter, like a shopping list. These are wrapped in a <a href="../../docs/Web/HTML/Element/ul.html" title="The HTML unordered list element (&lt;ul&gt;) represents an unordered list of items, namely a collection of items that do not have a numerical ordering, and their order in the list is meaningless. Typically, unordered-list items are displayed with a bullet, which can be of several forms, like a dot, a circle or a squared. The bullet style is not defined in the HTML description of the page, but in its associated CSS, using the list-style-type property."><code>&lt;ul&gt;</code></a> element.</li>
+ <li><strong>Ordered lists</strong> are for lists where the order of the items does matter, like a recipe. These are wrapped in an <a href="../../docs/Web/HTML/Element/ol.html" title="The HTML &lt;ol&gt; Element (or HTML Ordered List Element) represents an ordered list of items. Typically, ordered-list items are displayed with a preceding numbering, which can be of any form, like numerals, letters or Romans numerals or even simple bullets. This numbered style is not defined in the HTML description of the page, but in its associated CSS, using the list-style-type property."><code>&lt;ol&gt;</code></a> element.</li>
+</ol>
+
+<p>Each item inside the lists is put inside an <a href="../../docs/Web/HTML/Element/li.html" title="The HTML List Item Element (&lt;li&gt;) is used to represent an item in a list. It must be contained in a parent element: an ordered list (&lt;ol&gt;), an unordered list (&lt;ul&gt;), or a menu (&lt;menu&gt;). In menus and unordered lists, list items are usually displayed using bullet points. In ordered lists, they are usually displayed with an ascending counter on the left, such as a number or letter."><code>&lt;li&gt;</code></a> (list item) element.</p>
+
+<p>For example, if we wanted to turn the part of the following paragraph fragment into a list:</p>
+
+<pre class="brush: html">&lt;p&gt;At Mozilla, we’re a global community of technologists, thinkers, and builders working together ... &lt;/p&gt;</pre>
+
+<p>We could modfy the markup to&nbsp;this:</p>
+
+<pre class="brush: html">&lt;p&gt;At Mozilla, we’re a global community of&lt;/p&gt;
+    
+&lt;ul&gt; 
+  &lt;li&gt;technologists&lt;/li&gt;
+  &lt;li&gt;thinkers&lt;/li&gt;
+  &lt;li&gt;builders&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;working together ... &lt;/p&gt;</pre>
+
+<p><strong>Try adding an ordered or unordered list to your example page.</strong></p>
+
+<h2 id="Links">Links</h2>
+
+<p>Links are very important — they are what makes the Web A WEB. To add a link, we need to use a simple link — <a href="../../docs/Web/HTML/Element/a.html" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a> — the <em>a</em> being short for "anchor". To make text within your paragraph into a link, follow&nbsp;these steps:</p>
+
+<ol>
+ <li>Choose some text. We chose the text "Mozilla Manifesto".</li>
+ <li>Wrap the text in an &lt;a&gt; element, like so:
+  <pre class="brush: html">&lt;a&gt;Mozilla Manifesto&lt;/a&gt;</pre>
+ </li>
+ <li>Give the &lt;a&gt; element an href attribute, like so:
+  <pre class="brush: html">&lt;a href=""&gt;Mozilla Manifesto&lt;/a&gt;</pre>
+ </li>
+ <li>Fill in the value of this attribute with the web address that you want the link to link to:
+  <pre class="brush: html">&lt;a href="https://www.mozilla.org/en-US/about/manifesto/"&gt;Mozilla Manifesto&lt;/a&gt;</pre>
+ </li>
+</ol>
+
+<p>You might get unexpected results if you omit the <code>https://</code> or <code>http://</code> part, called the <em>protocol</em>, at the beginning of the web address. After making a link, click it to make sure it is sending you where you wanted it to.</p>
+
+<div class="note">
+<p><code>href</code> might appear like a rather obscure choice for an attribute name at first. If you are having trouble remembering it, remember that it stands for <em><strong>h</strong>ypertext <strong>ref</strong>erence</em>.</p>
+</div>
+
+<p><strong>Add a link to your page now, if you haven't already done so.</strong></p>
+
+<h2 id="Conclusion">Conclusion</h2>
+
+<p>If you have followed all the instructions in this article, you should end up with a page that looks like the one below (you can also <a href="http://mdn.github.io/beginner-html-site/" class="external">view it here</a>):<br>
+ <br>
+ <img src="../../../../mdn.mozillademos.org/files/9351/finished-test-page-small.png" style="display: block; height: 838px; margin: 0px auto; width: 716px;" alt="A web page screenshot showing a firefox logo, a heading saying mozilla is cool, and two paragraphs of filler text"></p>
+
+<p>If you get stuck, you can always compare your work with our <a href="https://github.com/mdn/beginner-html-site/blob/gh-pages/index.html" class="external">finished example code</a> on Github.</p>
+
+<p>Here, we have only really scratched the surface of HTML. To find out more, go to our <a href="../HTML.html">HTML Learning page</a>.</p>
+
+<p></p><div class="prevnext" style="text-align: right;"> 
+    <p><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/Dealing_with_files" style="float: left;">« Previous</a><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics">Next  »</a></p> 
+</div><p></p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/beginner">beginner</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Beginner">Beginner</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/CodingScripting">CodingScripting</a></li>
+              <li><a href="../../docs/tag/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Learn">Learn</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/web">web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight">SphinxKnight</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Carmelina">Carmelina</a>,             <a href="https://developer.mozilla.org/en-US/profiles/manderton">manderton</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jlin">jlin</a>,             <a href="https://developer.mozilla.org/en-US/profiles/karyse">karyse</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/NickPapayiannakis">NickPapayiannakis</a>,             <a href="https://developer.mozilla.org/en-US/profiles/odsantos">odsantos</a>,             <a href="https://developer.mozilla.org/en-US/profiles/xfq">xfq</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jsx">jsx</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight">SphinxKnight</a>,
+                      <time datetime="2015-09-13T06:37:17-07:00">Sep 13, 2015, 6:37:17 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol><li><a href="https://developer.mozilla.org/en-US/Learn/Getting_started_with_the_web">Getting started with the web</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/Skills">Learn the web</a>
+  <ol><li><a href="https://webmaker.org/en-US/literacy" rel="external">Web Literacy Map</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Web_Mechanics">Web mechanics</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Infrastructure">Infrastructure</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Coding-Scripting">Coding &amp; Scripting</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Design_and_Accessibility">Design &amp; Accessibility</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Composing_for_the_web">Writing &amp; planning</a></li>
+  </ol></li>
+ <li><a href="#">Learn technologies</a>
+  <ol><li><a href="../HTML.html">HTML</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/CSS">CSS</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/JavaScript">JavaScript</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/Python">Python</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/tutorial">Learning tutorials</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/Learn/tutorial/How_to_build_a_web_site">How to build a web site?</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/Learn/tutorial/Information_Security_Basics">Information security basics</a></li>
+  </ol></li>
+ <li><a href="http://weblitmapper.webmakerprototypes.org/">Learning resources</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/help">Getting help</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/Learn/FAQ">FAQ</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Glossary">Glossary</a></li>
+   <li><a href="http://discourse.webmakerprototypes.org/" rel="external">Ask your questions</a></li>
+   <li><a href="https://events.webmaker.org/" rel="external">Meet teachers and mentors</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/Learn/How_to_contribute">How to contribute</a></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics" selected="">
+          English (US)
+        </option>
+                  <option value="/cs/docs/Learn/Getting_started_with_the_web/HTML_z%C3%A1klad">
+            Čeština
+          </option>          <option value="/de/docs/Learn/Getting_started_with_the_web/HTML_basics">
+            Deutsch
+          </option>          <option value="/es/docs/Learn/Getting_started_with_the_web/HTML_basics">
+            Español
+          </option>          <option value="/fr/docs/Apprendre/Commencer_avec_le_web/Les_bases_HTML">
+            Français
+          </option>          <option value="/ko/docs/Learn/Getting_started_with_the_web/HTML_%EA%B8%B0%EB%B3%B8">
+            한국어
+          </option>          <option value="/pt-BR/docs/Aprender/Getting_started_with_the_web/HTML_basico">
+            Português (do&nbsp;Brasil)
+          </option>          <option value="/ru/docs/Learn/Getting_started_with_the_web/HTML_basics">
+            Русский
+          </option>          <option value="/zh-CN/docs/Learn/Getting_started_with_the_web/HTML_basics">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Learn/Getting_started_with_the_web/HTML_basics by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:23:21 GMT -->
+</body></html>

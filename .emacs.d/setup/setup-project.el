@@ -160,15 +160,17 @@
 (require 'helm-dash)
 (setq helm-dash-min-length 2)
 (setq helm-dash-docsets-path (expand-file-name "~/.emacs.d/docsets"))
-(setq helm-dash-common-docsets '("Python_2"
+(setq helm-dash-common-docsets '(
+                                 "Markdown"
+                                 "LaTeX"
+                                 "Python_2"
                                  "Perl"
+                                 "C++"
                                  "JavaScript"
-                                 "Java"
+                                 "Bash"
                                  "Tcl"
                                  "R"
-                                 "Bash"
-                                 "LaTeX"
-                                 "C++"))
+                                 "Emacs_Lisp"))
 
 (defun c-doc-hook ()
   (interactive)
@@ -177,13 +179,18 @@
 
 (defun python-doc-hook ()
   (interactive)
-  (setq-local helm-dash-docsets '("Python_2" "NumPy")))
+  (setq-local helm-dash-docsets '("Python_2" "NumPy" "SciPy")))
 (add-hook 'python-mode-hook 'python-doc-hook)
 
 (defun js2-doc-hook ()
   (interactive)
-  (setq-local helm-dash-docsets '("JavaScript" "NodeJS")))
+  (setq-local helm-dash-docsets '("JavaScript" "NodeJS" "HTML")))
 (add-hook 'js2-mode-hook 'js2-doc-hook)
+
+(defun java-doc-hook ()
+  (interactive)
+  (setq-local helm-dash-docsets '("Java")))
+(add-hook 'java-mode-hook 'java-doc-hook)
 
 (provide 'setup-project)
 ;;; setup-project.el ends here

@@ -1,0 +1,857 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:54:27 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>Examine and edit HTML</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+                  <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Tools$styles">
+          
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML$json">
+  <link rel="canonical" href="Examine_and_edit_HTML.html">
+
+            <link rel="alternate" hreflang="fr" href="../../../../../fr/docs/Outils/Inspecteur/Comment/Examiner_et_%c3%a9diter_le_code_HTML.html" title="Examiner et éditer le code HTML">
+          <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" title="HTML の調査と編集">
+          <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" title="Исследование и редактирование HTML">
+          <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" title="查看和编辑HTML">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Examine and edit HTML">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML">
+  <meta name="twitter:title" content="Examine and edit HTML">
+    <meta property="og:description" content="You can examine and edit the page's HTML in the HTML pane.">
+  <meta name="description" content="You can examine and edit the page's HTML in the HTML pane.">
+  <meta name="twitter:description" content="You can examine and edit the page's HTML in the HTML pane.">
+  
+      
+  </head>
+<body data-slug="Tools/Page_Inspector/How_to/Examine_and_edit_HTML" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FTools%2FPage_Inspector%2FHow_to%2FExamine_and_edit_HTML" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FTools%2FPage_Inspector%2FHow_to%2FExamine_and_edit_HTML" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../../Web/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+                <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Tools">Firefox Developer Tools</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+     <!-- end is_zone -->
+
+
+    <div class="wiki-main-content"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="../../../../../fr/docs/Outils/Inspecteur/Comment/Examiner_et_%c3%a9diter_le_code_HTML.html" title="Examiner et éditer le code HTML">Français</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" title="HTML の調査と編集">日本語</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" title="Исследование и редактирование HTML">Русский</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" title="查看和编辑HTML">中文 (简体)</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Tools" rel="v:url" property="v:title">Firefox Developer Tools</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector" rel="v:url" property="v:title">Page Inspector</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to" rel="v:url" property="v:title">How to</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">Examine and edit HTML</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>Examine and edit HTML</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 5 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wbamberg" title="View profile: wbamberg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wbamberg" data-src="../../../../../../secure.gravatar.com/avatar/576b94c81f8ad97e58d63f12e5fdb00c6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">wbamberg</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Aleksej" title="View profile: Aleksej">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Aleksej" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Aleksej</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/pbrosset" title="View profile: pbrosset">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="pbrosset" data-src="../../../../../../secure.gravatar.com/avatar/84ab9576d6f4960d9d05867b5e53111e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">pbrosset</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/past" title="View profile: past">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="past" data-src="../../../../../../secure.gravatar.com/avatar/6b24a710395ecdb17a16bb477626a1986aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">past</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Navigating_the_HTML" rel="internal">Navigating the HTML</a><ol><li><a href="#HTML_breadcrumbs" rel="internal">HTML breadcrumbs</a></li><li><a href="#Searching" rel="internal">Searching</a></li><li><a href="#HTML_tree" rel="internal">HTML tree</a></li><li><a href="#before_and_after" rel="internal">::before and ::after</a></li></ol></li><li><a href="#Element_popup_menu" rel="internal">Element popup menu</a></li><li><a href="#Editing_HTML_2" rel="internal">Editing HTML</a><ol><li><a href="#Copy_and_paste" rel="internal">Copy and paste</a></li><li><a href="#Drag_and_drop" rel="internal">Drag and drop</a></li></ol></li>
+                </ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>You can examine and edit the page's HTML in the <a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/UI_Tour#HTML_pane">HTML pane</a>.</p>
+
+<h2 id="Navigating_the_HTML">Navigating the HTML</h2>
+
+<p>At the top of the HTML pane there's a toolbar split into two sections: a trail of <a href="http://en.wikipedia.org/wiki/Breadcrumb_(navigation)" class="external">breadcrumbs</a> and a search box.</p>
+
+<h3 id="HTML_breadcrumbs">HTML breadcrumbs</h3>
+
+<p>This shows the complete hierarchy through the document for the branch containing the selected element:</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/10813/inspector-breadcrumbs.png" style="display: block; height: 266px; margin-left: auto; margin-right: auto; width: 739px;" alt=""> If you click and hold on one of the elements in the bar, a popup menu appears that lets you select one of that element's siblings. Clicking the small arrow icons at the left and right ends of the bar will scroll the bar if it's wider than the available space.</p>
+
+<p>From Firefox 34 onwards, hovering over a breadcrumb highlights that element in the page.</p>
+
+<h3 id="Searching">Searching</h3>
+
+<p>Click in the search box to expand it, then type the thing you are searching for. You'll see a popup showing matches.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/10811/inspector-search-annotated.png" style="display: block; height: 278px; margin-left: auto; margin-right: auto; width: 736px;" alt="">Press "Enter". The first element of that type in the page will be selected, and pressing "Enter" again finds the next one.</p>
+
+<p>You can search for a tag, or enter a <a href="https://developer.mozilla.org/en-US/docs/Glossary/CSS_Selector">CSS selector string</a>, so you could search for an element with the ID <code>myId</code> by entering the string <code>#myId</code>.</p>
+
+<p>From Firefox 40 onwards, you can search for class or id attributes without using the CSS selector, so just entering <code>myId</code> will find that element.</p>
+
+<h3 id="HTML_tree">HTML tree</h3>
+
+<p>The rest of the pane shows you the page's HTML as a tree (this UI is also called the Markup View). Just to the left of each node is an arrow: click the arrow to expand the node. If you hold the Alt key while clicking the arrow, it expands the node and all the nodes underneath it.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/8541/inspector-html-tree.png" style="display: block; margin-left: auto; margin-right: auto;" alt="">Moving the mouse over a node in the tree highlights that element in the page.</p>
+
+<p>Nodes that are hidden using <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/display">display:none</a> are shown faded (as are nodes that aren't rendered like <a href="../../../Web/HTML/Element/head.html">&lt;head&gt;</a> for example).</p>
+
+<h3 id="before_and_after">::before and ::after</h3>
+
+<p>From Firefox 35 onwards, you can inspect pseudo-elements added using <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::before"><code>::before</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::after"><code>::after</code></a>:</p>
+
+<p></p><div class="intrinsic-wrapper"><div class="intrinsic-container "><iframe src="https://www.youtube.com/embed/ecfqTGvzsNc?rel=0&amp;html5=1"></iframe></div></div><p></p>
+
+<h2 id="Element_popup_menu">Element popup menu</h2>
+
+<p>You can perform certain common tasks on a specific node using a popup menu. To activate this menu, context-click the element:</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11623/inspector-markup-popup.png" style="display: block; height: 930px; margin-left: auto; margin-right: auto; width: 300px;" alt="">The menu gives you the following options:</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td style="width: 30%;">Edit as HTML</td>
+   <td><a href="#Editing_HTML">Edit the element's HTML</a></td>
+  </tr>
+  <tr>
+   <td>Copy Inner HTML</td>
+   <td>Copy the inner HTML for the element</td>
+  </tr>
+  <tr>
+   <td>Copy Outer HTML</td>
+   <td>
+    <p>Copy the outer HTML for the element</p>
+
+    <p>From Firefox 42 onwards, pressing <kbd>Ctrl</kbd> + <kbd>C</kbd> (or <kbd>Cmd</kbd> + <kbd>C</kbd> on a Mac) also performs this action.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>Copy Unique Selector</td>
+   <td>Copy a CSS selector that uniquely selects the element</td>
+  </tr>
+  <tr>
+   <td>Copy Image Data-URL</td>
+   <td>Copy image as a data:// URL, if the selected element is an image</td>
+  </tr>
+  <tr>
+   <td>Show DOM Properties</td>
+   <td>Open the <a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console#The_split_console">split console</a> and enter the console command "<code>inspect($0)</code>" to <a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Inspecting_objects">inspect</a> the currently selected element.</td>
+  </tr>
+  <tr>
+   <td>Use in Console</td>
+   <td>
+    <div class="geckoVersionNote">
+    <p>New in Firefox 43</p>
+    </div>
+    Assigns the currently selected node to a variable named <code>temp0</code> (or <code>temp1</code> if <code>temp0</code> is already taken, and so on), then opens the <a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console#The_split_console">split console</a>, enabling you to interact with that node using the console's command line.</td>
+  </tr>
+  <tr>
+   <td>Paste Inner HTML</td>
+   <td>Paste the clipboard contents into the node as its <a href="../../../Web/API/Element/innerHTML.html">innerHTML</a>.</td>
+  </tr>
+  <tr>
+   <td>Paste Outer HTML</td>
+   <td>Paste the clipboard contents into the node as its <a href="../../../Web/API/Element/outerHTML.html">outerHTML</a>.</td>
+  </tr>
+  <tr>
+   <td>Paste/Before</td>
+   <td>Paste the clipboard contents into the document immediately before this node.</td>
+  </tr>
+  <tr>
+   <td>Paste/After</td>
+   <td>Paste the clipboard contents into the document immediately after this node.</td>
+  </tr>
+  <tr>
+   <td>Paste/As First Child</td>
+   <td>Paste the clipboard contents into the document as the first child of this node.</td>
+  </tr>
+  <tr>
+   <td>Paste/As Last Child</td>
+   <td>Paste the clipboard contents into the document as the last child of this node.</td>
+  </tr>
+  <tr>
+   <td>Scroll Into View</td>
+   <td>
+    <div class="geckoVersionNote">
+    <p>New in Firefox 40</p>
+    </div>
+    Scrolls the web page so the selected node is visible.</td>
+  </tr>
+  <tr>
+   <td>Screenshot Node</td>
+   <td>
+    <div class="geckoVersionNote">
+    <p>New in Firefox 41</p>
+    </div>
+    Takes a screenshot of the selected node, saved to your Downloads directory.</td>
+  </tr>
+  <tr>
+   <td>Delete Node</td>
+   <td>Delete the element</td>
+  </tr>
+  <tr>
+   <td>Open Link in New Tab</td>
+   <td>
+    <div class="geckoVersionNote">
+    <p>New in Firefox 40</p>
+    </div>
+    (only when invoked over a link, such as an href attribute) Opens the linked item in a new tab.</td>
+  </tr>
+  <tr>
+   <td>Open File in Debugger</td>
+   <td>
+    <div class="geckoVersionNote">
+    <p>New in Firefox 40</p>
+    </div>
+    (only when invoked over a link to a JS source) Opens the linked source in the Debugger.</td>
+  </tr>
+  <tr>
+   <td>Open File in Style-Editor</td>
+   <td>
+    <div class="geckoVersionNote">
+    <p>New in Firefox 40</p>
+    </div>
+    (only when invoked over a link to a CSS source) Opens the linked source in the Style Editor.</td>
+  </tr>
+  <tr>
+   <td>Copy Link Address</td>
+   <td>
+    <div class="geckoVersionNote">
+    <p>New in Firefox 40</p>
+    </div>
+    (only when invoked over a URL) Copy the URL.</td>
+  </tr>
+  <tr>
+   <td>:hover</td>
+   <td>Set the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:hover" title="/en-US/docs/Web/CSS/:hover">:hover</a> CSS pseudo-class</td>
+  </tr>
+  <tr>
+   <td>:active</td>
+   <td>Set the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:active" title="/en-US/docs/Web/CSS/:active">:active</a> CSS pseudo-class</td>
+  </tr>
+  <tr>
+   <td>:focus</td>
+   <td>Set the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/:focus" title="/en-US/docs/Web/CSS/:focus">:focus</a> CSS pseudo-class</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Editing_HTML_2"><a name="Editing_HTML">Editing HTML</a></h2>
+
+<p>You can edit the HTML - tags, attributes, and content - directly in the HTML pane: double-click the text you want to edit, change it, and press Enter to see the changes reflected immediately.</p>
+
+<p>To edit an element's <a href="../../../Web/API/Element/outerHTML.html">outerHTML</a>, activate the element's popup menu and select "Edit As HTML". You'll see a text box in the HTML pane:</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/7451/inspector-editHTML.png" style="display: block; height: 269px; margin-left: auto; margin-right: auto; width: 540px;" alt="">You can add any HTML in here: changing the element's tag, changing existing elements, or adding new ones. Once you click outside the box, the changes are applied to the page.</p>
+
+<h3 id="Copy_and_paste">Copy and paste</h3>
+
+<p>You can use the <a href="Examine_and_edit_HTML.html#Element_popup_menu">popup menu</a> to copy nodes in the HTML tree and paste them into the desired location.</p>
+
+<h3 id="Drag_and_drop">Drag and drop</h3>
+
+<div class="geckoVersionNote">
+<p>New in Firefox 39.</p>
+</div>
+
+<p>From Firefox 39 onwards, you can edit HTML by moving nodes in the HTML tree. Just click and hold on any element and drag it up or down in the tree. When you release the mouse button, the element will be inserted at the corresponding position:</p>
+
+<p></p><div class="intrinsic-wrapper"><div class="intrinsic-container "><iframe src="https://www.youtube.com/embed/oI-a035nfWk?rel=0&amp;html5=1"></iframe></div></div><p></p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/guide">guide</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Inspector">Inspector</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Tools">Tools</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Aleksej">Aleksej</a>,             <a href="https://developer.mozilla.org/en-US/profiles/pbrosset">pbrosset</a>,             <a href="https://developer.mozilla.org/en-US/profiles/past">past</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>,
+                      <time datetime="2015-09-28T14:26:06-07:00">Sep 28, 2015, 2:26:06 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="#">Creating</a>
+
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Scratchpad">Scratchpad</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Style_Editor">Style Editor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Shader_Editor">Shader Editor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Audio_Editor">Web Audio Editor</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Debugging</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector">Page Inspector</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console">Web Console</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Debugger">Debugger</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Network_Monitor">Network Monitor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Storage_Inspector">Storage Inspector</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/GCLI">Developer Toolbar</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/3D_View">3D View</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Eyedropper">Eyedropper</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/tools/Working_with_iframes">Selecting iframes</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/View_source">View Source</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Mobile</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/Firefox_OS/Using_the_App_Manager">App Manager</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/WebIDE">WebIDE</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Remote_Debugging/Firefox_for_Android">Firefox for Android</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Firefox_OS_Simulator">Firefox OS Simulator</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_View">Responsive Design View</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance">Performance</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Frame_rate">Frame rate graph</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Waterfall">Waterfall</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Call_Tree">Call Tree</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Flame_Chart">Flame Chart</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Paint_Flashing_Tool">Paint Flashing Tool</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Reflow_events">Reflow Event Logging</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Network_Monitor#Performance_analysis">Network Performance</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Debugging the browser</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">Browser Console</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Toolbox">Browser Toolbox</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Extending the devtools</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Adding_a_panel_to_the_toolbox">Adding a panel to the toolbox</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Example_add-ons">Example devtools add-ons</a></li>
+   <li><a href="https://wiki.mozilla.org/Remote_Debugging_Protocol">Remote Debugging Protocol</a></li>
+   <li><a href="https://wiki.mozilla.org/Remote_Debugging_Protocol_Stream_Transport">Stream Transport</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Editor">Source Editor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API">The <code>Debugger</code> Interface</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Custom_output">Web Console custom output</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Tools_Toolbox#Settings">Settings</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Release_notes">Release notes</a></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML" selected="">
+          English (US)
+        </option>
+                  <option value="/fr/docs/Outils/Inspecteur/Comment/Examiner_et_%C3%A9diter_le_code_HTML">
+            Français
+          </option>          <option value="/ja/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML">
+            日本語
+          </option>          <option value="/ru/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML">
+            Русский
+          </option>          <option value="/zh-CN/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML">
+            中文 (简体)
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_HTML by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:54:31 GMT -->
+</body></html>

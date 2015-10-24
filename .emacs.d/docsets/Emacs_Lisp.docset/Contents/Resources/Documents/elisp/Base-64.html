@@ -1,0 +1,110 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Base 64</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Base-64"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Checksum_002fHash.html#Checksum_002fHash">Checksum/Hash</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Decompression.html#Decompression">Decompression</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+
+</p></div>
+
+<h3 class="section">31.24 Base 64 Encoding</h3>
+
+<p><a name="index-base-64-encoding-3140"></a>
+  Base 64 code is used in email to encode a sequence of 8-bit bytes as
+a longer sequence of <acronym>ASCII</acronym> graphic characters.  It is defined in
+Internet RFC<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>2045.  This section describes the functions for
+converting to and from this code.
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/base64%2Dencode%2Dregion"></a><a name="DASH-195"></a>— Command: <b>base64-encode-region</b><var> beg end &amp;optional no-line-break<a name="index-base64_002dencode_002dregion-3141"></a></var><br>
+<blockquote><p>This function converts the region from <var>beg</var> to <var>end</var> into base
+64 code.  It returns the length of the encoded text.  An error is
+signaled if a character in the region is multibyte, i.e., in a
+multibyte buffer the region must contain only characters from the
+charsets <code>ascii</code>, <code>eight-bit-control</code> and
+<code>eight-bit-graphic</code>.
+
+        </p><p>Normally, this function inserts newline characters into the encoded
+text, to avoid overlong lines.  However, if the optional argument
+<var>no-line-break</var> is non-<code>nil</code>, these newlines are not added, so
+the output is just one long line. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/base64%2Dencode%2Dstring"></a><a name="DASH-196"></a>— Function: <b>base64-encode-string</b><var> string &amp;optional no-line-break<a name="index-base64_002dencode_002dstring-3142"></a></var><br>
+<blockquote><p>This function converts the string <var>string</var> into base 64 code.  It
+returns a string containing the encoded text.  As for
+<code>base64-encode-region</code>, an error is signaled if a character in the
+string is multibyte.
+
+        </p><p>Normally, this function inserts newline characters into the encoded
+text, to avoid overlong lines.  However, if the optional argument
+<var>no-line-break</var> is non-<code>nil</code>, these newlines are not added, so
+the result string is just one long line. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/base64%2Ddecode%2Dregion"></a><a name="DASH-197"></a>— Command: <b>base64-decode-region</b><var> beg end<a name="index-base64_002ddecode_002dregion-3143"></a></var><br>
+<blockquote><p>This function converts the region from <var>beg</var> to <var>end</var> from base
+64 code into the corresponding decoded text.  It returns the length of
+the decoded text.
+
+        </p><p>The decoding functions ignore newline characters in the encoded text. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/base64%2Ddecode%2Dstring"></a><a name="DASH-198"></a>— Function: <b>base64-decode-string</b><var> string<a name="index-base64_002ddecode_002dstring-3144"></a></var><br>
+<blockquote><p>This function converts the string <var>string</var> from base 64 code into
+the corresponding decoded text.  It returns a unibyte string containing the
+decoded text.
+
+        </p><p>The decoding functions ignore newline characters in the encoded text. 
+</p></blockquote></div>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
+An RFC, an acronym for <dfn>Request for Comments</dfn>, is a numbered
+Internet informational document describing a standard.  RFCs are
+usually written by technical experts acting on their own initiative,
+and are traditionally written in a pragmatic, experience-driven
+manner. 
+</p>
+
+   <hr></div>
+
+   
+
+</body></html>

@@ -1,0 +1,219 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.stats.boxcox_normmax</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Statistical functions (scipy.stats)" href="../stats.html">
+    <link rel="next" title="scipy.stats.boxcox_llf" href="scipy.stats.boxcox_llf.html">
+    <link rel="prev" title="scipy.stats.boxcox" href="scipy.stats.boxcox.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../stats.html" accesskey="U">Statistical functions (<tt class="docutils literal"><span class="pre">scipy.stats</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.boxcox_llf.html" title="scipy.stats.boxcox_llf" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.boxcox.html" title="scipy.stats.boxcox" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.stats.boxcox.html" title="previous chapter">scipy.stats.boxcox</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.stats.boxcox_llf.html" title="next chapter">scipy.stats.boxcox_llf</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-stats-boxcox-normmax">
+<h1>scipy.stats.boxcox_normmax<a class="headerlink" href="#scipy-stats-boxcox-normmax" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.stats.boxcox_normmax"></a><dt id="scipy.stats.boxcox_normmax">
+<tt class="descclassname">scipy.stats.</tt><tt class="descname">boxcox_normmax</tt><big>(</big><em>x</em>, <em>brack=(-2.0</em>, <em>2.0)</em>, <em>method='pearsonr'</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/stats/morestats.py#L834"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.stats.boxcox_normmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute optimal Box-Cox transform parameter for input data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<div><p>Input array.</p>
+</div></blockquote>
+<p><strong>brack</strong> : 2-tuple, optional</p>
+<blockquote>
+<div><p>The starting interval for a downhill bracket search with
+<em class="xref py py-obj">optimize.brent</em>.  Note that this is in most cases not critical; the
+final result is allowed to be outside this bracket.</p>
+</div></blockquote>
+<p><strong>method</strong> : str, optional</p>
+<blockquote>
+<div><p>The method to determine the optimal transform parameter (<a class="reference internal" href="scipy.stats.boxcox.html#scipy.stats.boxcox" title="scipy.stats.boxcox"><tt class="xref py py-obj docutils literal"><span class="pre">boxcox</span></tt></a>
+<tt class="docutils literal"><span class="pre">lmbda</span></tt> parameter). Options are:</p>
+<dl class="docutils">
+<dt>‘pearsonr’  (default)</dt>
+<dd><p class="first last">Maximizes the Pearson correlation coefficient between
+<tt class="docutils literal"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">boxcox(x)</span></tt> and the expected values for <tt class="docutils literal"><span class="pre">y</span></tt> if <em class="xref py py-obj">x</em> would be
+normally-distributed.</p>
+</dd>
+<dt>‘mle’</dt>
+<dd><p class="first last">Minimizes the log-likelihood <a class="reference internal" href="scipy.stats.boxcox_llf.html#scipy.stats.boxcox_llf" title="scipy.stats.boxcox_llf"><tt class="xref py py-obj docutils literal"><span class="pre">boxcox_llf</span></tt></a>.  This is the method used
+in <a class="reference internal" href="scipy.stats.boxcox.html#scipy.stats.boxcox" title="scipy.stats.boxcox"><tt class="xref py py-obj docutils literal"><span class="pre">boxcox</span></tt></a>.</p>
+</dd>
+<dt>‘all’</dt>
+<dd><p class="first last">Use all optimization methods available, and return all results.
+Useful to compare different methods.</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>maxlog</strong> : float or ndarray</p>
+<blockquote class="last">
+<div><p>The optimal transform parameter found.  An array instead of a scalar
+for <tt class="docutils literal"><span class="pre">method='all'</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="scipy.stats.boxcox.html#scipy.stats.boxcox" title="scipy.stats.boxcox"><tt class="xref py py-obj docutils literal"><span class="pre">boxcox</span></tt></a>, <a class="reference internal" href="scipy.stats.boxcox_llf.html#scipy.stats.boxcox_llf" title="scipy.stats.boxcox_llf"><tt class="xref py py-obj docutils literal"><span class="pre">boxcox_llf</span></tt></a>, <a class="reference internal" href="scipy.stats.boxcox_normplot.html#scipy.stats.boxcox_normplot" title="scipy.stats.boxcox_normplot"><tt class="xref py py-obj docutils literal"><span class="pre">boxcox_normplot</span></tt></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c"># make this example reproducible</span>
+</pre></div>
+</div>
+<p>Generate some data and determine optimal <tt class="docutils literal"><span class="pre">lmbda</span></tt> in various ways:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">loggamma</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="p">,</span> <span class="n">lmax_mle</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">boxcox</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lmax_pearsonr</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">boxcox_normmax</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lmax_mle</span>
+<span class="go">7.177...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lmax_pearsonr</span>
+<span class="go">7.916...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span><span class="o">.</span><span class="n">boxcox_normmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">'all'</span><span class="p">)</span>
+<span class="go">array([ 7.91667384,  7.17718692])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span><span class="o">.</span><span class="n">boxcox_normplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lmax_mle</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'r'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lmax_pearsonr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'g'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s">'--'</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../generated/scipy-stats-boxcox_normmax-1.py">Source code</a>)</p>
+<div class="figure">
+<img alt="../_images/scipy-stats-boxcox_normmax-1.png" src="../_images/scipy-stats-boxcox_normmax-1.png">
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

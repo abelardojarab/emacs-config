@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>root(method=’anderson’)</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="index.html" >
+    <link rel="up" title="Optimization and root finding (scipy.optimize)" href="optimize.html" >
+    <link rel="next" title="root(method=’linearmixing’)" href="optimize.root-linearmixing.html" >
+    <link rel="prev" title="root(method=’broyden2’)" href="optimize.root-broyden2.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="optimize.html" accesskey="U">Optimization and root finding (<tt class="docutils literal"><span class="pre">scipy.optimize</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy-optimize-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="optimize.root-linearmixing.html" title="root(method=’linearmixing’)"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="optimize.root-broyden2.html" title="root(method=’broyden2’)"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="optimize.root-broyden2.html"
+                        title="previous chapter">root(method=&#8217;broyden2&#8217;)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="optimize.root-linearmixing.html"
+                        title="next chapter">root(method=&#8217;linearmixing&#8217;)</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="root-method-anderson">
+<span id="optimize-root-anderson"></span><h1>root(method=&#8217;anderson&#8217;)<a class="headerlink" href="#root-method-anderson" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt>
+<tt class="descclassname">scipy.optimize.</tt><tt class="descname">root</tt><big>(</big><em>fun</em>, <em>x0</em>, <em>args=()</em>, <em>method='anderson'</em>, <em>tol=None</em>, <em>callback=None</em>, <em>options={}</em><big>)</big></dt>
+<dd><div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">For documentation for the rest of the parameters, see <a class="reference internal" href="generated/scipy.optimize.root.html#scipy.optimize.root" title="scipy.optimize.root"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.optimize.root</span></tt></a></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><p class="first"><strong>nit</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of iterations to make. If omitted (default), make as many
+as required to meet tolerances.</p>
+</div></blockquote>
+<p><strong>disp</strong> : bool, optional</p>
+<blockquote>
+<div><p>Print status to stdout on every iteration.</p>
+</div></blockquote>
+<p><strong>maxiter</strong> : int, optional</p>
+<blockquote>
+<div><p>Maximum number of iterations to make. If more are needed to
+meet convergence, <em class="xref py py-obj">NoConvergence</em> is raised.</p>
+</div></blockquote>
+<p><strong>ftol</strong> : float, optional</p>
+<blockquote>
+<div><p>Relative tolerance for the residual. If omitted, not used.</p>
+</div></blockquote>
+<p><strong>fatol</strong> : float, optional</p>
+<blockquote>
+<div><p>Absolute tolerance (in max-norm) for the residual.
+If omitted, default is 6e-6.</p>
+</div></blockquote>
+<p><strong>xtol</strong> : float, optional</p>
+<blockquote>
+<div><p>Relative minimum step size. If omitted, not used.</p>
+</div></blockquote>
+<p><strong>xatol</strong> : float, optional</p>
+<blockquote>
+<div><p>Absolute minimum step size, as determined from the Jacobian
+approximation. If the step size is smaller than this, optimization
+is terminated as successful. If omitted, not used.</p>
+</div></blockquote>
+<p><strong>tol_norm</strong> : function(vector) -&gt; scalar, optional</p>
+<blockquote>
+<div><p>Norm to use in convergence check. Default is the maximum norm.</p>
+</div></blockquote>
+<p><strong>line_search</strong> : {None, &#8216;armijo&#8217; (default), &#8216;wolfe&#8217;}, optional</p>
+<blockquote>
+<div><p>Which type of a line search to use to determine the step size in
+the direction given by the Jacobian approximation. Defaults to
+&#8216;armijo&#8217;.</p>
+</div></blockquote>
+<p><strong>jac_options</strong> : dict, optional</p>
+<blockquote class="last">
+<div><p>Options for the respective Jacobian approximation.</p>
+<dl class="docutils">
+<dt>alpha <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd><p class="first last">Initial guess for the Jacobian is (-1/alpha).</p>
+</dd>
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd><p class="first last">Number of previous vectors to retain. Defaults to 5.</p>
+</dd>
+<dt>w0 <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd><p class="first last">Regularization parameter for numerical stability.
+Compared to unity, good values of the order of 0.01.</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

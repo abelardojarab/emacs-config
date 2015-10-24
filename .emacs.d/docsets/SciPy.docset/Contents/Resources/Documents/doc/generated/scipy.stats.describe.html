@@ -1,0 +1,191 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.stats.describe</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Statistical functions (scipy.stats)" href="../stats.html">
+    <link rel="next" title="scipy.stats.gmean" href="scipy.stats.gmean.html">
+    <link rel="prev" title="scipy.stats.zipf" href="scipy.stats.zipf.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../stats.html" accesskey="U">Statistical functions (<tt class="docutils literal"><span class="pre">scipy.stats</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.gmean.html" title="scipy.stats.gmean" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.stats.zipf.html" title="scipy.stats.zipf" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.stats.zipf.html" title="previous chapter">scipy.stats.zipf</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.stats.gmean.html" title="next chapter">scipy.stats.gmean</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-stats-describe">
+<h1>scipy.stats.describe<a class="headerlink" href="#scipy-stats-describe" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.stats.describe"></a><dt id="scipy.stats.describe">
+<tt class="descclassname">scipy.stats.</tt><tt class="descname">describe</tt><big>(</big><em>a</em>, <em>axis=0</em>, <em>ddof=1</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/stats/stats.py#L1132"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.stats.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes several descriptive statistics of the passed array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : array_like</p>
+<blockquote>
+<div><p>Input data.</p>
+</div></blockquote>
+<p><strong>axis</strong> : int or None, optional</p>
+<blockquote>
+<div><p>Axis along which statistics are calculated. Default is 0.
+If None, compute over the whole array <em class="xref py py-obj">a</em>.</p>
+</div></blockquote>
+<p><strong>ddof</strong> : int, optional</p>
+<blockquote>
+<div><p>Delta degrees of freedom.  Default is 1.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>nobs</strong> : int</p>
+<blockquote>
+<div><p>Number of observations (length of data along <em class="xref py py-obj">axis</em>).</p>
+</div></blockquote>
+<p>minmax: tuple of ndarrays or floats</p>
+<blockquote>
+<div><p>Minimum and maximum value of data array.</p>
+</div></blockquote>
+<p><strong>mean</strong> : ndarray or float</p>
+<blockquote>
+<div><p>Arithmetic mean of data along axis.</p>
+</div></blockquote>
+<p><strong>variance</strong> : ndarray or float</p>
+<blockquote>
+<div><p>Unbiased variance of the data along axis, denominator is number of
+observations minus one.</p>
+</div></blockquote>
+<p><strong>skewness</strong> : ndarray or float</p>
+<blockquote>
+<div><p>Biased skewness, based on moment calculations with denominator equal to
+the number of observations, i.e. no degrees of freedom correction.</p>
+</div></blockquote>
+<p><strong>kurtosis</strong> : ndarray or float</p>
+<blockquote class="last">
+<div><p>Biased kurtosis (Fisher).  The kurtosis is normalized so that it is
+zero for the normal distribution.  No degrees of freedom or bias
+correction is used.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="scipy.stats.skew.html#scipy.stats.skew" title="scipy.stats.skew"><tt class="xref py py-obj docutils literal"><span class="pre">skew</span></tt></a>, <a class="reference internal" href="scipy.stats.kurtosis.html#scipy.stats.kurtosis" title="scipy.stats.kurtosis"><tt class="xref py py-obj docutils literal"><span class="pre">kurtosis</span></tt></a></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

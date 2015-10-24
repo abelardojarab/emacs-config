@@ -1,0 +1,1 @@
+{"entries":[{"name":"Attributes","isHeader":true},{"name":"name","path":"attr-name","entryType":"Attribute"},{"name":"type","path":"attr-type","entryType":"Attribute"},{"name":"value","path":"attr-value","entryType":"Attribute"},{"name":"valuetype","path":"attr-valuetype","entryType":"Attribute"}]}

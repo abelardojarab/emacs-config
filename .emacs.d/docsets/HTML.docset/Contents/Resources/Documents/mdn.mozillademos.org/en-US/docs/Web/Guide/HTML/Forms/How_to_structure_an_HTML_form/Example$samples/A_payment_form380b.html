@@ -1,0 +1,158 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/How_to_structure_an_HTML_form/Example$samples/A_payment_form?revision=391609 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 10:04:52 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+                <style type="text/css">
+            h1 {
+  margin-top: 0;
+}
+
+ul {
+  margin : 0;
+  padding: 0;
+  list-style: none;
+}
+
+form {
+  margin: 0 auto;
+  width : 400px;
+
+  padding: 1em;
+  border : 1px solid #CCC;
+  border-radius: 1em;
+}
+
+div + div {
+  margin-top: 1em;
+}
+
+label span{
+  display: inline-block;
+  width  : 120px;
+  text-align: right;
+}
+
+input, textarea {
+  font: 1em sans-serif;
+
+  width: 250px;
+  -moz-box-sizing: border-box;
+       box-sizing: border-box;
+
+  border: 1px solid #999;
+}
+
+input[type=checkbox], input[type=radio] {
+  width : auto;
+  border: none;
+}
+
+input:focus, textarea:focus {
+  border-color: #000;
+}
+
+textarea {
+  vertical-align: top;
+
+  height: 5em;
+
+  resize: vertical;
+}
+
+fieldset {
+  width: 250px;
+  -moz-box-sizing: border-box;
+       box-sizing: border-box;
+
+  margin-left: 124px;
+ 
+  border: 1px solid #999;
+}
+
+button {
+  margin-left: 124px;
+}
+        </style>
+            </head>
+    <body>
+                    <form action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi" method="post">
+  <h1>Payment form</h1>
+  <p>Required fields are followed by <strong><abbr title="required">*</abbr></strong>.</p>
+ 
+  <section>
+  <h2>Contact information</h2>
+ 
+  <fieldset>
+    <legend>Title</legend>
+    <ul>
+    <li>
+      <label for="title_1">
+      <input type="radio" id="title_1" name="title" value="M.">
+      Mister
+      </label>
+    </li>
+    <li>
+      <label for="title_2">
+      <input type="radio" id="title_2" name="title" value="Ms.">
+      Miss
+      </label>
+    </li>
+    </ul>
+  </fieldset>
+ 
+  <p>
+    <label for="name">
+    <span>Name: </span>
+    <input type="text" id="name" name="username" required="">
+    <strong><abbr title="required">*</abbr></strong>
+    </label>
+  </p>
+ 
+   <p>
+    <label for="mail">
+    <span>E-mail: </span>
+    <input type="email" id="mail" name="usermail" required="">
+    <strong><abbr title="required">*</abbr></strong>
+    </label>
+  </p>
+  </section>
+ 
+  <section>
+  <h2>Payment information</h2>
+ 
+  <p>
+    <label for="card">
+    <span>Card type:</span>
+    <select id="card" name="usercard">
+      <option value="visa">Visa</option>
+      <option value="mc">Mastercard</option>
+      <option value="amex">American Express</option>
+    </select>
+    </label>
+  </p>
+  <p>
+    <label for="number">
+    <span>Card number:</span>
+    <input type="text" id="number" name="cardnumber" required="">
+    <strong><abbr title="required">*</abbr></strong>
+    </label>
+  </p>
+  <p>
+    <label for="date">
+    <span>Expiration date:</span>
+    <input type="text" id="date" name="expiration" required="">
+    <strong><abbr title="required">*</abbr></strong>
+    <em>formated as mm/yy</em>
+    </label>
+  </p>
+  </section>
+ 
+  <section>
+  <p>
+    <button>Validate the payment</button>
+  </p>
+  </section>
+</form>
+                    
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/How_to_structure_an_HTML_form/Example$samples/A_payment_form?revision=391609 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 10:04:52 GMT -->
+</body></html>

@@ -1,0 +1,523 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.optimize.minimize</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Optimization and root finding (scipy.optimize)" href="../optimize.html">
+    <link rel="next" title="scipy.optimize.minimize_scalar" href="scipy.optimize.minimize_scalar.html">
+    <link rel="prev" title="Routines" href="../optimize.nonlin.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../optimize.html" accesskey="U">Optimization and root finding (<tt class="docutils literal"><span class="pre">scipy.optimize</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.optimize.minimize_scalar.html" title="scipy.optimize.minimize_scalar" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../optimize.nonlin.html" title="Routines" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../optimize.nonlin.html" title="previous chapter">Routines</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.optimize.minimize_scalar.html" title="next chapter">scipy.optimize.minimize_scalar</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-optimize-minimize">
+<h1>scipy.optimize.minimize<a class="headerlink" href="#scipy-optimize-minimize" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.optimize.minimize"></a><dt id="scipy.optimize.minimize">
+<tt class="descclassname">scipy.optimize.</tt><tt class="descname">minimize</tt><big>(</big><em>fun</em>, <em>x0</em>, <em>args=()</em>, <em>method=None</em>, <em>jac=None</em>, <em>hess=None</em>, <em>hessp=None</em>, <em>bounds=None</em>, <em>constraints=()</em>, <em>tol=None</em>, <em>callback=None</em>, <em>options=None</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/optimize/_minimize.py#L36"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.optimize.minimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimization of scalar function of one or more variables.</p>
+<p>In general, the optimization problems are of the form:</p>
+<p>minimize f(x)</p>
+<p>subject to:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">g_i(x)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>, i = 1,...,m
+<tt class="docutils literal"><span class="pre">h_j(x)</span>&nbsp; <span class="pre">=</span> <span class="pre">0</span></tt>, j = 1,...,p</div></blockquote>
+<p>Where x is a vector of one or more variables.
+<tt class="docutils literal"><span class="pre">g_i(x)</span></tt> are the inequality constraints.
+<tt class="docutils literal"><span class="pre">h_j(x)</span></tt> are the equality constrains.</p>
+<p>Optionally, the lower and upper bounds for each element in x can also be specified 
+using the <em class="xref py py-obj">bounds</em> argument.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fun</strong> : callable</p>
+<blockquote>
+<div><p>Objective function.</p>
+</div></blockquote>
+<p><strong>x0</strong> : ndarray</p>
+<blockquote>
+<div><p>Initial guess.</p>
+</div></blockquote>
+<p><strong>args</strong> : tuple, optional</p>
+<blockquote>
+<div><p>Extra arguments passed to the objective function and its
+derivatives (Jacobian, Hessian).</p>
+</div></blockquote>
+<p><strong>method</strong> : str or callable, optional</p>
+<blockquote>
+<div><p>Type of solver.  Should be one of</p>
+<blockquote>
+<div><ul class="simple">
+<li>‘Nelder-Mead’ <a class="reference internal" href="../optimize.minimize-neldermead.html#optimize-minimize-neldermead"><em>(see here)</em></a></li>
+<li>‘Powell’      <a class="reference internal" href="../optimize.minimize-powell.html#optimize-minimize-powell"><em>(see here)</em></a></li>
+<li>‘CG’          <a class="reference internal" href="../optimize.minimize-cg.html#optimize-minimize-cg"><em>(see here)</em></a></li>
+<li>‘BFGS’        <a class="reference internal" href="../optimize.minimize-bfgs.html#optimize-minimize-bfgs"><em>(see here)</em></a></li>
+<li>‘Newton-CG’   <a class="reference internal" href="../optimize.minimize-newtoncg.html#optimize-minimize-newtoncg"><em>(see here)</em></a></li>
+<li>‘L-BFGS-B’    <a class="reference internal" href="../optimize.minimize-lbfgsb.html#optimize-minimize-lbfgsb"><em>(see here)</em></a></li>
+<li>‘TNC’         <a class="reference internal" href="../optimize.minimize-tnc.html#optimize-minimize-tnc"><em>(see here)</em></a></li>
+<li>‘COBYLA’      <a class="reference internal" href="../optimize.minimize-cobyla.html#optimize-minimize-cobyla"><em>(see here)</em></a></li>
+<li>‘SLSQP’       <a class="reference internal" href="../optimize.minimize-slsqp.html#optimize-minimize-slsqp"><em>(see here)</em></a></li>
+<li>‘dogleg’      <a class="reference internal" href="../optimize.minimize-dogleg.html#optimize-minimize-dogleg"><em>(see here)</em></a></li>
+<li>‘trust-ncg’   <a class="reference internal" href="../optimize.minimize-trustncg.html#optimize-minimize-trustncg"><em>(see here)</em></a></li>
+<li>custom - a callable object (added in version 0.14.0),
+see below for description.</li>
+</ul>
+</div></blockquote>
+<p>If not given, chosen to be one of <tt class="docutils literal"><span class="pre">BFGS</span></tt>, <tt class="docutils literal"><span class="pre">L-BFGS-B</span></tt>, <tt class="docutils literal"><span class="pre">SLSQP</span></tt>,
+depending if the problem has constraints or bounds.</p>
+</div></blockquote>
+<p><strong>jac</strong> : bool or callable, optional</p>
+<blockquote>
+<div><p>Jacobian (gradient) of objective function. Only for CG, BFGS,
+Newton-CG, L-BFGS-B, TNC, SLSQP, dogleg, trust-ncg.
+If <em class="xref py py-obj">jac</em> is a Boolean and is True, <em class="xref py py-obj">fun</em> is assumed to return the
+gradient along with the objective function. If False, the
+gradient will be estimated numerically.
+<em class="xref py py-obj">jac</em> can also be a callable returning the gradient of the
+objective. In this case, it must accept the same arguments as <em class="xref py py-obj">fun</em>.</p>
+</div></blockquote>
+<p><strong>hess, hessp</strong> : callable, optional</p>
+<blockquote>
+<div><p>Hessian (matrix of second-order derivatives) of objective function or
+Hessian of objective function times an arbitrary vector p.  Only for
+Newton-CG, dogleg, trust-ncg.
+Only one of <em class="xref py py-obj">hessp</em> or <em class="xref py py-obj">hess</em> needs to be given.  If <em class="xref py py-obj">hess</em> is
+provided, then <em class="xref py py-obj">hessp</em> will be ignored.  If neither <em class="xref py py-obj">hess</em> nor
+<em class="xref py py-obj">hessp</em> is provided, then the Hessian product will be approximated
+using finite differences on <em class="xref py py-obj">jac</em>. <em class="xref py py-obj">hessp</em> must compute the Hessian
+times an arbitrary vector.</p>
+</div></blockquote>
+<p><strong>bounds</strong> : sequence, optional</p>
+<blockquote>
+<div><p>Bounds for variables (only for L-BFGS-B, TNC and SLSQP).
+<tt class="docutils literal"><span class="pre">(min,</span> <span class="pre">max)</span></tt> pairs for each element in <tt class="docutils literal"><span class="pre">x</span></tt>, defining
+the bounds on that parameter. Use None for one of <tt class="docutils literal"><span class="pre">min</span></tt> or
+<tt class="docutils literal"><span class="pre">max</span></tt> when there is no bound in that direction.</p>
+</div></blockquote>
+<p><strong>constraints</strong> : dict or sequence of dict, optional</p>
+<blockquote>
+<div><p>Constraints definition (only for COBYLA and SLSQP).
+Each constraint is defined in a dictionary with fields:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>type <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Constraint type: ‘eq’ for equality, ‘ineq’ for inequality.</p>
+</dd>
+<dt>fun <span class="classifier-delimiter">:</span> <span class="classifier">callable</span></dt>
+<dd><p class="first last">The function defining the constraint.</p>
+</dd>
+<dt>jac <span class="classifier-delimiter">:</span> <span class="classifier">callable, optional</span></dt>
+<dd><p class="first last">The Jacobian of <em class="xref py py-obj">fun</em> (only for SLSQP).</p>
+</dd>
+<dt>args <span class="classifier-delimiter">:</span> <span class="classifier">sequence, optional</span></dt>
+<dd><p class="first last">Extra arguments to be passed to the function and Jacobian.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Equality constraint means that the constraint function result is to
+be zero whereas inequality means that it is to be non-negative.
+Note that COBYLA only supports inequality constraints.</p>
+</div></blockquote>
+<p><strong>tol</strong> : float, optional</p>
+<blockquote>
+<div><p>Tolerance for termination. For detailed control, use solver-specific
+options.</p>
+</div></blockquote>
+<p><strong>options</strong> : dict, optional</p>
+<blockquote>
+<div><p>A dictionary of solver options. All methods accept the following
+generic options:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>maxiter <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Maximum number of iterations to perform.</p>
+</dd>
+<dt>disp <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Set to True to print convergence messages.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>For method-specific options, see <a class="reference internal" href="scipy.optimize.show_options.html#scipy.optimize.show_options" title="scipy.optimize.show_options"><tt class="xref py py-func docutils literal"><span class="pre">show_options</span></tt></a>.</p>
+</div></blockquote>
+<p><strong>callback</strong> : callable, optional</p>
+<blockquote>
+<div><p>Called after each iteration, as <tt class="docutils literal"><span class="pre">callback(xk)</span></tt>, where <tt class="docutils literal"><span class="pre">xk</span></tt> is the
+current parameter vector.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>res</strong> : OptimizeResult</p>
+<blockquote class="last">
+<div><p>The optimization result represented as a <tt class="docutils literal"><span class="pre">OptimizeResult</span></tt> object.
+Important attributes are: <tt class="docutils literal"><span class="pre">x</span></tt> the solution array, <tt class="docutils literal"><span class="pre">success</span></tt> a
+Boolean flag indicating if the optimizer exited successfully and
+<tt class="docutils literal"><span class="pre">message</span></tt> which describes the cause of the termination. See
+<a class="reference internal" href="scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult" title="scipy.optimize.OptimizeResult"><tt class="xref py py-obj docutils literal"><span class="pre">OptimizeResult</span></tt></a> for a description of other attributes.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="scipy.optimize.minimize_scalar.html#scipy.optimize.minimize_scalar" title="scipy.optimize.minimize_scalar"><tt class="xref py py-obj docutils literal"><span class="pre">minimize_scalar</span></tt></a></dt>
+<dd>Interface to minimization algorithms for scalar univariate functions</dd>
+<dt><a class="reference internal" href="scipy.optimize.show_options.html#scipy.optimize.show_options" title="scipy.optimize.show_options"><tt class="xref py py-obj docutils literal"><span class="pre">show_options</span></tt></a></dt>
+<dd>Additional options accepted by the solvers</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>This section describes the available solvers that can be selected by the
+‘method’ parameter. The default method is <em>BFGS</em>.</p>
+<p><strong>Unconstrained minimization</strong></p>
+<p>Method <a class="reference internal" href="../optimize.minimize-neldermead.html#optimize-minimize-neldermead"><em>Nelder-Mead</em></a> uses the
+Simplex algorithm <a class="reference internal" href="#r142" id="id1">[R142]</a>, <a class="reference internal" href="#r143" id="id2">[R143]</a>. This algorithm has been successful
+in many applications but other algorithms using the first and/or
+second derivatives information might be preferred for their better
+performances and robustness in general.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-powell.html#optimize-minimize-powell"><em>Powell</em></a> is a modification
+of Powell’s method <a class="reference internal" href="#r144" id="id3">[R144]</a>, <a class="reference internal" href="#r145" id="id4">[R145]</a> which is a conjugate direction
+method. It performs sequential one-dimensional minimizations along
+each vector of the directions set (<em class="xref py py-obj">direc</em> field in <em class="xref py py-obj">options</em> and
+<em class="xref py py-obj">info</em>), which is updated at each iteration of the main
+minimization loop. The function need not be differentiable, and no
+derivatives are taken.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-cg.html#optimize-minimize-cg"><em>CG</em></a> uses a nonlinear conjugate
+gradient algorithm by Polak and Ribiere, a variant of the
+Fletcher-Reeves method described in <a class="reference internal" href="#r146" id="id5">[R146]</a> pp.  120-122. Only the
+first derivatives are used.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-bfgs.html#optimize-minimize-bfgs"><em>BFGS</em></a> uses the quasi-Newton
+method of Broyden, Fletcher, Goldfarb, and Shanno (BFGS) <a class="reference internal" href="#r146" id="id6">[R146]</a>
+pp. 136. It uses the first derivatives only. BFGS has proven good
+performance even for non-smooth optimizations. This method also
+returns an approximation of the Hessian inverse, stored as
+<em class="xref py py-obj">hess_inv</em> in the OptimizeResult object.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-newtoncg.html#optimize-minimize-newtoncg"><em>Newton-CG</em></a> uses a
+Newton-CG algorithm <a class="reference internal" href="#r146" id="id7">[R146]</a> pp. 168 (also known as the truncated
+Newton method). It uses a CG method to the compute the search
+direction. See also <em>TNC</em> method for a box-constrained
+minimization with a similar algorithm.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-dogleg.html#optimize-minimize-dogleg"><em>dogleg</em></a> uses the dog-leg
+trust-region algorithm <a class="reference internal" href="#r146" id="id8">[R146]</a> for unconstrained minimization. This
+algorithm requires the gradient and Hessian; furthermore the
+Hessian is required to be positive definite.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-trustncg.html#optimize-minimize-trustncg"><em>trust-ncg</em></a> uses the
+Newton conjugate gradient trust-region algorithm <a class="reference internal" href="#r146" id="id9">[R146]</a> for
+unconstrained minimization. This algorithm requires the gradient
+and either the Hessian or a function that computes the product of
+the Hessian with a given vector.</p>
+<p><strong>Constrained minimization</strong></p>
+<p>Method <a class="reference internal" href="../optimize.minimize-lbfgsb.html#optimize-minimize-lbfgsb"><em>L-BFGS-B</em></a> uses the L-BFGS-B
+algorithm <a class="reference internal" href="#r147" id="id10">[R147]</a>, <a class="reference internal" href="#r148" id="id11">[R148]</a> for bound constrained minimization.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-tnc.html#optimize-minimize-tnc"><em>TNC</em></a> uses a truncated Newton
+algorithm <a class="reference internal" href="#r146" id="id12">[R146]</a>, <a class="reference internal" href="#r149" id="id13">[R149]</a> to minimize a function with variables subject
+to bounds. This algorithm uses gradient information; it is also
+called Newton Conjugate-Gradient. It differs from the <em>Newton-CG</em>
+method described above as it wraps a C implementation and allows
+each variable to be given upper and lower bounds.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-cobyla.html#optimize-minimize-cobyla"><em>COBYLA</em></a> uses the
+Constrained Optimization BY Linear Approximation (COBYLA) method
+<a class="reference internal" href="#r150" id="id14">[R150]</a>, <a class="footnote-reference" href="#id18" id="id15">[10]</a>, <a class="footnote-reference" href="#id19" id="id16">[11]</a>. The algorithm is based on linear
+approximations to the objective function and each constraint. The
+method wraps a FORTRAN implementation of the algorithm. The
+constraints functions ‘fun’ may return either a single number
+or an array or list of numbers.</p>
+<p>Method <a class="reference internal" href="../optimize.minimize-slsqp.html#optimize-minimize-slsqp"><em>SLSQP</em></a> uses Sequential
+Least SQuares Programming to minimize a function of several
+variables with any combination of bounds, equality and inequality
+constraints. The method wraps the SLSQP Optimization subroutine
+originally implemented by Dieter Kraft <a class="footnote-reference" href="#id20" id="id17">[12]</a>. Note that the
+wrapper handles infinite values in bounds by converting them into
+large floating values.</p>
+<p><strong>Custom minimizers</strong></p>
+<p>It may be useful to pass a custom minimization method, for example
+when using a frontend to this method such as <a class="reference internal" href="scipy.optimize.basinhopping.html#scipy.optimize.basinhopping" title="scipy.optimize.basinhopping"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.optimize.basinhopping</span></tt></a>
+or a different library.  You can simply pass a callable as the <tt class="docutils literal"><span class="pre">method</span></tt>
+parameter.</p>
+<p>The callable is called as <tt class="docutils literal"><span class="pre">method(fun,</span> <span class="pre">x0,</span> <span class="pre">args,</span> <span class="pre">**kwargs,</span> <span class="pre">**options)</span></tt>
+where <tt class="docutils literal"><span class="pre">kwargs</span></tt> corresponds to any other parameters passed to <a class="reference internal" href="#scipy.optimize.minimize" title="scipy.optimize.minimize"><tt class="xref py py-obj docutils literal"><span class="pre">minimize</span></tt></a>
+(such as <em class="xref py py-obj">callback</em>, <em class="xref py py-obj">hess</em>, etc.), except the <em class="xref py py-obj">options</em> dict, which has
+its contents also passed as <em class="xref py py-obj">method</em> parameters pair by pair.  Also, if
+<em class="xref py py-obj">jac</em> has been passed as a bool type, <em class="xref py py-obj">jac</em> and <em class="xref py py-obj">fun</em> are mangled so that
+<em class="xref py py-obj">fun</em> returns just the function values and <em class="xref py py-obj">jac</em> is converted to a function
+returning the Jacobian.  The method shall return an <tt class="docutils literal"><span class="pre">OptimizeResult</span></tt>
+object.</p>
+<p>The provided <em class="xref py py-obj">method</em> callable must be able to accept (and possibly ignore)
+arbitrary parameters; the set of parameters accepted by <a class="reference internal" href="#scipy.optimize.minimize" title="scipy.optimize.minimize"><tt class="xref py py-obj docutils literal"><span class="pre">minimize</span></tt></a> may
+expand in future versions and then these parameters will be passed to
+the method.  You can find an example in the scipy.optimize tutorial.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r142" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R142]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id21">2</a>)</em> Nelder, J A, and R Mead. 1965. A Simplex Method for Function
+Minimization. The Computer Journal 7: 308-13.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r143" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R143]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id22">2</a>)</em> Wright M H. 1996. Direct search methods: Once scorned, now
+respectable, in Numerical Analysis 1995: Proceedings of the 1995
+Dundee Biennial Conference in Numerical Analysis (Eds. D F
+Griffiths and G A Watson). Addison Wesley Longman, Harlow, UK.
+191-208.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r144" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R144]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id23">2</a>)</em> Powell, M J D. 1964. An efficient method for finding the minimum of
+a function of several variables without calculating derivatives. The
+Computer Journal 7: 155-162.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r145" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R145]</td><td><em>(<a class="fn-backref" href="#id4">1</a>, <a class="fn-backref" href="#id24">2</a>)</em> Press W, S A Teukolsky, W T Vetterling and B P Flannery.
+Numerical Recipes (any edition), Cambridge University Press.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r146" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R146]</td><td><em>(<a class="fn-backref" href="#id5">1</a>, <a class="fn-backref" href="#id6">2</a>, <a class="fn-backref" href="#id7">3</a>, <a class="fn-backref" href="#id8">4</a>, <a class="fn-backref" href="#id9">5</a>, <a class="fn-backref" href="#id12">6</a>, <a class="fn-backref" href="#id25">7</a>, <a class="fn-backref" href="#id33">8</a>)</em> Nocedal, J, and S J Wright. 2006. Numerical Optimization.
+Springer New York.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r147" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R147]</td><td><em>(<a class="fn-backref" href="#id10">1</a>, <a class="fn-backref" href="#id26">2</a>)</em> Byrd, R H and P Lu and J. Nocedal. 1995. A Limited Memory
+Algorithm for Bound Constrained Optimization. SIAM Journal on
+Scientific and Statistical Computing 16 (5): 1190-1208.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r148" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R148]</td><td><em>(<a class="fn-backref" href="#id11">1</a>, <a class="fn-backref" href="#id27">2</a>)</em> Zhu, C and R H Byrd and J Nocedal. 1997. L-BFGS-B: Algorithm
+778: L-BFGS-B, FORTRAN routines for large scale bound constrained
+optimization. ACM Transactions on Mathematical Software 23 (4):
+550-560.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r149" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R149]</td><td><em>(<a class="fn-backref" href="#id13">1</a>, <a class="fn-backref" href="#id28">2</a>)</em> Nash, S G. Newton-Type Minimization Via the Lanczos Method.
+1984. SIAM Journal of Numerical Analysis 21: 770-778.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r150" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R150]</td><td><em>(<a class="fn-backref" href="#id14">1</a>, <a class="fn-backref" href="#id29">2</a>)</em> Powell, M J D. A direct search optimization method that models
+the objective and constraint functions by linear interpolation.
+1994. Advances in Optimization and Numerical Analysis, eds. S. Gomez
+and J-P Hennart, Kluwer Academic (Dordrecht), 51-67.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id18" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[10]</td><td><em>(<a class="fn-backref" href="#id15">1</a>, <a class="fn-backref" href="#id30">2</a>)</em> Powell M J D. Direct search algorithms for optimization
+calculations. 1998. Acta Numerica 7: 287-336.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id19" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[11]</td><td><em>(<a class="fn-backref" href="#id16">1</a>, <a class="fn-backref" href="#id31">2</a>)</em> Powell M J D. A view of algorithms for optimization without
+derivatives. 2007.Cambridge University Technical Report DAMTP
+2007/NA03</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id20" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label">[12]</td><td><em>(<a class="fn-backref" href="#id17">1</a>, <a class="fn-backref" href="#id32">2</a>)</em> Kraft, D. A software package for sequential quadratic
+programming. 1988. Tech. Rep. DFVLR-FB 88-28, DLR German Aerospace
+Center – Institute for Flight Mechanics, Koln, Germany.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Let us consider the problem of minimizing the Rosenbrock function. This
+function (and its respective derivatives) is implemented in <a class="reference internal" href="scipy.optimize.rosen.html#scipy.optimize.rosen" title="scipy.optimize.rosen"><tt class="xref py py-obj docutils literal"><span class="pre">rosen</span></tt></a>
+(resp. <a class="reference internal" href="scipy.optimize.rosen_der.html#scipy.optimize.rosen_der" title="scipy.optimize.rosen_der"><tt class="xref py py-obj docutils literal"><span class="pre">rosen_der</span></tt></a>, <a class="reference internal" href="scipy.optimize.rosen_hess.html#scipy.optimize.rosen_hess" title="scipy.optimize.rosen_hess"><tt class="xref py py-obj docutils literal"><span class="pre">rosen_hess</span></tt></a>) in the <a class="reference internal" href="../optimize.html#module-scipy.optimize" title="scipy.optimize"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.optimize</span></tt></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">rosen</span><span class="p">,</span> <span class="n">rosen_der</span>
+</pre></div>
+</div>
+<p>A simple application of the <em>Nelder-Mead</em> method is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.9</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">rosen</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">'Nelder-Mead'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">x</span>
+<span class="go">[ 1.  1.  1.  1.  1.]</span>
+</pre></div>
+</div>
+<p>Now using the <em>BFGS</em> algorithm, using the first derivative and a few
+options:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">rosen</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">'BFGS'</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="n">rosen_der</span><span class="p">,</span>
+<span class="gp">... </span>               <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s">'gtol'</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="s">'disp'</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+<span class="go">Optimization terminated successfully.</span>
+<span class="go">         Current function value: 0.000000</span>
+<span class="go">         Iterations: 52</span>
+<span class="go">         Function evaluations: 64</span>
+<span class="go">         Gradient evaluations: 64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">x</span>
+<span class="go">array([ 1.  1.  1.  1.  1.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="go">Optimization terminated successfully.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">hess_inv</span>
+<span class="go">[[ 0.00749589  0.01255155  0.02396251  0.04750988  0.09495377]</span>
+<span class="go"> [ 0.01255155  0.02510441  0.04794055  0.09502834  0.18996269]</span>
+<span class="go"> [ 0.02396251  0.04794055  0.09631614  0.19092151  0.38165151]</span>
+<span class="go"> [ 0.04750988  0.09502834  0.19092151  0.38341252  0.7664427 ]</span>
+<span class="go"> [ 0.09495377  0.18996269  0.38165151  0.7664427   1.53713523]]</span>
+</pre></div>
+</div>
+<p>Next, consider a minimization problem with several constraints (namely
+Example 16.4 from <a class="reference internal" href="#r146" id="id33">[R146]</a>). The objective function is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fun</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>There are three constraints defined as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cons</span> <span class="o">=</span> <span class="p">({</span><span class="s">'type'</span><span class="p">:</span> <span class="s">'ineq'</span><span class="p">,</span> <span class="s">'fun'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span>  <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">},</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="s">'type'</span><span class="p">:</span> <span class="s">'ineq'</span><span class="p">,</span> <span class="s">'fun'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">6</span><span class="p">},</span>
+<span class="gp">... </span>        <span class="p">{</span><span class="s">'type'</span><span class="p">:</span> <span class="s">'ineq'</span><span class="p">,</span> <span class="s">'fun'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>And variables must be positive, hence the following bounds:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bnds</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The optimization problem is solved using the SLSQP method as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s">'SLSQP'</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bnds</span><span class="p">,</span>
+<span class="gp">... </span>               <span class="n">constraints</span><span class="o">=</span><span class="n">cons</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It should converge to the theoretical solution (1.4 ,1.7).</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

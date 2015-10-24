@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Beta Distribution</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../../index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../../scipy-optimize-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="beta-distribution">
+<span id="continuous-beta"></span><h1>Beta Distribution<a class="headerlink" href="#beta-distribution" title="Permalink to this headline">¶</a></h1>
+<p>Two shape parameters</p>
+<div class="math">
+\[\begin{split}a,b&gt;0\end{split}\]</div>
+<div class="math">
+\[ \begin{eqnarray*} f\left(x;a,b\right) & = & \frac{\Gamma\left(a+b\right)}{\Gamma\left(a\right)\Gamma\left(b\right)}x^{a-1}\left(1-x\right)^{b-1}I_{\left(0,1\right)}\left(x\right)\\ F\left(x;a,b\right) & = & \int_{0}^{x}f\left(y;a,b\right)dy=I\left(x,a,b\right)\\ G\left(\alpha;a,b\right) & = & I^{-1}\left(\alpha;a,b\right)\\ M\left(t\right) & = & \frac{\Gamma\left(a\right)\Gamma\left(b\right)}{\Gamma\left(a+b\right)}\,_{1}F_{1}\left(a;a+b;t\right)\\ \mu & = & \frac{a}{a+b}\\ \mu_{2} & = & \frac{ab\left(a+b+1\right)}{\left(a+b\right)^{2}}\\ \gamma_{1} & = & 2\frac{b-a}{a+b+2}\sqrt{\frac{a+b+1}{ab}}\\ \gamma_{2} & = & \frac{6\left(a^{3}+a^{2}\left(1-2b\right)+b^{2}\left(b+1\right)-2ab\left(b+2\right)\right)}{ab\left(a+b+2\right)\left(a+b+3\right)}\\ m_{d} & = & \frac{\left(a-1\right)}{\left(a+b-2\right)}\, a+b\neq2\end{eqnarray*}\]</div><p><span class="math">\(f\left(x;a,1\right)\)</span> is also called the Power-function distribution.</p>
+<div class="math">
+\[l_{\mathbf{x}}\left(a,b\right)=-N\log\Gamma\left(a+b\right)+N\log\Gamma\left(a\right)+N\log\Gamma\left(b\right)-N\left(a-1\right)\overline{\log\mathbf{x}}-N\left(b-1\right)\overline{\log\left(1-\mathbf{x}\right)}\]</div>
+<p>All of the <span class="math">\(x_{i}\in\left[0,1\right]\)</span></p>
+<p>Implementation: <a class="reference internal" href="../../generated/scipy.stats.beta.html#scipy.stats.beta" title="scipy.stats.beta"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.stats.beta</span></tt></a></p>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

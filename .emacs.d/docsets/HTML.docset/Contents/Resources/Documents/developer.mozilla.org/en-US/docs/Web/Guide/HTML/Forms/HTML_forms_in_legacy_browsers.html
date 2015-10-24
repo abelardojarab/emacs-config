@@ -1,0 +1,693 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:52:05 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>HTML forms in legacy browsers</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+    
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers$json">
+  <link rel="canonical" href="HTML_forms_in_legacy_browsers.html">
+
+            <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers" title="古いブラウザでの HTML フォーム">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="HTML forms in legacy browsers">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers">
+  <meta name="twitter:title" content="HTML forms in legacy browsers">
+    <meta property="og:description" content="All web developers learn very quickly (and sometimes painfully) that the Web is a very rough place for them. Our worst curse is legacy browsers. Okay, let's admit it, when we said &quot;legacy browser&quot; we all have in mind old versions of Internet Explorer... but it's far from the only one. A one-year-old Firefox such as the ESR version is a legacy browser too. And in the mobile world? When neither the browser nor the OS can be updated? Yes, there are many older Android phones or iPhones that have stock browsers that are not up to date. These are also legacy browsers.">
+  <meta name="description" content="All web developers learn very quickly (and sometimes painfully) that the Web is a very rough place for them. Our worst curse is legacy browsers. Okay, let's admit it, when we said &quot;legacy browser&quot; we all have in mind old versions of Internet Explorer... but it's far from the only one. A one-year-old Firefox such as the ESR version is a legacy browser too. And in the mobile world? When neither the browser nor the OS can be updated? Yes, there are many older Android phones or iPhones that have stock browsers that are not up to date. These are also legacy browsers.">
+  <meta name="twitter:description" content="All web developers learn very quickly (and sometimes painfully) that the Web is a very rough place for them. Our worst curse is legacy browsers. Okay, let's admit it, when we said &quot;legacy browser&quot; we all have in mind old versions of Internet Explorer... but it's far from the only one. A one-year-old Firefox such as the ESR version is a legacy browser too. And in the mobile world? When neither the browser nor the OS can be updated? Yes, there are many older Android phones or iPhones that have stock browsers that are not up to date. These are also legacy browsers.">
+  
+      
+  </head>
+<body data-slug="Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FForms%2FHTML_forms_in_legacy_browsers" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FHTML%2FForms%2FHTML_forms_in_legacy_browsers" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../../HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+   <!-- end is_zone -->
+
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers" title="古いブラウザでの HTML フォーム">日本語</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../../HTML.html" rel="v:url" property="v:title">HTML developer guide</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="../Forms.html" rel="v:url" property="v:title">HTML forms guide</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">HTML forms in legacy browsers</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>HTML forms in legacy browsers</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 6 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/nunu10000" title="View profile: nunu10000">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nunu10000" data-src="../../../../../../../secure.gravatar.com/avatar/52baa62fafd95dad8ae90215542380a16aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">nunu10000</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Learn_about_the_issues" rel="internal">Learn about the issues</a><ol><li><a href="#Browser_vendor_documentation" rel="internal">Browser vendor documentation</a></li><li><a href="#Independent_documentation" rel="internal">Independent documentation</a></li></ol></li><li><a href="#Make_things_simple" rel="internal">Make things simple</a><ol><li><a href="#Graceful_degradation_is_web_developer's_best_friend" rel="internal">Graceful degradation is web developer's best friend</a><ol><li><a href="#HTML_input_types" rel="internal">HTML input types</a></li><li><a href="#CSS_Attribute_Selectors" rel="internal">CSS Attribute Selectors</a></li><li><a href="#Form_buttons" rel="internal">Form buttons</a></li></ol></li><li><a href="#Let_go_of_CSS" rel="internal">Let go of CSS</a></li></ol></li><li><a href="#Feature_detection_and_polyfills" rel="internal">Feature detection and polyfills</a><ol><li><a href="#Unobtrusive_JavaScript" rel="internal">Unobtrusive JavaScript</a></li><li><a href="#The_Modernizr_library" rel="internal">The Modernizr library</a></li><li><a href="#Pay_attention_to_performance" rel="internal">Pay attention to performance</a></li></ol></li><li><a href="#Conclusion" rel="internal">Conclusion</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <p>All web developers learn very quickly (and sometimes painfully) that the Web is a very rough place for them. Our worst curse is legacy browsers. Okay, let's admit it, when we said "legacy browser" we all have in mind old versions of Internet Explorer ... but it's far from the only one. A one-year-old Firefox such as <a class="external" href="http://www.mozilla.org/en-US/firefox/organizations/" title="http://www.mozilla.org/en-US/firefox/organizations/">the ESR version</a> is a legacy browser too. And in the mobile world? When neither the browser nor the OS can be updated? Yes, there are many older Android phones or iPhones that have stock browsers that are not up to date. These are also legacy browsers.</p>
+<p>Sadly, dealing with that wilderness is part of the job. Fortunately, there are a few tricks to know that can help you to solve about 80% of the problems caused by legacy browsers.</p>
+<h2 id="Learn_about_the_issues">Learn about the issues</h2>
+<p>Actually, the most important thing is to read documentation about those browsers to try to understand the common patterns. For example, CSS support is the biggest issue with HTML forms in many cases. You are at the right place to start. Just check the support of the elements (or DOM interface) you want to use. MDN has compatibility tables available for many elements, properties or APIs that can be used in a web page. But there are other resources that can be amazingly helpful:</p>
+<h3 id="Browser_vendor_documentation">Browser vendor documentation</h3>
+<ul>
+ <li>Mozilla: You're in the right place, just browse MDN</li>
+ <li>Microsoft: <a class="external" href="http://msdn.microsoft.com/en-us/library/ff410218(v=vs.85).aspx" rel="external" title="http://msdn.microsoft.com/en-us/library/ff410218%28v=vs.85%29.aspx">Internet Explorer Standards Support Documentation</a></li>
+ <li>Opera: <a class="external" href="http://www.opera.com/docs/specs/" rel="external" title="http://www.opera.com/docs/specs/">Web specification support in Opera</a></li>
+ <li>WebKit: Because there are several different editions of this engine, things are a little trickier.
+  <ul>
+   <li><a class="external" href="https://www.webkit.org/blog/" rel="external" title="https://www.webkit.org/blog/">The WebKit blog</a> and <a class="external" href="http://planet.webkit.org/" rel="external" title="http://planet.webkit.org/">Planet WebKit</a> aggregate the best articles by WebKit core developers.</li>
+   <li><a class="external" href="http://www.chromium.org/developers/web-platform-status" title="http://www.chromium.org/developers/web-platform-status">The chromium web site</a> is also important.</li>
+   <li>As well as <a class="external" href="https://developer.apple.com/technologies/safari/" rel="external" title="https://developer.apple.com/technologies/safari/">the Apple web site.</a></li>
+  </ul>
+ </li>
+</ul>
+<h3 id="Independent_documentation">Independent documentation</h3>
+<ul>
+ <li><a class="external" href="http://caniuse.com/" rel="external" title="http://caniuse.com">Can I Use</a> has information about support for cutting edge technologies.</li>
+ <li><a class="external" href="http://www.quirksmode.org/" rel="external" title="http://www.quirksmode.org">Quirks Mode</a> is an amazing resource about browsers' compatibility. <a class="external" href="http://www.quirksmode.org/mobile/" rel="external" title="http://www.quirksmode.org/mobile/">The mobile part</a> is one of the best available at the moment.</li>
+ <li><a class="external" href="http://positioniseverything.net/" rel="external" title="http://positioniseverything.net/">Position Is Everything</a> is the best resource available about rendering bugs in legacy browsers and their work-arounds (if any).</li>
+ <li><a class="external" href="http://mobilehtml5.org/" rel="external" title="http://mobilehtml5.org">Mobile HTML5</a> has compatibility information for a wide range of mobile browsers, not just the "top 5" (including Nokia, Amazon, and Blackberry).</li>
+</ul>
+<h2 id="Make_things_simple">Make things simple</h2>
+<p>Because <a href="../../../../HTML/Forms.png" title="/en-US/docs/HTML/Forms">HTML forms</a> involves complex interaction, there is one rule of thumb: <a class="external" href="http://en.wikipedia.org/wiki/KISS_principle" rel="external" title="http://en.wikipedia.org/wiki/KISS_principle">keep it as simple as possible</a>. There are so many cases where we want forms that are "nicer" or "with advanced functionality", but building efficient HTML Forms is not a question of design or technology. Just as a reminder, take the time to read this article about <a class="external" href="http://www.uxforthemasses.com/forms-usability/" rel="external" title="http://www.uxforthemasses.com/forms-usability/">forms usability on UX For The Masses</a>.</p>
+<h3 id="Graceful_degradation_is_web_developer's_best_friend">Graceful degradation is web developer's best friend</h3>
+<p><a class="external" href="http://www.sitepoint.com/progressive-enhancement-graceful-degradation-choice/" rel="external" title="http://www.sitepoint.com/progressive-enhancement-graceful-degradation-choice/">Graceful degradation and progressive enhancement</a> are development patterns that allow you to build great stuff by supporting a wide range of browsers at the same time. When you build something for a modern browser, and you want to be sure it will work, one way or another, on legacy browsers, you are performing graceful degradation.</p>
+<p>Let's see some examples related to HTML forms.</p>
+<h4 id="HTML_input_types">HTML input types</h4>
+<p>The new input types brought by HTML5 are very cool because the way they degrade is highly predictable. If a browser does not know the value of the <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> attribute of an <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms."><code>&lt;input&gt;</code></a> element, it will fall back as if the value were <code>text</code>.</p>
+<pre class="brush: html">&lt;label for="myColor"&gt;
+&nbsp; Pick a color
+&nbsp; &lt;input type="color" id="myColor" name="color"&gt;
+&lt;/label&gt;</pre>
+<table>
+ <thead>
+  <tr>
+   <th scope="col" style="text-align: center;">Chrome 24</th>
+   <th scope="col" style="text-align: center;">Firefox 18</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th style="text-align: center;"><img alt="Screen shot of the color input on Chrome for Mac OSX" src="../../../../../../../mdn.mozillademos.org/files/4575/color-fallback-chrome.png" style="width: 139px; height: 35px;"></th>
+   <th style="text-align: center;"><img alt="Screen shot of the color input on Firefox for Mac OSX" src="../../../../../../../mdn.mozillademos.org/files/4577/color-fallback-firefox.png" style="width: 245px; height: 30px;"></th>
+  </tr>
+ </tbody>
+</table>
+<h4 id="CSS_Attribute_Selectors">CSS Attribute Selectors</h4>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/CSS/Attribute_selectors" title="/en-US/docs/CSS/Attribute_selectors">CSS Attribute selectors</a> are very useful with <a href="../../../../HTML/Forms.png" title="/en-US/docs/HTML/Forms">HTML Forms</a> but some legacy browsers do not support it. In that case, it's customary to double the type with an equivalent class:</p>
+<pre class="brush: html">&lt;input type="number" class="number"&gt;</pre>
+<pre class="brush: css">input[type=number] {
+  /* This can fail in some browsers */
+}
+
+input.number {
+  /* This will work everywhere */
+}</pre>
+<p>Note that the following is useless (because it's redundant) and can fail in some browsers:</p>
+<pre class="brush: css">input[type=number],
+input.number {
+  /* This can fail in some browsers because if they do not understand
+     one of the selectors, they will skip the whole rule */
+}</pre>
+<h4 id="Form_buttons">Form buttons</h4>
+<p>There are two ways to define buttons within HTML forms:</p>
+<ul>
+ <li>The <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms."><code>&lt;input&gt;</code></a> element with its attribute <code><a href="../../../HTML/Element/input.html#attr-type">type</a></code> set to the values <code>button</code>, <code>submit</code>, <code>reset</code> or <code>image</code></li>
+ <li>The <a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> element</li>
+</ul>
+<p>The&nbsp; <a href="../../../HTML/Element/input.html" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms."><code>&lt;input&gt;</code></a> element can make things a little difficult if you want to apply some CSS by using the element selector:</p>
+<pre class="brush: html">&lt;input type="button" class="button" value="click me"&gt;</pre>
+<pre class="brush: css">input {
+  /* This rule turns off the default rendering for buttons defined with an input element */
+  border: 1px solid #CCC;
+}
+
+input.button {
+  /* This does NOT restore the default rendering */
+  border: none;
+}
+
+input.button {
+  /* That doesn't either! Actually there is no standard way to do it in any browser */
+  border: auto;
+}</pre>
+<p>The <a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> element suffers from two possible issues:</p>
+<ul>
+ <li>A bug in some old versions of Internet Explorer. When the user click the button, it's not the content of the <code><a href="../../../HTML/Element/button.html#attr-value">value</a></code> attribute that is sent, but the HTML content available between the starting and ending tag of the <a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> element. This is an issue only if you want to send such a value, for example if the processing of the data depends on which button the user clicks.</li>
+ <li>Some very old browsers does not use <code>submit</code> as the default value for the <code><a href="../../../HTML/Element/button.html#attr-type">type</a></code> attribute, so it's recommended to always set the attribute <code><a href="../../../HTML/Element/button.html#attr-type">type</a></code> on <a href="../../../HTML/Element/button.html" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> elements.</li>
+</ul>
+<pre class="brush: html">&lt;!-- Clicking this button sends "&lt;em&gt;Do A&lt;/em&gt;" instead of "A" in some cases --&gt;
+&lt;button type="submit" name="IWantTo" value="A"&gt;
+  &lt;em&gt;Do A&lt;/em&gt;
+&lt;/button&gt;</pre>
+<p>Choosing one solution or the other is up to you based on your project's constraints.</p>
+<h3 id="Let_go_of_CSS">Let go of CSS</h3>
+<p>The biggest issue with HTML Forms and legacy browsers is the support for CSS. As you can see from the complexity of the <a href="https://developer.mozilla.org/en-US/docs/Property_compatibility_table_for_form_widgets" title="/en-US/docs/Property_compatibility_table_for_form_widgets">Property compatibility table for form widgets</a> article, it's very difficult. Even if it's still possible to do a few adjustments on text elements (such as sizing or font color), there are always side effects. The best approach remains to not style HTML Form widgets at all. But you can still apply styles to all the surrounding items. If you are a professional and if your client requires it, in that case, you can investigate some hard techniques such as <a href="How_to_build_custom_form_widgets.html" title="/en-US/docs/HTML/Forms/How_to_build_custom_form_widgets">rebuilding widgets with JavaScript</a>. But in that case, do not hesitate to <a class="external" href="http://www.smashingmagazine.com/2011/11/03/“but-the-client-wants-ie-6-support”/" rel="external" title="http://www.smashingmagazine.com/2011/11/03/“but-the-client-wants-ie-6-support”/">charge your client for such foolishness</a>.</p>
+<h2 id="Feature_detection_and_polyfills">Feature detection and polyfills</h2>
+<p>While JavaScript is an awesome technology in modern browsers, legacy browsers have many issues with it.</p>
+<h3 id="Unobtrusive_JavaScript">Unobtrusive JavaScript</h3>
+<p>One of the biggest problems is the availability of APIs. For that reason, it's considered best practice to work with "unobtrusive" JavaScript. It's a development pattern that defines two requirements:</p>
+<ul>
+ <li>A strict separation between structure and behaviors.</li>
+ <li>If the code breaks, the content and the basic functionalities must remain accessible and usable.</li>
+</ul>
+<p><a class="external" href="http://docs.webplatform.org/wiki/concepts/programming/the_principles_of_unobtrusive_javascript" rel="external" title="http://docs.webplatform.org/wiki/concepts/programming/the_principles_of_unobtrusive_javascript">The principles of unobtrusive JavaScript</a> (originally written by Peter-Paul Koch for Dev.Opera.com and now moved to Docs.WebPlatform.org) describes these ideas very well.</p>
+<h3 id="The_Modernizr_library">The Modernizr library</h3>
+<p>There are many cases where a good "polyfill" can help a lot by providing a missing API. A <a class="external" href="http://remysharp.com/2010/10/08/what-is-a-polyfill/" rel="external" title="http://remysharp.com/2010/10/08/what-is-a-polyfill/">polyfill</a> is a bit of JavaScript that "fills in the holes" in the functionality of legacy browsers. While they can be used to improve support for any functionality, using them for JavaScript is less risky than for CSS or HTML; there many cases where JavaScript can break (network issues, script conflicts, etc.). But for JavaScript, if you work with unobstructive JavaScript in mind, if polyfills are missing, it's no big deal.</p>
+<p>The best way to polyfill missing API is by using the <a class="external" href="http://modernizr.com/" rel="external" title="http://modernizr.com">Modernizr</a> library and its spin-off project: <a class="external" href="http://yepnopejs.com/" rel="external" title="http://yepnopejs.com">YepNope</a>. Modernizr is a library that allows you to test the availability of functionality in order to act accordingly. YepNope is a conditional loading library.</p>
+<p>Here is an example:</p>
+<pre class="brush: js">Modernizr.load({
+  // This tests if your browser supports the HTML5 form validation API
+  test : Modernizr.formvalidation,
+ 
+  // If the browser does not support it, the following polyfill is loaded
+  nope : form-validation-API-polyfill.js,
+ 
+  // In any case, your core App file that depends on that API is loaded
+  both : app.js,
+ 
+  // Once both files are loaded, this function is called in order to initialize the App.
+  complete : function () {
+    app.init();
+  }
+});</pre>
+<p>The Modernizr team conveniently maintains <a class="external" href="https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills" rel="external" title="https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills">a list of great polyfills</a>. Just pick what you need.</p>
+<div class="note">
+ <p><strong>Note:</strong> Modernizr has other awesome features to help you in dealing with unobstructive JavaScript and graceful degradation techniques. Please&nbsp;<a class="external" href="http://modernizr.com/docs/" rel="external" title="http://modernizr.com/docs/">read the Modernizr documentation</a>.</p>
+</div>
+<h3 id="Pay_attention_to_performance">Pay attention to performance</h3>
+<p>Even though scripts like Modernizr are very aware of performance, loading a 200 kilobyte polyfill can affect the performance of your application. This is especially critical with legacy browsers; many of them have a very slow JavaScript engine that can make the execution of all your polyfills painful for the user. Performance is a subject on its own, but legacy browsers are very sensitive to it: basically, they are slow and the more polyfills they need, the more JavaScript they have to process. So they are doubly burdened compared to modern browsers. Test your code with legacy browsers to see how they actually perform. Sometimes, dropping some functionality leads to a better user experience than having exactly the same functionality in all browsers. As a last reminder, just always think about the end users.</p>
+<h2 id="Conclusion">Conclusion</h2>
+<p>As you can see, dealing with legacy browsers is not just about forms. It's a whole set of techniques; however mastering all of them is beyond the scope of this article.</p>
+<p>If you read all the articles of this <a href="../../../../HTML/Forms.png" title="/en-US/docs/HTML/Forms">HTML Forms guide</a>, you should now be at ease with using forms. If you discover new techniques or hints, please help <a href="https://developer.mozilla.org/en-US/docs/Project:How_to_help" title="/en-US/docs/Project:How_to_help">improve the guide</a>.<br>
+ &nbsp;</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Example">Example</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Forms">Forms</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+              <li><a href="../../../../tag/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Intermediate">Intermediate</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/nunu10000">nunu10000</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>,             <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>,             <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,             <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,             <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/nunu10000">nunu10000</a>,
+                      <time datetime="2014-04-28T10:23:33-07:00">Apr 28, 2014, 10:23:33 AM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers" selected="">
+          English (US)
+        </option>
+                  <option value="/ja/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers">
+            日本語
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/HTML_forms_in_legacy_browsers by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:52:07 GMT -->
+</body></html>

@@ -1,0 +1,232 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.signal.StateSpace</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Signal processing (scipy.signal)" href="../signal.html">
+    <link rel="next" title="scipy.signal.StateSpace.A" href="scipy.signal.StateSpace.A.html">
+    <link rel="prev" title="scipy.signal.lti.step" href="scipy.signal.lti.step.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../signal.html" accesskey="U">Signal processing (<tt class="docutils literal"><span class="pre">scipy.signal</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.signal.StateSpace.A.html" title="scipy.signal.StateSpace.A" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.signal.lti.step.html" title="scipy.signal.lti.step" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.signal.lti.step.html" title="previous chapter">scipy.signal.lti.step</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.signal.StateSpace.A.html" title="next chapter">scipy.signal.StateSpace.A</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-signal-statespace">
+<h1>scipy.signal.StateSpace<a class="headerlink" href="#scipy-signal-statespace" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<a class="dashAnchor" name="//apple_ref/Class/scipy.signal.StateSpace"></a><dt id="scipy.signal.StateSpace">
+<em class="property">class </em><tt class="descclassname">scipy.signal.</tt><tt class="descname">StateSpace</tt><big>(</big><em>*system</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/signal/ltisys.py#L770"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.signal.StateSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear Time Invariant system class in state-space form.</p>
+<p>Represents the system as the first order differential equation
+<span class="math">\(\dot{x} = A x + B u\)</span>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*system</strong> : arguments</p>
+<blockquote class="last">
+<div><p>The <a class="reference internal" href="#scipy.signal.StateSpace" title="scipy.signal.StateSpace"><tt class="xref py py-obj docutils literal"><span class="pre">StateSpace</span></tt></a> class can be instantiated with 1 or 4 arguments.
+The following gives the number of input arguments and their
+interpretation:</p>
+<blockquote>
+<div><ul class="simple">
+<li>1: <a class="reference internal" href="scipy.signal.lti.html#scipy.signal.lti" title="scipy.signal.lti"><tt class="xref py py-obj docutils literal"><span class="pre">lti</span></tt></a> system: (<a class="reference internal" href="#scipy.signal.StateSpace" title="scipy.signal.StateSpace"><tt class="xref py py-obj docutils literal"><span class="pre">StateSpace</span></tt></a>, <a class="reference internal" href="scipy.signal.TransferFunction.html#scipy.signal.TransferFunction" title="scipy.signal.TransferFunction"><tt class="xref py py-obj docutils literal"><span class="pre">TransferFunction</span></tt></a> or
+<a class="reference internal" href="scipy.signal.ZerosPolesGain.html#scipy.signal.ZerosPolesGain" title="scipy.signal.ZerosPolesGain"><tt class="xref py py-obj docutils literal"><span class="pre">ZerosPolesGain</span></tt></a>)</li>
+<li>4: array_like: (A, B, C, D)</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Changing the value of properties that are not part of the
+<a class="reference internal" href="#scipy.signal.StateSpace" title="scipy.signal.StateSpace"><tt class="xref py py-obj docutils literal"><span class="pre">StateSpace</span></tt></a> system representation (such as <a class="reference internal" href="scipy.signal.StateSpace.zeros.html#scipy.signal.StateSpace.zeros" title="scipy.signal.StateSpace.zeros"><tt class="xref py py-obj docutils literal"><span class="pre">zeros</span></tt></a> or <a class="reference internal" href="scipy.signal.StateSpace.poles.html#scipy.signal.StateSpace.poles" title="scipy.signal.StateSpace.poles"><tt class="xref py py-obj docutils literal"><span class="pre">poles</span></tt></a>) is very
+inefficient and may lead to numerical inaccuracies.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%">
+<col width="90%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.A.html#scipy.signal.StateSpace.A" title="scipy.signal.StateSpace.A"><tt class="xref py py-obj docutils literal"><span class="pre">A</span></tt></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.signal.StateSpace.B.html#scipy.signal.StateSpace.B" title="scipy.signal.StateSpace.B"><tt class="xref py py-obj docutils literal"><span class="pre">B</span></tt></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.C.html#scipy.signal.StateSpace.C" title="scipy.signal.StateSpace.C"><tt class="xref py py-obj docutils literal"><span class="pre">C</span></tt></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.signal.StateSpace.D.html#scipy.signal.StateSpace.D" title="scipy.signal.StateSpace.D"><tt class="xref py py-obj docutils literal"><span class="pre">D</span></tt></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.den.html#scipy.signal.StateSpace.den" title="scipy.signal.StateSpace.den"><tt class="xref py py-obj docutils literal"><span class="pre">den</span></tt></a></td>
+<td>Denominator of the <a class="reference internal" href="scipy.signal.TransferFunction.html#scipy.signal.TransferFunction" title="scipy.signal.TransferFunction"><tt class="xref py py-obj docutils literal"><span class="pre">TransferFunction</span></tt></a> system.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.signal.StateSpace.gain.html#scipy.signal.StateSpace.gain" title="scipy.signal.StateSpace.gain"><tt class="xref py py-obj docutils literal"><span class="pre">gain</span></tt></a></td>
+<td>Gain of the <a class="reference internal" href="scipy.signal.ZerosPolesGain.html#scipy.signal.ZerosPolesGain" title="scipy.signal.ZerosPolesGain"><tt class="xref py py-obj docutils literal"><span class="pre">ZerosPolesGain</span></tt></a> system.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.num.html#scipy.signal.StateSpace.num" title="scipy.signal.StateSpace.num"><tt class="xref py py-obj docutils literal"><span class="pre">num</span></tt></a></td>
+<td>Numerator of the <a class="reference internal" href="scipy.signal.TransferFunction.html#scipy.signal.TransferFunction" title="scipy.signal.TransferFunction"><tt class="xref py py-obj docutils literal"><span class="pre">TransferFunction</span></tt></a> system.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.signal.StateSpace.poles.html#scipy.signal.StateSpace.poles" title="scipy.signal.StateSpace.poles"><tt class="xref py py-obj docutils literal"><span class="pre">poles</span></tt></a></td>
+<td>Poles of the <a class="reference internal" href="scipy.signal.ZerosPolesGain.html#scipy.signal.ZerosPolesGain" title="scipy.signal.ZerosPolesGain"><tt class="xref py py-obj docutils literal"><span class="pre">ZerosPolesGain</span></tt></a> system.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.zeros.html#scipy.signal.StateSpace.zeros" title="scipy.signal.StateSpace.zeros"><tt class="xref py py-obj docutils literal"><span class="pre">zeros</span></tt></a></td>
+<td>Zeros of the <a class="reference internal" href="scipy.signal.ZerosPolesGain.html#scipy.signal.ZerosPolesGain" title="scipy.signal.ZerosPolesGain"><tt class="xref py py-obj docutils literal"><span class="pre">ZerosPolesGain</span></tt></a> system.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%">
+<col width="90%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.bode.html#scipy.signal.StateSpace.bode" title="scipy.signal.StateSpace.bode"><tt class="xref py py-obj docutils literal"><span class="pre">bode</span></tt></a>([w,&nbsp;n])</td>
+<td>Calculate Bode magnitude and phase data of a continuous-time system.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.signal.StateSpace.freqresp.html#scipy.signal.StateSpace.freqresp" title="scipy.signal.StateSpace.freqresp"><tt class="xref py py-obj docutils literal"><span class="pre">freqresp</span></tt></a>([w,&nbsp;n])</td>
+<td>Calculate the frequency response of a continuous-time system.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.impulse.html#scipy.signal.StateSpace.impulse" title="scipy.signal.StateSpace.impulse"><tt class="xref py py-obj docutils literal"><span class="pre">impulse</span></tt></a>([X0,&nbsp;T,&nbsp;N])</td>
+<td>Return the impulse response of a continuous-time system.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.signal.StateSpace.output.html#scipy.signal.StateSpace.output" title="scipy.signal.StateSpace.output"><tt class="xref py py-obj docutils literal"><span class="pre">output</span></tt></a>(U,&nbsp;T[,&nbsp;X0])</td>
+<td>Return the response of a continuous-time system to input <em class="xref py py-obj">U</em>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.step.html#scipy.signal.StateSpace.step" title="scipy.signal.StateSpace.step"><tt class="xref py py-obj docutils literal"><span class="pre">step</span></tt></a>([X0,&nbsp;T,&nbsp;N])</td>
+<td>Return the step response of a continuous-time system.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.signal.StateSpace.to_ss.html#scipy.signal.StateSpace.to_ss" title="scipy.signal.StateSpace.to_ss"><tt class="xref py py-obj docutils literal"><span class="pre">to_ss</span></tt></a>()</td>
+<td>Return a copy of the current <a class="reference internal" href="#scipy.signal.StateSpace" title="scipy.signal.StateSpace"><tt class="xref py py-obj docutils literal"><span class="pre">StateSpace</span></tt></a> system.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="scipy.signal.StateSpace.to_tf.html#scipy.signal.StateSpace.to_tf" title="scipy.signal.StateSpace.to_tf"><tt class="xref py py-obj docutils literal"><span class="pre">to_tf</span></tt></a>(**kwargs)</td>
+<td>Convert system representation to <a class="reference internal" href="scipy.signal.TransferFunction.html#scipy.signal.TransferFunction" title="scipy.signal.TransferFunction"><tt class="xref py py-obj docutils literal"><span class="pre">TransferFunction</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="scipy.signal.StateSpace.to_zpk.html#scipy.signal.StateSpace.to_zpk" title="scipy.signal.StateSpace.to_zpk"><tt class="xref py py-obj docutils literal"><span class="pre">to_zpk</span></tt></a>(**kwargs)</td>
+<td>Convert system representation to <a class="reference internal" href="scipy.signal.ZerosPolesGain.html#scipy.signal.ZerosPolesGain" title="scipy.signal.ZerosPolesGain"><tt class="xref py py-obj docutils literal"><span class="pre">ZerosPolesGain</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

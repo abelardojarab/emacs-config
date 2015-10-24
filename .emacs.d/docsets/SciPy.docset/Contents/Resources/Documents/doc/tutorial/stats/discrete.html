@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Discrete Statistical Distributions</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../../index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../../scipy-optimize-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Discrete Statistical Distributions</a><ul>
+<li><a class="reference internal" href="#probability-mass-function-pmf">Probability Mass Function (PMF)</a></li>
+<li><a class="reference internal" href="#cumulative-distribution-function-cdf">Cumulative Distribution Function (CDF)</a></li>
+<li><a class="reference internal" href="#survival-function">Survival Function</a></li>
+<li><a class="reference internal" href="#percent-point-function-inverse-cdf">Percent Point Function (Inverse CDF)</a></li>
+<li><a class="reference internal" href="#inverse-survival-function">Inverse survival function</a></li>
+<li><a class="reference internal" href="#hazard-functions">Hazard functions</a></li>
+<li><a class="reference internal" href="#moments">Moments</a></li>
+<li><a class="reference internal" href="#moment-generating-function">Moment generating function</a></li>
+<li><a class="reference internal" href="#fitting-data">Fitting data</a></li>
+<li><a class="reference internal" href="#standard-notation-for-mean">Standard notation for mean</a></li>
+<li><a class="reference internal" href="#combinations">Combinations</a></li>
+<li><a class="reference internal" href="#discrete-distributions-in-scipy-stats">Discrete Distributions in <tt class="docutils literal"><span class="pre">scipy.stats</span></tt></a></li>
+</ul>
+</li>
+</ul>
+
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="discrete-statistical-distributions">
+<span id="discrete-random-variables"></span><h1>Discrete Statistical Distributions<a class="headerlink" href="#discrete-statistical-distributions" title="Permalink to this headline">¶</a></h1>
+<p>Discrete random variables take on only a countable number of values.
+The commonly used distributions are included in SciPy and described in
+this document. Each discrete distribution can take one extra integer
+parameter: <span class="math">\(L.\)</span> The relationship between the general distribution
+<span class="math">\(p\)</span> and the standard distribution <span class="math">\(p_{0}\)</span> is</p>
+<div class="math">
+\[ p\left(x\right) = p_{0}\left(x-L\right)\]</div><p>which allows for shifting of the input. When a distribution generator
+is initialized, the discrete distribution can either specify the
+beginning and ending (integer) values <span class="math">\(a\)</span> and <span class="math">\(b\)</span> which must be such that</p>
+<div class="math">
+\[ p_{0}\left(x\right) = 0\quad x < a \textrm{ or } x > b\]</div><p>in which case, it is assumed that the pdf function is specified on the
+integers <span class="math">\(a+mk\leq b\)</span> where <span class="math">\(k\)</span> is a non-negative integer ( <span class="math">\(0,1,2,\ldots\)</span> ) and <span class="math">\(m\)</span> is a positive integer multiplier. Alternatively, the two lists <span class="math">\(x_{k}\)</span> and <span class="math">\(p\left(x_{k}\right)\)</span> can be provided directly in which case a dictionary is set up
+internally to evaulate probabilities and generate random variates.</p>
+<div class="section" id="probability-mass-function-pmf">
+<h2>Probability Mass Function (PMF)<a class="headerlink" href="#probability-mass-function-pmf" title="Permalink to this headline">¶</a></h2>
+<p>The probability mass function of a random variable X is defined as the
+probability that the random variable takes on a particular value.</p>
+<div class="math">
+\[ p\left(x_{k}\right)=P\left[X=x_{k}\right]\]</div><p>This is also sometimes called the probability density function,
+although technically</p>
+<div class="math">
+\[ f\left(x\right)=\sum_{k}p\left(x_{k}\right)\delta\left(x-x_{k}\right)\]</div><p>is the probability density function for a discrete distribution <a class="footnote-reference" href="#id2" id="id1">[1]</a> .</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>XXX: Unknown layout Plain Layout: Note that we will be using <span class="math">\(p\)</span> to represent the probability mass function and a parameter (a
+XXX: probability). The usage should be obvious from context.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cumulative-distribution-function-cdf">
+<h2>Cumulative Distribution Function (CDF)<a class="headerlink" href="#cumulative-distribution-function-cdf" title="Permalink to this headline">¶</a></h2>
+<p>The cumulative distribution function is</p>
+<div class="math">
+\[ F\left(x\right)=P\left[X\leq x\right]=\sum_{x_{k}\leq x}p\left(x_{k}\right)\]</div><p>and is also useful to be able to compute. Note that</p>
+<div class="math">
+\[ F\left(x_{k}\right)-F\left(x_{k-1}\right)=p\left(x_{k}\right)\]</div></div>
+<div class="section" id="survival-function">
+<h2>Survival Function<a class="headerlink" href="#survival-function" title="Permalink to this headline">¶</a></h2>
+<p>The survival function is just</p>
+<div class="math">
+\[ S\left(x\right)=1-F\left(x\right)=P\left[X>k\right]\]</div><p>the probability that the random variable is strictly larger than <span class="math">\(k\)</span> .</p>
+</div>
+<div class="section" id="percent-point-function-inverse-cdf">
+<span id="discrete-ppf"></span><h2>Percent Point Function (Inverse CDF)<a class="headerlink" href="#percent-point-function-inverse-cdf" title="Permalink to this headline">¶</a></h2>
+<p>The percent point function is the inverse of the cumulative
+distribution function and is</p>
+<div class="math">
+\[ G\left(q\right)=F^{-1}\left(q\right)\]</div><p>for discrete distributions, this must be modified for cases where
+there is no <span class="math">\(x_{k}\)</span> such that <span class="math">\(F\left(x_{k}\right)=q.\)</span> In these cases we choose <span class="math">\(G\left(q\right)\)</span> to be the smallest value <span class="math">\(x_{k}=G\left(q\right)\)</span> for which <span class="math">\(F\left(x_{k}\right)\geq q\)</span> . If <span class="math">\(q=0\)</span> then we define <span class="math">\(G\left(0\right)=a-1\)</span> . This definition allows random variates to be defined in the same way
+as with continuous rv&#8217;s using the inverse cdf on a uniform
+distribution to generate random variates.</p>
+</div>
+<div class="section" id="inverse-survival-function">
+<h2>Inverse survival function<a class="headerlink" href="#inverse-survival-function" title="Permalink to this headline">¶</a></h2>
+<p>The inverse survival function is the inverse of the survival function</p>
+<div class="math">
+\[ Z\left(\alpha\right)=S^{-1}\left(\alpha\right)=G\left(1-\alpha\right)\]</div><p>and is thus the smallest non-negative integer <span class="math">\(k\)</span> for which <span class="math">\(F\left(k\right)\geq1-\alpha\)</span> or the smallest non-negative integer <span class="math">\(k\)</span> for which <span class="math">\(S\left(k\right)\leq\alpha.\)</span></p>
+</div>
+<div class="section" id="hazard-functions">
+<h2>Hazard functions<a class="headerlink" href="#hazard-functions" title="Permalink to this headline">¶</a></h2>
+<p>If desired, the hazard function and the cumulative hazard function
+could be defined as</p>
+<div class="math">
+\[ h\left(x_{k}\right)=\frac{p\left(x_{k}\right)}{1-F\left(x_{k}\right)}\]</div><p>and</p>
+<div class="math">
+\[ H\left(x\right)=\sum_{x_{k}\leq x}h\left(x_{k}\right)=\sum_{x_{k}\leq x}\frac{F\left(x_{k}\right)-F\left(x_{k-1}\right)}{1-F\left(x_{k}\right)}.\]</div></div>
+<div class="section" id="moments">
+<h2>Moments<a class="headerlink" href="#moments" title="Permalink to this headline">¶</a></h2>
+<p>Non-central moments are defined using the PDF</p>
+<div class="math">
+\[ \mu_{m}^{\prime}=E\left[X^{m}\right]=\sum_{k}x_{k}^{m}p\left(x_{k}\right).\]</div><p>Central moments are computed similarly <span class="math">\(\mu=\mu_{1}^{\prime}\)</span></p>
+<div class="math">
+\[ \begin{eqnarray*} \mu_{m}=E\left[\left(X-\mu\right)^{m}\right] & = & \sum_{k}\left(x_{k}-\mu\right)^{m}p\left(x_{k}\right)\\  & = & \sum_{k=0}^{m}\left(-1\right)^{m-k}\left(\begin{array}{c} m\\ k\end{array}\right)\mu^{m-k}\mu_{k}^{\prime}\end{eqnarray*}\]</div><p>The mean is the first moment</p>
+<div class="math">
+\[ \mu=\mu_{1}^{\prime}=E\left[X\right]=\sum_{k}x_{k}p\left(x_{k}\right)\]</div><p>the variance is the second central moment</p>
+<div class="math">
+\[ \mu_{2}=E\left[\left(X-\mu\right)^{2}\right]=\sum_{x_{k}}x_{k}^{2}p\left(x_{k}\right)-\mu^{2}.\]</div><p>Skewness is defined as</p>
+<div class="math">
+\[ \gamma_{1}=\frac{\mu_{3}}{\mu_{2}^{3/2}}\]</div><p>while (Fisher) kurtosis is</p>
+<div class="math">
+\[ \gamma_{2}=\frac{\mu_{4}}{\mu_{2}^{2}}-3,\]</div><p>so that a normal distribution has a kurtosis of zero.</p>
+</div>
+<div class="section" id="moment-generating-function">
+<h2>Moment generating function<a class="headerlink" href="#moment-generating-function" title="Permalink to this headline">¶</a></h2>
+<p>The moment generating function is defined as</p>
+<div class="math">
+\[ M_{X}\left(t\right)=E\left[e^{Xt}\right]=\sum_{x_{k}}e^{x_{k}t}p\left(x_{k}\right)\]</div><p>Moments are found as the derivatives of the moment generating function
+evaluated at <span class="math">\(0.\)</span></p>
+</div>
+<div class="section" id="fitting-data">
+<h2>Fitting data<a class="headerlink" href="#fitting-data" title="Permalink to this headline">¶</a></h2>
+<p>To fit data to a distribution, maximizing the likelihood function is
+common. Alternatively, some distributions have well-known minimum
+variance unbiased estimators. These will be chosen by default, but the
+likelihood function will always be available for minimizing.</p>
+<p>If <span class="math">\(f_{i}\left(k;\boldsymbol{\theta}\right)\)</span> is the PDF of a random-variable where <span class="math">\(\boldsymbol{\theta}\)</span> is a vector of parameters ( <em>e.g.</em> <span class="math">\(L\)</span> and <span class="math">\(S\)</span> ), then for a collection of <span class="math">\(N\)</span> independent samples from this distribution, the joint distribution the
+random vector <span class="math">\(\mathbf{k}\)</span> is</p>
+<div class="math">
+\[ f\left(\mathbf{k};\boldsymbol{\theta}\right)=\prod_{i=1}^{N}f_{i}\left(k_{i};\boldsymbol{\theta}\right).\]</div><p>The maximum likelihood estimate of the parameters <span class="math">\(\boldsymbol{\theta}\)</span> are the parameters which maximize this function with <span class="math">\(\mathbf{x}\)</span> fixed and given by the data:</p>
+<div class="math">
+\[ \begin{eqnarray*} \hat{\boldsymbol{\theta}} & = & \arg\max_{\boldsymbol{\theta}}f\left(\mathbf{k};\boldsymbol{\theta}\right)\\  & = & \arg\min_{\boldsymbol{\theta}}l_{\mathbf{k}}\left(\boldsymbol{\theta}\right).\end{eqnarray*}\]</div><p>Where</p>
+<div class="math">
+\[ \begin{eqnarray*} l_{\mathbf{k}}\left(\boldsymbol{\theta}\right) & = & -\sum_{i=1}^{N}\log f\left(k_{i};\boldsymbol{\theta}\right)\\  & = & -N\overline{\log f\left(k_{i};\boldsymbol{\theta}\right)}\end{eqnarray*}\]</div></div>
+<div class="section" id="standard-notation-for-mean">
+<h2>Standard notation for mean<a class="headerlink" href="#standard-notation-for-mean" title="Permalink to this headline">¶</a></h2>
+<p>We will use</p>
+<div class="math">
+\[ \overline{y\left(\mathbf{x}\right)}=\frac{1}{N}\sum_{i=1}^{N}y\left(x_{i}\right)\]</div><p>where <span class="math">\(N\)</span> should be clear from context.</p>
+</div>
+<div class="section" id="combinations">
+<h2>Combinations<a class="headerlink" href="#combinations" title="Permalink to this headline">¶</a></h2>
+<p>Note that</p>
+<div class="math">
+\[ k!=k\cdot\left(k-1\right)\cdot\left(k-2\right)\cdot\cdots\cdot1=\Gamma\left(k+1\right)\]</div><p>and has special cases of</p>
+<div class="math">
+\[ \begin{eqnarray*} 0! & \equiv & 1\\ k! & \equiv & 0\quad k<0\end{eqnarray*}\]</div><p>and</p>
+<div class="math">
+\[ \left(\begin{array}{c} n\\ k\end{array}\right)=\frac{n!}{\left(n-k\right)!k!}.\]</div><p>If <span class="math">\(n&lt;0\)</span> or <span class="math">\(k&lt;0\)</span> or <span class="math">\(k&gt;n\)</span> we define <span class="math">\(\left(\begin{array}{c} n\\ k\end{array}\right)=0\)</span></p>
+</div>
+<div class="section" id="discrete-distributions-in-scipy-stats">
+<h2>Discrete Distributions in <a class="reference internal" href="../../stats.html#module-scipy.stats" title="scipy.stats"><tt class="xref py py-obj docutils literal"><span class="pre">scipy.stats</span></tt></a><a class="headerlink" href="#discrete-distributions-in-scipy-stats" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="discrete_bernoulli.html">Bernoulli Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_binom.html">Binomial Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_boltzmann.html">Boltzmann (truncated Planck) Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_planck.html">Planck (discrete exponential) Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_poisson.html">Poisson Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_geom.html">Geometric Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_nbinom.html">Negative Binomial Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_hypergeom.html">Hypergeometric Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_zipf.html">Zipf (Zeta) Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_logser.html">Logarithmic (Log-Series, Series) Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_randint.html">Discrete Uniform (randint) Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete_dlaplace.html">Discrete Laplacian Distribution</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

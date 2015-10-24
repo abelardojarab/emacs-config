@@ -1,0 +1,96 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Other Hash</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Other-Hash"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Hash.html#Defining-Hash">Defining Hash</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hash-Tables.html#Hash-Tables">Hash Tables</a>
+
+</p></div>
+
+<h3 class="section">7.4 Other Hash Table Functions</h3>
+
+<p>Here are some other functions for working with hash tables.
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/hash%2Dtable%2Dp"></a><a name="DASH-1519"></a>— Function: <b>hash-table-p</b><var> table<a name="index-hash_002dtable_002dp-471"></a></var><br>
+<blockquote><p>This returns non-<code>nil</code> if <var>table</var> is a hash table object. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/copy%2Dhash%2Dtable"></a><a name="DASH-1520"></a>— Function: <b>copy-hash-table</b><var> table<a name="index-copy_002dhash_002dtable-472"></a></var><br>
+<blockquote><p>This function creates and returns a copy of <var>table</var>.  Only the table
+itself is copied—the keys and values are shared. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/hash%2Dtable%2Dcount"></a><a name="DASH-1521"></a>— Function: <b>hash-table-count</b><var> table<a name="index-hash_002dtable_002dcount-473"></a></var><br>
+<blockquote><p>This function returns the actual number of entries in <var>table</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/hash%2Dtable%2Dtest"></a><a name="DASH-1522"></a>— Function: <b>hash-table-test</b><var> table<a name="index-hash_002dtable_002dtest-474"></a></var><br>
+<blockquote><p>This returns the <var>test</var> value that was given when <var>table</var> was
+created, to specify how to hash and compare keys.  See
+<code>make-hash-table</code> (see <a href="Creating-Hash.html#Creating-Hash">Creating Hash</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/hash%2Dtable%2Dweakness"></a><a name="DASH-1523"></a>— Function: <b>hash-table-weakness</b><var> table<a name="index-hash_002dtable_002dweakness-475"></a></var><br>
+<blockquote><p>This function returns the <var>weak</var> value that was specified for hash
+table <var>table</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/hash%2Dtable%2Drehash%2Dsize"></a><a name="DASH-1524"></a>— Function: <b>hash-table-rehash-size</b><var> table<a name="index-hash_002dtable_002drehash_002dsize-476"></a></var><br>
+<blockquote><p>This returns the rehash size of <var>table</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/hash%2Dtable%2Drehash%2Dthreshold"></a><a name="DASH-1525"></a>— Function: <b>hash-table-rehash-threshold</b><var> table<a name="index-hash_002dtable_002drehash_002dthreshold-477"></a></var><br>
+<blockquote><p>This returns the rehash threshold of <var>table</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/hash%2Dtable%2Dsize"></a><a name="DASH-1526"></a>— Function: <b>hash-table-size</b><var> table<a name="index-hash_002dtable_002dsize-478"></a></var><br>
+<blockquote><p>This returns the current nominal size of <var>table</var>. 
+</p></blockquote></div>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2014 Free Software -->
+<!-- Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+
+   
+
+</body></html>

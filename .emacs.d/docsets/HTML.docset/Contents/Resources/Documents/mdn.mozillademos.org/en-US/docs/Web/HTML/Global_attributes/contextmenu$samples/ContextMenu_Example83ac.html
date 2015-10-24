@@ -1,0 +1,42 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/HTML/Global_attributes/contextmenu$samples/ContextMenu_Example?revision=722467 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:36:46 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+            </head>
+    <body contextmenu="share">
+                    
+  <menu type="context" id="share">
+    <menu label="share">
+      <menuitem label="Twitter" onclick="window.open('https://twitter.com/intent/tweet?text=Hurray!%20I%20am%20learning%20ContextMenu%20from%20MDN%20via%20Mozilla');"></menuitem>
+      <menuitem label="Facebook" onclick="window.open('https://facebook.com/sharer/sharer.php?u=https://https://developer.mozilla.org/en/HTML/Element/Using_HTML_context_menus');"></menuitem>
+    </menu>
+  </menu>
+  <ol>
+    <li>Anywhere in the example you can share the page on Twitter and Facebook using the Share menu from your context menu.</li>
+    <li><pre contextmenu="changeFont" id="fontSizing">On this specific list element, you can change the size of the text by using the "Increase/Decrease font" actions from your context menu</pre></li>
+    <menu type="context" id="changeFont">
+      <menuitem label="Increase Font" onclick="incFont()"></menuitem>
+      <menuitem label="Decrease Font" onclick="decFont()"></menuitem>
+    </menu>
+    <li contextmenu="ChangeImage" id="changeImage">On the image below, you can fire the "Change Image" action in your Context Menu.</li><br>
+    <img src="../../../../../../../developer.mozilla.org/static/img/promote/promobutton_mdn5.png" contextmenu="ChangeImage" id="promoButton">
+    <menu type="context" id="ChangeImage">
+      <menuitem label="Change Image" onclick="changeImage()"></menuitem>
+    </menu>
+  </ol>
+
+                            <script type="text/javascript">
+                function incFont(){
+  document.getElementById("fontSizing").style.fontSize="larger";
+}
+function decFont(){
+  document.getElementById("fontSizing").style.fontSize="smaller";
+}
+function changeImage(){
+  var j = Math.ceil((Math.random()*39)+1);
+  document.images[0].src="https://developer.mozilla.org/media/img/promote/promobutton_mdn" + j + ".png";
+}
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/HTML/Global_attributes/contextmenu$samples/ContextMenu_Example?revision=722467 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 09:36:47 GMT -->
+</body></html>

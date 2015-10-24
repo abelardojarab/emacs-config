@@ -1,0 +1,1054 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:24:22 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"><script async="" src="../../../../../www.google-analytics.com/analytics.js"></script>
+  <script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+        
+    <title>2D maze game with device orientation</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+              <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/mdn-min2bff.css?build=2aab9d6">
+
+      
+    <link rel="stylesheet" media="all" href="../../../../../developer.cdn.mozilla.net/static/css/wiki-min2bff.css?build=2aab9d6">
+
+    
+                  <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Games$styles">
+          
+  <!-- common social tags -->
+    <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.png">
+  <!-- basic favicon -->
+          <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script src="https://developer.cdn.mozilla.net/static/js/libs/html5.js"></script>
+  <![endif]-->
+
+    <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation$json">
+  <link rel="canonical" href="HTML5_Gamedev_Phaser_Device_Orientation.html">
+
+            <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation" title="Introducción al Desarrollo de Juegos en HTML5 con Phaser y la API de Orientación a Dispositivos">
+          <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation_FR" title="Introduction au développement de jeux HTML5 avec Phaser et l'API du gyroscope">
+      
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="2D maze game with device orientation">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation">
+  <meta name="twitter:title" content="2D maze game with device orientation">
+    <meta property="og:description" content="I hope this tutorial will help you dive into 2D game development and inspire you to create awesome games on your own. You can play the demo game Cyber Orb and check out its source code on GitHub.">
+  <meta name="description" content="I hope this tutorial will help you dive into 2D game development and inspire you to create awesome games on your own. You can play the demo game Cyber Orb and check out its source code on GitHub.">
+  <meta name="twitter:description" content="I hope this tutorial will help you dive into 2D game development and inspire you to create awesome games on your own. You can play the demo game Cyber Orb and check out its source code on GitHub.">
+  
+      
+  </head>
+<body data-slug="Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "N j, Y, P", 
+    "DATETIME_INPUT_FORMATS": [
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d", 
+      "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
+      "%m/%d/%Y %H:%M", 
+      "%m/%d/%Y", 
+      "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
+      "%m/%d/%y %H:%M", 
+      "%m/%d/%y"
+    ], 
+    "DATE_FORMAT": "N j, Y", 
+    "DATE_INPUT_FORMATS": [
+      "%Y-%m-%d", 
+      "%m/%d/%Y", 
+      "%m/%d/%y"
+    ], 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "0", 
+    "MONTH_DAY_FORMAT": "F j", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "m/d/Y P", 
+    "SHORT_DATE_FORMAT": "m/d/Y", 
+    "THOUSAND_SEPARATOR": ",", 
+    "TIME_FORMAT": "P", 
+    "TIME_INPUT_FORMATS": [
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+
+
+    (function(win) {
+        'use strict';
+
+                    (function(){
+  var FLAGS = {
+    'header_feedback': true,'helpfulness': false,'kumaediting': false,'mdn10_logo': true,'mdn10_tile': true,'page_move': false,'registration_disabled': false,'search_suggestions': false,'share_links': false,'wiki_samples': false
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': false,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+        // This represents the site configuration
+        win.mdn = {
+            build: '2aab9d6',
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+                        notifications: [],
+                        // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            }
+        };
+    })(this);
+</script>
+    <div class="global-notice">
+    <div class="wrap center">
+              <p><bdi>Join MDN and developers like you at Mozilla's View Source conference, November 2-4 in Portland, Oregon. Learn more at <a href="https://viewsourceconf.org/">https://viewsourceconf.org/</a>.</bdi></p>
+          </div>
+  </div>
+
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+          <li><a href="#q" id="skip-search">Skip to search</a></li>
+      </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+            <a href="https://developer.mozilla.org/en-US/" class="logo logo-mdn10">Mozilla Developer Network</a>
+    
+    <div id="nav-sec">
+                          <ul>
+                  <li>
+    
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                <span class="oauth-login-options-text-icons">Sign in with</span>
+                <span class="oauth-login-options-text-no-icons">Sign in</span>
+              </span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FGames%2FWorkflows%2FHTML5_Gamedev_Phaser_Device_Orientation" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FGames%2FWorkflows%2FHTML5_Gamedev_Phaser_Device_Orientation" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+            </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="../../Web/HTML.html">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/demos/">Demos</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+                <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Games">Game development</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+     <!-- end is_zone -->
+
+
+    <div class="wiki-main-content"><div class="center">
+            <div class="article-meta">
+        <!-- action buttons -->
+        
+        
+        
+
+  <ul class="page-buttons" data-sticky="false"><li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+                                                <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation" title="Introducción al Desarrollo de Juegos en HTML5 con Phaser y la API de Orientación a Dispositivos">Español</a></bdi></li>
+                                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation_FR" title="Introduction au développement de jeux HTML5 avec Phaser et l'API du gyroscope">Français</a></bdi></li>
+                              
+                              <li><a href="https://developer.mozilla.org/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+                          </ul>
+          </div>
+        </div></li><li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li><li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation$history" rel="nofollow, noindex">History</a></li>
+                                                                
+                
+                                                                <li class="page-print"><a href="#" onclick="return window.print();">Print this page</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+          <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Games" rel="v:url" property="v:title">Game development</a></li>
+          <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Games/Workflows" rel="v:url" property="v:title">Workflows for different game types</a></li>
+        <li class="crumb" typeof="v:Breadcrumb" property="v:title">2D maze game with device orientation</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        <h1>2D maze game with device orientation</h1>
+
+        
+                <div class="contributor-avatars" data-all-text="Show all…&lt;span class='hidden'&gt;contributors&lt;/span&gt;">
+            <span class="quickstat">
+            by 4 contributors:            </span>
+            <ul>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/end3r" title="View profile: end3r">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="end3r" data-src="../../../../../secure.gravatar.com/avatar/a84d365d52c5f58dd52ed9dc1583f55d6aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">end3r</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6aac.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+                            <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/roryokane" title="View profile: roryokane">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="roryokane" data-src="../../../../../secure.gravatar.com/avatar/5b2b185c814bb25f2f95a1152e58f0336aac.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2F%2Fimg%2Favatar.png">roryokane</noscript></a>
+                </li>
+                        </ul>
+        </div>
+        
+      </div>
+      
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+                    <!-- additional controls row; hidden unless needed -->
+          <div id="wiki-controls" class="column-container column-container-reverse">
+            <div class="column-strip">
+              <!-- Show TOC "show" link -->
+            </div>
+            <div class="column-half">
+            </div>
+            <div class="column-strip quick-links hidden">
+              <a href="#show-quick-links" class="title smaller" id="show-quick-links"><i aria-hidden="true" class="icon-caret-down"></i>Show Sidebar</a>
+            </div>
+          </div>
+          
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+                          <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+                            <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Example_game" rel="internal">Example game</a></li><li><a href="#Phaser_framework" rel="internal">Phaser framework</a></li><li><a href="#Starting_with_the_project" rel="internal">Starting with the project</a></li><li><a href="#Setting_up_the_Canvas" rel="internal">Setting up the Canvas</a></li><li><a href="#Managing_game_states" rel="internal">Managing game states</a><ol><li><a href="#Boot.js" rel="internal">Boot.js</a></li><li><a href="#Preloader.js" rel="internal">Preloader.js</a></li><li><a href="#MainMenu.js" rel="internal">MainMenu.js</a></li><li><a href="#Howto.js" rel="internal">Howto.js</a></li><li><a href="#Game.js" rel="internal">Game.js</a><ol><li><a href="#Adding_the_ball_and_its_motion_mechanics" rel="internal">Adding the ball and its motion mechanics</a></li><li><a href="#Controlling_the_ball" rel="internal">Controlling the ball</a></li><li><a href="#Implementing_the_Device_Orientation_API" rel="internal">Implementing the Device Orientation API</a></li><li><a href="#Adding_the_hole" rel="internal">Adding the hole</a></li><li><a href="#Building_the_block_labyrinth" rel="internal">Building the block labyrinth</a></li><li><a href="#Collision_detection" rel="internal">Collision detection</a></li><li><a href="#Adding_the_sound" rel="internal">Adding the sound</a></li><li><a href="#Implementing_the_Vibration_API" rel="internal">Implementing the Vibration API</a></li><li><a href="#Adding_the_elapsed_time" rel="internal">Adding the elapsed time</a></li><li><a href="#Finishing_the_level_and_the_game" rel="internal">Finishing the level and the game</a></li></ol></li></ol></li><li><a href="#Ideas_for_new_features" rel="internal">Ideas for new features</a></li><li><a href="#Summary" rel="internal">Summary</a>
+                </li></ol>
+                              </div>
+                            </div>
+            
+                                                  
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+              
+                                                                                          
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                                                      <div><!-- --></div>
+<div class="summary">
+<p>In this tutorial we’ll go through the process of building an HTML5 mobile game that uses the <a href="https://developer.mozilla.org/en-US/Apps/Build/gather_and_modify_data/responding_to_device_orientation_changes">Device Orientation</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/Vibration">Vibration</a><strong> APIs</strong> to enhance the gameplay and is built using the <a href="http://phaser.io/" class="external-icon external">Phaser</a> framework. Basic JavaScript knowledge is recommended to get the most from this tutorial.</p>
+</div>
+
+<h2 id="Example_game">Example game</h2>
+
+<p>By the end of the tutorial you will have a fully functional demo game: <a href="http://orb.enclavegames.com/" class="external">Cyber Orb</a>. It will look something like this:</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/10297/cyber-orb.png" style="display: block; height: 450px; margin: 0px auto; width: 300px;" alt="A 2D game board featuring a small yellow ball. There is a large black hole for the ball to escape down, and a number of barriers blocking the ball from escaping."></p>
+
+<h2 id="Phaser_framework">Phaser framework</h2>
+
+<p><a href="http://phaser.io/" class="external">Phaser</a> is a framework for building desktop and mobile HTML5 games. It’s quite new, but growing rapidly thanks to the passionate community involved in the development process. You can check it out <a href="https://github.com/photonstorm/phaser" class="external">on GitHub</a> where it’s open sourced, read the <a href="http://docs.phaser.io/" class="external">online documentation</a> and go through the big collection of <a href="http://examples.phaser.io/" class="external">examples</a>. The Phaser framework provides you with a set of tools that will speed up development and help handle generic tasks needed to complete the game, so you can focus on the game idea itself.</p>
+
+<h2 id="Starting_with_the_project">Starting with the project</h2>
+
+<p>You can see <a href="https://github.com/EnclaveGames/Cyber-Orb" class="external">Cyber Orb source code</a> on GitHub. The folder structure is quite straightforward: the starting point is the <code>index.html</code> file where we initialize the framework and set up an <a href="../../Web/HTML/Element/canvas.html" title="The HTML &lt;canvas&gt; Element can be used to draw graphics via scripting (usually JavaScript). For example, it can be used to draw graphs, make photo compositions or even perform animations. You may (and should) provide alternate content inside the &lt;canvas&gt; block. That content will be rendered both on older browsers that don't support canvas and in browsers with JavaScript disabled."><code>&lt;canvas&gt;</code></a> to render the game on.</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/10357/cyber-orb-github.png" style="height: 423px; width: 620px;" alt="Screenshot of the GitHub repository with the Cyber Orb game code, listing the folders and the files in the main structure."></p>
+
+<p>You can open the index file in your favourite browser to launch the game and try it. There are also three folders in the directory:</p>
+
+<ul>
+ <li><code>img</code>: All the images that we will use in the game.</li>
+ <li><code>src</code>: The JavaScript files with all the source code of the game defined inside.</li>
+ <li><code>audio:</code> The sound files used in the game.</li>
+</ul>
+
+<h2 id="Setting_up_the_Canvas">Setting up the Canvas</h2>
+
+<p>We will be rendering our game on Canvas, but we won't do it manually — this will be taken care of by the framework. Let’s set it up: our starting point is the <code>index.html</code> file with the following content. You can create this yourself if you want to follow along:</p>
+
+<pre class="brush: html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;Cyber Orb demo&lt;/title&gt;
+    &lt;style&gt; body { margin: 0; background: #333; } &lt;/style&gt;
+    &lt;script src="src/phaser-arcade-physics.2.2.2.min.js"&gt;&lt;/script&gt;
+    &lt;script src="src/Boot.js"&gt;&lt;/script&gt;
+    &lt;script src="src/Preloader.js"&gt;&lt;/script&gt;
+    &lt;script src="src/MainMenu.js"&gt;&lt;/script&gt;
+    &lt;script src="src/Howto.js"&gt;&lt;/script&gt;
+    &lt;script src="src/Game.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script&gt;
+(function() {
+    var game = new Phaser.Game(320, 480, Phaser.CANVAS, 'game');
+    game.state.add('Boot', Ball.Boot);
+    game.state.add('Preloader', Ball.Preloader);
+    game.state.add('MainMenu', Ball.MainMenu);
+    game.state.add('Howto', Ball.Howto);
+    game.state.add('Game', Ball.Game);
+    game.state.start('Boot');
+})();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p>So far we have a simple HTML website with some basic content in the <code>&lt;head&gt;</code> section: charset, title, CSS styling and the inclusion of the JavaScript files. The <code>&lt;body&gt;</code> contains initialization of the Phaser framework and the definitions of the game states.</p>
+
+<pre class="brush: js">var game = new Phaser.Game(320, 480, Phaser.CANVAS, 'game');</pre>
+
+<p>The line above will initialize the Phaser instance — the arguments are the width of the Canvas, height of the Canvas, rendering method (we're using <code>CANVAS</code>, but there are also <code>WEBGL</code> and <code>AUTO</code> options available) and the optional ID of the DOM container we want to put the Canvas in. If there's nothing specified in that last argument or the element is not found, the Canvas will be added to the &lt;body&gt; tag. Without the framework, to add the Canvas element to the page, you would have to write something like this inside the &lt;body&gt; tag:</p>
+
+<pre class="brush: html">&lt;canvas id='game' width='320' height='480'&gt;&lt;/canvas&gt;</pre>
+
+<p>The important thing to remember is that the framework is setting up helpful methods to speed up a lot of things like image manipulation or assets management, which would be a lot harder to do manually.</p>
+
+<div class="note">
+<p><strong>Note</strong>: You can read the <a href="http://gamedevelopment.tutsplus.com/tutorials/getting-started-with-phaser-building-monster-wants-candy--cms-21723" class="external">Building Monster Wants Candy</a> article for the in-depth introduction to the basic Phaser-specific functions and methods.</p>
+</div>
+
+<p>Back to game states: the line below is adding a new state called <code>Boot</code> to the game:</p>
+
+<pre class="brush: html">game.state.add('Boot', Ball.Boot);</pre>
+
+<p>The first value is the name of the state and the second one is the object we want to assign to it. The <code>start</code> method is starting the given state and making it active. Let's see what the states are actually.</p>
+
+<h2 id="Managing_game_states">Managing game states</h2>
+
+<p>The states in Phaser are separate parts of the game logic; in our case we’re loading them from independent JavaScript files for better maintainability. The basic states used in this game are: <code>Boot</code>, <code>Preloader</code>, <code>MainMenu</code>, <code>Howto</code> and <code>Game</code>. <code>Boot</code> will take care of initializing a few settings, <code>Preloader</code> will load all of the assets like graphics and audio, <code>MainMenu</code> is the menu with the start button, <code>Howto</code> shows the "how to play" instructions and the <code>Game</code> state lets you actually play the game. Let's quickly go though the content of those states.</p>
+
+<h3 id="Boot.js">Boot.js</h3>
+
+<p>The <code>Boot</code> state is the first one in the game.</p>
+
+<pre class="brush: js">var Ball = {
+    _WIDTH: 320,
+    _HEIGHT: 480
+};
+Ball.Boot = function(game) {};
+Ball.Boot.prototype = {
+    preload: function() {
+        this.load.image('preloaderBg', 'img/loading-bg.png');
+        this.load.image('preloaderBar', 'img/loading-bar.png');
+    },
+    create: function() {
+        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.scale.pageAlignHorizontally = true;
+        this.game.scale.pageAlignVertically = true;
+        this.game.state.start('Preloader');
+    }
+};</pre>
+
+<p>The main <code>Ball</code> object is defined and we're adding two variables called <code>_WIDTH</code> and <code>_HEIGHT</code> that are the width and the height of the game Canvas — they will help us position the elements on the screen. We're loading two images first that will be used later in the <code>Preload</code> state to show the progress of loading all the other assets. The <code>create</code> function holds some basic configuration: we're setting up the scaling and alignment of the Canvas, and moving on to the <code>Preload</code> state when everything's ready.</p>
+
+<h3 id="Preloader.js">Preloader.js</h3>
+
+<p>The <code>Preloader</code> state takes care of loading all the assets:</p>
+
+<pre class="brush: js">Ball.Preloader = function(game) {};
+Ball.Preloader.prototype = {
+    preload: function() {
+        this.preloadBg = this.add.sprite((Ball._WIDTH-297)*0.5, (Ball._HEIGHT-145)*0.5, 'preloaderBg');
+        this.preloadBar = this.add.sprite((Ball._WIDTH-158)*0.5, (Ball._HEIGHT-50)*0.5, 'preloaderBar');
+        this.load.setPreloadSprite(this.preloadBar);
+
+        this.load.image('ball', 'img/ball.png');
+        // ...
+        this.load.spritesheet('button-start', 'img/button-start.png', 146, 51);
+        // ...
+        this.load.audio('audio-bounce', ['audio/bounce.ogg', 'audio/bounce.mp3', 'audio/bounce.m4a']);
+    },
+    create: function() {
+        this.game.state.start('MainMenu');
+    }
+};</pre>
+
+<p>There are single images, spritesheets and audio files loaded by the framework. In this state the <code>preloadBar</code> is showing the progress on the screen. That progress of the loaded assets is visualized by the framework with the use of one image. With every asset loaded you can see more of the <code>preloadBar</code> image: from 0% to 100%, updated on every frame. After all the assets are loaded, the <code>MainMenu</code> state is launched.</p>
+
+<h3 id="MainMenu.js">MainMenu.js</h3>
+
+<p>The <code>MainMenu</code> state shows the main menu of the game, where you can start playing by clicking the button.</p>
+
+<pre class="brush: js">Ball.MainMenu = function(game) {};
+Ball.MainMenu.prototype = {
+    create: function() {
+        this.add.sprite(0, 0, 'screen-mainmenu');
+        this.gameTitle = this.add.sprite(Ball._WIDTH*0.5, 40, 'title');
+        this.gameTitle.anchor.set(0.5,0);
+        this.startButton = this.add.button(Ball._WIDTH*0.5, 200, 'button-start', this.startGame, this, 2, 0, 1);
+        this.startButton.anchor.set(0.5,0);
+        this.startButton.input.useHandCursor = true;
+    },
+    startGame: function() {
+        this.game.state.start('Howto');
+    }
+};</pre>
+
+<p>To create a new button there's <code>add.button</code> method with the following list of optional arguments:</p>
+
+<ul>
+ <li>Top absolute position on Canvas in pixels.</li>
+ <li>Left absolute position on Canvas in pixels.</li>
+ <li>Name of the image asset the button is using.</li>
+ <li>Function that will be executed when someone clicks the button.</li>
+ <li>The execution context.</li>
+ <li>Frame from the image asset used as the button's "hover" state.</li>
+ <li>Frame from the image asset used as the button's "normal" or "out" state.</li>
+ <li>Frame from the image asset used as the button's "click" or "down" state.</li>
+</ul>
+
+<p>The <code>anchor.set</code> is setting up the anchor point on the button for which all the calculations of the position are applied. In our case it's anchored half the way from the left edge and at the start of the top edge, so it can be easily horizontally centered on the screen without the need to know its width.</p>
+
+<p>When the start button is pressed, instead of jumping directly into the action the game will show the screen with the information on how to play the game.</p>
+
+<h3 id="Howto.js">Howto.js</h3>
+
+<pre class="brush: js">Ball.Howto = function(game) {
+};
+Ball.Howto.prototype = {
+    create: function() {
+        this.buttonContinue = this.add.button(0, 0, 'screen-howtoplay', this.startGame, this);
+    },
+    startGame: function() {
+        this.game.state.start('Game');
+    }
+};</pre>
+
+<p>The <code>Howto</code> state shows the gameplay instructions on the screen before starting the game. After clicking the screen the actual game is launched.</p>
+
+<h3 id="Game.js">Game.js</h3>
+
+<p>The <code>Game</code> state from the <code>Game.js</code> file is where all the magic happens. All the initialization is in the <code>create()</code> function (launched once at the beginning of the game). After that some functionality will require further code to control — we will write our own functions to handle more complicated tasks. In particular, take note of the <code>update()</code> function (executed at every frame), which updates things such as the ball position.</p>
+
+<pre class="brush: js">Ball.Game = function(game) {};
+Ball.Game.prototype = {
+    create: function() {},
+    initLevels: function() {},
+    showLevel: function(level) {},
+    updateCounter: function() {},
+    managePause: function() {},
+    manageAudio: function() {},
+    update: function() {},
+    wallCollision: function() {},
+    handleOrientation: function(e) {},
+    finishLevel: function() {}
+};</pre>
+
+<p>The <code>create</code> and <code>update</code> functions are framework-specific, while others will be our own creations:</p>
+
+<ul>
+ <li><code>initLevels</code> initializes the level data.</li>
+ <li><code>showLevel</code> prints the level data on the screen.</li>
+ <li><code>updateCounter</code> updates the time spent playing each level and records the total time spent playing the game..</li>
+ <li><code>managePause</code> pauses and resumes the game.</li>
+ <li><code>manageAudio</code> turns the audio on and off.</li>
+ <li><code>wallCollision</code> is executed when the ball hits the walls or other objects.</li>
+ <li><code>handleOrientation</code> is the function bound to the event responsible for the Device Orientation API, providing the motion controls when the game is running on a mobile device with appropriate hardware.</li>
+ <li><code>finishLevel</code> loads a new level when the current level is completed, or finished the game if the final level is completed.</li>
+</ul>
+
+<h4 id="Adding_the_ball_and_its_motion_mechanics">Adding the ball and its motion mechanics</h4>
+
+<p>First, let’s go to the <code>create()</code> function, initialize the ball object itself and assign a few properties to it:</p>
+
+<pre class="brush: js">this.ball = this.add.sprite(this.ballStartPos.x, this.ballStartPos.y, 'ball');
+this.ball.anchor.set(0.5);
+this.physics.enable(this.ball, Phaser.Physics.ARCADE);
+this.ball.body.setSize(18, 18);
+this.ball.body.bounce.set(0.3, 0.3);</pre>
+
+<p>Here we’re adding a sprite at the given place on the screen and using the <code>'ball'</code> image from the loaded graphic assets. We’re also setting the anchor for any physics calculations to the middle of the ball, enabling the Arcade physics engine (which handles all the physics for the ball movement), and setting the size of the body for the collision detection. The <code>bounce</code> property is used to set the bounciness of the ball when it hits the obstacles.</p>
+
+<h4 id="Controlling_the_ball">Controlling the ball</h4>
+
+<p>It’s cool to have the ball ready to be thrown around in the play area, but it’s also important to be able to actually move it! Now we will add the ability to control the ball with the keyboard on the desktop devices, and then we will move to the implementation of the Device Orientation API. Let’s focus on the keyboard first by adding the following to the <code>create()</code> function :</p>
+
+<pre class="brush: js">this.keys = this.game.input.keyboard.createCursorKeys();</pre>
+
+<p>As you can see there’s a special Phaser function called&nbsp;<code>createCursorKeys()</code>, which will give us an object with event handlers for the four arrow keys to play with: up, down, left and right.</p>
+
+<p>Next we will add the following code to the <code>update()</code> function, so it will be fired on every frame. The <code>this.keys</code> object will be checked against player input, so the ball can react accordingly with the predefined force:</p>
+
+<pre class="brush: js">if(this.keys.left.isDown) {
+    this.ball.body.velocity.x -= this.movementForce;
+}
+else if(this.keys.right.isDown) {
+    this.ball.body.velocity.x += this.movementForce;
+}
+if(this.keys.up.isDown) {
+    this.ball.body.velocity.y -= this.movementForce;
+}
+else if(this.keys.down.isDown) {
+    this.ball.body.velocity.y += this.movementForce;
+}</pre>
+
+<p>That way we can check which key is pressed at the given frame and apply the defined force to the ball, thus increase the velocity in the proper direction.</p>
+
+<h4 id="Implementing_the_Device_Orientation_API">Implementing the Device Orientation API</h4>
+
+<p>Probably the most interesting part of the game is its usage of the <strong>Device Orientation API</strong> for control on mobile devices. Thanks to this you can play the game by tilting the device in the direction you want the ball to roll. Here’s the code from the <code>create()</code> function responsible for this:</p>
+
+<pre class="brush: js">window.addEventListener("deviceorientation", this.handleOrientation, true);</pre>
+
+<p>We’re adding an event listener to the <code>"deviceorientation"</code> event and binding the <code>handleOrientation</code> function which looks like this:</p>
+
+<pre class="brush: js">handleOrientation: function(e) {
+    var x = e.gamma;
+    var y = e.beta;
+    Ball._player.body.velocity.x += x;
+    Ball._player.body.velocity.y += y;
+},</pre>
+
+<p>The more you tilt the device, the more force is applied to the ball, therefore the faster it moves (the velocity is higher).</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/10369/cyber-orb-flame-orientation.png" style="height: 480px; width: 620px;" alt="An explanation of the X, Y and Z axes of a Flame mobile device with the Cyber Orb game demo on the screen."></p>
+
+<div class="note">
+<p><strong>Note</strong>: To find more out about implementing device orientation and what raw code would look like, read <a href="https://developer.mozilla.org/en-US/Apps/Build/gather_and_modify_data/responding_to_device_orientation_changes">Keep it level: responding to device orientation changes</a>.</p>
+</div>
+
+<h4 id="Adding_the_hole">Adding the hole</h4>
+
+<p>The main objective in the game is to move the ball from the starting position to the ending position: a hole in the ground. Implementation looks very similar to the part where we created the ball, and it's also added in the <code>create()</code> function of our <code>Game</code> state:</p>
+
+<pre class="brush: js">this.hole = this.add.sprite(Ball._WIDTH*0.5, 90, 'hole');
+this.physics.enable(this.hole, Phaser.Physics.ARCADE);
+this.hole.anchor.set(0.5);
+this.hole.body.setSize(2, 2);</pre>
+
+<p>The difference is that our hole’s body will not move when we hit it with the ball and will have the collision detection calculated (which will be discussed later on in this article).</p>
+
+<h4 id="Building_the_block_labyrinth">Building the block labyrinth</h4>
+
+<p>To make the game harder and more interesting we will add some obstacles between the ball and the exit. We could use a level editor, but for the sake of this tutorial let's create something on our own.</p>
+
+<p>To hold the block information we'll use a level data array: for each block we'll store the top and left absolute positions in pixels (<code>x</code> and <code>y</code>) and the type of the block — horizontal or vertical (<code>t</code> with the <code>'w'</code> value meaning width and <code>'h'</code> meaning height). Then, to load the level we'll parse the data and show the blocks specific for that level. In the <code>initLevels</code> function we have:</p>
+
+<pre class="brush: js">this.levelData = [
+    [
+        { x: 96, y: 224, t: 'w' }
+    ],
+    [
+        { x: 72, y: 320, t: 'w' },
+        { x: 200, y: 320, t: 'h' },
+        { x: 72, y: 150, t: 'w' }
+    ],
+    // ...
+];</pre>
+
+<p>Every array element holds a collection of blocks with an <code>x</code> and <code>y</code> position and <code>t</code> value for each. After <code>levelData</code>, but still in the <code>initLevels</code> function, we're adding the blocks into an array in the <code>for</code> loop using some of the framework-specific methods:</p>
+
+<pre class="brush: js">for(var i=0; i&lt;this.maxLevels; i++) {
+    var newLevel = this.add.group();
+    newLevel.enableBody = true;
+    newLevel.physicsBodyType = Phaser.Physics.ARCADE;
+    for(var e=0; e&lt;this.levelData[i].length; e++) {
+        var item = this.levelData[i][e];
+        newLevel.create(item.x, item.y, 'element-'+item.t);
+    }
+    newLevel.setAll('body.immovable', true);
+    newLevel.visible = false;
+    this.levels.push(newLevel);
+}</pre>
+
+<p>First, <code>add.group()</code> is used to create a new group of items. Then the <code>ARCADE</code> body type is set for that group to enable physics calculations. The <code>newLevel.create</code> method creates new items in the group with starting left and top positions, and its own image. If you don't want to loop through the list of items again to add a property to every single one explicitly, you can use <code>setAll</code> on a group to apply it to all the items in that group.</p>
+
+<p>The objects are stored in the <code>this.levels</code> array, which is by default invisible. To load specific levels, we make sure the previous levels are hidden, and show the current one:</p>
+
+<pre class="brush: js">showLevel: function(level) {
+    var lvl = level | this.level;
+    if(this.levels[lvl-2]) {
+        this.levels[lvl-2].visible = false;
+    }
+    this.levels[lvl-1].visible = true;
+}</pre>
+
+<p>Thanks to that the game gives the player a challenge - now he have to roll the ball across the play area and guide it through the labyrinth built from the blocks. It's just an example of loading the levels, and there are only 5 of them just to showcase the idea, but you can work on expanding that on your own.</p>
+
+<h4 id="Collision_detection">Collision detection</h4>
+
+<p>At this point we've got the ball that is controlled by the player, the hole to reach and the obstacles blocking the way. There’s a problem though — our game doesn’t have any collision detection yet, so nothing happens when the ball hits the blocks — it just goes through. Let’s fix it! The good news is that the framework will take care of calculating the collision detection, we only have to specify the colliding objects in the <code>update()</code> function:</p>
+
+<pre class="brush: js">this.physics.arcade.collide(this.ball, this.borderGroup, this.wallCollision, null, this);
+this.physics.arcade.collide(this.ball, this.levels[this.level-1], this.wallCollision, null, this);</pre>
+
+<p>This will tell the framework to execute the <code>wallCollision</code> function when the ball hits any of the walls. We can use the <code>wallCollision</code> function to add any functionality we want like playing the bounce sound and implementing the <strong>Vibration API</strong>.</p>
+
+<h4 id="Adding_the_sound">Adding the sound</h4>
+
+<p>Among the preloaded assets there was an audio track (in various formats for browser compatibility), which we can use now. It has to be defined in the <code>create()</code> function first:</p>
+
+<pre class="brush: js">this.bounceSound = this.game.add.audio('audio-bounce');</pre>
+
+<p>If the status of the audio is <code>true</code> (so the sounds in the game are enabled), we can play it in the <code>wallCollision</code> function:</p>
+
+<pre class="brush: js">if(this.audioStatus) {
+    this.bounceSound.play();
+}</pre>
+
+<p>That's all — loading and playing the sounds is easy with Phaser.</p>
+
+<h4 id="Implementing_the_Vibration_API">Implementing the Vibration API</h4>
+
+<p>When collision detection works as expected let's add some special effects with the help from the Vibration API.</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/10371/cyber-orb-flame-vibration.png" style="height: 480px; width: 620px;" alt="A visualization of the vibrations of a Flame mobile device with the Cyber Orb game demo on the screen."></p>
+
+<p>The best way to use it in our case is to vibrate the phone every time the ball hits the walls — inside the <code>wallCollision</code> function:</p>
+
+<pre class="brush: js">if("vibrate" in window.navigator) {
+    window.navigator.vibrate(100);
+}</pre>
+
+<p>If the <code>vibrate</code> method is supported by the browser and available in the <code>window.navigator</code> object, vibrate the phone for 100 miliseconds. That's it!</p>
+
+<h4 id="Adding_the_elapsed_time">Adding the elapsed time</h4>
+
+<p>To improve replayability and give players the option to compete with each other we will store the elapsed time — players can then try to improve on their best game completion time. To implement this we have to create a variable for storing the actual number of seconds elapsed from the start of the game, and to show it for the player in the game. Let’s define the variables in the <code>create</code> function first:</p>
+
+<pre class="brush: js">this.timer = 0; // time elapsed in the current level
+this.totalTimer = 0; // time elapsed in the whole game</pre>
+
+<p>Then, right after that, we can initialize the necessary text objects to display this information to the user:</p>
+
+<pre class="brush: js">this.timerText = this.game.add.text(15, 15, "Time: "+this.timer, this.fontBig);
+this.totalTimeText = this.game.add.text(120, 30, "Total time: "+this.totalTimer, this.fontSmall);</pre>
+
+<p>We’re defining the top and left positions of the text, the content that will be shown and the styling applied to the text. We have this printed out on the screen, but it would be good to update the values every second:</p>
+
+<pre class="brush: js">this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);</pre>
+
+<p>This loop, also in the <code>create</code> function, will execute the <code>updateCounter</code> function every single second from the beginning of the game, so we can apply the changes accordingly. This is how the complete <code>updateCounter</code> function looks:</p>
+
+<pre class="brush: js">updateCounter: function() {
+    this.timer++;
+    this.timerText.setText("Time: "+this.timer);
+    this.totalTimeText.setText("Total time: "+(this.totalTimer+this.timer));
+},</pre>
+
+<p>As you can see we’re incrementing the <code>this.timer</code> variable and updating the content of the text objects with the current values on each iteration, so the player sees the elapsed time.</p>
+
+<h4 id="Finishing_the_level_and_the_game">Finishing the level and the game</h4>
+
+<p>The ball is rolling on the screen, the timer is working and we have the hole created that we have to reach. Now let’s set up the possibility to actually finish the level! The following line in the <code>update()</code> function adds a listener that fires when the ball gets to the hole.</p>
+
+<pre class="brush: js">this.physics.arcade.overlap(this.ball, this.hole, this.finishLevel, null, this);</pre>
+
+<p>This works similarly to the <code>collide</code> method explained earlier. When the ball overlaps with the hole (instead of colliding), the <code>finishLevel</code> function is executed:</p>
+
+<pre class="brush: js">finishLevel: function() {
+    if(this.level &gt;= this.maxLevels) {
+        this.totalTimer += this.timer;
+        alert('Congratulations, game completed!\nTotal time of play: '+this.totalTimer+' seconds!');
+        this.game.state.start('MainMenu');
+    }
+    else {
+        alert('Congratulations, level '+this.level+' completed!');
+        this.totalTimer += this.timer;
+        this.timer = 0;
+        this.level++;
+        this.timerText.setText("Time: "+this.timer);
+        this.totalTimeText.setText("Total time: "+this.totalTimer);
+        this.levelText.setText("Level: "+this.level+" / "+this.maxLevels);
+        this.ball.body.x = this.ballStartPos.x;
+        this.ball.body.y = this.ballStartPos.y;
+        this.ball.body.velocity.x = 0;
+        this.ball.body.velocity.y = 0;
+        this.showLevel();
+    }
+},</pre>
+
+<p>If the current level is equal to the maximum number of levels (in this case 5), then the game is finished — you'll get a congratulations message along with the number of seconds elapsed through the whole game, and a button to press that takes you to the main menu.</p>
+
+<p>If the current level is lower than 5, all the neccesary variables are reset and the next level is loaded.</p>
+
+<h2 id="Ideas_for_new_features">Ideas for new features</h2>
+
+<p>This is merely a working demo of a game that could have lots of additional features. We can for example add power-ups to collect along the way that will make our ball roll faster, stop the timer for a few seconds or give the ball special powers to go through obstacles. There’s also room for the traps which will slow the ball down or make it more difficult to reach the hole. You can create more levels of increasing difficulty. You can even implement achievements, leaderboards and medals for different actions in the game. There are endless possibilities — they only depend on your imagination.</p>
+
+<h2 id="Summary">Summary</h2>
+
+<p>I hope this tutorial will help you dive into 2D game development and inspire you to create awesome games on your own. You can play the demo game <a href="http://orb.enclavegames.com/" class="external">Cyber Orb</a> and check out its <a href="https://github.com/EnclaveGames/Cyber-Orb" class="external">source code on GitHub</a>.</p>
+
+<p>HTML5 gives us raw tools, the frameworks built on top of it are getting faster and better, so now is a great time get into web game development. In this tutorial we used Phaser, but there are a number of <a href="http://html5devstarter.enclavegames.com/#frameworks" class="external">other frameworks</a> worth considering too like <a href="http://impactjs.com/" class="external">ImpactJS</a>, <a href="https://www.scirra.com/construct2" class="external">Construct 2</a> or <a href="http://playcanvas.com/" class="external">PlayCanvas</a> — it depends on your preferences, coding skills (or lack thereof), project scale, requirements and other aspects. You should check them all out and decide which one suits your needs best.</p>
+                                                </article>
+
+            
+
+              
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                                      <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Canvas">Canvas</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Device Orientation API">Device Orientation API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Game Development">Game Development</a></li>
+              <li><a href="../../tag/HTML5.html">HTML5</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Phaser">Phaser</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/tag/Vibration API">Vibration API</a></li>
+          </ul>
+  </div>
+
+                                      <div class="contributors-sub"> <i aria-hidden="true" class="icon-group"></i><strong>Contributors to this page:</strong>         <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,             <a href="https://developer.mozilla.org/en-US/profiles/end3r">end3r</a>,             <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,             <a href="https://developer.mozilla.org/en-US/profiles/roryokane">roryokane</a>     </div>                  
+                                      <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o"></i><strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,
+                      <time datetime="2015-08-04T15:08:33-07:00">Aug 4, 2015, 3:08:33 PM</time>
+                    </div>
+                                  </div>
+                          </div>
+
+                          <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+                <a href="#quick-links" class="title smaller" id="quick-links-toggle"><i aria-hidden="true" class="icon-caret-up"></i>Hide Sidebar</a>
+
+                                  <!-- zone subnav -->
+                    <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol><li><a href="https://developer.mozilla.org/en-US/docs/Games">Game development</a></li>
+ <li><a href="#">Introduction</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/Games/Introduction" title="An introduction to the technologies useful for game developers and how to get started developing games using Web technologies. This article also looks at the business case for why it makes sense to create games for the Web">Introduction to game development for the Web</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Anatomy" title="What is a video game, really? There are certain parts that are common between games (even if it doesn't seem like it). This article looks to explain concepts like main loops in a completely general context. When it does focus, it does so toward web standards.">Anatomy of a video game</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Developing/Games/Special_considerations" title="This article from the App Center looks briefly at things you need to consider spefically when trying to create a game that will run as an open web app.">Special considerations for game developers</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tools">Tools</a>
+  <ol><li><a href="../Tools/asm.html" title="asm.js is a very limited subset of the JavaScript language, which can be greatly optimized and run in an ahead-of-time (AOT) compiling engine for much faster performance than your typical JavaScript performance. This is, of course, great for games.">asm.js</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Emscripten" title="An LLVM to JavaScript compiler; with Emscripten, you can compile C++ and other languages that can compile to LLVM bytecode into high-performance JavaScript.">Emscripten</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API">WebVR</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Performance/Profiling_with_the_Built-in_Profiler">Gecko profiler</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tools/Engines_and_tools" title="A list of engines, templates and technologies useful to game developers.">Game engines and tools</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques">Techniques</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Async_scripts" title="Especially when creating medium to large-sized games, async scripts are an essential technique to take advantage of, so that your game's JavaScript can be compiled off the main thread and be cached for future game running">Using async scripts for asm.js</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Apps/Developing/Optimizing_startup_performance" title="How to make sure your game starts up quickly, smoothly, and without appearing to lock up the user's browser or device.">Optimizing startup performance</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/WebRTC_data_channels" title="In addition to providing support for audio and video communication, WebRTC lets you set up peer-to-peer data channels to exchange text or binary data actively between your players.">Using WebRTC peer-to-peer data channels</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Efficient_animation_for_web_games">Efficient animation for web games</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Audio_for_Web_Games">Audio for Web Games</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection">2D collision detection</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Workflows">Workflows</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript">2D breakout game using pure JavaScript</a></li>
+   <li><a href="HTML5_Gamedev_Phaser_Device_Orientation.html">2D maze game with device orientation</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Examples">Examples</a></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+                
+                <!-- approvals -->
+                
+              
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation$history" label="View page history"></menuitem>
+  </menu>
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+                <div class="contentinfo">
+          <p>© 2005-2015 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+                </div>
+      </div>
+      <div class="column-strip">
+                        <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation" selected="">
+          English (US)
+        </option>
+                  <option value="/es/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation">
+            Español
+          </option>          <option value="/fr/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation_FR">
+            Français
+          </option>      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+                </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+          <!--[if lte IE 8]><script src="https://developer.cdn.mozilla.net/static/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/main-min2bff.js?build=2aab9d6"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+      
+    <script src="../../../../../developer.cdn.mozilla.net/static/js/wiki-min2bff.js?build=2aab9d6" async="" id="wikiscript"></script>
+
+    <script type="text/javascript">
+            mdn.optimizely.push(['activate', 2796520257]);
+  </script>
+
+  
+  
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Games/Workflows/HTML5_Gamedev_Phaser_Device_Orientation by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 08:24:24 GMT -->
+</body></html>

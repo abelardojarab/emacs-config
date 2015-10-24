@@ -1,0 +1,197 @@
+<html><head>
+    <meta charset="utf-8">
+    
+    <title>scipy.special.lpmn</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="top" title="SciPy v0.16.0 Reference Guide" href="../index.html">
+    <link rel="up" title="Special functions (scipy.special)" href="../special.html">
+    <link rel="next" title="scipy.special.lqmn" href="scipy.special.lqmn.html">
+    <link rel="prev" title="scipy.special.lqn" href="scipy.special.lqn.html"> 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">SciPy v0.16.0 Reference Guide</a></li>
+	
+          <li class="active"><a href="../special.html" accesskey="U">Special functions (<tt class="docutils literal"><span class="pre">scipy.special</span></tt>)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index" accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="../scipy-optimize-modindex.html" title="Python Module Index">modules</a>
+      </li>
+      <li class="active">
+        <a href="scipy.special.lqmn.html" title="scipy.special.lqmn" accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="scipy.special.lqn.html" title="scipy.special.lqn" accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/scipyshiny_small.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scipy.special.lqn.html" title="previous chapter">scipy.special.lqn</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scipy.special.lqmn.html" title="next chapter">scipy.special.lqmn</a></p>
+
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scipy-special-lpmn">
+<h1>scipy.special.lpmn<a class="headerlink" href="#scipy-special-lpmn" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<a class="dashAnchor" name="//apple_ref/Function/scipy.special.lpmn"></a><dt id="scipy.special.lpmn">
+<tt class="descclassname">scipy.special.</tt><tt class="descname">lpmn</tt><big>(</big><em>m</em>, <em>n</em>, <em>z</em><big>)</big><a class="reference external" href="http://github.com/scipy/scipy/blob/v0.16.0/scipy/special/basic.py#L638"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scipy.special.lpmn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associated Legendre function of the first kind, Pmn(z)</p>
+<p>Computes the associated Legendre function of the first kind
+of order m and degree n,:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Pmn</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">=</span> <span class="n">P_n</span><span class="o">^</span><span class="n">m</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and its derivative, <tt class="docutils literal"><span class="pre">Pmn'(z)</span></tt>.  Returns two arrays of size
+<tt class="docutils literal"><span class="pre">(m+1,</span> <span class="pre">n+1)</span></tt> containing <tt class="docutils literal"><span class="pre">Pmn(z)</span></tt> and <tt class="docutils literal"><span class="pre">Pmn'(z)</span></tt> for all
+orders from <tt class="docutils literal"><span class="pre">0..m</span></tt> and degrees from <tt class="docutils literal"><span class="pre">0..n</span></tt>.</p>
+<p>This function takes a real argument <tt class="docutils literal"><span class="pre">z</span></tt>. For complex arguments <tt class="docutils literal"><span class="pre">z</span></tt>
+use clpmn instead.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<colgroup><col class="field-name">
+<col class="field-body">
+</colgroup><tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>m</strong> : int</p>
+<blockquote>
+<div><p><tt class="docutils literal"><span class="pre">|m|</span> <span class="pre">&lt;=</span> <span class="pre">n</span></tt>; the order of the Legendre function.</p>
+</div></blockquote>
+<p><strong>n</strong> : int</p>
+<blockquote>
+<div><p>where <tt class="docutils literal"><span class="pre">n</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>; the degree of the Legendre function.  Often
+called <tt class="docutils literal"><span class="pre">l</span></tt> (lower case L) in descriptions of the associated
+Legendre function</p>
+</div></blockquote>
+<p><strong>z</strong> : float</p>
+<blockquote>
+<div><p>Input value.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Pmn_z</strong> : (m+1, n+1) array</p>
+<blockquote>
+<div><p>Values for all orders 0..m and degrees 0..n</p>
+</div></blockquote>
+<p><strong>Pmn_d_z</strong> : (m+1, n+1) array</p>
+<blockquote class="last">
+<div><p>Derivatives for all orders 0..m and degrees 0..n</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="scipy.special.clpmn.html#scipy.special.clpmn" title="scipy.special.clpmn"><tt class="xref py py-obj docutils literal"><span class="pre">clpmn</span></tt></a></dt>
+<dd>associated Legendre functions of the first kind for complex z</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>In the interval (-1, 1), Ferrer’s function of the first kind is
+returned. The phase convention used for the intervals (1, inf)
+and (-inf, -1) is such that the result is always real.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r290" rules="none">
+<colgroup><col class="label"><col></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R290]</a></td><td>NIST Digital Library of Mathematical Functions
+<a class="reference external" href="http://dlmf.nist.gov/14.3">http://dlmf.nist.gov/14.3</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        © Copyright 2008-2014, The Scipy community.
+      </li>
+      <li>
+      Last updated on Jul 24, 2015.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  
+</body></html>

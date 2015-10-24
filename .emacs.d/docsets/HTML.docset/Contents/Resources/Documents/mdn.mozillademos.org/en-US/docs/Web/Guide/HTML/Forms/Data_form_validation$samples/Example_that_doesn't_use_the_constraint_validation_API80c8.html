@@ -1,0 +1,152 @@
+<html><!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation$samples/Example_that_doesn't_use_the_constraint_validation_API?revision=566329 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 10:03:18 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1">
+                <style type="text/css">
+            /* This is just to make the example nicer */
+body {
+  font: 1em sans-serif;
+  padding: 0;
+  margin : 0;
+}
+
+form {
+  max-width: 200px;
+}
+
+p * {
+  display: block;
+}
+
+input.mail {
+  -webkit-appearance: none;
+
+  width: 100%;
+  border: 1px solid #333;
+  margin: 0;
+
+  font-family: inherit;
+  font-size: 90%;
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* This is our style for the invalid fields */
+input.invalid{
+  border-color: #900;
+  background-color: #FDD;
+}
+
+input:focus.invalid {
+  outline: none;
+}
+
+/* This is the style of our error messages */
+.error {
+  width  : 100%;
+  padding: 0;
+ 
+  font-size: 80%;
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+ 
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}
+        </style>
+            </head>
+    <body>
+                    <form>
+  <p>
+    <label for="mail">
+        <span>Please enter an email address:</span>
+        <input type="text" class="valid" id="mail" name="mail">
+        <span class="error" aria-live="polite"></span>
+    </label>
+  </p><p>
+  <!-- Some legacy browsers need to have the `type` attribute
+       explicitly set to `submit` on the `button`element -->
+  <button type="submit">Submit</button>
+</p></form>
+                            <script type="text/javascript">
+                // There are less ways to pick a DOM node with legacy browsers
+var form  = document.getElementsByTagName('form')[0];
+var email = document.getElementById('mail');
+
+// The following is a trick to reach the next sibling Element node in the DOM
+// This is dangerous because you can easily build an infinite loop.
+// In modern browsers, you should prefer using element.nextElementSibling
+var error = email;
+while ((error = error.nextSibling).nodeType != 1);
+
+// As per the HTML5 Specification
+var emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+// Many legacy browsers do not support the addEventListener method.
+// Here is a simple way to handle this; it's fare from the only one.
+function addEvent(element, event, callback) {
+  var previousEventCallBack = element["on"+event];
+  element["on"+event] = function (e) {
+    var output = callback(e);
+    
+    // A callback that return `false` stop the callback chain
+    // and interupt the execution of the event callback.
+    if (output === false) return false;
+
+    if (typeof previousEventCallBack === 'function') {
+      output = previousEventCallBack(e);
+      if(output === false) return false;
+    }
+  }
+};
+
+// Now we can rebuild our validation constraint
+// Because we do not rely on CSS pseudo-class, we have to  
+// set explicitly the valid/invalid class on our email field
+addEvent(window, "load", function () {
+  // Here, we test if the field is empty (remember, the field is not required)
+  // If it is not, we check if its content is a well-formed e-mail address.
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+ 
+  email.className = test ? "valid" : "invalid";
+});
+
+// This defines what happens when the user type on the field
+addEvent(email, "keyup", function () {
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+  if (test) {
+    email.className = "valid";
+    error.innerHTML = "";
+    error.className = "error";
+  } else {
+    email.className = "invalid";
+  }
+});
+
+// This defines what happens when the user try to submit the data
+addEvent(form, "submit", function () {
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+ 
+  if (!test) {
+    email.className = "invalid";
+    error.innerHTML = "I expect an e-mail, darling!";
+    error.className = "error active";
+
+    // Some legacy browsers do not support the event.reventDefault() method
+    return false;
+  } else {
+    email.className = "valid";
+    error.innerHTML = "";
+    error.className = "error";
+  }
+});
+            </script>
+            
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/Guide/HTML/Forms/Data_form_validation$samples/Example_that_doesn't_use_the_constraint_validation_API?revision=566329 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Oct 2015 10:03:18 GMT -->
+</body></html>

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Ctl-Char Syntax</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Ctl-Char-Syntax"></a>
+<a name="Ctl_002dChar-Syntax"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Meta_002dChar-Syntax.html#Meta_002dChar-Syntax">Meta-Char Syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="General-Escape-Syntax.html#General-Escape-Syntax">General Escape Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Character-Type.html#Character-Type">Character Type</a>
+
+</div>
+
+<h5 class="subsubsection">2.3.3.3 Control-Character Syntax</h5>
+
+<p><a name="index-control-characters-79"></a>  Control characters can be represented using yet another read syntax. 
+This consists of a question mark followed by a backslash, caret, and the
+corresponding non-control character, in either upper or lower case.  For
+example, both &lsquo;<samp><span class="samp">?\^I</span></samp>&rsquo; and &lsquo;<samp><span class="samp">?\^i</span></samp>&rsquo; are valid read syntax for the
+character <kbd>C-i</kbd>, the character whose value is 9.
+
+   <p>Instead of the &lsquo;<samp><span class="samp">^</span></samp>&rsquo;, you can use &lsquo;<samp><span class="samp">C-</span></samp>&rsquo;; thus, &lsquo;<samp><span class="samp">?\C-i</span></samp>&rsquo; is
+equivalent to &lsquo;<samp><span class="samp">?\^I</span></samp>&rsquo; and to &lsquo;<samp><span class="samp">?\^i</span></samp>&rsquo;:
+
+<pre class="example">     ?\^I &rArr; 9     ?\C-I &rArr; 9
+</pre>
+   <p>In strings and buffers, the only control characters allowed are those
+that exist in <acronym>ASCII</acronym>; but for keyboard input purposes, you can turn
+any character into a control character with &lsquo;<samp><span class="samp">C-</span></samp>&rsquo;.  The character
+codes for these non-<acronym>ASCII</acronym> control characters include the
+2**26
+bit as well as the code for the corresponding non-control character. 
+Ordinary text terminals have no way of generating non-<acronym>ASCII</acronym>
+control characters, but you can generate them straightforwardly using
+X and other window systems.
+
+   <p>For historical reasons, Emacs treats the &lt;DEL&gt; character as
+the control equivalent of <kbd>?</kbd>:
+
+<pre class="example">     ?\^? &rArr; 127     ?\C-? &rArr; 127
+</pre>
+   <p class="noindent">As a result, it is currently not possible to represent the character
+<kbd>Control-?</kbd>, which is a meaningful input character under X, using
+&lsquo;<samp><span class="samp">\C-</span></samp>&rsquo;.  It is not easy to change this, as various Lisp files refer
+to &lt;DEL&gt; in this way.
+
+   <p>For representing control characters to be found in files or strings,
+we recommend the &lsquo;<samp><span class="samp">^</span></samp>&rsquo; syntax; for control characters in keyboard
+input, we prefer the &lsquo;<samp><span class="samp">C-</span></samp>&rsquo; syntax.  Which one you use does not
+affect the meaning of the program, but may guide the understanding of
+people who read it.
+
+   </body></html>
+
