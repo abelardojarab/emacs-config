@@ -163,8 +163,14 @@
 ;; Setup tabbar
 (require 'setup-tabbar)
 
+;; Setup helm
+(require 'setup-helm)
+
 ;; Setup project support
 (require 'setup-project)
+
+;; Setup dash
+(require 'setup-dash)
 
 ;; Setup utilities
 (require 'setup-utilities)

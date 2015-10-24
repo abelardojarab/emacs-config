@@ -102,6 +102,14 @@
 ;; Put c++-mode as default for *.h files (improves parsing)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
+;; C/C++ style
+(defun my/c-mode-init ()
+  (c-set-style "k&r")
+  (c-toggle-electric-state -1)
+  (setq c-basic-offset 4))
+(add-hook 'c-mode-hook #'my/c-mode-init)
+(add-hook 'c++-mode-hook #'my/c-mode-init)
+
 ;; Enable case-insensitive searching
 (set-default 'semantic-case-fold t)
 
@@ -143,19 +151,20 @@
 (setq gdb-many-windows t
       gdb-max-frames 120)
 
-;; C/C++ style
-(defun my/c-mode-init ()
-  (c-set-style "k&r")
-  (c-toggle-electric-state -1)
-  (setq c-basic-offset 4))
-(add-hook 'c-mode-hook #'my/c-mode-init)
-(add-hook 'c++-mode-hook #'my/c-mode-init)
-
 ;; Function arguments
 (add-to-list 'load-path "~/.emacs.d/functions-args")
 (load "~/.emacs.d/function-args/function-args.el")
 (require 'function-args)
 (fa-config-default)
+
+;; Enable which-function-mode for selected major modes
+(setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode java-mode
+                                         c-mode c++-mode makefile-mode sh-mode))
+(which-func-mode t)
+(mapc (lambda (mode)
+        (add-hook mode (lambda () (which-function-mode t))))
+      '(prog-mode-hook
+        org-mode-hook))
 
 (provide 'setup-cedet)
 ;;; setup-cedet.el ends here
