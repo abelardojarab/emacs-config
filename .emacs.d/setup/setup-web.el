@@ -26,6 +26,8 @@
 
 (when (fboundp 'eww)
   (setq browse-url-browser-function 'eww-browse-url)
+  (setq-default url-configuration-directory "~/.emacs.cache/url")
+  (setq-default url-cookie-file "~/.emacs.cache/url/cookies")
 
   (advice-add 'url-http-user-agent-string :around
               (lambda (ignored)

@@ -37,16 +37,16 @@
 (semantic-load-enable-minimum-features)
 
 ;; Faster parsing
-(setq semantic-idle-work-parse-neighboring-files-flag nil)
-(setq semantic-idle-work-update-headers-flag nil)
-(setq semantic-idle-scheduler-idle-time 3)
-(setq semantic-idle-scheduler-work-idle-time 180000)
-(setq semantic-idle-scheduler-max-buffer-size 1000)
+(setq-default semantic-idle-work-parse-neighboring-files-flag nil)
+(setq-default semantic-idle-work-update-headers-flag nil)
+(setq-default semantic-idle-scheduler-idle-time 3)
+(setq-default semantic-idle-scheduler-work-idle-time 180000)
+(setq-default semantic-idle-scheduler-max-buffer-size 1000)
 
 ;; Default directory
-(setq semanticdb-default-system-save-directory
-      (setq semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
-(setq ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
+(setq-default semanticdb-default-system-save-directory
+              (setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
+(setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
 
 ;; ctags
 (defun my-semantic-hook ()

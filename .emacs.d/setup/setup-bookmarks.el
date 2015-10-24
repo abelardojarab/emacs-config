@@ -27,6 +27,7 @@
 ;; Bookmark Plus
 (add-to-list 'load-path "~/.emacs.d/bookmark+")
 (require 'bookmark+)
+(setq-default bookmark-default-file "~/.emacs.cache/bookmarks")
 
 ;; Bookmarks
 (add-to-list 'load-path "~/.emacs.d/bm")

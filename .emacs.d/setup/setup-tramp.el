@@ -38,7 +38,8 @@
       '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))
 
 ;; Fix the auto save problem.
-(setq tramp-auto-save-directory "~/.emacs.cache/backups")
+(setq-default tramp-persistency-file-name "~/.emacs.cache/tramp")
+(setq-default tramp-auto-save-directory "~/.emacs.cache/backups")
 (make-directory tramp-auto-save-directory t)
 
 ;; have tramp save temps locally...

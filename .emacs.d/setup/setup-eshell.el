@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+(setq-default eshell-directory-name "~/.emacs.cache/eshell")
+
 (add-hook 'sh-mode-hook
           (lambda ()
             (show-paren-mode -1)
