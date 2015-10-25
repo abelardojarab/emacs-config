@@ -32,7 +32,7 @@ xterm*faceName:   xft:Dejavu Sans Mono:pixelsize=16
 ! xterm*font:     *-fixed-*-*-*-20-*
 ! xterm*faceSize: 12
 
-! Fix up xterm's keybindings 
+! Fix up xterm keybindings 
 xterm*VT100.translations:	#override \
       <Key>BackSpace:    string(0x7F) \n\
       <Key>Insert:       string(0x1b) string("[2~")\n\
