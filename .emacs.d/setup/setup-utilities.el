@@ -164,7 +164,7 @@ buffer."
         (t                    (self-insert-command (or arg 1)))))
 
 ;; Unindent blocks
-(setq my-tab-width 2)
+(defvar my-tab-width 2)
 (defun indent-block()
   (shift-region my-tab-width)
   (setq deactivate-mark nil))

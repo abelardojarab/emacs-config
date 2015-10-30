@@ -65,11 +65,11 @@
 (setenv "PYTHONPATH" (concat (concat (getenv "HOME") "/workspace/pythonlibs/lib/python2.7/site-packages") ":" (getenv "PYTHONPATH")))
 
 ;; switch to the interpreter after executing code
-(setq py-shell-switch-buffers-on-execute-p t)
-(setq py-switch-buffers-on-execute-p t)
+(setq-default py-shell-switch-buffers-on-execute-p t)
+(setq-default py-switch-buffers-on-execute-p t)
 
 ;; try to automagically figure out indentation
-(setq py-smart-indentation t)
+(setq-default py-smart-indentation t)
 
 ;; split horizontally on execution
 (setq-default py-split-windows-on-execute-function 'split-window-horizontally)

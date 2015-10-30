@@ -34,11 +34,8 @@
 ;; Activate template autocompletion
 (abbrev-mode t)
 (setq save-abbrevs t)
-(dolist (hook '(c-common-mode-hook
-                python-mode-hook
-                js2-mode-hook
-                lisp-mode-hook
-                emacs-lisp-mode-hook
+(dolist (hook '(prog-mode-hook
+                markdown-mode-hook
                 org-mode-hook
                 text-mode-hook))
   (add-hook hook (lambda () (abbrev-mode 1))))
