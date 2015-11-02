@@ -211,7 +211,7 @@
 (global-set-key (kbd "<f11>") 'toggle-frame-maximized)
 
 ;; iBuffer
-(global-set-key (kbd "<f12>") 'ibuffer)
+(global-set-key (kbd "<f12>") 'helm-buffer-list)
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)
@@ -402,10 +402,10 @@
 (global-set-key [C-end] 'tabbar-forward-group)
 
 ;; Alternative tabbar keys
-(global-set-key (kbd "C-x <up>") 'tabbar-backward-group)
-(global-set-key (kbd "C-x <down>") 'tabbar-forward-group)
-(global-set-key (kbd "C-x <right>") 'tabbar-forward-tab)
-(global-set-key (kbd "C-x <left>") 'tabbar-backward-tab)
+(global-set-key (kbd "C-x <prior>") 'tabbar-backward-group)
+(global-set-key (kbd "C-x <next>") 'tabbar-forward-group)
+(global-set-key (kbd "C-x <home>") 'tabbar-forward-tab)
+(global-set-key (kbd "C-x <end>") 'tabbar-backward-tab)
 
 ;; Faster buffer switching
 (add-to-list 'load-path "~/.emacs.d/popup-switcher")
@@ -456,7 +456,7 @@
 (define-key my-keys-minor-mode-map (kbd "C-`") 'psw-switch-function)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'ibuffer)
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffer-list)
 (define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
 
 ;; Good for navigating
