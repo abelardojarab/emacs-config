@@ -97,10 +97,6 @@
 (setq shift-select-mode t)
 (cua-mode 1)
 
-;; Multiple cursors
-(add-to-list 'load-path "~/.emacs.d/multiple-cursors")
-(require 'multiple-cursors)
-
 ;; Smart tab
 (add-to-list 'load-path "~/.emacs.d/smart-tab")
 (require 'smart-tab)
