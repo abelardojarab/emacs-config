@@ -159,9 +159,9 @@ Opus.geometry:          =1000x1000+0+0
 ! **********************************************
 ! * These resources allow you to set the fonts *
 ! **********************************************
-Opus.labelFont:   -b&h-lucidatypewriter-medium-r-normal-sans-18-180-75-75-m-110-iso8859-4
-Opus.textFont:    -b&h-lucidatypewriter-medium-r-normal-sans-18-180-75-75-m-110-iso8859-4
-Opus.helpFont:    -b&h-lucidatypewriter-medium-r-normal-sans-18-180-75-75-m-110-iso8859-4
+Opus.labelFont:   -adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-2
+Opus.textFont:    -adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-2
+Opus.helpFont:    -adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-2
 
 ! ****************************************************
 ! * This resource lets you specify which text editor *
@@ -188,16 +188,16 @@ Opus.buttonColor:              #800000
 Opus.editorBackground:         #000000
 Opus.showFixedMenuLabels: True
 
-cdsLibManager*textFontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*buttonFontList: -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*labelFontList: -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*XbaeMatrix*fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*Tree.XmHierButton.fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*copyErrorDestLib.fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*copyErrorMessage.fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*cdsComboBox.edit.fontList: -adobe-courier-medium-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*XmMenuShell.buttonFontList: -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
-cdsLibManager*menuBar.XmCascadeButtonGadget.fontList: -adobe-helvetica-bold-r-*-*-12-*-*
+cdsLibManager*textFontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*buttonFontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*labelFontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*XbaeMatrix*fontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*Tree.XmHierButton.fontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*copyErrorDestLib.fontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*copyErrorMessage.fontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*cdsComboBox.edit.fontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*XmMenuShell.buttonFontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
+cdsLibManager*menuBar.XmCascadeButtonGadget.fontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
 
 ! ****************************************************
 ! * These resources allow you to specify the default *
@@ -228,7 +228,7 @@ Maker*background: #c0c0c0
 Maker*bottomShadowColor:#999999
 Maker*topShadowColor: #ffffff
 Maker*foreground: #800000
-Maker*fontList: -b&h-lucidatypewriter-medium-r-normal-sans-18-180-75-75-m-110-iso8859-4
+Maker*fontList: -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso8859-14
 Maker.colorDocs: True
 Maker.useBackingStore: True
 Maker.colorImages: True
