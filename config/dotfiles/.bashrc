@@ -109,13 +109,16 @@ fi
 alias lmli='/opt/cadence/installs/IC615/tools/bin/lmgrd -c /opt/cadence/installs/IC615/share/license/license.dat'
 
 export EMACS_SERVER_FILE=$HOME/.emacs.cache/server/server
-export OA_UNSUPPORTED_PLAT=linux_rhel40_gcc44x
+export OA_UNSUPPORTED_PLAT=linux_rhel50_gcc44x
 export OA_HOME=/opt/cadence/installs/IC616/oa_v22.43.018
 export PYTHONPATH=~/workspace/pythonlibs/lib/python2.7/site-packages
 export PYTHONPATH=${PYTHONPATH}:/opt/oaScript/python2
+export CDS_AUTO_64BIT=NONE
 export CDSROOT=/opt/cadence/installs/IC616
 export CDSHOME=/opt/cadence/installs/IC616
 export CDS_ROOT=/opt/cadence/installs/IC616
+export BASIC_LIB_PATH=$CDSROOT/tools/dfII/etc/cdslib/basic
+export ANALOG_LIB_PATH=$CDSROOT/tools/dfII/etc/cdslib/artist/analogLib/
 export CDS_LIC_FILE=$HOME/flexlm/cadence.dat
 export CDS_LOG_PATH=/tmp
 export CDS_LOG_VERSION=pid
