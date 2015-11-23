@@ -106,7 +106,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-alias lmli='/opt/cadence/installs/IC615/tools/bin/lmgrd -c /opt/cadence/installs/IC615/share/license/license.dat'
+alias lmlicense='/opt/cadence/installs/IC616/tools.lnx86/bin/lmgrd -c'
 
 export EMACS_SERVER_FILE=$HOME/.emacs.cache/server/server
 export OA_UNSUPPORTED_PLAT=linux_rhel50_gcc44x
@@ -128,14 +128,16 @@ export CDS_Netlisting_Mode=Analog
 export MMSIM_ROOT=/opt/cadence/installs/MMSIM121
 export APACHEDA_LICENSE_FILE=$HOME/flexlm/totem.lic
 export APACHEROOT=/opt/Ansys/Totem14.1.b2
-export CALIBRE_HOME=/opt/mentor/calibre/2007.1_17.18
-export MGC_HOME=/opt/mentor/calibre/2007.1_17.18
-export MGLS_LICENSE_FILE=$HOME/flexlm/calibre.dat
-export LM_LICENSE_FILE=$HOME/flexlm/license.dat
-export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/cadence.dat:$HOME/flexlm/synopsys.dat:$HOME/flexlm/modelsim.dat:$HOME/flexlm/matlab.dat
-export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:/opt/cds/soc710/bin:/opt/synopsys/starrc/2012.12/bin:/opt/synopsys/hspice/Z-2007.03/hspice/linux:/opt/synopsys/cosmosscope/H-2012.12/ai_bin:/opt/mentor/modelsim/6.5f/modeltech/bin:/opt/mentor/calibre/2007.1_17.18/bin:/opt/PyCharm/4.0.6/bin:/opt/IBM/SPSS/Statistics/22/bin:/opt/synopsys/icweb/G-2012.06-SP1/bin/amd64:/opt/synopsys/icvalidator/H-2013.06/bin/SUSE.64:$PYTHONPATH/bin:$PATH:~/workspace/frametools/bin
+export SNPSLMD_LICENSE_FILE=$HOME/flexlm/synopsys.dat
+export SNPS_DC_ROOT=/opt/synopsys/designcompiler/B-2008.09
+export MODELSIMROOT=/opt/mentor/modelsim/10.1c
+export CALIBRE_HOME=/opt/mentor/calibre/2013.3_28.19
+export MGC_HOME=/opt/mentor/calibre/2013.3_28.19
+export MGLS_LICENSE_FILE=$HOME/flexlm/calibre.dat:$HOME/flexlm/modelsim.dat
+export LM_LICENSE_FILE=$HOME/flexlm/modelsim.dat:$HOME/flexlm/calibre.dat:$HOME/flexlm/synopsys.dat:$HOME/flexlm/matlab.dat:$HOME/flexlm/cadence.dat
+export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:/opt/cadence/installs/SOC710/bin:$SNPS_DC_ROOT/bin:/opt/synopsys/starrc/2012.12/bin:/opt/synopsys/hspice/Z-2007.03/hspice/linux:/opt/synopsys/cosmosscope/H-2012.12/ai_bin:$MODELSIMROOT/modeltech/bin:$CALIBRE_HOME/bin:/opt/PyCharm/4.0.6/bin:/opt/IBM/SPSS/Statistics/22/bin:/opt/synopsys/icweb/G-2012.06-SP1/bin/amd64:/opt/synopsys/icvalidator/H-2013.06/bin/SUSE.64:$PYTHONPATH/bin:$PATH:~/workspace/frametools/bin
 export CDK_DIR=/opt/ncsu-cdk-1.6.0
 export PDK_DIR=/opt/FreePDK45
 export PDK_DIR_SC=/opt/FreePDK45StandardCells
-export _JAVA_OPTIONS="-Xmx4g -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Xms512m -Xmx1024m"
+export _JAVA_OPTIONS=" -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Xms512m -Xmx1024m"
 export theHost=`hostname`
