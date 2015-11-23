@@ -179,7 +179,8 @@
                 sass-mode yaml-mode csv-mode espresso-mode haskell-mode
                 html-mode nxml-mode sh-mode smarty-mode clojure-mode
                 lisp-mode textile-mode markdown-mode tuareg-mode
-                csharp-mode js2-mode js3-mode css-mode less-css-mode))
+                csharp-mode js2-mode js3-mode css-mode less-css-mode
+                vhdl-mode verilog-mode))
   (add-to-list 'ac-modes mode))
 
 ;; Autocomplete for Org
