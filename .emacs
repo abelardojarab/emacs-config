@@ -33,6 +33,7 @@
 (require 'cedet-remove-builtin)
 (setq byte-compile-warnings nil)
 (load-file "~/.emacs.d/cedet/cedet-devel-load.el")
+
 (load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
 (global-ede-mode 1)
 
@@ -97,9 +98,6 @@
 ;; Setup web support
 (require 'setup-web)
 
-;; Setup regular expressions
-(require 'setup-regexp)
-
 ;; Setup Etags and GTAGS
 (require 'setup-tags)
 
@@ -115,20 +113,17 @@
 ;; Setup Ido and Flex
 (require 'setup-ido)
 
-;; Setup Autopair
+;; ;; Setup Autopair
 (require 'setup-autopair)
 
 ;; Setup Eldoc
-(require 'setup-eldoc)
+;; (require 'setup-eldoc)
 
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
 
 ;; Setup Auto-Complete
 (require 'setup-auto-complete)
-
-;; Setup Hideshow
-(require 'setup-hideshow)
 
 ;; Setup markdown and Yaml
 (require 'setup-markdown)
@@ -151,9 +146,6 @@
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
-;; Setup versioning control
-(require 'setup-versioning)
-
 ;; Setup modeline and Smex
 (require 'setup-modeline)
 
@@ -166,17 +158,11 @@
 ;; Setup helm
 (require 'setup-helm)
 
-;; Setup project support
-(require 'setup-project)
-
 ;; Setup dash
 (require 'setup-dash)
 
 ;; Setup utilities
 (require 'setup-utilities)
-
-;; Setup eshell
-(require 'setup-eshell)
 
 ;; Setup ECB
 (require 'setup-ecb)
@@ -184,10 +170,7 @@
 ;; Setup post
 (require 'setup-post)
 
-;; Setup tramp
-(require 'setup-tramp)
-
-;; Setup keys
+;; ;; Setup keys
 (require 'setup-keys)
 
 ;; Setup server

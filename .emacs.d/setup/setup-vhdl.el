@@ -1,6 +1,6 @@
 ;;; setup-vhdl.el ---
 
-;; Copyright (C) 2014  Abelardo
+;; Copyright (C) 2014, 2015  Abelardo
 
 ;; Author: Abelardo <abelardo@abelardo-Aspire-7720>
 ;; Keywords:
