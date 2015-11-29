@@ -441,6 +441,9 @@ Defaults to `error'."
 (setq auto-indent-on-visit-file t) ;; do not indent when a file is visit
 (setq auto-indent-blank-lines-on-move nil)
 (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
+(setq auto-indent-disabled-modes-list (list
+                                       (quote vhdl-mode)))
+
 (require 'auto-indent-mode)
 (auto-indent-global-mode)
 

@@ -155,8 +155,14 @@
 ;; Setup tabbar
 (require 'setup-tabbar)
 
+;; Setup versioning
+(require 'setup-versioning)
+
 ;; Setup helm
 (require 'setup-helm)
+
+;; Setup project
+(require 'setup-project)
 
 ;; Setup dash
 (require 'setup-dash)
@@ -174,6 +180,6 @@
 (require 'setup-keys)
 
 ;; Setup server
-(require 'setup-server)
+;; (require 'setup-server)
 
 (setq debug-on-error nil)

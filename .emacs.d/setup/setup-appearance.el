@@ -144,41 +144,6 @@ non-nil."
   (let ((font-lock-fontified nil))
     ad-do-it))
 
-;; snippet to analyze complex log files
-(defun hi-lock-show-all ()
-  "Show all lines in the current buffer containing a overlay of hi-lock."
-  (interactive)
-  (let ((newbuf (format "*hi-lock:%s*" (buffer-name)))
-        (hide-start (point-min)))
-    (when (get-buffer newbuf) (kill-buffer newbuf))
-    (clone-indirect-buffer-other-window newbuf t)
-    (with-current-buffer newbuf
-      (goto-char (point-min))
-      (dolist (bol (save-excursion
-                     (sort
-                      (mapcar (lambda (ov)
-                                (goto-char (overlay-start ov))
-                                (point-at-bol))
-                              (ee-flatten (overlay-lists))) '<)))
-        (goto-char bol)
-        (outline-flag-region hide-start bol t)
-        (forward-line 1)
-        (setq hide-start (point))))
-    (outline-flag-region hide-start (point-max) t)
-    (goto-char (point-min))
-    (view-mode 1)))
-
-(defun hi-lock-overlay-p (overlay)
-  "Return the overlay if overlay is a hi-lock overlay."
-  (if (and (overlayp overlay)
-         (eq (overlay-get overlay 'hi-lock-overlay) t))
-      overlay
-    nil))
-
-;; if there is size information associated with text, change the text
-;; size to reflect it
-(size-indication-mode t)
-
 ;; Use 10-pt Consolas as default font
 (when (find-font (font-spec :name "Consolas"))
   (setq main-programming-font "Consolas-13")
@@ -190,11 +155,6 @@ non-nil."
   (setq main-writing-font "Calibri-14")
   (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
 (add-hook 'text-mode-hook 'variable-pitch-mode)
-
-;; Fallback for Unicode symbols
-(if (find-font (font-spec :name "Symbola"))
-    (set-fontset-font "fontset-default" nil
-                      (font-spec :size 18 :name "Symbola")))
 
 ;; Dynamic font adjusting based on monitor resolution
 (when (find-font (font-spec :name "Consolas"))
@@ -224,10 +184,10 @@ non-nil."
                         (setq main-writing-font (concat main-writing-font "-13")))
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
-                          (setq main-programming-font "Consolas-15:antialias=subpixel")
+                          (setq main-programming-font "Consolas-14:antialias=subpixel")
                           (setq main-writing-font (concat main-writing-font "-18")))
                       (progn ;; HD monitor
-                        (setq main-programming-font "Consolas-13:antialias=subpixel")
+                        (setq main-programming-font "Consolas-12:antialias=subpixel")
                         (setq main-writing-font (concat main-writing-font "-16")))))
                 (progn ;; Small display
                   (if (equal system-type 'darwin)
@@ -349,18 +309,18 @@ non-nil."
 (add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
 (setq highlight-symbol-on-navigation-p t)
 
-;; higlight changes in documents
-(global-highlight-changes-mode t)
-(setq highlight-changes-visibility-initial-state nil)
+;; ;; higlight changes in documents
+;; (global-highlight-changes-mode t)
+;; (setq highlight-changes-visibility-initial-state nil)
 
-;; Fix highlight bug of marking a file as modified
-(defadvice highlight-changes-rotate-faces (around around-rotate-faces)
-  (let ((was-modified (buffer-modified-p))
-        (buffer-undo-list t))
-    ad-do-it
-    (unless was-modified
-      (set-buffer-modified-p nil))))
-(ad-activate 'highlight-changes-rotate-faces)
+;; ;; Fix highlight bug of marking a file as modified
+;; (defadvice highlight-changes-rotate-faces (around around-rotate-faces)
+;;   (let ((was-modified (buffer-modified-p))
+;;         (buffer-undo-list t))
+;;     ad-do-it
+;;     (unless was-modified
+;;       (set-buffer-modified-p nil))))
+;; (ad-activate 'highlight-changes-rotate-faces)
 
 ;; Scrollbar
 (set-scroll-bar-mode 'right)
