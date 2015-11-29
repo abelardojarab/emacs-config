@@ -117,7 +117,7 @@
 (require 'setup-autopair)
 
 ;; Setup Eldoc
-;; (require 'setup-eldoc)
+(require 'setup-eldoc)
 
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
@@ -180,6 +180,6 @@
 (require 'setup-keys)
 
 ;; Setup server
-;; (require 'setup-server)
+(require 'setup-server)
 
 (setq debug-on-error nil)

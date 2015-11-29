@@ -441,9 +441,7 @@ Defaults to `error'."
 (setq auto-indent-on-visit-file t) ;; do not indent when a file is visit
 (setq auto-indent-blank-lines-on-move nil)
 (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
-(setq auto-indent-disabled-modes-list (list
-                                       (quote vhdl-mode)))
-
+(setq auto-indent-disabled-modes-list (list (quote vhdl-mode)))
 (require 'auto-indent-mode)
 (auto-indent-global-mode)
 
@@ -465,7 +463,7 @@ Defaults to `error'."
 (defvar my-auto-save-folder "~/.emacs.cache/auto-save/") ;; folder for auto-saves
 (setq auto-save-list-file-prefix "~/.emacs.cache/auto-save/.saves-") ;; set prefix for auto-saves
 (setq auto-save-file-name-transforms `((".*" ,my-auto-save-folder t))) ;; location for all auto-save files
-(setq tramp-auto-save-directory my-auto-save-folder) ;; auto-save tramp files in local directory
+(setq tramp-auto-save-directory my-auto-save-folder) ;; auyto-save tramp files in local directory
 
 ;; Backups
 (setq make-backup-files t

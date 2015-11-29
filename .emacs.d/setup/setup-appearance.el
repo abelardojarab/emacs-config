@@ -184,11 +184,11 @@ non-nil."
                         (setq main-writing-font (concat main-writing-font "-13")))
                     (if (> (x-display-pixel-width) 2000)
                         (progn ;; Cinema display
-                          (setq main-programming-font "Consolas-14:antialias=subpixel")
+                          (setq main-programming-font "Consolas-16:antialias=subpixel")
                           (setq main-writing-font (concat main-writing-font "-18")))
                       (progn ;; HD monitor
                         (setq main-programming-font "Consolas-12:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-16")))))
+                        (setq main-writing-font (concat main-writing-font "-15")))))
                 (progn ;; Small display
                   (if (equal system-type 'darwin)
                       (progn
@@ -309,18 +309,18 @@ non-nil."
 (add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
 (setq highlight-symbol-on-navigation-p t)
 
-;; ;; higlight changes in documents
-;; (global-highlight-changes-mode t)
-;; (setq highlight-changes-visibility-initial-state nil)
+;; higlight changes in documents
+(global-highlight-changes-mode t)
+(setq highlight-changes-visibility-initial-state nil)
 
-;; ;; Fix highlight bug of marking a file as modified
-;; (defadvice highlight-changes-rotate-faces (around around-rotate-faces)
-;;   (let ((was-modified (buffer-modified-p))
-;;         (buffer-undo-list t))
-;;     ad-do-it
-;;     (unless was-modified
-;;       (set-buffer-modified-p nil))))
-;; (ad-activate 'highlight-changes-rotate-faces)
+;; Fix highlight bug of marking a file as modified
+(defadvice highlight-changes-rotate-faces (around around-rotate-faces)
+  (let ((was-modified (buffer-modified-p))
+        (buffer-undo-list t))
+    ad-do-it
+    (unless was-modified
+      (set-buffer-modified-p nil))))
+(ad-activate 'highlight-changes-rotate-faces)
 
 ;; Scrollbar
 (set-scroll-bar-mode 'right)
