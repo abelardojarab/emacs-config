@@ -89,8 +89,8 @@
 ;; Setup appearance
 (require 'setup-appearance)
 
-;; Setup Cedet
-(require 'setup-cedet)
+;; ;; Setup Cedet
+;; (require 'setup-cedet)
 
 ;; Setup Org and LaTeX
 (require 'setup-org)
@@ -113,7 +113,7 @@
 ;; Setup Ido and Flex
 (require 'setup-ido)
 
-;; ;; Setup Autopair
+;; Setup Autopair
 (require 'setup-autopair)
 
 ;; Setup Eldoc

@@ -147,7 +147,7 @@ export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/cadence.dat
 
 # Apache settings
 export APACHEDA_LICENSE_FILE=$HOME/flexlm/apache.dat
-export APACHEROOT=/opt/Ansys/Totem14.1.b2
+export APACHEROOT=/opt/ansys/Totem14.1.b2
 export PATH=$APACHEROOT/bin:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/apache.dat
 
@@ -171,6 +171,9 @@ export MGC_HOME=/opt/mentor/calibre/2013.3_28.19
 export MGLS_LICENSE_FILE=$HOME/flexlm/calibre.dat:$HOME/flexlm/modelsim.dat
 export PATH=$MODELSIMROOT/modeltech/bin:$CALIBRE_HOME/bin:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/calibre.dat
+
+# Aldec settings
+export ALDEC_LICENSE_FILE=$HOME/flexlm/aldec.dat
 
 # Matlab settings
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/matlab.dat
