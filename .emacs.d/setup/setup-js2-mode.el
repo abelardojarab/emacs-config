@@ -13,8 +13,6 @@
                            ac-source-html-tag
                            ac-source-html-attribute))))
 
-
-(add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (add-to-list 'load-path "~/.emacs.d/js2-mode")
 (add-to-list 'load-path "~/.emacs.d/js2-refactor")
 (add-to-list 'load-path "~/.emacs.d/web-server")

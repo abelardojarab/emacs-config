@@ -655,6 +655,10 @@ Defaults to `error'."
 (require 'auto-rsync)
 (auto-rsync-mode t)
 
+;; Multiple cursors
+(add-to-list 'load-path "~/.emacs.d/multiple-cursors")
+(require 'multiple-cursors)
+
 ;; Benchmark-init can give us a breakdown of time spent on require and load calls:
 (add-to-list 'load-path "~/.emacs.d/benchmark-init")
 (require 'benchmark-init)
