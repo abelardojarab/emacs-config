@@ -189,15 +189,19 @@ non-nil."
                  (setq main-writing-font (concat main-writing-font "-11")))))
             ('darwin
              (if (> (x-display-pixel-width) 1800)
-                 (progn ;; HD monitor in Windows
+                 (if (> (x-display-pixel-width) 2000)
+                     (progn ;; Ultra-HD monitor in OSX
+                       (setq main-programming-font "Consolas-16:antialias=subpixel")
+                       (setq main-writing-font (concat main-writing-font "-16")))
+                 (progn ;; HD monitor in OSX
                    (setq main-programming-font "Consolas-14:antialias=subpixel")
-                   (setq main-writing-font (concat main-writing-font "-14")))
+                   (setq main-writing-font (concat main-writing-font "-14"))))
                (progn
                  (setq main-programming-font "Consolas-11:antialias=subpixel")
                  (setq main-writing-font (concat main-writing-font "-11")))))
             (t ;; Linux
              (if (> (x-display-pixel-width) 1800)
-                 (progn ;; HD monitor in Windows
+                 (progn ;; HD monitor in Linux
                    (setq main-programming-font "Consolas-13:antialias=subpixel")
                    (setq main-writing-font (concat main-writing-font "-13")))
                (progn
