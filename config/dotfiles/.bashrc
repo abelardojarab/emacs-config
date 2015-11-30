@@ -160,7 +160,7 @@ export SNPS_STARRC_ROOT=/opt/synopsys/starrc/H-2012.12
 export SNPS_COSMOSSCOPE_ROOT=/opt/synopsys/cosmosscope/H-2012.12
 export SNPS_ICWB_ROOT=/opt/synopsys/icweb/G-2012.06-SP1
 export SNPS_ICV_ROOT=/opt/synopsys/icvalidator/H-2013.06
-export PATH=$SNPS_DC_ROOT/bin:$SNPS_STARRC_ROOT/bin:$SNPS_HSPICE_ROOT/hspice/linux:SNPS_COSMOSSCOPE_ROOT/ai_bin:$PATH
+export PATH=$SNPS_HSPICE_ROOT/hspice/linux:$SNPS_DC_ROOT/bin:$SNPS_STARRC_ROOT/bin:SNPS_COSMOSSCOPE_ROOT/ai_bin:$PATH
 export PATH=$SNPS_ICWB_ROOT/bin/amd64:$SNPS_ICV_ROOT/bin/SUSE.64:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/synopsys.dat
 
