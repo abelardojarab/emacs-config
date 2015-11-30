@@ -89,8 +89,8 @@
 ;; Setup appearance
 (require 'setup-appearance)
 
-;; ;; Setup Cedet
-;; (require 'setup-cedet)
+;; Setup Cedet
+(require 'setup-cedet)
 
 ;; Setup Org and LaTeX
 (require 'setup-org)
@@ -183,3 +183,4 @@
 (require 'setup-server)
 
 (setq debug-on-error nil)
+(setq debug-on-quit t)
