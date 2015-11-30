@@ -144,74 +144,80 @@ non-nil."
   (let ((font-lock-fontified nil))
     ad-do-it))
 
-;; Use 10-pt Consolas as default font
-(when (find-font (font-spec :name "Consolas"))
-  (setq main-programming-font "Consolas-13")
-  (set-face-attribute 'default nil :font main-programming-font)
-  (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-  (add-to-list 'default-frame-alist '(font . "Consolas-13"))) ;; default font, used by speedbar
-
-(when (find-font (font-spec :name "Calibri"))
-  (setq main-writing-font "Calibri-14")
-  (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal))
-(add-hook 'text-mode-hook 'variable-pitch-mode)
-
-;; Dynamic font adjusting based on monitor resolution
-(when (find-font (font-spec :name "Consolas"))
+;; Adjust font when using graphical interface
+(when window-system
   (let ()
 
-    ;; Finally, set the fonts as desired
-    (defun set-default-font (main-programming-font frame)
-      (interactive)
+    ;; Use 12-pt Consolas as default font
+    (when (find-font (font-spec :name "Consolas"))
+      (setq main-programming-font "Consolas-12")
       (set-face-attribute 'default nil :font main-programming-font)
       (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-      (set-frame-parameter frame 'font main-programming-font))
+      (add-to-list 'default-frame-alist '(font . "Consolas-12"))) ;; default font, used by speedbar
 
-    (defun fontify-frame (frame)
-      (interactive)
-      (let (main-writing-font main-programming-font)
-        (setq main-programming-font "Consolas-12")
-        (setq main-writing-font "Consolas")
-        (if (find-font (font-spec :name "Calibri"))
-            (setq main-writing-font "Calibri"))
+    (when (find-font (font-spec :name "Calibri"))
+      (setq main-writing-font "Calibri-12")
+      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
+      (add-hook 'text-mode-hook 'variable-pitch-mode))
 
-        (if window-system
-            (progn
-              (if (> (x-display-pixel-width) 1800)
-                  (if (equal system-type 'windows-nt)
-                      (progn ;; HD monitor in Windows
-                        (setq main-programming-font "Consolas-11:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-13")))
-                    (if (> (x-display-pixel-width) 2000)
-                        (progn ;; Cinema display
-                          (setq main-programming-font "Consolas-16:antialias=subpixel")
-                          (setq main-writing-font (concat main-writing-font "-18")))
-                      (progn ;; HD monitor
-                        (setq main-programming-font "Consolas-12:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-15")))))
-                (progn ;; Small display
-                  (if (equal system-type 'darwin)
-                      (progn
-                        (setq main-programming-font "Consolas-12:antialias=subpixel")
-                        (setq main-writing-font (concat main-writing-font "-15")))
-                    (progn
-                      (setq main-programming-font "Consolas-10:antialias=subpixel")
-                      (setq main-writing-font (concat main-writing-font "-13"))))))))
-
-        ;; Apply fonts
-        (set-default-font main-programming-font frame)
-        (add-to-list 'default-frame-alist (cons 'font main-programming-font))
+    ;; Dynamic font adjusting based on monitor resolution
+    (when (find-font (font-spec :name "Consolas"))
+      ;; Finally, set the fonts as desired
+      (defun set-default-font (main-programming-font frame)
+        (interactive)
+        (set-face-attribute 'default nil :font main-programming-font)
         (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
+        (set-frame-parameter frame 'font main-programming-font))
 
-    ;; Fontify current frame
-    (fontify-frame nil)
+      (defun fontify-frame (frame)
+        (interactive)
+        (let (main-writing-font main-programming-font)
+          (setq main-programming-font "Consolas-12")
+          (setq main-writing-font "Consolas")
+          (if (find-font (font-spec :name "Calibri"))
+              (setq main-writing-font "Calibri"))
 
-    ;; Fontify any future frames for emacsclient
-    (push 'fontify-frame after-make-frame-functions)
+          (case system-type
 
-    ;; hook for setting up UI when not running in daemon mode
-    (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil)))))
+            ('windows-nt
+             (if (> (x-display-pixel-width) 1800)
+                 (progn ;; HD monitor in Windows
+                   (setq main-programming-font "Consolas-13:antialias=subpixel")
+                   (setq main-writing-font (concat main-writing-font "-13")))
+               (progn
+                 (setq main-programming-font "Consolas-11:antialias=subpixel")
+                 (setq main-writing-font (concat main-writing-font "-11")))))
+            ('darwin
+             (if (> (x-display-pixel-width) 1800)
+                 (progn ;; HD monitor in Windows
+                   (setq main-programming-font "Consolas-14:antialias=subpixel")
+                   (setq main-writing-font (concat main-writing-font "-14")))
+               (progn
+                 (setq main-programming-font "Consolas-11:antialias=subpixel")
+                 (setq main-writing-font (concat main-writing-font "-11")))))
+            (t ;; Linux
+             (if (> (x-display-pixel-width) 1800)
+                 (progn ;; HD monitor in Windows
+                   (setq main-programming-font "Consolas-13:antialias=subpixel")
+                   (setq main-writing-font (concat main-writing-font "-13")))
+               (progn
+                 (setq main-programming-font "Consolas-11:antialias=subpixel")
+                 (setq main-writing-font (concat main-writing-font "-11"))))))
+
+          ;; Apply fonts
+          (set-default-font main-programming-font frame)
+          (add-to-list 'default-frame-alist (cons 'font main-programming-font))
+          (set-face-attribute 'fixed-pitch nil :font main-programming-font)
+          (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
+
+      ;; Fontify current frame
+      (fontify-frame nil)
+
+      ;; Fontify any future frames for emacsclient
+      (push 'fontify-frame after-make-frame-functions)
+
+      ;; hook for setting up UI when not running in daemon mode
+      (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil))))))
 
 ;; Highlight the line
 (require 'hl-line)
@@ -323,78 +329,77 @@ non-nil."
 (ad-activate 'highlight-changes-rotate-faces)
 
 ;; Scrollbar
-(set-scroll-bar-mode 'right)
+(when window-system
+  (set-scroll-bar-mode 'right)
 
-;; Smart scrollbar
-(defvar regexp-always-scroll-bar '("\\.yes" "\\*Scroll-Bar\\*")
-  "Regexp matching buffer names that will always have scroll bars.")
+  ;; Smart scrollbar
+  (defvar regexp-always-scroll-bar '("\\.yes" "\\*Scroll-Bar\\*")
+    "Regexp matching buffer names that will always have scroll bars.")
 
-(defvar regexp-never-scroll-bar '("\\.off" "\\.not")
-  "Regexp matching buffer names that will never have scroll bars.")
+  (defvar regexp-never-scroll-bar '("\\.off" "\\.not")
+    "Regexp matching buffer names that will never have scroll bars.")
 
-(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
-(modify-all-frames-parameters (list (cons 'vertical-scroll-bars nil)))
+  (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+  (modify-all-frames-parameters (list (cons 'vertical-scroll-bars nil)))
 
-(defun lawlist-scroll-bar ()
-  (ignore-errors
-    (when (window-live-p (get-buffer-window (current-buffer)))
-      (redisplay t)
-      (cond
-       ;; not regexp matches | not narrow-to-region
-       ((and
-         (not (regexp-match-p regexp-always-scroll-bar (buffer-name)))
-         (not (regexp-match-p regexp-never-scroll-bar (buffer-name)))
-         (equal (- (point-max) (point-min)) (buffer-size)))
+  (defun lawlist-scroll-bar ()
+    (ignore-errors
+      (when (window-live-p (get-buffer-window (current-buffer)))
+        (redisplay t)
         (cond
-         ;; Lines of text are less-than or equal-to window height,
-         ;; and scroll bars are present (which need to be removed).
+         ;; not regexp matches | not narrow-to-region
          ((and
-           (<= (- (point-max) (point-min)) (- (window-end) (window-start)))
+           (not (regexp-match-p regexp-always-scroll-bar (buffer-name)))
+           (not (regexp-match-p regexp-never-scroll-bar (buffer-name)))
+           (equal (- (point-max) (point-min)) (buffer-size)))
+          (cond
+           ;; Lines of text are less-than or equal-to window height,
+           ;; and scroll bars are present (which need to be removed).
+           ((and
+             (<= (- (point-max) (point-min)) (- (window-end) (window-start)))
+             (equal (window-scroll-bars) `(15 2 right nil)))
+            (set-window-scroll-bars (selected-window) 0 'right nil))
+           ;; Lines of text are greater-than window height, and
+           ;; scroll bars are not present and need to be added.
+           ((and
+             (> (- (point-max) (point-min)) (- (window-end) (window-start)))
+             (not (equal (window-scroll-bars) `(15 2 right nil))))
+            (set-window-scroll-bars (selected-window) 15 'right nil))))
+         ;; Narrow-to-region is active, and scroll bars are present
+         ;; (which need to be removed).
+         ((and
+           (not (equal (- (point-max) (point-min)) (buffer-size)))
            (equal (window-scroll-bars) `(15 2 right nil)))
           (set-window-scroll-bars (selected-window) 0 'right nil))
-         ;; Lines of text are greater-than window height, and
-         ;; scroll bars are not present and need to be added.
+         ;; not narrow-to-region | regexp always scroll-bars
          ((and
-           (> (- (point-max) (point-min)) (- (window-end) (window-start)))
-           (not (equal (window-scroll-bars) `(15 2 right nil))))
-          (set-window-scroll-bars (selected-window) 15 'right nil))))
-       ;; Narrow-to-region is active, and scroll bars are present
-       ;; (which need to be removed).
-       ((and
-         (not (equal (- (point-max) (point-min)) (buffer-size)))
-         (equal (window-scroll-bars) `(15 2 right nil)))
-        (set-window-scroll-bars (selected-window) 0 'right nil))
-       ;; not narrow-to-region | regexp always scroll-bars
-       ((and
-         (equal (- (point-max) (point-min)) (buffer-size))
-         (regexp-match-p regexp-always-scroll-bar (buffer-name)))
-        (set-window-scroll-bars (selected-window) 15 'right nil))
-       ;; not narrow-to-region | regexp never scroll-bars
-       ((and
-         (equal (- (point-max) (point-min)) (buffer-size))
-         (regexp-match-p regexp-never-scroll-bar (buffer-name)))
-        (set-window-scroll-bars (selected-window) 0 'right nil))))))
+           (equal (- (point-max) (point-min)) (buffer-size))
+           (regexp-match-p regexp-always-scroll-bar (buffer-name)))
+          (set-window-scroll-bars (selected-window) 15 'right nil))
+         ;; not narrow-to-region | regexp never scroll-bars
+         ((and
+           (equal (- (point-max) (point-min)) (buffer-size))
+           (regexp-match-p regexp-never-scroll-bar (buffer-name)))
+          (set-window-scroll-bars (selected-window) 0 'right nil))))))
 
-(define-minor-mode lawlist-scroll-bar-mode
-  "This is a custom scroll bar mode."
-  :lighter " sc"
-  (if lawlist-scroll-bar-mode
-      (progn
-        (add-hook 'post-command-hook 'lawlist-scroll-bar nil t))
-    (remove-hook 'post-command-hook 'lawlist-scroll-bar t)
-    (remove-hook 'change-major-mode-hook 'lawlist-scroll-bar t)
-    (remove-hook 'window-configuration-change-hook 'lawlist-scroll-bar t)))
+  (define-minor-mode lawlist-scroll-bar-mode
+    "This is a custom scroll bar mode."
+    :lighter " sc"
+    (if lawlist-scroll-bar-mode
+        (progn
+          (add-hook 'post-command-hook 'lawlist-scroll-bar nil t))
+      (remove-hook 'post-command-hook 'lawlist-scroll-bar t)
+      (remove-hook 'change-major-mode-hook 'lawlist-scroll-bar t)
+      (remove-hook 'window-configuration-change-hook 'lawlist-scroll-bar t)))
 
-(define-globalized-minor-mode global-lawlist-scroll-bar-mode
-  lawlist-scroll-bar-mode lawlist-scroll-bar-on)
+  (define-globalized-minor-mode global-lawlist-scroll-bar-mode
+    lawlist-scroll-bar-mode lawlist-scroll-bar-on)
 
-(defun lawlist-scroll-bar-on ()
-  (unless (minibufferp)
-    (lawlist-scroll-bar-mode 1)))
+  (defun lawlist-scroll-bar-on ()
+    (unless (minibufferp)
+      (lawlist-scroll-bar-mode 1)))
 
-(global-lawlist-scroll-bar-mode)
-(add-hook 'prog-mode-hook
-          (lambda () (lawlist-scroll-bar-mode -1)))
+  (global-lawlist-scroll-bar-mode))
 
 ;; https://github.com/kentaro/auto-save-buffers-enhanced
 ;; `regexp-match-p` function modified by @sds on stackoverflow
