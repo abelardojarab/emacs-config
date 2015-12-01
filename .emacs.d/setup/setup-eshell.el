@@ -43,7 +43,7 @@
 ;; Fix issues in csh indentation
 (defun my/tcsh-set-indent-functions ()
   (when (or (string-match ".*\\.alias" (buffer-file-name))
-            (string-match ".*csh$" (file-name-extension (buffer-file-name))))
+           (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
     (require 'csh-mode) ;; https://github.com/Tux/tcsh/blob/master/csh-mode.el
     (setq-local indent-line-function   #'csh-indent-line)
     (setq-local indent-region-function #'csh-indent-region)))
