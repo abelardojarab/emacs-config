@@ -1,6 +1,6 @@
 ;;; setup-ido.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -29,8 +29,7 @@
 (add-to-list 'load-path "~/.emacs.d/flx")
 (require 'ido)
 (require 'flx-ido)
-
-(ido-mode 'both) ;; for buffers and files
+(ido-mode 'both)
 (ido-everywhere 1)
 (flx-ido-mode 1)
 

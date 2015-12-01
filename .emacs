@@ -113,7 +113,7 @@
 ;; Setup compile
 (require 'setup-compile)
 
-;; Setup Ido and Flex
+;; Setup Ido
 (require 'setup-ido)
 
 ;; Setup Autopair

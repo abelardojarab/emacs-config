@@ -83,16 +83,8 @@
 (add-hook 'prog-mode-hook 'cc-mode-ac-key-bindings)
 
 ;; smart completions
-(setq-mode-local emacs-lisp-mode semanticdb-find-default-throttle
-                 '())
-(setq-mode-local lisp-mode semanticdb-find-default-throttle
-                 '(project))
-(setq-mode-local c++-mode semanticdb-find-default-throttle
-                 '(project unloaded system recursive))
-(setq-mode-local python-mode semanticdb-find-default-throttle
-                 '(project unloaded system recursive))
-(setq-mode-local java-mode semanticdb-find-default-throttle
-                 '(project unloaded system recursive))
+(setq-mode-local prog-mode semanticdb-find-default-throttle
+                 '(project system))
 
 ;; working with tags
 (when (cedet-gnu-global-version-check t)
@@ -106,7 +98,7 @@
 (defun my/c-mode-init ()
   (c-set-style "k&r")
   (c-toggle-electric-state -1)
-  (setq c-basic-offset 4))
+  (setq-default c-basic-offset 4))
 (add-hook 'c-mode-hook #'my/c-mode-init)
 (add-hook 'c++-mode-hook #'my/c-mode-init)
 
@@ -117,26 +109,6 @@
 (require 'semantic/bovine/c)
 (require 'semantic/bovine/gcc)
 (require 'semantic/bovine/clang)
-
-;; Eassist header switches
-(require 'eassist)
-(setq eassist-header-switches
-      '(("h" . ("cpp" "cxx" "c++" "CC" "cc" "C" "c" "mm" "m"))
-        ("hh" . ("cc" "CC" "cpp" "cxx" "c++" "C"))
-        ("hpp" . ("cpp" "cxx" "c++" "cc" "CC" "C"))
-        ("hxx" . ("cxx" "cpp" "c++" "cc" "CC" "C"))
-        ("h++" . ("c++" "cpp" "cxx" "cc" "CC" "C"))
-        ("H" . ("C" "CC" "cc" "cpp" "cxx" "c++" "mm" "m"))
-        ("HH" . ("CC" "cc" "C" "cpp" "cxx" "c++"))
-        ("cpp" . ("hpp" "hxx" "h++" "HH" "hh" "H" "h"))
-        ("cxx" . ("hxx" "hpp" "h++" "HH" "hh" "H" "h"))
-        ("c++" . ("h++" "hpp" "hxx" "HH" "hh" "H" "h"))
-        ("CC" . ("HH" "hh" "hpp" "hxx" "h++" "H" "h"))
-        ("cc" . ("hh" "HH" "hpp" "hxx" "h++" "H" "h"))
-        ("C" . ("hpp" "hxx" "h++" "HH" "hh" "H" "h"))
-        ("c" . ("h"))
-        ("m" . ("h"))
-        ("mm" . ("h"))))
 
 ;; when skipping to errors, show a few lines above
 (setq compilation-context-lines 1)
@@ -150,12 +122,6 @@
 ;; gdb should use many windows, to make it look like an IDE
 (setq gdb-many-windows t
       gdb-max-frames 120)
-
-;; Function arguments
-(add-to-list 'load-path "~/.emacs.d/functions-args")
-(load "~/.emacs.d/function-args/function-args.el")
-(require 'function-args)
-(fa-config-default)
 
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode java-mode
