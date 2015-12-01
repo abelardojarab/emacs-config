@@ -146,6 +146,9 @@
 ;; Setup bison/yacc/lex
 (require 'setup-bison)
 
+;; Setup shell
+(require 'setup-eshell)
+
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 

@@ -26,30 +26,39 @@
 
 (setq-default eshell-directory-name "~/.emacs.cache/eshell")
 
+;; Configuration choices
 (add-hook 'sh-mode-hook
           (lambda ()
             (show-paren-mode -1)
             (flycheck-mode -1)
             (setq blink-matching-paren nil)))
 
-(add-to-list 'auto-mode-alist '("\\.zsh$" . sh-mode))
-(add-to-list 'auto-mode-alist '("\\.csh$" . sh-mode))
 
-;;When compiling from shell, display error result as in compilation
-;;buffer, with links to errors.
+;; When compiling from shell, display error result as in compilation
+;; buffer, with links to errors.
 (add-hook 'sh-mode-hook 'compilation-shell-minor-mode)
 (add-hook 'sh-mode-hook 'ansi-color-for-comint-mode-on)
 
+;; CShell mode
+(require 'csh-mode)
+;; (add-to-list 'auto-mode-alist '("\\.csh\\'" . csh-mode))
+;; (add-to-list 'auto-mode-alist '("\\.cshrc\\'" . csh-mode))
+(dolist (elt interpreter-mode-alist)
+  (when (member (car elt) (list "csh" "tcsh"))
+    (setcdr elt 'csh-mode)))
+
 ;; Fix issues in csh indentation
+(add-to-list 'auto-mode-alist '("\\.zsh\\'" . sh-mode))
+(add-to-list 'auto-mode-alist '("\\.csh\\'" . sh-mode))
+(add-to-list 'auto-mode-alist '("\\.cshrc\\'" . sh-mode))
 (defun my/tcsh-set-indent-functions ()
   (when (or (string-match ".*\\.alias" (buffer-file-name))
            (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
-    (require 'csh-mode) ;; https://github.com/Tux/tcsh/blob/master/csh-mode.el
     (setq-local indent-line-function   #'csh-indent-line)
     (setq-local indent-region-function #'csh-indent-region)))
 (add-hook 'sh-mode-hook #'my/tcsh-set-indent-functions)
 (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions)
-(add-hook 'sh-mode-hook (lambda () (electric-mode -1)))
+(add-hook 'sh-mode-hook (lambda () (electric-indent-mode -1)))
 
 (provide 'setup-eshell)
 ;;; setup-eshell.el ends here
