@@ -84,7 +84,6 @@
   (define-key function-key-map "\e[z6b"    [C-S-return])
   (define-key function-key-map "\e[z7b"    [M-C-return])
   (define-key function-key-map "\e[z8b"    [M-C-S-return]))
-
 (fix-up-xterm-input-function-key-map)
 
 ;; As in Windows, replace after typing a letter
@@ -465,6 +464,7 @@
                (local-set-key [(meta left)] 'psw-switch-function)
                (local-set-key [(meta right)] 'psw-switch-function)))))
 
+;; Define custom key mode
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
   t " my-keys" 'my-keys-minor-mode-map)

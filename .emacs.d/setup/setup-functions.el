@@ -1,4 +1,4 @@
-;;; setup-utilities.el ---
+;;; setup-functions.el ---
 
 ;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
@@ -23,6 +23,17 @@
 ;;
 
 ;;; Code:
+
+;; https://github.com/kentaro/auto-save-buffers-enhanced
+;; `regexp-match-p` function modified by @sds on stackoverflow
+;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
+(defun regexp-match-p (regexps string)
+  (and string
+       (catch 'matched
+         (let ((inhibit-changing-match-data t)) ; small optimization
+           (dolist (regexp regexps)
+             (when (string-match regexp string)
+               (throw 'matched t)))))))
 
 ;; Insertion of Dates, bind to C-c i
 (defun insert-date-string ()
@@ -211,22 +222,6 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
                 (delete-horizontal-space)
               (backward-kill-word 1))))))))
 
-;; mac and pc users would like selecting text this way
-(defun dave-shift-mouse-select (event)
-  "Set the mark and then move point to the position clicked on with
- the mouse. This should be bound to a mouse click event type."
-  (interactive "e")
-  (mouse-minibuffer-check event)
-  (if mark-active (exchange-point-and-mark))
-  (set-mark-command nil)
-  ;; Use event-end in case called from mouse-drag-region.
-  ;; If EVENT is a click, event-end and event-start give same value.
-  (posn-set-point (event-end event)))
-
-;; be aware that this overrides the function for picking a font. you can still call the command
-;; directly from the minibufer doing: "M-x mouse-set-font"
-(define-key global-map [S-down-mouse-1] 'dave-shift-mouse-select)
-
 ;; Help to determine who modifies buffer
 (defvar my-debug-set-buffer-modified-p-buffers nil)
 (defadvice set-buffer-modified-p
@@ -260,5 +255,5 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
     (setenv "SSH_AUTH_SOCK" agent)
     (message agent)))
 
-(provide 'setup-utilities)
+(provide 'setup-functions)
 ;;; setup-utilities.el ends here

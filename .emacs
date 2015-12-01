@@ -80,6 +80,9 @@
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
 
+;; Setup utilities
+(require 'setup-functions)
+
 ;; Setup package
 (require 'setup-package)
 
@@ -166,9 +169,6 @@
 
 ;; Setup dash
 (require 'setup-dash)
-
-;; Setup utilities
-(require 'setup-utilities)
 
 ;; Setup ECB
 (require 'setup-ecb)

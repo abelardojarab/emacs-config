@@ -405,17 +405,6 @@ non-nil."
 
   (global-lawlist-scroll-bar-mode))
 
-;; https://github.com/kentaro/auto-save-buffers-enhanced
-;; `regexp-match-p` function modified by @sds on stackoverflow
-;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
-(defun regexp-match-p (regexps string)
-  (and string
-     (catch 'matched
-       (let ((inhibit-changing-match-data t)) ; small optimization
-         (dolist (regexp regexps)
-           (when (string-match regexp string)
-             (throw 'matched t)))))))
-
 ;; Pretty lambdas
 (defun pretty-lambdas ()
   (font-lock-add-keywords
