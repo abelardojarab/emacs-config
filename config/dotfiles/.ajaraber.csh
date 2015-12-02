@@ -5,7 +5,7 @@ alias emacsclient 'emacsclient -n'
 
 setenv JAVA_HOME /usr/intel/pkgs/java/1.8.0
 if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
-   setenv PATH ${HOME}/bin:${HOME}/bin/bin:${HOME}/workspace/frametools/bin:${JAVA_HOME}/bin:${PATH}:/p/advda/utils/bin
+   setenv PATH ${HOME}/bin:${HOME}/bin/bin:${HOME}/workspace/frametools/bin:${JAVA_HOME}/bin:${PATH}
 else
    setenv PATH ${HOME}/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/builds/nodejs/bin:${PATH}:${HOME}/bin:${HOME}/bin/bin
 endif
