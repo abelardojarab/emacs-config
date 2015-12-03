@@ -46,14 +46,14 @@ Defaults to `error'."
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
 
-;; Garbage collection
-(setq gc-cons-threshold 120000000)
-
 ;; Missing variable
 (defvar scheme-imenu-generic-expression "")
 
 ;; Missing variable
 (defvar cursor-sensor-inhibit nil)
+
+;; Garbage collection
+(setq gc-cons-threshold 120000000)
 
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
@@ -82,12 +82,6 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/names")
 (require 'names)
 
-;; Enable context menus
-(add-to-list 'load-path "~/.emacs.d/makey")
-(add-to-list 'load-path "~/.emacs.d/discover")
-(require 'discover)
-(global-discover-mode 1)
-
 ;; Set path environment depending on OS.
 (add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
 (require 'exec-path-from-shell)
@@ -96,6 +90,7 @@ Defaults to `error'."
 
  ;; Linux
  ((equal system-type 'gnu/linux)
+
   ;; Get back font antialiasing
   (push '(font-backend xft x) default-frame-alist)
 
@@ -217,14 +212,15 @@ Defaults to `error'."
 ;; Garantee utf8 as input-method
 (set-input-method nil)
 (setq read-quoted-char-radix 10)
-(set-language-environment "UTF-8")
+(set-language-environment 'utf-8)
+(set-locale-environment "en_GB.UTF-8")
 (setq locale-coding-system 'utf-8-unix)
+
+;; Coding system
+(set-default-coding-systems 'utf-8-unix)
 (set-terminal-coding-system 'utf-8-unix)
 (set-keyboard-coding-system 'utf-8-unix)
 (set-selection-coding-system 'utf-8-unix)
-(set-default buffer-file-coding-system 'utf-8-unix)
-(set-default default-buffer-file-coding-system 'utf-8-unix)
-(set-default-coding-systems 'utf-8-unix)
 (prefer-coding-system 'utf-8-unix)
 
 ;; Even so, ansi-term doesn’t obey:
@@ -271,9 +267,6 @@ Defaults to `error'."
         (split-window-sensibly window))
     (split-window-sensibly window)))
 (setq split-window-preferred-function 'split-window-prefer-horizonally)
-
-;; Better help
-(require 'help-fns+)
 
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")

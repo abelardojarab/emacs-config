@@ -110,19 +110,6 @@
 (require 'semantic/bovine/gcc)
 (require 'semantic/bovine/clang)
 
-;; when skipping to errors, show a few lines above
-(setq compilation-context-lines 1)
-
-;; scroll compilation buffer
-(setq compilation-scroll-output t)
-
-;; make sure ant's output is in a format emacs likes
-(setenv "ANT_ARGS" "-emacs")
-
-;; gdb should use many windows, to make it look like an IDE
-(setq gdb-many-windows t
-      gdb-max-frames 120)
-
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode java-mode
                                          c-mode c++-mode makefile-mode sh-mode))

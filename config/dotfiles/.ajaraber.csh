@@ -7,11 +7,10 @@ setenv JAVA_HOME /usr/intel/pkgs/java/1.8.0
 if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
    setenv PATH ${HOME}/bin:${HOME}/bin/bin:${HOME}/workspace/frametools/bin:${JAVA_HOME}/bin:${PATH}
 else
-   setenv PATH ${HOME}/workspace/builds/emacs-24.4/src:/p/advda/utils/bin:${HOME}/bin:${HOME}/workspace/frametools/bin:${HOME}/builds/nodejs/bin:${PATH}:${HOME}/bin:${HOME}/bin/bin
+   setenv PATH ${HOME}/workspace/frametools/bin:${HOME}/builds/nodejs/bin:${PATH}:$HOME/bin:${HOME}/bin/bin
 endif
 
 unsetenv PYTHONPATH
-
 setenv EC_DISABLE_VAL 1
 setenv CAMDEXGT_CAD_ROOT ${HOME}/camdex/data
 setenv PYTHONPATH ${HOME}/workspace/pythonlibs/lib/python2.7/site-packages:${HOME}/workspace/frametools/extratools/ctk/tools/oascript/v3.1_oa22.43p028/linux_rhel55_gcc44x_64/python

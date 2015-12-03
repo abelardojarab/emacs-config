@@ -47,12 +47,20 @@
 (require 'org-list)
 (require 'ox-org)
 
-(let ((todo "~/workspace/Documents/Org/agenda.org"))
+;; Set up Org agenda files
+(let ((todo "~/workspace/Documents/Org/diary.org"))
   (when (file-readable-p todo)
+
     ;; set org directory
     (setq org-directory (expand-file-name "~/workspace/Documents/Org"))
+    (setq diary-file (concat org-directory "/diary"))
     (setq org-default-notes-file (concat org-directory "/notes.org"))
-    (setq org-agenda-files (list (concat org-directory "/agenda.org")))))
+    (setq org-agenda-diary-file (concat org-directory "/diary.org"))
+    (setq org-agenda-files (list
+                            (concat org-directory "/diary.org")
+                            (concat org-directory "/agenda.org")))))
+
+;; Tweaks
 (add-hook 'org-mode-hook
           (lambda ()
             (progn
@@ -68,13 +76,15 @@
       org-cycle-separator-lines 1
       org-startup-with-inline-images nil
       org-startup-truncated t
-      org-refile-targets '((org-agenda-files :maxlevel . 3))
+      org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
+      org-refile-targets '((org-agenda-files :maxlevel . 9))
       org-src-fontify-natively t
       org-src-tab-acts-natively t
       org-confirm-babel-evaluate nil
       org-use-speed-commands t
       org-completion-use-ido t
       org-hide-leading-stars t
+      org-log-done t
       org-enforce-todo-dependencies)
 
 (setq org-indent-mode nil) ;; this causes problem in other modes
@@ -83,12 +93,11 @@
 
 ;; Agenda settings
 (setq org-agenda-show-log t
-      org-agenda-todo-ignore-scheduled t
-      org-agenda-todo-ignore-deadlines t
       org-agenda-start-on-weekday nil
       org-agenda-span 14
       org-agenda-include-diary t
-      org-agenda-window-setup 'current-window)
+      org-agenda-window-setup 'current-window
+      org-deadline-warning-days 7)
 
 ;; Export options
 (setq org-export-time-stamp-file nil)
@@ -177,7 +186,7 @@
       (concat str "►"))))
 
 (setq org-agenda-custom-commands
-      '(("c" "My TODOs"
+      '(("c" "TODOs"
          ((tags-todo "mytag"
                      ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
                       (org-tags-match-list-sublevels t)))))))

@@ -24,6 +24,13 @@
 
 ;;; Code:
 
+;; make sure ant's output is in a format emacs likes
+(setenv "ANT_ARGS" "-emacs")
+
+;; gdb should use many windows, to make it look like an IDE
+(setq gdb-many-windows t
+      gdb-max-frames 120)
+
 ;; Close compile buffer if no errors nor warnings
 (defun bury-compile-buffer-if-successful (buffer string)
   "Bury a compilation buffer if succeeded without warnings "
@@ -55,6 +62,7 @@
 ;; Compilation
 ;; http://www.emacswiki.org/cgi-bin/wiki/ModeCompile
 (setq
+ compilation-context-lines 1 compilation-context-lines 1
  compilation-exit-message-function 'compilation-exit-autoclose
  compilation-scroll-output 'first-error      ;; scroll until first error
  compilation-read-command nil                  ;; don't need enter
@@ -78,11 +86,6 @@
 (require 'compile)
 (add-hook 'c-mode-common-hook
           (lambda ()
-            (setq
-             compilation-scroll-output 'first-error  ; scroll until first error
-             ;; compilation-read-command nil          ; don't need enter
-             compilation-window-height 11)
-
             (local-set-key (kbd "<M-up>")   'previous-error)
             (local-set-key (kbd "<M-down>") 'next-error)
 
@@ -98,14 +101,7 @@
                              (file-name-sans-extension file)
                              ;;(or (getenv "CPPFLAGS") "-DDEBUG=9")
                              (or (getenv "CFLAGS") " -g -O2")
-                             file)))))
-          ;; (number of things in " " in format must match number of arg. in getenv.)
-
-          ;; This will run Make if there is a Makefile in the same directory as the
-          ;; source-file, or it will create a command for compiling a single
-          ;; file and name the executable the same name as the file with the extension
-          ;; stripped.
-          )
+                             file))))))
 
 ;; makefiles
 (add-hook 'makefile-mode-hook

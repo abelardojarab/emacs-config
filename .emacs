@@ -186,4 +186,3 @@
 (require 'setup-server)
 
 (setq debug-on-error nil)
-(setq debug-on-quit t)
