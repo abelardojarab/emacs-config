@@ -41,9 +41,8 @@
 ;; Tags table
 (setq tags-revert-without-query t)
 (setq tags-always-build-completion-table t)
-(when (not (file-exists-p (expand-file-name "~/.emacs.cache/TAGS")))
-  (if (not (file-exists-p (expand-file-name "~/.emacs.cache")))
-      (make-directory (expand-file-name "~/.emacs.cache") t))
+(if (file-exists-p (expand-file-name "~/.emacs.cache/TAGS"))
+    (visit-tags-table (expand-file-name "~/.emacs.cache/TAGS"))
   (with-temp-buffer (write-file (expand-file-name "~/.emacs.cache/TAGS"))))
 (setq tags-file-name (expand-file-name "~/.emacs.cache/TAGS"))
 (setq tags-table-list (list tags-file-name))
@@ -57,41 +56,6 @@
        '(".*\\.\\([ch]\\|cpp\\)" (expand-file-name "~/.emacs.cache/TAGS"))
         ))
 (setq etags-table-search-up-depth 1) ;; Max depth to search up for a tags file.  nil means don't search.
-
-;; Below function comes useful when you change the project-root symbol to a
-;; different value (when switching projects)
-(defun update-etags-table-then-find-tag ()
-  "Update etags-table based on the current value of project-root and then do
-tag find"
-  (interactive)
-  (when (boundp 'project-root) ;; add-to-list if project-root symbol is defined
-    (add-to-list 'etags-table-alist
-                 `(,(concat project-root "/.*") ,(concat project-root "/TAGS")) t))
-  (etags-select-find-tag-at-point))
-
-;; Ctags update
-(require 'ctags-update)
-(when (executable-find "ctags")
-  (setq ctags-update-delay-seconds (* 30 60)) ;; every 1/2 hour
-  (autoload 'turn-on-ctags-auto-update-mode "ctags-update" "turn on `ctags-auto-update-mode'." t)
-  (add-hook 'verilog-mode-hook    'turn-on-ctags-auto-update-mode)
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode))
-
-;; better searching of tags
-(add-to-list 'load-path "~/.emacs.d/ggtags")
-(require 'gtags)
-(require 'ggtags)
-
-;; Use ggtags instead of gtags
-(mapc (lambda (mode)
-        (add-hook mode 'gtags-mode)
-        (add-hook mode 'ggtags-mode))
-      '(c-mode-hook
-        c++-mode-hook
-        lisp-mode-hook
-        python-mode-hook
-        js2-mode-hook
-        java-mode-hook))
 
 ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
 (defun ido-find-tag ()
@@ -142,15 +106,6 @@ tag find"
                 "gtags: top of source tree:" default-directory)))
          (shell-command "gtags -i -q 2>/dev/null")
          (message "Created tagfile"))))))
-
-(add-hook 'prog-mode-hook
-          (lambda ()
-            ;; ggtags
-            (ggtags-mode t)
-            (local-set-key (kbd "C-c .") 'ggtags-grep)
-            (local-set-key (kbd "M-,")   'ggtags-find-reference)
-            (when (fboundp 'gtags-create-or-update)
-              (gtags-create-or-update)))) ;; auto-update tags
 
 (provide 'setup-tags)
 ;;; setup-tags.el ends here

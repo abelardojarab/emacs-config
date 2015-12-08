@@ -52,6 +52,10 @@ Defaults to `error'."
 ;; Missing variable
 (defvar cursor-sensor-inhibit nil)
 
+;; Assure .emacs.cache directory exists
+(if (not (file-exists-p (expand-file-name "~/.emacs.cache")))
+    (make-directory (expand-file-name "~/.emacs.cache") t))
+
 ;; Garbage collection
 (setq gc-cons-threshold 120000000)
 
