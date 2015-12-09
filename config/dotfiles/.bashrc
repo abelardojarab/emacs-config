@@ -141,8 +141,9 @@ export CDS_LOG_VERSION=pid
 export CDS_AUTO_CKOUT=all
 export CDS_LOAD_ENV=CWD
 export CDS_Netlisting_Mode=Analog
+export EDI_ROOT=/opt/cadence/installs/EDI131
 export MMSIM_ROOT=/opt/cadence/installs/MMSIM121
-export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:/opt/cadence/installs/SOC710/bin:$PATH
+export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:$EDI_ROOT/bin:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/cadence.dat
 
 # Apache settings
@@ -155,12 +156,12 @@ export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/apache.dat
 export SYNOPSYS=/opt/synopsys
 export SNPSLMD_LICENSE_FILE=$HOME/flexlm/synopsys.dat
 export SNPS_DC_ROOT=/opt/synopsys/designcompiler/B-2008.09
-export SNPS_HSPICE_ROOT=/opt/synopsys/hspice/Z-2007.03
+export SNPS_HSPICE_ROOT=/opt/synopsys/hspice/F-2011.09-SP2
 export SNPS_STARRC_ROOT=/opt/synopsys/starrc/H-2012.12
 export SNPS_COSMOSSCOPE_ROOT=/opt/synopsys/cosmosscope/H-2012.12
 export SNPS_ICWB_ROOT=/opt/synopsys/icweb/G-2012.06-SP1
 export SNPS_ICV_ROOT=/opt/synopsys/icvalidator/H-2013.06
-export PATH=$SNPS_HSPICE_ROOT/hspice/linux:$SNPS_DC_ROOT/bin:$SNPS_STARRC_ROOT/bin:SNPS_COSMOSSCOPE_ROOT/ai_bin:$PATH
+export PATH=$SNPS_HSPICE_ROOT/hspice/linux:$SNPS_DC_ROOT/bin:$SNPS_STARRC_ROOT/bin:$SNPS_COSMOSSCOPE_ROOT/ai_bin:$PATH
 export PATH=$SNPS_ICWB_ROOT/bin/amd64:$SNPS_ICV_ROOT/bin/SUSE.64:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/synopsys.dat
 
