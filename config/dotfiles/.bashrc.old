@@ -143,7 +143,7 @@ export CDS_AUTO_CKOUT=all
 export CDS_LOAD_ENV=CWD
 export CDS_Netlisting_Mode=Analog
 export MMSIM_ROOT=/opt/cadence/installs/MMSIM121
-export SOC_ROOT=/opt/cadence/installs/SOC710
+export SOC_ROOT=/opt/cadence/installs/EDI131
 export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:$SOC_ROOT/bin:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/cadence.dat
 
