@@ -112,7 +112,7 @@ export EMACS_SERVER_FILE=$HOME/.emacs.cache/server/server
 export PYTHONPATH=~/workspace/pythonlibs/lib/python2.7/site-packages
 export PYTHONPATH=${PYTHONPATH}:/opt/oaScript/python2
 export LM_LICENSE_FILE=$HOME/flexlm/license.dat
-export _JAVA_OPTIONS=" -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Xms512m -Xmx1024m"
+export _JAVA_OPTIONS=" -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Xms512m -Xmx1024m -Dsun.java2d.opengl=true"
 export theHost=`hostname`
 alias lmli='/opt/cadence/installs/IC615/tools/bin/lmgrd -c /opt/cadence/installs/IC615/share/license/license.dat'
 
@@ -127,13 +127,13 @@ export PYTHONPATH=${PYTHONPATH}:/opt/oaScript/python2
 # PDKs
 export CDK_DIR=/opt/ncsu-cdk-1.6.0
 export PDK_DIR=/opt/FreePDK45
-export PDK_DIR_SC=/opt/FreePDK45StandardCells
+export PDK_DIR_SC=/opt/FreePDK45/StandardCells
 
 # Cadence settings
 export CDS_AUTO_64BIT=NONE
-export CDSROOT=/opt/cadence/installs/IC616
-export CDSHOME=/opt/cadence/installs/IC616
-export CDS_ROOT=/opt/cadence/installs/IC616
+export CDSROOT=/opt/cadence/installs/IC615
+export CDSHOME=/opt/cadence/installs/IC615
+export CDS_ROOT=/opt/cadence/installs/IC615
 export BASIC_LIB_PATH=$CDSROOT/tools/dfII/etc/cdslib/basic
 export ANALOG_LIB_PATH=$CDSROOT/tools/dfII/etc/cdslib/artist/analogLib/
 export CDS_LIC_FILE=27000@ubuntu
@@ -143,12 +143,13 @@ export CDS_AUTO_CKOUT=all
 export CDS_LOAD_ENV=CWD
 export CDS_Netlisting_Mode=Analog
 export MMSIM_ROOT=/opt/cadence/installs/MMSIM121
-export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:/opt/cadence/installs/SOC710/bin:$PATH
+export SOC_ROOT=/opt/cadence/installs/SOC710
+export PATH=$MMSIM_ROOT/tools/bin:$MMSIM_ROOT/tools/spectre/bin:$CDS_ROOT/tools/bin:$CDS_ROOT/tools/dfII/bin:$SOC_ROOT/bin:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/cadence.dat
 
 # Apache settings
 export APACHEDA_LICENSE_FILE=$HOME/flexlm/apache.dat
-export APACHEROOT=/opt/Ansys/Totem14.1.b2
+export APACHEROOT=/opt/ansys/Totem14.1.b2
 export PATH=$APACHEROOT/bin:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/apache.dat
 
@@ -156,23 +157,23 @@ export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/apache.dat
 export SYNOPSYS=/opt/synopsys
 export SNPSLMD_LICENSE_FILE=$HOME/flexlm/synopsys.dat
 export DC_HOME=/opt/synopsys/designcompiler/B-2008.09
-export SNPS_HSPICE_ROOT=/opt/synopsys/hspice/Z-2007.03
+export SNPS_HSPICE_ROOT=/opt/synopsys/hspice/F-2011.09-SP2
 export STAR_RCXT_HOME=/opt/synopsys/starrc/H-2012.12-SP2
 export SNPS_COSMOSSCOPE_ROOT=/opt/synopsys/cosmosscope/H-2012.12
 export SNPS_ICWB_ROOT=/opt/synopsys/icweb/G-2012.06-SP1
 export SNPS_ICV_ROOT=/opt/synopsys/icvalidator/H-2013.06
-export PATH=$DC_HOME/bin:$STAR_RCXT_HOME/bin:$SNPS_HSPICE_ROOT/hspice/linux:SNPS_COSMOSSCOPE_ROOT/ai_bin:$PATH
+export PATH=$DC_HOME/bin:$STAR_RCXT_HOME/bin:$SNPS_HSPICE_ROOT/hspice/bin:$SNPS_COSMOSSCOPE_ROOT/ai_bin:$PATH
 export PATH=$SNPS_ICWB_ROOT/bin/amd64:$SNPS_ICV_ROOT/bin/SUSE.64:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/synopsys.dat
 alias starrc='StarXtract' 
 
 # Mentor settings
 export MODELSIMROOT=/opt/mentor/modelsim/6.5f
-export CALIBRE_HOME=opt/mentor/calibre/2007.1_17.18
-export MGC_HOME=/opt/mentor/calibre/2007.1_17.18
+export CALIBRE_HOME=/opt/mentor/calibre/2013.3_28.19
+export MGC_HOME=/opt/mentor/calibre/2013.3_28.19
 export MGLS_LICENSE_FILE=$HOME/flexlm/calibre.dat:$HOME/flexlm/modelsim.dat
 export PATH=$MODELSIMROOT/modeltech/bin:$CALIBRE_HOME/bin:$PATH
-export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/calibre.dat
+export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/calibre.dat:$HOME/flexlm/modelsim.dat
 
 # Matlab settings
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/matlab.dat
