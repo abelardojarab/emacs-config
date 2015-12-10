@@ -75,6 +75,7 @@
       org-startup-indented t
       org-cycle-separator-lines 1
       org-startup-with-inline-images nil
+      org-image-actual-width '(100)
       org-startup-truncated t
       org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
       org-refile-targets '((org-agenda-files :maxlevel . 9))
@@ -209,27 +210,37 @@
 (eval-after-load 'image+ '(imagex-auto-adjust-mode 1))
 (setq imagex-quiet-error t)
 
+;; Insert images from files like this:
+;; #+BEGIN: image :file "~/Documents/personal/foo.png"
+;; #+END
+(defun org-dblock-write:image (params)
+  (let ((file (plist-get params :file)))
+    (clear-image-cache file)
+    (insert-image (create-image file))))
+
 ;; Showing images
 (require 'iimage)
 (autoload 'iimage-mode "iimage" "Support Inline image minor mode." t)
 (autoload 'turn-on-iimage-mode "iimage" "Turn on Inline image minor mode." t)
 (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
 (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
-(setq org-image-actual-width '(100))
 
-;; Rendering ditaa
-(setq org-ditaa-jar-path (expand-file-name "~/.emacs.d/jar/ditaa.jar"))
-
-;; Rendering plantuml
-(setq org-plantuml-jar-path (expand-file-name "~/.emacs.d/jar/plantuml.jar"))
-(defun plantuml-render-buffer ()
+;; Function to setup images for display on load
+(defun org-turn-on-iimage-in-org ()
+  "display images in your org file"
   (interactive)
-  (message "PLANTUML Start rendering")
-  (shell-command (concat "java -jar "
-                         (expand-file-name "~/.emacs.d/jar/plantuml.jar")
-                         " "
-                         buffer-file-name))
-  (message (concat "PLANTUML Rendered:  " (buffer-name))))
+  (turn-on-iimage-mode)
+  (set-face-underline-p 'org-link t)) ;; start with hidden images
+(add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
+
+;; Function to toggle images in a org buffer
+(defun org-toggle-iimage-in-org ()
+  "display images in your org file"
+  (interactive)
+  (if (face-underline-p 'org-link)
+      (set-face-underline-p 'org-link nil)
+    (set-face-underline-p 'org-link t))
+  (call-interactively 'iimage-mode))
 
 ;; Image reloading
 (defun org-reload-image-at-point ()
@@ -249,22 +260,19 @@
                            file file))
     (org-reload-image-at-point)))
 
-;; Function to setup images for display on load
-(defun org-turn-on-iimage-in-org ()
-  "display images in your org file"
-  (interactive)
-  (turn-on-iimage-mode)
-  (set-face-underline-p 'org-link t)) ;; start with hidden images
-(add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
+;; Rendering ditaa
+(setq org-ditaa-jar-path (expand-file-name "~/.emacs.d/jar/ditaa.jar"))
 
-;; Function to toggle images in a org buffer
-(defun org-toggle-iimage-in-org ()
-  "display images in your org file"
+;; Rendering plantuml
+(setq org-plantuml-jar-path (expand-file-name "~/.emacs.d/jar/plantuml.jar"))
+(defun plantuml-render-buffer ()
   (interactive)
-  (if (face-underline-p 'org-link)
-      (set-face-underline-p 'org-link nil)
-    (set-face-underline-p 'org-link t))
-  (call-interactively 'iimage-mode))
+  (message "PLANTUML Start rendering")
+  (shell-command (concat "java -jar "
+                         (expand-file-name "~/.emacs.d/jar/plantuml.jar")
+                         " "
+                         buffer-file-name))
+  (message (concat "PLANTUML Rendered:  " (buffer-name))))
 
 ;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
 (setq org-latex-create-formula-image-program 'imagemagick)
@@ -302,14 +310,6 @@
   (let ((relwidth (expt text-scale-mode-step text-scale-mode-amount)))
     (unless (= (plist-get org-format-latex-options :scale) relwidth)
       (plist-put org-format-latex-options :scale relwidth))))
-
-;; Insert images from files like this:
-;; #+BEGIN: image :file "~/Documents/personal/foo.png"
-;; #+END
-(defun org-dblock-write:image (params)
-  (let ((file (plist-get params :file)))
-    (clear-image-cache file)
-    (insert-image (create-image file))))
 
 ;; Insert screenshots into Org mode, very useful
 (defun org-insert-screenshot ()
@@ -627,10 +627,6 @@ a link to this file."
    ((((class color) (min-colors 16) (background dark))
      (:foreground "LightSalmon" :strike-through t)))))
 
-;; Org Journal
-(add-to-list 'load-path "~/.emacs.d/org-journal")
-(require 'org-journal)
-
 ;; Pandoc
 (add-to-list 'load-path "~/.emacs.d/hydra")
 (add-to-list 'load-path "~/.emacs.d/pandoc-mode")
@@ -692,9 +688,9 @@ a link to this file."
         '(
           "▢"
           "○"
-          "▰"
-          "•"
           "▪"
+          "•"
+          "▰"
           "+"
           "-")))
 
