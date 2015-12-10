@@ -156,7 +156,7 @@ export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/apache.dat
 # Synopsys settings
 export SYNOPSYS=/opt/synopsys
 export SNPSLMD_LICENSE_FILE=$HOME/flexlm/synopsys.dat
-export DC_HOME=/opt/synopsys/designcompiler/B-2008.09
+export DC_HOME=/opt/synopsys/designcompiler/F-2011.09-SP3
 export SNPS_HSPICE_ROOT=/opt/synopsys/hspice/F-2011.09-SP2
 export STAR_RCXT_HOME=/opt/synopsys/starrc/H-2012.12-SP2
 export SNPS_COSMOSSCOPE_ROOT=/opt/synopsys/cosmosscope/H-2012.12
