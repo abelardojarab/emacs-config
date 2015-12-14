@@ -1,6 +1,6 @@
 ;;; setup-spell.el ---
 
-;; Copyright (C) 2014  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -30,7 +30,8 @@
 ;; We need tell emacs to use aspell, and where your custom dictionary is.
 (setq ispell-silently-savep t)
 (setq ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra"))
+      ispell-extra-args '("--sug-mode=ultra")
+      ispell-alternate-dictionary (expand-file-name "~/.emacs.d/dictionaries/words.txt" ))
 (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
 (when (eq system-type 'darwin)
   (if (file-executable-p "/usr/local/bin/aspell")
