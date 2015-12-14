@@ -182,11 +182,11 @@ non-nil."
             ('windows-nt
              (if (> (x-display-pixel-width) 1800)
                  (progn ;; HD monitor in Windows
-                   (setq main-programming-font "Consolas-13:antialias=subpixel")
+                   (setq main-programming-font "Consolas-12:antialias=subpixel")
                    (setq main-writing-font (concat main-writing-font "-13")))
                (progn
                  (setq main-programming-font "Consolas-11:antialias=subpixel")
-                 (setq main-writing-font (concat main-writing-font "-11")))))
+                 (setq main-writing-font (concat main-writing-font "-12")))))
             ('darwin
              (if (> (x-display-pixel-width) 1800)
                  (if (> (x-display-pixel-width) 2000)
