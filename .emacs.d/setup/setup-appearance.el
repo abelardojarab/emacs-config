@@ -228,7 +228,7 @@ non-nil."
 (defun local-hl-line-mode-off ()
   (interactive)
   (make-local-variable 'global-hl-line-mode)
-  (setq global-hl-line-mode nil))
+  (setq global-hl-line-mode t))
 (add-hook 'org-mode-hook 'local-hl-line-mode-off)
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
@@ -300,10 +300,6 @@ non-nil."
 ;; Highlight blocks
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
 (require 'highlight-blocks)
-
-;; Context indentation guide
-(add-to-list 'load-path "~/.emacs.d/indent-guide")
-(require 'indent-guide)
 
 ;; Permanent indentation guide
 (add-to-list 'load-path "~/.emacs.d/indent-hint")

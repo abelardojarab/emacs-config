@@ -36,6 +36,9 @@
 (semantic-mode 1)
 (semantic-load-enable-minimum-features)
 
+;; Enable case-insensitive searching
+(set-default 'semantic-case-fold t)
+
 ;; Faster parsing
 (setq-default semantic-idle-work-parse-neighboring-files-flag nil)
 (setq-default semantic-idle-work-update-headers-flag nil)
@@ -101,9 +104,6 @@
   (setq-default c-basic-offset 4))
 (add-hook 'c-mode-hook #'my/c-mode-init)
 (add-hook 'c++-mode-hook #'my/c-mode-init)
-
-;; Enable case-insensitive searching
-(set-default 'semantic-case-fold t)
 
 ;; Include settings
 (require 'semantic/bovine/c)
