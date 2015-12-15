@@ -631,16 +631,6 @@ Defaults to `error'."
          (linum-format (concat " %" (number-to-string w) "d ")))
     ad-do-it))
 
-;; Dired async
-(add-to-list 'load-path "~/.emacs.d/async")
-(require 'dired-aux)
-(require 'dired-async)
-(require 'dired+)
-
-;; rsync support
-(require 'auto-rsync)
-(auto-rsync-mode t)
-
 ;; Multiple cursors
 (add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (require 'multiple-cursors)
