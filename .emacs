@@ -134,9 +134,6 @@
 ;; Setup Python
 (require 'setup-python)
 
-;; Setup Javascript mode
-(require 'setup-js2-mode)
-
 ;; Setup Lisp mode
 (require 'setup-lisp)
 

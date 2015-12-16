@@ -84,10 +84,10 @@
                        (unless (local-variable-p 'ac-imenu-index)
                          (make-local-variable 'ac-imenu-index))
                        (or ac-imenu-index
-                           (setq ac-imenu-index (ignore-errors (imenu--make-index-alist)))))
+                          (setq ac-imenu-index (ignore-errors (imenu--make-index-alist)))))
         with result
         while (and stack (or (not (integerp ac-limit))
-                             (< i ac-limit)))
+                          (< i ac-limit)))
         for node = (pop stack)
         if (consp node)
         do
@@ -98,7 +98,7 @@
                       (push child stack))
                     cdr)
             (when (and (stringp car)
-                       (string-match (concat "^" (regexp-quote ac-prefix)) car))
+                     (string-match (concat "^" (regexp-quote ac-prefix)) car))
               ;; Remove extra characters
               (if (string-match "^.*\\(()\\|=\\|<>\\)$" car)
                   (setq car (substring car 0 (match-beginning 1))))
@@ -207,5 +207,14 @@
   (if (display-graphic-p)
       (apply 'popup-pos-tip string args)
     ad-do-it))
+
+(defun popup-documentation-at-point ()
+  (interactive)
+  (let* ((position (point))
+         (string-under-cursor (buffer-substring-no-properties
+                               (progn (skip-syntax-backward "w_") (point))
+                               (progn (skip-syntax-forward "w_") (point)))))
+    (goto-char position)
+    (popup-tip (ac-symbol-documentation (intern string-under-cursor)))))
 
 (provide 'setup-auto-complete)
