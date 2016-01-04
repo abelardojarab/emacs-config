@@ -1,6 +1,6 @@
 ;;; setup-general.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -69,12 +69,7 @@ Defaults to `error'."
 ;; Undefined function
 (require 'let-alist)
 
-;; GUI-specific thing
-(when (window-system)
-  (setenv "EMACS_GUI" "t"))
-
 ;; Printing
-;; 2 column landscape size 7 prints column 0-78, lines 1 to 70
 (setq ps-paper-type 'a4
       ps-font-size 7.0
       ps-print-header nil
@@ -86,9 +81,25 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/names")
 (require 'names)
 
+;; Define preferred shell
+(cond
+ ((executable-find "bash")
+  (setq shell-file-name "bash"))
+ ((executable-find "csh")
+  (setq shell-file-name "csh"))
+ ((executable-find "cmdproxy")
+  (setq shell-file-name "cmdproxy"))
+ (t
+  (setq shell-file-name "bash")))
+(setq explicit-shell-file-name shell-file-name)
+
 ;; Set path environment depending on OS.
 (add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
 (require 'exec-path-from-shell)
+
+;; GUI-specific thing
+(when (window-system)
+  (setenv "EMACS_GUI" "t"))
 
 (cond
 
@@ -198,18 +209,6 @@ Defaults to `error'."
         (use-dialog-box t))
     ad-do-it))
 
-;; Define preferred shell
-(cond
- ((executable-find "bash")
-  (setq shell-file-name "bash"))
- ((executable-find "csh")
-  (setq shell-file-name "csh"))
- ((executable-find "cmdproxy")
-  (setq shell-file-name "cmdproxy"))
- (t
-  (setq shell-file-name "bash")))
-(setq explicit-shell-file-name shell-file-name)
-
 ;; try to improve slow performance on windows.
 (setq w32-get-true-file-attributes nil)
 
@@ -217,7 +216,7 @@ Defaults to `error'."
 (set-input-method nil)
 (setq read-quoted-char-radix 10)
 (set-language-environment 'utf-8)
-(set-locale-environment "en_GB.UTF-8")
+(set-locale-environment "en_US.UTF-8")
 (setq locale-coding-system 'utf-8-unix)
 
 ;; Coding system
@@ -266,7 +265,7 @@ Defaults to `error'."
   "If there's only one window (excluding any possibly active
          minibuffer), then split the current window horizontally."
   (if (and (one-window-p t)
-           (not (active-minibuffer-window)))
+         (not (active-minibuffer-window)))
       (let ((split-height-threshold nil))
         (split-window-sensibly window))
     (split-window-sensibly window)))
@@ -456,6 +455,7 @@ Defaults to `error'."
       (indent-region (region-beginning) (region-end) nil)))
 
 ;; Autosave
+(setq auto-save-default nil)
 (setq auto-save-interval 500)
 (defvar my-auto-save-folder "~/.emacs.cache/auto-save/") ;; folder for auto-saves
 (setq auto-save-list-file-prefix "~/.emacs.cache/auto-save/.saves-") ;; set prefix for auto-saves

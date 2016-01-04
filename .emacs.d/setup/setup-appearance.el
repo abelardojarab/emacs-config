@@ -1,6 +1,6 @@
 ;;; setup-appearance.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -308,6 +308,11 @@ non-nil."
 (require 'indent-hint)
 (add-hook 'prog-mode-hook 'indent-hint-mode)
 (add-hook 'lisp-mode-hook 'indent-hint-lisp)
+
+;; Transient indentation guide
+(add-to-list 'load-path "~/.emacs.d/indent-guide")
+(defvar indent-guide-mode)
+(require 'indent-guide)
 
 ;; Highlight symbol
 (add-to-list 'load-path "~/.emacs.d/highlight-symbol")
