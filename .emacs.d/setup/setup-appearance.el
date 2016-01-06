@@ -47,9 +47,6 @@
 ;; Do not redraw entire frame after suspending.
 (setq no-redraw-on-reenter t)
 
-;; Disable bidirectional text support
-(setq-default bidi-display-reordering nil)
-
 ;; Enable GUI features
 (setq use-file-dialog t)
 (setq use-dialog-box t)
@@ -405,6 +402,11 @@ non-nil."
       (lawlist-scroll-bar-mode 1)))
 
   (global-lawlist-scroll-bar-mode))
+
+;; Blinking cursor
+(require 'heartbeat-cursor)
+(add-hook 'prog-mode-hook (lambda () (heartbeat-cursor-mode)))
+(add-hook 'org-mode-hook (lambda () (heartbeat-cursor-mode)))
 
 ;; Pretty lambdas
 (defun pretty-lambdas ()
